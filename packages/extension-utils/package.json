@@ -1,0 +1,35 @@
+{
+  "name": "@looker/extension-utils",
+  "version": "0.1.0",
+  "description": "Looker Extension Utilities",
+  "main": "dist/bundle.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": false,
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-utils",
+  "scripts": {
+    "analyze": "export ANALYZE_MODE=static && yarn bundle",
+    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "deploy": "bin/deploy",
+    "develop": "webpack serve --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js",
+    "watch": "yarn lerna exec --scope @looker/extension-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "dependencies": {
+    "@looker/components": "^2.8.1",
+    "@looker/extension-sdk": "^21.18.1",
+    "@looker/extension-sdk-react": "^21.18.1",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/redux": "^3.6.0",
+    "webpack-bundle-analyzer": "^4.2.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  }
+}

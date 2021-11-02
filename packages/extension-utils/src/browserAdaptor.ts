@@ -23,9 +23,42 @@
  SOFTWARE.
 
  */
-import type { IApixEnvAdaptor } from '../utils'
-import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 
-export const registerTestEnvAdaptor = (envAdaptor?: IApixEnvAdaptor) => {
-  registerEnvAdaptor(envAdaptor || new StandaloneEnvAdaptor())
+import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
+import { getThemeOverrides, hostedInternally } from './adaptorUtils'
+
+/**
+ * An adaptor class for interacting with browser APIs when not running in an extension
+ */
+export class BrowserAdaptor implements IEnvironmentAdaptor {
+  private _themeOverrides: ThemeOverrides
+
+  constructor() {
+    const { hostname } = location
+    this._themeOverrides = getThemeOverrides(hostedInternally(hostname))
+  }
+
+  async localStorageGetItem(key: string) {
+    return localStorage.getItem(key)
+  }
+
+  async localStorageSetItem(key: string, value: string) {
+    await localStorage.setItem(key, value)
+  }
+
+  async localStorageRemoveItem(key: string) {
+    await localStorage.removeItem(key)
+  }
+
+  themeOverrides() {
+    return this._themeOverrides
+  }
+
+  openBrowserWindow(url: string, target?: string) {
+    window.open(url, target)
+  }
+
+  logError(_error: Error, _componentStack: string): void {
+    // noop - error logging for standalone applications TBD
+  }
 }

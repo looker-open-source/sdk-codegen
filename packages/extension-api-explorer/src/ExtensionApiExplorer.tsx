@@ -35,7 +35,7 @@ import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import { ApiExplorer, store, Loader } from '@looker/api-explorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Provider } from 'react-redux'
-import { ExtensionEnvAdaptor } from './utils'
+import { ExtensionAdaptor } from '@looker/extension-utils'
 
 class ExtensionConfigurator implements RunItConfigurator {
   storage: Record<string, string> = {}
@@ -66,7 +66,6 @@ class ExtensionConfigurator implements RunItConfigurator {
 const configurator = new ExtensionConfigurator()
 
 export const ExtensionApiExplorer: FC = () => {
-  // const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
   const [specs, setSpecs] = useState<SpecList>()
 
@@ -88,7 +87,7 @@ export const ExtensionApiExplorer: FC = () => {
     if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
   }, [specs, sdk])
 
-  const extensionEnvAdaptor = new ExtensionEnvAdaptor(getExtensionSDK())
+  const extensionAdaptor = new ExtensionAdaptor(getExtensionSDK())
 
   return (
     <Provider store={store}>
@@ -97,13 +96,13 @@ export const ExtensionApiExplorer: FC = () => {
           {specs ? (
             <ApiExplorer
               specs={specs}
-              envAdaptor={extensionEnvAdaptor}
+              adaptor={extensionAdaptor}
               setVersionsUrl={runItNoSet}
               // TODO We need expand/collapse side nav for the headless extension before we enabled this
               headless={false}
             />
           ) : (
-            <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
+            <Loader themeOverrides={extensionAdaptor.themeOverrides()} />
           )}
         </>
       </RunItProvider>

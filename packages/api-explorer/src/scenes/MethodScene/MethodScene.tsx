@@ -42,6 +42,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 import {
   ApixSection,
   DocActivityType,
@@ -57,12 +58,11 @@ import {
   DocSchema,
 } from '../../components'
 import { selectSdkLanguage } from '../../state'
-import type { IApixEnvAdaptor } from '../../utils'
 import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {
   api: ApiModel
-  envAdaptor: IApixEnvAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
 }
 
@@ -72,14 +72,14 @@ interface MethodSceneParams {
   specKey: string
 }
 
-const showRunIt = async (envAdaptor: IApixEnvAdaptor) => {
-  const data = await envAdaptor.localStorageGetItem(RunItFormKey)
+const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
+  const data = await adaptor.localStorageGetItem(RunItFormKey)
   return !!data
 }
 
 export const MethodScene: FC<MethodSceneProps> = ({
   api,
-  envAdaptor,
+  adaptor,
   setVersionsUrl,
 }) => {
   const history = useHistory()
@@ -110,7 +110,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
   useEffect(() => {
     const checkRunIt = async () => {
       try {
-        const show = await showRunIt(envAdaptor)
+        const show = await showRunIt(adaptor)
         if (show) {
           setOn()
         }
@@ -119,7 +119,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
       }
     }
     checkRunIt()
-  }, [envAdaptor, setOn])
+  }, [adaptor, setOn])
 
   const runItToggle = (
     <RunItButton

@@ -24,9 +24,9 @@
 
  */
 import ReduxSagaTester from 'redux-saga-tester'
-import { registerTestEnvAdaptor } from '../../test-utils'
 
-import { EnvAdaptorConstants, getEnvAdaptor } from '../../utils'
+import { getEnvAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
+import { StoreConstants } from '@looker/run-it'
 import * as sagas from './sagas'
 import { settingActions, defaultSettings, settingsSlice } from './slice'
 
@@ -60,7 +60,7 @@ describe('Settings Sagas', () => {
         })
       )
       expect(localStorage.setItem).toHaveBeenLastCalledWith(
-        EnvAdaptorConstants.LOCALSTORAGE_SETTINGS_KEY,
+        StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
         JSON.stringify({ sdkLanguage: 'Kotlin' })
       )
     })

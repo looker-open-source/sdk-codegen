@@ -23,14 +23,15 @@
  SOFTWARE.
 
  */
-import type { IApixEnvAdaptor, ThemeOverrides } from '@looker/api-explorer'
-import { getThemeOverrides } from '@looker/api-explorer'
+
 import type { ExtensionSDK } from '@looker/extension-sdk'
+import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
+import { getThemeOverrides } from './adaptorUtils'
 
 /**
  * An adaptor class for interacting with browser APIs when running as an extension
  */
-export class ExtensionEnvAdaptor implements IApixEnvAdaptor {
+export class ExtensionAdaptor implements IEnvironmentAdaptor {
   _themeOverrides: ThemeOverrides
   constructor(public extensionSdk: ExtensionSDK) {
     this._themeOverrides = getThemeOverrides(
