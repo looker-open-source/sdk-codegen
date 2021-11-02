@@ -24,7 +24,5 @@
 
  */
 export * from './ApiExplorer'
-export type { ThemeOverrides, IApixEnvAdaptor } from './utils'
-export { getThemeOverrides } from './utils'
 export { Loader } from './components'
 export { store } from './state'
