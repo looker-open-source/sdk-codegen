@@ -23,11 +23,13 @@
  SOFTWARE.
 
  */
+
 import type { FC } from 'react'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import type { ApiModel, SpecList } from '@looker/sdk-codegen'
 import type { RunItSetter } from '@looker/run-it'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 
 import {
   HomeScene,
@@ -37,7 +39,6 @@ import {
   TypeTagScene,
 } from '../scenes'
 import { DiffScene } from '../scenes/DiffScene'
-import type { IApixEnvAdaptor } from '../utils'
 import { diffPath } from '../utils'
 
 interface AppRouterProps {
@@ -45,7 +46,7 @@ interface AppRouterProps {
   specKey: string
   specs: SpecList
   toggleNavigation: (target?: boolean) => void
-  envAdaptor: IApixEnvAdaptor
+  adaptor: IEnvironmentAdaptor
   setVersionsUrl: RunItSetter
 }
 
@@ -54,7 +55,7 @@ export const AppRouter: FC<AppRouterProps> = ({
   api,
   specs,
   toggleNavigation,
-  envAdaptor,
+  adaptor,
   setVersionsUrl,
 }) => {
   return (
@@ -72,7 +73,7 @@ export const AppRouter: FC<AppRouterProps> = ({
       <Route path="/:specKey/methods/:methodTag/:methodName">
         <MethodScene
           api={api}
-          envAdaptor={envAdaptor}
+          adaptor={adaptor}
           setVersionsUrl={setVersionsUrl}
         />
       </Route>

@@ -23,28 +23,7 @@
  SOFTWARE.
 
  */
-import type { ThemeOverrides } from './envAdaptor'
-import { StandaloneEnvAdaptor, getThemeOverrides } from './envAdaptor'
 
-describe('StandaloneEnvAdaptor', () => {
-  test.each([
-    ['www.looker.com', getThemeOverrides(true)],
-    ['www.google.com', getThemeOverrides(true)],
-    ['localhost', getThemeOverrides(true)],
-    ['127.0.0.1', getThemeOverrides(false)],
-  ])(
-    'returns correct font overrides',
-    (hostname: string, expectedOverrides: ThemeOverrides) => {
-      const saveLoc = window.location
-      delete (window as any).location
-      window.location = {
-        ...saveLoc,
-        hostname,
-      }
-      expect(new StandaloneEnvAdaptor().themeOverrides()).toEqual(
-        expectedOverrides
-      )
-      window.location = saveLoc
-    }
-  )
-})
+export * from './adaptorUtils'
+export * from './browserAdaptor'
+export * from './extensionAdaptor'

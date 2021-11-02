@@ -32,7 +32,7 @@ import {
   Heading,
   ProgressCircular,
 } from '@looker/components'
-import type { ThemeOverrides } from '../../utils'
+import type { ThemeOverrides } from '@looker/extension-utils'
 
 export interface LoaderProps {
   themeOverrides: ThemeOverrides

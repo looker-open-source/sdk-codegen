@@ -25,10 +25,20 @@
  */
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { App } from './App'
+import { ExtensionProvider } from '@looker/extension-sdk-react'
+import { Provider } from 'react-redux'
+import { Hackathon } from './Hackathon'
+import store from './data/store'
 
 window.addEventListener('DOMContentLoaded', (_) => {
   const root = document.createElement('div')
   document.body.appendChild(root)
-  ReactDOM.render(<App />, root)
+  ReactDOM.render(
+    <ExtensionProvider requiredLookerVersion=">=21.3.0">
+      <Provider store={store}>
+        <Hackathon />
+      </Provider>
+    </ExtensionProvider>,
+    root
+  )
 })

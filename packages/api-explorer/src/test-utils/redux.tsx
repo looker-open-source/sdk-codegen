@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import type { ReactElement } from 'react'
 import React from 'react'
 import { Provider } from 'react-redux'
@@ -31,6 +32,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 import { createStore } from '@looker/redux'
 
+import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
 import type { LodesState, RootState, SettingState } from '../state'
 import {
   settingsSlice,
@@ -39,14 +41,13 @@ import {
   store as defaultStore,
   lodesSlice,
 } from '../state'
-import { registerEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
 import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = defaultStore
 ) => {
-  registerEnvAdaptor(new StandaloneEnvAdaptor())
+  registerEnvAdaptor(new BrowserAdaptor())
   return <Provider store={store}>{consumers}</Provider>
 }
 
