@@ -413,6 +413,36 @@ const settings = new NodeSettingsIniFile('LOOKERSDK', config.localIni, 'Looker')
 const sdk = LookerNodeSDK.init40(settings)
 
 describe('spec conversion', () => {
+  it.skip('numeric ids', () => {
+    const api = ApiModel.fromString(apiSource)
+    const numerics = ['integer', 'int64', 'float', 'double']
+    const stale: Record<string, string[]> = { methodParams: [], typeProps: [] }
+    Object.entries(api.methods).forEach(([_, method]) => {
+      const badArgs = method.params
+        .filter(
+          (p) =>
+            p.name.toLowerCase().endsWith('id') &&
+            p.type.intrinsic &&
+            numerics.includes(p.type.name)
+        )
+        .map((p) => p.fullName)
+      badArgs.forEach((p) => stale.methodParams.push(p))
+    })
+    Object.entries(api.types).forEach(([_, type]) => {
+      const badArgs = Object.entries(type.properties)
+        .filter(
+          ([_, p]) =>
+            p.name.toLowerCase().endsWith('id') &&
+            p.type.intrinsic &&
+            numerics.includes(p.type.name)
+        )
+        .map(([_, p]) => p.fullName)
+      badArgs.forEach((p) => stale.typeProps.push(p))
+    })
+    expect(stale.methodParams).toHaveLength(0)
+    expect(stale.typeProps).toHaveLength(0)
+  })
+
   it('swaps out x-looker-tags', () => {
     const actual = swapXLookerTags(specFrag)
     expect(actual).toContain('"nullable": true')
