@@ -24,7 +24,7 @@
 
  */
 
-import type { ITechnologyProps } from '../../../models'
+import type { ITechnologyProps } from '../models'
 
 export const techDescriptions = (
   ids: string[],

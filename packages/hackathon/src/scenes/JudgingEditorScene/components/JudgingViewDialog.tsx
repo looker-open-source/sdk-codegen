@@ -30,16 +30,18 @@ import type { IJudgingProps } from '../../../models'
 import { JudgingView } from './JudgingView'
 
 interface JudgingViewDialogProps {
+  /** If assigned, Dialog appears. If undefined, dialog closes */
   judging?: IJudgingProps
-  closer: () => void
+  /** Dialog closing event handler */
+  onClose: () => void
 }
 
 export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
   judging,
-  closer,
+  onClose,
 }) => {
   const closeDialog = () => {
-    closer()
+    onClose()
   }
 
   return (

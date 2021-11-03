@@ -31,16 +31,18 @@ import type { IProjectProps } from '../../models'
 import { ProjectView } from '../../scenes'
 
 interface ProjectViewDialogProps {
+  /** if assigned, dialog appears. If undefined, dialog is hidden */
   project?: IProjectProps
-  closer: () => void
+  /** Dialog closing event handler */
+  onClose: () => void
 }
 
 export const ProjectViewDialog: FC<ProjectViewDialogProps> = ({
   project,
-  closer,
+  onClose,
 }) => {
   const closeDialog = () => {
-    closer()
+    onClose()
   }
 
   return (

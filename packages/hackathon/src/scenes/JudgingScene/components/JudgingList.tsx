@@ -136,7 +136,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         pages={totalPages}
         onChange={updatePage}
       />
-      <JudgingViewDialog judging={currentJudging} closer={closeView} />
+      <JudgingViewDialog judging={currentJudging} onClose={closeView} />
     </>
   )
 }

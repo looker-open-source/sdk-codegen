@@ -30,7 +30,7 @@ import { useSelector } from 'react-redux'
 import type { IProjectProps } from '../../../models'
 import { ExtMarkdown } from '../../../components'
 import { getTechnologies } from '../../../data/hack_session/selectors'
-import { getMembers, techDescriptions } from './utils'
+import { getMembers, techDescriptions } from '../../utils'
 
 interface ProjectViewProps {
   project: IProjectProps

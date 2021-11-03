@@ -204,7 +204,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         pages={totalPages}
         onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
-      <ProjectViewDialog project={currentProject} closer={closeView} />
+      <ProjectViewDialog project={currentProject} onClose={closeView} />
     </>
   )
 }
