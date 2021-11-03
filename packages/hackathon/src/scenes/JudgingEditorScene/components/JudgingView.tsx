@@ -30,7 +30,7 @@ import { useSelector } from 'react-redux'
 import type { IJudgingProps } from '../../../models'
 import { getTechnologies } from '../../../data/hack_session/selectors'
 import { ExtMarkdown } from '../../../components'
-import { getMembers, techDescriptions } from '../../ProjectsScene'
+import { getMembers, techDescriptions } from '../../utils'
 
 interface JudgingViewProps {
   judging: IJudgingProps
