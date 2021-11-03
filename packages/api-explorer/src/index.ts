@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
-export { ApiExplorer } from './ApiExplorer'
-export { Loader } from './components'
-export { store } from './state'
+export * from './ApiExplorer'
+export * from './StandaloneApiExplorer'
+export * from './components'
+export * from './state'
