@@ -45,7 +45,7 @@ export const ProjectViewDialog: FC<ProjectViewDialogProps> = ({
 
   return (
     <Dialog isOpen={!!project} onClose={closeDialog}>
-      <DialogHeader>Judging {project?.title}</DialogHeader>
+      <DialogHeader>{project?.title}</DialogHeader>
       <DialogContent>
         {!!project && <ProjectView project={project} />}
       </DialogContent>
