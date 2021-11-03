@@ -137,3 +137,7 @@ export const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
   const configIsNeeded = sdkNeedsConfig(sdk)
   return configIsNeeded && !sdk.authSession.isAuthenticated()
 }
+
+export enum StoreConstants {
+  LOCALSTORAGE_SETTINGS_KEY = 'settings',
+}

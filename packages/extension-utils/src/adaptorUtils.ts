@@ -25,12 +25,13 @@
  */
 
 import type { ThemeCustomizations } from '@looker/design-tokens'
+import { BrowserAdaptor } from './browserAdaptor'
 
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
- * Examples include: local storage operations, writing to clipboard and various link navigation functions amongst others
+ * Examples include: local storage operations and various link navigation functions
  */
-export interface IApixEnvAdaptor {
+export interface IEnvironmentAdaptor {
   /** Method for retrieving a keyed value from local storage */
   localStorageGetItem(key: string): Promise<string | null>
   /** Method for setting a keyed value in local storage */
@@ -51,12 +52,32 @@ export interface IApixEnvAdaptor {
  * system is being used (for example an embedded extension).
  */
 export interface ThemeOverrides {
+  /** Should Google-specific fonts be used for the theme? */
   loadGoogleFonts?: boolean
+  /** Property bag overrides for Looker component theming */
   themeCustomizations?: ThemeCustomizations
 }
 
-export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
-  useGoogleFonts
+/**
+ * Is this an "internal" host that will use internal brancing?
+ * @param hostname to check
+ */
+export const hostedInternally = (hostname: string): boolean =>
+  hostname.endsWith('.looker.com') ||
+  hostname.endsWith('.google.com') ||
+  hostname === 'localhost' ||
+  // Include firebase staging dev portal for now. Can be removed
+  // when dev portal gets its own APIX project. Also includes
+  // PRs.
+  (hostname.startsWith('looker-developer-portal') &&
+    hostname.endsWith('.web.app'))
+
+/**
+ * Return theme overrides that make apply "internal" or external theming
+ * @param internalTheming true if "internal" theme should be used
+ */
+export const getThemeOverrides = (internalTheming: boolean): ThemeOverrides =>
+  internalTheming
     ? {
         loadGoogleFonts: true,
         themeCustomizations: {
@@ -70,78 +91,37 @@ export const getThemeOverrides = (useGoogleFonts: boolean): ThemeOverrides =>
         },
       }
 
+let extensionAdaptor: IEnvironmentAdaptor | undefined
+
 /**
- * An adaptor class for interacting with browser APIs when running in standalone mode
+ * Register the environment adaptor. Used when initializing the application
+ * @param adaptor to register
  */
-export class StandaloneEnvAdaptor implements IApixEnvAdaptor {
-  private _themeOverrides: ThemeOverrides
-
-  constructor() {
-    const { hostname } = location
-    this._themeOverrides = getThemeOverrides(
-      hostname.endsWith('.looker.com') ||
-        hostname.endsWith('.google.com') ||
-        hostname === 'localhost' ||
-        // Include firebase staging dev portal for now. Can be removed
-        // when dev portal gets its own APIX project. Also includes
-        // PRs.
-        (hostname.startsWith('looker-developer-portal') &&
-          hostname.endsWith('.web.app'))
-    )
-  }
-
-  async localStorageGetItem(key: string) {
-    return localStorage.getItem(key)
-  }
-
-  async localStorageSetItem(key: string, value: string) {
-    await localStorage.setItem(key, value)
-  }
-
-  async localStorageRemoveItem(key: string) {
-    await localStorage.removeItem(key)
-  }
-
-  themeOverrides() {
-    return this._themeOverrides
-  }
-
-  openBrowserWindow(url: string, target?: string) {
-    window.open(url, target)
-  }
-
-  logError(_error: Error, _componentStack: string): void {
-    // noop - error logging for standalone APIX TBD
-  }
-}
-
-export enum EnvAdaptorConstants {
-  LOCALSTORAGE_SDK_LANGUAGE_KEY = 'sdkLanguage',
-  LOCALSTORAGE_SETTINGS_KEY = 'settings',
-}
-
-let envAdaptor: IApixEnvAdaptor | undefined
-
-/**
- * Register the environment adaptor. The API Explorer will automatically call this.
- */
-export const registerEnvAdaptor = (adaptor: IApixEnvAdaptor) => {
-  envAdaptor = adaptor
+export const registerEnvAdaptor = (adaptor: IEnvironmentAdaptor) => {
+  extensionAdaptor = adaptor
 }
 
 /**
- * Unregister the envAdaptor. The API Explorer will automatically call this when it is unmounted.
+ * Unregister the environment adaptor. Extensions should call this when unmounted
  */
 export const unregisterEnvAdaptor = () => {
-  envAdaptor = undefined
+  extensionAdaptor = undefined
 }
 
 /**
- * Global access to the envAdaptor. An error will be thrown if accessed prematurely.
+ * Global access to the environment adaptor. An error will be thrown if accessed prematurely.
  */
 export const getEnvAdaptor = () => {
-  if (!envAdaptor) {
+  if (!extensionAdaptor) {
     throw new Error('Environment adaptor not initialized.')
   }
-  return envAdaptor
+  return extensionAdaptor
+}
+
+/**
+ * Used by some unit tests
+ * @param adaptor to use for testing
+ */
+export const registerTestEnvAdaptor = (adaptor?: IEnvironmentAdaptor) => {
+  registerEnvAdaptor(adaptor || new BrowserAdaptor())
 }

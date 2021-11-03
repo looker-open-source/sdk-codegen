@@ -23,24 +23,27 @@
  SOFTWARE.
 
  */
+import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
+import { ExtensionAdaptor } from './extensionAdaptor'
+import type { ThemeOverrides } from '@looker/extension-utils'
+import { getThemeOverrides } from '@looker/extension-utils'
 
-import type { FC } from 'react'
-import React from 'react'
-import { Provider } from 'react-redux'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { ComponentsProvider } from '@looker/components'
-import { hot } from 'react-hot-loader/root'
-import { Hackathon } from './Hackathon'
-import store from './data/store'
-
-export const App: FC = hot(() => {
-  return (
-    <Provider store={store}>
-      <ExtensionProvider>
-        <ComponentsProvider>
-          <Hackathon />
-        </ComponentsProvider>
-      </ExtensionProvider>
-    </Provider>
+describe('ExtensionAdaptor', () => {
+  test.each([
+    [undefined, getThemeOverrides(false)],
+    ['standard', getThemeOverrides(true)],
+    ['embed', getThemeOverrides(false)],
+    ['spartan', getThemeOverrides(false)],
+  ])(
+    'returns correct font overrides',
+    (hostType?: string, expectedOverrides?: ThemeOverrides) => {
+      expect(
+        new ExtensionAdaptor({
+          lookerHostData: {
+            hostType,
+          } as Readonly<LookerHostData>,
+        } as ExtensionSDK).themeOverrides()
+      ).toEqual(expectedOverrides)
+    }
   )
 })

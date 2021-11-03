@@ -36,10 +36,12 @@ import {
   Heading,
   CardContent,
   ButtonItem,
+  Paragraph,
+  Field,
 } from '@looker/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Routes } from '../../routes/AppRouter'
-import { resources } from './resource_data'
+import { resources, ResourceTag } from './resource_data'
 
 interface ResourceSceneProps {}
 
@@ -76,25 +78,26 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
 
   return (
     <>
-      <Heading as="h4" fontWeight="bold" px="medium">
-        Select a technology:
+      <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+        Resources
       </Heading>
-      <ButtonGroup
-        px="medium"
-        pt="small"
-        value={filterValues}
-        onChange={updateFilterValue}
+      <Paragraph mb="medium">
+        Here are videos, tutorials, demos, apis, datasets, and dev tools for
+        your hacking needs.
+      </Paragraph>
+      <Field
+        label="Filter by areas of interest:"
+        description="Select 1 or more areas"
       >
-        <ButtonItem value="embed">Embed</ButtonItem>
-        <ButtonItem value="extension">Extensions</ButtonItem>
-        <ButtonItem value="lookml">LookML</ButtonItem>
-        <ButtonItem value="action">Actions</ButtonItem>
-        <ButtonItem value="api">API</ButtonItem>
-        <ButtonItem value="viz">Custom Viz</ButtonItem>
-        <ButtonItem value="devtool">Dev Tools</ButtonItem>
-        <ButtonItem value="other">Other</ButtonItem>
-      </ButtonGroup>
-      <Grid padding="medium" columns={3}>
+        <ButtonGroup value={filterValues} onChange={updateFilterValue}>
+          {Object.keys(ResourceTag).map((k) => (
+            <ButtonItem key={k} value={ResourceTag[k]}>
+              {ResourceTag[k]}
+            </ButtonItem>
+          ))}
+        </ButtonGroup>
+      </Field>
+      <Grid pt="medium" columns={3}>
         {selectedResources.map((_k, index) => (
           <Link
             href={selectedResources[index].shortenedLink}
