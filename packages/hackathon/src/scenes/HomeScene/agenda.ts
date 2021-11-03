@@ -198,7 +198,7 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
   {
     start: later(day2, 15),
     stop: later(day2, 17),
-    description: { 
+    description: {
       en: `## Hacky Hour (Social Event)`,
       ja_JP: '## Hacky Hour (懇親会)',
     },
