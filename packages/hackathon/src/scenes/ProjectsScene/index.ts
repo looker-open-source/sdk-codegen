@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
+
 export * from './ProjectsScene'
+export * from './components'

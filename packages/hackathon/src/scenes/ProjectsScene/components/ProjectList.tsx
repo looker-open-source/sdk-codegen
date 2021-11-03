@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -58,6 +58,7 @@ import {
   getCurrentProjectsState,
   getProjectsPageNumState,
 } from '../../../data/projects/selectors'
+import { ProjectViewDialog } from '../../../components/ProjectViewDialog'
 
 interface ProjectListProps {}
 
@@ -70,6 +71,9 @@ export const ProjectList: FC<ProjectListProps> = () => {
     dispatch(currentProjectsRequest())
   }, [dispatch])
   const projects = useSelector(getCurrentProjectsState)
+  const [currentProject, setCurrentProject] = useState<
+    IProjectProps | undefined
+  >(undefined)
 
   const handleDelete = (project: IProjectProps) => {
     dispatch(deleteProject(project._id))
@@ -98,10 +102,12 @@ export const ProjectList: FC<ProjectListProps> = () => {
     })
   }
 
-  const handleView = (projectId: string) => {
-    setTimeout(() => {
-      history.push(`/projectview/${projectId}`)
-    })
+  const handleView = (project: IProjectProps) => {
+    setCurrentProject(project)
+  }
+
+  const closeView = () => {
+    setCurrentProject(undefined)
   }
 
   const actions = (project: IProjectProps) => {
@@ -120,7 +126,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         )}
 
         <DataTableAction
-          onClick={handleView.bind(null, project._id)}
+          onClick={handleView.bind(null, project)}
           icon={<TextSnippet />}
           itemRole="link"
         >
@@ -198,6 +204,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         pages={totalPages}
         onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
+      <ProjectViewDialog project={currentProject} closer={closeView} />
     </>
   )
 }

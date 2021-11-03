@@ -23,4 +23,7 @@
  SOFTWARE.
 
  */
+
 export * from './ProjectList'
+export * from './ProjectView'
+export * from './utils'

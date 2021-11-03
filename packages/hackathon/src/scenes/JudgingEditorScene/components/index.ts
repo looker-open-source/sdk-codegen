@@ -23,4 +23,7 @@
  SOFTWARE.
 
  */
+
 export * from './JudgingForm'
+export * from './JudgingView'
+export * from './JudgingViewDialog'

@@ -36,11 +36,7 @@ import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import type {
-  IHackerProps,
-  IJudgingProps,
-  IProjectProps,
-} from '../../../models'
+import type { IJudgingProps } from '../../../models'
 import { sheetCell } from '../../../models'
 import {
   getHackerState,
@@ -56,24 +52,7 @@ import {
 } from '../../../data/judgings/selectors'
 import { canDoJudgingAction } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
-import { ProjectViewDialog } from '../../../components/ProjectViewDialog'
-
-const asProject = (
-  hacker: IHackerProps,
-  judging: IJudgingProps
-): IProjectProps => {
-  return {
-    _id: 'projectviewdialog',
-    _row: 0,
-    _user_id: hacker.id,
-    title: judging.$title,
-    project_type: judging.$project_type,
-    technologies: judging.$technologies,
-    $members: judging.$members,
-    description: judging.$description,
-    contestant: judging.$contestant,
-  } as IProjectProps
-}
+import { JudgingViewDialog } from '../../JudgingEditorScene'
 
 interface JudgingListProps {}
 
@@ -84,8 +63,8 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const hacker = useSelector(getHackerState)
   const judgings = useSelector(getJudgingsState)
   const currentPage = useSelector(getJudgingsPageNumState)
-  const [currentProject, setCurrentProject] = useState<
-    IProjectProps | undefined
+  const [currentJudging, setCurrentJudging] = useState<
+    IJudgingProps | undefined
   >(undefined)
 
   useEffect(() => {
@@ -96,12 +75,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
     dispatch(updateJudgingsPageNum(pageNum))
   }
 
-  const viewProject = (judging: IJudgingProps) => {
-    setCurrentProject(asProject(hacker, judging))
+  const viewJudging = (judging: IJudgingProps) => {
+    setCurrentJudging(judging)
   }
 
-  const hideProject = () => {
-    setCurrentProject(undefined)
+  const closeView = () => {
+    setCurrentJudging(undefined)
   }
 
   const showJudging = (judgingId: string) => {
@@ -114,20 +93,20 @@ export const JudgingList: FC<JudgingListProps> = () => {
     return (
       <>
         <DataTableAction
-          onClick={viewProject.bind(null, judging)}
+          onClick={viewJudging.bind(null, judging)}
           icon={<TextSnippet />}
         >
-          View Project
+          View Judging
         </DataTableAction>
-        <DataTableAction
-          onClick={showJudging.bind(null, judging._id)}
-          icon={<Create />}
-          itemRole="link"
-        >
-          {canDoJudgingAction(hacker, judging)
-            ? 'Update Judging'
-            : 'View Judging'}
-        </DataTableAction>
+        {canDoJudgingAction(hacker, judging) && (
+          <DataTableAction
+            onClick={showJudging.bind(null, judging._id)}
+            icon={<Create />}
+            itemRole="link"
+          >
+            Update Judging
+          </DataTableAction>
+        )}
       </>
     )
   }
@@ -157,7 +136,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         pages={totalPages}
         onChange={updatePage}
       />
-      <ProjectViewDialog project={currentProject} closer={hideProject} />
+      <JudgingViewDialog judging={currentJudging} closer={closeView} />
     </>
   )
 }

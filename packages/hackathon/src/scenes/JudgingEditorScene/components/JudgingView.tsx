@@ -26,9 +26,43 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import { ProjectForm } from './components'
+import { useSelector } from 'react-redux'
+import type { IJudgingProps } from '../../../models'
+import { getTechnologies } from '../../../data/hack_session/selectors'
+import { ExtMarkdown } from '../../../components'
+import { getMembers, techDescriptions } from '../../ProjectsScene'
 
-export const ProjectEditorScene: FC = () => {
-  // TODO: add a not found error in case project is not found
-  return <ProjectForm />
+interface JudgingViewProps {
+  judging: IJudgingProps
+}
+
+export const JudgingView: FC<JudgingViewProps> = ({ judging }) => {
+  const availableTechnologies = useSelector(getTechnologies)
+
+  const tech = techDescriptions(judging.$technologies, availableTechnologies)
+  const members = getMembers(judging.$members)
+  const view = `# ${judging.$title}
+by ${members}
+
+${judging.$description}
+
+| Criteria | Score |
+| :-------- | -----: |
+| Execution | ${judging.execution} |
+| Ambition | ${judging.ambition} |
+| Coolness | ${judging.coolness} |
+| Impact | ${judging.impact} |
+| **Score** | **${judging.score}** |
+
+## Judge's notes
+
+${judging.notes}
+
+**Uses**: ${tech}
+
+**Project type**: ${judging.$project_type}
+
+**Contestant**: ${judging.$contestant ? 'Yes' : 'No'}
+`
+  return <ExtMarkdown source={view} />
 }

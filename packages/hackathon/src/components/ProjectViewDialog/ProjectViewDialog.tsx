@@ -23,11 +23,12 @@
  SOFTWARE.
 
  */
+
 import type { FC } from 'react'
 import React from 'react'
 import { Dialog, DialogHeader, DialogContent } from '@looker/components'
-import { ProjectView } from '../../scenes/ProjectViewScene/components'
 import type { IProjectProps } from '../../models'
+import { ProjectView } from '../../scenes'
 
 interface ProjectViewDialogProps {
   project?: IProjectProps

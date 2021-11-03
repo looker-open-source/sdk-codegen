@@ -23,4 +23,31 @@
  SOFTWARE.
 
  */
-export * from './ProjectViewScene'
+import type { FC } from 'react'
+import React from 'react'
+import { Dialog, DialogHeader, DialogContent } from '@looker/components'
+import type { IJudgingProps } from '../../../models'
+import { JudgingView } from './JudgingView'
+
+interface JudgingViewDialogProps {
+  judging?: IJudgingProps
+  closer: () => void
+}
+
+export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
+  judging,
+  closer,
+}) => {
+  const closeDialog = () => {
+    closer()
+  }
+
+  return (
+    <Dialog isOpen={!!judging} onClose={closeDialog}>
+      <DialogHeader>Judging {judging?.$title}</DialogHeader>
+      <DialogContent>
+        {!!judging && <JudgingView judging={judging} />}
+      </DialogContent>
+    </Dialog>
+  )
+}

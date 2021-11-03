@@ -38,7 +38,7 @@ import {
   ProjectEditorScene,
   ResourceScene,
 } from '../scenes'
-import { ProjectViewScene } from '../scenes/ProjectViewScene'
+
 export enum Routes {
   HOME = '/home',
   ADMIN = '/admin',
@@ -133,11 +133,6 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
     {authorizedRoutes.includes(Routes.EDIT_PROJECT) && (
       <Route path={Routes.EDIT_PROJECT} exact>
         <ProjectEditorScene />
-      </Route>
-    )}
-    {authorizedRoutes.includes(Routes.VIEW_PROJECT) && (
-      <Route path={Routes.VIEW_PROJECT} exact>
-        <ProjectViewScene />
       </Route>
     )}
     {authorizedRoutes.includes(Routes.USERS) && (

@@ -27,33 +27,13 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import type { IProjectProps, ITechnologyProps } from '../../../models'
+import type { IProjectProps } from '../../../models'
 import { ExtMarkdown } from '../../../components'
 import { getTechnologies } from '../../../data/hack_session/selectors'
+import { getMembers, techDescriptions } from './utils'
 
 interface ProjectViewProps {
   project: IProjectProps
-}
-
-const techDescriptions = (ids: string[], technologies?: ITechnologyProps[]) => {
-  try {
-    return technologies
-      ?.filter((t) => ids.includes(t._id))
-      .map((t) => t.description)
-      .join(', ')
-  } catch {
-    // avoid sheet data errors
-    return ids.join(', ')
-  }
-}
-
-const getMembers = (team: string[]) => {
-  try {
-    return team.join(', ') || 'Nobody!'
-  } catch {
-    // avoid sheet data errors
-    return 'Error retrieving team members'
-  }
 }
 
 export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
