@@ -37,9 +37,9 @@ import {
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
-
 import { BrowserAdaptor } from '@looker/extension-utils'
-import ApiExplorer from './ApiExplorer'
+
+import { ApiExplorer } from './ApiExplorer'
 import { store } from './state'
 import { Loader } from './components'
 
