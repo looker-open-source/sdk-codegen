@@ -23,28 +23,31 @@
  SOFTWARE.
 
  */
+
 import type { FC } from 'react'
 import React from 'react'
 import { Dialog, DialogHeader, DialogContent } from '@looker/components'
-import { ProjectView } from '../../scenes/ProjectViewScene/components'
 import type { IProjectProps } from '../../models'
+import { ProjectView } from '../../scenes'
 
 interface ProjectViewDialogProps {
+  /** if assigned, dialog appears. If undefined, dialog is hidden */
   project?: IProjectProps
-  closer: () => void
+  /** Dialog closing event handler */
+  onClose: () => void
 }
 
 export const ProjectViewDialog: FC<ProjectViewDialogProps> = ({
   project,
-  closer,
+  onClose,
 }) => {
   const closeDialog = () => {
-    closer()
+    onClose()
   }
 
   return (
     <Dialog isOpen={!!project} onClose={closeDialog}>
-      <DialogHeader>Judging {project?.title}</DialogHeader>
+      <DialogHeader>{project?.title}</DialogHeader>
       <DialogContent>
         {!!project && <ProjectView project={project} />}
       </DialogContent>

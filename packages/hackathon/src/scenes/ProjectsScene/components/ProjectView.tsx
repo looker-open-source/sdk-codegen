@@ -24,5 +24,33 @@
 
  */
 
-export * from './ProjectsScene'
-export * from './components'
+import type { FC } from 'react'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import type { IProjectProps } from '../../../models'
+import { ExtMarkdown } from '../../../components'
+import { getTechnologies } from '../../../data/hack_session/selectors'
+import { getMembers, techDescriptions } from '../../utils'
+
+interface ProjectViewProps {
+  project: IProjectProps
+}
+
+export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
+  const availableTechnologies = useSelector(getTechnologies)
+
+  const tech = techDescriptions(project.technologies, availableTechnologies)
+  const members = getMembers(project.$members)
+  const view = `# ${project.title}
+by ${members}
+
+${project.description}
+
+**Uses**: ${tech}
+
+**Project type**: ${project.project_type}
+
+**Contestant**: ${project.contestant ? 'Yes' : 'No'}
+`
+  return <ExtMarkdown source={view} />
+}

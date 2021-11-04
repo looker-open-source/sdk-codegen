@@ -80,7 +80,7 @@ import { allHackersRequest } from '../../../data/hackers/actions'
 import { getJudgesState } from '../../../data/hackers/selectors'
 import { canUpdateProject, canLockProject } from '../../../utils'
 import { Routes } from '../../../routes'
-import { ProjectView } from '../../ProjectViewScene/components'
+import { ProjectView } from '../../ProjectsScene/components/ProjectView'
 
 interface ProjectFormProps {}
 
