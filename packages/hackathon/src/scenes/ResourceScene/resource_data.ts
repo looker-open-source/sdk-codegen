@@ -98,6 +98,15 @@ export const resources: Array<Resource> = [
     title: 'Embed Tutorial Video',
   },
   {
+    content:
+      'Create extensions with zero manual configuration with the create-looker-extension utility.',
+    type: ResourceType.Resource,
+    tag: ResourceTag.Extensions,
+    link: 'https://github.com/looker-open-source/create-looker-extension',
+    shortenedLink: 'https://bit.ly/3k6vcNW',
+    title: 'Extension Creation Utility',
+  },
+  {
     content: 'The API Explorer lets you learn and interact with Looker API.',
     type: ResourceType.Resource,
     tag: ResourceTag.API,
