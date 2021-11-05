@@ -21,8 +21,8 @@ To configure your access token server, see the instructions in the [access token
 Until the Hackathon extension is available via the Looker Marketplace, a Hackathon manifest needs to be used. This manifest should have:
 
 ```lookml
-project_name: "hackathon_app"
-application: hackathon_app {
+project_name: "hackathon"
+application: hackathon {
   label: "Hackathon"
   url: "https://localhost:8080/dist/bundle.js"
   # file: "bundle.js"
@@ -46,8 +46,29 @@ application: hackathon_app {
     use_clipboard: no
     external_api_urls: ["http://localhost:8081/*", "https://sheets.googleapis.com/*"]
     core_api_methods: [
-      "me", "all_roles", "all_user_attributes", "delete_user_attribute", "create_user_attribute", "search_groups",
-      "search_users", "user_roles", "role_users", "user_attribute_user_values"
+      "me",
+      "all_roles",
+      "all_user_attributes",
+      "delete_user_attribute",
+      "create_user_attribute",
+      "search_groups",
+      "search_users",
+      "user_roles",
+      "role_users",
+      "user_attribute_user_values",
+      "search_roles",
+      "create_group",
+      "set_role_groups",
+      "set_user_attribute_group_values",
+      "set_user_attribute_user_value",
+      "create_user_credentials_email",
+      "send_user_credentials_email_password_reset",
+      "create_user_credentials_api3",
+      "add_group_user",
+      "update_user",
+      "create_user",
+      "search_groups_with_roles",
+      "role_groups"
       ]
     oauth2_urls: []
     scoped_user_attributes: ["sheet_id", "token_server_url"]
@@ -60,8 +81,8 @@ application: hackathon_app {
 Remember to add a model to the project that has a valid connection.
 
 ## Specific steps to `yarn`
-1. run `yarn install` in sdk-codegen 
-2. run `yarn build` in sdk-codgen
+1. run `yarn install` in sdk-codegen
+2. run `yarn build` in sdk-codegen
 3. run `yarn start` in examples/access_token_server
 4. run `yarn dev:hack` in sdk-codegen to start the development server and connect to the extension
 
