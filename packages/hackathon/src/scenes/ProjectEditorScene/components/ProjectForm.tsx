@@ -223,7 +223,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
               <FieldToggleSwitch
                 disabled={!canUpdate}
                 name="contestant"
-                label="Submit this project for judging?"
+                label="Consent project to be judged?"
                 onChange={(e: BaseSyntheticEvent) => {
                   dispatch(
                     updateProjectData({
