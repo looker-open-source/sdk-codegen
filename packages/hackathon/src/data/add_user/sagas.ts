@@ -50,7 +50,7 @@ const HACKATHON_USER_ATTR_NAME = 'hackathon' // case sensitive
 const HACKATHON_USER_ATTR_LABEL = 'Hackathon'
 const HACKATHON_GROUP_PREFIX = 'Looker_Hack: '
 const LANDING_PAGE_ATTR_NAME = 'landing_page'
-const LANDING_PAGE_PATH = '/extensions/hackathon::hackathon_app'
+const LANDING_PAGE_PATH = '/extensions/hackathon::hackathon'
 
 function* parseCsvSaga(action: ReturnType<typeof parseCsv>): SagaIterator {
   try {
