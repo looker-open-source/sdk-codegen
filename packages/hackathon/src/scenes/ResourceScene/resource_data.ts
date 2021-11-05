@@ -56,6 +56,14 @@ export interface Resource {
 
 export const resources: Array<Resource> = [
   {
+    content: 'A JOIN 2021 tutorial video on creating actions.',
+    type: ResourceType.Tutorial,
+    tag: ResourceTag.Actions,
+    link: 'https://www.youtube.com/watch?v=DnIG0pD3UNA',
+    shortenedLink: 'https://bit.ly/3k4iEqw',
+    title: 'Actions Tutorial Video',
+  },
+  {
     content:
       'A JOIN 2021 intro and demo video of the new visualization components.',
     type: ResourceType.Resource,
@@ -77,8 +85,8 @@ export const resources: Array<Resource> = [
     content: 'A JOIN 2021 tutorial video on using API Explorer and Looker API.',
     type: ResourceType.Tutorial,
     tag: ResourceTag.API,
-    link: 'https://www.youtube.com/watch?v=f1Wb4dYZxhM',
-    shortenedLink: 'https://bit.ly/2ZT71eS',
+    link: 'https://www.youtube.com/watch?v=plfF00T82-g',
+    shortenedLink: 'https://bit.ly/3q9e91K',
     title: 'API Explorer & API Tutorial Video',
   },
   {
