@@ -28,10 +28,6 @@ import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
 const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
-// const day1 = zonedTimeToUtc(
-//   add(new Date(), { hours: -10 }),
-//   'America/Los_Angeles'
-// )
 const day2 = add(day1, { days: 1 })
 let current = day1
 
@@ -39,6 +35,8 @@ const later = (start: Date, hours: number) => {
   current = add(start, { minutes: hours * 60 })
   return current
 }
+
+const MARKDOWN_LINEBREAK = '  '
 
 /**
  * from https://looker.com/events/join/agenda?agendaPath=session/616880
@@ -49,15 +47,17 @@ export const agenda = [
     // NOTE: if stop values are not defined, they default to the start of the next agenda item
     stop: later(day1, -3.5), // Nov 9th
     description: {
-      en: '## Welcome APAC',
+      en: `## **Welcome Session** (APAC)
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '## 開会 APAC（ご案内・注意事項など)',
     },
   },
   {
-    start: later(day1, 5), // Nov 10th
-    stop: later(day1, 5.5), // Nov 10th
+    start: later(day1, 1), // Nov 10th
+    stop: later(day1, 1.5), // Nov 10th
     description: {
-      en: '## Welcome EMEA',
+      en: `## **Welcome Session** (EMEA)
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '## 開会 EMEA（ご案内・注意事項など）',
     },
   },
@@ -65,7 +65,8 @@ export const agenda = [
     start: later(day1, 10),
     stop: later(day1, 10.5),
     description: {
-      en: '## Welcome AMER',
+      en: `## **Welcome Session** (AMER)
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '## 開会 AMER（ご案内・注意事項など)',
     },
   },
@@ -73,11 +74,9 @@ export const agenda = [
     start: later(day1, -3.5), // Nov 9th
     stop: later(day1, -2),
     description: {
-      en: `_Supported hacking hours (ENG/JPN)_
-
-Use [Slack](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F) to ask Looker staff for assistance
-
-See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`,
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
       ja_JP: `_サポート時間 (対応言語：英・日)_
 
 [Slack](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)にて日本語での技術サポートを実施しております
@@ -89,7 +88,9 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day1, 1.5), // Nov 10th
     stop: later(day1, 3.5),
     description: {
-      en: '_Supported hacking hours (ENG/JPN)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
       ja_JP: '_サポート時間 (対応言語：英・日)_',
     },
   },
@@ -97,7 +98,9 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day1, 5), // Nov 10th
     stop: later(day1, 7),
     description: {
-      en: '_Supported hacking hours (ENG)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English supported._`,
       ja_JP: '_サポート時間 (対応言語：英)_',
     },
   },
@@ -105,7 +108,9 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day1, 10.5),
     stop: later(day1, 13),
     description: {
-      en: '_Supported hacking hours (ENG)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English supported._`,
       ja_JP: '_サポート時間 (対応言語：英)_',
     },
   },
@@ -113,14 +118,28 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day1, 14.5),
     stop: later(day1, 16),
     description: {
-      en: '_Supported hacking hours (ENG/JPN)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
+      ja_JP: '_サポート時間 (対応言語：英・日)_',
+    },
+  },
+  {
+    start: later(day1, 17),
+    stop: later(day1, 19),
+    description: {
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
       ja_JP: '_サポート時間 (対応言語：英・日)_',
     },
   },
   {
     start: later(day1, 19),
     description: {
-      en: '**Hack@Night session**',
+      en: `### **Hack@Night session**
+Random fun little session!${MARKDOWN_LINEBREAK}
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '**Hack@Night Session**', //
     },
   },
@@ -128,15 +147,19 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day2, -4),
     stop: later(day2, -3.5),
     description: {
-      en: '_Roundtable Check-In APAC_',
+      en: `## **Check-In Session** (APAC)
+Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '_ラウンドテーブル Check-in APAC_',
     },
   },
   {
-    start: later(day2, 5),
-    stop: later(day2, 5.5),
+    start: later(day2, 1),
+    stop: later(day2, 1.5),
     description: {
-      en: '_Roundtable Check-In EMEA_',
+      en: `## **Check-In Session** (EMEA)
+Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '_ラウンドテーブル Check-in EMEA_',
     },
   },
@@ -144,7 +167,9 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day2, 10),
     stop: later(day2, 10.5),
     description: {
-      en: '_Roundtable Check-In AMER_',
+      en: `## **Check-In Session** (AMER)
+Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
       ja_JP: '_ラウンドテーブル Check-in AMER_',
     },
   },
@@ -152,15 +177,19 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day2, -3.5),
     stop: later(day2, -2),
     description: {
-      en: '_Supported hacking hours (ENG/JPN)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
       ja_JP: '_サポート時間 (対応言語：英・日)_',
     },
   },
   {
     start: later(day2, 1.5),
-    stop: later(day2, 3.5),
+    stop: later(day2, 3.0),
     description: {
-      en: '_Supported hacking hours (ENG/JPN)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English and Japanese supported._`,
       ja_JP: '_サポート時間 (対応言語：英・日)_',
     },
   },
@@ -168,38 +197,58 @@ See [looker-open-source](https://github.com/looker-open-source) for cool stuff!`
     start: later(day2, 5),
     stop: later(day2, 7),
     description: {
-      en: '_Supported hacking hours (ENG)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English supported._`,
       ja_JP: '_サポート時間 (対応言語：英)_',
     },
   },
   {
     start: later(day2, 10.5),
-    stop: later(day2, 13),
+    stop: later(day2, 12),
     description: {
-      en: '_Supported hacking hours (ENG)_',
+      en: `### Supported hacking hours
+Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
+_English supported._`,
       ja_JP: '_サポート時間 (対応言語：英・日)_',
     },
   },
   {
     start: later(day2, 13),
+    stop: later(day2, 15.5),
     description: {
-      en: `**Final submissions due**`,
+      en: `## **Project Judging**
+Projects will be locked.${MARKDOWN_LINEBREAK}
+Please update your project description with your deliverables beforehand.`,
       ja_JP: '**プロジェクトの提出締め切り**',
     },
   },
   {
     start: later(day2, 14),
+    stop: later(day2, 14),
     description: {
-      en: `## Winner announcements & Demos`,
+      en: `## **Finalists announced**`,
+      ja_JP: '## 優秀賞発表 & デモ',
+    },
+  },
+  {
+    start: later(day2, 15.5),
+    stop: later(day2, 16.5),
+    description: {
+      en: `## **Closing Session**
+Winners announced.${MARKDOWN_LINEBREAK}
+[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
       ja_JP: '## 優秀賞発表 & デモ',
     },
   },
   // NOTE: All other stop values can default. The final stop value is required.
   {
-    start: later(day2, 15),
-    stop: later(day2, 17),
+    start: later(day2, 16.5),
+    stop: later(day2, 17.5),
     description: {
-      en: `## Hacky Hour (Social Event)`,
+      en: `## **~Happy~ Hacky Hour**
+Congrats on making it to the end!${MARKDOWN_LINEBREAK}
+Let's socialize and celebrate!`,
       ja_JP: '## Hacky Hour (懇親会)',
     },
   },
