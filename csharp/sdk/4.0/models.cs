@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 298 API models: 221 Spec, 0 Request, 57 Write, 20 Enum
+/// 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -291,7 +291,7 @@ public class BoardItem : SdkModel
   /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -460,7 +460,7 @@ public class ContentFavorite : SdkModel
   /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Id of a look (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
   public LookBasic? look { get; set; }
@@ -482,7 +482,7 @@ public class ContentMeta : SdkModel
   /// <summary>Id of associated dashboard when content_type is "dashboard" (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>Id of associated look when content_type is "look" (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of associated folder when content_type is "space" (read-only)</summary>
   public string? folder_id { get; set; } = null;
   /// <summary>Content Type ("dashboard", "look", or "folder") (read-only)</summary>
@@ -637,7 +637,7 @@ public class ContentValidationFolder : SdkModel
 public class ContentValidationLook : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>Short Url (read-only)</summary>
@@ -668,7 +668,7 @@ public class ContentValidationScheduledPlan : SdkModel
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
 }
@@ -696,7 +696,7 @@ public class ContentView : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Id of viewed Look (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of the viewed Dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Name or title of underlying content (read-only)</summary>
@@ -746,6 +746,26 @@ public class CreateCostEstimate : SdkModel
 {
   /// <summary>SQL statement to estimate (read-only)</summary>
   public string? sql { get; set; } = null;
+}
+
+public class CreateCredentialsApi3 : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>API key client_id (read-only)</summary>
+  public string? client_id { get; set; } = null;
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>Has this credential been disabled? (read-only)</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>API key client_secret (read-only)</summary>
+  public string? client_secret { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
 }
 
 public class CreateDashboardFilter : SdkModel
@@ -835,12 +855,11 @@ public class CreateQueryTask : SdkModel
   /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
 
-/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class CredentialsApi3 : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -1096,7 +1115,7 @@ public class Dashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -1750,6 +1769,22 @@ public class EmbedParams : SdkModel
   public bool? force_logout_login { get; set; } = null;
 }
 
+public class EmbedSecret : SdkModel
+{
+  /// <summary>Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`</summary>
+  public string? algorithm { get; set; } = null;
+  /// <summary>When secret was created (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>Is this secret currently enabled</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Secret for use with SSO embedding (read-only)</summary>
+  public string? secret { get; set; } = null;
+  /// <summary>Id of user who created this secret (read-only)</summary>
+  public long? user_id { get; set; } = null;
+}
+
 public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
@@ -2101,7 +2136,7 @@ public class HomepageItem : SdkModel
   /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -2558,7 +2593,7 @@ public class Look : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -3067,7 +3102,7 @@ public class LookWithDashboards : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -3131,7 +3166,7 @@ public class LookWithQuery : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -3775,7 +3810,7 @@ public class QueryTask : SdkModel
   /// <summary>Source of the results of the query. (read-only)</summary>
   public string? result_source { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>The data format of the query results. (read-only)</summary>
@@ -3801,7 +3836,7 @@ public class RenderTask : SdkModel
   /// <summary>Id of this render task (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Id of look to render (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of lookml dashboard to render (read-only)</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Id of query to render (read-only)</summary>
@@ -4147,7 +4182,7 @@ public class ScheduledPlan : SdkModel
   /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>
@@ -5022,7 +5057,7 @@ public class WriteBoardItem : SdkModel
   /// <summary>Associated Board Section</summary>
   public long? board_section_id { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -5148,7 +5183,7 @@ public class WriteCreateQueryTask : SdkModel
   /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
@@ -5186,7 +5221,7 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -5450,6 +5485,16 @@ public class WriteDBConnectionOverride : SdkModel
   public string? jdbc_additional_params { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+}
+
+/// Dynamic writeable type for EmbedSecret removes:
+/// created_at, id, secret, user_id
+public class WriteEmbedSecret : SdkModel
+{
+  /// <summary>Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`</summary>
+  public string? algorithm { get; set; } = null;
+  /// <summary>Is this secret currently enabled</summary>
+  public bool? enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for ExternalOauthApplication removes:
@@ -5993,7 +6038,7 @@ public class WriteScheduledPlan : SdkModel
   /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>

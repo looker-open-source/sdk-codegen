@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -63,6 +63,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -97,6 +98,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IExternalOauthApplication,
@@ -169,6 +171,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -250,6 +253,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -651,6 +655,58 @@ export class Looker40SDKStream extends APIMethods {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   *
+   * The value of the `secret` field will be set by Looker and returned.
+   *
+   * POST /embed_config/secrets -> IEmbedSecret
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteEmbedSecret>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_embed_secret(
+    callback: (readable: Readable) => Promise<IEmbedSecret>,
+    body?: Partial<IWriteEmbedSecret>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IEmbedSecret>(
+      callback,
+      'POST',
+      '/embed_config/secrets',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an embed secret.
+   *
+   * DELETE /embed_config/secrets/{embed_secret_id} -> string
+   *
+   * @param callback streaming output function
+   * @param embed_secret_id Id of Embed Secret
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_embed_secret(
+    callback: (readable: Readable) => Promise<string>,
+    embed_secret_id: number,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<string>(
+      callback,
+      'DELETE',
+      `/embed_config/secrets/${embed_secret_id}`,
+      null,
+      null,
+      options
+    )
+  }
 
   /**
    * ### Create SSO Embed URL
@@ -5600,6 +5656,62 @@ export class Looker40SDKStream extends APIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_model(
+    callback: (readable: Readable) => Promise<IDependencyGraph>,
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.model = encodeParam(request.model)
+    return this.authStream<IDependencyGraph>(
+      callback,
+      'GET',
+      `/derived_table/graph/model/${request.model}`,
+      { format: request.format, color: request.color },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_view(
+    callback: (readable: Readable) => Promise<IDependencyGraph>,
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.view = encodeParam(request.view)
+    return this.authStream<IDependencyGraph>(
+      callback,
+      'GET',
+      `/derived_table/graph/view/${request.view}`,
+      { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -6984,10 +7096,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
-    look_id: number,
+    look_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     return this.authStream<ILookWithQuery>(
       callback,
       'GET',
@@ -7031,11 +7144,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
-    look_id: number,
+    look_id: string,
     body: Partial<IWriteLookWithQuery>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     return this.authStream<ILookWithQuery>(
       callback,
       'PATCH',
@@ -7064,9 +7178,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_look(
     callback: (readable: Readable) => Promise<string>,
-    look_id: number,
+    look_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -7112,6 +7227,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunLook,
     options?: Partial<ITransportSettings>
   ) {
+    request.look_id = encodeParam(request.look_id)
     request.result_format = encodeParam(request.result_format)
     return this.authStream<string>(
       callback,
@@ -7155,10 +7271,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async copy_look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
-    look_id: number,
+    look_id: string,
     folder_id?: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     return this.authStream<ILookWithQuery>(
       callback,
       'POST',
@@ -7187,10 +7304,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async move_look(
     callback: (readable: Readable) => Promise<ILookWithQuery>,
-    look_id: number,
+    look_id: string,
     folder_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     return this.authStream<ILookWithQuery>(
       callback,
       'PATCH',
@@ -7204,32 +7322,6 @@ export class Looker40SDKStream extends APIMethods {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param callback streaming output function
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async graph_derived_tables_for_model(
-    callback: (readable: Readable) => Promise<IDependencyGraph>,
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ) {
-    request.model = encodeParam(request.model)
-    return this.authStream<IDependencyGraph>(
-      callback,
-      'GET',
-      `/derived_table/graph/model/${request.model}`,
-      { format: request.format, color: request.color },
-      null,
-      options
-    )
-  }
 
   /**
    * ### Get information about all lookml models.
@@ -9028,6 +9120,7 @@ export class Looker40SDKStream extends APIMethods {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        source: request.source,
       },
       null,
       options
@@ -12261,28 +12354,26 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param callback streaming output function
    * @param user_id id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async create_user_credentials_api3(
-    callback: (readable: Readable) => Promise<ICredentialsApi3>,
+    callback: (readable: Readable) => Promise<ICreateCredentialsApi3>,
     user_id: number,
-    body?: Partial<ICredentialsApi3>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
-    return this.authStream<ICredentialsApi3>(
+    return this.authStream<ICreateCredentialsApi3>(
       callback,
       'POST',
       `/users/${user_id}/credentials_api3`,
       { fields },
-      body,
+      null,
       options
     )
   }

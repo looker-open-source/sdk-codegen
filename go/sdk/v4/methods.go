@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-425 API methods
+429 API methods
 */
 
 
@@ -259,6 +259,32 @@ func (l *LookerSDK) Logout(
   // endregion ApiAuth: API Authentication
 
   // region Auth: Manage User Authentication Configuration
+
+// ### Create an embed secret using the specified information.
+//
+// The value of the `secret` field will be set by Looker and returned.
+//
+// POST /embed_config/secrets -> EmbedSecret
+func (l *LookerSDK) CreateEmbedSecret(
+    body WriteEmbedSecret,
+    options *rtl.ApiSettings) (EmbedSecret, error) {
+    var result EmbedSecret
+    err := l.session.Do(&result, "POST", "/4.0", "/embed_config/secrets", nil, body, options)
+    return result, err
+
+}
+
+// ### Delete an embed secret.
+//
+// DELETE /embed_config/secrets/{embed_secret_id} -> string
+func (l *LookerSDK) DeleteEmbedSecret(
+    embedSecretId int64,
+    options *rtl.ApiSettings) (string, error) {
+    var result string
+    err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed_config/secrets/%v", embedSecretId), nil, nil, options)
+    return result, err
+
+}
 
 // ### Create SSO Embed URL
 //
@@ -2893,6 +2919,34 @@ func (l *LookerSDK) UpdateDatagroup(
 
   // endregion Datagroup: Manage Datagroups
 
+  // region DerivedTable: View Derived Table graphs
+
+// ### Discover information about derived tables
+//
+// GET /derived_table/graph/model/{model} -> DependencyGraph
+func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTablesForModel,
+    options *rtl.ApiSettings) (DependencyGraph, error) {
+    request.Model = url.PathEscape(request.Model)
+    var result DependencyGraph
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
+    return result, err
+
+}
+
+// ### Get the subgraph representing this derived table and its dependencies.
+//
+// GET /derived_table/graph/view/{view} -> DependencyGraph
+func (l *LookerSDK) GraphDerivedTablesForView(request RequestGraphDerivedTablesForView,
+    options *rtl.ApiSettings) (DependencyGraph, error) {
+    request.View = url.PathEscape(request.View)
+    var result DependencyGraph
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
+    return result, err
+
+}
+
+  // endregion DerivedTable: View Derived Table graphs
+
   // region Folder: Manage Folders
 
 // Search for folders by creator id, parent id, name, etc
@@ -3583,9 +3637,10 @@ func (l *LookerSDK) SearchLooks(request RequestSearchLooks,
 //
 // GET /looks/{look_id} -> LookWithQuery
 func (l *LookerSDK) Look(
-    lookId int64,
+    lookId string,
     fields string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
+    lookId = url.PathEscape(lookId)
     var result LookWithQuery
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -3615,10 +3670,11 @@ func (l *LookerSDK) Look(
 //
 // PATCH /looks/{look_id} -> LookWithQuery
 func (l *LookerSDK) UpdateLook(
-    lookId int64,
+    lookId string,
     body WriteLookWithQuery,
     fields string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
+    lookId = url.PathEscape(lookId)
     var result LookWithQuery
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -3635,8 +3691,9 @@ func (l *LookerSDK) UpdateLook(
 //
 // DELETE /looks/{look_id} -> string
 func (l *LookerSDK) DeleteLook(
-    lookId int64,
+    lookId string,
     options *rtl.ApiSettings) (string, error) {
+    lookId = url.PathEscape(lookId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/looks/%v", lookId), nil, nil, options)
     return result, err
@@ -3667,6 +3724,7 @@ func (l *LookerSDK) DeleteLook(
 // **Note**: Binary content may be returned by this method.
 func (l *LookerSDK) RunLook(request RequestRunLook,
     options *rtl.ApiSettings) (string, error) {
+    request.LookId = url.PathEscape(request.LookId)
     request.ResultFormat = url.PathEscape(request.ResultFormat)
     var result string
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v/run/%v", request.LookId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, nil, options)
@@ -3684,9 +3742,10 @@ func (l *LookerSDK) RunLook(request RequestRunLook,
 //
 // POST /looks/{look_id}/copy -> LookWithQuery
 func (l *LookerSDK) CopyLook(
-    lookId int64,
+    lookId string,
     folderId string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
+    lookId = url.PathEscape(lookId)
     var result LookWithQuery
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/looks/%v/copy", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
     return result, err
@@ -3702,9 +3761,10 @@ func (l *LookerSDK) CopyLook(
 //
 // PATCH /looks/{look_id}/move -> LookWithQuery
 func (l *LookerSDK) MoveLook(
-    lookId int64,
+    lookId string,
     folderId string,
     options *rtl.ApiSettings) (LookWithQuery, error) {
+    lookId = url.PathEscape(lookId)
     var result LookWithQuery
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v/move", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
     return result, err
@@ -3714,18 +3774,6 @@ func (l *LookerSDK) MoveLook(
   // endregion Look: Run and Manage Looks
 
   // region LookmlModel: Manage LookML Models
-
-// ### Discover information about derived tables
-//
-// GET /derived_table/graph/model/{model} -> DependencyGraph
-func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTablesForModel,
-    options *rtl.ApiSettings) (DependencyGraph, error) {
-    request.Model = url.PathEscape(request.Model)
-    var result DependencyGraph
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
-    return result, err
-
-}
 
 // ### Get information about all lookml models.
 //
@@ -4730,7 +4778,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
     options *rtl.ApiSettings) (string, error) {
     request.ResultFormat = url.PathEscape(request.ResultFormat)
     var result string
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source}, nil, options)
     return result, err
 
 }
@@ -6587,14 +6635,13 @@ func (l *LookerSDK) AllUserCredentialsApi3s(
 
 // ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
 //
-// POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+// POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
 func (l *LookerSDK) CreateUserCredentialsApi3(
     userId int64,
-    body CredentialsApi3,
     fields string,
-    options *rtl.ApiSettings) (CredentialsApi3, error) {
-    var result CredentialsApi3
-    err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, body, options)
+    options *rtl.ApiSettings) (CreateCredentialsApi3, error) {
+    var result CreateCredentialsApi3
+    err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
 
 }
