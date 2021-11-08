@@ -53,7 +53,7 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
             <ExtMarkdown
               source={`### Our [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429) contains all event details!
 *Change your [account](https://hack.looker.com/account) timezone to display times in your timezone.*${MARKDOWN_LINEBREAK}
-*Change your [account](https://hack.looker.com/account) locale to ${'`ja_JP`'} to display agenda in japanese.*`}
+*Change your [account](https://hack.looker.com/account) locale to ${'`ja_JP`'} to display the agenda in Japanese.*`}
             />
           </Paragraph>
         </Span>

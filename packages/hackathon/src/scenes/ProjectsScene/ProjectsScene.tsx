@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { Button, Space, Heading } from '@looker/components'
@@ -50,6 +50,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const hackathon = useSelector(getCurrentHackathonState)
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
+  const [judgingStarted, setJudgingStarted] = useState<boolean>(true)
 
   const handleAdd = () => {
     history.push(Routes.CREATE_PROJECT)
@@ -63,6 +64,16 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
+  useEffect(() => {
+    if (hackathon) {
+      setJudgingStarted(
+        hackathon.judging_starts?.getTime() < new Date().getTime()
+      )
+    } else {
+      setJudgingStarted(false)
+    }
+  }, [hackathon])
+
   return (
     <>
       <Space>
@@ -73,7 +84,11 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       </Space>
       <ProjectList />
       <Space pt="xlarge">
-        <Button iconBefore={<Add />} onClick={handleAdd} disabled={isLoading}>
+        <Button
+          iconBefore={<Add />}
+          onClick={handleAdd}
+          disabled={isLoading || judgingStarted}
+        >
           Add Project
         </Button>
         <>
