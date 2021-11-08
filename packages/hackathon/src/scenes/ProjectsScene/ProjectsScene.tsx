@@ -28,18 +28,20 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Space, Heading } from '@looker/components'
+import { Button, Space, Heading, Span } from '@looker/components'
 import { Add } from '@styled-icons/material-outlined/Add'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Lock } from '@styled-icons/material-outlined/Lock'
 import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components'
-import { Routes } from '../../routes/AppRouter'
+import { Routes } from '../../routes'
 import {
   getCurrentHackathonState,
   getHackerState,
 } from '../../data/hack_session/selectors'
+import { canLockProject } from '../../utils'
+import { Era, eraColor, zonedLocaleDate } from '../HomeScene/components'
 import { ProjectList } from './components'
 
 interface ProjectSceneProps {}
@@ -51,6 +53,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
   const [judgingStarted, setJudgingStarted] = useState<boolean>(true)
+  const [judgingStarts, setJudgingStarts] = useState<string>('')
 
   const handleAdd = () => {
     history.push(Routes.CREATE_PROJECT)
@@ -65,14 +68,21 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   }
 
   useEffect(() => {
-    if (hackathon) {
-      setJudgingStarted(
-        hackathon.judging_starts?.getTime() < new Date().getTime()
+    if (hackathon && hacker) {
+      const started = hackathon.judging_starts?.getTime() < new Date().getTime()
+      setJudgingStarts(
+        `Judging start${started ? 'ed' : 's'} ${zonedLocaleDate(
+          hackathon.judging_starts,
+          hacker.timezone,
+          hacker.locale
+        )}`
       )
+      setJudgingStarted(started)
     } else {
+      setJudgingStarts('')
       setJudgingStarted(false)
     }
-  }, [hackathon])
+  }, [hackathon, hacker])
 
   return (
     <>
@@ -84,10 +94,15 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       </Space>
       <ProjectList />
       <Space pt="xlarge">
+        {judgingStarted && (
+          <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
+            {judgingStarts}
+          </Span>
+        )}
         <Button
           iconBefore={<Add />}
           onClick={handleAdd}
-          disabled={isLoading || judgingStarted}
+          disabled={(isLoading || judgingStarted) && !canLockProject(hacker)}
         >
           Add Project
         </Button>

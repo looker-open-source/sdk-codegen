@@ -73,9 +73,25 @@ export const dateLocale = (locale: string) => (locale === 'ja_JP' ? ja : enUS)
 export const dateString = (
   value: AgendaTime,
   locale: string,
-  template = 'LLL'
+  template = 'PPpp'
 ) => {
   return format(value, template, { locale: dateLocale(locale) })
+}
+
+/**
+ * Localized, zoned time
+ * @param value to zone and localize
+ * @param zone to use
+ * @param locale to use
+ * @param template override for dateString()
+ */
+export const zonedLocaleDate = (
+  value: AgendaTime,
+  zone: string,
+  locale: string,
+  template = 'PPpp'
+) => {
+  return dateString(zoneDate(value, zone), locale, template)
 }
 
 /**
