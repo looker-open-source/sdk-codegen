@@ -71,7 +71,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon && hacker) {
       const started = hackathon.judging_starts?.getTime() < new Date().getTime()
       setJudgingStarts(
-        `Judging start${started ? 'ed' : 's'} ${zonedLocaleDate(
+        `Judging start${started ? 'ed' : 's'}: ${zonedLocaleDate(
           hackathon.judging_starts,
           hacker.timezone,
           hacker.locale
@@ -94,7 +94,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       </Space>
       <ProjectList />
       <Space pt="xlarge">
-        {judgingStarted && (
+        {!!judgingStarts && (
           <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
             {judgingStarts}
           </Span>
