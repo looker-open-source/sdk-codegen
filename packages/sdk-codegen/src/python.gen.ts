@@ -86,6 +86,7 @@ export class PythonGen extends CodeGen {
     'in',
     'is',
     'lambda',
+    'models',
     'nonlocal',
     'not',
     'or',
@@ -169,7 +170,11 @@ ${this.hooks.join('\n')}
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
-      hash.push(`"${arg}": ${arg}`)
+      let argName = arg
+      if (this.pythonKeywords.has(argName)) {
+        argName = argName + '_'
+      }
+      hash.push(`"${arg}": ${argName}`)
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`
   }
@@ -251,6 +256,10 @@ ${this.hooks.join('\n')}
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
+    let paramName = param.name
+    if (this.pythonKeywords.has(paramName)) {
+      paramName = paramName + '_'
+    }
     let type: IType
     if (param.location === strBody) {
       type = this.writeableType(param.type, method) || param.type
@@ -261,7 +270,7 @@ ${this.hooks.join('\n')}
     const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`
     return (
       this.commentHeader(indent, param.description) +
-      `${indent}${param.name}: ${paramType}` +
+      `${indent}${paramName}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     )
   }
