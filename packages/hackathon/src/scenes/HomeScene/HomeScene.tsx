@@ -28,6 +28,7 @@ import type { FC } from 'react'
 import React from 'react'
 
 import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import type { IHackerProps } from '../../models'
 import { ExtMarkdown } from '../../components'
 import { Agenda } from './components'
@@ -41,7 +42,7 @@ const MARKDOWN_LINEBREAK = '  '
 
 export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
   const schedule = localAgenda(hacker.locale)
-  const host = 'https://hack.looker.com'
+  const host = getExtensionSDK().lookerHostData?.hostUrl
   const intro =
     hacker.locale === 'ja_JP'
       ? `### ハッカソン詳細については、[よくある質問記事](https://community.looker.com/hackathome-2021-1026/hackathome-2021-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F-28518)をご確認いただけます。
