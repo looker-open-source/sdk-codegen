@@ -52,8 +52,6 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   const hackathon = useSelector(getCurrentHackathonState)
   const isLoading = useSelector(isLoadingState)
   const history = useHistory()
-  const [judgingStarted, setJudgingStarted] = useState<boolean>(true)
-  const [judgingStarts, setJudgingStarts] = useState<string>('')
 
   const handleAdd = () => {
     history.push(Routes.CREATE_PROJECT)
@@ -67,22 +65,23 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
-  useEffect(() => {
-    if (hackathon && hacker) {
-      const started = hackathon.judging_starts?.getTime() < new Date().getTime()
-      setJudgingStarts(
-        `Judging start${started ? 'ed' : 's'}: ${zonedLocaleDate(
-          hackathon.judging_starts,
-          hacker.timezone,
-          hacker.locale
-        )}`
-      )
-      setJudgingStarted(started)
+  let judgingStarted = false
+  let judgingString = ''
+  if (hackathon && hacker) {
+    judgingStarted = hackathon.judging_starts?.getTime() < new Date().getTime()
+
+    const dateString = zonedLocaleDate(
+      hackathon.judging_starts,
+      hacker.timezone,
+      hacker.locale
+    )
+
+    if (judgingStarted) {
+      judgingString = `Judging started: ${dateString}`
     } else {
-      setJudgingStarts('')
-      setJudgingStarted(false)
+      judgingString = `Judging starts: ${dateString}`
     }
-  }, [hackathon, hacker])
+  }
 
   return (
     <>
@@ -94,11 +93,6 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       </Space>
       <ProjectList />
       <Space pt="xlarge">
-        {!!judgingStarts && (
-          <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
-            {judgingStarts}
-          </Span>
-        )}
         <Button
           iconBefore={<Add />}
           onClick={handleAdd}
@@ -126,6 +120,9 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
             </>
           )}
         </>
+        <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
+          {judgingString}
+        </Span>
       </Space>
     </>
   )
