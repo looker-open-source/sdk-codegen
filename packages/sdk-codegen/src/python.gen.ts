@@ -166,15 +166,18 @@ ${this.hooks.join('\n')}
     return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)
   }
 
+  fixName(propName: string) {
+    if (this.pythonKeywords.has(propName)) {
+      propName = propName + '_'
+    }
+    return propName
+  }
+
   argGroup(_indent: string, args: Arg[]) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
-      let argName = arg
-      if (this.pythonKeywords.has(argName)) {
-        argName = argName + '_'
-      }
-      hash.push(`"${arg}": ${argName}`)
+      hash.push(`"${arg}": ${this.fixName(arg)}`)
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`
   }
@@ -191,10 +194,6 @@ ${this.hooks.join('\n')}
 
   declareProperty(indent: string, property: IProperty, annotations = false) {
     const mappedType = this.typeMapModels(property.type)
-    let propName = property.name
-    if (this.pythonKeywords.has(propName)) {
-      propName = propName + '_'
-    }
     let propType = mappedType.name
     if (!property.required) {
       propType = `Optional[${mappedType.name}]`
@@ -206,12 +205,14 @@ ${this.hooks.join('\n')}
       if (this.isBareForwardRef(property)) {
         annotation = `ForwardRef(${propType})`
       }
-      propDef = `${this.bumper(indent)}"${propName}": ${annotation}`
+      propDef = `${this.bumper(indent)}"${this.fixName(
+        property.name
+      )}": ${annotation}`
     } else {
       if (!property.required) {
         propType += ` = ${this.nullStr}`
       }
-      propDef = `${indent}${propName}: ${propType}`
+      propDef = `${indent}${this.fixName(property.name)}: ${propType}`
     }
     return propDef
   }
@@ -256,10 +257,6 @@ ${this.hooks.join('\n')}
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
-    let paramName = param.name
-    if (this.pythonKeywords.has(paramName)) {
-      paramName = paramName + '_'
-    }
     let type: IType
     if (param.location === strBody) {
       type = this.writeableType(param.type, method) || param.type
@@ -270,7 +267,7 @@ ${this.hooks.join('\n')}
     const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`
     return (
       this.commentHeader(indent, param.description) +
-      `${indent}${paramName}: ${paramType}` +
+      `${indent}${this.fixName(param.name)}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     )
   }
@@ -286,11 +283,9 @@ ${this.hooks.join('\n')}
   }
 
   initArg(indent: string, property: IProperty) {
-    let propName = property.name
-    if (this.pythonKeywords.has(propName)) {
-      propName = propName + '_'
-    }
-    return `${indent}self.${propName} = ${propName}`
+    return `${indent}self.${this.fixName(property.name)} = ${this.fixName(
+      property.name
+    )}`
   }
 
   declareType(indent: string, type: IType) {
@@ -364,11 +359,7 @@ ${this.hooks.join('\n')}
     } else {
       propType = `Optional[${mappedType.name}] = ${this.nullStr}`
     }
-    let propName = property.name
-    if (this.pythonKeywords.has(propName)) {
-      propName = propName + '_'
-    }
-    return `${indent}${propName}: ${propType}`
+    return `${indent}${this.fixName(property.name)}: ${propType}`
   }
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
@@ -472,12 +463,10 @@ ${this.hooks.join('\n')}
 
     if (!isEnum) {
       for (const prop of this.typeProperties(type)) {
-        let propName = prop.name
-        if (this.pythonKeywords.has(propName)) {
-          propName = propName + '_'
+        if (this.pythonKeywords.has(prop.name)) {
           usesReservedPythonKeyword = true
         }
-        let attr = `${b2}${propName}:`
+        let attr = `${b2}${this.fixName(prop.name)}:`
         if (prop.description) {
           attr += ` ${prop.description}`
         }
