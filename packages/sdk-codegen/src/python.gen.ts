@@ -86,7 +86,6 @@ export class PythonGen extends CodeGen {
     'in',
     'is',
     'lambda',
-    'models',
     'nonlocal',
     'not',
     'or',
@@ -111,7 +110,7 @@ import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union, cast
 import warnings
 
-from . import models
+from . import models as mdls
 from ${this.packagePath}.rtl import api_methods
 from ${this.packagePath}.rtl import transport
 
@@ -166,18 +165,11 @@ ${this.hooks.join('\n')}
     return this.fileName(`sdk/api${this.apiRef}/${baseFileName}`)
   }
 
-  fixName(propName: string) {
-    if (this.pythonKeywords.has(propName)) {
-      propName = propName + '_'
-    }
-    return propName
-  }
-
   argGroup(_indent: string, args: Arg[]) {
     if (!args || args.length === 0) return this.nullStr
     const hash: string[] = []
     for (const arg of args) {
-      hash.push(`"${arg}": ${this.fixName(arg)}`)
+      hash.push(`"${arg}": ${arg}`)
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`
   }
@@ -194,6 +186,10 @@ ${this.hooks.join('\n')}
 
   declareProperty(indent: string, property: IProperty, annotations = false) {
     const mappedType = this.typeMapModels(property.type)
+    let propName = property.name
+    if (this.pythonKeywords.has(propName)) {
+      propName = propName + '_'
+    }
     let propType = mappedType.name
     if (!property.required) {
       propType = `Optional[${mappedType.name}]`
@@ -205,14 +201,12 @@ ${this.hooks.join('\n')}
       if (this.isBareForwardRef(property)) {
         annotation = `ForwardRef(${propType})`
       }
-      propDef = `${this.bumper(indent)}"${this.fixName(
-        property.name
-      )}": ${annotation}`
+      propDef = `${this.bumper(indent)}"${propName}": ${annotation}`
     } else {
       if (!property.required) {
         propType += ` = ${this.nullStr}`
       }
-      propDef = `${indent}${this.fixName(property.name)}: ${propType}`
+      propDef = `${indent}${propName}: ${propType}`
     }
     return propDef
   }
@@ -267,7 +261,7 @@ ${this.hooks.join('\n')}
     const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`
     return (
       this.commentHeader(indent, param.description) +
-      `${indent}${this.fixName(param.name)}: ${paramType}` +
+      `${indent}${param.name}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     )
   }
@@ -283,9 +277,11 @@ ${this.hooks.join('\n')}
   }
 
   initArg(indent: string, property: IProperty) {
-    return `${indent}self.${this.fixName(property.name)} = ${this.fixName(
-      property.name
-    )}`
+    let propName = property.name
+    if (this.pythonKeywords.has(propName)) {
+      propName = propName + '_'
+    }
+    return `${indent}self.${propName} = ${propName}`
   }
 
   declareType(indent: string, type: IType) {
@@ -359,7 +355,11 @@ ${this.hooks.join('\n')}
     } else {
       propType = `Optional[${mappedType.name}] = ${this.nullStr}`
     }
-    return `${indent}${this.fixName(property.name)}: ${propType}`
+    let propName = property.name
+    if (this.pythonKeywords.has(propName)) {
+      propName = propName + '_'
+    }
+    return `${indent}${propName}: ${propType}`
   }
 
   // this is a builder function to produce arguments with optional null place holders but no extra required optional arguments
@@ -463,10 +463,12 @@ ${this.hooks.join('\n')}
 
     if (!isEnum) {
       for (const prop of this.typeProperties(type)) {
-        if (this.pythonKeywords.has(prop.name)) {
+        let propName = prop.name
+        if (this.pythonKeywords.has(propName)) {
+          propName = propName + '_'
           usesReservedPythonKeyword = true
         }
-        let attr = `${b2}${this.fixName(prop.name)}:`
+        let attr = `${b2}${propName}:`
         if (prop.description) {
           attr += ` ${prop.description}`
         }
@@ -503,7 +505,7 @@ ${this.hooks.join('\n')}
   }
 
   // when format is "methods" that means we're in the methods.py module
-  // and we need to reference the type by the `models.` package name
+  // and we need to reference the type by the `mdls.` package name
   prefixModelsNamespace(
     name: string,
     format: 'models' | 'methods',
@@ -513,7 +515,7 @@ ${this.hooks.join('\n')}
       // need to quote this forwardRef
       name = forwardRef ? `"${name}"` : name
     } else if (format === 'methods') {
-      name = `models.${name}`
+      name = `mdls.${name}`
     }
     return name
   }
