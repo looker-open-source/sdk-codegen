@@ -458,7 +458,7 @@ def test_search_looks_title_fields_filter(sdk: mtds.Looker40SDK):
     assert len(search_results) > 0
     look = search_results[0]
     assert isinstance(look.id, str)
-    assert look.id > 0
+    assert look.id != "0"
     assert "SDK" in look.title
     assert look.description is None
 
@@ -474,7 +474,7 @@ def test_search_look_and_run(sdk: mtds.Looker40SDK):
     assert len(search_results) > 0
     look = search_results[0]
     assert isinstance(look.id, str)
-    assert look.id > 0
+    assert look.id != "0"
     assert "SDK" in look.title
     assert look.description is None
     actual = sdk.run_look(look_id=look.id, result_format="csv")
