@@ -85,8 +85,8 @@ export const resources: Array<Resource> = [
     content: 'A JOIN 2021 tutorial video on using API Explorer and Looker API.',
     type: ResourceType.Tutorial,
     tag: ResourceTag.API,
-    link: 'https://www.youtube.com/watch?v=plfF00T82-g',
-    shortenedLink: 'https://bit.ly/3q9e91K',
+    link: 'https://youtu.be/kOanUnTMDpg',
+    shortenedLink: 'https://bit.ly/3wsOa6t',
     title: 'API Explorer & API Tutorial Video',
   },
   {
@@ -110,8 +110,8 @@ export const resources: Array<Resource> = [
     content: 'The API Explorer lets you learn and interact with Looker API.',
     type: ResourceType.Resource,
     tag: ResourceTag.API,
-    link: 'https://hack.looker.com/extensions/marketplace_git_github_com_looker_open_source_extension_api_explorer_git::api-explorer',
-    shortenedLink: 'https://bit.ly/3j1sdWD',
+    link: 'https://hack.looker.com/extensions/marketplace_extension_api_explorer::api-explorer',
+    shortenedLink: 'https://bit.ly/2YtLrwT',
     title: 'API Explorer',
   },
   {
