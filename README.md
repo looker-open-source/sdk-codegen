@@ -190,6 +190,23 @@ yarn run
 
 to see the list of all scripts that can be run by the code generator.
 
+After generation, the generated code might not conform with the code standards.
+Changes cannot be commited until they pass the lint tests.
+This can be checked with the following:
+```sh
+yarn lint
+```
+
+For a faster run, only the modified files can be checked with:
+```sh
+yarn lint-changed
+```
+
+Fixes can automagically be applied with:
+```sh
+yarn lint-changed-fix
+```
+
 ## SDK Examples
 
 The [examples directory](/examples) contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
