@@ -29,7 +29,7 @@ import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union, cast
 import warnings
 
-from . import models
+from . import models as mdls
 from looker_sdk.rtl import api_methods
 from looker_sdk.rtl import transport
 
@@ -67,7 +67,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
     #
-    # POST /login -> models.AccessToken
+    # POST /login -> mdls.AccessToken
     def login(
         self,
         # client_id part of API3 Key.
@@ -75,13 +75,13 @@ class Looker31SDK(api_methods.APIMethods):
         # client_secret part of API3 Key.
         client_secret: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.AccessToken:
+    ) -> mdls.AccessToken:
         """Login"""
         response = cast(
-            models.AccessToken,
+            mdls.AccessToken,
             self.post(
                 path="/login",
-                structure=models.AccessToken,
+                structure=mdls.AccessToken,
                 query_params={"client_id": client_id, "client_secret": client_secret},
                 transport_options=transport_options,
             ),
@@ -105,7 +105,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # See 'login' for more detail on the access token and how to use it.
     #
-    # POST /login/{user_id} -> models.AccessToken
+    # POST /login/{user_id} -> mdls.AccessToken
     def login_user(
         self,
         # Id of user.
@@ -113,16 +113,16 @@ class Looker31SDK(api_methods.APIMethods):
         # When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
         associative: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.AccessToken:
+    ) -> mdls.AccessToken:
         """Login user"""
         warnings.warn(
             "login_user behavior changed significantly in 21.4.0. See https://git.io/JOtH1"
         )
         response = cast(
-            models.AccessToken,
+            mdls.AccessToken,
             self.post(
                 path=f"/login/{user_id}",
-                structure=models.AccessToken,
+                structure=mdls.AccessToken,
                 query_params={"associative": associative},
                 transport_options=transport_options,
             ),
@@ -184,18 +184,18 @@ class Looker31SDK(api_methods.APIMethods):
     # it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
     # encrypted transport.
     #
-    # POST /embed/sso_url -> models.EmbedUrlResponse
+    # POST /embed/sso_url -> mdls.EmbedUrlResponse
     def create_sso_embed_url(
         self,
-        body: models.EmbedSsoParams,
+        body: mdls.EmbedSsoParams,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.EmbedUrlResponse:
+    ) -> mdls.EmbedUrlResponse:
         """Create SSO Embed Url"""
         response = cast(
-            models.EmbedUrlResponse,
+            mdls.EmbedUrlResponse,
             self.post(
                 path="/embed/sso_url",
-                structure=models.EmbedUrlResponse,
+                structure=mdls.EmbedUrlResponse,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -219,17 +219,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
     #
-    # GET /ldap_config -> models.LDAPConfig
+    # GET /ldap_config -> mdls.LDAPConfig
     def ldap_config(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfig:
+    ) -> mdls.LDAPConfig:
         """Get LDAP Configuration"""
         response = cast(
-            models.LDAPConfig,
+            mdls.LDAPConfig,
             self.get(
                 path="/ldap_config",
-                structure=models.LDAPConfig,
+                structure=mdls.LDAPConfig,
                 transport_options=transport_options,
             ),
         )
@@ -247,18 +247,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
     #
-    # PATCH /ldap_config -> models.LDAPConfig
+    # PATCH /ldap_config -> mdls.LDAPConfig
     def update_ldap_config(
         self,
-        body: models.WriteLDAPConfig,
+        body: mdls.WriteLDAPConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfig:
+    ) -> mdls.LDAPConfig:
         """Update LDAP Configuration"""
         response = cast(
-            models.LDAPConfig,
+            mdls.LDAPConfig,
             self.patch(
                 path="/ldap_config",
-                structure=models.LDAPConfig,
+                structure=mdls.LDAPConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -284,18 +284,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
-    # PUT /ldap_config/test_connection -> models.LDAPConfigTestResult
+    # PUT /ldap_config/test_connection -> mdls.LDAPConfigTestResult
     def test_ldap_config_connection(
         self,
-        body: models.WriteLDAPConfig,
+        body: mdls.WriteLDAPConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfigTestResult:
+    ) -> mdls.LDAPConfigTestResult:
         """Test LDAP Connection"""
         response = cast(
-            models.LDAPConfigTestResult,
+            mdls.LDAPConfigTestResult,
             self.put(
                 path="/ldap_config/test_connection",
-                structure=models.LDAPConfigTestResult,
+                structure=mdls.LDAPConfigTestResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -323,18 +323,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
-    # PUT /ldap_config/test_auth -> models.LDAPConfigTestResult
+    # PUT /ldap_config/test_auth -> mdls.LDAPConfigTestResult
     def test_ldap_config_auth(
         self,
-        body: models.WriteLDAPConfig,
+        body: mdls.WriteLDAPConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfigTestResult:
+    ) -> mdls.LDAPConfigTestResult:
         """Test LDAP Auth"""
         response = cast(
-            models.LDAPConfigTestResult,
+            mdls.LDAPConfigTestResult,
             self.put(
                 path="/ldap_config/test_auth",
-                structure=models.LDAPConfigTestResult,
+                structure=mdls.LDAPConfigTestResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -351,18 +351,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
-    # PUT /ldap_config/test_user_info -> models.LDAPConfigTestResult
+    # PUT /ldap_config/test_user_info -> mdls.LDAPConfigTestResult
     def test_ldap_config_user_info(
         self,
-        body: models.WriteLDAPConfig,
+        body: mdls.WriteLDAPConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfigTestResult:
+    ) -> mdls.LDAPConfigTestResult:
         """Test LDAP User Info"""
         response = cast(
-            models.LDAPConfigTestResult,
+            mdls.LDAPConfigTestResult,
             self.put(
                 path="/ldap_config/test_user_info",
-                structure=models.LDAPConfigTestResult,
+                structure=mdls.LDAPConfigTestResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -379,18 +379,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
-    # PUT /ldap_config/test_user_auth -> models.LDAPConfigTestResult
+    # PUT /ldap_config/test_user_auth -> mdls.LDAPConfigTestResult
     def test_ldap_config_user_auth(
         self,
-        body: models.WriteLDAPConfig,
+        body: mdls.WriteLDAPConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LDAPConfigTestResult:
+    ) -> mdls.LDAPConfigTestResult:
         """Test LDAP User Auth"""
         response = cast(
-            models.LDAPConfigTestResult,
+            mdls.LDAPConfigTestResult,
             self.put(
                 path="/ldap_config/test_user_auth",
-                structure=models.LDAPConfigTestResult,
+                structure=mdls.LDAPConfigTestResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -410,17 +410,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # OIDC is enabled or disabled for Looker using the **enabled** field.
     #
-    # GET /oidc_config -> models.OIDCConfig
+    # GET /oidc_config -> mdls.OIDCConfig
     def oidc_config(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.OIDCConfig:
+    ) -> mdls.OIDCConfig:
         """Get OIDC Configuration"""
         response = cast(
-            models.OIDCConfig,
+            mdls.OIDCConfig,
             self.get(
                 path="/oidc_config",
-                structure=models.OIDCConfig,
+                structure=mdls.OIDCConfig,
                 transport_options=transport_options,
             ),
         )
@@ -436,18 +436,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
     #
-    # PATCH /oidc_config -> models.OIDCConfig
+    # PATCH /oidc_config -> mdls.OIDCConfig
     def update_oidc_config(
         self,
-        body: models.WriteOIDCConfig,
+        body: mdls.WriteOIDCConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.OIDCConfig:
+    ) -> mdls.OIDCConfig:
         """Update OIDC Configuration"""
         response = cast(
-            models.OIDCConfig,
+            mdls.OIDCConfig,
             self.patch(
                 path="/oidc_config",
-                structure=models.OIDCConfig,
+                structure=mdls.OIDCConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -456,20 +456,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get a OIDC test configuration by test_slug.
     #
-    # GET /oidc_test_configs/{test_slug} -> models.OIDCConfig
+    # GET /oidc_test_configs/{test_slug} -> mdls.OIDCConfig
     def oidc_test_config(
         self,
         # Slug of test config
         test_slug: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.OIDCConfig:
+    ) -> mdls.OIDCConfig:
         """Get OIDC Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
         response = cast(
-            models.OIDCConfig,
+            mdls.OIDCConfig,
             self.get(
                 path=f"/oidc_test_configs/{test_slug}",
-                structure=models.OIDCConfig,
+                structure=mdls.OIDCConfig,
                 transport_options=transport_options,
             ),
         )
@@ -498,18 +498,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a OIDC test configuration.
     #
-    # POST /oidc_test_configs -> models.OIDCConfig
+    # POST /oidc_test_configs -> mdls.OIDCConfig
     def create_oidc_test_config(
         self,
-        body: models.WriteOIDCConfig,
+        body: mdls.WriteOIDCConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.OIDCConfig:
+    ) -> mdls.OIDCConfig:
         """Create OIDC Test Configuration"""
         response = cast(
-            models.OIDCConfig,
+            mdls.OIDCConfig,
             self.post(
                 path="/oidc_test_configs",
-                structure=models.OIDCConfig,
+                structure=mdls.OIDCConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -518,17 +518,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get password config.
     #
-    # GET /password_config -> models.PasswordConfig
+    # GET /password_config -> mdls.PasswordConfig
     def password_config(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.PasswordConfig:
+    ) -> mdls.PasswordConfig:
         """Get Password Config"""
         response = cast(
-            models.PasswordConfig,
+            mdls.PasswordConfig,
             self.get(
                 path="/password_config",
-                structure=models.PasswordConfig,
+                structure=mdls.PasswordConfig,
                 transport_options=transport_options,
             ),
         )
@@ -536,18 +536,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update password config.
     #
-    # PATCH /password_config -> models.PasswordConfig
+    # PATCH /password_config -> mdls.PasswordConfig
     def update_password_config(
         self,
-        body: models.WritePasswordConfig,
+        body: mdls.WritePasswordConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.PasswordConfig:
+    ) -> mdls.PasswordConfig:
         """Update Password Config"""
         response = cast(
-            models.PasswordConfig,
+            mdls.PasswordConfig,
             self.patch(
                 path="/password_config",
-                structure=models.PasswordConfig,
+                structure=mdls.PasswordConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -585,17 +585,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # SAML is enabled or disabled for Looker using the **enabled** field.
     #
-    # GET /saml_config -> models.SamlConfig
+    # GET /saml_config -> mdls.SamlConfig
     def saml_config(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlConfig:
+    ) -> mdls.SamlConfig:
         """Get SAML Configuration"""
         response = cast(
-            models.SamlConfig,
+            mdls.SamlConfig,
             self.get(
                 path="/saml_config",
-                structure=models.SamlConfig,
+                structure=mdls.SamlConfig,
                 transport_options=transport_options,
             ),
         )
@@ -611,18 +611,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
     #
-    # PATCH /saml_config -> models.SamlConfig
+    # PATCH /saml_config -> mdls.SamlConfig
     def update_saml_config(
         self,
-        body: models.WriteSamlConfig,
+        body: mdls.WriteSamlConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlConfig:
+    ) -> mdls.SamlConfig:
         """Update SAML Configuration"""
         response = cast(
-            models.SamlConfig,
+            mdls.SamlConfig,
             self.patch(
                 path="/saml_config",
-                structure=models.SamlConfig,
+                structure=mdls.SamlConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -631,20 +631,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get a SAML test configuration by test_slug.
     #
-    # GET /saml_test_configs/{test_slug} -> models.SamlConfig
+    # GET /saml_test_configs/{test_slug} -> mdls.SamlConfig
     def saml_test_config(
         self,
         # Slug of test config
         test_slug: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlConfig:
+    ) -> mdls.SamlConfig:
         """Get SAML Test Configuration"""
         test_slug = self.encode_path_param(test_slug)
         response = cast(
-            models.SamlConfig,
+            mdls.SamlConfig,
             self.get(
                 path=f"/saml_test_configs/{test_slug}",
-                structure=models.SamlConfig,
+                structure=mdls.SamlConfig,
                 transport_options=transport_options,
             ),
         )
@@ -673,18 +673,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a SAML test configuration.
     #
-    # POST /saml_test_configs -> models.SamlConfig
+    # POST /saml_test_configs -> mdls.SamlConfig
     def create_saml_test_config(
         self,
-        body: models.WriteSamlConfig,
+        body: mdls.WriteSamlConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlConfig:
+    ) -> mdls.SamlConfig:
         """Create SAML Test Configuration"""
         response = cast(
-            models.SamlConfig,
+            mdls.SamlConfig,
             self.post(
                 path="/saml_test_configs",
-                structure=models.SamlConfig,
+                structure=mdls.SamlConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -693,18 +693,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Parse the given xml as a SAML IdP metadata document and return the result.
     #
-    # POST /parse_saml_idp_metadata -> models.SamlMetadataParseResult
+    # POST /parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def parse_saml_idp_metadata(
         self,
         body: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlMetadataParseResult:
+    ) -> mdls.SamlMetadataParseResult:
         """Parse SAML IdP XML"""
         response = cast(
-            models.SamlMetadataParseResult,
+            mdls.SamlMetadataParseResult,
             self.post(
                 path="/parse_saml_idp_metadata",
-                structure=models.SamlMetadataParseResult,
+                structure=mdls.SamlMetadataParseResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -715,18 +715,18 @@ class Looker31SDK(api_methods.APIMethods):
     # Note that this requires that the url be public or at least at a location where the Looker instance
     # can fetch it without requiring any special authentication.
     #
-    # POST /fetch_and_parse_saml_idp_metadata -> models.SamlMetadataParseResult
+    # POST /fetch_and_parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def fetch_and_parse_saml_idp_metadata(
         self,
         body: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SamlMetadataParseResult:
+    ) -> mdls.SamlMetadataParseResult:
         """Parse SAML IdP Url"""
         response = cast(
-            models.SamlMetadataParseResult,
+            mdls.SamlMetadataParseResult,
             self.post(
                 path="/fetch_and_parse_saml_idp_metadata",
-                structure=models.SamlMetadataParseResult,
+                structure=mdls.SamlMetadataParseResult,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -735,17 +735,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get session config.
     #
-    # GET /session_config -> models.SessionConfig
+    # GET /session_config -> mdls.SessionConfig
     def session_config(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SessionConfig:
+    ) -> mdls.SessionConfig:
         """Get Session Config"""
         response = cast(
-            models.SessionConfig,
+            mdls.SessionConfig,
             self.get(
                 path="/session_config",
-                structure=models.SessionConfig,
+                structure=mdls.SessionConfig,
                 transport_options=transport_options,
             ),
         )
@@ -753,18 +753,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update session config.
     #
-    # PATCH /session_config -> models.SessionConfig
+    # PATCH /session_config -> mdls.SessionConfig
     def update_session_config(
         self,
-        body: models.WriteSessionConfig,
+        body: mdls.WriteSessionConfig,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SessionConfig:
+    ) -> mdls.SessionConfig:
         """Update Session Config"""
         response = cast(
-            models.SessionConfig,
+            mdls.SessionConfig,
             self.patch(
                 path="/session_config",
-                structure=models.SessionConfig,
+                structure=mdls.SessionConfig,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -773,19 +773,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get currently locked-out users.
     #
-    # GET /user_login_lockouts -> Sequence[models.UserLoginLockout]
+    # GET /user_login_lockouts -> Sequence[mdls.UserLoginLockout]
     def all_user_login_lockouts(
         self,
         # Include only these fields in the response
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserLoginLockout]:
+    ) -> Sequence[mdls.UserLoginLockout]:
         """Get All User Login Lockouts"""
         response = cast(
-            Sequence[models.UserLoginLockout],
+            Sequence[mdls.UserLoginLockout],
             self.get(
                 path="/user_login_lockouts",
-                structure=Sequence[models.UserLoginLockout],
+                structure=Sequence[mdls.UserLoginLockout],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -794,7 +794,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Search currently locked-out users.
     #
-    # GET /user_login_lockouts/search -> Sequence[models.UserLoginLockout]
+    # GET /user_login_lockouts/search -> Sequence[mdls.UserLoginLockout]
     def search_user_login_lockouts(
         self,
         # Include only these fields in the response
@@ -816,13 +816,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserLoginLockout]:
+    ) -> Sequence[mdls.UserLoginLockout]:
         """Search User Login Lockouts"""
         response = cast(
-            Sequence[models.UserLoginLockout],
+            Sequence[mdls.UserLoginLockout],
             self.get(
                 path="/user_login_lockouts/search",
-                structure=Sequence[models.UserLoginLockout],
+                structure=Sequence[mdls.UserLoginLockout],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -873,19 +873,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # GET /color_collections -> Sequence[models.ColorCollection]
+    # GET /color_collections -> Sequence[mdls.ColorCollection]
     def all_color_collections(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ColorCollection]:
+    ) -> Sequence[mdls.ColorCollection]:
         """Get all Color Collections"""
         response = cast(
-            Sequence[models.ColorCollection],
+            Sequence[mdls.ColorCollection],
             self.get(
                 path="/color_collections",
-                structure=Sequence[models.ColorCollection],
+                structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -902,18 +902,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # POST /color_collections -> models.ColorCollection
+    # POST /color_collections -> mdls.ColorCollection
     def create_color_collection(
         self,
-        body: models.WriteColorCollection,
+        body: mdls.WriteColorCollection,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ColorCollection:
+    ) -> mdls.ColorCollection:
         """Create ColorCollection"""
         response = cast(
-            models.ColorCollection,
+            mdls.ColorCollection,
             self.post(
                 path="/color_collections",
-                structure=models.ColorCollection,
+                structure=mdls.ColorCollection,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -927,19 +927,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # GET /color_collections/custom -> Sequence[models.ColorCollection]
+    # GET /color_collections/custom -> Sequence[mdls.ColorCollection]
     def color_collections_custom(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ColorCollection]:
+    ) -> Sequence[mdls.ColorCollection]:
         """Get all Custom Color Collections"""
         response = cast(
-            Sequence[models.ColorCollection],
+            Sequence[mdls.ColorCollection],
             self.get(
                 path="/color_collections/custom",
-                structure=Sequence[models.ColorCollection],
+                structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -953,19 +953,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # GET /color_collections/standard -> Sequence[models.ColorCollection]
+    # GET /color_collections/standard -> Sequence[mdls.ColorCollection]
     def color_collections_standard(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ColorCollection]:
+    ) -> Sequence[mdls.ColorCollection]:
         """Get all Standard Color Collections"""
         response = cast(
-            Sequence[models.ColorCollection],
+            Sequence[mdls.ColorCollection],
             self.get(
                 path="/color_collections/standard",
-                structure=Sequence[models.ColorCollection],
+                structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -978,17 +978,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
     #
-    # GET /color_collections/default -> models.ColorCollection
+    # GET /color_collections/default -> mdls.ColorCollection
     def default_color_collection(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ColorCollection:
+    ) -> mdls.ColorCollection:
         """Get Default Color Collection"""
         response = cast(
-            models.ColorCollection,
+            mdls.ColorCollection,
             self.get(
                 path="/color_collections/default",
-                structure=models.ColorCollection,
+                structure=mdls.ColorCollection,
                 transport_options=transport_options,
             ),
         )
@@ -999,19 +999,19 @@ class Looker31SDK(api_methods.APIMethods):
     # Returns the new specified default Color Collection object.
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # PUT /color_collections/default -> models.ColorCollection
+    # PUT /color_collections/default -> mdls.ColorCollection
     def set_default_color_collection(
         self,
         # ID of color collection to set as default
         collection_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ColorCollection:
+    ) -> mdls.ColorCollection:
         """Set Default Color Collection"""
         response = cast(
-            models.ColorCollection,
+            mdls.ColorCollection,
             self.put(
                 path="/color_collections/default",
-                structure=models.ColorCollection,
+                structure=mdls.ColorCollection,
                 query_params={"collection_id": collection_id},
                 transport_options=transport_options,
             ),
@@ -1029,7 +1029,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # GET /color_collections/{collection_id} -> models.ColorCollection
+    # GET /color_collections/{collection_id} -> mdls.ColorCollection
     def color_collection(
         self,
         # Id of Color Collection
@@ -1037,14 +1037,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ColorCollection:
+    ) -> mdls.ColorCollection:
         """Get Color Collection by ID"""
         collection_id = self.encode_path_param(collection_id)
         response = cast(
-            models.ColorCollection,
+            mdls.ColorCollection,
             self.get(
                 path=f"/color_collections/{collection_id}",
-                structure=models.ColorCollection,
+                structure=mdls.ColorCollection,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1054,21 +1054,21 @@ class Looker31SDK(api_methods.APIMethods):
     # ### Update a custom color collection by id.
     # **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
     #
-    # PATCH /color_collections/{collection_id} -> models.ColorCollection
+    # PATCH /color_collections/{collection_id} -> mdls.ColorCollection
     def update_color_collection(
         self,
         # Id of Custom Color Collection
         collection_id: str,
-        body: models.WriteColorCollection,
+        body: mdls.WriteColorCollection,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ColorCollection:
+    ) -> mdls.ColorCollection:
         """Update Custom Color collection"""
         collection_id = self.encode_path_param(collection_id)
         response = cast(
-            models.ColorCollection,
+            mdls.ColorCollection,
             self.patch(
                 path=f"/color_collections/{collection_id}",
-                structure=models.ColorCollection,
+                structure=mdls.ColorCollection,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1109,17 +1109,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### WARNING: The Looker internal database backup function has been deprecated.
     #
-    # GET /backup_configuration -> models.BackupConfiguration
+    # GET /backup_configuration -> mdls.BackupConfiguration
     def backup_configuration(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.BackupConfiguration:
+    ) -> mdls.BackupConfiguration:
         """Get Backup Configuration"""
         response = cast(
-            models.BackupConfiguration,
+            mdls.BackupConfiguration,
             self.get(
                 path="/backup_configuration",
-                structure=models.BackupConfiguration,
+                structure=mdls.BackupConfiguration,
                 transport_options=transport_options,
             ),
         )
@@ -1127,18 +1127,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### WARNING: The Looker internal database backup function has been deprecated.
     #
-    # PATCH /backup_configuration -> models.BackupConfiguration
+    # PATCH /backup_configuration -> mdls.BackupConfiguration
     def update_backup_configuration(
         self,
-        body: models.WriteBackupConfiguration,
+        body: mdls.WriteBackupConfiguration,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.BackupConfiguration:
+    ) -> mdls.BackupConfiguration:
         """Update Backup Configuration"""
         response = cast(
-            models.BackupConfiguration,
+            mdls.BackupConfiguration,
             self.patch(
                 path="/backup_configuration",
-                structure=models.BackupConfiguration,
+                structure=mdls.BackupConfiguration,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1147,17 +1147,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Get the current Cloud Storage Configuration.
     #
-    # GET /cloud_storage -> models.BackupConfiguration
+    # GET /cloud_storage -> mdls.BackupConfiguration
     def cloud_storage_configuration(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.BackupConfiguration:
+    ) -> mdls.BackupConfiguration:
         """Get Cloud Storage"""
         response = cast(
-            models.BackupConfiguration,
+            mdls.BackupConfiguration,
             self.get(
                 path="/cloud_storage",
-                structure=models.BackupConfiguration,
+                structure=mdls.BackupConfiguration,
                 transport_options=transport_options,
             ),
         )
@@ -1165,18 +1165,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Update the current Cloud Storage Configuration.
     #
-    # PATCH /cloud_storage -> models.BackupConfiguration
+    # PATCH /cloud_storage -> mdls.BackupConfiguration
     def update_cloud_storage_configuration(
         self,
-        body: models.WriteBackupConfiguration,
+        body: mdls.WriteBackupConfiguration,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.BackupConfiguration:
+    ) -> mdls.BackupConfiguration:
         """Update Cloud Storage"""
         response = cast(
-            models.BackupConfiguration,
+            mdls.BackupConfiguration,
             self.patch(
                 path="/cloud_storage",
-                structure=models.BackupConfiguration,
+                structure=mdls.BackupConfiguration,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1185,17 +1185,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the current status and content of custom welcome emails
     #
-    # GET /custom_welcome_email -> models.CustomWelcomeEmail
+    # GET /custom_welcome_email -> mdls.CustomWelcomeEmail
     def custom_welcome_email(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CustomWelcomeEmail:
+    ) -> mdls.CustomWelcomeEmail:
         """Get Custom Welcome Email"""
         response = cast(
-            models.CustomWelcomeEmail,
+            mdls.CustomWelcomeEmail,
             self.get(
                 path="/custom_welcome_email",
-                structure=models.CustomWelcomeEmail,
+                structure=mdls.CustomWelcomeEmail,
                 transport_options=transport_options,
             ),
         )
@@ -1203,20 +1203,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
     #
-    # PATCH /custom_welcome_email -> models.CustomWelcomeEmail
+    # PATCH /custom_welcome_email -> mdls.CustomWelcomeEmail
     def update_custom_welcome_email(
         self,
-        body: models.WriteCustomWelcomeEmail,
+        body: mdls.WriteCustomWelcomeEmail,
         # If true a test email with the content from the request will be sent to the current user after saving
         send_test_welcome_email: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CustomWelcomeEmail:
+    ) -> mdls.CustomWelcomeEmail:
         """Update Custom Welcome Email Content"""
         response = cast(
-            models.CustomWelcomeEmail,
+            mdls.CustomWelcomeEmail,
             self.patch(
                 path="/custom_welcome_email",
-                structure=models.CustomWelcomeEmail,
+                structure=mdls.CustomWelcomeEmail,
                 query_params={"send_test_welcome_email": send_test_welcome_email},
                 body=body,
                 transport_options=transport_options,
@@ -1226,18 +1226,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
     #
-    # PUT /custom_welcome_email_test -> models.WelcomeEmailTest
+    # PUT /custom_welcome_email_test -> mdls.WelcomeEmailTest
     def update_custom_welcome_email_test(
         self,
-        body: models.WelcomeEmailTest,
+        body: mdls.WelcomeEmailTest,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.WelcomeEmailTest:
+    ) -> mdls.WelcomeEmailTest:
         """Send a test welcome email to the currently logged in user with the supplied content"""
         response = cast(
-            models.WelcomeEmailTest,
+            mdls.WelcomeEmailTest,
             self.put(
                 path="/custom_welcome_email_test",
-                structure=models.WelcomeEmailTest,
+                structure=mdls.WelcomeEmailTest,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1246,17 +1246,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Retrieve the value for whether or not digest emails is enabled
     #
-    # GET /digest_emails_enabled -> models.DigestEmails
+    # GET /digest_emails_enabled -> mdls.DigestEmails
     def digest_emails_enabled(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DigestEmails:
+    ) -> mdls.DigestEmails:
         """Get Digest_emails"""
         response = cast(
-            models.DigestEmails,
+            mdls.DigestEmails,
             self.get(
                 path="/digest_emails_enabled",
-                structure=models.DigestEmails,
+                structure=mdls.DigestEmails,
                 transport_options=transport_options,
             ),
         )
@@ -1264,18 +1264,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the setting for enabling/disabling digest emails
     #
-    # PATCH /digest_emails_enabled -> models.DigestEmails
+    # PATCH /digest_emails_enabled -> mdls.DigestEmails
     def update_digest_emails_enabled(
         self,
-        body: models.DigestEmails,
+        body: mdls.DigestEmails,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DigestEmails:
+    ) -> mdls.DigestEmails:
         """Update Digest_emails"""
         response = cast(
-            models.DigestEmails,
+            mdls.DigestEmails,
             self.patch(
                 path="/digest_emails_enabled",
-                structure=models.DigestEmails,
+                structure=mdls.DigestEmails,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1286,17 +1286,17 @@ class Looker31SDK(api_methods.APIMethods):
     # any actual emails, it generates records containing content which may be of interest for users who have become inactive.
     # Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
     #
-    # POST /digest_email_send -> models.DigestEmailSend
+    # POST /digest_email_send -> mdls.DigestEmailSend
     def create_digest_email_send(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DigestEmailSend:
+    ) -> mdls.DigestEmailSend:
         """Deliver digest email contents"""
         response = cast(
-            models.DigestEmailSend,
+            mdls.DigestEmailSend,
             self.post(
                 path="/digest_email_send",
-                structure=models.DigestEmailSend,
+                structure=mdls.DigestEmailSend,
                 transport_options=transport_options,
             ),
         )
@@ -1304,17 +1304,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Set the menu item name and content for internal help resources
     #
-    # GET /internal_help_resources_content -> models.InternalHelpResourcesContent
+    # GET /internal_help_resources_content -> mdls.InternalHelpResourcesContent
     def internal_help_resources_content(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.InternalHelpResourcesContent:
+    ) -> mdls.InternalHelpResourcesContent:
         """Get Internal Help Resources Content"""
         response = cast(
-            models.InternalHelpResourcesContent,
+            mdls.InternalHelpResourcesContent,
             self.get(
                 path="/internal_help_resources_content",
-                structure=models.InternalHelpResourcesContent,
+                structure=mdls.InternalHelpResourcesContent,
                 transport_options=transport_options,
             ),
         )
@@ -1322,18 +1322,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Update internal help resources content
     #
-    # PATCH /internal_help_resources_content -> models.InternalHelpResourcesContent
+    # PATCH /internal_help_resources_content -> mdls.InternalHelpResourcesContent
     def update_internal_help_resources_content(
         self,
-        body: models.WriteInternalHelpResourcesContent,
+        body: mdls.WriteInternalHelpResourcesContent,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.InternalHelpResourcesContent:
+    ) -> mdls.InternalHelpResourcesContent:
         """Update internal help resources content"""
         response = cast(
-            models.InternalHelpResourcesContent,
+            mdls.InternalHelpResourcesContent,
             self.patch(
                 path="/internal_help_resources_content",
-                structure=models.InternalHelpResourcesContent,
+                structure=mdls.InternalHelpResourcesContent,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1342,17 +1342,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get and set the options for internal help resources
     #
-    # GET /internal_help_resources_enabled -> models.InternalHelpResources
+    # GET /internal_help_resources_enabled -> mdls.InternalHelpResources
     def internal_help_resources(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.InternalHelpResources:
+    ) -> mdls.InternalHelpResources:
         """Get Internal Help Resources"""
         response = cast(
-            models.InternalHelpResources,
+            mdls.InternalHelpResources,
             self.get(
                 path="/internal_help_resources_enabled",
-                structure=models.InternalHelpResources,
+                structure=mdls.InternalHelpResources,
                 transport_options=transport_options,
             ),
         )
@@ -1360,18 +1360,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Update internal help resources settings
     #
-    # PATCH /internal_help_resources -> models.InternalHelpResources
+    # PATCH /internal_help_resources -> mdls.InternalHelpResources
     def update_internal_help_resources(
         self,
-        body: models.WriteInternalHelpResources,
+        body: mdls.WriteInternalHelpResources,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.InternalHelpResources:
+    ) -> mdls.InternalHelpResources:
         """Update internal help resources configuration"""
         response = cast(
-            models.InternalHelpResources,
+            mdls.InternalHelpResources,
             self.patch(
                 path="/internal_help_resources",
-                structure=models.InternalHelpResources,
+                structure=mdls.InternalHelpResources,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1380,17 +1380,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get all legacy features.
     #
-    # GET /legacy_features -> Sequence[models.LegacyFeature]
+    # GET /legacy_features -> Sequence[mdls.LegacyFeature]
     def all_legacy_features(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LegacyFeature]:
+    ) -> Sequence[mdls.LegacyFeature]:
         """Get All Legacy Features"""
         response = cast(
-            Sequence[models.LegacyFeature],
+            Sequence[mdls.LegacyFeature],
             self.get(
                 path="/legacy_features",
-                structure=Sequence[models.LegacyFeature],
+                structure=Sequence[mdls.LegacyFeature],
                 transport_options=transport_options,
             ),
         )
@@ -1398,19 +1398,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the legacy feature with a specific id.
     #
-    # GET /legacy_features/{legacy_feature_id} -> models.LegacyFeature
+    # GET /legacy_features/{legacy_feature_id} -> mdls.LegacyFeature
     def legacy_feature(
         self,
         # id of legacy feature
         legacy_feature_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LegacyFeature:
+    ) -> mdls.LegacyFeature:
         """Get Legacy Feature"""
         response = cast(
-            models.LegacyFeature,
+            mdls.LegacyFeature,
             self.get(
                 path=f"/legacy_features/{legacy_feature_id}",
-                structure=models.LegacyFeature,
+                structure=mdls.LegacyFeature,
                 transport_options=transport_options,
             ),
         )
@@ -1418,20 +1418,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update information about the legacy feature with a specific id.
     #
-    # PATCH /legacy_features/{legacy_feature_id} -> models.LegacyFeature
+    # PATCH /legacy_features/{legacy_feature_id} -> mdls.LegacyFeature
     def update_legacy_feature(
         self,
         # id of legacy feature
         legacy_feature_id: int,
-        body: models.WriteLegacyFeature,
+        body: mdls.WriteLegacyFeature,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LegacyFeature:
+    ) -> mdls.LegacyFeature:
         """Update Legacy Feature"""
         response = cast(
-            models.LegacyFeature,
+            mdls.LegacyFeature,
             self.patch(
                 path=f"/legacy_features/{legacy_feature_id}",
-                structure=models.LegacyFeature,
+                structure=mdls.LegacyFeature,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1440,17 +1440,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get a list of locales that Looker supports.
     #
-    # GET /locales -> Sequence[models.Locale]
+    # GET /locales -> Sequence[mdls.Locale]
     def all_locales(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Locale]:
+    ) -> Sequence[mdls.Locale]:
         """Get All Locales"""
         response = cast(
-            Sequence[models.Locale],
+            Sequence[mdls.Locale],
             self.get(
                 path="/locales",
-                structure=Sequence[models.Locale],
+                structure=Sequence[mdls.Locale],
                 transport_options=transport_options,
             ),
         )
@@ -1458,17 +1458,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
     #
-    # GET /timezones -> Sequence[models.Timezone]
+    # GET /timezones -> Sequence[mdls.Timezone]
     def all_timezones(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Timezone]:
+    ) -> Sequence[mdls.Timezone]:
         """Get All Timezones"""
         response = cast(
-            Sequence[models.Timezone],
+            Sequence[mdls.Timezone],
             self.get(
                 path="/timezones",
-                structure=Sequence[models.Timezone],
+                structure=Sequence[mdls.Timezone],
                 transport_options=transport_options,
             ),
         )
@@ -1476,19 +1476,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all API versions supported by this Looker instance.
     #
-    # GET /versions -> models.ApiVersion
+    # GET /versions -> mdls.ApiVersion
     def versions(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ApiVersion:
+    ) -> mdls.ApiVersion:
         """Get ApiVersion"""
         response = cast(
-            models.ApiVersion,
+            mdls.ApiVersion,
             self.get(
                 path="/versions",
-                structure=models.ApiVersion,
+                structure=mdls.ApiVersion,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1498,19 +1498,19 @@ class Looker31SDK(api_methods.APIMethods):
     # ### This feature is enabled only by special license.
     # ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
     #
-    # GET /whitelabel_configuration -> models.WhitelabelConfiguration
+    # GET /whitelabel_configuration -> mdls.WhitelabelConfiguration
     def whitelabel_configuration(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.WhitelabelConfiguration:
+    ) -> mdls.WhitelabelConfiguration:
         """Get Whitelabel configuration"""
         response = cast(
-            models.WhitelabelConfiguration,
+            mdls.WhitelabelConfiguration,
             self.get(
                 path="/whitelabel_configuration",
-                structure=models.WhitelabelConfiguration,
+                structure=mdls.WhitelabelConfiguration,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1519,18 +1519,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the whitelabel configuration
     #
-    # PUT /whitelabel_configuration -> models.WhitelabelConfiguration
+    # PUT /whitelabel_configuration -> mdls.WhitelabelConfiguration
     def update_whitelabel_configuration(
         self,
-        body: models.WriteWhitelabelConfiguration,
+        body: mdls.WriteWhitelabelConfiguration,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.WhitelabelConfiguration:
+    ) -> mdls.WhitelabelConfiguration:
         """Update Whitelabel configuration"""
         response = cast(
-            models.WhitelabelConfiguration,
+            mdls.WhitelabelConfiguration,
             self.put(
                 path="/whitelabel_configuration",
-                structure=models.WhitelabelConfiguration,
+                structure=mdls.WhitelabelConfiguration,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1543,19 +1543,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all connections.
     #
-    # GET /connections -> Sequence[models.DBConnection]
+    # GET /connections -> Sequence[mdls.DBConnection]
     def all_connections(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DBConnection]:
+    ) -> Sequence[mdls.DBConnection]:
         """Get All Connections"""
         response = cast(
-            Sequence[models.DBConnection],
+            Sequence[mdls.DBConnection],
             self.get(
                 path="/connections",
-                structure=Sequence[models.DBConnection],
+                structure=Sequence[mdls.DBConnection],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1564,18 +1564,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a connection using the specified configuration.
     #
-    # POST /connections -> models.DBConnection
+    # POST /connections -> mdls.DBConnection
     def create_connection(
         self,
-        body: models.WriteDBConnection,
+        body: mdls.WriteDBConnection,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DBConnection:
+    ) -> mdls.DBConnection:
         """Create Connection"""
         response = cast(
-            models.DBConnection,
+            mdls.DBConnection,
             self.post(
                 path="/connections",
-                structure=models.DBConnection,
+                structure=mdls.DBConnection,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1584,7 +1584,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a connection.
     #
-    # GET /connections/{connection_name} -> models.DBConnection
+    # GET /connections/{connection_name} -> mdls.DBConnection
     def connection(
         self,
         # Name of connection
@@ -1592,14 +1592,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DBConnection:
+    ) -> mdls.DBConnection:
         """Get Connection"""
         connection_name = self.encode_path_param(connection_name)
         response = cast(
-            models.DBConnection,
+            mdls.DBConnection,
             self.get(
                 path=f"/connections/{connection_name}",
-                structure=models.DBConnection,
+                structure=mdls.DBConnection,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1608,21 +1608,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a connection using the specified configuration.
     #
-    # PATCH /connections/{connection_name} -> models.DBConnection
+    # PATCH /connections/{connection_name} -> mdls.DBConnection
     def update_connection(
         self,
         # Name of connection
         connection_name: str,
-        body: models.WriteDBConnection,
+        body: mdls.WriteDBConnection,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DBConnection:
+    ) -> mdls.DBConnection:
         """Update Connection"""
         connection_name = self.encode_path_param(connection_name)
         response = cast(
-            models.DBConnection,
+            mdls.DBConnection,
             self.patch(
                 path=f"/connections/{connection_name}",
-                structure=models.DBConnection,
+                structure=mdls.DBConnection,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1683,22 +1683,22 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Unsupported tests in the request will be ignored.
     #
-    # PUT /connections/{connection_name}/test -> Sequence[models.DBConnectionTestResult]
+    # PUT /connections/{connection_name}/test -> Sequence[mdls.DBConnectionTestResult]
     def test_connection(
         self,
         # Name of connection
         connection_name: str,
         # Array of names of tests to run
-        tests: Optional[models.DelimSequence[str]] = None,
+        tests: Optional[mdls.DelimSequence[str]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DBConnectionTestResult]:
+    ) -> Sequence[mdls.DBConnectionTestResult]:
         """Test Connection"""
         connection_name = self.encode_path_param(connection_name)
         response = cast(
-            Sequence[models.DBConnectionTestResult],
+            Sequence[mdls.DBConnectionTestResult],
             self.put(
                 path=f"/connections/{connection_name}/test",
-                structure=Sequence[models.DBConnectionTestResult],
+                structure=Sequence[mdls.DBConnectionTestResult],
                 query_params={"tests": tests},
                 transport_options=transport_options,
             ),
@@ -1714,20 +1714,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Unsupported tests in the request will be ignored.
     #
-    # PUT /connections/test -> Sequence[models.DBConnectionTestResult]
+    # PUT /connections/test -> Sequence[mdls.DBConnectionTestResult]
     def test_connection_config(
         self,
-        body: models.WriteDBConnection,
+        body: mdls.WriteDBConnection,
         # Array of names of tests to run
-        tests: Optional[models.DelimSequence[str]] = None,
+        tests: Optional[mdls.DelimSequence[str]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DBConnectionTestResult]:
+    ) -> Sequence[mdls.DBConnectionTestResult]:
         """Test Connection Configuration"""
         response = cast(
-            Sequence[models.DBConnectionTestResult],
+            Sequence[mdls.DBConnectionTestResult],
             self.put(
                 path="/connections/test",
-                structure=Sequence[models.DBConnectionTestResult],
+                structure=Sequence[mdls.DBConnectionTestResult],
                 query_params={"tests": tests},
                 body=body,
                 transport_options=transport_options,
@@ -1737,19 +1737,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all dialects.
     #
-    # GET /dialect_info -> Sequence[models.DialectInfo]
+    # GET /dialect_info -> Sequence[mdls.DialectInfo]
     def all_dialect_infos(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DialectInfo]:
+    ) -> Sequence[mdls.DialectInfo]:
         """Get All Dialect Infos"""
         response = cast(
-            Sequence[models.DialectInfo],
+            Sequence[mdls.DialectInfo],
             self.get(
                 path="/dialect_info",
-                structure=Sequence[models.DialectInfo],
+                structure=Sequence[mdls.DialectInfo],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1783,7 +1783,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /content_favorite/search -> Sequence[models.ContentFavorite]
+    # GET /content_favorite/search -> Sequence[mdls.ContentFavorite]
     def search_content_favorites(
         self,
         # Match content favorite id(s)
@@ -1807,13 +1807,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ContentFavorite]:
+    ) -> Sequence[mdls.ContentFavorite]:
         """Search Favorite Contents"""
         response = cast(
-            Sequence[models.ContentFavorite],
+            Sequence[mdls.ContentFavorite],
             self.get(
                 path="/content_favorite/search",
-                structure=Sequence[models.ContentFavorite],
+                structure=Sequence[mdls.ContentFavorite],
                 query_params={
                     "id": id,
                     "user_id": user_id,
@@ -1833,7 +1833,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get favorite content by its id
     #
-    # GET /content_favorite/{content_favorite_id} -> models.ContentFavorite
+    # GET /content_favorite/{content_favorite_id} -> mdls.ContentFavorite
     def content_favorite(
         self,
         # Id of favorite content
@@ -1841,13 +1841,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentFavorite:
+    ) -> mdls.ContentFavorite:
         """Get Favorite Content"""
         response = cast(
-            models.ContentFavorite,
+            mdls.ContentFavorite,
             self.get(
                 path=f"/content_favorite/{content_favorite_id}",
-                structure=models.ContentFavorite,
+                structure=mdls.ContentFavorite,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1876,18 +1876,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create favorite content
     #
-    # POST /content_favorite -> models.ContentFavorite
+    # POST /content_favorite -> mdls.ContentFavorite
     def create_content_favorite(
         self,
-        body: models.WriteContentFavorite,
+        body: mdls.WriteContentFavorite,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentFavorite:
+    ) -> mdls.ContentFavorite:
         """Create Favorite Content"""
         response = cast(
-            models.ContentFavorite,
+            mdls.ContentFavorite,
             self.post(
                 path="/content_favorite",
-                structure=models.ContentFavorite,
+                structure=mdls.ContentFavorite,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1896,7 +1896,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all content metadata in a space.
     #
-    # GET /content_metadata -> Sequence[models.ContentMeta]
+    # GET /content_metadata -> Sequence[mdls.ContentMeta]
     def all_content_metadatas(
         self,
         # Parent space of content.
@@ -1904,13 +1904,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ContentMeta]:
+    ) -> Sequence[mdls.ContentMeta]:
         """Get All Content Metadatas"""
         response = cast(
-            Sequence[models.ContentMeta],
+            Sequence[mdls.ContentMeta],
             self.get(
                 path="/content_metadata",
-                structure=Sequence[models.ContentMeta],
+                structure=Sequence[mdls.ContentMeta],
                 query_params={"parent_id": parent_id, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -1919,7 +1919,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about an individual content metadata record.
     #
-    # GET /content_metadata/{content_metadata_id} -> models.ContentMeta
+    # GET /content_metadata/{content_metadata_id} -> mdls.ContentMeta
     def content_metadata(
         self,
         # Id of content metadata
@@ -1927,13 +1927,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentMeta:
+    ) -> mdls.ContentMeta:
         """Get Content Metadata"""
         response = cast(
-            models.ContentMeta,
+            mdls.ContentMeta,
             self.get(
                 path=f"/content_metadata/{content_metadata_id}",
-                structure=models.ContentMeta,
+                structure=mdls.ContentMeta,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -1942,20 +1942,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Move a piece of content.
     #
-    # PATCH /content_metadata/{content_metadata_id} -> models.ContentMeta
+    # PATCH /content_metadata/{content_metadata_id} -> mdls.ContentMeta
     def update_content_metadata(
         self,
         # Id of content metadata
         content_metadata_id: int,
-        body: models.WriteContentMeta,
+        body: mdls.WriteContentMeta,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentMeta:
+    ) -> mdls.ContentMeta:
         """Update Content Metadata"""
         response = cast(
-            models.ContentMeta,
+            mdls.ContentMeta,
             self.patch(
                 path=f"/content_metadata/{content_metadata_id}",
-                structure=models.ContentMeta,
+                structure=mdls.ContentMeta,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -1964,7 +1964,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### All content metadata access records for a content metadata item.
     #
-    # GET /content_metadata_access -> Sequence[models.ContentMetaGroupUser]
+    # GET /content_metadata_access -> Sequence[mdls.ContentMetaGroupUser]
     def all_content_metadata_accesses(
         self,
         # Id of content metadata
@@ -1972,13 +1972,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ContentMetaGroupUser]:
+    ) -> Sequence[mdls.ContentMetaGroupUser]:
         """Get All Content Metadata Accesses"""
         response = cast(
-            Sequence[models.ContentMetaGroupUser],
+            Sequence[mdls.ContentMetaGroupUser],
             self.get(
                 path="/content_metadata_access",
-                structure=Sequence[models.ContentMetaGroupUser],
+                structure=Sequence[mdls.ContentMetaGroupUser],
                 query_params={
                     "content_metadata_id": content_metadata_id,
                     "fields": fields,
@@ -1990,20 +1990,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create content metadata access.
     #
-    # POST /content_metadata_access -> models.ContentMetaGroupUser
+    # POST /content_metadata_access -> mdls.ContentMetaGroupUser
     def create_content_metadata_access(
         self,
-        body: models.ContentMetaGroupUser,
+        body: mdls.ContentMetaGroupUser,
         # Optionally sends notification email when granting access to a board.
         send_boards_notification_email: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentMetaGroupUser:
+    ) -> mdls.ContentMetaGroupUser:
         """Create Content Metadata Access"""
         response = cast(
-            models.ContentMetaGroupUser,
+            mdls.ContentMetaGroupUser,
             self.post(
                 path="/content_metadata_access",
-                structure=models.ContentMetaGroupUser,
+                structure=mdls.ContentMetaGroupUser,
                 query_params={
                     "send_boards_notification_email": send_boards_notification_email
                 },
@@ -2015,20 +2015,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update type of access for content metadata.
     #
-    # PUT /content_metadata_access/{content_metadata_access_id} -> models.ContentMetaGroupUser
+    # PUT /content_metadata_access/{content_metadata_access_id} -> mdls.ContentMetaGroupUser
     def update_content_metadata_access(
         self,
         # Id of content metadata access
         content_metadata_access_id: int,
-        body: models.ContentMetaGroupUser,
+        body: mdls.ContentMetaGroupUser,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentMetaGroupUser:
+    ) -> mdls.ContentMetaGroupUser:
         """Update Content Metadata Access"""
         response = cast(
-            models.ContentMetaGroupUser,
+            mdls.ContentMetaGroupUser,
             self.put(
                 path=f"/content_metadata_access/{content_metadata_access_id}",
-                structure=models.ContentMetaGroupUser,
+                structure=mdls.ContentMetaGroupUser,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -2101,19 +2101,19 @@ class Looker31SDK(api_methods.APIMethods):
     # Performs validation of all looks and dashboards
     # Returns a list of errors found as well as metadata about the content validation run.
     #
-    # GET /content_validation -> models.ContentValidation
+    # GET /content_validation -> mdls.ContentValidation
     def content_validation(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ContentValidation:
+    ) -> mdls.ContentValidation:
         """Validate Content"""
         response = cast(
-            models.ContentValidation,
+            mdls.ContentValidation,
             self.get(
                 path="/content_validation",
-                structure=models.ContentValidation,
+                structure=mdls.ContentValidation,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2143,7 +2143,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /content_view/search -> Sequence[models.ContentView]
+    # GET /content_view/search -> Sequence[mdls.ContentView]
     def search_content_views(
         self,
         # Match view count
@@ -2173,13 +2173,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ContentView]:
+    ) -> Sequence[mdls.ContentView]:
         """Search Content Views"""
         response = cast(
-            Sequence[models.ContentView],
+            Sequence[mdls.ContentView],
             self.get(
                 path="/content_view/search",
-                structure=Sequence[models.ContentView],
+                structure=Sequence[mdls.ContentView],
                 query_params={
                     "view_count": view_count,
                     "group_id": group_id,
@@ -2244,19 +2244,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
     #
-    # GET /dashboards -> Sequence[models.DashboardBase]
+    # GET /dashboards -> Sequence[mdls.DashboardBase]
     def all_dashboards(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardBase]:
+    ) -> Sequence[mdls.DashboardBase]:
         """Get All Dashboards"""
         response = cast(
-            Sequence[models.DashboardBase],
+            Sequence[mdls.DashboardBase],
             self.get(
                 path="/dashboards",
-                structure=Sequence[models.DashboardBase],
+                structure=Sequence[mdls.DashboardBase],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2278,18 +2278,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
     #
-    # POST /dashboards -> models.Dashboard
+    # POST /dashboards -> mdls.Dashboard
     def create_dashboard(
         self,
-        body: models.WriteDashboard,
+        body: mdls.WriteDashboard,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Dashboard:
+    ) -> mdls.Dashboard:
         """Create Dashboard"""
         response = cast(
-            models.Dashboard,
+            mdls.Dashboard,
             self.post(
                 path="/dashboards",
-                structure=models.Dashboard,
+                structure=mdls.Dashboard,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -2326,7 +2326,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
     #
-    # GET /dashboards/search -> Sequence[models.Dashboard]
+    # GET /dashboards/search -> Sequence[mdls.Dashboard]
     def search_dashboards(
         self,
         # Match dashboard id.
@@ -2368,13 +2368,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Dashboard]:
+    ) -> Sequence[mdls.Dashboard]:
         """Search Dashboards"""
         response = cast(
-            Sequence[models.Dashboard],
+            Sequence[mdls.Dashboard],
             self.get(
                 path="/dashboards/search",
-                structure=Sequence[models.Dashboard],
+                structure=Sequence[mdls.Dashboard],
                 query_params={
                     "id": id,
                     "slug": slug,
@@ -2414,26 +2414,26 @@ class Looker31SDK(api_methods.APIMethods):
     # **Sync** a linked UDD with [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard)
     # **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
     #
-    # POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> models.Dashboard
+    # POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> mdls.Dashboard
     def import_lookml_dashboard(
         self,
         # Id of LookML dashboard
         lookml_dashboard_id: str,
         # Id of space to import the dashboard to
         space_id: str,
-        body: Optional[models.WriteDashboard] = None,
+        body: Optional[mdls.WriteDashboard] = None,
         # If true, and this dashboard is localized, export it with the raw keys, not localized.
         raw_locale: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Dashboard:
+    ) -> mdls.Dashboard:
         """Import LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
         space_id = self.encode_path_param(space_id)
         response = cast(
-            models.Dashboard,
+            mdls.Dashboard,
             self.post(
                 path=f"/dashboards/{lookml_dashboard_id}/import/{space_id}",
-                structure=models.Dashboard,
+                structure=mdls.Dashboard,
                 query_params={"raw_locale": raw_locale},
                 body=body,
                 transport_options=transport_options,
@@ -2456,7 +2456,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # Id of LookML dashboard, in the form 'model::dashboardname'
         lookml_dashboard_id: str,
-        body: models.WriteDashboard,
+        body: mdls.WriteDashboard,
         # If true, and this dashboard is localized, export it with the raw keys, not localized.
         raw_locale: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -2483,7 +2483,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # You can **Search** for dashboards with [search_dashboards()](#!/Dashboard/search_dashboards)
     #
-    # GET /dashboards/{dashboard_id} -> models.Dashboard
+    # GET /dashboards/{dashboard_id} -> mdls.Dashboard
     def dashboard(
         self,
         # Id of dashboard
@@ -2491,14 +2491,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Dashboard:
+    ) -> mdls.Dashboard:
         """Get Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            models.Dashboard,
+            mdls.Dashboard,
             self.get(
                 path=f"/dashboards/{dashboard_id}",
-                structure=models.Dashboard,
+                structure=mdls.Dashboard,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2516,21 +2516,21 @@ class Looker31SDK(api_methods.APIMethods):
     # If you receive a 422 error response when updating a dashboard, be sure to look at the
     # response body for information about exactly which fields are missing or contain invalid data.
     #
-    # PATCH /dashboards/{dashboard_id} -> models.Dashboard
+    # PATCH /dashboards/{dashboard_id} -> mdls.Dashboard
     def update_dashboard(
         self,
         # Id of dashboard
         dashboard_id: str,
-        body: models.WriteDashboard,
+        body: mdls.WriteDashboard,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Dashboard:
+    ) -> mdls.Dashboard:
         """Update Dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            models.Dashboard,
+            mdls.Dashboard,
             self.patch(
                 path=f"/dashboards/{dashboard_id}",
-                structure=models.Dashboard,
+                structure=mdls.Dashboard,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -2568,20 +2568,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns a JSON object that contains the dashboard id and Aggregate Table lookml
     #
-    # GET /dashboards/aggregate_table_lookml/{dashboard_id} -> models.DashboardAggregateTableLookml
+    # GET /dashboards/aggregate_table_lookml/{dashboard_id} -> mdls.DashboardAggregateTableLookml
     def dashboard_aggregate_table_lookml(
         self,
         # Id of dashboard
         dashboard_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardAggregateTableLookml:
+    ) -> mdls.DashboardAggregateTableLookml:
         """Get Aggregate Table LookML for a dashboard"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            models.DashboardAggregateTableLookml,
+            mdls.DashboardAggregateTableLookml,
             self.get(
                 path=f"/dashboards/aggregate_table_lookml/{dashboard_id}",
-                structure=models.DashboardAggregateTableLookml,
+                structure=mdls.DashboardAggregateTableLookml,
                 transport_options=transport_options,
             ),
         )
@@ -2591,20 +2591,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns a JSON object that contains the dashboard id and the full lookml
     #
-    # GET /dashboards/lookml/{dashboard_id} -> models.DashboardLookml
+    # GET /dashboards/lookml/{dashboard_id} -> mdls.DashboardLookml
     def dashboard_lookml(
         self,
         # Id of dashboard
         dashboard_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLookml:
+    ) -> mdls.DashboardLookml:
         """Get lookml of a UDD"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            models.DashboardLookml,
+            mdls.DashboardLookml,
             self.get(
                 path=f"/dashboards/lookml/{dashboard_id}",
-                structure=models.DashboardLookml,
+                structure=mdls.DashboardLookml,
                 transport_options=transport_options,
             ),
         )
@@ -2635,7 +2635,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /dashboard_elements/search -> Sequence[models.DashboardElement]
+    # GET /dashboard_elements/search -> Sequence[mdls.DashboardElement]
     def search_dashboard_elements(
         self,
         # Select elements that refer to a given dashboard id
@@ -2653,13 +2653,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardElement]:
+    ) -> Sequence[mdls.DashboardElement]:
         """Search Dashboard Elements"""
         response = cast(
-            Sequence[models.DashboardElement],
+            Sequence[mdls.DashboardElement],
             self.get(
                 path="/dashboard_elements/search",
-                structure=Sequence[models.DashboardElement],
+                structure=Sequence[mdls.DashboardElement],
                 query_params={
                     "dashboard_id": dashboard_id,
                     "look_id": look_id,
@@ -2676,7 +2676,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the dashboard element with a specific id.
     #
-    # GET /dashboard_elements/{dashboard_element_id} -> models.DashboardElement
+    # GET /dashboard_elements/{dashboard_element_id} -> mdls.DashboardElement
     def dashboard_element(
         self,
         # Id of dashboard element
@@ -2684,14 +2684,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardElement:
+    ) -> mdls.DashboardElement:
         """Get DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
         response = cast(
-            models.DashboardElement,
+            mdls.DashboardElement,
             self.get(
                 path=f"/dashboard_elements/{dashboard_element_id}",
-                structure=models.DashboardElement,
+                structure=mdls.DashboardElement,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2700,23 +2700,23 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the dashboard element with a specific id.
     #
-    # PATCH /dashboard_elements/{dashboard_element_id} -> models.DashboardElement
+    # PATCH /dashboard_elements/{dashboard_element_id} -> mdls.DashboardElement
     def update_dashboard_element(
         self,
         # Id of dashboard element
         dashboard_element_id: str,
-        body: models.WriteDashboardElement,
+        body: mdls.WriteDashboardElement,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardElement:
+    ) -> mdls.DashboardElement:
         """Update DashboardElement"""
         dashboard_element_id = self.encode_path_param(dashboard_element_id)
         response = cast(
-            models.DashboardElement,
+            mdls.DashboardElement,
             self.patch(
                 path=f"/dashboard_elements/{dashboard_element_id}",
-                structure=models.DashboardElement,
+                structure=mdls.DashboardElement,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -2747,7 +2747,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the dashboard elements on a dashboard with a specific id.
     #
-    # GET /dashboards/{dashboard_id}/dashboard_elements -> Sequence[models.DashboardElement]
+    # GET /dashboards/{dashboard_id}/dashboard_elements -> Sequence[mdls.DashboardElement]
     def dashboard_dashboard_elements(
         self,
         # Id of dashboard
@@ -2755,14 +2755,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardElement]:
+    ) -> Sequence[mdls.DashboardElement]:
         """Get All DashboardElements"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            Sequence[models.DashboardElement],
+            Sequence[mdls.DashboardElement],
             self.get(
                 path=f"/dashboards/{dashboard_id}/dashboard_elements",
-                structure=Sequence[models.DashboardElement],
+                structure=Sequence[mdls.DashboardElement],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2771,20 +2771,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a dashboard element on the dashboard with a specific id.
     #
-    # POST /dashboard_elements -> models.DashboardElement
+    # POST /dashboard_elements -> mdls.DashboardElement
     def create_dashboard_element(
         self,
-        body: models.WriteDashboardElement,
+        body: mdls.WriteDashboardElement,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardElement:
+    ) -> mdls.DashboardElement:
         """Create DashboardElement"""
         response = cast(
-            models.DashboardElement,
+            mdls.DashboardElement,
             self.post(
                 path="/dashboard_elements",
-                structure=models.DashboardElement,
+                structure=mdls.DashboardElement,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -2794,7 +2794,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the dashboard filters with a specific id.
     #
-    # GET /dashboard_filters/{dashboard_filter_id} -> models.DashboardFilter
+    # GET /dashboard_filters/{dashboard_filter_id} -> mdls.DashboardFilter
     def dashboard_filter(
         self,
         # Id of dashboard filters
@@ -2802,14 +2802,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardFilter:
+    ) -> mdls.DashboardFilter:
         """Get Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
         response = cast(
-            models.DashboardFilter,
+            mdls.DashboardFilter,
             self.get(
                 path=f"/dashboard_filters/{dashboard_filter_id}",
-                structure=models.DashboardFilter,
+                structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2818,23 +2818,23 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the dashboard filter with a specific id.
     #
-    # PATCH /dashboard_filters/{dashboard_filter_id} -> models.DashboardFilter
+    # PATCH /dashboard_filters/{dashboard_filter_id} -> mdls.DashboardFilter
     def update_dashboard_filter(
         self,
         # Id of dashboard filter
         dashboard_filter_id: str,
-        body: models.WriteDashboardFilter,
+        body: mdls.WriteDashboardFilter,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardFilter:
+    ) -> mdls.DashboardFilter:
         """Update Dashboard Filter"""
         dashboard_filter_id = self.encode_path_param(dashboard_filter_id)
         response = cast(
-            models.DashboardFilter,
+            mdls.DashboardFilter,
             self.patch(
                 path=f"/dashboard_filters/{dashboard_filter_id}",
-                structure=models.DashboardFilter,
+                structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -2865,7 +2865,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the dashboard filters on a dashboard with a specific id.
     #
-    # GET /dashboards/{dashboard_id}/dashboard_filters -> Sequence[models.DashboardFilter]
+    # GET /dashboards/{dashboard_id}/dashboard_filters -> Sequence[mdls.DashboardFilter]
     def dashboard_dashboard_filters(
         self,
         # Id of dashboard
@@ -2873,14 +2873,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardFilter]:
+    ) -> Sequence[mdls.DashboardFilter]:
         """Get All Dashboard Filters"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            Sequence[models.DashboardFilter],
+            Sequence[mdls.DashboardFilter],
             self.get(
                 path=f"/dashboards/{dashboard_id}/dashboard_filters",
-                structure=Sequence[models.DashboardFilter],
+                structure=Sequence[mdls.DashboardFilter],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2889,20 +2889,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a dashboard filter on the dashboard with a specific id.
     #
-    # POST /dashboard_filters -> models.DashboardFilter
+    # POST /dashboard_filters -> mdls.DashboardFilter
     def create_dashboard_filter(
         self,
-        body: models.WriteCreateDashboardFilter,
+        body: mdls.WriteCreateDashboardFilter,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardFilter:
+    ) -> mdls.DashboardFilter:
         """Create Dashboard Filter"""
         response = cast(
-            models.DashboardFilter,
+            mdls.DashboardFilter,
             self.post(
                 path="/dashboard_filters",
-                structure=models.DashboardFilter,
+                structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -2912,7 +2912,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the dashboard elements with a specific id.
     #
-    # GET /dashboard_layout_components/{dashboard_layout_component_id} -> models.DashboardLayoutComponent
+    # GET /dashboard_layout_components/{dashboard_layout_component_id} -> mdls.DashboardLayoutComponent
     def dashboard_layout_component(
         self,
         # Id of dashboard layout component
@@ -2920,16 +2920,16 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLayoutComponent:
+    ) -> mdls.DashboardLayoutComponent:
         """Get DashboardLayoutComponent"""
         dashboard_layout_component_id = self.encode_path_param(
             dashboard_layout_component_id
         )
         response = cast(
-            models.DashboardLayoutComponent,
+            mdls.DashboardLayoutComponent,
             self.get(
                 path=f"/dashboard_layout_components/{dashboard_layout_component_id}",
-                structure=models.DashboardLayoutComponent,
+                structure=mdls.DashboardLayoutComponent,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2938,25 +2938,25 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the dashboard element with a specific id.
     #
-    # PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> models.DashboardLayoutComponent
+    # PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> mdls.DashboardLayoutComponent
     def update_dashboard_layout_component(
         self,
         # Id of dashboard layout component
         dashboard_layout_component_id: str,
-        body: models.WriteDashboardLayoutComponent,
+        body: mdls.WriteDashboardLayoutComponent,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLayoutComponent:
+    ) -> mdls.DashboardLayoutComponent:
         """Update DashboardLayoutComponent"""
         dashboard_layout_component_id = self.encode_path_param(
             dashboard_layout_component_id
         )
         response = cast(
-            models.DashboardLayoutComponent,
+            mdls.DashboardLayoutComponent,
             self.patch(
                 path=f"/dashboard_layout_components/{dashboard_layout_component_id}",
-                structure=models.DashboardLayoutComponent,
+                structure=mdls.DashboardLayoutComponent,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -2966,7 +2966,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
     #
-    # GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> Sequence[models.DashboardLayoutComponent]
+    # GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> Sequence[mdls.DashboardLayoutComponent]
     def dashboard_layout_dashboard_layout_components(
         self,
         # Id of dashboard layout component
@@ -2974,14 +2974,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardLayoutComponent]:
+    ) -> Sequence[mdls.DashboardLayoutComponent]:
         """Get All DashboardLayoutComponents"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = cast(
-            Sequence[models.DashboardLayoutComponent],
+            Sequence[mdls.DashboardLayoutComponent],
             self.get(
                 path=f"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components",
-                structure=Sequence[models.DashboardLayoutComponent],
+                structure=Sequence[mdls.DashboardLayoutComponent],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -2990,7 +2990,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the dashboard layouts with a specific id.
     #
-    # GET /dashboard_layouts/{dashboard_layout_id} -> models.DashboardLayout
+    # GET /dashboard_layouts/{dashboard_layout_id} -> mdls.DashboardLayout
     def dashboard_layout(
         self,
         # Id of dashboard layouts
@@ -2998,14 +2998,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLayout:
+    ) -> mdls.DashboardLayout:
         """Get DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = cast(
-            models.DashboardLayout,
+            mdls.DashboardLayout,
             self.get(
                 path=f"/dashboard_layouts/{dashboard_layout_id}",
-                structure=models.DashboardLayout,
+                structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3014,23 +3014,23 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the dashboard layout with a specific id.
     #
-    # PATCH /dashboard_layouts/{dashboard_layout_id} -> models.DashboardLayout
+    # PATCH /dashboard_layouts/{dashboard_layout_id} -> mdls.DashboardLayout
     def update_dashboard_layout(
         self,
         # Id of dashboard layout
         dashboard_layout_id: str,
-        body: models.WriteDashboardLayout,
+        body: mdls.WriteDashboardLayout,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLayout:
+    ) -> mdls.DashboardLayout:
         """Update DashboardLayout"""
         dashboard_layout_id = self.encode_path_param(dashboard_layout_id)
         response = cast(
-            models.DashboardLayout,
+            mdls.DashboardLayout,
             self.patch(
                 path=f"/dashboard_layouts/{dashboard_layout_id}",
-                structure=models.DashboardLayout,
+                structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -3061,7 +3061,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the dashboard elements on a dashboard with a specific id.
     #
-    # GET /dashboards/{dashboard_id}/dashboard_layouts -> Sequence[models.DashboardLayout]
+    # GET /dashboards/{dashboard_id}/dashboard_layouts -> Sequence[mdls.DashboardLayout]
     def dashboard_dashboard_layouts(
         self,
         # Id of dashboard
@@ -3069,14 +3069,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.DashboardLayout]:
+    ) -> Sequence[mdls.DashboardLayout]:
         """Get All DashboardLayouts"""
         dashboard_id = self.encode_path_param(dashboard_id)
         response = cast(
-            Sequence[models.DashboardLayout],
+            Sequence[mdls.DashboardLayout],
             self.get(
                 path=f"/dashboards/{dashboard_id}/dashboard_layouts",
-                structure=Sequence[models.DashboardLayout],
+                structure=Sequence[mdls.DashboardLayout],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3085,20 +3085,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a dashboard layout on the dashboard with a specific id.
     #
-    # POST /dashboard_layouts -> models.DashboardLayout
+    # POST /dashboard_layouts -> mdls.DashboardLayout
     def create_dashboard_layout(
         self,
-        body: models.WriteDashboardLayout,
+        body: mdls.WriteDashboardLayout,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DashboardLayout:
+    ) -> mdls.DashboardLayout:
         """Create DashboardLayout"""
         response = cast(
-            models.DashboardLayout,
+            mdls.DashboardLayout,
             self.post(
                 path="/dashboard_layouts",
-                structure=models.DashboardLayout,
+                structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -3112,18 +3112,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
     #
-    # POST /data_actions -> models.DataActionResponse
+    # POST /data_actions -> mdls.DataActionResponse
     def perform_data_action(
         self,
-        body: models.DataActionRequest,
+        body: mdls.DataActionRequest,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DataActionResponse:
+    ) -> mdls.DataActionResponse:
         """Send a Data Action"""
         response = cast(
-            models.DataActionResponse,
+            mdls.DataActionResponse,
             self.post(
                 path="/data_actions",
-                structure=models.DataActionResponse,
+                structure=mdls.DataActionResponse,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3132,18 +3132,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
     #
-    # POST /data_actions/form -> models.DataActionForm
+    # POST /data_actions/form -> mdls.DataActionForm
     def fetch_remote_data_action_form(
         self,
         body: MutableMapping[str, Any],
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DataActionForm:
+    ) -> mdls.DataActionForm:
         """Fetch Remote Data Action Form"""
         response = cast(
-            models.DataActionForm,
+            mdls.DataActionForm,
             self.post(
                 path="/data_actions/form",
-                structure=models.DataActionForm,
+                structure=mdls.DataActionForm,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3156,17 +3156,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all datagroups.
     #
-    # GET /datagroups -> Sequence[models.Datagroup]
+    # GET /datagroups -> Sequence[mdls.Datagroup]
     def all_datagroups(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Datagroup]:
+    ) -> Sequence[mdls.Datagroup]:
         """Get All Datagroups"""
         response = cast(
-            Sequence[models.Datagroup],
+            Sequence[mdls.Datagroup],
             self.get(
                 path="/datagroups",
-                structure=Sequence[models.Datagroup],
+                structure=Sequence[mdls.Datagroup],
                 transport_options=transport_options,
             ),
         )
@@ -3174,20 +3174,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a datagroup.
     #
-    # GET /datagroups/{datagroup_id} -> models.Datagroup
+    # GET /datagroups/{datagroup_id} -> mdls.Datagroup
     def datagroup(
         self,
         # ID of datagroup.
         datagroup_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Datagroup:
+    ) -> mdls.Datagroup:
         """Get Datagroup"""
         datagroup_id = self.encode_path_param(datagroup_id)
         response = cast(
-            models.Datagroup,
+            mdls.Datagroup,
             self.get(
                 path=f"/datagroups/{datagroup_id}",
-                structure=models.Datagroup,
+                structure=mdls.Datagroup,
                 transport_options=transport_options,
             ),
         )
@@ -3195,21 +3195,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a datagroup using the specified params.
     #
-    # PATCH /datagroups/{datagroup_id} -> models.Datagroup
+    # PATCH /datagroups/{datagroup_id} -> mdls.Datagroup
     def update_datagroup(
         self,
         # ID of datagroup.
         datagroup_id: str,
-        body: models.WriteDatagroup,
+        body: mdls.WriteDatagroup,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Datagroup:
+    ) -> mdls.Datagroup:
         """Update Datagroup"""
         datagroup_id = self.encode_path_param(datagroup_id)
         response = cast(
-            models.Datagroup,
+            mdls.Datagroup,
             self.patch(
                 path=f"/datagroups/{datagroup_id}",
-                structure=models.Datagroup,
+                structure=mdls.Datagroup,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3222,7 +3222,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Discover information about derived tables
     #
-    # GET /derived_table/graph/model/{model} -> models.DependencyGraph
+    # GET /derived_table/graph/model/{model} -> mdls.DependencyGraph
     def graph_derived_tables_for_model(
         self,
         # The name of the Lookml model.
@@ -3232,14 +3232,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
         color: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DependencyGraph:
+    ) -> mdls.DependencyGraph:
         """Get Derived Table graph for model"""
         model = self.encode_path_param(model)
         response = cast(
-            models.DependencyGraph,
+            mdls.DependencyGraph,
             self.get(
                 path=f"/derived_table/graph/model/{model}",
-                structure=models.DependencyGraph,
+                structure=mdls.DependencyGraph,
                 query_params={"format": format, "color": color},
                 transport_options=transport_options,
             ),
@@ -3248,25 +3248,25 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the subgraph representing this derived table and its dependencies.
     #
-    # GET /derived_table/graph/view/{view} -> models.DependencyGraph
+    # GET /derived_table/graph/view/{view} -> mdls.DependencyGraph
     def graph_derived_tables_for_view(
         self,
         # The derived table's view name.
         view: str,
         # The models where this derived table is defined.
-        models_: Optional[str] = None,
+        models: Optional[str] = None,
         # The model directory to look in, either `dev` or `production`.
         workspace: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DependencyGraph:
+    ) -> mdls.DependencyGraph:
         """Get subgraph of derived table and dependencies"""
         view = self.encode_path_param(view)
         response = cast(
-            models.DependencyGraph,
+            mdls.DependencyGraph,
             self.get(
                 path=f"/derived_table/graph/view/{view}",
-                structure=models.DependencyGraph,
-                query_params={"models": models_, "workspace": workspace},
+                structure=mdls.DependencyGraph,
+                query_params={"models": models, "workspace": workspace},
                 transport_options=transport_options,
             ),
         )
@@ -3278,7 +3278,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Search for folders by creator id, parent id, name, etc
     #
-    # GET /folders/search -> Sequence[models.Folder]
+    # GET /folders/search -> Sequence[mdls.Folder]
     def search_folders(
         self,
         # Requested fields.
@@ -3306,13 +3306,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Match is shared root
         is_shared_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Folder]:
+    ) -> Sequence[mdls.Folder]:
         """Search Folders"""
         response = cast(
-            Sequence[models.Folder],
+            Sequence[mdls.Folder],
             self.get(
                 path="/folders/search",
-                structure=Sequence[models.Folder],
+                structure=Sequence[mdls.Folder],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -3334,7 +3334,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the folder with a specific id.
     #
-    # GET /folders/{folder_id} -> models.Folder
+    # GET /folders/{folder_id} -> mdls.Folder
     def folder(
         self,
         # Id of folder
@@ -3342,14 +3342,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Folder:
+    ) -> mdls.Folder:
         """Get Folder"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            models.Folder,
+            mdls.Folder,
             self.get(
                 path=f"/folders/{folder_id}",
-                structure=models.Folder,
+                structure=mdls.Folder,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3358,21 +3358,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the folder with a specific id.
     #
-    # PATCH /folders/{folder_id} -> models.Folder
+    # PATCH /folders/{folder_id} -> mdls.Folder
     def update_folder(
         self,
         # Id of folder
         folder_id: str,
-        body: models.UpdateFolder,
+        body: mdls.UpdateFolder,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Folder:
+    ) -> mdls.Folder:
         """Update Folder"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            models.Folder,
+            mdls.Folder,
             self.patch(
                 path=f"/folders/{folder_id}",
-                structure=models.Folder,
+                structure=mdls.Folder,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3406,19 +3406,19 @@ class Looker31SDK(api_methods.APIMethods):
     # In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
     # In API 4.0+, all personal folders will be returned.
     #
-    # GET /folders -> Sequence[models.Folder]
+    # GET /folders -> Sequence[mdls.Folder]
     def all_folders(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Folder]:
+    ) -> Sequence[mdls.Folder]:
         """Get All Folders"""
         response = cast(
-            Sequence[models.Folder],
+            Sequence[mdls.Folder],
             self.get(
                 path="/folders",
-                structure=Sequence[models.Folder],
+                structure=Sequence[mdls.Folder],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3430,18 +3430,18 @@ class Looker31SDK(api_methods.APIMethods):
     # Caller must have permission to edit the parent folder and to create folders, otherwise the request
     # returns 404 Not Found.
     #
-    # POST /folders -> models.Folder
+    # POST /folders -> mdls.Folder
     def create_folder(
         self,
-        body: models.CreateFolder,
+        body: mdls.CreateFolder,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Folder:
+    ) -> mdls.Folder:
         """Create Folder"""
         response = cast(
-            models.Folder,
+            mdls.Folder,
             self.post(
                 path="/folders",
-                structure=models.Folder,
+                structure=mdls.Folder,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3450,7 +3450,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the children of a folder.
     #
-    # GET /folders/{folder_id}/children -> Sequence[models.Folder]
+    # GET /folders/{folder_id}/children -> Sequence[mdls.Folder]
     def folder_children(
         self,
         # Id of folder
@@ -3464,14 +3464,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Folder]:
+    ) -> Sequence[mdls.Folder]:
         """Get Folder Children"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            Sequence[models.Folder],
+            Sequence[mdls.Folder],
             self.get(
                 path=f"/folders/{folder_id}/children",
-                structure=Sequence[models.Folder],
+                structure=Sequence[mdls.Folder],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -3485,7 +3485,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Search the children of a folder
     #
-    # GET /folders/{folder_id}/children/search -> Sequence[models.Folder]
+    # GET /folders/{folder_id}/children/search -> Sequence[mdls.Folder]
     def folder_children_search(
         self,
         # Id of folder
@@ -3497,14 +3497,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Match folder name.
         name: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Folder]:
+    ) -> Sequence[mdls.Folder]:
         """Search Folder Children"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            Sequence[models.Folder],
+            Sequence[mdls.Folder],
             self.get(
                 path=f"/folders/{folder_id}/children/search",
-                structure=Sequence[models.Folder],
+                structure=Sequence[mdls.Folder],
                 query_params={"fields": fields, "sorts": sorts, "name": name},
                 transport_options=transport_options,
             ),
@@ -3513,7 +3513,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the parent of a folder
     #
-    # GET /folders/{folder_id}/parent -> models.Folder
+    # GET /folders/{folder_id}/parent -> mdls.Folder
     def folder_parent(
         self,
         # Id of folder
@@ -3521,14 +3521,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Folder:
+    ) -> mdls.Folder:
         """Get Folder Parent"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            models.Folder,
+            mdls.Folder,
             self.get(
                 path=f"/folders/{folder_id}/parent",
-                structure=models.Folder,
+                structure=mdls.Folder,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3537,7 +3537,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the ancestors of a folder
     #
-    # GET /folders/{folder_id}/ancestors -> Sequence[models.Folder]
+    # GET /folders/{folder_id}/ancestors -> Sequence[mdls.Folder]
     def folder_ancestors(
         self,
         # Id of folder
@@ -3545,14 +3545,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Folder]:
+    ) -> Sequence[mdls.Folder]:
         """Get Folder Ancestors"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            Sequence[models.Folder],
+            Sequence[mdls.Folder],
             self.get(
                 path=f"/folders/{folder_id}/ancestors",
-                structure=Sequence[models.Folder],
+                structure=Sequence[mdls.Folder],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3563,7 +3563,7 @@ class Looker31SDK(api_methods.APIMethods):
     # In API 3.x, this will return all looks in a folder, including looks in the trash.
     # In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
     #
-    # GET /folders/{folder_id}/looks -> Sequence[models.LookWithQuery]
+    # GET /folders/{folder_id}/looks -> Sequence[mdls.LookWithQuery]
     def folder_looks(
         self,
         # Id of folder
@@ -3571,14 +3571,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LookWithQuery]:
+    ) -> Sequence[mdls.LookWithQuery]:
         """Get Folder Looks"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            Sequence[models.LookWithQuery],
+            Sequence[mdls.LookWithQuery],
             self.get(
                 path=f"/folders/{folder_id}/looks",
-                structure=Sequence[models.LookWithQuery],
+                structure=Sequence[mdls.LookWithQuery],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3587,7 +3587,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the dashboards in a folder
     #
-    # GET /folders/{folder_id}/dashboards -> Sequence[models.Dashboard]
+    # GET /folders/{folder_id}/dashboards -> Sequence[mdls.Dashboard]
     def folder_dashboards(
         self,
         # Id of folder
@@ -3595,14 +3595,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Dashboard]:
+    ) -> Sequence[mdls.Dashboard]:
         """Get Folder Dashboards"""
         folder_id = self.encode_path_param(folder_id)
         response = cast(
-            Sequence[models.Dashboard],
+            Sequence[mdls.Dashboard],
             self.get(
                 path=f"/folders/{folder_id}/dashboards",
-                structure=Sequence[models.Dashboard],
+                structure=Sequence[mdls.Dashboard],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3615,7 +3615,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all groups.
     #
-    # GET /groups -> Sequence[models.Group]
+    # GET /groups -> Sequence[mdls.Group]
     def all_groups(
         self,
         # Requested fields.
@@ -3627,19 +3627,19 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         # Optional of ids to get specific groups.
-        ids: Optional[models.DelimSequence[int]] = None,
+        ids: Optional[mdls.DelimSequence[int]] = None,
         # Id of content metadata to which groups must have access.
         content_metadata_id: Optional[int] = None,
         # Select only groups that either can/cannot be given access to content.
         can_add_to_content_metadata: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Group]:
+    ) -> Sequence[mdls.Group]:
         """Get All Groups"""
         response = cast(
-            Sequence[models.Group],
+            Sequence[mdls.Group],
             self.get(
                 path="/groups",
-                structure=Sequence[models.Group],
+                structure=Sequence[mdls.Group],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -3656,20 +3656,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Creates a new group (admin only).
     #
-    # POST /groups -> models.Group
+    # POST /groups -> mdls.Group
     def create_group(
         self,
-        body: models.WriteGroup,
+        body: mdls.WriteGroup,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Group:
+    ) -> mdls.Group:
         """Create Group"""
         response = cast(
-            models.Group,
+            mdls.Group,
             self.post(
                 path="/groups",
-                structure=models.Group,
+                structure=mdls.Group,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -3702,7 +3702,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /groups/search -> Sequence[models.Group]
+    # GET /groups/search -> Sequence[mdls.Group]
     def search_groups(
         self,
         # Requested fields.
@@ -3726,13 +3726,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Match group externally_orphaned.
         externally_orphaned: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Group]:
+    ) -> Sequence[mdls.Group]:
         """Search Groups"""
         response = cast(
-            Sequence[models.Group],
+            Sequence[mdls.Group],
             self.get(
                 path="/groups/search",
-                structure=Sequence[models.Group],
+                structure=Sequence[mdls.Group],
                 query_params={
                     "fields": fields,
                     "limit": limit,
@@ -3752,7 +3752,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a group.
     #
-    # GET /groups/{group_id} -> models.Group
+    # GET /groups/{group_id} -> mdls.Group
     def group(
         self,
         # Id of group
@@ -3760,13 +3760,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Group:
+    ) -> mdls.Group:
         """Get Group"""
         response = cast(
-            models.Group,
+            mdls.Group,
             self.get(
                 path=f"/groups/{group_id}",
-                structure=models.Group,
+                structure=mdls.Group,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3775,22 +3775,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Updates the a group (admin only).
     #
-    # PATCH /groups/{group_id} -> models.Group
+    # PATCH /groups/{group_id} -> mdls.Group
     def update_group(
         self,
         # Id of group
         group_id: int,
-        body: models.WriteGroup,
+        body: mdls.WriteGroup,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Group:
+    ) -> mdls.Group:
         """Update Group"""
         response = cast(
-            models.Group,
+            mdls.Group,
             self.patch(
                 path=f"/groups/{group_id}",
-                structure=models.Group,
+                structure=mdls.Group,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -3820,7 +3820,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the groups in a group
     #
-    # GET /groups/{group_id}/groups -> Sequence[models.Group]
+    # GET /groups/{group_id}/groups -> Sequence[mdls.Group]
     def all_group_groups(
         self,
         # Id of group
@@ -3828,13 +3828,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Group]:
+    ) -> Sequence[mdls.Group]:
         """Get All Groups in Group"""
         response = cast(
-            Sequence[models.Group],
+            Sequence[mdls.Group],
             self.get(
                 path=f"/groups/{group_id}/groups",
-                structure=Sequence[models.Group],
+                structure=Sequence[mdls.Group],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -3843,20 +3843,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Adds a new group to a group.
     #
-    # POST /groups/{group_id}/groups -> models.Group
+    # POST /groups/{group_id}/groups -> mdls.Group
     def add_group_group(
         self,
         # Id of group
         group_id: int,
-        body: models.GroupIdForGroupInclusion,
+        body: mdls.GroupIdForGroupInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Group:
+    ) -> mdls.Group:
         """Add a Group to Group"""
         response = cast(
-            models.Group,
+            mdls.Group,
             self.post(
                 path=f"/groups/{group_id}/groups",
-                structure=models.Group,
+                structure=mdls.Group,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3865,7 +3865,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the users directly included in a group.
     #
-    # GET /groups/{group_id}/users -> Sequence[models.User]
+    # GET /groups/{group_id}/users -> Sequence[mdls.User]
     def all_group_users(
         self,
         # Id of group
@@ -3879,13 +3879,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Get All Users in Group"""
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.get(
                 path=f"/groups/{group_id}/users",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -3899,20 +3899,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Adds a new user to a group.
     #
-    # POST /groups/{group_id}/users -> models.User
+    # POST /groups/{group_id}/users -> mdls.User
     def add_group_user(
         self,
         # Id of group
         group_id: int,
-        body: models.GroupIdForGroupUserInclusion,
+        body: mdls.GroupIdForGroupUserInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Add a User to Group"""
         response = cast(
-            models.User,
+            mdls.User,
             self.post(
                 path=f"/groups/{group_id}/users",
-                structure=models.User,
+                structure=mdls.User,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3967,22 +3967,22 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
     #
-    # PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> models.UserAttributeGroupValue
+    # PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> mdls.UserAttributeGroupValue
     def update_user_attribute_group_value(
         self,
         # Id of group
         group_id: int,
         # Id of user attribute
         user_attribute_id: int,
-        body: models.UserAttributeGroupValue,
+        body: mdls.UserAttributeGroupValue,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.UserAttributeGroupValue:
+    ) -> mdls.UserAttributeGroupValue:
         """Set User Attribute Group Value"""
         response = cast(
-            models.UserAttributeGroupValue,
+            mdls.UserAttributeGroupValue,
             self.patch(
                 path=f"/groups/{group_id}/attribute_values/{user_attribute_id}",
-                structure=models.UserAttributeGroupValue,
+                structure=mdls.UserAttributeGroupValue,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -4017,19 +4017,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all homepages.
     #
-    # GET /homepages -> Sequence[models.Homepage]
+    # GET /homepages -> Sequence[mdls.Homepage]
     def all_homepages(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Homepage]:
+    ) -> Sequence[mdls.Homepage]:
         """Get All Homepages"""
         response = cast(
-            Sequence[models.Homepage],
+            Sequence[mdls.Homepage],
             self.get(
                 path="/homepages",
-                structure=Sequence[models.Homepage],
+                structure=Sequence[mdls.Homepage],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4038,20 +4038,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a new homepage.
     #
-    # POST /homepages -> models.Homepage
+    # POST /homepages -> mdls.Homepage
     def create_homepage(
         self,
-        body: models.WriteHomepage,
+        body: mdls.WriteHomepage,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Homepage:
+    ) -> mdls.Homepage:
         """Create Homepage"""
         response = cast(
-            models.Homepage,
+            mdls.Homepage,
             self.post(
                 path="/homepages",
-                structure=models.Homepage,
+                structure=mdls.Homepage,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4082,7 +4082,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /homepages/search -> Sequence[models.Homepage]
+    # GET /homepages/search -> Sequence[mdls.Homepage]
     def search_homepages(
         self,
         # Matches homepage title.
@@ -4112,13 +4112,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Homepage]:
+    ) -> Sequence[mdls.Homepage]:
         """Search Homepages"""
         response = cast(
-            Sequence[models.Homepage],
+            Sequence[mdls.Homepage],
             self.get(
                 path="/homepages/search",
-                structure=Sequence[models.Homepage],
+                structure=Sequence[mdls.Homepage],
                 query_params={
                     "title": title,
                     "created_at": created_at,
@@ -4141,7 +4141,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a homepage.
     #
-    # GET /homepages/{homepage_id} -> models.Homepage
+    # GET /homepages/{homepage_id} -> mdls.Homepage
     def homepage(
         self,
         # Id of homepage
@@ -4149,13 +4149,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Homepage:
+    ) -> mdls.Homepage:
         """Get Homepage"""
         response = cast(
-            models.Homepage,
+            mdls.Homepage,
             self.get(
                 path=f"/homepages/{homepage_id}",
-                structure=models.Homepage,
+                structure=mdls.Homepage,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4164,22 +4164,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a homepage definition.
     #
-    # PATCH /homepages/{homepage_id} -> models.Homepage
+    # PATCH /homepages/{homepage_id} -> mdls.Homepage
     def update_homepage(
         self,
         # Id of homepage
         homepage_id: int,
-        body: models.WriteHomepage,
+        body: mdls.WriteHomepage,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Homepage:
+    ) -> mdls.Homepage:
         """Update Homepage"""
         response = cast(
-            models.Homepage,
+            mdls.Homepage,
             self.patch(
                 path=f"/homepages/{homepage_id}",
-                structure=models.Homepage,
+                structure=mdls.Homepage,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4209,7 +4209,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all homepage items.
     #
-    # GET /homepage_items -> Sequence[models.HomepageItem]
+    # GET /homepage_items -> Sequence[mdls.HomepageItem]
     def all_homepage_items(
         self,
         # Requested fields.
@@ -4219,13 +4219,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Filter to a specific homepage section
         homepage_section_id: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.HomepageItem]:
+    ) -> Sequence[mdls.HomepageItem]:
         """Get All Homepage Items"""
         response = cast(
-            Sequence[models.HomepageItem],
+            Sequence[mdls.HomepageItem],
             self.get(
                 path="/homepage_items",
-                structure=Sequence[models.HomepageItem],
+                structure=Sequence[mdls.HomepageItem],
                 query_params={
                     "fields": fields,
                     "sorts": sorts,
@@ -4238,20 +4238,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a new homepage item.
     #
-    # POST /homepage_items -> models.HomepageItem
+    # POST /homepage_items -> mdls.HomepageItem
     def create_homepage_item(
         self,
-        body: models.WriteHomepageItem,
+        body: mdls.WriteHomepageItem,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageItem:
+    ) -> mdls.HomepageItem:
         """Create Homepage Item"""
         response = cast(
-            models.HomepageItem,
+            mdls.HomepageItem,
             self.post(
                 path="/homepage_items",
-                structure=models.HomepageItem,
+                structure=mdls.HomepageItem,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4261,7 +4261,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a homepage item.
     #
-    # GET /homepage_items/{homepage_item_id} -> models.HomepageItem
+    # GET /homepage_items/{homepage_item_id} -> mdls.HomepageItem
     def homepage_item(
         self,
         # Id of homepage item
@@ -4269,13 +4269,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageItem:
+    ) -> mdls.HomepageItem:
         """Get Homepage Item"""
         response = cast(
-            models.HomepageItem,
+            mdls.HomepageItem,
             self.get(
                 path=f"/homepage_items/{homepage_item_id}",
-                structure=models.HomepageItem,
+                structure=mdls.HomepageItem,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4284,22 +4284,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a homepage item definition.
     #
-    # PATCH /homepage_items/{homepage_item_id} -> models.HomepageItem
+    # PATCH /homepage_items/{homepage_item_id} -> mdls.HomepageItem
     def update_homepage_item(
         self,
         # Id of homepage item
         homepage_item_id: int,
-        body: models.WriteHomepageItem,
+        body: mdls.WriteHomepageItem,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageItem:
+    ) -> mdls.HomepageItem:
         """Update Homepage Item"""
         response = cast(
-            models.HomepageItem,
+            mdls.HomepageItem,
             self.patch(
                 path=f"/homepage_items/{homepage_item_id}",
-                structure=models.HomepageItem,
+                structure=mdls.HomepageItem,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4329,7 +4329,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all homepage sections.
     #
-    # GET /homepage_sections -> Sequence[models.HomepageSection]
+    # GET /homepage_sections -> Sequence[mdls.HomepageSection]
     def all_homepage_sections(
         self,
         # Requested fields.
@@ -4337,13 +4337,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.HomepageSection]:
+    ) -> Sequence[mdls.HomepageSection]:
         """Get All Homepage sections"""
         response = cast(
-            Sequence[models.HomepageSection],
+            Sequence[mdls.HomepageSection],
             self.get(
                 path="/homepage_sections",
-                structure=Sequence[models.HomepageSection],
+                structure=Sequence[mdls.HomepageSection],
                 query_params={"fields": fields, "sorts": sorts},
                 transport_options=transport_options,
             ),
@@ -4352,20 +4352,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a new homepage section.
     #
-    # POST /homepage_sections -> models.HomepageSection
+    # POST /homepage_sections -> mdls.HomepageSection
     def create_homepage_section(
         self,
-        body: models.WriteHomepageSection,
+        body: mdls.WriteHomepageSection,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageSection:
+    ) -> mdls.HomepageSection:
         """Create Homepage section"""
         response = cast(
-            models.HomepageSection,
+            mdls.HomepageSection,
             self.post(
                 path="/homepage_sections",
-                structure=models.HomepageSection,
+                structure=mdls.HomepageSection,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4375,7 +4375,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a homepage section.
     #
-    # GET /homepage_sections/{homepage_section_id} -> models.HomepageSection
+    # GET /homepage_sections/{homepage_section_id} -> mdls.HomepageSection
     def homepage_section(
         self,
         # Id of homepage section
@@ -4383,13 +4383,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageSection:
+    ) -> mdls.HomepageSection:
         """Get Homepage section"""
         response = cast(
-            models.HomepageSection,
+            mdls.HomepageSection,
             self.get(
                 path=f"/homepage_sections/{homepage_section_id}",
-                structure=models.HomepageSection,
+                structure=mdls.HomepageSection,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4398,22 +4398,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a homepage section definition.
     #
-    # PATCH /homepage_sections/{homepage_section_id} -> models.HomepageSection
+    # PATCH /homepage_sections/{homepage_section_id} -> mdls.HomepageSection
     def update_homepage_section(
         self,
         # Id of homepage section
         homepage_section_id: int,
-        body: models.WriteHomepageSection,
+        body: mdls.WriteHomepageSection,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.HomepageSection:
+    ) -> mdls.HomepageSection:
         """Update Homepage section"""
         response = cast(
-            models.HomepageSection,
+            mdls.HomepageSection,
             self.patch(
                 path=f"/homepage_sections/{homepage_section_id}",
-                structure=models.HomepageSection,
+                structure=mdls.HomepageSection,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4443,19 +4443,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the primary homepage's sections.
     #
-    # GET /primary_homepage_sections -> Sequence[models.HomepageSection]
+    # GET /primary_homepage_sections -> Sequence[mdls.HomepageSection]
     def all_primary_homepage_sections(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.HomepageSection]:
+    ) -> Sequence[mdls.HomepageSection]:
         """Get All Primary homepage sections"""
         response = cast(
-            Sequence[models.HomepageSection],
+            Sequence[mdls.HomepageSection],
             self.get(
                 path="/primary_homepage_sections",
-                structure=Sequence[models.HomepageSection],
+                structure=Sequence[mdls.HomepageSection],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4468,19 +4468,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all Integration Hubs.
     #
-    # GET /integration_hubs -> Sequence[models.IntegrationHub]
+    # GET /integration_hubs -> Sequence[mdls.IntegrationHub]
     def all_integration_hubs(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.IntegrationHub]:
+    ) -> Sequence[mdls.IntegrationHub]:
         """Get All Integration Hubs"""
         response = cast(
-            Sequence[models.IntegrationHub],
+            Sequence[mdls.IntegrationHub],
             self.get(
                 path="/integration_hubs",
-                structure=Sequence[models.IntegrationHub],
+                structure=Sequence[mdls.IntegrationHub],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4491,20 +4491,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # This API is rate limited to prevent it from being used for SSRF attacks
     #
-    # POST /integration_hubs -> models.IntegrationHub
+    # POST /integration_hubs -> mdls.IntegrationHub
     def create_integration_hub(
         self,
-        body: models.WriteIntegrationHub,
+        body: mdls.WriteIntegrationHub,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.IntegrationHub:
+    ) -> mdls.IntegrationHub:
         """Create Integration Hub"""
         response = cast(
-            models.IntegrationHub,
+            mdls.IntegrationHub,
             self.post(
                 path="/integration_hubs",
-                structure=models.IntegrationHub,
+                structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4514,7 +4514,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a Integration Hub.
     #
-    # GET /integration_hubs/{integration_hub_id} -> models.IntegrationHub
+    # GET /integration_hubs/{integration_hub_id} -> mdls.IntegrationHub
     def integration_hub(
         self,
         # Id of Integration Hub
@@ -4522,13 +4522,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.IntegrationHub:
+    ) -> mdls.IntegrationHub:
         """Get Integration Hub"""
         response = cast(
-            models.IntegrationHub,
+            mdls.IntegrationHub,
             self.get(
                 path=f"/integration_hubs/{integration_hub_id}",
-                structure=models.IntegrationHub,
+                structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4539,22 +4539,22 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # This API is rate limited to prevent it from being used for SSRF attacks
     #
-    # PATCH /integration_hubs/{integration_hub_id} -> models.IntegrationHub
+    # PATCH /integration_hubs/{integration_hub_id} -> mdls.IntegrationHub
     def update_integration_hub(
         self,
         # Id of Integration Hub
         integration_hub_id: int,
-        body: models.WriteIntegrationHub,
+        body: mdls.WriteIntegrationHub,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.IntegrationHub:
+    ) -> mdls.IntegrationHub:
         """Update Integration Hub"""
         response = cast(
-            models.IntegrationHub,
+            mdls.IntegrationHub,
             self.patch(
                 path=f"/integration_hubs/{integration_hub_id}",
-                structure=models.IntegrationHub,
+                structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4584,19 +4584,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
     #
-    # POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> models.IntegrationHub
+    # POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> mdls.IntegrationHub
     def accept_integration_hub_legal_agreement(
         self,
         # Id of integration_hub
         integration_hub_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.IntegrationHub:
+    ) -> mdls.IntegrationHub:
         """Accept Integration Hub Legal Agreement"""
         response = cast(
-            models.IntegrationHub,
+            mdls.IntegrationHub,
             self.post(
                 path=f"/integration_hubs/{integration_hub_id}/accept_legal_agreement",
-                structure=models.IntegrationHub,
+                structure=mdls.IntegrationHub,
                 transport_options=transport_options,
             ),
         )
@@ -4604,7 +4604,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all Integrations.
     #
-    # GET /integrations -> Sequence[models.Integration]
+    # GET /integrations -> Sequence[mdls.Integration]
     def all_integrations(
         self,
         # Requested fields.
@@ -4612,13 +4612,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Filter to a specific provider
         integration_hub_id: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Integration]:
+    ) -> Sequence[mdls.Integration]:
         """Get All Integrations"""
         response = cast(
-            Sequence[models.Integration],
+            Sequence[mdls.Integration],
             self.get(
                 path="/integrations",
-                structure=Sequence[models.Integration],
+                structure=Sequence[mdls.Integration],
                 query_params={
                     "fields": fields,
                     "integration_hub_id": integration_hub_id,
@@ -4630,7 +4630,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a Integration.
     #
-    # GET /integrations/{integration_id} -> models.Integration
+    # GET /integrations/{integration_id} -> mdls.Integration
     def integration(
         self,
         # Id of integration
@@ -4638,14 +4638,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Integration:
+    ) -> mdls.Integration:
         """Get Integration"""
         integration_id = self.encode_path_param(integration_id)
         response = cast(
-            models.Integration,
+            mdls.Integration,
             self.get(
                 path=f"/integrations/{integration_id}",
-                structure=models.Integration,
+                structure=mdls.Integration,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4654,23 +4654,23 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update parameters on a Integration.
     #
-    # PATCH /integrations/{integration_id} -> models.Integration
+    # PATCH /integrations/{integration_id} -> mdls.Integration
     def update_integration(
         self,
         # Id of integration
         integration_id: str,
-        body: models.WriteIntegration,
+        body: mdls.WriteIntegration,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Integration:
+    ) -> mdls.Integration:
         """Update Integration"""
         integration_id = self.encode_path_param(integration_id)
         response = cast(
-            models.Integration,
+            mdls.Integration,
             self.patch(
                 path=f"/integrations/{integration_id}",
-                structure=models.Integration,
+                structure=mdls.Integration,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4680,21 +4680,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Returns the Integration form for presentation to the user.
     #
-    # POST /integrations/{integration_id}/form -> models.DataActionForm
+    # POST /integrations/{integration_id}/form -> mdls.DataActionForm
     def fetch_integration_form(
         self,
         # Id of integration
         integration_id: str,
         body: Optional[MutableMapping[str, Any]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.DataActionForm:
+    ) -> mdls.DataActionForm:
         """Fetch Remote Integration Form"""
         integration_id = self.encode_path_param(integration_id)
         response = cast(
-            models.DataActionForm,
+            mdls.DataActionForm,
             self.post(
                 path=f"/integrations/{integration_id}/form",
-                structure=models.DataActionForm,
+                structure=mdls.DataActionForm,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -4703,20 +4703,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Tests the integration to make sure all the settings are working.
     #
-    # POST /integrations/{integration_id}/test -> models.IntegrationTestResult
+    # POST /integrations/{integration_id}/test -> mdls.IntegrationTestResult
     def test_integration(
         self,
         # Id of integration
         integration_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.IntegrationTestResult:
+    ) -> mdls.IntegrationTestResult:
         """Test integration"""
         integration_id = self.encode_path_param(integration_id)
         response = cast(
-            models.IntegrationTestResult,
+            mdls.IntegrationTestResult,
             self.post(
                 path=f"/integrations/{integration_id}/test",
-                structure=models.IntegrationTestResult,
+                structure=mdls.IntegrationTestResult,
                 transport_options=transport_options,
             ),
         )
@@ -4734,19 +4734,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
     #
-    # GET /looks -> Sequence[models.Look]
+    # GET /looks -> Sequence[mdls.Look]
     def all_looks(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Look]:
+    ) -> Sequence[mdls.Look]:
         """Get All Looks"""
         response = cast(
-            Sequence[models.Look],
+            Sequence[mdls.Look],
             self.get(
                 path="/looks",
-                structure=Sequence[models.Look],
+                structure=Sequence[mdls.Look],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4761,20 +4761,20 @@ class Looker31SDK(api_methods.APIMethods):
     # To place the look into a particular space, assign the space's id to the `space_id` property
     # in the call to `create_look()`.
     #
-    # POST /looks -> models.LookWithQuery
+    # POST /looks -> mdls.LookWithQuery
     def create_look(
         self,
-        body: models.WriteLookWithQuery,
+        body: mdls.WriteLookWithQuery,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookWithQuery:
+    ) -> mdls.LookWithQuery:
         """Create Look"""
         response = cast(
-            models.LookWithQuery,
+            mdls.LookWithQuery,
             self.post(
                 path="/looks",
-                structure=models.LookWithQuery,
+                structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -4810,7 +4810,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Get a **single look** by id with [look(id)](#!/Look/look)
     #
-    # GET /looks/search -> Sequence[models.Look]
+    # GET /looks/search -> Sequence[mdls.Look]
     def search_looks(
         self,
         # Match look id.
@@ -4848,13 +4848,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Look]:
+    ) -> Sequence[mdls.Look]:
         """Search Looks"""
         response = cast(
-            Sequence[models.Look],
+            Sequence[mdls.Look],
             self.get(
                 path="/looks/search",
-                structure=Sequence[models.Look],
+                structure=Sequence[mdls.Look],
                 query_params={
                     "id": id,
                     "title": title,
@@ -4883,7 +4883,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns detailed information about a Look and its associated Query.
     #
-    # GET /looks/{look_id} -> models.LookWithQuery
+    # GET /looks/{look_id} -> mdls.LookWithQuery
     def look(
         self,
         # Id of look
@@ -4891,13 +4891,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookWithQuery:
+    ) -> mdls.LookWithQuery:
         """Get Look"""
         response = cast(
-            models.LookWithQuery,
+            mdls.LookWithQuery,
             self.get(
                 path=f"/looks/{look_id}",
-                structure=models.LookWithQuery,
+                structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -4925,22 +4925,22 @@ class Looker31SDK(api_methods.APIMethods):
     # NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
     # database and destroyed. There is no "undo" for `delete_look()`.
     #
-    # PATCH /looks/{look_id} -> models.LookWithQuery
+    # PATCH /looks/{look_id} -> mdls.LookWithQuery
     def update_look(
         self,
         # Id of look
         look_id: int,
-        body: models.WriteLookWithQuery,
+        body: mdls.WriteLookWithQuery,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookWithQuery:
+    ) -> mdls.LookWithQuery:
         """Update Look"""
         response = cast(
-            models.LookWithQuery,
+            mdls.LookWithQuery,
             self.patch(
                 path=f"/looks/{look_id}",
-                structure=models.LookWithQuery,
+                structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -5058,19 +5058,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all lookml models.
     #
-    # GET /lookml_models -> Sequence[models.LookmlModel]
+    # GET /lookml_models -> Sequence[mdls.LookmlModel]
     def all_lookml_models(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LookmlModel]:
+    ) -> Sequence[mdls.LookmlModel]:
         """Get All LookML Models"""
         response = cast(
-            Sequence[models.LookmlModel],
+            Sequence[mdls.LookmlModel],
             self.get(
                 path="/lookml_models",
-                structure=Sequence[models.LookmlModel],
+                structure=Sequence[mdls.LookmlModel],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5079,18 +5079,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a lookml model using the specified configuration.
     #
-    # POST /lookml_models -> models.LookmlModel
+    # POST /lookml_models -> mdls.LookmlModel
     def create_lookml_model(
         self,
-        body: models.WriteLookmlModel,
+        body: mdls.WriteLookmlModel,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookmlModel:
+    ) -> mdls.LookmlModel:
         """Create LookML Model"""
         response = cast(
-            models.LookmlModel,
+            mdls.LookmlModel,
             self.post(
                 path="/lookml_models",
-                structure=models.LookmlModel,
+                structure=mdls.LookmlModel,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -5099,7 +5099,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a lookml model.
     #
-    # GET /lookml_models/{lookml_model_name} -> models.LookmlModel
+    # GET /lookml_models/{lookml_model_name} -> mdls.LookmlModel
     def lookml_model(
         self,
         # Name of lookml model.
@@ -5107,14 +5107,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookmlModel:
+    ) -> mdls.LookmlModel:
         """Get LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
         response = cast(
-            models.LookmlModel,
+            mdls.LookmlModel,
             self.get(
                 path=f"/lookml_models/{lookml_model_name}",
-                structure=models.LookmlModel,
+                structure=mdls.LookmlModel,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5123,21 +5123,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a lookml model using the specified configuration.
     #
-    # PATCH /lookml_models/{lookml_model_name} -> models.LookmlModel
+    # PATCH /lookml_models/{lookml_model_name} -> mdls.LookmlModel
     def update_lookml_model(
         self,
         # Name of lookml model.
         lookml_model_name: str,
-        body: models.WriteLookmlModel,
+        body: mdls.WriteLookmlModel,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookmlModel:
+    ) -> mdls.LookmlModel:
         """Update LookML Model"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
         response = cast(
-            models.LookmlModel,
+            mdls.LookmlModel,
             self.patch(
                 path=f"/lookml_models/{lookml_model_name}",
-                structure=models.LookmlModel,
+                structure=mdls.LookmlModel,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -5167,7 +5167,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a lookml model explore.
     #
-    # GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> models.LookmlModelExplore
+    # GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> mdls.LookmlModelExplore
     def lookml_model_explore(
         self,
         # Name of lookml model.
@@ -5177,15 +5177,15 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.LookmlModelExplore:
+    ) -> mdls.LookmlModelExplore:
         """Get LookML Model Explore"""
         lookml_model_name = self.encode_path_param(lookml_model_name)
         explore_name = self.encode_path_param(explore_name)
         response = cast(
-            models.LookmlModelExplore,
+            mdls.LookmlModelExplore,
             self.get(
                 path=f"/lookml_models/{lookml_model_name}/explores/{explore_name}",
-                structure=models.LookmlModelExplore,
+                structure=mdls.LookmlModelExplore,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5200,20 +5200,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns a list of git branches in the project repository
     #
-    # GET /projects/{project_id}/git_branches -> Sequence[models.GitBranch]
+    # GET /projects/{project_id}/git_branches -> Sequence[mdls.GitBranch]
     def all_git_branches(
         self,
         # Project Id
         project_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.GitBranch]:
+    ) -> Sequence[mdls.GitBranch]:
         """Get All Git Branches"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            Sequence[models.GitBranch],
+            Sequence[mdls.GitBranch],
             self.get(
                 path=f"/projects/{project_id}/git_branches",
-                structure=Sequence[models.GitBranch],
+                structure=Sequence[mdls.GitBranch],
                 transport_options=transport_options,
             ),
         )
@@ -5223,20 +5223,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns the git branch currently checked out in the given project repository
     #
-    # GET /projects/{project_id}/git_branch -> models.GitBranch
+    # GET /projects/{project_id}/git_branch -> mdls.GitBranch
     def git_branch(
         self,
         # Project Id
         project_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.GitBranch:
+    ) -> mdls.GitBranch:
         """Get Active Git Branch"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.GitBranch,
+            mdls.GitBranch,
             self.get(
                 path=f"/projects/{project_id}/git_branch",
-                structure=models.GitBranch,
+                structure=mdls.GitBranch,
                 transport_options=transport_options,
             ),
         )
@@ -5252,21 +5252,21 @@ class Looker31SDK(api_methods.APIMethods):
     # Optionally specify a branch name, tag name or commit SHA to which the branch should be reset.
     #   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
     #
-    # PUT /projects/{project_id}/git_branch -> models.GitBranch
+    # PUT /projects/{project_id}/git_branch -> mdls.GitBranch
     def update_git_branch(
         self,
         # Project Id
         project_id: str,
-        body: models.WriteGitBranch,
+        body: mdls.WriteGitBranch,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.GitBranch:
+    ) -> mdls.GitBranch:
         """Update Project Git Branch"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.GitBranch,
+            mdls.GitBranch,
             self.put(
                 path=f"/projects/{project_id}/git_branch",
-                structure=models.GitBranch,
+                structure=mdls.GitBranch,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -5282,21 +5282,21 @@ class Looker31SDK(api_methods.APIMethods):
     # Optionally specify a branch name, tag name or commit SHA as the start point in the ref field.
     #   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
     #
-    # POST /projects/{project_id}/git_branch -> models.GitBranch
+    # POST /projects/{project_id}/git_branch -> mdls.GitBranch
     def create_git_branch(
         self,
         # Project Id
         project_id: str,
-        body: models.WriteGitBranch,
+        body: mdls.WriteGitBranch,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.GitBranch:
+    ) -> mdls.GitBranch:
         """Checkout New Git Branch"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.GitBranch,
+            mdls.GitBranch,
             self.post(
                 path=f"/projects/{project_id}/git_branch",
-                structure=models.GitBranch,
+                structure=mdls.GitBranch,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -5307,7 +5307,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns the git branch specified in branch_name path param if it exists in the given project repository
     #
-    # GET /projects/{project_id}/git_branch/{branch_name} -> models.GitBranch
+    # GET /projects/{project_id}/git_branch/{branch_name} -> mdls.GitBranch
     def find_git_branch(
         self,
         # Project Id
@@ -5315,15 +5315,15 @@ class Looker31SDK(api_methods.APIMethods):
         # Branch Name
         branch_name: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.GitBranch:
+    ) -> mdls.GitBranch:
         """Find a Git Branch"""
         project_id = self.encode_path_param(project_id)
         branch_name = self.encode_path_param(branch_name)
         response = cast(
-            models.GitBranch,
+            mdls.GitBranch,
             self.get(
                 path=f"/projects/{project_id}/git_branch/{branch_name}",
-                structure=models.GitBranch,
+                structure=mdls.GitBranch,
                 transport_options=transport_options,
             ),
         )
@@ -5471,19 +5471,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns all projects visible to the current user
     #
-    # GET /projects -> Sequence[models.Project]
+    # GET /projects -> Sequence[mdls.Project]
     def all_projects(
         self,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Project]:
+    ) -> Sequence[mdls.Project]:
         """Get All Projects"""
         response = cast(
-            Sequence[models.Project],
+            Sequence[mdls.Project],
             self.get(
                 path="/projects",
-                structure=Sequence[models.Project],
+                structure=Sequence[mdls.Project],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5498,18 +5498,18 @@ class Looker31SDK(api_methods.APIMethods):
     # `name` is required.
     # `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
     #
-    # POST /projects -> models.Project
+    # POST /projects -> mdls.Project
     def create_project(
         self,
-        body: models.WriteProject,
+        body: mdls.WriteProject,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Project:
+    ) -> mdls.Project:
         """Create Project"""
         response = cast(
-            models.Project,
+            mdls.Project,
             self.post(
                 path="/projects",
-                structure=models.Project,
+                structure=mdls.Project,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -5520,7 +5520,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns the project with the given project id
     #
-    # GET /projects/{project_id} -> models.Project
+    # GET /projects/{project_id} -> mdls.Project
     def project(
         self,
         # Project Id
@@ -5528,14 +5528,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Project:
+    ) -> mdls.Project:
         """Get Project"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.Project,
+            mdls.Project,
             self.get(
                 path=f"/projects/{project_id}",
-                structure=models.Project,
+                structure=mdls.Project,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5565,23 +5565,23 @@ class Looker31SDK(api_methods.APIMethods):
     # 1. Call `update_session` to select the 'dev' workspace.
     # 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
     #
-    # PATCH /projects/{project_id} -> models.Project
+    # PATCH /projects/{project_id} -> mdls.Project
     def update_project(
         self,
         # Project Id
         project_id: str,
-        body: models.WriteProject,
+        body: mdls.WriteProject,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Project:
+    ) -> mdls.Project:
         """Update Project"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.Project,
+            mdls.Project,
             self.patch(
                 path=f"/projects/{project_id}",
-                structure=models.Project,
+                structure=mdls.Project,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -5593,20 +5593,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns the project with the given project id
     #
-    # GET /projects/{project_id}/manifest -> models.Manifest
+    # GET /projects/{project_id}/manifest -> mdls.Manifest
     def manifest(
         self,
         # Project Id
         project_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Manifest:
+    ) -> mdls.Manifest:
         """Get Manifest"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.Manifest,
+            mdls.Manifest,
             self.get(
                 path=f"/projects/{project_id}/manifest",
-                structure=models.Manifest,
+                structure=mdls.Manifest,
                 transport_options=transport_options,
             ),
         )
@@ -5677,7 +5677,7 @@ class Looker31SDK(api_methods.APIMethods):
     # the cached validation results were computed. The cached validation results may no longer
     # reflect the current state of the project.
     #
-    # GET /projects/{project_id}/validate -> models.ProjectValidationCache
+    # GET /projects/{project_id}/validate -> mdls.ProjectValidationCache
     def project_validation_results(
         self,
         # Project Id
@@ -5685,14 +5685,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ProjectValidationCache:
+    ) -> mdls.ProjectValidationCache:
         """Cached Project Validation Results"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.ProjectValidationCache,
+            mdls.ProjectValidationCache,
             self.get(
                 path=f"/projects/{project_id}/validate",
-                structure=models.ProjectValidationCache,
+                structure=mdls.ProjectValidationCache,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5709,7 +5709,7 @@ class Looker31SDK(api_methods.APIMethods):
     # when you really want to recompute project validation. To quickly display the results of
     # the most recent project validation (without recomputing), use `project_validation_results(project_id)`
     #
-    # POST /projects/{project_id}/validate -> models.ProjectValidation
+    # POST /projects/{project_id}/validate -> mdls.ProjectValidation
     def validate_project(
         self,
         # Project Id
@@ -5717,14 +5717,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ProjectValidation:
+    ) -> mdls.ProjectValidation:
         """Validate Project"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.ProjectValidation,
+            mdls.ProjectValidation,
             self.post(
                 path=f"/projects/{project_id}/validate",
-                structure=models.ProjectValidation,
+                structure=mdls.ProjectValidation,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5735,7 +5735,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns information about the state of the project files in the currently selected workspace
     #
-    # GET /projects/{project_id}/current_workspace -> models.ProjectWorkspace
+    # GET /projects/{project_id}/current_workspace -> mdls.ProjectWorkspace
     def project_workspace(
         self,
         # Project Id
@@ -5743,14 +5743,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ProjectWorkspace:
+    ) -> mdls.ProjectWorkspace:
         """Get Project Workspace"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.ProjectWorkspace,
+            mdls.ProjectWorkspace,
             self.get(
                 path=f"/projects/{project_id}/current_workspace",
-                structure=models.ProjectWorkspace,
+                structure=mdls.ProjectWorkspace,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5761,7 +5761,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns a list of the files in the project
     #
-    # GET /projects/{project_id}/files -> Sequence[models.ProjectFile]
+    # GET /projects/{project_id}/files -> Sequence[mdls.ProjectFile]
     def all_project_files(
         self,
         # Project Id
@@ -5769,14 +5769,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ProjectFile]:
+    ) -> Sequence[mdls.ProjectFile]:
         """Get All Project Files"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            Sequence[models.ProjectFile],
+            Sequence[mdls.ProjectFile],
             self.get(
                 path=f"/projects/{project_id}/files",
-                structure=Sequence[models.ProjectFile],
+                structure=Sequence[mdls.ProjectFile],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -5787,7 +5787,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns information about a file in the project
     #
-    # GET /projects/{project_id}/files/file -> models.ProjectFile
+    # GET /projects/{project_id}/files/file -> mdls.ProjectFile
     def project_file(
         self,
         # Project Id
@@ -5797,14 +5797,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ProjectFile:
+    ) -> mdls.ProjectFile:
         """Get Project File"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.ProjectFile,
+            mdls.ProjectFile,
             self.get(
                 path=f"/projects/{project_id}/files/file",
-                structure=models.ProjectFile,
+                structure=mdls.ProjectFile,
                 query_params={"file_id": file_id, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -5822,7 +5822,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
     #
-    # GET /projects/{project_id}/git_connection_tests -> Sequence[models.GitConnectionTest]
+    # GET /projects/{project_id}/git_connection_tests -> Sequence[mdls.GitConnectionTest]
     def all_git_connection_tests(
         self,
         # Project Id
@@ -5830,14 +5830,14 @@ class Looker31SDK(api_methods.APIMethods):
         # (Optional: leave blank for root project) The remote url for remote dependency to test.
         remote_url: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.GitConnectionTest]:
+    ) -> Sequence[mdls.GitConnectionTest]:
         """Get All Git Connection Tests"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            Sequence[models.GitConnectionTest],
+            Sequence[mdls.GitConnectionTest],
             self.get(
                 path=f"/projects/{project_id}/git_connection_tests",
-                structure=Sequence[models.GitConnectionTest],
+                structure=Sequence[mdls.GitConnectionTest],
                 query_params={"remote_url": remote_url},
                 transport_options=transport_options,
             ),
@@ -5852,7 +5852,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
     #
-    # GET /projects/{project_id}/git_connection_tests/{test_id} -> models.GitConnectionTestResult
+    # GET /projects/{project_id}/git_connection_tests/{test_id} -> mdls.GitConnectionTestResult
     def run_git_connection_test(
         self,
         # Project Id
@@ -5864,15 +5864,15 @@ class Looker31SDK(api_methods.APIMethods):
         # (Optional: leave blank for dev credentials) Whether to use git production credentials.
         use_production: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.GitConnectionTestResult:
+    ) -> mdls.GitConnectionTestResult:
         """Run Git Connection Test"""
         project_id = self.encode_path_param(project_id)
         test_id = self.encode_path_param(test_id)
         response = cast(
-            models.GitConnectionTestResult,
+            mdls.GitConnectionTestResult,
             self.get(
                 path=f"/projects/{project_id}/git_connection_tests/{test_id}",
-                structure=models.GitConnectionTestResult,
+                structure=mdls.GitConnectionTestResult,
                 query_params={
                     "remote_url": remote_url,
                     "use_production": use_production,
@@ -5888,7 +5888,7 @@ class Looker31SDK(api_methods.APIMethods):
     # optionally filtered by the file id.
     # Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
     #
-    # GET /projects/{project_id}/lookml_tests -> Sequence[models.LookmlTest]
+    # GET /projects/{project_id}/lookml_tests -> Sequence[mdls.LookmlTest]
     def all_lookml_tests(
         self,
         # Project Id
@@ -5896,14 +5896,14 @@ class Looker31SDK(api_methods.APIMethods):
         # File Id
         file_id: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LookmlTest]:
+    ) -> Sequence[mdls.LookmlTest]:
         """Get All LookML Tests"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            Sequence[models.LookmlTest],
+            Sequence[mdls.LookmlTest],
             self.get(
                 path=f"/projects/{project_id}/lookml_tests",
-                structure=Sequence[models.LookmlTest],
+                structure=Sequence[mdls.LookmlTest],
                 query_params={"file_id": file_id},
                 transport_options=transport_options,
             ),
@@ -5914,7 +5914,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Runs all tests in the project, optionally filtered by file, test, and/or model.
     #
-    # GET /projects/{project_id}/lookml_tests/run -> Sequence[models.LookmlTestResult]
+    # GET /projects/{project_id}/lookml_tests/run -> Sequence[mdls.LookmlTestResult]
     def run_lookml_test(
         self,
         # Project Id
@@ -5926,14 +5926,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Model Name
         model: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LookmlTestResult]:
+    ) -> Sequence[mdls.LookmlTestResult]:
         """Run LookML Test"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            Sequence[models.LookmlTestResult],
+            Sequence[mdls.LookmlTestResult],
             self.get(
                 path=f"/projects/{project_id}/lookml_tests/run",
-                structure=Sequence[models.LookmlTestResult],
+                structure=Sequence[mdls.LookmlTestResult],
                 query_params={"file_id": file_id, "test": test, "model": model},
                 transport_options=transport_options,
             ),
@@ -5944,12 +5944,12 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # This is an internal-only, undocumented route.
     #
-    # POST /projects/{project_id}/tag -> models.Project
+    # POST /projects/{project_id}/tag -> mdls.Project
     def tag_ref(
         self,
         # Project Id
         project_id: str,
-        body: models.WriteProject,
+        body: mdls.WriteProject,
         # (Optional): Commit Sha to Tag
         commit_sha: Optional[str] = None,
         # Tag Name
@@ -5957,14 +5957,14 @@ class Looker31SDK(api_methods.APIMethods):
         # (Optional): Tag Message
         tag_message: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Project:
+    ) -> mdls.Project:
         """Tag Ref"""
         project_id = self.encode_path_param(project_id)
         response = cast(
-            models.Project,
+            mdls.Project,
             self.post(
                 path=f"/projects/{project_id}/tag",
-                structure=models.Project,
+                structure=mdls.Project,
                 query_params={
                     "commit_sha": commit_sha,
                     "tag_name": tag_name,
@@ -5983,24 +5983,24 @@ class Looker31SDK(api_methods.APIMethods):
     # `root_project_id` is required.
     # `credential_id` is required.
     #
-    # PUT /projects/{root_project_id}/credential/{credential_id} -> models.RepositoryCredential
+    # PUT /projects/{root_project_id}/credential/{credential_id} -> mdls.RepositoryCredential
     def update_repository_credential(
         self,
         # Root Project Id
         root_project_id: str,
         # Credential Id
         credential_id: str,
-        body: models.WriteRepositoryCredential,
+        body: mdls.WriteRepositoryCredential,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RepositoryCredential:
+    ) -> mdls.RepositoryCredential:
         """Create Repository Credential"""
         root_project_id = self.encode_path_param(root_project_id)
         credential_id = self.encode_path_param(credential_id)
         response = cast(
-            models.RepositoryCredential,
+            mdls.RepositoryCredential,
             self.put(
                 path=f"/projects/{root_project_id}/credential/{credential_id}",
-                structure=models.RepositoryCredential,
+                structure=mdls.RepositoryCredential,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -6040,20 +6040,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # `root_project_id` is required.
     #
-    # GET /projects/{root_project_id}/credentials -> Sequence[models.RepositoryCredential]
+    # GET /projects/{root_project_id}/credentials -> Sequence[mdls.RepositoryCredential]
     def get_all_repository_credentials(
         self,
         # Root Project Id
         root_project_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.RepositoryCredential]:
+    ) -> Sequence[mdls.RepositoryCredential]:
         """Get All Repository Credentials"""
         root_project_id = self.encode_path_param(root_project_id)
         response = cast(
-            Sequence[models.RepositoryCredential],
+            Sequence[mdls.RepositoryCredential],
             self.get(
                 path=f"/projects/{root_project_id}/credentials",
-                structure=Sequence[models.RepositoryCredential],
+                structure=Sequence[mdls.RepositoryCredential],
                 transport_options=transport_options,
             ),
         )
@@ -6070,10 +6070,10 @@ class Looker31SDK(api_methods.APIMethods):
     # Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
     # After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
     #
-    # POST /query_tasks -> models.QueryTask
+    # POST /query_tasks -> mdls.QueryTask
     def create_query_task(
         self,
-        body: models.WriteCreateQueryTask,
+        body: mdls.WriteCreateQueryTask,
         # Row limit (may override the limit in the saved query).
         limit: Optional[int] = None,
         # Apply model-specified formatting to each result.
@@ -6101,13 +6101,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.QueryTask:
+    ) -> mdls.QueryTask:
         """Run Query Async"""
         response = cast(
-            models.QueryTask,
+            mdls.QueryTask,
             self.post(
                 path="/query_tasks",
-                structure=models.QueryTask,
+                structure=mdls.QueryTask,
                 query_params={
                     "limit": limit,
                     "apply_formatting": apply_formatting,
@@ -6141,7 +6141,7 @@ class Looker31SDK(api_methods.APIMethods):
     def query_task_multi_results(
         self,
         # List of Query Task IDs
-        query_task_ids: models.DelimSequence[str],
+        query_task_ids: mdls.DelimSequence[str],
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> MutableMapping[str, Any]:
         """Get Multiple Async Query Results"""
@@ -6164,7 +6164,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
     #
-    # GET /query_tasks/{query_task_id} -> models.QueryTask
+    # GET /query_tasks/{query_task_id} -> mdls.QueryTask
     def query_task(
         self,
         # ID of the Query Task
@@ -6172,14 +6172,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.QueryTask:
+    ) -> mdls.QueryTask:
         """Get Async Query Info"""
         query_task_id = self.encode_path_param(query_task_id)
         response = cast(
-            models.QueryTask,
+            mdls.QueryTask,
             self.get(
                 path=f"/query_tasks/{query_task_id}",
-                structure=models.QueryTask,
+                structure=mdls.QueryTask,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -6247,7 +6247,7 @@ class Looker31SDK(api_methods.APIMethods):
     # builds queries and visualizations and are not generally useful for API use. They are not required when
     # creating new queries and can usually just be ignored.
     #
-    # GET /queries/{query_id} -> models.Query
+    # GET /queries/{query_id} -> mdls.Query
     def query(
         self,
         # Id of query
@@ -6255,13 +6255,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Query:
+    ) -> mdls.Query:
         """Get Query"""
         response = cast(
-            models.Query,
+            mdls.Query,
             self.get(
                 path=f"/queries/{query_id}",
-                structure=models.Query,
+                structure=mdls.Query,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -6286,7 +6286,7 @@ class Looker31SDK(api_methods.APIMethods):
     # 'https://looker.yourcompany/explore/ecommerce/orders?qid=aogBgL6o3cKK1jN3RoZl5s'. In this case
     # 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
     #
-    # GET /queries/slug/{slug} -> models.Query
+    # GET /queries/slug/{slug} -> mdls.Query
     def query_for_slug(
         self,
         # Slug of query
@@ -6294,14 +6294,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Query:
+    ) -> mdls.Query:
         """Get Query for Slug"""
         slug = self.encode_path_param(slug)
         response = cast(
-            models.Query,
+            mdls.Query,
             self.get(
                 path=f"/queries/slug/{slug}",
-                structure=models.Query,
+                structure=mdls.Query,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -6317,20 +6317,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The query parameters are passed as json in the body of the request.
     #
-    # POST /queries -> models.Query
+    # POST /queries -> mdls.Query
     def create_query(
         self,
-        body: models.WriteQuery,
+        body: mdls.WriteQuery,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Query:
+    ) -> mdls.Query:
         """Create Query"""
         response = cast(
-            models.Query,
+            mdls.Query,
             self.post(
                 path="/queries",
-                structure=models.Query,
+                structure=mdls.Query,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -6475,7 +6475,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # Format of result
         result_format: str,
-        body: models.WriteQuery,
+        body: mdls.WriteQuery,
         # Row limit (may override the limit in the saved query).
         limit: Optional[int] = None,
         # Apply model-specified formatting to each result.
@@ -6611,7 +6611,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns a merge query object given its id.
     #
-    # GET /merge_queries/{merge_query_id} -> models.MergeQuery
+    # GET /merge_queries/{merge_query_id} -> mdls.MergeQuery
     def merge_query(
         self,
         # Merge Query Id
@@ -6619,14 +6619,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.MergeQuery:
+    ) -> mdls.MergeQuery:
         """Get Merge Query"""
         merge_query_id = self.encode_path_param(merge_query_id)
         response = cast(
-            models.MergeQuery,
+            mdls.MergeQuery,
             self.get(
                 path=f"/merge_queries/{merge_query_id}",
-                structure=models.MergeQuery,
+                structure=mdls.MergeQuery,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -6651,20 +6651,20 @@ class Looker31SDK(api_methods.APIMethods):
     # the existing merge query will be returned instead of creating a duplicate. Conversely, any
     # change to the contents of a merge query will produce a new object with a new id.
     #
-    # POST /merge_queries -> models.MergeQuery
+    # POST /merge_queries -> mdls.MergeQuery
     def create_merge_query(
         self,
-        body: Optional[models.WriteMergeQuery] = None,
+        body: Optional[mdls.WriteMergeQuery] = None,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.MergeQuery:
+    ) -> mdls.MergeQuery:
         """Create Merge Query"""
         response = cast(
-            models.MergeQuery,
+            mdls.MergeQuery,
             self.post(
                 path="/merge_queries",
-                structure=models.MergeQuery,
+                structure=mdls.MergeQuery,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -6674,17 +6674,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Get information about all running queries.
     #
-    # GET /running_queries -> Sequence[models.RunningQueries]
+    # GET /running_queries -> Sequence[mdls.RunningQueries]
     def all_running_queries(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.RunningQueries]:
+    ) -> Sequence[mdls.RunningQueries]:
         """Get All Running Queries"""
         response = cast(
-            Sequence[models.RunningQueries],
+            Sequence[mdls.RunningQueries],
             self.get(
                 path="/running_queries",
-                structure=Sequence[models.RunningQueries],
+                structure=Sequence[mdls.RunningQueries],
                 transport_options=transport_options,
             ),
         )
@@ -6713,20 +6713,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # Get a SQL Runner query.
     #
-    # GET /sql_queries/{slug} -> models.SqlQuery
+    # GET /sql_queries/{slug} -> mdls.SqlQuery
     def sql_query(
         self,
         # slug of query
         slug: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SqlQuery:
+    ) -> mdls.SqlQuery:
         """Get SQL Runner Query"""
         slug = self.encode_path_param(slug)
         response = cast(
-            models.SqlQuery,
+            mdls.SqlQuery,
             self.get(
                 path=f"/sql_queries/{slug}",
-                structure=models.SqlQuery,
+                structure=mdls.SqlQuery,
                 transport_options=transport_options,
             ),
         )
@@ -6736,18 +6736,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Either the `connection_name` or `model_name` parameter MUST be provided.
     #
-    # POST /sql_queries -> models.SqlQuery
+    # POST /sql_queries -> mdls.SqlQuery
     def create_sql_query(
         self,
-        body: models.SqlQueryCreate,
+        body: mdls.SqlQueryCreate,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.SqlQuery:
+    ) -> mdls.SqlQuery:
         """Create SQL Runner Query"""
         response = cast(
-            models.SqlQuery,
+            mdls.SqlQuery,
             self.post(
                 path="/sql_queries",
-                structure=models.SqlQuery,
+                structure=mdls.SqlQuery,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -6793,14 +6793,14 @@ class Looker31SDK(api_methods.APIMethods):
     # To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
     # Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
     #
-    # POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> models.RenderTask
+    # POST /render_tasks/lookml_dashboards/{dashboard_id}/{result_format} -> mdls.RenderTask
     def create_lookml_dashboard_render_task(
         self,
         # Id of lookml dashboard to render
         dashboard_id: str,
         # Output type: pdf, png, or jpg
         result_format: str,
-        body: models.CreateDashboardRenderTask,
+        body: mdls.CreateDashboardRenderTask,
         # Output width in pixels
         width: int,
         # Output height in pixels
@@ -6812,15 +6812,15 @@ class Looker31SDK(api_methods.APIMethods):
         # Whether to render pdf in landscape
         pdf_landscape: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RenderTask:
+    ) -> mdls.RenderTask:
         """Create Lookml Dashboard Render Task"""
         dashboard_id = self.encode_path_param(dashboard_id)
         result_format = self.encode_path_param(result_format)
         response = cast(
-            models.RenderTask,
+            mdls.RenderTask,
             self.post(
                 path=f"/render_tasks/lookml_dashboards/{dashboard_id}/{result_format}",
-                structure=models.RenderTask,
+                structure=mdls.RenderTask,
                 query_params={
                     "width": width,
                     "height": height,
@@ -6840,7 +6840,7 @@ class Looker31SDK(api_methods.APIMethods):
     # To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
     # Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
     #
-    # POST /render_tasks/looks/{look_id}/{result_format} -> models.RenderTask
+    # POST /render_tasks/looks/{look_id}/{result_format} -> mdls.RenderTask
     def create_look_render_task(
         self,
         # Id of look to render
@@ -6854,14 +6854,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RenderTask:
+    ) -> mdls.RenderTask:
         """Create Look Render Task"""
         result_format = self.encode_path_param(result_format)
         response = cast(
-            models.RenderTask,
+            mdls.RenderTask,
             self.post(
                 path=f"/render_tasks/looks/{look_id}/{result_format}",
-                structure=models.RenderTask,
+                structure=mdls.RenderTask,
                 query_params={"width": width, "height": height, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -6874,7 +6874,7 @@ class Looker31SDK(api_methods.APIMethods):
     # To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
     # Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
     #
-    # POST /render_tasks/queries/{query_id}/{result_format} -> models.RenderTask
+    # POST /render_tasks/queries/{query_id}/{result_format} -> mdls.RenderTask
     def create_query_render_task(
         self,
         # Id of the query to render
@@ -6888,14 +6888,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RenderTask:
+    ) -> mdls.RenderTask:
         """Create Query Render Task"""
         result_format = self.encode_path_param(result_format)
         response = cast(
-            models.RenderTask,
+            mdls.RenderTask,
             self.post(
                 path=f"/render_tasks/queries/{query_id}/{result_format}",
-                structure=models.RenderTask,
+                structure=mdls.RenderTask,
                 query_params={"width": width, "height": height, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -6908,14 +6908,14 @@ class Looker31SDK(api_methods.APIMethods):
     # To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
     # Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
     #
-    # POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> models.RenderTask
+    # POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> mdls.RenderTask
     def create_dashboard_render_task(
         self,
         # Id of dashboard to render
         dashboard_id: int,
         # Output type: pdf, png, or jpg
         result_format: str,
-        body: models.CreateDashboardRenderTask,
+        body: mdls.CreateDashboardRenderTask,
         # Output width in pixels
         width: int,
         # Output height in pixels
@@ -6927,14 +6927,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Whether to render pdf in landscape paper orientation
         pdf_landscape: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RenderTask:
+    ) -> mdls.RenderTask:
         """Create Dashboard Render Task"""
         result_format = self.encode_path_param(result_format)
         response = cast(
-            models.RenderTask,
+            mdls.RenderTask,
             self.post(
                 path=f"/render_tasks/dashboards/{dashboard_id}/{result_format}",
-                structure=models.RenderTask,
+                structure=mdls.RenderTask,
                 query_params={
                     "width": width,
                     "height": height,
@@ -6954,7 +6954,7 @@ class Looker31SDK(api_methods.APIMethods):
     # To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
     # Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
     #
-    # GET /render_tasks/{render_task_id} -> models.RenderTask
+    # GET /render_tasks/{render_task_id} -> mdls.RenderTask
     def render_task(
         self,
         # Id of render task
@@ -6962,14 +6962,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.RenderTask:
+    ) -> mdls.RenderTask:
         """Get Render Task"""
         render_task_id = self.encode_path_param(render_task_id)
         response = cast(
-            models.RenderTask,
+            mdls.RenderTask,
             self.get(
                 path=f"/render_tasks/{render_task_id}",
-                structure=models.RenderTask,
+                structure=mdls.RenderTask,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7040,7 +7040,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /model_sets/search -> Sequence[models.ModelSet]
+    # GET /model_sets/search -> Sequence[mdls.ModelSet]
     def search_model_sets(
         self,
         # Requested fields.
@@ -7062,13 +7062,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ModelSet]:
+    ) -> Sequence[mdls.ModelSet]:
         """Search Model Sets"""
         response = cast(
-            Sequence[models.ModelSet],
+            Sequence[mdls.ModelSet],
             self.get(
                 path="/model_sets/search",
-                structure=Sequence[models.ModelSet],
+                structure=Sequence[mdls.ModelSet],
                 query_params={
                     "fields": fields,
                     "limit": limit,
@@ -7087,7 +7087,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the model set with a specific id.
     #
-    # GET /model_sets/{model_set_id} -> models.ModelSet
+    # GET /model_sets/{model_set_id} -> mdls.ModelSet
     def model_set(
         self,
         # Id of model set
@@ -7095,13 +7095,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ModelSet:
+    ) -> mdls.ModelSet:
         """Get Model Set"""
         response = cast(
-            models.ModelSet,
+            mdls.ModelSet,
             self.get(
                 path=f"/model_sets/{model_set_id}",
-                structure=models.ModelSet,
+                structure=mdls.ModelSet,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7110,20 +7110,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update information about the model set with a specific id.
     #
-    # PATCH /model_sets/{model_set_id} -> models.ModelSet
+    # PATCH /model_sets/{model_set_id} -> mdls.ModelSet
     def update_model_set(
         self,
         # id of model set
         model_set_id: int,
-        body: models.WriteModelSet,
+        body: mdls.WriteModelSet,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ModelSet:
+    ) -> mdls.ModelSet:
         """Update Model Set"""
         response = cast(
-            models.ModelSet,
+            mdls.ModelSet,
             self.patch(
                 path=f"/model_sets/{model_set_id}",
-                structure=models.ModelSet,
+                structure=mdls.ModelSet,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7152,19 +7152,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all model sets.
     #
-    # GET /model_sets -> Sequence[models.ModelSet]
+    # GET /model_sets -> Sequence[mdls.ModelSet]
     def all_model_sets(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ModelSet]:
+    ) -> Sequence[mdls.ModelSet]:
         """Get All Model Sets"""
         response = cast(
-            Sequence[models.ModelSet],
+            Sequence[mdls.ModelSet],
             self.get(
                 path="/model_sets",
-                structure=Sequence[models.ModelSet],
+                structure=Sequence[mdls.ModelSet],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7173,18 +7173,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a model set with the specified information. Model sets are used by Roles.
     #
-    # POST /model_sets -> models.ModelSet
+    # POST /model_sets -> mdls.ModelSet
     def create_model_set(
         self,
-        body: models.WriteModelSet,
+        body: mdls.WriteModelSet,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ModelSet:
+    ) -> mdls.ModelSet:
         """Create Model Set"""
         response = cast(
-            models.ModelSet,
+            mdls.ModelSet,
             self.post(
                 path="/model_sets",
-                structure=models.ModelSet,
+                structure=mdls.ModelSet,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7193,17 +7193,17 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get all supported permissions.
     #
-    # GET /permissions -> Sequence[models.Permission]
+    # GET /permissions -> Sequence[mdls.Permission]
     def all_permissions(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Permission]:
+    ) -> Sequence[mdls.Permission]:
         """Get All Permissions"""
         response = cast(
-            Sequence[models.Permission],
+            Sequence[mdls.Permission],
             self.get(
                 path="/permissions",
-                structure=Sequence[models.Permission],
+                structure=Sequence[mdls.Permission],
                 transport_options=transport_options,
             ),
         )
@@ -7232,7 +7232,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /permission_sets/search -> Sequence[models.PermissionSet]
+    # GET /permission_sets/search -> Sequence[mdls.PermissionSet]
     def search_permission_sets(
         self,
         # Requested fields.
@@ -7254,13 +7254,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.PermissionSet]:
+    ) -> Sequence[mdls.PermissionSet]:
         """Search Permission Sets"""
         response = cast(
-            Sequence[models.PermissionSet],
+            Sequence[mdls.PermissionSet],
             self.get(
                 path="/permission_sets/search",
-                structure=Sequence[models.PermissionSet],
+                structure=Sequence[mdls.PermissionSet],
                 query_params={
                     "fields": fields,
                     "limit": limit,
@@ -7279,7 +7279,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the permission set with a specific id.
     #
-    # GET /permission_sets/{permission_set_id} -> models.PermissionSet
+    # GET /permission_sets/{permission_set_id} -> mdls.PermissionSet
     def permission_set(
         self,
         # Id of permission set
@@ -7287,13 +7287,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.PermissionSet:
+    ) -> mdls.PermissionSet:
         """Get Permission Set"""
         response = cast(
-            models.PermissionSet,
+            mdls.PermissionSet,
             self.get(
                 path=f"/permission_sets/{permission_set_id}",
-                structure=models.PermissionSet,
+                structure=mdls.PermissionSet,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7302,20 +7302,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update information about the permission set with a specific id.
     #
-    # PATCH /permission_sets/{permission_set_id} -> models.PermissionSet
+    # PATCH /permission_sets/{permission_set_id} -> mdls.PermissionSet
     def update_permission_set(
         self,
         # id of permission set
         permission_set_id: int,
-        body: models.WritePermissionSet,
+        body: mdls.WritePermissionSet,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.PermissionSet:
+    ) -> mdls.PermissionSet:
         """Update Permission Set"""
         response = cast(
-            models.PermissionSet,
+            mdls.PermissionSet,
             self.patch(
                 path=f"/permission_sets/{permission_set_id}",
-                structure=models.PermissionSet,
+                structure=mdls.PermissionSet,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7344,19 +7344,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all permission sets.
     #
-    # GET /permission_sets -> Sequence[models.PermissionSet]
+    # GET /permission_sets -> Sequence[mdls.PermissionSet]
     def all_permission_sets(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.PermissionSet]:
+    ) -> Sequence[mdls.PermissionSet]:
         """Get All Permission Sets"""
         response = cast(
-            Sequence[models.PermissionSet],
+            Sequence[mdls.PermissionSet],
             self.get(
                 path="/permission_sets",
-                structure=Sequence[models.PermissionSet],
+                structure=Sequence[mdls.PermissionSet],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7365,18 +7365,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a permission set with the specified information. Permission sets are used by Roles.
     #
-    # POST /permission_sets -> models.PermissionSet
+    # POST /permission_sets -> mdls.PermissionSet
     def create_permission_set(
         self,
-        body: models.WritePermissionSet,
+        body: mdls.WritePermissionSet,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.PermissionSet:
+    ) -> mdls.PermissionSet:
         """Create Permission Set"""
         response = cast(
-            models.PermissionSet,
+            mdls.PermissionSet,
             self.post(
                 path="/permission_sets",
-                structure=models.PermissionSet,
+                structure=mdls.PermissionSet,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7385,21 +7385,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all roles.
     #
-    # GET /roles -> Sequence[models.Role]
+    # GET /roles -> Sequence[mdls.Role]
     def all_roles(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         # Optional list of ids to get specific roles.
-        ids: Optional[models.DelimSequence[int]] = None,
+        ids: Optional[mdls.DelimSequence[int]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Role]:
+    ) -> Sequence[mdls.Role]:
         """Get All Roles"""
         response = cast(
-            Sequence[models.Role],
+            Sequence[mdls.Role],
             self.get(
                 path="/roles",
-                structure=Sequence[models.Role],
+                structure=Sequence[mdls.Role],
                 query_params={"fields": fields, "ids": ids},
                 transport_options=transport_options,
             ),
@@ -7408,18 +7408,18 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a role with the specified information.
     #
-    # POST /roles -> models.Role
+    # POST /roles -> mdls.Role
     def create_role(
         self,
-        body: models.WriteRole,
+        body: mdls.WriteRole,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Role:
+    ) -> mdls.Role:
         """Create Role"""
         response = cast(
-            models.Role,
+            mdls.Role,
             self.post(
                 path="/roles",
-                structure=models.Role,
+                structure=mdls.Role,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7451,7 +7451,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Boolean search params accept only "true" and "false" as values.
     #
-    # GET /roles/search -> Sequence[models.Role]
+    # GET /roles/search -> Sequence[mdls.Role]
     def search_roles(
         self,
         # Requested fields.
@@ -7471,13 +7471,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression.
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Role]:
+    ) -> Sequence[mdls.Role]:
         """Search Roles"""
         response = cast(
-            Sequence[models.Role],
+            Sequence[mdls.Role],
             self.get(
                 path="/roles/search",
-                structure=Sequence[models.Role],
+                structure=Sequence[mdls.Role],
                 query_params={
                     "fields": fields,
                     "limit": limit,
@@ -7495,19 +7495,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the role with a specific id.
     #
-    # GET /roles/{role_id} -> models.Role
+    # GET /roles/{role_id} -> mdls.Role
     def role(
         self,
         # id of role
         role_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Role:
+    ) -> mdls.Role:
         """Get Role"""
         response = cast(
-            models.Role,
+            mdls.Role,
             self.get(
                 path=f"/roles/{role_id}",
-                structure=models.Role,
+                structure=mdls.Role,
                 transport_options=transport_options,
             ),
         )
@@ -7515,20 +7515,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update information about the role with a specific id.
     #
-    # PATCH /roles/{role_id} -> models.Role
+    # PATCH /roles/{role_id} -> mdls.Role
     def update_role(
         self,
         # id of role
         role_id: int,
-        body: models.WriteRole,
+        body: mdls.WriteRole,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Role:
+    ) -> mdls.Role:
         """Update Role"""
         response = cast(
-            models.Role,
+            mdls.Role,
             self.patch(
                 path=f"/roles/{role_id}",
-                structure=models.Role,
+                structure=mdls.Role,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7557,7 +7557,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the groups with the role that has a specific id.
     #
-    # GET /roles/{role_id}/groups -> Sequence[models.Group]
+    # GET /roles/{role_id}/groups -> Sequence[mdls.Group]
     def role_groups(
         self,
         # id of role
@@ -7565,13 +7565,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Group]:
+    ) -> Sequence[mdls.Group]:
         """Get Role Groups"""
         response = cast(
-            Sequence[models.Group],
+            Sequence[mdls.Group],
             self.get(
                 path=f"/roles/{role_id}/groups",
-                structure=Sequence[models.Group],
+                structure=Sequence[mdls.Group],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7580,20 +7580,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Set all groups for a role, removing all existing group associations from that role.
     #
-    # PUT /roles/{role_id}/groups -> Sequence[models.Group]
+    # PUT /roles/{role_id}/groups -> Sequence[mdls.Group]
     def set_role_groups(
         self,
         # Id of Role
         role_id: int,
         body: Sequence[int],
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Group]:
+    ) -> Sequence[mdls.Group]:
         """Update Role Groups"""
         response = cast(
-            Sequence[models.Group],
+            Sequence[mdls.Group],
             self.put(
                 path=f"/roles/{role_id}/groups",
-                structure=Sequence[models.Group],
+                structure=Sequence[mdls.Group],
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7602,7 +7602,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all the users with the role that has a specific id.
     #
-    # GET /roles/{role_id}/users -> Sequence[models.User]
+    # GET /roles/{role_id}/users -> Sequence[mdls.User]
     def role_users(
         self,
         # id of user
@@ -7612,13 +7612,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Get only users associated directly with the role: exclude those only associated through groups.
         direct_association_only: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Get Role Users"""
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.get(
                 path=f"/roles/{role_id}/users",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 query_params={
                     "fields": fields,
                     "direct_association_only": direct_association_only,
@@ -7630,20 +7630,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Set all the users of the role with a specific id.
     #
-    # PUT /roles/{role_id}/users -> Sequence[models.User]
+    # PUT /roles/{role_id}/users -> Sequence[mdls.User]
     def set_role_users(
         self,
         # id of role
         role_id: int,
         body: Sequence[int],
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Update Role Users"""
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.put(
                 path=f"/roles/{role_id}/users",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7658,7 +7658,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns scheduled plans owned by the caller for a given space id.
     #
-    # GET /scheduled_plans/space/{space_id} -> Sequence[models.ScheduledPlan]
+    # GET /scheduled_plans/space/{space_id} -> Sequence[mdls.ScheduledPlan]
     def scheduled_plans_for_space(
         self,
         # Space Id
@@ -7666,13 +7666,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ScheduledPlan]:
+    ) -> Sequence[mdls.ScheduledPlan]:
         """Scheduled Plans for Space"""
         response = cast(
-            Sequence[models.ScheduledPlan],
+            Sequence[mdls.ScheduledPlan],
             self.get(
                 path=f"/scheduled_plans/space/{space_id}",
-                structure=Sequence[models.ScheduledPlan],
+                structure=Sequence[mdls.ScheduledPlan],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7683,7 +7683,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Admins can fetch information about other users' Scheduled Plans.
     #
-    # GET /scheduled_plans/{scheduled_plan_id} -> models.ScheduledPlan
+    # GET /scheduled_plans/{scheduled_plan_id} -> mdls.ScheduledPlan
     def scheduled_plan(
         self,
         # Scheduled Plan Id
@@ -7691,13 +7691,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ScheduledPlan:
+    ) -> mdls.ScheduledPlan:
         """Get Scheduled Plan"""
         response = cast(
-            models.ScheduledPlan,
+            mdls.ScheduledPlan,
             self.get(
                 path=f"/scheduled_plans/{scheduled_plan_id}",
-                structure=models.ScheduledPlan,
+                structure=mdls.ScheduledPlan,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -7747,20 +7747,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
     #
-    # PATCH /scheduled_plans/{scheduled_plan_id} -> models.ScheduledPlan
+    # PATCH /scheduled_plans/{scheduled_plan_id} -> mdls.ScheduledPlan
     def update_scheduled_plan(
         self,
         # Scheduled Plan Id
         scheduled_plan_id: int,
-        body: models.WriteScheduledPlan,
+        body: mdls.WriteScheduledPlan,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ScheduledPlan:
+    ) -> mdls.ScheduledPlan:
         """Update Scheduled Plan"""
         response = cast(
-            models.ScheduledPlan,
+            mdls.ScheduledPlan,
             self.patch(
                 path=f"/scheduled_plans/{scheduled_plan_id}",
-                structure=models.ScheduledPlan,
+                structure=mdls.ScheduledPlan,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7803,7 +7803,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The caller must have `see_schedules` permission to see other users' scheduled plans.
     #
-    # GET /scheduled_plans -> Sequence[models.ScheduledPlan]
+    # GET /scheduled_plans -> Sequence[mdls.ScheduledPlan]
     def all_scheduled_plans(
         self,
         # Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
@@ -7813,13 +7813,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Return scheduled plans belonging to all users (caller needs see_schedules permission)
         all_users: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ScheduledPlan]:
+    ) -> Sequence[mdls.ScheduledPlan]:
         """Get All Scheduled Plans"""
         response = cast(
-            Sequence[models.ScheduledPlan],
+            Sequence[mdls.ScheduledPlan],
             self.get(
                 path="/scheduled_plans",
-                structure=Sequence[models.ScheduledPlan],
+                structure=Sequence[mdls.ScheduledPlan],
                 query_params={
                     "user_id": user_id,
                     "fields": fields,
@@ -7889,18 +7889,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
     #
-    # POST /scheduled_plans -> models.ScheduledPlan
+    # POST /scheduled_plans -> mdls.ScheduledPlan
     def create_scheduled_plan(
         self,
-        body: models.WriteScheduledPlan,
+        body: mdls.WriteScheduledPlan,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ScheduledPlan:
+    ) -> mdls.ScheduledPlan:
         """Create Scheduled Plan"""
         response = cast(
-            models.ScheduledPlan,
+            mdls.ScheduledPlan,
             self.post(
                 path="/scheduled_plans",
-                structure=models.ScheduledPlan,
+                structure=mdls.ScheduledPlan,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7945,18 +7945,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
     #
-    # POST /scheduled_plans/run_once -> models.ScheduledPlan
+    # POST /scheduled_plans/run_once -> mdls.ScheduledPlan
     def scheduled_plan_run_once(
         self,
-        body: models.WriteScheduledPlan,
+        body: mdls.WriteScheduledPlan,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ScheduledPlan:
+    ) -> mdls.ScheduledPlan:
         """Run Scheduled Plan Once"""
         response = cast(
-            models.ScheduledPlan,
+            mdls.ScheduledPlan,
             self.post(
                 path="/scheduled_plans/run_once",
-                structure=models.ScheduledPlan,
+                structure=mdls.ScheduledPlan,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -7975,7 +7975,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The caller must have `see_schedules` permission to see other users' scheduled plans.
     #
-    # GET /scheduled_plans/look/{look_id} -> Sequence[models.ScheduledPlan]
+    # GET /scheduled_plans/look/{look_id} -> Sequence[mdls.ScheduledPlan]
     def scheduled_plans_for_look(
         self,
         # Look Id
@@ -7987,13 +7987,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Return scheduled plans belonging to all users for the look
         all_users: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ScheduledPlan]:
+    ) -> Sequence[mdls.ScheduledPlan]:
         """Scheduled Plans for Look"""
         response = cast(
-            Sequence[models.ScheduledPlan],
+            Sequence[mdls.ScheduledPlan],
             self.get(
                 path=f"/scheduled_plans/look/{look_id}",
-                structure=Sequence[models.ScheduledPlan],
+                structure=Sequence[mdls.ScheduledPlan],
                 query_params={
                     "user_id": user_id,
                     "fields": fields,
@@ -8016,7 +8016,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The caller must have `see_schedules` permission to see other users' scheduled plans.
     #
-    # GET /scheduled_plans/dashboard/{dashboard_id} -> Sequence[models.ScheduledPlan]
+    # GET /scheduled_plans/dashboard/{dashboard_id} -> Sequence[mdls.ScheduledPlan]
     def scheduled_plans_for_dashboard(
         self,
         # Dashboard Id
@@ -8028,13 +8028,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ScheduledPlan]:
+    ) -> Sequence[mdls.ScheduledPlan]:
         """Scheduled Plans for Dashboard"""
         response = cast(
-            Sequence[models.ScheduledPlan],
+            Sequence[mdls.ScheduledPlan],
             self.get(
                 path=f"/scheduled_plans/dashboard/{dashboard_id}",
-                structure=Sequence[models.ScheduledPlan],
+                structure=Sequence[mdls.ScheduledPlan],
                 query_params={
                     "user_id": user_id,
                     "all_users": all_users,
@@ -8057,7 +8057,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The caller must have `see_schedules` permission to see other users' scheduled plans.
     #
-    # GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> Sequence[models.ScheduledPlan]
+    # GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> Sequence[mdls.ScheduledPlan]
     def scheduled_plans_for_lookml_dashboard(
         self,
         # LookML Dashboard Id
@@ -8069,14 +8069,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Return scheduled plans belonging to all users for the dashboard
         all_users: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.ScheduledPlan]:
+    ) -> Sequence[mdls.ScheduledPlan]:
         """Scheduled Plans for LookML Dashboard"""
         lookml_dashboard_id = self.encode_path_param(lookml_dashboard_id)
         response = cast(
-            Sequence[models.ScheduledPlan],
+            Sequence[mdls.ScheduledPlan],
             self.get(
                 path=f"/scheduled_plans/lookml_dashboard/{lookml_dashboard_id}",
-                structure=Sequence[models.ScheduledPlan],
+                structure=Sequence[mdls.ScheduledPlan],
                 query_params={
                     "user_id": user_id,
                     "fields": fields,
@@ -8135,20 +8135,20 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # This API is rate limited to prevent it from being used for relay spam or DoS attacks
     #
-    # POST /scheduled_plans/{scheduled_plan_id}/run_once -> models.ScheduledPlan
+    # POST /scheduled_plans/{scheduled_plan_id}/run_once -> mdls.ScheduledPlan
     def scheduled_plan_run_once_by_id(
         self,
         # Id of schedule plan to copy and run
         scheduled_plan_id: int,
-        body: Optional[models.WriteScheduledPlan] = None,
+        body: Optional[mdls.WriteScheduledPlan] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ScheduledPlan:
+    ) -> mdls.ScheduledPlan:
         """Run Scheduled Plan Once by Id"""
         response = cast(
-            models.ScheduledPlan,
+            mdls.ScheduledPlan,
             self.post(
                 path=f"/scheduled_plans/{scheduled_plan_id}/run_once",
-                structure=models.ScheduledPlan,
+                structure=mdls.ScheduledPlan,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8163,17 +8163,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns information about the current API session, such as which workspace is selected for the session.
     #
-    # GET /session -> models.ApiSession
+    # GET /session -> mdls.ApiSession
     def session(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ApiSession:
+    ) -> mdls.ApiSession:
         """Get Session"""
         response = cast(
-            models.ApiSession,
+            mdls.ApiSession,
             self.get(
                 path="/session",
-                structure=models.ApiSession,
+                structure=mdls.ApiSession,
                 transport_options=transport_options,
             ),
         )
@@ -8200,18 +8200,18 @@ class Looker31SDK(api_methods.APIMethods):
     # If your Looker API client application needs to work in a dev workspace across multiple
     # API sessions, be sure to select the dev workspace after each login.
     #
-    # PATCH /session -> models.ApiSession
+    # PATCH /session -> mdls.ApiSession
     def update_session(
         self,
-        body: models.WriteApiSession,
+        body: mdls.WriteApiSession,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ApiSession:
+    ) -> mdls.ApiSession:
         """Update Session"""
         response = cast(
-            models.ApiSession,
+            mdls.ApiSession,
             self.patch(
                 path="/session",
-                structure=models.ApiSession,
+                structure=mdls.ApiSession,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8252,7 +8252,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     #   Get a **single space** by id with [Space](#!/Space/space)
     #
-    # GET /spaces/search -> Sequence[models.Space]
+    # GET /spaces/search -> Sequence[mdls.Space]
     def search_spaces(
         self,
         # Requested fields.
@@ -8280,13 +8280,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Match is shared root
         is_shared_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Space]:
+    ) -> Sequence[mdls.Space]:
         """Search Spaces"""
         response = cast(
-            Sequence[models.Space],
+            Sequence[mdls.Space],
             self.get(
                 path="/spaces/search",
-                structure=Sequence[models.Space],
+                structure=Sequence[mdls.Space],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -8308,7 +8308,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the space with a specific id.
     #
-    # GET /spaces/{space_id} -> models.Space
+    # GET /spaces/{space_id} -> mdls.Space
     def space(
         self,
         # Id of space
@@ -8316,14 +8316,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Space:
+    ) -> mdls.Space:
         """Get Space"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            models.Space,
+            mdls.Space,
             self.get(
                 path=f"/spaces/{space_id}",
-                structure=models.Space,
+                structure=mdls.Space,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8332,21 +8332,21 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update the space with a specific id.
     #
-    # PATCH /spaces/{space_id} -> models.Space
+    # PATCH /spaces/{space_id} -> mdls.Space
     def update_space(
         self,
         # Id of space
         space_id: str,
-        body: models.UpdateSpace,
+        body: mdls.UpdateSpace,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Space:
+    ) -> mdls.Space:
         """Update Space"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            models.Space,
+            mdls.Space,
             self.patch(
                 path=f"/spaces/{space_id}",
-                structure=models.Space,
+                structure=mdls.Space,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8380,19 +8380,19 @@ class Looker31SDK(api_methods.APIMethods):
     # In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
     # In API 4.0+, all personal spaces will be returned.
     #
-    # GET /spaces -> Sequence[models.SpaceBase]
+    # GET /spaces -> Sequence[mdls.SpaceBase]
     def all_spaces(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.SpaceBase]:
+    ) -> Sequence[mdls.SpaceBase]:
         """Get All Spaces"""
         response = cast(
-            Sequence[models.SpaceBase],
+            Sequence[mdls.SpaceBase],
             self.get(
                 path="/spaces",
-                structure=Sequence[models.SpaceBase],
+                structure=Sequence[mdls.SpaceBase],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8404,18 +8404,18 @@ class Looker31SDK(api_methods.APIMethods):
     # Caller must have permission to edit the parent space and to create spaces, otherwise the request
     # returns 404 Not Found.
     #
-    # POST /spaces -> models.Space
+    # POST /spaces -> mdls.Space
     def create_space(
         self,
-        body: models.CreateSpace,
+        body: mdls.CreateSpace,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Space:
+    ) -> mdls.Space:
         """Create Space"""
         response = cast(
-            models.Space,
+            mdls.Space,
             self.post(
                 path="/spaces",
-                structure=models.Space,
+                structure=mdls.Space,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8424,7 +8424,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the children of a space.
     #
-    # GET /spaces/{space_id}/children -> Sequence[models.Space]
+    # GET /spaces/{space_id}/children -> Sequence[mdls.Space]
     def space_children(
         self,
         # Id of space
@@ -8438,14 +8438,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Space]:
+    ) -> Sequence[mdls.Space]:
         """Get Space Children"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            Sequence[models.Space],
+            Sequence[mdls.Space],
             self.get(
                 path=f"/spaces/{space_id}/children",
-                structure=Sequence[models.Space],
+                structure=Sequence[mdls.Space],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -8459,7 +8459,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Search the children of a space
     #
-    # GET /spaces/{space_id}/children/search -> Sequence[models.Space]
+    # GET /spaces/{space_id}/children/search -> Sequence[mdls.Space]
     def space_children_search(
         self,
         # Id of space
@@ -8471,14 +8471,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Match Space name.
         name: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Space]:
+    ) -> Sequence[mdls.Space]:
         """Search Space Children"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            Sequence[models.Space],
+            Sequence[mdls.Space],
             self.get(
                 path=f"/spaces/{space_id}/children/search",
-                structure=Sequence[models.Space],
+                structure=Sequence[mdls.Space],
                 query_params={"fields": fields, "sorts": sorts, "name": name},
                 transport_options=transport_options,
             ),
@@ -8487,7 +8487,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the parent of a space
     #
-    # GET /spaces/{space_id}/parent -> models.Space
+    # GET /spaces/{space_id}/parent -> mdls.Space
     def space_parent(
         self,
         # Id of space
@@ -8495,14 +8495,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Space:
+    ) -> mdls.Space:
         """Get Space Parent"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            models.Space,
+            mdls.Space,
             self.get(
                 path=f"/spaces/{space_id}/parent",
-                structure=models.Space,
+                structure=mdls.Space,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8511,7 +8511,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the ancestors of a space
     #
-    # GET /spaces/{space_id}/ancestors -> Sequence[models.Space]
+    # GET /spaces/{space_id}/ancestors -> Sequence[mdls.Space]
     def space_ancestors(
         self,
         # Id of space
@@ -8519,14 +8519,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Space]:
+    ) -> Sequence[mdls.Space]:
         """Get Space Ancestors"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            Sequence[models.Space],
+            Sequence[mdls.Space],
             self.get(
                 path=f"/spaces/{space_id}/ancestors",
-                structure=Sequence[models.Space],
+                structure=Sequence[mdls.Space],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8537,7 +8537,7 @@ class Looker31SDK(api_methods.APIMethods):
     # In API 3.x, this will return all looks in a space, including looks in the trash.
     # In API 4.0+, all looks in a space will be returned, excluding looks in the trash.
     #
-    # GET /spaces/{space_id}/looks -> Sequence[models.LookWithQuery]
+    # GET /spaces/{space_id}/looks -> Sequence[mdls.LookWithQuery]
     def space_looks(
         self,
         # Id of space
@@ -8545,14 +8545,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.LookWithQuery]:
+    ) -> Sequence[mdls.LookWithQuery]:
         """Get Space Looks"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            Sequence[models.LookWithQuery],
+            Sequence[mdls.LookWithQuery],
             self.get(
                 path=f"/spaces/{space_id}/looks",
-                structure=Sequence[models.LookWithQuery],
+                structure=Sequence[mdls.LookWithQuery],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8561,7 +8561,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get the dashboards in a space
     #
-    # GET /spaces/{space_id}/dashboards -> Sequence[models.Dashboard]
+    # GET /spaces/{space_id}/dashboards -> Sequence[mdls.Dashboard]
     def space_dashboards(
         self,
         # Id of space
@@ -8569,14 +8569,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Dashboard]:
+    ) -> Sequence[mdls.Dashboard]:
         """Get Space Dashboards"""
         space_id = self.encode_path_param(space_id)
         response = cast(
-            Sequence[models.Dashboard],
+            Sequence[mdls.Dashboard],
             self.get(
                 path=f"/spaces/{space_id}/dashboards",
-                structure=Sequence[models.Dashboard],
+                structure=Sequence[mdls.Dashboard],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8595,19 +8595,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # GET /themes -> Sequence[models.Theme]
+    # GET /themes -> Sequence[mdls.Theme]
     def all_themes(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Theme]:
+    ) -> Sequence[mdls.Theme]:
         """Get All Themes"""
         response = cast(
-            Sequence[models.Theme],
+            Sequence[mdls.Theme],
             self.get(
                 path="/themes",
-                structure=Sequence[models.Theme],
+                structure=Sequence[mdls.Theme],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8630,18 +8630,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # POST /themes -> models.Theme
+    # POST /themes -> mdls.Theme
     def create_theme(
         self,
-        body: models.WriteTheme,
+        body: mdls.WriteTheme,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Create Theme"""
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.post(
                 path="/themes",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8687,7 +8687,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # GET /themes/search -> Sequence[models.Theme]
+    # GET /themes/search -> Sequence[mdls.Theme]
     def search_themes(
         self,
         # Match theme id.
@@ -8709,13 +8709,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Theme]:
+    ) -> Sequence[mdls.Theme]:
         """Search Themes"""
         response = cast(
-            Sequence[models.Theme],
+            Sequence[mdls.Theme],
             self.get(
                 path="/themes/search",
-                structure=Sequence[models.Theme],
+                structure=Sequence[mdls.Theme],
                 query_params={
                     "id": id,
                     "name": name,
@@ -8740,19 +8740,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
     #
-    # GET /themes/default -> models.Theme
+    # GET /themes/default -> mdls.Theme
     def default_theme(
         self,
         # Timestamp representing the target datetime for the active period. Defaults to 'now'
         ts: Optional[datetime.datetime] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Get Default Theme"""
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.get(
                 path="/themes/default",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 query_params={"ts": ts},
                 transport_options=transport_options,
             ),
@@ -8771,19 +8771,19 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # PUT /themes/default -> models.Theme
+    # PUT /themes/default -> mdls.Theme
     def set_default_theme(
         self,
         # Name of theme to set as default
         name: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Set Default Theme"""
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.put(
                 path="/themes/default",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 query_params={"name": name},
                 transport_options=transport_options,
             ),
@@ -8800,7 +8800,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # GET /themes/active -> Sequence[models.Theme]
+    # GET /themes/active -> Sequence[mdls.Theme]
     def active_themes(
         self,
         # Name of theme
@@ -8810,13 +8810,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Theme]:
+    ) -> Sequence[mdls.Theme]:
         """Get Active Themes"""
         response = cast(
-            Sequence[models.Theme],
+            Sequence[mdls.Theme],
             self.get(
                 path="/themes/active",
-                structure=Sequence[models.Theme],
+                structure=Sequence[mdls.Theme],
                 query_params={"name": name, "ts": ts, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -8830,7 +8830,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # GET /themes/theme_or_default -> models.Theme
+    # GET /themes/theme_or_default -> mdls.Theme
     def theme_or_default(
         self,
         # Name of theme
@@ -8838,13 +8838,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Timestamp representing the target datetime for the active period. Defaults to 'now'
         ts: Optional[datetime.datetime] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Get Theme or Default"""
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.get(
                 path="/themes/theme_or_default",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 query_params={"name": name, "ts": ts},
                 transport_options=transport_options,
             ),
@@ -8859,18 +8859,18 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # POST /themes/validate -> models.ValidationError
+    # POST /themes/validate -> mdls.ValidationError
     def validate_theme(
         self,
-        body: models.WriteTheme,
+        body: mdls.WriteTheme,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.ValidationError:
+    ) -> mdls.ValidationError:
         """Validate Theme"""
         response = cast(
-            models.ValidationError,
+            mdls.ValidationError,
             self.post(
                 path="/themes/validate",
-                structure=models.ValidationError,
+                structure=mdls.ValidationError,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8883,7 +8883,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # GET /themes/{theme_id} -> models.Theme
+    # GET /themes/{theme_id} -> mdls.Theme
     def theme(
         self,
         # Id of theme
@@ -8891,14 +8891,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Get Theme"""
         theme_id = self.encode_path_param(theme_id)
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.get(
                 path=f"/themes/{theme_id}",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8909,21 +8909,21 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
-    # PATCH /themes/{theme_id} -> models.Theme
+    # PATCH /themes/{theme_id} -> mdls.Theme
     def update_theme(
         self,
         # Id of theme
         theme_id: str,
-        body: models.WriteTheme,
+        body: mdls.WriteTheme,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Theme:
+    ) -> mdls.Theme:
         """Update Theme"""
         theme_id = self.encode_path_param(theme_id)
         response = cast(
-            models.Theme,
+            mdls.Theme,
             self.patch(
                 path=f"/themes/{theme_id}",
-                structure=models.Theme,
+                structure=mdls.Theme,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -8965,19 +8965,19 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about the current user; i.e. the user account currently calling the API.
     #
-    # GET /user -> models.User
+    # GET /user -> mdls.User
     def me(
         self,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Get Current User"""
         response = cast(
-            models.User,
+            mdls.User,
             self.get(
                 path="/user",
-                structure=models.User,
+                structure=mdls.User,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -8986,7 +8986,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all users.
     #
-    # GET /users -> Sequence[models.User]
+    # GET /users -> Sequence[mdls.User]
     def all_users(
         self,
         # Requested fields.
@@ -8998,15 +8998,15 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to sort by.
         sorts: Optional[str] = None,
         # Optional list of ids to get specific users.
-        ids: Optional[models.DelimSequence[int]] = None,
+        ids: Optional[mdls.DelimSequence[int]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Get All Users"""
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.get(
                 path="/users",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -9021,20 +9021,20 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a user with the specified information.
     #
-    # POST /users -> models.User
+    # POST /users -> mdls.User
     def create_user(
         self,
-        body: Optional[models.WriteUser] = None,
+        body: Optional[mdls.WriteUser] = None,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Create User"""
         response = cast(
-            models.User,
+            mdls.User,
             self.post(
                 path="/users",
-                structure=models.User,
+                structure=mdls.User,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9073,7 +9073,7 @@ class Looker31SDK(api_methods.APIMethods):
     # names of other users but no details; normal users in a closed system can only see
     # names of other users who are members of the same group as the user.
     #
-    # GET /users/search -> Sequence[models.User]
+    # GET /users/search -> Sequence[mdls.User]
     def search_users(
         self,
         # Include only these fields in the response
@@ -9105,13 +9105,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Search for users who are direct members of this group
         group_id: Optional[int] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Search Users"""
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.get(
                 path="/users/search",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -9140,7 +9140,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Any additional search params will be combined into a logical AND expression.
     #
-    # GET /users/search/names/{pattern} -> Sequence[models.User]
+    # GET /users/search/names/{pattern} -> Sequence[mdls.User]
     def search_users_names(
         self,
         # Pattern to match
@@ -9166,14 +9166,14 @@ class Looker31SDK(api_methods.APIMethods):
         # Include or exclude disabled accounts in the results
         is_disabled: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.User]:
+    ) -> Sequence[mdls.User]:
         """Search User Names"""
         pattern = self.encode_path_param(pattern)
         response = cast(
-            Sequence[models.User],
+            Sequence[mdls.User],
             self.get(
                 path=f"/users/search/names/{pattern}",
-                structure=Sequence[models.User],
+                structure=Sequence[mdls.User],
                 query_params={
                     "fields": fields,
                     "page": page,
@@ -9197,7 +9197,7 @@ class Looker31SDK(api_methods.APIMethods):
     # be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
     # The user name and avatar url, but no sensitive information.
     #
-    # GET /users/{user_id} -> models.User
+    # GET /users/{user_id} -> mdls.User
     def user(
         self,
         # Id of user
@@ -9205,13 +9205,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Get User by Id"""
         response = cast(
-            models.User,
+            mdls.User,
             self.get(
                 path=f"/users/{user_id}",
-                structure=models.User,
+                structure=mdls.User,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9220,22 +9220,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update information about the user with a specific id.
     #
-    # PATCH /users/{user_id} -> models.User
+    # PATCH /users/{user_id} -> mdls.User
     def update_user(
         self,
         # Id of user
         user_id: int,
-        body: models.WriteUser,
+        body: mdls.WriteUser,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Update User"""
         response = cast(
-            models.User,
+            mdls.User,
             self.patch(
                 path=f"/users/{user_id}",
-                structure=models.User,
+                structure=mdls.User,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9294,7 +9294,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
     #
-    # GET /users/credential/{credential_type}/{credential_id} -> models.User
+    # GET /users/credential/{credential_type}/{credential_id} -> mdls.User
     def user_for_credential(
         self,
         # Type name of credential
@@ -9304,15 +9304,15 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.User:
+    ) -> mdls.User:
         """Get User by Credential Id"""
         credential_type = self.encode_path_param(credential_type)
         credential_id = self.encode_path_param(credential_id)
         response = cast(
-            models.User,
+            mdls.User,
             self.get(
                 path=f"/users/credential/{credential_type}/{credential_id}",
-                structure=models.User,
+                structure=mdls.User,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9321,7 +9321,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_email -> models.CredentialsEmail
+    # GET /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def user_credentials_email(
         self,
         # id of user
@@ -9329,13 +9329,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsEmail:
+    ) -> mdls.CredentialsEmail:
         """Get Email/Password Credential"""
         response = cast(
-            models.CredentialsEmail,
+            mdls.CredentialsEmail,
             self.get(
                 path=f"/users/{user_id}/credentials_email",
-                structure=models.CredentialsEmail,
+                structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9344,22 +9344,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
-    # POST /users/{user_id}/credentials_email -> models.CredentialsEmail
+    # POST /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def create_user_credentials_email(
         self,
         # id of user
         user_id: int,
-        body: models.WriteCredentialsEmail,
+        body: mdls.WriteCredentialsEmail,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsEmail:
+    ) -> mdls.CredentialsEmail:
         """Create Email/Password Credential"""
         response = cast(
-            models.CredentialsEmail,
+            mdls.CredentialsEmail,
             self.post(
                 path=f"/users/{user_id}/credentials_email",
-                structure=models.CredentialsEmail,
+                structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9369,22 +9369,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
-    # PATCH /users/{user_id}/credentials_email -> models.CredentialsEmail
+    # PATCH /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def update_user_credentials_email(
         self,
         # id of user
         user_id: int,
-        body: models.WriteCredentialsEmail,
+        body: mdls.WriteCredentialsEmail,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsEmail:
+    ) -> mdls.CredentialsEmail:
         """Update Email/Password Credential"""
         response = cast(
-            models.CredentialsEmail,
+            mdls.CredentialsEmail,
             self.patch(
                 path=f"/users/{user_id}/credentials_email",
-                structure=models.CredentialsEmail,
+                structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9414,7 +9414,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Two-factor login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_totp -> models.CredentialsTotp
+    # GET /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def user_credentials_totp(
         self,
         # id of user
@@ -9422,13 +9422,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsTotp:
+    ) -> mdls.CredentialsTotp:
         """Get Two-Factor Credential"""
         response = cast(
-            models.CredentialsTotp,
+            mdls.CredentialsTotp,
             self.get(
                 path=f"/users/{user_id}/credentials_totp",
-                structure=models.CredentialsTotp,
+                structure=mdls.CredentialsTotp,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9437,22 +9437,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Two-factor login information for the specified user.
     #
-    # POST /users/{user_id}/credentials_totp -> models.CredentialsTotp
+    # POST /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def create_user_credentials_totp(
         self,
         # id of user
         user_id: int,
-        body: Optional[models.CredentialsTotp] = None,
+        body: Optional[mdls.CredentialsTotp] = None,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsTotp:
+    ) -> mdls.CredentialsTotp:
         """Create Two-Factor Credential"""
         response = cast(
-            models.CredentialsTotp,
+            mdls.CredentialsTotp,
             self.post(
                 path=f"/users/{user_id}/credentials_totp",
-                structure=models.CredentialsTotp,
+                structure=mdls.CredentialsTotp,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9482,7 +9482,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### LDAP login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_ldap -> models.CredentialsLDAP
+    # GET /users/{user_id}/credentials_ldap -> mdls.CredentialsLDAP
     def user_credentials_ldap(
         self,
         # id of user
@@ -9490,13 +9490,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsLDAP:
+    ) -> mdls.CredentialsLDAP:
         """Get LDAP Credential"""
         response = cast(
-            models.CredentialsLDAP,
+            mdls.CredentialsLDAP,
             self.get(
                 path=f"/users/{user_id}/credentials_ldap",
-                structure=models.CredentialsLDAP,
+                structure=mdls.CredentialsLDAP,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9525,7 +9525,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Google authentication login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_google -> models.CredentialsGoogle
+    # GET /users/{user_id}/credentials_google -> mdls.CredentialsGoogle
     def user_credentials_google(
         self,
         # id of user
@@ -9533,13 +9533,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsGoogle:
+    ) -> mdls.CredentialsGoogle:
         """Get Google Auth Credential"""
         response = cast(
-            models.CredentialsGoogle,
+            mdls.CredentialsGoogle,
             self.get(
                 path=f"/users/{user_id}/credentials_google",
-                structure=models.CredentialsGoogle,
+                structure=mdls.CredentialsGoogle,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9568,7 +9568,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Saml authentication login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_saml -> models.CredentialsSaml
+    # GET /users/{user_id}/credentials_saml -> mdls.CredentialsSaml
     def user_credentials_saml(
         self,
         # id of user
@@ -9576,13 +9576,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsSaml:
+    ) -> mdls.CredentialsSaml:
         """Get Saml Auth Credential"""
         response = cast(
-            models.CredentialsSaml,
+            mdls.CredentialsSaml,
             self.get(
                 path=f"/users/{user_id}/credentials_saml",
-                structure=models.CredentialsSaml,
+                structure=mdls.CredentialsSaml,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9611,7 +9611,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### OpenID Connect (OIDC) authentication login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_oidc -> models.CredentialsOIDC
+    # GET /users/{user_id}/credentials_oidc -> mdls.CredentialsOIDC
     def user_credentials_oidc(
         self,
         # id of user
@@ -9619,13 +9619,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsOIDC:
+    ) -> mdls.CredentialsOIDC:
         """Get OIDC Auth Credential"""
         response = cast(
-            models.CredentialsOIDC,
+            mdls.CredentialsOIDC,
             self.get(
                 path=f"/users/{user_id}/credentials_oidc",
-                structure=models.CredentialsOIDC,
+                structure=mdls.CredentialsOIDC,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9654,7 +9654,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
     #
-    # GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> models.CredentialsApi3
+    # GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> mdls.CredentialsApi3
     def user_credentials_api3(
         self,
         # Id of user
@@ -9664,13 +9664,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsApi3:
+    ) -> mdls.CredentialsApi3:
         """Get API 3 Credential"""
         response = cast(
-            models.CredentialsApi3,
+            mdls.CredentialsApi3,
             self.get(
                 path=f"/users/{user_id}/credentials_api3/{credentials_api3_id}",
-                structure=models.CredentialsApi3,
+                structure=mdls.CredentialsApi3,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9701,7 +9701,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
     #
-    # GET /users/{user_id}/credentials_api3 -> Sequence[models.CredentialsApi3]
+    # GET /users/{user_id}/credentials_api3 -> Sequence[mdls.CredentialsApi3]
     def all_user_credentials_api3s(
         self,
         # id of user
@@ -9709,13 +9709,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.CredentialsApi3]:
+    ) -> Sequence[mdls.CredentialsApi3]:
         """Get All API 3 Credentials"""
         response = cast(
-            Sequence[models.CredentialsApi3],
+            Sequence[mdls.CredentialsApi3],
             self.get(
                 path=f"/users/{user_id}/credentials_api3",
-                structure=Sequence[models.CredentialsApi3],
+                structure=Sequence[mdls.CredentialsApi3],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9724,22 +9724,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
     #
-    # POST /users/{user_id}/credentials_api3 -> models.CredentialsApi3
+    # POST /users/{user_id}/credentials_api3 -> mdls.CredentialsApi3
     def create_user_credentials_api3(
         self,
         # id of user
         user_id: int,
-        body: Optional[models.CredentialsApi3] = None,
+        body: Optional[mdls.CredentialsApi3] = None,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsApi3:
+    ) -> mdls.CredentialsApi3:
         """Create API 3 Credential"""
         response = cast(
-            models.CredentialsApi3,
+            mdls.CredentialsApi3,
             self.post(
                 path=f"/users/{user_id}/credentials_api3",
-                structure=models.CredentialsApi3,
+                structure=mdls.CredentialsApi3,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -9749,7 +9749,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> models.CredentialsEmbed
+    # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> mdls.CredentialsEmbed
     def user_credentials_embed(
         self,
         # Id of user
@@ -9759,13 +9759,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsEmbed:
+    ) -> mdls.CredentialsEmbed:
         """Get Embedding Credential"""
         response = cast(
-            models.CredentialsEmbed,
+            mdls.CredentialsEmbed,
             self.get(
                 path=f"/users/{user_id}/credentials_embed/{credentials_embed_id}",
-                structure=models.CredentialsEmbed,
+                structure=mdls.CredentialsEmbed,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9796,7 +9796,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # GET /users/{user_id}/credentials_embed -> Sequence[models.CredentialsEmbed]
+    # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(
         self,
         # id of user
@@ -9804,13 +9804,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.CredentialsEmbed]:
+    ) -> Sequence[mdls.CredentialsEmbed]:
         """Get All Embedding Credentials"""
         response = cast(
-            Sequence[models.CredentialsEmbed],
+            Sequence[mdls.CredentialsEmbed],
             self.get(
                 path=f"/users/{user_id}/credentials_embed",
-                structure=Sequence[models.CredentialsEmbed],
+                structure=Sequence[mdls.CredentialsEmbed],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9819,7 +9819,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Looker Openid login information for the specified user. Used by Looker Analysts.
     #
-    # GET /users/{user_id}/credentials_looker_openid -> models.CredentialsLookerOpenid
+    # GET /users/{user_id}/credentials_looker_openid -> mdls.CredentialsLookerOpenid
     def user_credentials_looker_openid(
         self,
         # id of user
@@ -9827,13 +9827,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsLookerOpenid:
+    ) -> mdls.CredentialsLookerOpenid:
         """Get Looker OpenId Credential"""
         response = cast(
-            models.CredentialsLookerOpenid,
+            mdls.CredentialsLookerOpenid,
             self.get(
                 path=f"/users/{user_id}/credentials_looker_openid",
-                structure=models.CredentialsLookerOpenid,
+                structure=mdls.CredentialsLookerOpenid,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9862,7 +9862,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Web login session for the specified user.
     #
-    # GET /users/{user_id}/sessions/{session_id} -> models.Session
+    # GET /users/{user_id}/sessions/{session_id} -> mdls.Session
     def user_session(
         self,
         # Id of user
@@ -9872,13 +9872,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Session:
+    ) -> mdls.Session:
         """Get Web Login Session"""
         response = cast(
-            models.Session,
+            mdls.Session,
             self.get(
                 path=f"/users/{user_id}/sessions/{session_id}",
-                structure=models.Session,
+                structure=mdls.Session,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9909,7 +9909,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Web login session for the specified user.
     #
-    # GET /users/{user_id}/sessions -> Sequence[models.Session]
+    # GET /users/{user_id}/sessions -> Sequence[mdls.Session]
     def all_user_sessions(
         self,
         # id of user
@@ -9917,13 +9917,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Session]:
+    ) -> Sequence[mdls.Session]:
         """Get All Web Login Sessions"""
         response = cast(
-            Sequence[models.Session],
+            Sequence[mdls.Session],
             self.get(
                 path=f"/users/{user_id}/sessions",
-                structure=Sequence[models.Session],
+                structure=Sequence[mdls.Session],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -9940,7 +9940,7 @@ class Looker31SDK(api_methods.APIMethods):
     # The expire period is always 60 minutes when expires is enabled.
     # This method can be called with an empty body.
     #
-    # POST /users/{user_id}/credentials_email/password_reset -> models.CredentialsEmail
+    # POST /users/{user_id}/credentials_email/password_reset -> mdls.CredentialsEmail
     def create_user_credentials_email_password_reset(
         self,
         # Id of user
@@ -9950,13 +9950,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.CredentialsEmail:
+    ) -> mdls.CredentialsEmail:
         """Create Password Reset Token"""
         response = cast(
-            models.CredentialsEmail,
+            mdls.CredentialsEmail,
             self.post(
                 path=f"/users/{user_id}/credentials_email/password_reset",
-                structure=models.CredentialsEmail,
+                structure=mdls.CredentialsEmail,
                 query_params={"expires": expires, "fields": fields},
                 transport_options=transport_options,
             ),
@@ -9965,7 +9965,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about roles of a given user
     #
-    # GET /users/{user_id}/roles -> Sequence[models.Role]
+    # GET /users/{user_id}/roles -> Sequence[mdls.Role]
     def user_roles(
         self,
         # id of user
@@ -9975,13 +9975,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Get only roles associated directly with the user: exclude those only associated through groups.
         direct_association_only: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Role]:
+    ) -> Sequence[mdls.Role]:
         """Get User Roles"""
         response = cast(
-            Sequence[models.Role],
+            Sequence[mdls.Role],
             self.get(
                 path=f"/users/{user_id}/roles",
-                structure=Sequence[models.Role],
+                structure=Sequence[mdls.Role],
                 query_params={
                     "fields": fields,
                     "direct_association_only": direct_association_only,
@@ -9993,7 +9993,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Set roles of the user with a specific id.
     #
-    # PUT /users/{user_id}/roles -> Sequence[models.Role]
+    # PUT /users/{user_id}/roles -> Sequence[mdls.Role]
     def set_user_roles(
         self,
         # id of user
@@ -10002,13 +10002,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Role]:
+    ) -> Sequence[mdls.Role]:
         """Set User Roles"""
         response = cast(
-            Sequence[models.Role],
+            Sequence[mdls.Role],
             self.put(
                 path=f"/users/{user_id}/roles",
-                structure=Sequence[models.Role],
+                structure=Sequence[mdls.Role],
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -10033,7 +10033,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The value of all hidden user attributes will be blank.
     #
-    # GET /users/{user_id}/attribute_values -> Sequence[models.UserAttributeWithValue]
+    # GET /users/{user_id}/attribute_values -> Sequence[mdls.UserAttributeWithValue]
     def user_attribute_user_values(
         self,
         # Id of user
@@ -10041,19 +10041,19 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         # Specific user attributes to request. Omit or leave blank to request all user attributes.
-        user_attribute_ids: Optional[models.DelimSequence[int]] = None,
+        user_attribute_ids: Optional[mdls.DelimSequence[int]] = None,
         # If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
         all_values: Optional[bool] = None,
         # If true, returns an empty record for each requested attribute that has no user, group, or default value.
         include_unset: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserAttributeWithValue]:
+    ) -> Sequence[mdls.UserAttributeWithValue]:
         """Get User Attribute Values"""
         response = cast(
-            Sequence[models.UserAttributeWithValue],
+            Sequence[mdls.UserAttributeWithValue],
             self.get(
                 path=f"/users/{user_id}/attribute_values",
-                structure=Sequence[models.UserAttributeWithValue],
+                structure=Sequence[mdls.UserAttributeWithValue],
                 query_params={
                     "fields": fields,
                     "user_attribute_ids": user_attribute_ids,
@@ -10069,22 +10069,22 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Per-user user attribute values take precedence over group or default values.
     #
-    # PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> models.UserAttributeWithValue
+    # PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> mdls.UserAttributeWithValue
     def set_user_attribute_user_value(
         self,
         # Id of user
         user_id: int,
         # Id of user attribute
         user_attribute_id: int,
-        body: models.WriteUserAttributeWithValue,
+        body: mdls.WriteUserAttributeWithValue,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.UserAttributeWithValue:
+    ) -> mdls.UserAttributeWithValue:
         """Set User Attribute User Value"""
         response = cast(
-            models.UserAttributeWithValue,
+            mdls.UserAttributeWithValue,
             self.patch(
                 path=f"/users/{user_id}/attribute_values/{user_attribute_id}",
-                structure=models.UserAttributeWithValue,
+                structure=mdls.UserAttributeWithValue,
                 body=body,
                 transport_options=transport_options,
             ),
@@ -10124,7 +10124,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about all user attributes.
     #
-    # GET /user_attributes -> Sequence[models.UserAttribute]
+    # GET /user_attributes -> Sequence[mdls.UserAttribute]
     def all_user_attributes(
         self,
         # Requested fields.
@@ -10132,13 +10132,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Fields to order the results by. Sortable fields include: name, label
         sorts: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserAttribute]:
+    ) -> Sequence[mdls.UserAttribute]:
         """Get All User Attributes"""
         response = cast(
-            Sequence[models.UserAttribute],
+            Sequence[mdls.UserAttribute],
             self.get(
                 path="/user_attributes",
-                structure=Sequence[models.UserAttribute],
+                structure=Sequence[mdls.UserAttribute],
                 query_params={"fields": fields, "sorts": sorts},
                 transport_options=transport_options,
             ),
@@ -10156,20 +10156,20 @@ class Looker31SDK(api_methods.APIMethods):
     # Attempting to create a new user attribute with a name or label that duplicates an existing
     # user attribute will fail with a 422 error.
     #
-    # POST /user_attributes -> models.UserAttribute
+    # POST /user_attributes -> mdls.UserAttribute
     def create_user_attribute(
         self,
-        body: models.WriteUserAttribute,
+        body: mdls.WriteUserAttribute,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.UserAttribute:
+    ) -> mdls.UserAttribute:
         """Create User Attribute"""
         response = cast(
-            models.UserAttribute,
+            mdls.UserAttribute,
             self.post(
                 path="/user_attributes",
-                structure=models.UserAttribute,
+                structure=mdls.UserAttribute,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -10179,7 +10179,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get information about a user attribute.
     #
-    # GET /user_attributes/{user_attribute_id} -> models.UserAttribute
+    # GET /user_attributes/{user_attribute_id} -> mdls.UserAttribute
     def user_attribute(
         self,
         # Id of user attribute
@@ -10187,13 +10187,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.UserAttribute:
+    ) -> mdls.UserAttribute:
         """Get User Attribute"""
         response = cast(
-            models.UserAttribute,
+            mdls.UserAttribute,
             self.get(
                 path=f"/user_attributes/{user_attribute_id}",
-                structure=models.UserAttribute,
+                structure=mdls.UserAttribute,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -10202,22 +10202,22 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Update a user attribute definition.
     #
-    # PATCH /user_attributes/{user_attribute_id} -> models.UserAttribute
+    # PATCH /user_attributes/{user_attribute_id} -> mdls.UserAttribute
     def update_user_attribute(
         self,
         # Id of user attribute
         user_attribute_id: int,
-        body: models.WriteUserAttribute,
+        body: mdls.WriteUserAttribute,
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.UserAttribute:
+    ) -> mdls.UserAttribute:
         """Update User Attribute"""
         response = cast(
-            models.UserAttribute,
+            mdls.UserAttribute,
             self.patch(
                 path=f"/user_attributes/{user_attribute_id}",
-                structure=models.UserAttribute,
+                structure=mdls.UserAttribute,
                 query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
@@ -10253,7 +10253,7 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Results will only include groups that the caller's user account has permission to see.
     #
-    # GET /user_attributes/{user_attribute_id}/group_values -> Sequence[models.UserAttributeGroupValue]
+    # GET /user_attributes/{user_attribute_id}/group_values -> Sequence[mdls.UserAttributeGroupValue]
     def all_user_attribute_group_values(
         self,
         # Id of user attribute
@@ -10261,13 +10261,13 @@ class Looker31SDK(api_methods.APIMethods):
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserAttributeGroupValue]:
+    ) -> Sequence[mdls.UserAttributeGroupValue]:
         """Get User Attribute Group Values"""
         response = cast(
-            Sequence[models.UserAttributeGroupValue],
+            Sequence[mdls.UserAttributeGroupValue],
             self.get(
                 path=f"/user_attributes/{user_attribute_id}/group_values",
-                structure=Sequence[models.UserAttributeGroupValue],
+                structure=Sequence[mdls.UserAttributeGroupValue],
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),
@@ -10295,20 +10295,20 @@ class Looker31SDK(api_methods.APIMethods):
     #   To set a user attribute value for a single user, see [Set User Attribute User Value](#!/User/set_user_attribute_user_value).
     # To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
     #
-    # POST /user_attributes/{user_attribute_id}/group_values -> Sequence[models.UserAttributeGroupValue]
+    # POST /user_attributes/{user_attribute_id}/group_values -> Sequence[mdls.UserAttributeGroupValue]
     def set_user_attribute_group_values(
         self,
         # Id of user attribute
         user_attribute_id: int,
-        body: Sequence[models.UserAttributeGroupValue],
+        body: Sequence[mdls.UserAttributeGroupValue],
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.UserAttributeGroupValue]:
+    ) -> Sequence[mdls.UserAttributeGroupValue]:
         """Set User Attribute Group Values"""
         response = cast(
-            Sequence[models.UserAttributeGroupValue],
+            Sequence[mdls.UserAttributeGroupValue],
             self.post(
                 path=f"/user_attributes/{user_attribute_id}/group_values",
-                structure=Sequence[models.UserAttributeGroupValue],
+                structure=Sequence[mdls.UserAttributeGroupValue],
                 body=body,
                 transport_options=transport_options,
             ),
@@ -10323,17 +10323,17 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Returns all workspaces available to the calling user.
     #
-    # GET /workspaces -> Sequence[models.Workspace]
+    # GET /workspaces -> Sequence[mdls.Workspace]
     def all_workspaces(
         self,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Sequence[models.Workspace]:
+    ) -> Sequence[mdls.Workspace]:
         """Get All Workspaces"""
         response = cast(
-            Sequence[models.Workspace],
+            Sequence[mdls.Workspace],
             self.get(
                 path="/workspaces",
-                structure=Sequence[models.Workspace],
+                structure=Sequence[mdls.Workspace],
                 transport_options=transport_options,
             ),
         )
@@ -10369,20 +10369,20 @@ class Looker31SDK(api_methods.APIMethods):
     # reside in a special user-specific directory on the Looker server and will still be there when you login in again
     # later and use update_session(workspace_id: "dev") to select the dev workspace for the new API session.
     #
-    # GET /workspaces/{workspace_id} -> models.Workspace
+    # GET /workspaces/{workspace_id} -> mdls.Workspace
     def workspace(
         self,
         # Id of the workspace
         workspace_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> models.Workspace:
+    ) -> mdls.Workspace:
         """Get Workspace"""
         workspace_id = self.encode_path_param(workspace_id)
         response = cast(
-            models.Workspace,
+            mdls.Workspace,
             self.get(
                 path=f"/workspaces/{workspace_id}",
-                structure=models.Workspace,
+                structure=mdls.Workspace,
                 transport_options=transport_options,
             ),
         )

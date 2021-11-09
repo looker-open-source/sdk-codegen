@@ -3994,7 +3994,7 @@ class EmbedSsoParams(model.Model):
         last_name: Last name of the embed user. Defaults to 'User' if not specified
         user_timezone: Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
         permissions: List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
-        models_: List of model names that the embed user may access
+        models: List of model names that the embed user may access
         group_ids: List of Looker group ids in which to enroll the embed user
         external_group_id: A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
         user_attributes: A dictionary of name-value pairs associating a Looker user attribute name with a value.
@@ -4009,7 +4009,7 @@ class EmbedSsoParams(model.Model):
     last_name: Optional[str] = None
     user_timezone: Optional[str] = None
     permissions: Optional[Sequence[str]] = None
-    models_: Optional[Sequence[str]] = None
+    models: Optional[Sequence[str]] = None
     group_ids: Optional[Sequence[int]] = None
     external_group_id: Optional[str] = None
     user_attributes: Optional[MutableMapping[str, Any]] = None
@@ -4026,7 +4026,7 @@ class EmbedSsoParams(model.Model):
         last_name: Optional[str] = None,
         user_timezone: Optional[str] = None,
         permissions: Optional[Sequence[str]] = None,
-        models_: Optional[Sequence[str]] = None,
+        models: Optional[Sequence[str]] = None,
         group_ids: Optional[Sequence[int]] = None,
         external_group_id: Optional[str] = None,
         user_attributes: Optional[MutableMapping[str, Any]] = None,
@@ -4040,7 +4040,7 @@ class EmbedSsoParams(model.Model):
         self.last_name = last_name
         self.user_timezone = user_timezone
         self.permissions = permissions
-        self.models_ = models_
+        self.models = models
         self.group_ids = group_ids
         self.external_group_id = external_group_id
         self.user_attributes = user_attributes
@@ -7360,7 +7360,7 @@ class ModelSet(model.Model):
         all_access:
         built_in:
         id: Unique Id
-        models_:
+        models:
         name: Name of ModelSet
         url: Link to get this item
     """
@@ -7369,7 +7369,7 @@ class ModelSet(model.Model):
     all_access: Optional[bool] = None
     built_in: Optional[bool] = None
     id: Optional[int] = None
-    models_: Optional[Sequence[str]] = None
+    models: Optional[Sequence[str]] = None
     name: Optional[str] = None
     url: Optional[str] = None
 
@@ -7380,7 +7380,7 @@ class ModelSet(model.Model):
         all_access: Optional[bool] = None,
         built_in: Optional[bool] = None,
         id: Optional[int] = None,
-        models_: Optional[Sequence[str]] = None,
+        models: Optional[Sequence[str]] = None,
         name: Optional[str] = None,
         url: Optional[str] = None
     ):
@@ -7388,7 +7388,7 @@ class ModelSet(model.Model):
         self.all_access = all_access
         self.built_in = built_in
         self.id = id
-        self.models_ = models_
+        self.models = models
         self.name = name
         self.url = url
 
@@ -12479,17 +12479,17 @@ class WriteModelSet(model.Model):
     can, all_access, built_in, id, url
 
         Attributes:
-            models_:
+            models:
             name: Name of ModelSet
     """
 
-    models_: Optional[Sequence[str]] = None
+    models: Optional[Sequence[str]] = None
     name: Optional[str] = None
 
     def __init__(
-        self, *, models_: Optional[Sequence[str]] = None, name: Optional[str] = None
+        self, *, models: Optional[Sequence[str]] = None, name: Optional[str] = None
     ):
-        self.models_ = models_
+        self.models = models
         self.name = name
 
 
@@ -13925,10 +13925,6 @@ sr.converter40.register_structure_hook(
     forward_ref_structure_hook,  # type:ignore
 )
 sr.converter40.register_structure_hook(
-    EmbedSsoParams,  # type: ignore
-    translate_keys_structure_hook,  # type:ignore
-)
-sr.converter40.register_structure_hook(
     ForwardRef("EmbedUrlResponse"),  # type: ignore
     forward_ref_structure_hook,  # type:ignore
 )
@@ -14223,10 +14219,6 @@ sr.converter40.register_structure_hook(
 sr.converter40.register_structure_hook(
     ForwardRef("ModelSet"),  # type: ignore
     forward_ref_structure_hook,  # type:ignore
-)
-sr.converter40.register_structure_hook(
-    ModelSet,  # type: ignore
-    translate_keys_structure_hook,  # type:ignore
 )
 sr.converter40.register_structure_hook(
     ForwardRef("ModelsNotValidated"),  # type: ignore
@@ -14683,10 +14675,6 @@ sr.converter40.register_structure_hook(
 sr.converter40.register_structure_hook(
     ForwardRef("WriteModelSet"),  # type: ignore
     forward_ref_structure_hook,  # type:ignore
-)
-sr.converter40.register_structure_hook(
-    WriteModelSet,  # type: ignore
-    translate_keys_structure_hook,  # type:ignore
 )
 sr.converter40.register_structure_hook(
     ForwardRef("WriteOauthClientApp"),  # type: ignore
