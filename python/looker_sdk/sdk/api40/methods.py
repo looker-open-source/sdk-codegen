@@ -4790,7 +4790,7 @@ class Looker40SDK(api_methods.APIMethods):
         # The derived table's view name.
         view: str,
         # The models where this derived table is defined.
-        models: Optional[str] = None,
+        models_: Optional[str] = None,
         # The model directory to look in, either `dev` or `production`.
         workspace: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -4802,7 +4802,7 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/derived_table/graph/view/{view}",
                 structure=models.DependencyGraph,
-                query_params={"models": models, "workspace": workspace},
+                query_params={"models": models_, "workspace": workspace},
                 transport_options=transport_options,
             ),
         )
