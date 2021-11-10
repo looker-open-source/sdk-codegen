@@ -197,14 +197,19 @@ This can be checked with the following:
 yarn lint
 ```
 
-For a faster run, only the modified files can be checked with:
+For a faster run, only the modified files can be checked with any of these
+commands:
 ```sh
 yarn lint-changed
+yarn lint -q
+yarn lint --quick
 ```
 
-Fixes can automagically be applied with:
+Fixes can automagically be applied with one of the following:
 ```sh
 yarn lint-changed-fix
+yarn lint -q -f
+yarn lint --quick --fix
 ```
 
 ## SDK Examples
