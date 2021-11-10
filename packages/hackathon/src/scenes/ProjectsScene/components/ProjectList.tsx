@@ -39,6 +39,8 @@ import { Lock } from '@styled-icons/material-outlined/Lock'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Delete } from '@styled-icons/material-outlined/Delete'
 import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
+import { Logout } from '@styled-icons/material-outlined/Logout'
+import { Login } from '@styled-icons/material-outlined/Login'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import type { IHackerProps, IProjectProps } from '../../../models'
@@ -89,6 +91,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
     const isMember = isProjectMember(hacker, project)
     dispatch(changeMembership(project!._id, String(hacker.user.id), isMember))
+    dispatch(currentProjectsRequest())
   }
 
   const lockCol = columns[0]
@@ -157,7 +160,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         {canJoinProject(hacker, project) && (
           <DataTableAction
             onClick={handleJoin.bind(null, project, hacker)}
-            icon={<Delete />}
+            icon={isProjectMember(hacker, project) ? <Logout /> : <Login />}
           >
             {isProjectMember(hacker, project)
               ? 'Leave project'
