@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-utils",
-  "version": "21.20.0",
+  "version": "0.1.0",
   "description": "Looker Extension Utilities",
   "main": "dist/bundle.js",
   "module": "lib/esm/index.js",
