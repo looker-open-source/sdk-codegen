@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.18.1...sdk-node-v21.20.0) (2021-11-10)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.18.1 to ^21.20.0
+    * @looker/sdk-rtl bumped from ^21.1.1 to ^21.2.0
+
 ### [21.18.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.18.0...sdk-node-v21.18.1) (2021-10-27)
 
 

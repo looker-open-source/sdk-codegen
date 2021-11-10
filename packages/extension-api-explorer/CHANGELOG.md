@@ -1,5 +1,24 @@
 # Changelog
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.18.1...extension-api-explorer-v21.20.0) (2021-11-10)
+
+
+### Features
+
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.22 to ^0.9.23
+    * @looker/extension-sdk bumped from ^21.18.1 to ^21.20.0
+    * @looker/extension-sdk-react bumped from ^21.18.1 to ^21.20.0
+    * @looker/run-it bumped from ^0.9.22 to ^0.9.23
+    * @looker/sdk bumped from ^21.18.1 to ^21.20.0
+    * @looker/sdk-codegen bumped from ^21.1.1 to ^21.2.0
+
 ### [21.18.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.18.0...extension-api-explorer-v21.18.1) (2021-10-27)
 
 

@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.1.14](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.13...code-editor-v0.1.14) (2021-11-10)
+
+
+### Features
+
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.1.1 to ^21.2.0
+
 ### [0.1.13](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.12...code-editor-v0.1.13) (2021-10-27)
 
 
