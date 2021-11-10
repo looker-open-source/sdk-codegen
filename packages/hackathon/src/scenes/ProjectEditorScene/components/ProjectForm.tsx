@@ -209,10 +209,6 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                     label:
                       'Closed: no one other than the project creator can join',
                   },
-                  {
-                    value: 'Invite Only',
-                    label: 'Only joinable by invitation',
-                  },
                 ]}
                 onChange={(value: string) => {
                   dispatch(
