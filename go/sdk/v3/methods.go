@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-376 API methods
+378 API methods
 */
 
 
@@ -2005,6 +2005,34 @@ func (l *LookerSDK) UpdateDatagroup(
 
   // endregion Datagroup: Manage Datagroups
 
+  // region DerivedTable: View Derived Table graphs
+
+// ### Discover information about derived tables
+//
+// GET /derived_table/graph/model/{model} -> DependencyGraph
+func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTablesForModel,
+    options *rtl.ApiSettings) (DependencyGraph, error) {
+    request.Model = url.PathEscape(request.Model)
+    var result DependencyGraph
+    err := l.session.Do(&result, "GET", "/3.1", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
+    return result, err
+
+}
+
+// ### Get the subgraph representing this derived table and its dependencies.
+//
+// GET /derived_table/graph/view/{view} -> DependencyGraph
+func (l *LookerSDK) GraphDerivedTablesForView(request RequestGraphDerivedTablesForView,
+    options *rtl.ApiSettings) (DependencyGraph, error) {
+    request.View = url.PathEscape(request.View)
+    var result DependencyGraph
+    err := l.session.Do(&result, "GET", "/3.1", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
+    return result, err
+
+}
+
+  // endregion DerivedTable: View Derived Table graphs
+
   // region Folder: Manage Folders
 
 // Search for folders by creator id, parent id, name, etc
@@ -2942,18 +2970,6 @@ func (l *LookerSDK) RunLook(request RequestRunLook,
   // endregion Look: Run and Manage Looks
 
   // region LookmlModel: Manage LookML Models
-
-// ### Discover information about derived tables
-//
-// GET /derived_table/graph/model/{model} -> DependencyGraph
-func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTablesForModel,
-    options *rtl.ApiSettings) (DependencyGraph, error) {
-    request.Model = url.PathEscape(request.Model)
-    var result DependencyGraph
-    err := l.session.Do(&result, "GET", "/3.1", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
-    return result, err
-
-}
 
 // ### Get information about all lookml models.
 //

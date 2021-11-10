@@ -25,7 +25,7 @@
  */
 
 /**
- * 298 API models: 221 Spec, 0 Request, 57 Write, 20 Enum
+ * 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
  */
 
 
@@ -694,7 +694,7 @@ public struct BoardItem: SDKModel {
         case id
         case image_url
         case location
-        case look_id
+        case _look_id = "look_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case order
         case title
@@ -776,10 +776,14 @@ public struct BoardItem: SDKModel {
      */
     public var location: String?
 
+    private var _look_id: AnyString?
     /**
      * Look to base this item on
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -810,7 +814,7 @@ public struct BoardItem: SDKModel {
      */
     public var view_count: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
         self.can = can
         self.content_created_by = content_created_by
         self.content_favorite_id = content_favorite_id
@@ -826,7 +830,7 @@ public struct BoardItem: SDKModel {
         self.id = id
         self.image_url = image_url
         self.location = location
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.title = title
@@ -1186,6 +1190,17 @@ public struct ConnectionFeatures: SDKModel {
 }
 
 public struct ContentFavorite: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case id
+        case user_id
+        case content_metadata_id
+        case _look_id = "look_id"
+        case dashboard_id
+        case look
+        case dashboard
+        case board_id
+    }
     /**
      * Unique Id (read-only)
      */
@@ -1201,10 +1216,14 @@ public struct ContentFavorite: SDKModel {
      */
     public var content_metadata_id: Int64?
 
+    private var _look_id: AnyString?
     /**
      * Id of a look (read-only)
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Id of a dashboard (read-only)
@@ -1220,11 +1239,11 @@ public struct ContentFavorite: SDKModel {
      */
     public var board_id: Int64?
 
-    public init(id: Int64? = nil, user_id: Int64? = nil, content_metadata_id: Int64? = nil, look_id: Int64? = nil, dashboard_id: Int64? = nil, look: LookBasic? = nil, dashboard: DashboardBase? = nil, board_id: Int64? = nil) {
+    public init(id: Int64? = nil, user_id: Int64? = nil, content_metadata_id: Int64? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, look: LookBasic? = nil, dashboard: DashboardBase? = nil, board_id: Int64? = nil) {
         self.id = id
         self.user_id = user_id
         self.content_metadata_id = content_metadata_id
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self.dashboard_id = dashboard_id
         self.look = look
         self.dashboard = dashboard
@@ -1241,7 +1260,7 @@ public struct ContentMeta: SDKModel {
         case name
         case parent_id
         case _dashboard_id = "dashboard_id"
-        case look_id
+        case _look_id = "look_id"
         case _folder_id = "folder_id"
         case content_type
         case inherits
@@ -1277,10 +1296,14 @@ public struct ContentMeta: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
+    private var _look_id: AnyString?
     /**
      * Id of associated look when content_type is "look" (read-only)
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _folder_id: AnyString?
     /**
@@ -1311,13 +1334,13 @@ public struct ContentMeta: SDKModel {
      */
     public var slug: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, parent_id: Int64? = nil, dashboard_id: String? = nil, look_id: Int64? = nil, folder_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: Int64? = nil, slug: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, parent_id: Int64? = nil, dashboard_id: String? = nil, look_id: String? = nil, folder_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: Int64? = nil, slug: String? = nil) {
         self.can = can
         self.id = id
         self.name = name
         self.parent_id = parent_id
         self._dashboard_id = dashboard_id.map(AnyString.init)
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._folder_id = folder_id.map(AnyString.init)
         self.content_type = content_type
         self.inherits = inherits
@@ -1800,10 +1823,21 @@ public struct ContentValidationFolder: SDKModel {
 }
 
 public struct ContentValidationLook: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case title
+        case short_url
+        case folder
+    }
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Look Title
@@ -1817,8 +1851,8 @@ public struct ContentValidationLook: SDKModel {
 
     public var folder: ContentValidationFolder?
 
-    public init(id: Int64? = nil, title: String? = nil, short_url: String? = nil, folder: ContentValidationFolder? = nil) {
-        self.id = id
+    public init(id: String? = nil, title: String? = nil, short_url: String? = nil, folder: ContentValidationFolder? = nil) {
+        self._id = id.map(AnyString.init)
         self.title = title
         self.short_url = short_url
         self.folder = folder
@@ -1892,24 +1926,34 @@ public struct ContentValidationLookMLDashboardElement: SDKModel {
 }
 
 public struct ContentValidationScheduledPlan: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case name
+        case _look_id = "look_id"
+        case id
+    }
     /**
      * Name of this scheduled plan
      */
     public var name: String?
 
+    private var _look_id: AnyString?
     /**
      * Id of a look
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Unique Id (read-only)
      */
     public var id: Int64?
 
-    public init(name: String? = nil, look_id: Int64? = nil, id: Int64? = nil) {
+    public init(name: String? = nil, look_id: String? = nil, id: Int64? = nil) {
         self.name = name
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self.id = id
     }
 
@@ -1975,6 +2019,21 @@ public struct ContentValidatorError: SDKModel {
 }
 
 public struct ContentView: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case _look_id = "look_id"
+        case dashboard_id
+        case title
+        case content_metadata_id
+        case user_id
+        case group_id
+        case view_count
+        case favorite_count
+        case last_viewed_at
+        case start_of_week_date
+    }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
@@ -1985,10 +2044,14 @@ public struct ContentView: SDKModel {
      */
     public var id: Int64?
 
+    private var _look_id: AnyString?
     /**
      * Id of viewed Look (read-only)
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Id of the viewed Dashboard (read-only)
@@ -2035,10 +2098,10 @@ public struct ContentView: SDKModel {
      */
     public var start_of_week_date: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, look_id: Int64? = nil, dashboard_id: Int64? = nil, title: String? = nil, content_metadata_id: Int64? = nil, user_id: Int64? = nil, group_id: Int64? = nil, view_count: Int64? = nil, favorite_count: Int64? = nil, last_viewed_at: String? = nil, start_of_week_date: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, title: String? = nil, content_metadata_id: Int64? = nil, user_id: Int64? = nil, group_id: Int64? = nil, view_count: Int64? = nil, favorite_count: Int64? = nil, last_viewed_at: String? = nil, start_of_week_date: String? = nil) {
         self.can = can
         self.id = id
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self.dashboard_id = dashboard_id
         self.title = title
         self.content_metadata_id = content_metadata_id
@@ -2134,6 +2197,75 @@ public struct CreateCostEstimate: SDKModel {
 
     public init(sql: String? = nil) {
         self.sql = sql
+    }
+
+}
+
+public struct CreateCredentialsApi3: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case id
+        case _client_id = "client_id"
+        case created_at
+        case is_disabled
+        case type
+        case client_secret
+        case url
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64?
+
+    private var _client_id: AnyString?
+    /**
+     * API key client_id (read-only)
+     */
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Timestamp for the creation of this credential (read-only)
+     */
+    public var created_at: String?
+
+    /**
+     * Has this credential been disabled? (read-only)
+     */
+    public var is_disabled: Bool?
+
+    /**
+     * Short name for the type of this kind of credential (read-only)
+     */
+    public var type: String?
+
+    /**
+     * API key client_secret (read-only)
+     */
+    public var client_secret: String?
+
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String?
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, client_secret: String? = nil, url: String? = nil) {
+        self.can = can
+        self.id = id
+        self._client_id = client_id.map(AnyString.init)
+        self.created_at = created_at
+        self.is_disabled = is_disabled
+        self.type = type
+        self.client_secret = client_secret
+        self.url = url
     }
 
 }
@@ -2409,7 +2541,7 @@ public struct CreateQueryTask: SDKModel {
         case result_format
         case source
         case deferred
-        case look_id
+        case _look_id = "look_id"
         case _dashboard_id = "dashboard_id"
     }
     /**
@@ -2437,10 +2569,14 @@ public struct CreateQueryTask: SDKModel {
      */
     public var deferred: Bool?
 
+    private var _look_id: AnyString?
     /**
      * Id of look associated with query.
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _dashboard_id: AnyString?
     /**
@@ -2451,25 +2587,22 @@ public struct CreateQueryTask: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.can = can
         self.query_id = query_id
         self.result_format = result_format
         self.source = source
         self.deferred = deferred
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
-    public init(can: StringDictionary<Bool>? = nil, _ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, _ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.init(can: can, query_id: query_id, result_format: result_format, source: source, deferred: deferred, look_id: look_id, dashboard_id: dashboard_id)
     }
 
 }
 
-/**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- */
 public struct CredentialsApi3: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -3299,7 +3432,7 @@ public struct Dashboard: SDKModel {
     public var preferred_viewer: String?
 
     /**
-     * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+     * Enables alerts to keep in sync with dashboard filter changes
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
 
@@ -5325,6 +5458,48 @@ public struct EmbedParams: SDKModel {
 
 }
 
+public struct EmbedSecret: SDKModel {
+    /**
+     * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+     */
+    public var algorithm: String?
+
+    /**
+     * When secret was created (read-only)
+     */
+    public var created_at: String?
+
+    /**
+     * Is this secret currently enabled
+     */
+    public var enabled: Bool?
+
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64?
+
+    /**
+     * Secret for use with SSO embedding (read-only)
+     */
+    public var secret: String?
+
+    /**
+     * Id of user who created this secret (read-only)
+     */
+    public var user_id: Int64?
+
+    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: Int64? = nil, secret: String? = nil, user_id: Int64? = nil) {
+        self.algorithm = algorithm
+        self.created_at = created_at
+        self.enabled = enabled
+        self.id = id
+        self.secret = secret
+        self.user_id = user_id
+    }
+
+}
+
 public struct EmbedSsoParams: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -6349,7 +6524,7 @@ public struct HomepageItem: SDKModel {
         case id
         case image_url
         case location
-        case look_id
+        case _look_id = "look_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case order
         case section_fetch_time
@@ -6446,10 +6621,14 @@ public struct HomepageItem: SDKModel {
      */
     public var location: String?
 
+    private var _look_id: AnyString?
     /**
      * Look to base this item on
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -6505,7 +6684,7 @@ public struct HomepageItem: SDKModel {
      */
     public var view_count: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, homepage_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, section_fetch_time: Float? = nil, title: String? = nil, url: String? = nil, use_custom_description: Bool? = nil, use_custom_image: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, homepage_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, section_fetch_time: Float? = nil, title: String? = nil, url: String? = nil, use_custom_description: Bool? = nil, use_custom_image: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, view_count: Int64? = nil) {
         self.can = can
         self.content_created_by = content_created_by
         self.content_favorite_id = content_favorite_id
@@ -6523,7 +6702,7 @@ public struct HomepageItem: SDKModel {
         self.id = id
         self.image_url = image_url
         self.location = location
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
         self.section_fetch_time = section_fetch_time
@@ -7782,7 +7961,7 @@ public struct Look: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case can
         case content_metadata_id
-        case id
+        case _id = "id"
         case title
         case user_id
         case content_favorite_id
@@ -7821,10 +8000,14 @@ public struct Look: SDKModel {
      */
     public var content_metadata_id: Int64?
 
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Look Title
@@ -7959,10 +8142,10 @@ public struct Look: SDKModel {
      */
     public var view_count: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: Int64? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil) {
         self.can = can
         self.content_metadata_id = content_metadata_id
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.title = title
         self.user_id = user_id
         self.content_favorite_id = content_favorite_id
@@ -9244,7 +9427,7 @@ public struct LookWithDashboards: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case can
         case content_metadata_id
-        case id
+        case _id = "id"
         case title
         case user_id
         case content_favorite_id
@@ -9284,10 +9467,14 @@ public struct LookWithDashboards: SDKModel {
      */
     public var content_metadata_id: Int64?
 
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Look Title
@@ -9427,10 +9614,10 @@ public struct LookWithDashboards: SDKModel {
      */
     public var dashboards: [DashboardBase]?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: Int64? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
         self.can = can
         self.content_metadata_id = content_metadata_id
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.title = title
         self.user_id = user_id
         self.content_favorite_id = content_favorite_id
@@ -9468,7 +9655,7 @@ public struct LookWithQuery: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case can
         case content_metadata_id
-        case id
+        case _id = "id"
         case title
         case user_id
         case content_favorite_id
@@ -9509,10 +9696,14 @@ public struct LookWithQuery: SDKModel {
      */
     public var content_metadata_id: Int64?
 
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64?
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Look Title
@@ -9654,10 +9845,10 @@ public struct LookWithQuery: SDKModel {
      */
     public var url: String?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: Int64? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
         self.can = can
         self.content_metadata_id = content_metadata_id
-        self.id = id
+        self._id = id.map(AnyString.init)
         self.title = title
         self.user_id = user_id
         self.content_favorite_id = content_favorite_id
@@ -11243,7 +11434,7 @@ public struct QueryTask: SDKModel {
         case runtime
         case rebuild_pdts
         case result_source
-        case look_id
+        case _look_id = "look_id"
         case _dashboard_id = "dashboard_id"
         case result_format
     }
@@ -11328,10 +11519,14 @@ public struct QueryTask: SDKModel {
      */
     public var result_source: String?
 
+    private var _look_id: AnyString?
     /**
      * Id of look associated with query.
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _dashboard_id: AnyString?
     /**
@@ -11347,7 +11542,7 @@ public struct QueryTask: SDKModel {
      */
     public var result_format: String?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: Int64? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: Int64? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: Int64? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: String? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self.query_id = query_id
@@ -11364,7 +11559,7 @@ public struct QueryTask: SDKModel {
         self.runtime = runtime
         self.rebuild_pdts = rebuild_pdts
         self.result_source = result_source
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self.result_format = result_format
     }
@@ -11382,7 +11577,7 @@ public struct RenderTask: SDKModel {
         case finalized_at
         case height
         case _id = "id"
-        case look_id
+        case _look_id = "look_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case query_id
         case _dashboard_element_id = "dashboard_element_id"
@@ -11439,10 +11634,14 @@ public struct RenderTask: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
+    private var _look_id: AnyString?
     /**
      * Id of look to render (read-only)
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -11507,7 +11706,7 @@ public struct RenderTask: SDKModel {
      */
     public var width: Int64?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, dashboard_filters: String? = nil, dashboard_id: Int64? = nil, dashboard_style: String? = nil, finalized_at: String? = nil, height: Int64? = nil, id: String? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, query_id: Int64? = nil, dashboard_element_id: String? = nil, query_runtime: Double? = nil, render_runtime: Double? = nil, result_format: String? = nil, runtime: Double? = nil, status: String? = nil, status_detail: String? = nil, user_id: Int64? = nil, width: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, dashboard_filters: String? = nil, dashboard_id: Int64? = nil, dashboard_style: String? = nil, finalized_at: String? = nil, height: Int64? = nil, id: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, query_id: Int64? = nil, dashboard_element_id: String? = nil, query_runtime: Double? = nil, render_runtime: Double? = nil, result_format: String? = nil, runtime: Double? = nil, status: String? = nil, status_detail: String? = nil, user_id: Int64? = nil, width: Int64? = nil) {
         self.can = can
         self.created_at = created_at
         self.dashboard_filters = dashboard_filters
@@ -11516,7 +11715,7 @@ public struct RenderTask: SDKModel {
         self.finalized_at = finalized_at
         self.height = height
         self._id = id.map(AnyString.init)
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.query_id = query_id
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
@@ -12412,7 +12611,7 @@ public struct ScheduledPlan: SDKModel {
         case user_id
         case run_as_recipient
         case enabled
-        case look_id
+        case _look_id = "look_id"
         case dashboard_id
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case filters_string
@@ -12463,10 +12662,14 @@ public struct ScheduledPlan: SDKModel {
      */
     public var enabled: Bool?
 
+    private var _look_id: AnyString?
     /**
      * Id of a look
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Id of a dashboard
@@ -12618,12 +12821,12 @@ public struct ScheduledPlan: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: Int64? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, id: Int64? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, id: Int64? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
         self.name = name
         self.user_id = user_id
         self.run_as_recipient = run_as_recipient
         self.enabled = enabled
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self.dashboard_id = dashboard_id
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string
@@ -14799,7 +15002,7 @@ public struct WriteBoardItem: SDKModel {
         case custom_url
         case dashboard_id
         case board_section_id
-        case look_id
+        case _look_id = "look_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case order
     }
@@ -14828,10 +15031,14 @@ public struct WriteBoardItem: SDKModel {
      */
     public var board_section_id: Int64?
 
+    private var _look_id: AnyString?
     /**
      * Look to base this item on
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _lookml_dashboard_id: AnyString?
     /**
@@ -14847,13 +15054,13 @@ public struct WriteBoardItem: SDKModel {
      */
     public var order: Int64?
 
-    public init(custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: Int64? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
+    public init(custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
         self.custom_description = custom_description
         self.custom_title = custom_title
         self.custom_url = custom_url
         self.dashboard_id = dashboard_id
         self.board_section_id = board_section_id
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.order = order
     }
@@ -15154,7 +15361,7 @@ public struct WriteCreateQueryTask: SDKModel {
         case result_format
         case source
         case deferred
-        case look_id
+        case _look_id = "look_id"
         case _dashboard_id = "dashboard_id"
     }
     /**
@@ -15177,10 +15384,14 @@ public struct WriteCreateQueryTask: SDKModel {
      */
     public var deferred: Bool?
 
+    private var _look_id: AnyString?
     /**
      * Id of look associated with query.
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     private var _dashboard_id: AnyString?
     /**
@@ -15191,16 +15402,16 @@ public struct WriteCreateQueryTask: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
-    public init(query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
+    public init(query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.query_id = query_id
         self.result_format = result_format
         self.source = source
         self.deferred = deferred
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
-    public init(_ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: Int64? = nil, dashboard_id: String? = nil) {
+    public init(_ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.init(query_id: query_id, result_format: result_format, source: source, deferred: deferred, look_id: look_id, dashboard_id: dashboard_id)
     }
 
@@ -15301,7 +15512,7 @@ public struct WriteDashboard: SDKModel {
     public var preferred_viewer: String?
 
     /**
-     * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+     * Enables alerts to keep in sync with dashboard filter changes
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
 
@@ -16105,6 +16316,28 @@ public struct WriteDBConnectionOverride: SDKModel {
         self.schema = schema
         self.jdbc_additional_params = jdbc_additional_params
         self.after_connect_statements = after_connect_statements
+    }
+
+}
+
+/**
+ * Dynamic writeable type for EmbedSecret removes:
+ * created_at, id, secret, user_id
+ */
+public struct WriteEmbedSecret: SDKModel {
+    /**
+     * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+     */
+    public var algorithm: String?
+
+    /**
+     * Is this secret currently enabled
+     */
+    public var enabled: Bool?
+
+    public init(algorithm: String? = nil, enabled: Bool? = nil) {
+        self.algorithm = algorithm
+        self.enabled = enabled
     }
 
 }
@@ -17573,7 +17806,7 @@ public struct WriteScheduledPlan: SDKModel {
         case user_id
         case run_as_recipient
         case enabled
-        case look_id
+        case _look_id = "look_id"
         case dashboard_id
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case filters_string
@@ -17616,10 +17849,14 @@ public struct WriteScheduledPlan: SDKModel {
      */
     public var enabled: Bool?
 
+    private var _look_id: AnyString?
     /**
      * Id of a look
      */
-    public var look_id: Int64?
+    public var look_id: String? {
+        get { _look_id?.value }
+        set { _look_id = newValue.map(AnyString.init) }
+    }
 
     /**
      * Id of a dashboard
@@ -17734,12 +17971,12 @@ public struct WriteScheduledPlan: SDKModel {
      */
     public var inline_table_width: Int64?
 
-    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: Int64? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil) {
+    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil) {
         self.name = name
         self.user_id = user_id
         self.run_as_recipient = run_as_recipient
         self.enabled = enabled
-        self.look_id = look_id
+        self._look_id = look_id.map(AnyString.init)
         self.dashboard_id = dashboard_id
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self.filters_string = filters_string

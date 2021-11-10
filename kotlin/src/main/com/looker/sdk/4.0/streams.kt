@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 
@@ -313,6 +313,37 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     //endregion ApiAuth: API Authentication
 
     //region Auth: Manage User Authentication Configuration
+
+
+    /**
+     * ### Create an embed secret using the specified information.
+     *
+     * The value of the `secret` field will be set by Looker and returned.
+     *
+     * @param {WriteEmbedSecret} body
+     *
+     * POST /embed_config/secrets -> ByteArray
+     */
+    @JvmOverloads fun create_embed_secret(
+        body: WriteEmbedSecret? = null
+    ) : SDKResponse {
+            return this.post<ByteArray>("/embed_config/secrets", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete an embed secret.
+     *
+     * @param {Long} embed_secret_id Id of Embed Secret
+     *
+     * DELETE /embed_config/secrets/{embed_secret_id} -> ByteArray
+     */
+    fun delete_embed_secret(
+        embed_secret_id: Long
+    ) : SDKResponse {
+        val path_embed_secret_id = encodeParam(embed_secret_id)
+            return this.delete<ByteArray>("/embed_config/secrets/${path_embed_secret_id}", mapOf())
+    }
 
 
     /**
@@ -3667,6 +3698,52 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     //endregion Datagroup: Manage Datagroups
 
+    //region DerivedTable: View Derived Table graphs
+
+
+    /**
+     * ### Discover information about derived tables
+     *
+     * @param {String} model The name of the Lookml model.
+     * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
+     * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
+     *
+     * GET /derived_table/graph/model/{model} -> ByteArray
+     */
+    @JvmOverloads fun graph_derived_tables_for_model(
+        model: String,
+        format: String? = null,
+        color: String? = null
+    ) : SDKResponse {
+        val path_model = encodeParam(model)
+            return this.get<ByteArray>("/derived_table/graph/model/${path_model}", 
+                mapOf("format" to format,
+                     "color" to color))
+    }
+
+
+    /**
+     * ### Get the subgraph representing this derived table and its dependencies.
+     *
+     * @param {String} view The derived table's view name.
+     * @param {String} models The models where this derived table is defined.
+     * @param {String} workspace The model directory to look in, either `dev` or `production`.
+     *
+     * GET /derived_table/graph/view/{view} -> ByteArray
+     */
+    @JvmOverloads fun graph_derived_tables_for_view(
+        view: String,
+        models: String? = null,
+        workspace: String? = null
+    ) : SDKResponse {
+        val path_view = encodeParam(view)
+            return this.get<ByteArray>("/derived_table/graph/view/${path_view}", 
+                mapOf("models" to models,
+                     "workspace" to workspace))
+    }
+
+    //endregion DerivedTable: View Derived Table graphs
+
     //region Folder: Manage Folders
 
 
@@ -4747,13 +4824,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns detailed information about a Look and its associated Query.
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {String} fields Requested fields.
      *
      * GET /looks/{look_id} -> ByteArray
      */
     @JvmOverloads fun look(
-        look_id: Long,
+        look_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4784,14 +4861,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
      * database and destroyed. There is no "undo" for `delete_look()`.
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {WriteLookWithQuery} body
      * @param {String} fields Requested fields.
      *
      * PATCH /looks/{look_id} -> ByteArray
      */
     @JvmOverloads fun update_look(
-        look_id: Long,
+        look_id: String,
         body: WriteLookWithQuery,
         fields: String? = null
     ) : SDKResponse {
@@ -4810,12 +4887,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      *
      * DELETE /looks/{look_id} -> ByteArray
      */
     fun delete_look(
-        look_id: Long
+        look_id: String
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
             return this.delete<ByteArray>("/looks/${path_look_id}", mapOf())
@@ -4842,7 +4919,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {String} result_format Format of result
      * @param {Long} limit Row limit (may override the limit in the saved query).
      * @param {Boolean} apply_formatting Apply model-specified formatting to each result.
@@ -4862,7 +4939,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * **Note**: Binary content may be returned by this method.
      */
     @JvmOverloads fun run_look(
-        look_id: Long,
+        look_id: String,
         result_format: String,
         limit: Long? = null,
         apply_formatting: Boolean? = null,
@@ -4904,13 +4981,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
-     * @param {Long} look_id Look id to copy.
+     * @param {String} look_id Look id to copy.
      * @param {String} folder_id Folder id to copy to.
      *
      * POST /looks/{look_id}/copy -> ByteArray
      */
     @JvmOverloads fun copy_look(
-        look_id: Long,
+        look_id: String,
         folder_id: String? = null
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4927,13 +5004,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * `look_id` and `folder_id` are required.
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
-     * @param {Long} look_id Look id to move.
+     * @param {String} look_id Look id to move.
      * @param {String} folder_id Folder id to move to.
      *
      * PATCH /looks/{look_id}/move -> ByteArray
      */
     fun move_look(
-        look_id: Long,
+        look_id: String,
         folder_id: String
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4944,27 +5021,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     //endregion Look: Run and Manage Looks
 
     //region LookmlModel: Manage LookML Models
-
-
-    /**
-     * ### Discover information about derived tables
-     *
-     * @param {String} model The name of the Lookml model.
-     * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
-     * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
-     *
-     * GET /derived_table/graph/model/{model} -> ByteArray
-     */
-    @JvmOverloads fun graph_derived_tables_for_model(
-        model: String,
-        format: String? = null,
-        color: String? = null
-    ) : SDKResponse {
-        val path_model = encodeParam(model)
-            return this.get<ByteArray>("/derived_table/graph/model/${path_model}", 
-                mapOf("format" to format,
-                     "color" to color))
-    }
 
 
     /**
@@ -6282,6 +6338,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
+     * @param {String} source Specifies the source of this call.
      *
      * GET /queries/{query_id}/run/{result_format} -> ByteArray
      *
@@ -6301,7 +6358,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         cache_only: Boolean? = null,
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
-        server_table_calcs: Boolean? = null
+        server_table_calcs: Boolean? = null,
+        source: String? = null
     ) : SDKResponse {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
@@ -6317,7 +6375,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                      "cache_only" to cache_only,
                      "path_prefix" to path_prefix,
                      "rebuild_pdts" to rebuild_pdts,
-                     "server_table_calcs" to server_table_calcs))
+                     "server_table_calcs" to server_table_calcs,
+                     "source" to source))
     }
 
 
@@ -8860,19 +8919,17 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {Long} user_id id of user
-     * @param {CredentialsApi3} body
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_api3 -> ByteArray
      */
     @JvmOverloads fun create_user_credentials_api3(
         user_id: Long,
-        body: CredentialsApi3? = null,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.post<ByteArray>("/users/${path_user_id}/credentials_api3", 
-                mapOf("fields" to fields), body)
+                mapOf("fields" to fields))
     }
 
 

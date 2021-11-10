@@ -25,7 +25,7 @@
  */
 
 /**
- * 298 API models: 221 Spec, 0 Request, 57 Write, 20 Enum
+ * 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
  */
 
 
@@ -307,7 +307,7 @@ data class BoardItem (
     var id: Long? = null,
     var image_url: String? = null,
     var location: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null,
     var title: String? = null,
@@ -471,7 +471,7 @@ data class ContentFavorite (
     var id: Long? = null,
     var user_id: Long? = null,
     var content_metadata_id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var look: LookBasic? = null,
     var dashboard: DashboardBase? = null,
@@ -497,7 +497,7 @@ data class ContentMeta (
     var name: String? = null,
     var parent_id: Long? = null,
     var dashboard_id: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var folder_id: String? = null,
     var content_type: String? = null,
     var inherits: Boolean? = null,
@@ -660,7 +660,7 @@ data class ContentValidationFolder (
  * @property folder
  */
 data class ContentValidationLook (
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var short_url: String? = null,
     var folder: ContentValidationFolder? = null
@@ -693,7 +693,7 @@ data class ContentValidationLookMLDashboardElement (
  */
 data class ContentValidationScheduledPlan (
     var name: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var id: Long? = null
 ) : Serializable
 
@@ -739,7 +739,7 @@ data class ContentValidatorError (
 data class ContentView (
     var can: Map<String,Boolean>? = null,
     var id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var title: String? = null,
     var content_metadata_id: Long? = null,
@@ -784,6 +784,27 @@ data class CostEstimate (
  */
 data class CreateCostEstimate (
     var sql: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property client_id API key client_id (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property client_secret API key client_secret (read-only)
+ * @property url Link to get this item (read-only)
+ */
+data class CreateCredentialsApi3 (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var client_id: String? = null,
+    var created_at: String? = null,
+    var is_disabled: Boolean? = null,
+    var type: String? = null,
+    var client_secret: String? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -887,13 +908,11 @@ data class CreateQueryTask (
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null
 ) : Serializable
 
 /**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property client_id API key client_id (read-only)
@@ -1145,7 +1164,7 @@ data class CustomWelcomeEmail (
  * @property user_id Id of User (read-only)
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes
  * @property background_color Background color
  * @property created_at Time that the Dashboard was created. (read-only)
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1854,6 +1873,23 @@ data class EmbedParams (
 ) : Serializable
 
 /**
+ * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+ * @property created_at When secret was created (read-only)
+ * @property enabled Is this secret currently enabled
+ * @property id Unique Id (read-only)
+ * @property secret Secret for use with SSO embedding (read-only)
+ * @property user_id Id of user who created this secret (read-only)
+ */
+data class EmbedSecret (
+    var algorithm: String? = null,
+    var created_at: String? = null,
+    var enabled: Boolean? = null,
+    var id: Long? = null,
+    var secret: String? = null,
+    var user_id: Long? = null
+) : Serializable
+
+/**
  * @property target_url The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
  * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
@@ -2230,7 +2266,7 @@ data class HomepageItem (
     var id: Long? = null,
     var image_url: String? = null,
     var location: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null,
     var section_fetch_time: Float? = null,
@@ -2725,7 +2761,7 @@ data class LocalizationSettings (
 data class Look (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -3257,7 +3293,7 @@ data class LookModel (
 data class LookWithDashboards (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -3325,7 +3361,7 @@ data class LookWithDashboards (
 data class LookWithQuery (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -3963,7 +3999,7 @@ data class QueryTask (
     var runtime: Float? = null,
     var rebuild_pdts: Boolean? = null,
     var result_source: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null,
     var result_format: String? = null
 ) : Serializable
@@ -3999,7 +4035,7 @@ data class RenderTask (
     var finalized_at: String? = null,
     var height: Long? = null,
     var id: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var query_id: Long? = null,
     var dashboard_element_id: String? = null,
@@ -4377,7 +4413,7 @@ data class ScheduledPlan (
     var user_id: Long? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,
@@ -5250,7 +5286,7 @@ data class WriteBoardItem (
     var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var board_section_id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null
 ) : Serializable
@@ -5383,7 +5419,7 @@ data class WriteCreateQueryTask (
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null
 ) : Serializable
 
@@ -5412,7 +5448,7 @@ data class WriteCredentialsEmail (
  * @property title Dashboard Title
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
@@ -5693,6 +5729,18 @@ data class WriteDBConnectionOverride (
     var schema: String? = null,
     var jdbc_additional_params: String? = null,
     var after_connect_statements: String? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for EmbedSecret removes:
+ * created_at, id, secret, user_id
+ *
+ * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+ * @property enabled Is this secret currently enabled
+ */
+data class WriteEmbedSecret (
+    var algorithm: String? = null,
+    var enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -6300,7 +6348,7 @@ data class WriteScheduledPlan (
     var user_id: Long? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,

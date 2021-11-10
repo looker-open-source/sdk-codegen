@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-352 API models: 221 Spec, 54 Request, 57 Write, 20 Enum
+356 API models: 223 Spec, 55 Request, 58 Write, 20 Enum
 */
 
 
@@ -192,7 +192,7 @@ type BoardItem struct {
   Id                *int64           `json:"id,omitempty"`                   // Unique Id
   ImageUrl          *string          `json:"image_url,omitempty"`            // The actual image_url for display
   Location          *string          `json:"location,omitempty"`             // The container folder name of the content
-  LookId            *int64           `json:"look_id,omitempty"`              // Look to base this item on
+  LookId            *string          `json:"look_id,omitempty"`              // Look to base this item on
   LookmlDashboardId *string          `json:"lookml_dashboard_id,omitempty"`  // LookML Dashboard to base this item on
   Order             *int64           `json:"order,omitempty"`                // An arbitrary integer representing the sort order within the section
   Title             *string          `json:"title,omitempty"`                // The actual title for display
@@ -291,7 +291,7 @@ type ContentFavorite struct {
   Id                *int64         `json:"id,omitempty"`                   // Unique Id
   UserId            *int64         `json:"user_id,omitempty"`              // User Id which owns this ContentFavorite
   ContentMetadataId *int64         `json:"content_metadata_id,omitempty"`  // Content Metadata Id associated with this ContentFavorite
-  LookId            *int64         `json:"look_id,omitempty"`              // Id of a look
+  LookId            *string        `json:"look_id,omitempty"`              // Id of a look
   DashboardId       *int64         `json:"dashboard_id,omitempty"`         // Id of a dashboard
   Look              *LookBasic     `json:"look,omitempty"`
   Dashboard         *DashboardBase `json:"dashboard,omitempty"`
@@ -305,7 +305,7 @@ type ContentMeta struct {
   Name         *string          `json:"name,omitempty"`           // Name or title of underlying content
   ParentId     *int64           `json:"parent_id,omitempty"`      // Id of Parent Content
   DashboardId  *string          `json:"dashboard_id,omitempty"`   // Id of associated dashboard when content_type is "dashboard"
-  LookId       *int64           `json:"look_id,omitempty"`        // Id of associated look when content_type is "look"
+  LookId       *string          `json:"look_id,omitempty"`        // Id of associated look when content_type is "look"
   FolderId     *string          `json:"folder_id,omitempty"`      // Id of associated folder when content_type is "space"
   ContentType  *string          `json:"content_type,omitempty"`   // Content Type ("dashboard", "look", or "folder")
   Inherits     *bool            `json:"inherits,omitempty"`       // Whether content inherits its access levels from parent
@@ -400,7 +400,7 @@ type ContentValidationFolder struct {
 
 
 type ContentValidationLook struct {
-  Id       *int64                   `json:"id,omitempty"`         // Unique Id
+  Id       *string                  `json:"id,omitempty"`         // Unique Id
   Title    *string                  `json:"title,omitempty"`      // Look Title
   ShortUrl *string                  `json:"short_url,omitempty"`  // Short Url
   Folder   *ContentValidationFolder `json:"folder,omitempty"`
@@ -422,7 +422,7 @@ type ContentValidationLookMLDashboardElement struct {
 
 type ContentValidationScheduledPlan struct {
   Name   *string `json:"name,omitempty"`     // Name of this scheduled plan
-  LookId *int64  `json:"look_id,omitempty"`  // Id of a look
+  LookId *string `json:"look_id,omitempty"`  // Id of a look
   Id     *int64  `json:"id,omitempty"`       // Unique Id
 }
 
@@ -444,7 +444,7 @@ type ContentValidatorError struct {
 type ContentView struct {
   Can               *map[string]bool `json:"can,omitempty"`                  // Operations the current user is able to perform on this object
   Id                *int64           `json:"id,omitempty"`                   // Unique Id
-  LookId            *int64           `json:"look_id,omitempty"`              // Id of viewed Look
+  LookId            *string          `json:"look_id,omitempty"`              // Id of viewed Look
   DashboardId       *int64           `json:"dashboard_id,omitempty"`         // Id of the viewed Dashboard
   Title             *string          `json:"title,omitempty"`                // Name or title of underlying content
   ContentMetadataId *int64           `json:"content_metadata_id,omitempty"`  // Content metadata id of the Look or Dashboard
@@ -475,6 +475,18 @@ type CostEstimate struct {
 // WARNING: no writeable properties found for POST, PUT, or PATCH
 type CreateCostEstimate struct {
   Sql *string `json:"sql,omitempty"`  // SQL statement to estimate
+}
+
+
+type CreateCredentialsApi3 struct {
+  Can          *map[string]bool `json:"can,omitempty"`            // Operations the current user is able to perform on this object
+  Id           *int64           `json:"id,omitempty"`             // Unique Id
+  ClientId     *string          `json:"client_id,omitempty"`      // API key client_id
+  CreatedAt    *string          `json:"created_at,omitempty"`     // Timestamp for the creation of this credential
+  IsDisabled   *bool            `json:"is_disabled,omitempty"`    // Has this credential been disabled?
+  Type         *string          `json:"type,omitempty"`           // Short name for the type of this kind of credential
+  ClientSecret *string          `json:"client_secret,omitempty"`  // API key client_secret
+  Url          *string          `json:"url,omitempty"`            // Link to get this item
 }
 
 
@@ -536,11 +548,11 @@ type CreateQueryTask struct {
   ResultFormat ResultFormat     `json:"result_format"`           // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
   Source       *string          `json:"source,omitempty"`        // Source of query task
   Deferred     *bool            `json:"deferred,omitempty"`      // Create the task but defer execution
-  LookId       *int64           `json:"look_id,omitempty"`       // Id of look associated with query.
+  LookId       *string          `json:"look_id,omitempty"`       // Id of look associated with query.
   DashboardId  *string          `json:"dashboard_id,omitempty"`  // Id of dashboard associated with query.
 }
 
-// WARNING: no writeable properties found for POST, PUT, or PATCH
+
 type CredentialsApi3 struct {
   Can        *map[string]bool `json:"can,omitempty"`          // Operations the current user is able to perform on this object
   Id         *int64           `json:"id,omitempty"`           // Unique Id
@@ -691,7 +703,7 @@ type Dashboard struct {
   UserId                              *int64               `json:"user_id,omitempty"`                                   // Id of User
   Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CreatedAt                           *time.Time           `json:"created_at,omitempty"`                                // Time that the Dashboard was created.
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1083,6 +1095,16 @@ type EmbedParams struct {
 }
 
 
+type EmbedSecret struct {
+  Algorithm *string `json:"algorithm,omitempty"`   // Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+  CreatedAt *string `json:"created_at,omitempty"`  // When secret was created
+  Enabled   *bool   `json:"enabled,omitempty"`     // Is this secret currently enabled
+  Id        *int64  `json:"id,omitempty"`          // Unique Id
+  Secret    *string `json:"secret,omitempty"`      // Secret for use with SSO embedding
+  UserId    *int64  `json:"user_id,omitempty"`     // Id of user who created this secret
+}
+
+
 type EmbedSsoParams struct {
   TargetUrl        string                  `json:"target_url"`                    // The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
   SessionLength    *int64                  `json:"session_length,omitempty"`      // Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
@@ -1288,7 +1310,7 @@ type HomepageItem struct {
   Id                    *int64           `json:"id,omitempty"`                        // Unique Id
   ImageUrl              *string          `json:"image_url,omitempty"`                 // The actual image_url for display
   Location              *string          `json:"location,omitempty"`                  // The container folder name of the content
-  LookId                *int64           `json:"look_id,omitempty"`                   // Look to base this item on
+  LookId                *string          `json:"look_id,omitempty"`                   // Look to base this item on
   LookmlDashboardId     *string          `json:"lookml_dashboard_id,omitempty"`       // LookML Dashboard to base this item on
   Order                 *int64           `json:"order,omitempty"`                     // An arbitrary integer representing the sort order within the section
   SectionFetchTime      *float32         `json:"section_fetch_time,omitempty"`        // Number of seconds it took to fetch the section this item is in
@@ -1560,7 +1582,7 @@ type LocalizationSettings struct {
 type Look struct {
   Can                      *map[string]bool `json:"can,omitempty"`                         // Operations the current user is able to perform on this object
   ContentMetadataId        *int64           `json:"content_metadata_id,omitempty"`         // Id of content metadata
-  Id                       *int64           `json:"id,omitempty"`                          // Unique Id
+  Id                       *string          `json:"id,omitempty"`                          // Unique Id
   Title                    *string          `json:"title,omitempty"`                       // Look Title
   UserId                   *int64           `json:"user_id,omitempty"`                     // User Id
   ContentFavoriteId        *int64           `json:"content_favorite_id,omitempty"`         // Content Favorite Id
@@ -1860,7 +1882,7 @@ type LookModel struct {
 type LookWithDashboards struct {
   Can                      *map[string]bool `json:"can,omitempty"`                         // Operations the current user is able to perform on this object
   ContentMetadataId        *int64           `json:"content_metadata_id,omitempty"`         // Id of content metadata
-  Id                       *int64           `json:"id,omitempty"`                          // Unique Id
+  Id                       *string          `json:"id,omitempty"`                          // Unique Id
   Title                    *string          `json:"title,omitempty"`                       // Look Title
   UserId                   *int64           `json:"user_id,omitempty"`                     // User Id
   ContentFavoriteId        *int64           `json:"content_favorite_id,omitempty"`         // Content Favorite Id
@@ -1895,7 +1917,7 @@ type LookWithDashboards struct {
 type LookWithQuery struct {
   Can                      *map[string]bool `json:"can,omitempty"`                         // Operations the current user is able to perform on this object
   ContentMetadataId        *int64           `json:"content_metadata_id,omitempty"`         // Id of content metadata
-  Id                       *int64           `json:"id,omitempty"`                          // Unique Id
+  Id                       *string          `json:"id,omitempty"`                          // Unique Id
   Title                    *string          `json:"title,omitempty"`                       // Look Title
   UserId                   *int64           `json:"user_id,omitempty"`                     // User Id
   ContentFavoriteId        *int64           `json:"content_favorite_id,omitempty"`         // Content Favorite Id
@@ -2276,7 +2298,7 @@ type QueryTask struct {
   Runtime          *float32         `json:"runtime,omitempty"`             // Runtime of prior queries.
   RebuildPdts      *bool            `json:"rebuild_pdts,omitempty"`        // Rebuild PDTS used in query.
   ResultSource     *string          `json:"result_source,omitempty"`       // Source of the results of the query.
-  LookId           *int64           `json:"look_id,omitempty"`             // Id of look associated with query.
+  LookId           *string          `json:"look_id,omitempty"`             // Id of look associated with query.
   DashboardId      *string          `json:"dashboard_id,omitempty"`        // Id of dashboard associated with query.
   ResultFormat     *string          `json:"result_format,omitempty"`       // The data format of the query results.
 }
@@ -2291,7 +2313,7 @@ type RenderTask struct {
   FinalizedAt        *string          `json:"finalized_at,omitempty"`          // Date/Time render task was completed
   Height             *int64           `json:"height,omitempty"`                // Output height in pixels. Flowed layouts may ignore this value.
   Id                 *string          `json:"id,omitempty"`                    // Id of this render task
-  LookId             *int64           `json:"look_id,omitempty"`               // Id of look to render
+  LookId             *string          `json:"look_id,omitempty"`               // Id of look to render
   LookmlDashboardId  *string          `json:"lookml_dashboard_id,omitempty"`   // Id of lookml dashboard to render
   QueryId            *int64           `json:"query_id,omitempty"`              // Id of query to render
   DashboardElementId *string          `json:"dashboard_element_id,omitempty"`  // Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
@@ -2521,6 +2543,13 @@ type RequestGraphDerivedTablesForModel struct {
   Color  *string `json:"color,omitempty"`   // Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
 }
 
+// Dynamically generated request type for graph_derived_tables_for_view
+type RequestGraphDerivedTablesForView struct {
+  View      string  `json:"view"`                 // The derived table's view name.
+  Models    *string `json:"models,omitempty"`     // The models where this derived table is defined.
+  Workspace *string `json:"workspace,omitempty"`  // The model directory to look in, either `dev` or `production`.
+}
+
 // Dynamically generated request type for login
 type RequestLogin struct {
   ClientId     *string `json:"client_id,omitempty"`      // client_id part of API3 Key.
@@ -2571,7 +2600,7 @@ type RequestRunInlineQuery struct {
 
 // Dynamically generated request type for run_look
 type RequestRunLook struct {
-  LookId             int64   `json:"look_id"`                         // Id of look
+  LookId             string  `json:"look_id"`                         // Id of look
   ResultFormat       string  `json:"result_format"`                   // Format of result
   Limit              *int64  `json:"limit,omitempty"`                 // Row limit (may override the limit in the saved query).
   ApplyFormatting    *bool   `json:"apply_formatting,omitempty"`      // Apply model-specified formatting to each result.
@@ -2611,6 +2640,7 @@ type RequestRunQuery struct {
   PathPrefix         *string `json:"path_prefix,omitempty"`           // Prefix to use for drill links (url encoded).
   RebuildPdts        *bool   `json:"rebuild_pdts,omitempty"`          // Rebuild PDTS used in query.
   ServerTableCalcs   *bool   `json:"server_table_calcs,omitempty"`    // Perform table calculations on query results
+  Source             *string `json:"source,omitempty"`                // Specifies the source of this call.
 }
 
 // Dynamically generated request type for scheduled_plans_for_dashboard
@@ -3091,7 +3121,7 @@ type ScheduledPlan struct {
   UserId                   *int64                      `json:"user_id,omitempty"`                     // User Id which owns this scheduled plan
   RunAsRecipient           *bool                       `json:"run_as_recipient,omitempty"`            // Whether schedule is run as recipient (only applicable for email recipients)
   Enabled                  *bool                       `json:"enabled,omitempty"`                     // Whether the ScheduledPlan is enabled
-  LookId                   *int64                      `json:"look_id,omitempty"`                     // Id of a look
+  LookId                   *string                     `json:"look_id,omitempty"`                     // Id of a look
   DashboardId              *int64                      `json:"dashboard_id,omitempty"`                // Id of a dashboard
   LookmlDashboardId        *string                     `json:"lookml_dashboard_id,omitempty"`         // Id of a LookML dashboard
   FiltersString            *string                     `json:"filters_string,omitempty"`              // Query string to run look or dashboard with
@@ -3612,7 +3642,7 @@ type WriteBoardItem struct {
   CustomUrl         *string `json:"custom_url,omitempty"`           // Custom url entered by the user, if present
   DashboardId       *int64  `json:"dashboard_id,omitempty"`         // Dashboard to base this item on
   BoardSectionId    *int64  `json:"board_section_id,omitempty"`     // Associated Board Section
-  LookId            *int64  `json:"look_id,omitempty"`              // Look to base this item on
+  LookId            *string `json:"look_id,omitempty"`              // Look to base this item on
   LookmlDashboardId *string `json:"lookml_dashboard_id,omitempty"`  // LookML Dashboard to base this item on
   Order             *int64  `json:"order,omitempty"`                // An arbitrary integer representing the sort order within the section
 }
@@ -3687,7 +3717,7 @@ type WriteCreateQueryTask struct {
   ResultFormat ResultFormat `json:"result_format"`           // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
   Source       *string      `json:"source,omitempty"`        // Source of query task
   Deferred     *bool        `json:"deferred,omitempty"`      // Create the task but defer execution
-  LookId       *int64       `json:"look_id,omitempty"`       // Id of look associated with query.
+  LookId       *string      `json:"look_id,omitempty"`       // Id of look associated with query.
   DashboardId  *string      `json:"dashboard_id,omitempty"`  // Id of dashboard associated with query.
 }
 
@@ -3710,7 +3740,7 @@ type WriteDashboard struct {
   Title                               *string              `json:"title,omitempty"`                                     // Dashboard Title
   Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
@@ -3856,6 +3886,13 @@ type WriteDBConnectionOverride struct {
   Schema                 *string `json:"schema,omitempty"`                    // Scheme name
   JdbcAdditionalParams   *string `json:"jdbc_additional_params,omitempty"`    // Additional params to add to JDBC connection string
   AfterConnectStatements *string `json:"after_connect_statements,omitempty"`  // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+}
+
+// Dynamic writeable type for EmbedSecret removes:
+// created_at, id, secret, user_id
+type WriteEmbedSecret struct {
+  Algorithm *string `json:"algorithm,omitempty"`  // Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+  Enabled   *bool   `json:"enabled,omitempty"`    // Is this secret currently enabled
 }
 
 // Dynamic writeable type for ExternalOauthApplication removes:
@@ -4177,7 +4214,7 @@ type WriteScheduledPlan struct {
   UserId                   *int64                      `json:"user_id,omitempty"`                     // User Id which owns this scheduled plan
   RunAsRecipient           *bool                       `json:"run_as_recipient,omitempty"`            // Whether schedule is run as recipient (only applicable for email recipients)
   Enabled                  *bool                       `json:"enabled,omitempty"`                     // Whether the ScheduledPlan is enabled
-  LookId                   *int64                      `json:"look_id,omitempty"`                     // Id of a look
+  LookId                   *string                     `json:"look_id,omitempty"`                     // Id of a look
   DashboardId              *int64                      `json:"dashboard_id,omitempty"`                // Id of a dashboard
   LookmlDashboardId        *string                     `json:"lookml_dashboard_id,omitempty"`         // Id of a LookML dashboard
   FiltersString            *string                     `json:"filters_string,omitempty"`              // Query string to run look or dashboard with
