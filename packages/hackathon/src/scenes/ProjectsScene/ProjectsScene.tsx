@@ -28,11 +28,14 @@ import type { FC } from 'react'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Space, Heading, Span } from '@looker/components'
+import { Button, ButtonOutline, Space, Heading, Span } from '@looker/components'
 import { Add } from '@styled-icons/material-outlined/Add'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Lock } from '@styled-icons/material-outlined/Lock'
-import { lockProjects } from '../../data/projects/actions'
+import {
+  currentProjectsRequest,
+  lockProjects,
+} from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components'
 import { Routes } from '../../routes'
@@ -65,6 +68,10 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
+  const handleReload = () => {
+    dispatch(currentProjectsRequest())
+  }
+
   let judgingStarted = false
   let judgingString = ''
   if (hackathon && hacker) {
@@ -87,7 +94,7 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     <>
       <Space>
         <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Projects
+          Projects <ButtonOutline onClick={handleReload}>Reload</ButtonOutline>
         </Heading>
         {isLoading && <Loading message={'Processing projects...'} />}
       </Space>
