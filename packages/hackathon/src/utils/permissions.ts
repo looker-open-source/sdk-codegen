@@ -66,6 +66,18 @@ export const canUpdateProject = (
   return false
 }
 
+export const canJoinProject = (
+  hacker: IHackerProps,
+  project?: IProjectProps
+): boolean => {
+  if (hacker.registration && hacker.registration._id) {
+    if (project && project.project_type === 'Open' && !project.locked) {
+      return true
+    }
+  }
+  return false
+}
+
 export const canLockProject = (hacker: IHackerProps): boolean =>
   hacker.canAdmin || hacker.canJudge || hacker.canStaff
 
