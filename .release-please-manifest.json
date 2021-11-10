@@ -5,7 +5,7 @@
   "packages/extension-api-explorer": "21.20.0",
   "packages/extension-sdk": "21.20.0",
   "packages/extension-sdk-react": "21.20.0",
-  "packages/extension-utils": "21.20.0",
+  "packages/extension-utils": "0.1.0",
   "packages/hackathon": "21.20.0",
   "packages/run-it": "0.9.23",
   "packages/sdk": "21.20.0",
