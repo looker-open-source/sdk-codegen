@@ -144,10 +144,10 @@ _English and Japanese supported._`,
     description: {
       en: `### **Hack@Night session**
 Random fun little session!${MARKDOWN_LINEBREAK}
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+[Live session link](https://meet.google.com/daw-pwci-gpm)`,
       ja_JP: `**Hack@Night Session**
 アメリカの夜懇親会!${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`, //
+[生放送をご視ください](https://meet.google.com/daw-pwci-gpm)`, //
     },
   },
   {
@@ -258,7 +258,7 @@ Projects → Add Project機能が使えなくなります${MARKDOWN_LINEBREAK}
 Winners announced.${MARKDOWN_LINEBREAK}
 [Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
       ja_JP: `## **クロウジング**
-優秀賞発表 & 優秀賞デモ ${MARKDOWN_LINEBREAK}   
+優秀賞発表 & 優秀賞デモ ${MARKDOWN_LINEBREAK}
 [生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
     },
   },
@@ -268,9 +268,10 @@ Winners announced.${MARKDOWN_LINEBREAK}
     stop: later(day2, 17.5),
     description: {
       en: `## **~Happy~ Hacky Hour**
-Congrats on making it to the end!${MARKDOWN_LINEBREAK}
-Let's socialize and celebrate!`,
+Let's hang out and celebrate!${MARKDOWN_LINEBREAK}
+[Live session link](https://meet.google.com/daw-pwci-gpm)`,
       ja_JP: `## **~Happy~ Hacky Hour(懇親会)**
+[生放送をご視ください](https://meet.google.com/daw-pwci-gpm)
 `,
     },
   },
