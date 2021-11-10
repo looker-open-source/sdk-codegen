@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-302 API models: 188 Spec, 47 Request, 51 Write, 16 Enum
+303 API models: 188 Spec, 48 Request, 51 Write, 16 Enum
 */
 
 
@@ -482,7 +482,7 @@ type Dashboard struct {
   Slug                                *string              `json:"slug,omitempty"`                                      // Content Metadata Slug
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
   Space                               *SpaceBase           `json:"space,omitempty"`
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CreatedAt                           *time.Time           `json:"created_at,omitempty"`                                // Time that the Dashboard was created.
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -2185,6 +2185,13 @@ type RequestGraphDerivedTablesForModel struct {
   Color  *string `json:"color,omitempty"`   // Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
 }
 
+// Dynamically generated request type for graph_derived_tables_for_view
+type RequestGraphDerivedTablesForView struct {
+  View      string  `json:"view"`                 // The derived table's view name.
+  Models    *string `json:"models,omitempty"`     // The models where this derived table is defined.
+  Workspace *string `json:"workspace,omitempty"`  // The model directory to look in, either `dev` or `production`.
+}
+
 // Dynamically generated request type for login
 type RequestLogin struct {
   ClientId     *string `json:"client_id,omitempty"`      // client_id part of API3 Key.
@@ -3240,7 +3247,7 @@ type WriteDashboard struct {
   PreferredViewer                     *string              `json:"preferred_viewer,omitempty"`                          // The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
   Space                               *WriteSpaceBase      `json:"space,omitempty"`                                     // Dynamic writeable type for SpaceBase removes:
  // id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+  AlertSyncWithDashboardFilterEnabled *bool                `json:"alert_sync_with_dashboard_filter_enabled,omitempty"`  // Enables alerts to keep in sync with dashboard filter changes
   BackgroundColor                     *string              `json:"background_color,omitempty"`                          // Background color
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.

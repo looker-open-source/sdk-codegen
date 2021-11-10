@@ -28,6 +28,7 @@ import type { FC } from 'react'
 import React from 'react'
 
 import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import type { IHackerProps } from '../../models'
 import { ExtMarkdown } from '../../components'
 import { Agenda } from './components'
@@ -41,6 +42,16 @@ const MARKDOWN_LINEBREAK = '  '
 
 export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
   const schedule = localAgenda(hacker.locale)
+  const host = getExtensionSDK().lookerHostData?.hostUrl
+  const intro =
+    hacker.locale === 'ja_JP'
+      ? `### ハッカソン詳細については、[よくある質問記事](https://community.looker.com/hackathome-2021-1026/hackathome-2021-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F-28518)をご確認いただけます。
+現地時間が表示されるため、[アカウント](${host}/account)の「タイムゾーン」を設定できます。${MARKDOWN_LINEBREAK}
+アジェンダが日本語で表示されるため、[アカウント](${host}/account)の「Locale」は「ja_JP」に指定できます。
+`
+      : `### Our [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429) contains all event details!
+*Change your [account](${host}/account) timezone to display times in your timezone*${MARKDOWN_LINEBREAK}
+*Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`
 
   return (
     <>
@@ -50,16 +61,7 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
             Agenda
           </Heading>
           <Paragraph>
-            <ExtMarkdown
-              source={`### Our [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429) contains all event details! 
-*Change your [account](https://hack.looker.com/account) timezone to display times in your timezone*${MARKDOWN_LINEBREAK}
-*Change your [account](https://hack.looker.com/account) locale to ${'`ja_JP`'} to display agenda in Japanese.*${MARKDOWN_LINEBREAK}
-${MARKDOWN_LINEBREAK}${MARKDOWN_LINEBREAK}
-### ハッカソン詳細については、[よくある質問記事](https://community.looker.com/hackathome-2021-1026/hackathome-2021-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F-28518)をご確認いただけます。
-現地時間が表示されるため、[アカウント](https://hack.looker.com/account)の「タイムゾーン」を設定できます。${MARKDOWN_LINEBREAK}
-アジェンダが日本語で表示されるため、[アカウント](https://hack.looker.com/account)の「Locale」は「ja_JP」に指定できます。
-`}
-            />
+            <ExtMarkdown source={intro} />
           </Paragraph>
         </Span>
         <Agenda schedule={schedule} hacker={hacker} />

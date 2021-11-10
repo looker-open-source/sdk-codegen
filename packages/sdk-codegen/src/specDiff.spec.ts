@@ -236,7 +236,7 @@ describe('spec differ', () => {
       expect(actual).toHaveLength(1)
       expect(actual[0].diffCount).toEqual({
         added: 0,
-        changed: 2,
+        changed: 3,
         removed: 3,
       })
     })

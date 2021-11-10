@@ -110,7 +110,7 @@ import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union, cast
 import warnings
 
-from . import models
+from . import models as mdls
 from ${this.packagePath}.rtl import api_methods
 from ${this.packagePath}.rtl import transport
 
@@ -505,7 +505,7 @@ ${this.hooks.join('\n')}
   }
 
   // when format is "methods" that means we're in the methods.py module
-  // and we need to reference the type by the `models.` package name
+  // and we need to reference the type by the `mdls.` package name
   prefixModelsNamespace(
     name: string,
     format: 'models' | 'methods',
@@ -515,7 +515,7 @@ ${this.hooks.join('\n')}
       // need to quote this forwardRef
       name = forwardRef ? `"${name}"` : name
     } else if (format === 'methods') {
-      name = `models.${name}`
+      name = `mdls.${name}`
     }
     return name
   }

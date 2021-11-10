@@ -373,7 +373,7 @@ def test_crud_look(sdk: mtds.Looker40SDK, looks):
         assert look.user_id == l.get("user_id") or sdk.me().id
 
         # Update
-        assert isinstance(look.id, int)
+        assert isinstance(look.id, str)
         updated_look = sdk.update_look(look.id, ml.WriteLookWithQuery(deleted=True))
         assert updated_look.deleted
         assert updated_look.title == look.title
@@ -457,8 +457,8 @@ def test_search_looks_title_fields_filter(sdk: mtds.Looker40SDK):
     assert isinstance(search_results, list)
     assert len(search_results) > 0
     look = search_results[0]
-    assert isinstance(look.id, int)
-    assert look.id > 0
+    assert isinstance(look.id, str)
+    assert look.id != "0"
     assert "SDK" in look.title
     assert look.description is None
 
@@ -473,8 +473,8 @@ def test_search_look_and_run(sdk: mtds.Looker40SDK):
     assert isinstance(search_results, list)
     assert len(search_results) > 0
     look = search_results[0]
-    assert isinstance(look.id, int)
-    assert look.id > 0
+    assert isinstance(look.id, str)
+    assert look.id != "0"
     assert "SDK" in look.title
     assert look.description is None
     actual = sdk.run_look(look_id=look.id, result_format="csv")

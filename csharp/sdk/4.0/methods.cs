@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 425 API methods
+/// 429 API methods
 
 #nullable enable
 using System;
@@ -305,6 +305,35 @@ namespace Looker.SDK.API40
   #endregion ApiAuth: API Authentication
 
   #region Auth: Manage User Authentication Configuration
+
+  /// ### Create an embed secret using the specified information.
+  ///
+  /// The value of the `secret` field will be set by Looker and returned.
+  ///
+  /// POST /embed_config/secrets -> EmbedSecret
+  ///
+  /// <returns><c>EmbedSecret</c> embed secret (application/json)</returns>
+  ///
+  public async Task<SdkResponse<EmbedSecret, Exception>> create_embed_secret(
+    WriteEmbedSecret? body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EmbedSecret, Exception>(HttpMethod.Post, "/embed_config/secrets", null,body,options);
+  }
+
+  /// ### Delete an embed secret.
+  ///
+  /// DELETE /embed_config/secrets/{embed_secret_id} -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="embed_secret_id">Id of Embed Secret</param>
+  public async Task<SdkResponse<string, Exception>> delete_embed_secret(
+    long embed_secret_id,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/embed_config/secrets/{embed_secret_id}", null,null,options);
+  }
 
   /// ### Create SSO Embed URL
   ///
@@ -3582,6 +3611,52 @@ namespace Looker.SDK.API40
 
   #endregion Datagroup: Manage Datagroups
 
+  #region DerivedTable: View Derived Table graphs
+
+  /// ### Discover information about derived tables
+  ///
+  /// GET /derived_table/graph/model/{model} -> DependencyGraph
+  ///
+  /// <returns><c>DependencyGraph</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model">The name of the Lookml model.</param>
+  /// <param name="format">The format of the graph. Valid values are [dot]. Default is `dot`</param>
+  /// <param name="color">Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.</param>
+  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_model(
+    string model,
+    string? format = null,
+    string? color = null,
+    ITransportSettings? options = null)
+{  
+      model = SdkUtils.EncodeParam(model);
+    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/model/{model}", new Values {
+      { "format", format },
+      { "color", color }},null,options);
+  }
+
+  /// ### Get the subgraph representing this derived table and its dependencies.
+  ///
+  /// GET /derived_table/graph/view/{view} -> DependencyGraph
+  ///
+  /// <returns><c>DependencyGraph</c> Graph of the derived table component, represented in the DOT language. (application/json)</returns>
+  ///
+  /// <param name="view">The derived table's view name.</param>
+  /// <param name="models">The models where this derived table is defined.</param>
+  /// <param name="workspace">The model directory to look in, either `dev` or `production`.</param>
+  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_view(
+    string view,
+    string? models = null,
+    string? workspace = null,
+    ITransportSettings? options = null)
+{  
+      view = SdkUtils.EncodeParam(view);
+    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/view/{view}", new Values {
+      { "models", models },
+      { "workspace", workspace }},null,options);
+  }
+
+  #endregion DerivedTable: View Derived Table graphs
+
   #region Folder: Manage Folders
 
   /// Search for folders by creator id, parent id, name, etc
@@ -4636,10 +4711,11 @@ namespace Looker.SDK.API40
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> look(
-    long look_id,
+    string look_id,
     string? fields = null,
     ITransportSettings? options = null)
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Get, $"/looks/{look_id}", new Values {
       { "fields", fields }},null,options);
   }
@@ -4672,11 +4748,12 @@ namespace Looker.SDK.API40
   /// <param name="look_id">Id of look</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> update_look(
-    long look_id,
+    string look_id,
     WriteLookWithQuery body,
     string? fields = null,
     ITransportSettings? options = null)
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}", new Values {
       { "fields", fields }},body,options);
   }
@@ -4695,9 +4772,10 @@ namespace Looker.SDK.API40
   ///
   /// <param name="look_id">Id of look</param>
   public async Task<SdkResponse<string, Exception>> delete_look(
-    long look_id,
+    string look_id,
     ITransportSettings? options = null)
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/looks/{look_id}", null,null,options);
   }
 
@@ -4746,7 +4824,7 @@ namespace Looker.SDK.API40
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_look<TSuccess>(
-    long look_id,
+    string look_id,
     string result_format,
     long? limit = null,
     bool? apply_formatting = null,
@@ -4762,6 +4840,7 @@ namespace Looker.SDK.API40
     bool? server_table_calcs = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
       result_format = SdkUtils.EncodeParam(result_format);
     return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/looks/{look_id}/run/{result_format}", new Values {
       { "limit", limit },
@@ -4793,10 +4872,11 @@ namespace Looker.SDK.API40
   /// <param name="look_id">Look id to copy.</param>
   /// <param name="folder_id">Folder id to copy to.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> copy_look(
-    long look_id,
+    string look_id,
     string? folder_id = null,
     ITransportSettings? options = null)
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Post, $"/looks/{look_id}/copy", new Values {
       { "folder_id", folder_id }},null,options);
   }
@@ -4815,10 +4895,11 @@ namespace Looker.SDK.API40
   /// <param name="look_id">Look id to move.</param>
   /// <param name="folder_id">Folder id to move to.</param>
   public async Task<SdkResponse<LookWithQuery, Exception>> move_look(
-    long look_id,
+    string look_id,
     string folder_id,
     ITransportSettings? options = null)
 {  
+      look_id = SdkUtils.EncodeParam(look_id);
     return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}/move", new Values {
       { "folder_id", folder_id }},null,options);
   }
@@ -4826,27 +4907,6 @@ namespace Looker.SDK.API40
   #endregion Look: Run and Manage Looks
 
   #region LookmlModel: Manage LookML Models
-
-  /// ### Discover information about derived tables
-  ///
-  /// GET /derived_table/graph/model/{model} -> DependencyGraph
-  ///
-  /// <returns><c>DependencyGraph</c> Derived Table (application/json)</returns>
-  ///
-  /// <param name="model">The name of the Lookml model.</param>
-  /// <param name="format">The format of the graph. Valid values are [dot]. Default is `dot`</param>
-  /// <param name="color">Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.</param>
-  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_model(
-    string model,
-    string? format = null,
-    string? color = null,
-    ITransportSettings? options = null)
-{  
-      model = SdkUtils.EncodeParam(model);
-    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/model/{model}", new Values {
-      { "format", format },
-      { "color", color }},null,options);
-  }
 
   /// ### Get information about all lookml models.
   ///
@@ -6187,6 +6247,7 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="source">Specifies the source of this call.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_query<TSuccess>(
     long query_id,
     string result_format,
@@ -6202,6 +6263,7 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    string? source = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
@@ -6217,7 +6279,8 @@ namespace Looker.SDK.API40
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
-      { "server_table_calcs", server_table_calcs }},null,options);
+      { "server_table_calcs", server_table_calcs },
+      { "source", source }},null,options);
   }
 
   /// ### Run the query that is specified inline in the posted body.
@@ -8707,20 +8770,19 @@ namespace Looker.SDK.API40
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
-  /// POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+  /// POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
   ///
-  /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
+  /// <returns><c>CreateCredentialsApi3</c> API 3 Credential (application/json)</returns>
   ///
   /// <param name="user_id">id of user</param>
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsApi3, Exception>> create_user_credentials_api3(
+  public async Task<SdkResponse<CreateCredentialsApi3, Exception>> create_user_credentials_api3(
     long user_id,
-    CredentialsApi3? body,
     string? fields = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<CredentialsApi3, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_api3", new Values {
-      { "fields", fields }},body,options);
+    return await AuthRequest<CreateCredentialsApi3, Exception>(HttpMethod.Post, $"/users/{user_id}/credentials_api3", new Values {
+      { "fields", fields }},null,options);
   }
 
   /// ### Embed login information for the specified user.

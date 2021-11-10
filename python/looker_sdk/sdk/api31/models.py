@@ -1609,7 +1609,7 @@ class Dashboard(model.Model):
         slug: Content Metadata Slug
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
-        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes
         background_color: Background color
         created_at: Time that the Dashboard was created.
         crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -9804,7 +9804,7 @@ class WriteDashboard(model.Model):
             preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
             space: Dynamic writeable type for SpaceBase removes:
     id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+            alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes
             background_color: Background color
             crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
             deleted: Whether or not a dashboard is 'soft' deleted.

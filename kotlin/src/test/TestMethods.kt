@@ -175,7 +175,7 @@ class TestMethods {
             sdk.create_scheduled_plan(
                 WriteScheduledPlan(
                     name = scheduleName,
-                    look_id = look.id!!.toLong(),
+                    look_id = look.id!!,
                     require_change = false,
                     require_no_results = false,
                     require_results = true,
@@ -404,7 +404,7 @@ class TestMethods {
     @Test
     fun testAllLooks() {
         prepLook()
-        testAll<Look, Long, LookWithQuery>(
+        testAll<Look, String, LookWithQuery>(
             { sdk.all_looks() },
             { item -> item.id!! },
             { id, fields -> sdk.look(id, fields) }
@@ -528,7 +528,7 @@ class TestMethods {
     @Test
     fun testErrorHandling() {
         try {
-            sdk.ok<Array<Look>>(sdk.look(-1))
+            sdk.ok<Array<Look>>(sdk.look("-1"))
             assertTrue(false, "We shouldn't get here")
         } catch (e: java.lang.Error) {
             assertTrue(e.toString().contains("GET /looks/-1"))
