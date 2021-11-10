@@ -98,6 +98,14 @@ export const resources: Array<Resource> = [
     title: 'Embed Tutorial Video',
   },
   {
+    content: `An interactive demonstration of Looker's new Visualization Components`,
+    type: ResourceType.Resource,
+    tag: ResourceTag.Components,
+    link: 'https://developers.looker.com/components/visualization-components',
+    shortenedLink: 'https://bit.ly/3D0AdiE',
+    title: 'Visualization Components Playground',
+  },
+  {
     content:
       'Create extensions with zero manual configuration with the create-looker-extension utility.',
     type: ResourceType.Resource,
