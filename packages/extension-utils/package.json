@@ -9,6 +9,15 @@
   "files": [
     "lib"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/extension-utils"
+  },
+  "author": "Looker",
   "license": "MIT",
   "private": false,
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-utils",

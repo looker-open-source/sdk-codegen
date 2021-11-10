@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/sdk-rtl"
+    "directory": "packages/extension-sdk"
   },
   "author": "Looker",
   "license": "MIT",
