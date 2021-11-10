@@ -23,5 +23,33 @@
  SOFTWARE.
 
  */
+import type { FC } from 'react'
+import React from 'react'
+import { Dialog, DialogHeader, DialogContent } from '@looker/components'
+import type { IJudgingProps } from '../../../models'
+import { JudgingView } from './JudgingView'
 
-export * from './ProjectView'
+interface JudgingViewDialogProps {
+  /** If assigned, Dialog appears. If undefined, dialog closes */
+  judging?: IJudgingProps
+  /** Dialog closing event handler */
+  onClose: () => void
+}
+
+export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
+  judging,
+  onClose,
+}) => {
+  const closeDialog = () => {
+    onClose()
+  }
+
+  return (
+    <Dialog isOpen={!!judging} onClose={closeDialog}>
+      <DialogHeader>Judging {judging?.$title}</DialogHeader>
+      <DialogContent>
+        {!!judging && <JudgingView judging={judging} />}
+      </DialogContent>
+    </Dialog>
+  )
+}

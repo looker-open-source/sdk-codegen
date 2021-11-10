@@ -27,50 +27,42 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import type { IProjectProps, ITechnologyProps } from '../../../models'
-import { ExtMarkdown } from '../../../components'
+import type { IJudgingProps } from '../../../models'
 import { getTechnologies } from '../../../data/hack_session/selectors'
+import { ExtMarkdown } from '../../../components'
+import { getMembers, techDescriptions } from '../../utils'
 
-interface ProjectViewProps {
-  project: IProjectProps
+interface JudgingViewProps {
+  judging: IJudgingProps
 }
 
-const techDescriptions = (ids: string[], technologies?: ITechnologyProps[]) => {
-  try {
-    return technologies
-      ?.filter((t) => ids.includes(t._id))
-      .map((t) => t.description)
-      .join(', ')
-  } catch {
-    // avoid sheet data errors
-    return ids.join(', ')
-  }
-}
-
-const getMembers = (team: string[]) => {
-  try {
-    return team.join(', ') || 'Nobody!'
-  } catch {
-    // avoid sheet data errors
-    return 'Error retrieving team members'
-  }
-}
-
-export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
+export const JudgingView: FC<JudgingViewProps> = ({ judging }) => {
   const availableTechnologies = useSelector(getTechnologies)
 
-  const tech = techDescriptions(project.technologies, availableTechnologies)
-  const members = getMembers(project.$members)
-  const view = `# ${project.title}
+  const tech = techDescriptions(judging.$technologies, availableTechnologies)
+  const members = getMembers(judging.$members)
+  const view = `# ${judging.$title}
 by ${members}
 
-${project.description}
+${judging.$description}
+
+| Criteria | Score |
+| :-------- | -----: |
+| Execution | ${judging.execution} |
+| Ambition | ${judging.ambition} |
+| Coolness | ${judging.coolness} |
+| Impact | ${judging.impact} |
+| **Score** | **${judging.score}** |
+
+## Judge's notes
+
+${judging.notes}
 
 **Uses**: ${tech}
 
-**Project type**: ${project.project_type}
+**Project type**: ${judging.$project_type}
 
-**Contestant**: ${project.contestant ? 'Yes' : 'No'}
+**Contestant**: ${judging.$contestant ? 'Yes' : 'No'}
 `
   return <ExtMarkdown source={view} />
 }

@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 import type {
@@ -65,6 +65,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -99,6 +100,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IError,
@@ -172,6 +174,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -253,6 +256,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -616,6 +620,54 @@ export const logout = async (
 //#endregion ApiAuth: API Authentication
 
 //#region Auth: Manage User Authentication Configuration
+
+/**
+ * ### Create an embed secret using the specified information.
+ *
+ * The value of the `secret` field will be set by Looker and returned.
+ *
+ * POST /embed_config/secrets -> IEmbedSecret
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteEmbedSecret>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_embed_secret = async (
+  sdk: IAPIMethods,
+  body?: Partial<IWriteEmbedSecret>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IEmbedSecret, IError | IValidationError>> => {
+  return sdk.post<IEmbedSecret, IError | IValidationError>(
+    '/embed_config/secrets',
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Delete an embed secret.
+ *
+ * DELETE /embed_config/secrets/{embed_secret_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param embed_secret_id Id of Embed Secret
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_embed_secret = async (
+  sdk: IAPIMethods,
+  embed_secret_id: number,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  return sdk.delete<string, IError>(
+    `/embed_config/secrets/${embed_secret_id}`,
+    null,
+    null,
+    options
+  )
+}
 
 /**
  * ### Create SSO Embed URL
@@ -5191,6 +5243,58 @@ export const update_datagroup = async (
 
 //#endregion Datagroup: Manage Datagroups
 
+//#region DerivedTable: View Derived Table graphs
+
+/**
+ * ### Discover information about derived tables
+ *
+ * GET /derived_table/graph/model/{model} -> IDependencyGraph
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const graph_derived_tables_for_model = async (
+  sdk: IAPIMethods,
+  request: IRequestGraphDerivedTablesForModel,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDependencyGraph, IError>> => {
+  request.model = encodeParam(request.model)
+  return sdk.get<IDependencyGraph, IError>(
+    `/derived_table/graph/model/${request.model}`,
+    { format: request.format, color: request.color },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get the subgraph representing this derived table and its dependencies.
+ *
+ * GET /derived_table/graph/view/{view} -> IDependencyGraph
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const graph_derived_tables_for_view = async (
+  sdk: IAPIMethods,
+  request: IRequestGraphDerivedTablesForView,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDependencyGraph, IError>> => {
+  request.view = encodeParam(request.view)
+  return sdk.get<IDependencyGraph, IError>(
+    `/derived_table/graph/view/${request.view}`,
+    { models: request.models, workspace: request.workspace },
+    null,
+    options
+  )
+}
+
+//#endregion DerivedTable: View Derived Table graphs
+
 //#region Folder: Manage Folders
 
 /**
@@ -6473,10 +6577,11 @@ export const search_looks = async (
  */
 export const look = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError>> => {
+  look_id = encodeParam(look_id)
   return sdk.get<ILookWithQuery, IError>(
     `/looks/${look_id}`,
     { fields },
@@ -6518,11 +6623,12 @@ export const look = async (
  */
 export const update_look = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   body: Partial<IWriteLookWithQuery>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
+  look_id = encodeParam(look_id)
   return sdk.patch<ILookWithQuery, IError | IValidationError>(
     `/looks/${look_id}`,
     { fields },
@@ -6549,9 +6655,10 @@ export const update_look = async (
  */
 export const delete_look = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  look_id = encodeParam(look_id)
   return sdk.delete<string, IError>(`/looks/${look_id}`, null, null, options)
 }
 
@@ -6590,6 +6697,7 @@ export const run_look = async (
   request: IRequestRunLook,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
+  request.look_id = encodeParam(request.look_id)
   request.result_format = encodeParam(request.result_format)
   return sdk.get<string, IError | IValidationError>(
     `/looks/${request.look_id}/run/${request.result_format}`,
@@ -6631,10 +6739,11 @@ export const run_look = async (
  */
 export const copy_look = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   folder_id?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
+  look_id = encodeParam(look_id)
   return sdk.post<ILookWithQuery, IError | IValidationError>(
     `/looks/${look_id}/copy`,
     { folder_id },
@@ -6661,10 +6770,11 @@ export const copy_look = async (
  */
 export const move_look = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   folder_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> => {
+  look_id = encodeParam(look_id)
   return sdk.patch<ILookWithQuery, IError | IValidationError>(
     `/looks/${look_id}/move`,
     { folder_id },
@@ -6676,30 +6786,6 @@ export const move_look = async (
 //#endregion Look: Run and Manage Looks
 
 //#region LookmlModel: Manage LookML Models
-
-/**
- * ### Discover information about derived tables
- *
- * GET /derived_table/graph/model/{model} -> IDependencyGraph
- *
- * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
- * @param options one-time API call overrides
- *
- */
-export const graph_derived_tables_for_model = async (
-  sdk: IAPIMethods,
-  request: IRequestGraphDerivedTablesForModel,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDependencyGraph, IError>> => {
-  request.model = encodeParam(request.model)
-  return sdk.get<IDependencyGraph, IError>(
-    `/derived_table/graph/model/${request.model}`,
-    { format: request.format, color: request.color },
-    null,
-    options
-  )
-}
 
 /**
  * ### Get information about all lookml models.
@@ -8379,6 +8465,7 @@ export const run_query = async (
       path_prefix: request.path_prefix,
       rebuild_pdts: request.rebuild_pdts,
       server_table_calcs: request.server_table_calcs,
+      source: request.source,
     },
     null,
     options
@@ -11372,11 +11459,10 @@ export const all_user_credentials_api3s = async (
 /**
  * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
  *
- * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+ * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
  *
  * @param sdk IAPIMethods implementation
  * @param user_id id of user
- * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -11384,14 +11470,13 @@ export const all_user_credentials_api3s = async (
 export const create_user_credentials_api3 = async (
   sdk: IAPIMethods,
   user_id: number,
-  body?: Partial<ICredentialsApi3>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>> => {
-  return sdk.post<ICredentialsApi3, IError | IValidationError>(
+): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>> => {
+  return sdk.post<ICreateCredentialsApi3, IError | IValidationError>(
     `/users/${user_id}/credentials_api3`,
     { fields },
-    body,
+    null,
     options
   )
 }

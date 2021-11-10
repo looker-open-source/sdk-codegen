@@ -25,7 +25,7 @@
  */
 
 /**
- * 352 API models: 221 Spec, 54 Request, 57 Write, 20 Enum
+ * 356 API models: 223 Spec, 55 Request, 58 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -452,7 +452,7 @@ export interface IBoardItem {
   /**
    * Look to base this item on
    */
-  look_id?: number
+  look_id?: string
   /**
    * LookML Dashboard to base this item on
    */
@@ -709,7 +709,7 @@ export interface IContentFavorite {
   /**
    * Id of a look (read-only)
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of a dashboard (read-only)
    */
@@ -746,7 +746,7 @@ export interface IContentMeta {
   /**
    * Id of associated look when content_type is "look" (read-only)
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of associated folder when content_type is "space" (read-only)
    */
@@ -1009,7 +1009,7 @@ export interface IContentValidationLook {
   /**
    * Unique Id (read-only)
    */
-  id?: number
+  id?: string
   /**
    * Look Title
    */
@@ -1055,7 +1055,7 @@ export interface IContentValidationScheduledPlan {
   /**
    * Id of a look
    */
-  look_id?: number
+  look_id?: string
   /**
    * Unique Id (read-only)
    */
@@ -1093,7 +1093,7 @@ export interface IContentView {
   /**
    * Id of viewed Look (read-only)
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of the viewed Dashboard (read-only)
    */
@@ -1178,6 +1178,41 @@ export interface ICreateCostEstimate {
    * SQL statement to estimate (read-only)
    */
   sql?: string
+}
+
+export interface ICreateCredentialsApi3 {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Unique Id (read-only)
+   */
+  id?: number
+  /**
+   * API key client_id (read-only)
+   */
+  client_id?: string
+  /**
+   * Timestamp for the creation of this credential (read-only)
+   */
+  created_at?: string
+  /**
+   * Has this credential been disabled? (read-only)
+   */
+  is_disabled?: boolean
+  /**
+   * Short name for the type of this kind of credential (read-only)
+   */
+  type?: string
+  /**
+   * API key client_secret (read-only)
+   */
+  client_secret?: string
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string
 }
 
 export interface ICreateDashboardFilter {
@@ -1313,16 +1348,13 @@ export interface ICreateQueryTask {
   /**
    * Id of look associated with query.
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of dashboard associated with query.
    */
   dashboard_id?: string
 }
 
-/**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- */
 export interface ICredentialsApi3 {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1775,7 +1807,7 @@ export interface IDashboard {
    */
   preferred_viewer?: string
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -2902,6 +2934,33 @@ export interface IEmbedParams {
   force_logout_login?: boolean
 }
 
+export interface IEmbedSecret {
+  /**
+   * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+   */
+  algorithm?: string
+  /**
+   * When secret was created (read-only)
+   */
+  created_at?: string
+  /**
+   * Is this secret currently enabled
+   */
+  enabled?: boolean
+  /**
+   * Unique Id (read-only)
+   */
+  id?: number
+  /**
+   * Secret for use with SSO embedding (read-only)
+   */
+  secret?: string
+  /**
+   * Id of user who created this secret (read-only)
+   */
+  user_id?: number
+}
+
 export interface IEmbedSsoParams {
   /**
    * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
@@ -3509,7 +3568,7 @@ export interface IHomepageItem {
   /**
    * Look to base this item on
    */
-  look_id?: number
+  look_id?: string
   /**
    * LookML Dashboard to base this item on
    */
@@ -4300,7 +4359,7 @@ export interface ILook {
   /**
    * Unique Id (read-only)
    */
-  id?: number
+  id?: string
   /**
    * Look Title
    */
@@ -5186,7 +5245,7 @@ export interface ILookWithDashboards {
   /**
    * Unique Id (read-only)
    */
-  id?: number
+  id?: string
   /**
    * Look Title
    */
@@ -5307,7 +5366,7 @@ export interface ILookWithQuery {
   /**
    * Unique Id (read-only)
    */
-  id?: number
+  id?: string
   /**
    * Look Title
    */
@@ -6387,7 +6446,7 @@ export interface IQueryTask {
   /**
    * Id of look associated with query.
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of dashboard associated with query.
    */
@@ -6434,7 +6493,7 @@ export interface IRenderTask {
   /**
    * Id of look to render (read-only)
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of lookml dashboard to render (read-only)
    */
@@ -7093,6 +7152,24 @@ export interface IRequestGraphDerivedTablesForModel {
 }
 
 /**
+ * Dynamically generated request type for graph_derived_tables_for_view
+ */
+export interface IRequestGraphDerivedTablesForView {
+  /**
+   * The derived table's view name.
+   */
+  view: string
+  /**
+   * The models where this derived table is defined.
+   */
+  models?: string
+  /**
+   * The model directory to look in, either `dev` or `production`.
+   */
+  workspace?: string
+}
+
+/**
  * Dynamically generated request type for login
  */
 export interface IRequestLogin {
@@ -7241,7 +7318,7 @@ export interface IRequestRunLook {
   /**
    * Id of look
    */
-  look_id: number
+  look_id: string
   /**
    * Format of result
    */
@@ -7378,6 +7455,10 @@ export interface IRequestRunQuery {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean
+  /**
+   * Specifies the source of this call.
+   */
+  source?: string
 }
 
 /**
@@ -8849,7 +8930,7 @@ export interface IScheduledPlan {
   /**
    * Id of a look
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of a dashboard
    */
@@ -10254,7 +10335,7 @@ export interface IWriteBoardItem {
   /**
    * Look to base this item on
    */
-  look_id?: number
+  look_id?: string
   /**
    * LookML Dashboard to base this item on
    */
@@ -10457,7 +10538,7 @@ export interface IWriteCreateQueryTask {
   /**
    * Id of look associated with query.
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of dashboard associated with query.
    */
@@ -10518,7 +10599,7 @@ export interface IWriteDashboard {
    */
   preferred_viewer?: string
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -10979,6 +11060,21 @@ export interface IWriteDBConnectionOverride {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string
+}
+
+/**
+ * Dynamic writeable type for EmbedSecret removes:
+ * created_at, id, secret, user_id
+ */
+export interface IWriteEmbedSecret {
+  /**
+   * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+   */
+  algorithm?: string
+  /**
+   * Is this secret currently enabled
+   */
+  enabled?: boolean
 }
 
 /**
@@ -11907,7 +12003,7 @@ export interface IWriteScheduledPlan {
   /**
    * Id of a look
    */
-  look_id?: number
+  look_id?: string
   /**
    * Id of a dashboard
    */

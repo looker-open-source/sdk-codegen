@@ -28,18 +28,20 @@ import type { FC } from 'react'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Space, Heading } from '@looker/components'
+import { Button, Space, Heading, Span } from '@looker/components'
 import { Add } from '@styled-icons/material-outlined/Add'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Lock } from '@styled-icons/material-outlined/Lock'
 import { lockProjects } from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components'
-import { Routes } from '../../routes/AppRouter'
+import { Routes } from '../../routes'
 import {
   getCurrentHackathonState,
   getHackerState,
 } from '../../data/hack_session/selectors'
+import { canLockProject } from '../../utils'
+import { Era, eraColor, zonedLocaleDate } from '../HomeScene/components'
 import { ProjectList } from './components'
 
 interface ProjectSceneProps {}
@@ -63,6 +65,24 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
+  let judgingStarted = false
+  let judgingString = ''
+  if (hackathon && hacker) {
+    judgingStarted = hackathon.judging_starts?.getTime() < new Date().getTime()
+
+    const dateString = zonedLocaleDate(
+      hackathon.judging_starts,
+      hacker.timezone,
+      hacker.locale
+    )
+
+    if (judgingStarted) {
+      judgingString = `Judging started: ${dateString}`
+    } else {
+      judgingString = `Judging starts: ${dateString}`
+    }
+  }
+
   return (
     <>
       <Space>
@@ -73,7 +93,11 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
       </Space>
       <ProjectList />
       <Space pt="xlarge">
-        <Button iconBefore={<Add />} onClick={handleAdd} disabled={isLoading}>
+        <Button
+          iconBefore={<Add />}
+          onClick={handleAdd}
+          disabled={(isLoading || judgingStarted) && !canLockProject(hacker)}
+        >
           Add Project
         </Button>
         <>
@@ -96,6 +120,9 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
             </>
           )}
         </>
+        <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
+          {judgingString}
+        </Span>
       </Space>
     </>
   )

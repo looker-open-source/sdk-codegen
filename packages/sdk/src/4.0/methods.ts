@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 import type {
@@ -63,6 +63,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -97,6 +98,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IError,
@@ -170,6 +172,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -251,6 +254,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -597,6 +601,50 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   *
+   * The value of the `secret` field will be set by Looker and returned.
+   *
+   * POST /embed_config/secrets -> IEmbedSecret
+   *
+   * @param body Partial<IWriteEmbedSecret>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_embed_secret(
+    body?: Partial<IWriteEmbedSecret>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IEmbedSecret, IError | IValidationError>> {
+    return this.post<IEmbedSecret, IError | IValidationError>(
+      '/embed_config/secrets',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an embed secret.
+   *
+   * DELETE /embed_config/secrets/{embed_secret_id} -> string
+   *
+   * @param embed_secret_id Id of Embed Secret
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_embed_secret(
+    embed_secret_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    return this.delete<string, IError>(
+      `/embed_config/secrets/${embed_secret_id}`,
+      null,
+      null,
+      options
+    )
+  }
 
   /**
    * ### Create SSO Embed URL
@@ -4855,6 +4903,54 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.model = encodeParam(request.model)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/model/${request.model}`,
+      { format: request.format, color: request.color },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.view = encodeParam(request.view)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/view/${request.view}`,
+      { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -6055,10 +6151,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async look(
-    look_id: number,
+    look_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError>> {
+    look_id = encodeParam(look_id)
     return this.get<ILookWithQuery, IError>(
       `/looks/${look_id}`,
       { fields },
@@ -6098,11 +6195,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async update_look(
-    look_id: number,
+    look_id: string,
     body: Partial<IWriteLookWithQuery>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.patch<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}`,
       { fields },
@@ -6127,9 +6225,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async delete_look(
-    look_id: number,
+    look_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>> {
+    look_id = encodeParam(look_id)
     return this.delete<string, IError>(`/looks/${look_id}`, null, null, options)
   }
 
@@ -6166,6 +6265,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     request: IRequestRunLook,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError | IValidationError>> {
+    request.look_id = encodeParam(request.look_id)
     request.result_format = encodeParam(request.result_format)
     return this.get<string, IError | IValidationError>(
       `/looks/${request.look_id}/run/${request.result_format}`,
@@ -6205,10 +6305,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async copy_look(
-    look_id: number,
+    look_id: string,
     folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.post<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}/copy`,
       { folder_id },
@@ -6233,10 +6334,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async move_look(
-    look_id: number,
+    look_id: string,
     folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.patch<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}/move`,
       { folder_id },
@@ -6248,28 +6350,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>> {
-    request.model = encodeParam(request.model)
-    return this.get<IDependencyGraph, IError>(
-      `/derived_table/graph/model/${request.model}`,
-      { format: request.format, color: request.color },
-      null,
-      options
-    )
-  }
 
   /**
    * ### Get information about all lookml models.
@@ -7847,6 +7927,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        source: request.source,
       },
       null,
       options
@@ -10680,24 +10761,22 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param user_id id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async create_user_credentials_api3(
     user_id: number,
-    body?: Partial<ICredentialsApi3>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>> {
-    return this.post<ICredentialsApi3, IError | IValidationError>(
+  ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>> {
+    return this.post<ICreateCredentialsApi3, IError | IValidationError>(
       `/users/${user_id}/credentials_api3`,
       { fields },
-      body,
+      null,
       options
     )
   }

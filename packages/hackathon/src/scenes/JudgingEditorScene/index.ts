@@ -24,3 +24,4 @@
 
  */
 export * from './JudgingEditorScene'
+export * from './components'

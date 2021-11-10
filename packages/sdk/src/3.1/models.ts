@@ -25,7 +25,7 @@
  */
 
 /**
- * 302 API models: 188 Spec, 47 Request, 51 Write, 16 Enum
+ * 303 API models: 188 Spec, 48 Request, 51 Write, 16 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -1198,7 +1198,7 @@ export interface IDashboard {
   preferred_viewer?: string
   space?: ISpaceBase
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**
@@ -6184,6 +6184,24 @@ export interface IRequestGraphDerivedTablesForModel {
 }
 
 /**
+ * Dynamically generated request type for graph_derived_tables_for_view
+ */
+export interface IRequestGraphDerivedTablesForView {
+  /**
+   * The derived table's view name.
+   */
+  view: string
+  /**
+   * The models where this derived table is defined.
+   */
+  models?: string
+  /**
+   * The model directory to look in, either `dev` or `production`.
+   */
+  workspace?: string
+}
+
+/**
  * Dynamically generated request type for login
  */
 export interface IRequestLogin {
@@ -9257,7 +9275,7 @@ export interface IWriteDashboard {
    */
   space?: IWriteSpaceBase
   /**
-   * Enables alerts to keep in sync with dashboard filter changes - only available in Enhanced Alerts (beta)
+   * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean
   /**

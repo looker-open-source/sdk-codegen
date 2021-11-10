@@ -25,7 +25,7 @@
  */
 
 /**
- * 376 API methods
+ * 378 API methods
  */
 
 import type {
@@ -142,6 +142,7 @@ import type {
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -2435,6 +2436,38 @@ export interface ILooker31SDK extends IAPIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -3570,20 +3603,6 @@ export interface ILooker31SDK extends IAPIMethods {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>>
 
   /**
    * ### Get information about all lookml models.

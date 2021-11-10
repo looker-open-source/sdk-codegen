@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 
@@ -349,6 +349,41 @@ open class LookerSDK: APIMethods {
 
 
     // MARK Auth: Manage User Authentication Configuration
+
+    /**
+     * ### Create an embed secret using the specified information.
+     *
+     * The value of the `secret` field will be set by Looker and returned.
+     *
+     * POST /embed_config/secrets -> EmbedSecret
+     */
+    public func create_embed_secret(
+        /**
+         * @param {WriteEmbedSecret} body
+         */
+        body: WriteEmbedSecret?,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<EmbedSecret, SDKError> {
+        let result: SDKResponse<EmbedSecret, SDKError> = self.post("/embed_config/secrets", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete an embed secret.
+     *
+     * DELETE /embed_config/secrets/{embed_secret_id} -> String
+     */
+    public func delete_embed_secret(
+        /**
+         * @param {Int64} embed_secret_id Id of Embed Secret
+         */
+        _ embed_secret_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_embed_secret_id = encodeParam(embed_secret_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/embed_config/secrets/\(path_embed_secret_id)", nil, nil, options)
+        return result
+    }
 
     /**
      * ### Create SSO Embed URL
@@ -4218,6 +4253,62 @@ open class LookerSDK: APIMethods {
 
 
 
+    // MARK DerivedTable: View Derived Table graphs
+
+    /**
+     * ### Discover information about derived tables
+     *
+     * GET /derived_table/graph/model/{model} -> DependencyGraph
+     */
+    public func graph_derived_tables_for_model(
+        /**
+         * @param {String} model The name of the Lookml model.
+         */
+        _ model: String,
+        /**
+         * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
+         */
+        format: String? = nil,
+        /**
+         * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
+         */
+        color: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DependencyGraph, SDKError> {
+        let path_model = encodeParam(model)
+        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/model/\(path_model)", 
+            ["format": format, "color": color], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get the subgraph representing this derived table and its dependencies.
+     *
+     * GET /derived_table/graph/view/{view} -> DependencyGraph
+     */
+    public func graph_derived_tables_for_view(
+        /**
+         * @param {String} view The derived table's view name.
+         */
+        _ view: String,
+        /**
+         * @param {String} models The models where this derived table is defined.
+         */
+        models: String? = nil,
+        /**
+         * @param {String} workspace The model directory to look in, either `dev` or `production`.
+         */
+        workspace: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DependencyGraph, SDKError> {
+        let path_view = encodeParam(view)
+        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/view/\(path_view)", 
+            ["models": models, "workspace": workspace], nil, options)
+        return result
+    }
+
+
+
     // MARK Folder: Manage Folders
 
     /**
@@ -5517,9 +5608,9 @@ open class LookerSDK: APIMethods {
      */
     public func look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -5558,9 +5649,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {WriteLookWithQuery} body
          */
@@ -5590,9 +5681,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_look_id = encodeParam(look_id)
@@ -5626,9 +5717,9 @@ open class LookerSDK: APIMethods {
      */
     public func run_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} result_format Format of result
          */
@@ -5703,9 +5794,9 @@ open class LookerSDK: APIMethods {
      */
     public func copy_look(
         /**
-         * @param {Int64} look_id Look id to copy.
+         * @param {String} look_id Look id to copy.
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} folder_id Folder id to copy to.
          */
@@ -5730,9 +5821,9 @@ open class LookerSDK: APIMethods {
      */
     public func move_look(
         /**
-         * @param {Int64} look_id Look id to move.
+         * @param {String} look_id Look id to move.
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} folder_id Folder id to move to.
          */
@@ -5748,32 +5839,6 @@ open class LookerSDK: APIMethods {
 
 
     // MARK LookmlModel: Manage LookML Models
-
-    /**
-     * ### Discover information about derived tables
-     *
-     * GET /derived_table/graph/model/{model} -> DependencyGraph
-     */
-    public func graph_derived_tables_for_model(
-        /**
-         * @param {String} model The name of the Lookml model.
-         */
-        _ model: String,
-        /**
-         * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
-         */
-        format: String? = nil,
-        /**
-         * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
-         */
-        color: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<DependencyGraph, SDKError> {
-        let path_model = encodeParam(model)
-        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/model/\(path_model)", 
-            ["format": format, "color": color], nil, options)
-        return result
-    }
 
     /**
      * ### Get information about all lookml models.
@@ -7362,12 +7427,16 @@ open class LookerSDK: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
+        /**
+         * @param {String} source Specifies the source of this call.
+         */
+        source: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<String, SDKError> = self.get("/queries/\(path_query_id)/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], nil, options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source], nil, options)
         return result
     }
 
@@ -10308,7 +10377,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+     * POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
      */
     public func create_user_credentials_api3(
         /**
@@ -10316,18 +10385,14 @@ open class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         /**
-         * @param {CredentialsApi3} body
-         */
-        body: CredentialsApi3?,
-        /**
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsApi3, SDKError> {
+    ) -> SDKResponse<CreateCredentialsApi3, SDKError> {
         let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<CredentialsApi3, SDKError> = self.post("/users/\(path_user_id)/credentials_api3", 
-            ["fields": fields], try! self.encode(body), options)
+        let result: SDKResponse<CreateCredentialsApi3, SDKError> = self.post("/users/\(path_user_id)/credentials_api3", 
+            ["fields": fields], nil, options)
         return result
     }
 

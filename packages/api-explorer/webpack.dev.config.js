@@ -30,6 +30,9 @@ const base = require('../../webpack.base.config')(__dirname)
 const browser = require('../../webpack.browser.config')()
 
 module.exports = merge(base, browser, {
+  entry: {
+    app: path.join(__dirname, 'src/App.tsx'),
+  },
   mode: 'development',
   devServer: {
     contentBase: path.join(__dirname, 'public'),

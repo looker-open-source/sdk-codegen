@@ -25,7 +25,7 @@
  */
 
 /**
- * 425 API methods
+ * 429 API methods
  */
 
 import type {
@@ -60,6 +60,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -94,6 +95,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IError,
@@ -167,6 +169,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -248,6 +251,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -518,6 +522,36 @@ export interface ILooker40SDK extends IAPIMethods {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   *
+   * The value of the `secret` field will be set by Looker and returned.
+   *
+   * POST /embed_config/secrets -> IEmbedSecret
+   *
+   * @param body Partial<IWriteEmbedSecret>
+   * @param options one-time API call overrides
+   *
+   */
+  create_embed_secret(
+    body?: Partial<IWriteEmbedSecret>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IEmbedSecret, IError | IValidationError>>
+
+  /**
+   * ### Delete an embed secret.
+   *
+   * DELETE /embed_config/secrets/{embed_secret_id} -> string
+   *
+   * @param embed_secret_id Id of Embed Secret
+   * @param options one-time API call overrides
+   *
+   */
+  delete_embed_secret(
+    embed_secret_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>
 
   /**
    * ### Create SSO Embed URL
@@ -3503,6 +3537,38 @@ export interface ILooker40SDK extends IAPIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -4313,7 +4379,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   look(
-    look_id: number,
+    look_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError>>
@@ -4349,7 +4415,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_look(
-    look_id: number,
+    look_id: string,
     body: Partial<IWriteLookWithQuery>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -4371,7 +4437,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_look(
-    look_id: number,
+    look_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -4426,7 +4492,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   copy_look(
-    look_id: number,
+    look_id: string,
     folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
@@ -4447,7 +4513,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   move_look(
-    look_id: number,
+    look_id: string,
     folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
@@ -4455,20 +4521,6 @@ export interface ILooker40SDK extends IAPIMethods {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>>
 
   /**
    * ### Get information about all lookml models.
@@ -7658,20 +7710,18 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param user_id id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   create_user_credentials_api3(
     user_id: number,
-    body?: Partial<ICredentialsApi3>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>>
+  ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>>
 
   /**
    * ### Embed login information for the specified user.

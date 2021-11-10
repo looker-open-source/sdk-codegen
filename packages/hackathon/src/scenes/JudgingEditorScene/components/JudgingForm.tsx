@@ -34,9 +34,10 @@ import {
   ButtonOutline,
   Space,
   Span,
-  Text,
   SpaceVertical,
   FieldTextArea,
+  Tabs2,
+  Tab2,
 } from '@looker/components'
 import {
   saveJudgingRequest,
@@ -44,7 +45,8 @@ import {
 } from '../../../data/judgings/actions'
 import { getHackerState } from '../../../data/hack_session/selectors'
 import type { IJudgingProps } from '../../../models'
-import { Routes } from '../../../routes/AppRouter'
+import { Routes } from '../../../routes'
+import { JudgingView } from './JudgingView'
 
 interface JudgingFormProps {
   judging: IJudgingProps
@@ -79,103 +81,101 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
   const impact = judging.impact
 
   return (
-    <>
-      {!hacker.canAdmin && judging.user_id !== hacker.id && (
-        <Text>You can't judge this</Text>
-      )}
-      <SpaceVertical gap="xlarge" width="40vh">
-        <Heading as="h1">{judging.$title}</Heading>
-        <Span>{judging.$description}</Span>
-        <SpaceVertical gap="medium">
-          <Slider
-            name="execution"
-            onChange={onValueChange}
-            value={execution}
-            min={1}
-            max={10}
-            step={1}
-            disabled={readonly}
-          />
-          <Heading>
-            <strong>Execution:</strong> {execution}
-          </Heading>
-        </SpaceVertical>
-        <SpaceVertical gap="medium">
-          <Slider
-            name="ambition"
-            onChange={onValueChange}
-            value={ambition}
-            min={1}
-            max={10}
-            step={1}
-            disabled={readonly}
-          />
-          <Heading>
-            <strong>Ambition:</strong> {ambition}
-          </Heading>
-        </SpaceVertical>
-        <SpaceVertical gap="medium">
-          <Slider
-            name="coolness"
-            onChange={onValueChange}
-            value={coolness}
-            min={1}
-            max={10}
-            step={1}
-            disabled={readonly}
-          />
-          <Heading>
-            <strong>Coolness:</strong> {coolness}
-          </Heading>
-        </SpaceVertical>
-        <SpaceVertical gap="medium">
-          <Slider
-            name="impact"
-            onChange={onValueChange}
-            value={impact}
-            min={1}
-            max={10}
-            step={1}
-            disabled={readonly}
-          />
-          <Heading>
-            <strong>Impact:</strong> {impact}
-          </Heading>
-        </SpaceVertical>
-        <Heading>
-          <strong>Total Score: {judging.score}</strong>
-        </Heading>
-        <SpaceVertical gap="medium">
-          <FieldTextArea
-            name="notes"
-            resize="vertical"
-            label="Notes"
-            placeholder="Additional comments about this project"
-            defaultValue={judging.notes}
-            onChange={onValueChange}
-            disabled={readonly}
-          />
-        </SpaceVertical>
-        <SpaceVertical gap="medium">
-          <FieldTextArea
-            readOnly
-            resize="vertical"
-            label="Copy the link below and paste into a new browser window to see additional information about the project"
-            placeholder="A link to more information"
-            defaultValue={judging.$more_info || ''}
-          />
-        </SpaceVertical>
-        <Space between>
-          <Space>
-            <ButtonOutline type="button" onClick={handleCancel}>
-              Return to judging
-            </ButtonOutline>
-            <Button type="submit" onClick={handleSave} disabled={readonly}>
-              Save judging
-            </Button>
-          </Space>
-        </Space>
-      </SpaceVertical>
-    </>
+    <SpaceVertical>
+      <Tabs2>
+        <Tab2 id="form" label="Form">
+          {!hacker.canAdmin && judging.user_id !== hacker.id && (
+            <Span>You are not assigned to judge this project</Span>
+          )}
+          <SpaceVertical gap="xlarge" width="40vh">
+            <Heading as="h1">{judging.$title}</Heading>
+            <Span>{judging.$description}</Span>
+            <SpaceVertical gap="medium">
+              <Slider
+                name="execution"
+                onChange={onValueChange}
+                value={execution}
+                min={1}
+                max={10}
+                step={1}
+                disabled={readonly}
+              />
+              <Heading>
+                <strong>Execution:</strong> {execution}
+              </Heading>
+            </SpaceVertical>
+            <SpaceVertical gap="medium">
+              <Slider
+                name="ambition"
+                onChange={onValueChange}
+                value={ambition}
+                min={1}
+                max={10}
+                step={1}
+                disabled={readonly}
+              />
+              <Heading>
+                <strong>Ambition:</strong> {ambition}
+              </Heading>
+            </SpaceVertical>
+            <SpaceVertical gap="medium">
+              <Slider
+                name="coolness"
+                onChange={onValueChange}
+                value={coolness}
+                min={1}
+                max={10}
+                step={1}
+                disabled={readonly}
+              />
+              <Heading>
+                <strong>Coolness:</strong> {coolness}
+              </Heading>
+            </SpaceVertical>
+            <SpaceVertical gap="medium">
+              <Slider
+                name="impact"
+                onChange={onValueChange}
+                value={impact}
+                min={1}
+                max={10}
+                step={1}
+                disabled={readonly}
+              />
+              <Heading>
+                <strong>Impact:</strong> {impact}
+              </Heading>
+            </SpaceVertical>
+            <Heading>
+              <strong>Total Score: {judging.score}</strong>
+            </Heading>
+            <SpaceVertical gap="medium">
+              <FieldTextArea
+                name="notes"
+                resize="vertical"
+                label="Notes"
+                placeholder="Additional comments about this project (supports markdown)"
+                defaultValue={judging.notes}
+                onChange={onValueChange}
+                disabled={readonly}
+              />
+            </SpaceVertical>
+            <Space between>
+              <Space>
+                <ButtonOutline type="button" onClick={handleCancel}>
+                  Return to judging
+                </ButtonOutline>
+                <Button type="submit" onClick={handleSave} disabled={readonly}>
+                  Save judging
+                </Button>
+              </Space>
+            </Space>
+          </SpaceVertical>
+        </Tab2>
+        <Tab2 id="preview" label="Preview">
+          <JudgingView judging={judging} />
+        </Tab2>
+      </Tabs2>
+    </SpaceVertical>
   )
 }

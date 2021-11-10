@@ -54,6 +54,6 @@ describe('SomethingWentWrong', () => {
 
     expect(screen.getByText(header)).toBeVisible()
     expect(screen.getByText(actionMessage)).toBeVisible()
-    expect(screen.getByAltText(altText)).toBeVisible()
+    expect(screen.getByTitle(altText)).toBeInTheDocument()
   })
 })
