@@ -1,5 +1,39 @@
 # Changelog
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.18.1...hackathon-v21.20.0) (2021-11-10)
+
+
+### Features
+
+* Add JPN agenda.ts and add yarn command in readme.md for hackathon app ([#889](https://www.github.com/looker-open-source/sdk-codegen/issues/889)) ([16528bc](https://www.github.com/looker-open-source/sdk-codegen/commit/16528bc245f6e447be3d862a4a0115a50aa1a16a))
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+* disable "Add Project" when judging starts ([#894](https://www.github.com/looker-open-source/sdk-codegen/issues/894)) ([d3386ae](https://www.github.com/looker-open-source/sdk-codegen/commit/d3386ae034dd5bacd067de791fe5ba5f3ed06ac4))
+* judging view for Hackathon app ([#891](https://www.github.com/looker-open-source/sdk-codegen/issues/891)) ([ff9f9f6](https://www.github.com/looker-open-source/sdk-codegen/commit/ff9f9f6240b54abf0a295bead5317489658ec068))
+* Looker 21.20 bindings ([#899](https://www.github.com/looker-open-source/sdk-codegen/issues/899)) ([304d0d0](https://www.github.com/looker-open-source/sdk-codegen/commit/304d0d0688349efad0499d37609605e14df7e97d))
+* markdown, link click support, and project view for hackathon projects ([#877](https://www.github.com/looker-open-source/sdk-codegen/issues/877)) ([c55b221](https://www.github.com/looker-open-source/sdk-codegen/commit/c55b22101f3be2b8f172841dc3964dcc18825e47))
+
+
+### Bug Fixes
+
+* add hackathon resource ([#900](https://www.github.com/looker-open-source/sdk-codegen/issues/900)) ([c092c93](https://www.github.com/looker-open-source/sdk-codegen/commit/c092c933b01ba61cb285782a4dd5cbf97d249f6f))
+* Add hackathon resources and refactor to use enums ([#887](https://www.github.com/looker-open-source/sdk-codegen/issues/887)) ([59faaab](https://www.github.com/looker-open-source/sdk-codegen/commit/59faaaba3875c60c88bb1aa7adea2ef16a94705c))
+* Hackathon styling and resource update ([#884](https://www.github.com/looker-open-source/sdk-codegen/issues/884)) ([7e07abb](https://www.github.com/looker-open-source/sdk-codegen/commit/7e07abb46213b9c7fd3170f1d75788a621e6bbd8))
+* Updated and corrected agenda and resources page ([#892](https://www.github.com/looker-open-source/sdk-codegen/issues/892)) ([db5000c](https://www.github.com/looker-open-source/sdk-codegen/commit/db5000ced51deddfc0fbb64161283770868a2cd2))
+* Updated hackathon readme landing page path and cleanup ([#893](https://www.github.com/looker-open-source/sdk-codegen/issues/893)) ([382a9f0](https://www.github.com/looker-open-source/sdk-codegen/commit/382a9f0e41716a8b1adc9858ad60a88b6e0b5343))
+* Updated hackathon resources and project description ([#898](https://www.github.com/looker-open-source/sdk-codegen/issues/898)) ([9581b20](https://www.github.com/looker-open-source/sdk-codegen/commit/9581b20d27530d0a2d0e4327bdf2b9daf0e4e35a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.13 to ^0.1.14
+    * @looker/extension-sdk bumped from ^21.18.1 to ^21.20.0
+    * @looker/extension-sdk-react bumped from ^21.18.1 to ^21.20.0
+    * @looker/sdk bumped from ^21.18.1 to ^21.20.0
+    * @looker/sdk-rtl bumped from ^21.1.1 to ^21.2.0
+    * @looker/wholly-sheet bumped from ^0.5.19 to ^0.5.20
+
 ### [21.18.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.18.0...hackathon-v21.18.1) (2021-10-27)
 
 
