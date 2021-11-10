@@ -84,7 +84,7 @@ jobs:
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run unit tests
-        run: yarn jest "packages/sdk-codegen(-utils|-scripts)/src" --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
