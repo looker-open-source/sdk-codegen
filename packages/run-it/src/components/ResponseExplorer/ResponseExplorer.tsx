@@ -129,7 +129,7 @@ interface ResponseExplorerProps {
  * Explore the raw response from an HTTP request
  * @param response IRawResponse values
  * @param verb HTTP method
- * @param path Path of request
+ * @param path Full path of request, including query string
  * @constructor
  */
 export const ResponseExplorer: FC<ResponseExplorerProps> = ({
@@ -145,11 +145,8 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
       {!response && <DarkSpan>No response was received</DarkSpan>}
       {response && (
         <>
-          <RunItHeading as="h4">
-            {`${verb || ''} ${path || ''} (${response.statusCode}: ${
-              response.statusMessage
-            })`}
-          </RunItHeading>
+          <RunItHeading as="h4">{`${verb || ''} ${path || ''}`}</RunItHeading>
+          <DarkSpan>{`${response.statusCode}: ${response.statusMessage}`}</DarkSpan>
           <CollapserCard
             divider={false}
             heading={`Body (${getBodySize(response)})`}

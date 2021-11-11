@@ -35,6 +35,7 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { BaseTransport } from '@looker/sdk-rtl'
 import type { ResponseContent } from './components'
 import {
   RequestForm,
@@ -51,11 +52,11 @@ import {
   initRequestContent,
   createRequestParams,
   runRequest,
-  pathify,
   sdkNeedsConfig,
   prepareInputs,
   sdkNeedsAuth,
   createInputs,
+  requestUrl,
 } from './utils'
 import type { RunItSetter } from '.'
 import { runItNoSet, RunItContext } from '.'
@@ -126,6 +127,7 @@ export const RunIt: FC<RunItProps> = ({
     initRequestContent(configurator, inputs)
   )
   const [activePathParams, setActivePathParams] = useState({})
+  const [activeQueryParams, setActiveQueryParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
@@ -173,6 +175,7 @@ export const RunIt: FC<RunItProps> = ({
       }
     }
     setActivePathParams(pathParams)
+    setActiveQueryParams(queryParams)
     tabs.onSelectTab(1)
     if (sdk) {
       setLoading(true)
@@ -240,12 +243,24 @@ export const RunIt: FC<RunItProps> = ({
         <TabPanel key="response">
           <Loading
             loading={loading}
-            message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+            message={`${httpMethod} ${requestUrl(
+              sdk.authSession.transport as BaseTransport,
+              basePath,
+              endpoint,
+              activePathParams,
+              activeQueryParams
+            )}`}
           />
           <ResponseExplorer
             response={responseContent}
             verb={httpMethod}
-            path={pathify(endpoint, activePathParams)}
+            path={requestUrl(
+              sdk.authSession.transport as BaseTransport,
+              basePath,
+              endpoint,
+              activePathParams,
+              activeQueryParams
+            )}
           />
         </TabPanel>
         <TabPanel key="makeTheCall">

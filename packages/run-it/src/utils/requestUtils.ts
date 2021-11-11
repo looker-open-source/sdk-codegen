@@ -24,7 +24,7 @@
 
  */
 
-import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import type { BaseTransport, IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
 import { isEmpty } from 'lodash'
 import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
@@ -170,6 +170,26 @@ export const createRequestParams = (
     }
   }
   return [pathParams, queryParams, body]
+}
+
+/**
+ * Construct the full request URL
+ * @param transport to get server's host url
+ * @param path to REST server
+ * @param endpoint REST endpoint
+ * @param pathParams path parameters
+ * @param queryParams collection
+ */
+export const requestUrl = (
+  transport: BaseTransport,
+  path: string,
+  endpoint: string,
+  pathParams: RunItValues,
+  queryParams?: RunItValues
+) => {
+  path = `${path}${pathify(endpoint, pathParams)}`
+  const url = transport.makeUrl(path, transport.options, queryParams)
+  return url
 }
 
 /**
