@@ -25,7 +25,7 @@
  */
 import type { SheetValues } from '@looker/wholly-sheet'
 import type { DataTableColumn, DataTableColumns } from '@looker/components'
-import { Icon } from '@looker/components'
+import { Span, Icon } from '@looker/components'
 import { Done } from '@styled-icons/material/Done'
 import React from 'react'
 
@@ -86,10 +86,10 @@ export const sheetHeader = (header: string[], row: any) => {
  * @param value to convert to displayable actionitem
  */
 export const sheetCell = (value: any) => {
-  if (typeof value === 'undefined') return ''
+  if (typeof value === 'undefined') return <Span></Span>
 
   if (typeof value === 'boolean') {
-    return value ? <Icon size="small" icon={<Done />} /> : ''
+    return value ? <Icon size="small" icon={<Done />} /> : <Span></Span>
   }
 
   if (value instanceof Set) {
@@ -98,10 +98,10 @@ export const sheetCell = (value: any) => {
     for (const v of value.values()) {
       values.push(v.toString())
     }
-    return values.join(', ')
+    return <Span>{values.join(', ')}</Span>
   }
   if (value instanceof Date) {
-    return value.toDateString()
+    return <Span>{value.toDateString()}</Span>
   }
-  return value.toString()
+  return <Span>{value.toString()}</Span>
 }
