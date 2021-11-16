@@ -52,3 +52,4 @@ def load_to_bq():
             table.num_rows, len(table.schema), table_id
         )
     )
+    
