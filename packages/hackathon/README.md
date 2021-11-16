@@ -38,6 +38,7 @@ application: hackathon {
       "https://*.slack.com/*",
       "https://*.github.com/*",
       "https://*.youtube.com/*",
+      "https://*.youtu.be/*",
       "https://*.vimeo.com/*"
       ]
     use_form_submit: yes
