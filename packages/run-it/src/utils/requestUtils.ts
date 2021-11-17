@@ -24,7 +24,7 @@
 
  */
 
-import type { ITransport, IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
 import { isEmpty } from 'lodash'
 import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
@@ -174,21 +174,20 @@ export const createRequestParams = (
 
 /**
  * Construct the full request URL
- * @param transport to get server's host url
+ * @param baseUrl full path to the API server version
  * @param path to REST server
  * @param pathParams path parameters
  * @param queryParams collection
  */
 export const fullRequestUrl = (
-  transport: ITransport,
+  baseUrl: string,
   path: string,
   pathParams: RunItValues,
   queryParams?: RunItValues
 ) => {
-  const base = transport.options.base_url
   path = pathify(path, pathParams)
   if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
-    path = `${base}${path}` // path was relative
+    path = `${baseUrl}${path}` // path was relative
   }
   path = addQueryParams(path, queryParams)
   return path
@@ -214,7 +213,11 @@ export const runRequest = async (
   if (!sdk.authSession.isAuthenticated()) {
     await sdk.ok(sdk.authSession.login())
   }
-  const url = fullRequestUrl(sdk.authSession.transport, endpoint, pathParams)
+  const url = fullRequestUrl(
+    sdk.authSession.transport.options.base_url,
+    endpoint,
+    pathParams
+  )
   const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,

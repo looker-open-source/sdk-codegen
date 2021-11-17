@@ -68,7 +68,7 @@ describe('RunIt', () => {
       jest.clearAllMocks()
     })
 
-    test('it renders endpoint, request and response tabs, and form inputs', () => {
+    it('it renders endpoint, request and response tabs, and form inputs', () => {
       renderRunIt()
       // TODO fix this
       // expect(screen.getByRole('heading')).toHaveTextContent(
@@ -93,7 +93,7 @@ describe('RunIt', () => {
       ).not.toBeInTheDocument()
     })
 
-    test('the form submit handler invokes the request callback on submit', async () => {
+    it('the form submit handler invokes the request callback on submit', async () => {
       renderRunIt(api, api.methods.me)
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
@@ -108,13 +108,13 @@ describe('RunIt', () => {
         ).toBeInTheDocument()
         expect(
           screen.getByRole('heading', {
-            name: 'GET https://self-signed.looker.com:19999/user',
+            name: 'GET https://self-signed.looker.com:19999/api/4.0/user',
           })
         ).toBeInTheDocument()
       })
     })
 
-    test('run_inline_query has required body parameters', async () => {
+    it('run_inline_query has required body parameters', async () => {
       renderRunIt()
       const defaultRequestCallback = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
@@ -140,7 +140,7 @@ describe('RunIt', () => {
       })
     })
 
-    test('it has Configure button', () => {
+    it('it has Configure button', () => {
       renderRunIt()
       expect(
         screen.getByRole('button', { name: 'Configure' })
@@ -163,7 +163,7 @@ describe('RunIt', () => {
       })
     })
 
-    test('it has Login button', () => {
+    it('it has Login button', () => {
       renderRunIt()
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument()
       expect(

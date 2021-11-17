@@ -108,6 +108,10 @@ interface RunItProps {
   sdkLanguage?: string
 }
 
+// interface SpecParams {
+//   specKey: string
+// }
+
 /**
  * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
@@ -118,6 +122,7 @@ export const RunIt: FC<RunItProps> = ({
   setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
 }) => {
+  // const { specKey } = useParams<SpecParams>()
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
   const { sdk, configurator } = useContext(RunItContext)
@@ -206,6 +211,9 @@ export const RunIt: FC<RunItProps> = ({
 
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
+  const baseUrl = isExtension
+    ? 'need extension callback' // `${getExtensionSDK().lookerHostData?.hostUrl}/api/${specKey}`
+    : sdk.authSession.transport.options.base_url
 
   return (
     <Box bg="background" py="large" height="100%">
@@ -240,7 +248,7 @@ export const RunIt: FC<RunItProps> = ({
           <Loading
             loading={loading}
             message={`${httpMethod} ${fullRequestUrl(
-              sdk.authSession.transport,
+              baseUrl,
               endpoint,
               activeParams.path,
               activeParams.query
@@ -250,7 +258,7 @@ export const RunIt: FC<RunItProps> = ({
             response={responseContent}
             verb={httpMethod}
             path={fullRequestUrl(
-              sdk.authSession.transport,
+              baseUrl,
               endpoint,
               activeParams.path,
               activeParams.query

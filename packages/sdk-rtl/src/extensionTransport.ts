@@ -71,8 +71,8 @@ export class ExtensionTransport implements ITransport {
     readonly options: ITransportSettings,
     private hostConnection: IHostConnection
   ) {
-    this.options = options
     this.hostConnection = hostConnection
+    this.options = options
   }
 
   observer: RawObserver | undefined
