@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import type { RunItInput } from '../RunIt'
 import { testJsonResponse, api } from '../test-data'
 import { defaultConfigurator, StandaloneConfigurator } from '../components'
@@ -32,6 +33,7 @@ import {
   runRequest,
   createInputs,
   initRequestContent,
+  fullRequestUrl,
 } from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 
@@ -43,12 +45,12 @@ describe('requestUtils', () => {
   })
 
   describe('pathify', () => {
-    test('it returns unchanged path if no path params are specified', () => {
+    it('returns unchanged path if no path params are specified', () => {
       const actual = pathify('/logout')
       expect(actual).toEqual('/logout')
     })
 
-    test('it works path params', () => {
+    it('works path params', () => {
       const pathParams = {
         query_id: 1,
         result_format: 'json',
@@ -61,6 +63,45 @@ describe('requestUtils', () => {
     })
   })
 
+  describe('fullRequestUrl', () => {
+    it('has full path', () => {
+      const path = '/queries/{query_id}/run/{result_format}'
+      const pathParams = {
+        query_id: 1,
+        result_format: 'json',
+      }
+      const actual = fullRequestUrl(
+        sdk.authSession.transport.options.base_url,
+        path,
+        pathParams
+      )
+      expect(actual).toEqual(
+        'https://self-signed.looker.com:19999/api/4.0/queries/1/run/json'
+      )
+    })
+
+    it('has escaped query params', () => {
+      const path = '/dashboards/{dashboard_id}/search'
+      const pathParams = {
+        dashboard_id: 1,
+      }
+      const queryParams = {
+        title: 'SDK%',
+        description: '%dashboard&',
+        limit: 4,
+        offset: 10,
+      }
+      const actual = fullRequestUrl(
+        sdk.authSession.transport.options.base_url,
+        path,
+        pathParams,
+        queryParams
+      )
+      expect(actual).toEqual(
+        'https://self-signed.looker.com:19999/api/4.0/dashboards/1/search?title=SDK%25&description=%25dashboard%26&limit=4&offset=10'
+      )
+    })
+  })
   describe('createRequestParams', () => {
     const inputs: RunItInput[] = [
       {
@@ -107,7 +148,7 @@ describe('requestUtils', () => {
       body: '{}',
     }
 
-    test('empty json body is not removed', () => {
+    it('does not remove empty json body', () => {
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         noBody
@@ -121,7 +162,7 @@ describe('requestUtils', () => {
       expect(body).toEqual({})
     })
 
-    test('it correctly identifies requestContent params location', () => {
+    it('correctly identifies requestContent params location', () => {
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         requestContent
@@ -135,7 +176,7 @@ describe('requestUtils', () => {
       expect(body).toEqual(JSON.parse(requestContent.body))
     })
 
-    test('non JSON parsable strings are treated as x-www-form-urlencoded strings', () => {
+    it('treats non JSON parsable strings as x-www-form-urlencoded strings', () => {
       const urlParams = 'key1=value1&key2=value2'
       const [, , body] = createRequestParams(
         [
@@ -156,7 +197,7 @@ describe('requestUtils', () => {
   })
 
   describe('defaultRunItCallback', () => {
-    test('it makes a request', async () => {
+    it('makes a request', async () => {
       const spy = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
         .mockResolvedValueOnce(testJsonResponse)
@@ -164,7 +205,6 @@ describe('requestUtils', () => {
 
       const resp = await runRequest(
         sdk,
-        '/api/3.1',
         'POST',
         '/queries/run/{result_format}',
         { result_format: 'json' },
@@ -174,7 +214,7 @@ describe('requestUtils', () => {
 
       expect(spy).toHaveBeenCalledWith(
         'POST',
-        '/api/3.1/queries/run/json',
+        'https://self-signed.looker.com:19999/api/4.0/queries/run/json',
         {
           fields: 'first_name, last_name',
         },
@@ -190,7 +230,7 @@ describe('requestUtils', () => {
   })
 
   describe('createInputs', () => {
-    test('converts delimarray to string', () => {
+    it('converts delimarray to string', () => {
       const method = api.methods.all_users
       const actual = createInputs(api, method)
       expect(actual).toHaveLength(method.allParams.length)
@@ -203,7 +243,7 @@ describe('requestUtils', () => {
       })
     })
 
-    test('converts enums in body to string', () => {
+    it('converts enums in body to string', () => {
       const method = api.methods.create_query_task
       const actual = createInputs(api, method)
       expect(actual).toHaveLength(method.allParams.length)
@@ -223,7 +263,7 @@ describe('requestUtils', () => {
       })
     })
 
-    test('works with various param types', () => {
+    it('works with various param types', () => {
       const method = api.methods.run_inline_query
       const actual = createInputs(api, method)
       expect(actual).toHaveLength(method.allParams.length)
@@ -288,7 +328,7 @@ describe('requestUtils', () => {
   })
 
   describe('request content initialization', () => {
-    test('it initialzies body params with default values', () => {
+    it('it initialzies body params with default values', () => {
       const inputs = createInputs(api, api.methods.run_inline_query)
       const actual = initRequestContent(defaultConfigurator, inputs, {})
       expect(actual).toEqual({
@@ -317,7 +357,7 @@ describe('requestUtils', () => {
       })
     })
 
-    test('it contains default-empty body params', () => {
+    it('it contains default-empty body params', () => {
       const inputs = createInputs(api, api.methods.fetch_integration_form)
       const bodyInput = inputs.find((i) => i.location === 'body')!
       expect(bodyInput.name).toEqual('body')
@@ -332,7 +372,7 @@ describe('requestUtils', () => {
   describe('createRequestParams', () => {
     const inputs = createInputs(api, api.methods.run_inline_query)
 
-    test('removes empties for path, query and body params', () => {
+    it('removes empties for path, query and body params', () => {
       const requestContent = initRequestContent(defaultConfigurator, inputs)
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
@@ -346,7 +386,7 @@ describe('requestUtils', () => {
       })
     })
 
-    test('does mot remove empty bodies', () => {
+    it('does mot remove empty bodies', () => {
       const requestContent = { body: {} }
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,

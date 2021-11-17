@@ -51,11 +51,11 @@ import {
   initRequestContent,
   createRequestParams,
   runRequest,
-  pathify,
   sdkNeedsConfig,
   prepareInputs,
   sdkNeedsAuth,
   createInputs,
+  fullRequestUrl,
 } from './utils'
 import type { RunItSetter } from '.'
 import { runItNoSet, RunItContext } from '.'
@@ -108,6 +108,10 @@ interface RunItProps {
   sdkLanguage?: string
 }
 
+// interface SpecParams {
+//   specKey: string
+// }
+
 /**
  * Given an array of inputs, a method, and an api model it renders a REST request form
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
@@ -118,14 +122,15 @@ export const RunIt: FC<RunItProps> = ({
   setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
 }) => {
+  // const { specKey } = useParams<SpecParams>()
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
-  const { sdk, configurator, basePath } = useContext(RunItContext)
+  const { sdk, configurator } = useContext(RunItContext)
   const [inputs] = useState(() => createInputs(api, method))
   const [requestContent, setRequestContent] = useState(() =>
     initRequestContent(configurator, inputs)
   )
-  const [activePathParams, setActivePathParams] = useState({})
+  const [activeParams, setActiveParams] = useState({ path: {}, query: {} })
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
@@ -172,7 +177,7 @@ export const RunIt: FC<RunItProps> = ({
         return
       }
     }
-    setActivePathParams(pathParams)
+    setActiveParams({ path: pathParams, query: queryParams })
     tabs.onSelectTab(1)
     if (sdk) {
       setLoading(true)
@@ -180,7 +185,6 @@ export const RunIt: FC<RunItProps> = ({
       try {
         response = await runRequest(
           sdk,
-          basePath,
           httpMethod,
           endpoint,
           pathParams,
@@ -207,6 +211,9 @@ export const RunIt: FC<RunItProps> = ({
 
   // No SDK, no RunIt for you!
   if (!sdk) return <></>
+  const baseUrl = isExtension
+    ? 'need extension callback' // `${getExtensionSDK().lookerHostData?.hostUrl}/api/${specKey}`
+    : sdk.authSession.transport.options.base_url
 
   return (
     <Box bg="background" py="large" height="100%">
@@ -240,12 +247,22 @@ export const RunIt: FC<RunItProps> = ({
         <TabPanel key="response">
           <Loading
             loading={loading}
-            message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+            message={`${httpMethod} ${fullRequestUrl(
+              baseUrl,
+              endpoint,
+              activeParams.path,
+              activeParams.query
+            )}`}
           />
           <ResponseExplorer
             response={responseContent}
             verb={httpMethod}
-            path={pathify(endpoint, activePathParams)}
+            path={fullRequestUrl(
+              baseUrl,
+              endpoint,
+              activeParams.path,
+              activeParams.query
+            )}
           />
         </TabPanel>
         <TabPanel key="makeTheCall">

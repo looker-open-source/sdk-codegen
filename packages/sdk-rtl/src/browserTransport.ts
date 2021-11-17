@@ -77,7 +77,7 @@ export class BrowserCryptoHash implements ICryptoHash {
 }
 
 export class BrowserTransport extends BaseTransport {
-  constructor(protected readonly options: ITransportSettings) {
+  constructor(public readonly options: ITransportSettings) {
     super(options)
   }
 

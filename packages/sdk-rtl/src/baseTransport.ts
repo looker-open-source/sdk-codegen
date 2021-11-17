@@ -38,7 +38,7 @@ import type {
 } from './transport'
 
 export abstract class BaseTransport implements ITransport {
-  protected constructor(protected readonly options: ITransportSettings) {
+  protected constructor(readonly options: ITransportSettings) {
     this.options = options
   }
 
@@ -128,7 +128,7 @@ export abstract class BaseTransport implements ITransport {
     path: string,
     options: Partial<ITransportSettings>,
     queryParams?: Values
-  ) {
+  ): string {
     // is this an API-versioned call?
     const base = options.base_url
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {

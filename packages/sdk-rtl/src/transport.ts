@@ -186,6 +186,7 @@ export type RawObserver = (raw: IRawResponse) => IRawResponse
 export interface ITransport {
   /** Observer lambda to process raw responses */
   observer: RawObserver | undefined
+  options: ITransportSettings
 
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses

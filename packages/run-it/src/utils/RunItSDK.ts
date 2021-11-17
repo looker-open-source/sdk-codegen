@@ -38,7 +38,7 @@ import { RunItConfigKey } from '../components'
 // https://docs.looker.com/reference/api-and-integration/api-cors
 const settings = {
   ...DefaultSettings(),
-  base_url: 'https://self-signed.looker.com:19999',
+  base_url: 'https://self-signed.looker.com:19999/api/4.0',
   agentTag: 'RunIt 0.8',
 } as IApiSettings
 

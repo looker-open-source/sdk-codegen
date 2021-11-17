@@ -68,11 +68,11 @@ export interface IHostConnection {
 
 export class ExtensionTransport implements ITransport {
   constructor(
-    private readonly options: ITransportSettings,
+    readonly options: ITransportSettings,
     private hostConnection: IHostConnection
   ) {
-    this.options = options
     this.hostConnection = hostConnection
+    this.options = options
   }
 
   observer: RawObserver | undefined

@@ -37,10 +37,10 @@ import {
   trimInputs,
 } from '@looker/sdk-codegen'
 
+import { addQueryParams } from '@looker/sdk-rtl'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import type { RunItConfigurator } from '../components'
 import { RunItFormKey } from '../components'
-import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
 export type RunItSetter = (value: any) => any
@@ -173,9 +173,29 @@ export const createRequestParams = (
 }
 
 /**
+ * Construct the full request URL
+ * @param baseUrl full path to the API server version
+ * @param path to REST server
+ * @param pathParams path parameters
+ * @param queryParams collection
+ */
+export const fullRequestUrl = (
+  baseUrl: string,
+  path: string,
+  pathParams: RunItValues,
+  queryParams?: RunItValues
+) => {
+  path = pathify(path, pathParams)
+  if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
+    path = `${baseUrl}${path}` // path was relative
+  }
+  path = addQueryParams(path, queryParams)
+  return path
+}
+
+/**
  * Makes an http request using the SDK browser transport rawRequest method
  * @param sdk functional SDK that supports rawRequest via its transport
- * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
  * @param pathParams Collection of path params
@@ -184,7 +204,6 @@ export const createRequestParams = (
  */
 export const runRequest = async (
   sdk: IAPIMethods,
-  basePath: string,
   httpMethod: RunItHttpMethod,
   endpoint: string,
   pathParams: RunItValues,
@@ -192,15 +211,19 @@ export const runRequest = async (
   body: any
 ): Promise<IRawResponse> => {
   if (!sdk.authSession.isAuthenticated()) {
-    await sdk.ok(runItSDK.authSession.login())
+    await sdk.ok(sdk.authSession.login())
   }
-  const url = `${basePath}${pathify(endpoint, pathParams)}`
+  const url = fullRequestUrl(
+    sdk.authSession.transport.options.base_url,
+    endpoint,
+    pathParams
+  )
   const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
-    (props) => runItSDK.authSession.authenticate(props)
+    (props) => sdk.authSession.authenticate(props)
   )
   return raw
 }

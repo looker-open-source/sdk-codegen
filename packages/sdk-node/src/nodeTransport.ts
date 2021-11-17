@@ -83,7 +83,7 @@ export type RequestOptions = rq.RequiredUriUrl &
   rq.OptionsWithUrl
 
 export class NodeTransport extends BaseTransport {
-  constructor(protected readonly options: ITransportSettings) {
+  constructor(public readonly options: ITransportSettings) {
     super(options)
   }
 
