@@ -28,16 +28,19 @@ import type { ThemeCustomizations } from '@looker/design-tokens'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { BrowserAdaptor } from './browserAdaptor'
 
-/**
- * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
- * Examples include: local storage operations and various link navigation functions
- */
-export interface IEnvironmentAdaptor {
+export interface IAuthAdaptor {
   /** Method for retrieving an instantiated SDK */
   get sdk(): IAPIMethods
   /** Method for authenticating against the API server. Auth mechanism is dependent on the authSession implementation
    * used for the sdk. */
   login(): void
+}
+
+/**
+ * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
+ * Examples include: local storage operations and various link navigation functions
+ */
+export interface IEnvironmentAdaptor extends IAuthAdaptor {
   /** Method for determining whether running in a browser or extension environment */
   isExtension(): boolean
   /** Method for retrieving a keyed value from local storage */
@@ -53,6 +56,7 @@ export interface IEnvironmentAdaptor {
   /** error logger */
   logError: (error: Error, componentStack: string) => void
 }
+
 
 /**
  * Theme overrides used to load google fonts in Google environments only.

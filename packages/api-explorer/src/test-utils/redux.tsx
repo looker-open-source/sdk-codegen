@@ -31,8 +31,9 @@ import type { Store } from 'redux'
 import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 import { createStore } from '@looker/redux'
-
 import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
+import { initRunItSdk } from '@looker/run-it'
+
 import type { LodesState, RootState, SettingState } from '../state'
 import {
   settingsSlice,
@@ -47,7 +48,7 @@ export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = defaultStore
 ) => {
-  registerEnvAdaptor(new BrowserAdaptor())
+  registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()))
   return <Provider store={store}>{consumers}</Provider>
 }
 

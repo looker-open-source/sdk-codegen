@@ -26,27 +26,33 @@
 
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { getThemeOverrides, hostedInternally } from './adaptorUtils'
-import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
+import type {
+  IAuthAdaptor,
+  IEnvironmentAdaptor,
+  ThemeOverrides,
+} from './adaptorUtils'
+
+export class BrowserAuthAdaptor implements IAuthAdaptor {
+  constructor(public readonly sdk: IAPIMethods) {}
+
+  async login() {
+    await this.sdk.authSession.login()
+  }
+}
 
 /**
  * An adaptor class for interacting with browser APIs when not running in an extension
  */
-export class BrowserAdaptor implements IEnvironmentAdaptor {
+export class BrowserAdaptor
+  extends BrowserAuthAdaptor
+  implements IEnvironmentAdaptor
+{
   private _themeOverrides: ThemeOverrides
-  private readonly _sdk: IAPIMethods
 
   constructor(sdk: IAPIMethods) {
+    super(sdk)
     const { hostname } = location
     this._themeOverrides = getThemeOverrides(hostedInternally(hostname))
-    this._sdk = sdk
-  }
-
-  get sdk() {
-    return this._sdk
-  }
-
-  async login() {
-    await this.sdk.authSession.login()
   }
 
   isExtension() {

@@ -37,8 +37,7 @@ import {
 import { hot } from 'react-hot-loader/root'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getExtensionSDK } from '@looker/extension-sdk'
-import { ExtensionAdaptor } from '@looker/extension-utils'
+import { getThemeOverrides } from '@looker/extension-utils'
 import { SideNav, Header } from './components'
 import { AppRouter, getAuthorizedRoutes } from './routes'
 import { getMessageState } from './data/common/selectors'
@@ -63,9 +62,7 @@ const banner = (currentHackathon: any, hacker?: IHackerProps) => {
 }
 
 export const Hackathon: FC<HackathonProps> = hot(() => {
-  const extSdk = getExtensionSDK()
-  const adaptor = new ExtensionAdaptor(extSdk)
-  const themeOverrides = adaptor.themeOverrides()
+  const themeOverrides = getThemeOverrides(true)
 
   const dispatch = useDispatch()
   useEffect(() => {
