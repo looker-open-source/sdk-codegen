@@ -25,6 +25,7 @@
  */
 
 import type { ExtensionSDK } from '@looker/extension-sdk'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { IEnvironmentAdaptor, ThemeOverrides } from './adaptorUtils'
 import { getThemeOverrides } from './adaptorUtils'
 
@@ -33,11 +34,26 @@ import { getThemeOverrides } from './adaptorUtils'
  */
 export class ExtensionAdaptor implements IEnvironmentAdaptor {
   _themeOverrides: ThemeOverrides
-  constructor(public extensionSdk: ExtensionSDK) {
+  private readonly _sdk: IAPIMethods
+
+  constructor(public extensionSdk: ExtensionSDK, sdk: IAPIMethods) {
     this._themeOverrides = getThemeOverrides(
       (this.extensionSdk.lookerHostData || { hostType: 'standard' })
         .hostType === 'standard'
     )
+    this._sdk = sdk
+  }
+
+  get sdk() {
+    return this._sdk
+  }
+
+  async login() {
+    // Noop for extensions. Authentication is not required in an extension context
+  }
+
+  isExtension() {
+    return true
   }
 
   async localStorageGetItem(key: string) {

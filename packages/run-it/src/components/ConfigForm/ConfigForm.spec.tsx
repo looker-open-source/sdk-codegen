@@ -29,17 +29,13 @@ import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { defaultConfigurator } from '..'
-import { runItNoSet } from '../..'
+import { runItNoSet, initRunItSdk } from '../..'
 import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
 
-// jest.mock('./configUtils', () => ({
-//   loadSpecsFromVersions: jest.fn(),
-// }))
-
 describe('ConfigForm', () => {
+  const sdk = initRunItSdk()
   const apiLabel = /API server URL/i
   const authLabel = /OAuth server URL/i
-  // https://testing-library.com/docs/guide-which-query
 
   beforeEach(() => {
     defaultConfigurator.removeStorage(RunItConfigKey)
@@ -48,6 +44,7 @@ describe('ConfigForm', () => {
   test('it creates an empty config form without stored config', async () => {
     renderWithTheme(
       <ConfigForm
+        sdk={sdk}
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         requestContent={{}}
@@ -89,6 +86,7 @@ describe('ConfigForm', () => {
   test('it disables and enables verify for bad and good urls', async () => {
     renderWithTheme(
       <ConfigForm
+        sdk={sdk}
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         requestContent={{}}
@@ -126,6 +124,7 @@ describe('ConfigForm', () => {
     const title = 'New title'
     renderWithTheme(
       <ConfigForm
+        sdk={sdk}
         configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         title={title}
@@ -146,6 +145,7 @@ describe('ConfigForm', () => {
       )
       renderWithTheme(
         <ConfigForm
+          sdk={sdk}
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
           requestContent={{}}
@@ -204,6 +204,7 @@ describe('ConfigForm', () => {
 
       renderWithTheme(
         <ConfigForm
+          sdk={sdk}
           configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
           requestContent={{}}

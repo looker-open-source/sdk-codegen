@@ -87,11 +87,14 @@ export const ExtensionApiExplorer: FC = () => {
     if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
   }, [specs, sdk])
 
-  const extensionAdaptor = new ExtensionAdaptor(getExtensionSDK())
+  const extensionAdaptor = new ExtensionAdaptor(
+    getExtensionSDK(),
+    extensionContext.core40SDK
+  )
 
   return (
     <Provider store={store}>
-      <RunItProvider sdk={sdk} configurator={configurator} basePath="">
+      <RunItProvider configurator={configurator} basePath="">
         <>
           {specs ? (
             <ApiExplorer

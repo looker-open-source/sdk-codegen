@@ -25,10 +25,11 @@
  */
 
 import type { FC } from 'react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import type { BrowserSession } from '@looker/sdk-rtl'
-import { RunItContext } from '../..'
+import { getEnvAdaptor } from '@looker/extension-utils'
+
 import { Loading } from '../../components'
 
 export const OAuthScene: FC = () => {
@@ -37,7 +38,7 @@ export const OAuthScene: FC = () => {
   const [auth, setAuth] = useState<BrowserSession>()
   const [oldUrl, setOldUrl] = useState<string>()
   const history = useHistory()
-  const { sdk } = useContext(RunItContext)
+  const sdk = getEnvAdaptor().sdk
 
   useEffect(() => {
     if (sdk) {
@@ -71,9 +72,6 @@ export const OAuthScene: FC = () => {
     }
     maybeLogin()
   }, [auth, history])
-
-  // No sdk no OAuth for you
-  if (!sdk) return <></>
 
   return (
     <Loading

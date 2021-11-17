@@ -32,8 +32,9 @@ import {
 } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 import { api_spec } from '@looker/sdk'
+import { getEnvAdaptor } from '@looker/extension-utils'
+
 import type { RunItValues } from '../..'
-import { runItSDK } from '../..'
 
 export type StorageLocation = 'session' | 'local'
 export const RunItConfigKey = 'RunItConfig'
@@ -152,7 +153,7 @@ const apiSpecBits = (spec: SpecItem): string[] =>
  * @param name to retrieve
  */
 export const funFetch = (version: string, name: string): Promise<string> => {
-  return runItSDK.ok(api_spec(runItSDK, version, name))
+  return getEnvAdaptor().sdk.ok(api_spec(getEnvAdaptor().sdk, version, name))
 }
 
 /**
@@ -260,9 +261,9 @@ export const fallbackFetch = async (
     console.error({ error })
   }
   if (!api) {
-    const authed = runItSDK.authSession.isAuthenticated()
+    const authed = getEnvAdaptor().sdk.authSession.isAuthenticated()
     if (!authed) {
-      await runItSDK.authSession.login()
+      await getEnvAdaptor().sdk.authSession.login()
     }
     api = await sdkSpecFetch(spec, fetcher)
   }

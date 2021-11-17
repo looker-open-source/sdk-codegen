@@ -25,7 +25,7 @@
  */
 import type { RunItInput } from '../RunIt'
 import { testJsonResponse, api } from '../test-data'
-import { defaultConfigurator, StandaloneConfigurator } from '../components'
+import { defaultConfigurator } from '../components'
 import {
   createRequestParams,
   pathify,
@@ -35,7 +35,7 @@ import {
 } from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 
-const sdk = initRunItSdk(new StandaloneConfigurator())
+const sdk = initRunItSdk()
 
 describe('requestUtils', () => {
   afterEach(() => {
