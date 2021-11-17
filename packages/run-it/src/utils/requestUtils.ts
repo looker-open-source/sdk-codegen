@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseTransport, IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import type { ITransport, IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
 import { isEmpty } from 'lodash'
 import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
@@ -37,10 +37,10 @@ import {
   trimInputs,
 } from '@looker/sdk-codegen'
 
+import { addQueryParams } from '@looker/sdk-rtl'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import type { RunItConfigurator } from '../components'
 import { RunItFormKey } from '../components'
-import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
 export type RunItSetter = (value: any) => any
@@ -176,26 +176,27 @@ export const createRequestParams = (
  * Construct the full request URL
  * @param transport to get server's host url
  * @param path to REST server
- * @param endpoint REST endpoint
  * @param pathParams path parameters
  * @param queryParams collection
  */
-export const requestUrl = (
-  transport: BaseTransport,
+export const fullRequestUrl = (
+  transport: ITransport,
   path: string,
-  endpoint: string,
   pathParams: RunItValues,
   queryParams?: RunItValues
 ) => {
-  path = `${path}${pathify(endpoint, pathParams)}`
-  const url = transport.makeUrl(path, transport.options, queryParams)
-  return url
+  const base = transport.options.base_url
+  path = pathify(path, pathParams)
+  if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
+    path = `${base}${path}` // path was relative
+  }
+  path = addQueryParams(path, queryParams)
+  return path
 }
 
 /**
  * Makes an http request using the SDK browser transport rawRequest method
  * @param sdk functional SDK that supports rawRequest via its transport
- * @param basePath base path for the URL. For standalone this includes the specKey. Empty for extension.
  * @param httpMethod Request operation
  * @param endpoint Request path with path params in curly braces e.g. /queries/{query_id}/run/{result_format}
  * @param pathParams Collection of path params
@@ -204,7 +205,6 @@ export const requestUrl = (
  */
 export const runRequest = async (
   sdk: IAPIMethods,
-  basePath: string,
   httpMethod: RunItHttpMethod,
   endpoint: string,
   pathParams: RunItValues,
@@ -212,15 +212,15 @@ export const runRequest = async (
   body: any
 ): Promise<IRawResponse> => {
   if (!sdk.authSession.isAuthenticated()) {
-    await sdk.ok(runItSDK.authSession.login())
+    await sdk.ok(sdk.authSession.login())
   }
-  const url = `${basePath}${pathify(endpoint, pathParams)}`
+  const url = fullRequestUrl(sdk.authSession.transport, endpoint, pathParams)
   const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
-    (props) => runItSDK.authSession.authenticate(props)
+    (props) => sdk.authSession.authenticate(props)
   )
   return raw
 }

@@ -128,7 +128,7 @@ export abstract class BaseTransport implements ITransport {
     path: string,
     options: Partial<ITransportSettings>,
     queryParams?: Values
-  ) {
+  ): string {
     // is this an API-versioned call?
     const base = options.base_url
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {

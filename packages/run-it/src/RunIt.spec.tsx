@@ -106,6 +106,11 @@ describe('RunIt', () => {
         expect(
           screen.queryByText(testTextResponse.body.toString())
         ).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', {
+            name: 'GET https://self-signed.looker.com:19999/user',
+          })
+        ).toBeInTheDocument()
       })
     })
 

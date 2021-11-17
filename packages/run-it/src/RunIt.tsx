@@ -35,7 +35,6 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import type { BaseTransport } from '@looker/sdk-rtl'
 import type { ResponseContent } from './components'
 import {
   RequestForm,
@@ -56,7 +55,7 @@ import {
   prepareInputs,
   sdkNeedsAuth,
   createInputs,
-  requestUrl,
+  fullRequestUrl,
 } from './utils'
 import type { RunItSetter } from '.'
 import { runItNoSet, RunItContext } from '.'
@@ -121,13 +120,12 @@ export const RunIt: FC<RunItProps> = ({
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
-  const { sdk, configurator, basePath } = useContext(RunItContext)
+  const { sdk, configurator } = useContext(RunItContext)
   const [inputs] = useState(() => createInputs(api, method))
   const [requestContent, setRequestContent] = useState(() =>
     initRequestContent(configurator, inputs)
   )
-  const [activePathParams, setActivePathParams] = useState({})
-  const [activeQueryParams, setActiveQueryParams] = useState({})
+  const [activeParams, setActiveParams] = useState({ path: {}, query: {} })
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
@@ -174,8 +172,7 @@ export const RunIt: FC<RunItProps> = ({
         return
       }
     }
-    setActivePathParams(pathParams)
-    setActiveQueryParams(queryParams)
+    setActiveParams({ path: pathParams, query: queryParams })
     tabs.onSelectTab(1)
     if (sdk) {
       setLoading(true)
@@ -183,7 +180,6 @@ export const RunIt: FC<RunItProps> = ({
       try {
         response = await runRequest(
           sdk,
-          basePath,
           httpMethod,
           endpoint,
           pathParams,
@@ -243,23 +239,21 @@ export const RunIt: FC<RunItProps> = ({
         <TabPanel key="response">
           <Loading
             loading={loading}
-            message={`${httpMethod} ${requestUrl(
-              sdk.authSession.transport as BaseTransport,
-              basePath,
+            message={`${httpMethod} ${fullRequestUrl(
+              sdk.authSession.transport,
               endpoint,
-              activePathParams,
-              activeQueryParams
+              activeParams.path,
+              activeParams.query
             )}`}
           />
           <ResponseExplorer
             response={responseContent}
             verb={httpMethod}
-            path={requestUrl(
-              sdk.authSession.transport as BaseTransport,
-              basePath,
+            path={fullRequestUrl(
+              sdk.authSession.transport,
               endpoint,
-              activePathParams,
-              activeQueryParams
+              activeParams.path,
+              activeParams.query
             )}
           />
         </TabPanel>
