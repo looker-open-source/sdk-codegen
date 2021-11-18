@@ -34,9 +34,7 @@ import {
   Fieldset,
   MessageBar,
 } from '@looker/components'
-import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
-import type { RunItConfigurator } from '../ConfigForm'
 import { LoginForm } from '../LoginForm'
 import type { RunItSetter } from '../..'
 import {
@@ -49,8 +47,6 @@ import { FormItem } from './FormItem'
 
 /** Properties required by RequestForm */
 interface RequestFormProps {
-  /** Established SDK instance */
-  sdk: IAPIMethods
   /** Request inputs to the endpoint */
   inputs: RunItInput[]
   /** A callback for submitting the form */
@@ -71,8 +67,6 @@ interface RequestFormProps {
   setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
-  /** Configuration plug-in for stand-alone or extension */
-  configurator: RunItConfigurator
   /** Validation message to display */
   validationMessage?: string
   /** Validation message setter */
@@ -86,7 +80,6 @@ interface RequestFormProps {
  * inputs
  */
 export const RequestForm: FC<RequestFormProps> = ({
-  sdk,
   inputs,
   httpMethod,
   handleSubmit,
@@ -95,9 +88,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   needsAuth,
   hasConfig,
   handleConfig,
-  setVersionsUrl,
   setHasConfig,
-  configurator,
   validationMessage,
   setValidationMessage,
   isExtension = false,
@@ -168,13 +159,7 @@ export const RequestForm: FC<RequestFormProps> = ({
           <>
             {hasConfig ? (
               needsAuth ? (
-                <LoginForm
-                  sdk={sdk}
-                  setVersionsUrl={setVersionsUrl}
-                  setHasConfig={setHasConfig}
-                  configurator={configurator}
-                  requestContent={requestContent}
-                />
+                <LoginForm requestContent={requestContent} />
               ) : (
                 <Tooltip content="Run the API request">
                   <Button type="submit">Run</Button>

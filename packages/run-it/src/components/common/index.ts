@@ -24,4 +24,3 @@
 
  */
 export { DarkSpan, RunItHeading } from './common'
-export * from './StandaloneConfigurator'

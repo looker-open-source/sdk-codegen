@@ -42,7 +42,8 @@ import {
   Tooltip,
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import { getEnvAdaptor } from '@looker/extension-utils'
+
 import type { RunItSetter, RunItValues } from '../..'
 import {
   CollapserCard,
@@ -52,7 +53,7 @@ import {
   readyToLogin,
   RunItNoConfig,
 } from '../..'
-import type { RunItConfigurator, ILoadedSpecs } from './configUtils'
+import type { ILoadedSpecs } from './configUtils'
 import {
   RunItConfigKey,
   validateUrl,
@@ -76,7 +77,6 @@ const defaultFieldValues: IFieldValues = {
 }
 
 interface ConfigFormProps {
-  configurator: RunItConfigurator
   setVersionsUrl: RunItSetter
   /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: RunItValues
@@ -84,16 +84,12 @@ interface ConfigFormProps {
   title?: string
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
-  /** SDK to use for login */
-  sdk: IAPIMethods
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
-  configurator,
   setVersionsUrl,
   title,
   requestContent,
-  sdk,
   setHasConfig,
 }) => {
   const BASE_URL = 'baseUrl'
@@ -109,17 +105,16 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   "enabled": true
 }
 `
-
+  const sdk = getEnvAdaptor().sdk
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
 
   const getConfig = () => {
+    // TODO: This is temporary until config settings are available in redux.
     // get configuration from storage, or default it
-    const data = configurator.getStorage(RunItConfigKey)
-    const result = data.value
-      ? JSON.parse(data.value)
-      : { base_url: '', looker_url: '' } // TODO why is RunItNoConfig undefined here?
+    const data = localStorage.getItem(RunItConfigKey)
+    const result = data ? JSON.parse(data) : { base_url: '', looker_url: '' } // TODO why is RunItNoConfig undefined here?
     return result
   }
 
@@ -144,7 +139,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
 
   useEffect(() => {
     const data = getConfig()
-    const { base_url, looker_url } = getConfig()
+    const { base_url, looker_url } = data
     setSaved(data)
     updateFields({
       [BASE_URL]: base_url,
@@ -152,7 +147,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       [FETCH_INTENT]:
         base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
     })
-  }, [configurator])
+  }, [])
 
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
@@ -187,12 +182,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         updateMessage(POSITIVE, 'Configuration is valid')
         if (save) {
           const data = { base_url: baseUrl, looker_url: webUrl }
-          configurator.setStorage(
-            RunItConfigKey,
-            JSON.stringify(data),
-            // Always store in local storage
-            'local'
-          )
+          // TODO: replace when redux is introduced to run it
+          localStorage.setItem(RunItConfigKey, JSON.stringify(data))
           if (setHasConfig) setHasConfig(true)
           setSaved(data)
           setVersionsUrl(versionsUrl)
@@ -213,8 +204,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const handleClear = async (_e: BaseSyntheticEvent) => {
-    // e.preventDefault()
-    configurator.removeStorage(RunItConfigKey)
+    // TODO: replace when redux is introduced to run it
+    localStorage.removeItem(RunItConfigKey)
     updateFields({
       [BASE_URL]: '',
       [WEB_URL]: '',
@@ -269,11 +260,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     if (requestContent) {
-      configurator.setStorage(
-        RunItFormKey,
-        JSON.stringify(requestContent),
-        'local'
-      )
+      // TODO: Replace when redux is introduced to run it
+      localStorage.setItem(RunItFormKey, JSON.stringify(requestContent))
     }
     // This will set storage variables and return to OAuthScene when successful
     await sdk.authSession.login()

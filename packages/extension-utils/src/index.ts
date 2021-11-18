@@ -27,3 +27,4 @@
 export * from './adaptorUtils'
 export * from './browserAdaptor'
 export * from './extensionAdaptor'
+export * from './authUtils'

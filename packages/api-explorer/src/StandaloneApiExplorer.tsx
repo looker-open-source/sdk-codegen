@@ -28,7 +28,6 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import {
   RunItProvider,
-  defaultConfigurator,
   loadSpecsFromVersions,
   RunItConfigKey,
   RunItNoConfig,
@@ -87,7 +86,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
 
   return (
     <Provider store={store}>
-      <RunItProvider configurator={defaultConfigurator} basePath="/api/4.0">
+      <RunItProvider basePath="/api/4.0">
         <>
           {specs ? (
             <ApiExplorer
