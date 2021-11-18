@@ -57,7 +57,6 @@ export interface IEnvironmentAdaptor extends IAuthAdaptor {
   logError: (error: Error, componentStack: string) => void
 }
 
-
 /**
  * Theme overrides used to load google fonts in Google environments only.
  * Google fonts should NOT be used when it is not obvious that a Google
