@@ -37,7 +37,7 @@ import {
 import { hot } from 'react-hot-loader/root'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { getThemeOverrides } from '@looker/extension-utils'
+import { getThemeOverrides, hostedInternally } from '@looker/extension-utils'
 import { SideNav, Header } from './components'
 import { AppRouter, getAuthorizedRoutes } from './routes'
 import { getMessageState } from './data/common/selectors'
@@ -62,7 +62,7 @@ const banner = (currentHackathon: any, hacker?: IHackerProps) => {
 }
 
 export const Hackathon: FC<HackathonProps> = hot(() => {
-  const themeOverrides = getThemeOverrides(true)
+  const themeOverrides = getThemeOverrides(hostedInternally(location.hostname))
 
   const dispatch = useDispatch()
   useEffect(() => {

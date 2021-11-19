@@ -153,7 +153,8 @@ const apiSpecBits = (spec: SpecItem): string[] =>
  * @param name to retrieve
  */
 export const funFetch = (version: string, name: string): Promise<string> => {
-  return getEnvAdaptor().sdk.ok(api_spec(getEnvAdaptor().sdk, version, name))
+  const sdk = getEnvAdaptor().sdk
+  return sdk.ok(api_spec(getEnvAdaptor().sdk, version, name))
 }
 
 /**
@@ -261,9 +262,10 @@ export const fallbackFetch = async (
     console.error({ error })
   }
   if (!api) {
-    const authed = getEnvAdaptor().sdk.authSession.isAuthenticated()
+    const sdk = getEnvAdaptor().sdk
+    const authed = sdk.authSession.isAuthenticated()
     if (!authed) {
-      await getEnvAdaptor().sdk.authSession.login()
+      await sdk.authSession.login()
     }
     api = await sdkSpecFetch(spec, fetcher)
   }
