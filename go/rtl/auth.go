@@ -11,6 +11,8 @@ import (
 	"os"
 	"reflect"
 	"time"
+        "strings"
+        "io"
 )
 
 type AccessToken struct {
@@ -133,14 +135,27 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return err
 	}
 	defer res.Body.Close()
-	
 
 	if res.StatusCode < 200 || res.StatusCode > 226 {
 		return fmt.Errorf("response error: %s", res.Status)
 	}
 
-	err = json.NewDecoder(res.Body).Decode(&result)
-
+        contentType := res.Header.Get("Content-Type")
+        if strings.Contains(contentType, "application/json") {
+                err = json.NewDecoder(res.Body).Decode(&result)
+                if err != nil {
+                        return err
+                }
+        } else {
+                b, err := io.ReadAll(res.Body)
+                if err != nil {
+                        return err
+                }
+                switch v := result.(type) {
+                case *string:
+                        *v = string(b)
+                }
+        }
 	return nil
 }
 
