@@ -7,7 +7,8 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 ## Full Applications
 
 - [Flask full app demo](lookersdk-flask)
-- [Google Cloud Function: User Creation](cloud-function-user-provision)
+- [Google Cloud Function & Google Sheet : Create new users from reading email addresses in a Google Sheet](cloud-function-user-provision)
+- [Google Cloud Function & BigQuery: Run a query in Looker, and write the result to a BigQuery table](cloud-function-write-to-bigquery)
 
 ## Connection : Manage Database Connections
 
