@@ -1,3 +1,13 @@
+"""This Cloud Function accomplishes the following tasks:
+1. Get data from a Looker query in CSV format
+2. Transform columns' names by replacing a white space with an underscore 
+("User Name" to "User_Name") since BigQuery does not accept a white space inside columns' names
+3. Write the modified column name and data to a CSV file stored in Cloud Functions' temporary disk
+4. Load the CSV file to a BigQuery table
+
+Last modified: November 2021 
+"""
+
 from google.cloud import bigquery
 import looker_sdk
 client = bigquery.Client()
@@ -20,8 +30,9 @@ def get_data_from_looker(query_id=1):
 
 def write_to_file():
   data = get_data_from_looker() 
-  ### Transform headers and data ("User Name" to become "User_Name")
-  cnt = 0
+  # Transform the columns' name (i.e: "User ID" to become "User_ID") because 
+  # BigQuery does not accept a white space inside columns' name 
+  cnt = 0 # cnt is to find the index of the character after the last character of columns'names
   for i in data: 
     if i == "\n":
         break
@@ -37,13 +48,15 @@ def write_to_file():
   print("Successfully wrote data to a CSV file stored in temporary disk")
 
 def load_to_bq():
-    # Prepare the table inside BQ in advance. Additional logic can be written to create a table 
-    # Example: https://github.com/googleapis/python-bigquery/blob/35627d145a41d57768f19d4392ef235928e00f72/samples/create_table.py
+    # Set up the table inside BQ in advance: The names and types of columns in BQ must match the 
+    # names and types of the query result from Looker (for example: User_ID, type: Integer). 
+    # Optionally, write additional logic to make an empty table with matching columns' names 
+    # Example: https://github.com/googleapis/python-bigquery/blob/main/samples/create_table.py
     table_id = "myproject.myschema.mytable" 
     job_config = bigquery.LoadJobConfig(
         source_format=bigquery.SourceFormat.CSV, skip_leading_rows=1, autodetect=True,
     )
-    with open("/tmp/table1.csv", "rb") as source_file:
+    with open("/tmp/table.csv", "rb") as source_file:
         job = client.load_table_from_file(source_file, table_id, job_config=job_config)
     job.result()  # Wait for the job to complete.
     table = client.get_table(table_id)  # Make an API request.
