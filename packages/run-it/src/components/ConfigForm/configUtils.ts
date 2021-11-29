@@ -154,7 +154,7 @@ const apiSpecBits = (spec: SpecItem): string[] =>
  */
 export const funFetch = (version: string, name: string): Promise<string> => {
   const sdk = getEnvAdaptor().sdk
-  return sdk.ok(api_spec(getEnvAdaptor().sdk, version, name))
+  return sdk.ok(api_spec(sdk, version, name))
 }
 
 /**
