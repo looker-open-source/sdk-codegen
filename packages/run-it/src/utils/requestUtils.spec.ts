@@ -25,7 +25,6 @@
  */
 import type { RunItInput } from '../RunIt'
 import { testJsonResponse, api } from '../test-data'
-import { defaultConfigurator } from '../components'
 import {
   createRequestParams,
   pathify,
@@ -290,7 +289,7 @@ describe('requestUtils', () => {
   describe('request content initialization', () => {
     test('it initialzies body params with default values', () => {
       const inputs = createInputs(api, api.methods.run_inline_query)
-      const actual = initRequestContent(defaultConfigurator, inputs, {})
+      const actual = initRequestContent(inputs)
       expect(actual).toEqual({
         body: {
           client_id: '',
@@ -322,7 +321,7 @@ describe('requestUtils', () => {
       const bodyInput = inputs.find((i) => i.location === 'body')!
       expect(bodyInput.name).toEqual('body')
       expect(bodyInput.type).toEqual({})
-      const actual = initRequestContent(defaultConfigurator, inputs, {})
+      const actual = initRequestContent(inputs)
       expect(actual).toEqual({
         body: {},
       })
@@ -333,7 +332,7 @@ describe('requestUtils', () => {
     const inputs = createInputs(api, api.methods.run_inline_query)
 
     test('removes empties for path, query and body params', () => {
-      const requestContent = initRequestContent(defaultConfigurator, inputs)
+      const requestContent = initRequestContent(inputs)
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         requestContent

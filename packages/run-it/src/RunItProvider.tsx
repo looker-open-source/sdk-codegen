@@ -26,11 +26,9 @@
 
 import type { FC, ReactElement } from 'react'
 import React, { createContext } from 'react'
-import type { RunItConfigurator } from './components'
 
 export interface RunItContextProps {
   basePath: string
-  configurator: RunItConfigurator
 }
 
 export interface RunItProviderProps extends RunItContextProps {
@@ -39,7 +37,6 @@ export interface RunItProviderProps extends RunItContextProps {
 
 const defaultRunItContextValue: RunItContextProps = {
   basePath: '',
-  configurator: {} as RunItConfigurator,
 }
 
 export const RunItContext = createContext<RunItContextProps>(
@@ -54,10 +51,9 @@ export const RunItContext = createContext<RunItContextProps>(
 export const RunItProvider: FC<RunItProviderProps> = ({
   children,
   basePath,
-  configurator,
 }) => {
   return (
-    <RunItContext.Provider value={{ configurator, basePath }}>
+    <RunItContext.Provider value={{ basePath }}>
       {children}
     </RunItContext.Provider>
   )

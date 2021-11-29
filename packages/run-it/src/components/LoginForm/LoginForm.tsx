@@ -24,43 +24,31 @@
 
  */
 
-import type { BaseSyntheticEvent, Dispatch, FC } from 'react'
+import type { BaseSyntheticEvent, FC } from 'react'
 import React from 'react'
 import { Button, Tooltip } from '@looker/components'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { RunItConfigurator } from '../ConfigForm'
+import { getEnvAdaptor } from '@looker/extension-utils'
+
 import { RunItFormKey } from '../ConfigForm'
-import type { RunItValues, RunItSetter } from '../..'
+import type { RunItValues } from '../..'
 
 interface LoginFormProps {
-  configurator: RunItConfigurator
   requestContent: RunItValues
-  setVersionsUrl: RunItSetter
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
-  setHasConfig?: Dispatch<boolean>
-  /** SDK to use for login */
-  sdk: IAPIMethods
 }
 
 export const readyToLogin =
   'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.'
 
-export const LoginForm: FC<LoginFormProps> = ({
-  configurator,
-  requestContent,
-  sdk,
-}) => {
+export const LoginForm: FC<LoginFormProps> = ({ requestContent }) => {
+  const adaptor = getEnvAdaptor()
+
   const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     if (requestContent) {
-      configurator.setStorage(
-        RunItFormKey,
-        JSON.stringify(requestContent),
-        'local'
-      )
+      adaptor.localStorageSetItem(RunItFormKey, JSON.stringify(requestContent))
     }
     // This will set storage variables and return to OAuthScene when successful
-    await sdk.authSession.login()
+    await adaptor.sdk.authSession.login()
   }
 
   return (

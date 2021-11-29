@@ -30,11 +30,10 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 
-import { BrowserAdaptor } from '@looker/extension-utils'
+import { BrowserAdaptor, OAuthConfigProvider } from '@looker/extension-utils'
 import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
-import { initRunItSdk, runItNoSet, RunItSettings } from './utils'
-import { defaultConfigurator } from './components'
+import { initRunItSdk, runItNoSet } from './utils'
 import { RunItProvider } from './RunItProvider'
 
 describe('RunIt', () => {
@@ -47,7 +46,7 @@ describe('RunIt', () => {
     method: IMethod = api.methods.run_inline_query
   ) => {
     renderWithTheme(
-      <RunItProvider configurator={defaultConfigurator} basePath="/api/4.0">
+      <RunItProvider basePath="/api/4.0">
         <RunIt
           adaptor={adaptor}
           api={_api}
@@ -61,10 +60,12 @@ describe('RunIt', () => {
   describe('configured and authenticated', () => {
     beforeEach(() => {
       jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
-      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
-        base_url: 'https://foo:19999',
-        looker_url: 'https://foo:9999',
-      })
+      jest
+        .spyOn(OAuthConfigProvider.prototype, 'getStoredConfig')
+        .mockReturnValue({
+          base_url: 'https://foo:19999',
+          looker_url: 'https://foo:9999',
+        })
     })
     afterEach(() => {
       jest.clearAllMocks()
@@ -131,10 +132,12 @@ describe('RunIt', () => {
   describe('not configured or authenticated', () => {
     beforeEach(() => {
       jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
-      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
-        base_url: '',
-        looker_url: '',
-      })
+      jest
+        .spyOn(OAuthConfigProvider.prototype, 'getStoredConfig')
+        .mockReturnValue({
+          base_url: '',
+          looker_url: '',
+        })
     })
 
     test('it has Configure button', () => {
@@ -154,10 +157,12 @@ describe('RunIt', () => {
   describe('configured but not authenticated', () => {
     beforeEach(() => {
       jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(false)
-      jest.spyOn(RunItSettings.prototype, 'getStoredConfig').mockReturnValue({
-        base_url: 'https://foo:19999',
-        looker_url: 'https://foo:9999',
-      })
+      jest
+        .spyOn(OAuthConfigProvider.prototype, 'getStoredConfig')
+        .mockReturnValue({
+          base_url: 'https://foo:19999',
+          looker_url: 'https://foo:9999',
+        })
     })
 
     test('it has Login button', () => {
