@@ -29,12 +29,11 @@ import React, { useEffect, useState } from 'react'
 import {
   RunItProvider,
   defaultConfigurator,
-  initRunItSdk,
   loadSpecsFromVersions,
   RunItConfigKey,
   RunItNoConfig,
+  initRunItSdk,
 } from '@looker/run-it'
-import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { SpecList } from '@looker/sdk-codegen'
 import { Provider } from 'react-redux'
 import { BrowserAdaptor } from '@looker/extension-utils'
@@ -48,7 +47,7 @@ export interface StandaloneApiExplorerProps {
   versionsUrl: string
 }
 
-const browserAdaptor = new BrowserAdaptor()
+const browserAdaptor = new BrowserAdaptor(initRunItSdk())
 
 const loadVersions = async (current: string) => {
   const data = await browserAdaptor.localStorageGetItem(RunItConfigKey)
@@ -86,15 +85,9 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
     }
   }, [versionsUrl, currentVersionsUrl])
 
-  const chosenSdk: IAPIMethods = initRunItSdk(defaultConfigurator)
-
   return (
     <Provider store={store}>
-      <RunItProvider
-        sdk={chosenSdk}
-        configurator={defaultConfigurator}
-        basePath="/api/4.0"
-      >
+      <RunItProvider configurator={defaultConfigurator} basePath="/api/4.0">
         <>
           {specs ? (
             <ApiExplorer

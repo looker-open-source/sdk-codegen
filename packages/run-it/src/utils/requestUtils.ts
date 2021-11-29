@@ -40,7 +40,6 @@ import {
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
 import type { RunItConfigurator } from '../components'
 import { RunItFormKey } from '../components'
-import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
 export type RunItSetter = (value: any) => any
@@ -192,7 +191,7 @@ export const runRequest = async (
   body: any
 ): Promise<IRawResponse> => {
   if (!sdk.authSession.isAuthenticated()) {
-    await sdk.ok(runItSDK.authSession.login())
+    await sdk.ok(sdk.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
   const raw = await sdk.authSession.transport.rawRequest(
@@ -200,7 +199,7 @@ export const runRequest = async (
     url,
     queryParams,
     body,
-    (props) => runItSDK.authSession.authenticate(props)
+    (props) => sdk.authSession.authenticate(props)
   )
   return raw
 }

@@ -49,7 +49,6 @@ import {
   RunItFormKey,
   RunItHeading,
   DarkSpan,
-  runItSDK,
   readyToLogin,
   RunItNoConfig,
 } from '../..'
@@ -85,8 +84,8 @@ interface ConfigFormProps {
   title?: string
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
-  /** SDK to use for login. Defaults to the `runItSDK` */
-  sdk?: IAPIMethods
+  /** SDK to use for login */
+  sdk: IAPIMethods
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
@@ -94,7 +93,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   setVersionsUrl,
   title,
   requestContent,
-  sdk = runItSDK,
+  sdk,
   setHasConfig,
 }) => {
   const BASE_URL = 'baseUrl'
@@ -253,7 +252,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     setValidationMessages(newValidationMessages)
   }
 
-  const isAuthenticated = () => sdk?.authSession.isAuthenticated()
+  const isAuthenticated = () => sdk.authSession.isAuthenticated()
 
   const verifyButtonDisabled =
     fields.baseUrl.trim().length === 0 ||
@@ -277,7 +276,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       )
     }
     // This will set storage variables and return to OAuthScene when successful
-    await sdk?.authSession.login()
+    await sdk.authSession.login()
   }
 
   return (

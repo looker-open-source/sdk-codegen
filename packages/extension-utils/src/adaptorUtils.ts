@@ -25,13 +25,24 @@
  */
 
 import type { ThemeCustomizations } from '@looker/design-tokens'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { BrowserAdaptor } from './browserAdaptor'
+
+export interface IAuthAdaptor {
+  /** Method for retrieving an instantiated SDK */
+  get sdk(): IAPIMethods
+  /** Method for authenticating against the API server. Auth mechanism is dependent on the authSession implementation
+   * used for the sdk. */
+  login(): void
+}
 
 /**
  * NOTE: This interface should describe all methods that require an adaptor when running in standalone vs extension mode
  * Examples include: local storage operations and various link navigation functions
  */
-export interface IEnvironmentAdaptor {
+export interface IEnvironmentAdaptor extends IAuthAdaptor {
+  /** Method for determining whether running in a browser or extension environment */
+  isExtension(): boolean
   /** Method for retrieving a keyed value from local storage */
   localStorageGetItem(key: string): Promise<string | null>
   /** Method for setting a keyed value in local storage */
@@ -59,7 +70,7 @@ export interface ThemeOverrides {
 }
 
 /**
- * Is this an "internal" host that will use internal brancing?
+ * Is this an "internal" host that will use internal branding?
  * @param hostname to check
  */
 export const hostedInternally = (hostname: string): boolean =>
@@ -123,5 +134,6 @@ export const getEnvAdaptor = () => {
  * @param adaptor to use for testing
  */
 export const registerTestEnvAdaptor = (adaptor?: IEnvironmentAdaptor) => {
-  registerEnvAdaptor(adaptor || new BrowserAdaptor())
+  const mockSdk = {} as unknown as IAPIMethods
+  registerEnvAdaptor(adaptor || new BrowserAdaptor(mockSdk))
 }

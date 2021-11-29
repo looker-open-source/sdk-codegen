@@ -28,7 +28,6 @@ import type { BaseSyntheticEvent, Dispatch, FC } from 'react'
 import React from 'react'
 import { Button, Tooltip } from '@looker/components'
 import type { IAPIMethods } from '@looker/sdk-rtl'
-import { runItSDK } from '../../utils'
 import type { RunItConfigurator } from '../ConfigForm'
 import { RunItFormKey } from '../ConfigForm'
 import type { RunItValues, RunItSetter } from '../..'
@@ -39,8 +38,8 @@ interface LoginFormProps {
   setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
-  /** SDK to use for login. Defaults to the `runItSDK` */
-  sdk?: IAPIMethods
+  /** SDK to use for login */
+  sdk: IAPIMethods
 }
 
 export const readyToLogin =
@@ -49,7 +48,7 @@ export const readyToLogin =
 export const LoginForm: FC<LoginFormProps> = ({
   configurator,
   requestContent,
-  sdk = runItSDK,
+  sdk,
 }) => {
   const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
@@ -61,7 +60,7 @@ export const LoginForm: FC<LoginFormProps> = ({
       )
     }
     // This will set storage variables and return to OAuthScene when successful
-    await sdk?.authSession.login()
+    await sdk.authSession.login()
   }
 
   return (

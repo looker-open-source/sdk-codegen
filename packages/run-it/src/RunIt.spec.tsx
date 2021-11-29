@@ -30,28 +30,30 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 
+import { BrowserAdaptor } from '@looker/extension-utils'
 import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
 import { initRunItSdk, runItNoSet, RunItSettings } from './utils'
-import { defaultConfigurator, StandaloneConfigurator } from './components'
+import { defaultConfigurator } from './components'
 import { RunItProvider } from './RunItProvider'
-
-const sdk = initRunItSdk(new StandaloneConfigurator())
 
 describe('RunIt', () => {
   const run = 'Run'
+  const sdk = initRunItSdk()
+  const adaptor = new BrowserAdaptor(sdk)
 
   const renderRunIt = (
     _api: ApiModel = api,
     method: IMethod = api.methods.run_inline_query
   ) => {
     renderWithTheme(
-      <RunItProvider
-        sdk={sdk}
-        configurator={defaultConfigurator}
-        basePath="/api/4.0"
-      >
-        <RunIt api={_api} method={method} setVersionsUrl={runItNoSet} />
+      <RunItProvider configurator={defaultConfigurator} basePath="/api/4.0">
+        <RunIt
+          adaptor={adaptor}
+          api={_api}
+          method={method}
+          setVersionsUrl={runItNoSet}
+        />
       </RunItProvider>
     )
   }

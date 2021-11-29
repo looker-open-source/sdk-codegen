@@ -25,7 +25,7 @@
  */
 
 import type { BaseSyntheticEvent, FC } from 'react'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Box,
   Tab,
@@ -35,6 +35,8 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+
 import type { ResponseContent } from './components'
 import {
   RequestForm,
@@ -52,9 +54,7 @@ import {
   createRequestParams,
   runRequest,
   pathify,
-  sdkNeedsConfig,
   prepareInputs,
-  sdkNeedsAuth,
   createInputs,
 } from './utils'
 import type { RunItSetter } from '.'
@@ -98,6 +98,7 @@ export interface RunItInput {
 }
 
 interface RunItProps {
+  adaptor: IEnvironmentAdaptor
   /** spec model to use for sdk call generation */
   api: ApiModel
   /** Method to test */
@@ -113,6 +114,7 @@ interface RunItProps {
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
 export const RunIt: FC<RunItProps> = ({
+  adaptor,
   api,
   method,
   setVersionsUrl = runItNoSet,
@@ -120,8 +122,11 @@ export const RunIt: FC<RunItProps> = ({
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
-  const { sdk, configurator, basePath } = useContext(RunItContext)
+  const sdk = adaptor.sdk
+  const { configurator, basePath } = useContext(RunItContext)
   const [inputs] = useState(() => createInputs(api, method))
+
+  /** Request related state */
   const [requestContent, setRequestContent] = useState(() =>
     initRequestContent(configurator, inputs)
   )
@@ -129,27 +134,21 @@ export const RunIt: FC<RunItProps> = ({
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
-  const [isExtension, setIsExtension] = useState<boolean>(false)
-  const [hasConfig, setHasConfig] = useState<boolean>(true)
-  const [needsAuth, setNeedsAuth] = useState<boolean>(() => sdkNeedsAuth(sdk))
+
+  /** Auth config related state */
+  const isExtension = adaptor.isExtension()
+  const [hasConfig, setHasConfig] = useState<boolean>(
+    isExtension ||
+      (sdk.authSession.settings as RunItSettings).authIsConfigured()
+  )
+  const [needsAuth] = useState<boolean>(
+    () => !isExtension && !sdk.authSession.isAuthenticated()
+  )
+
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
 
   const perf = new PerfTimings()
-
-  useEffect(() => {
-    if (sdk) {
-      const settings = sdk.authSession.settings as RunItSettings
-      const configIsNeeded = sdkNeedsConfig(sdk)
-      setIsExtension(!configIsNeeded)
-      setHasConfig(!configIsNeeded || settings.authIsConfigured())
-      setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
-    } else {
-      setIsExtension(true)
-      setHasConfig(true)
-      setNeedsAuth(false)
-    }
-  }, [sdk])
 
   const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
@@ -204,9 +203,6 @@ export const RunIt: FC<RunItProps> = ({
       setLoading(false)
     }
   }
-
-  // No SDK, no RunIt for you!
-  if (!sdk) return <></>
 
   return (
     <Box bg="background" py="large" height="100%">
@@ -268,6 +264,7 @@ export const RunIt: FC<RunItProps> = ({
         ) : (
           <TabPanel key="config">
             <ConfigForm
+              sdk={sdk}
               setHasConfig={setHasConfig}
               configurator={configurator}
               setVersionsUrl={setVersionsUrl}

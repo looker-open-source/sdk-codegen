@@ -28,16 +28,18 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
+
 import { defaultConfigurator, readyToLogin } from '..'
-import { runItNoSet } from '../..'
+import { initRunItSdk, runItNoSet } from '../..'
 import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
-  // https://testing-library.com/docs/guide-which-query
+  const sdk = initRunItSdk()
 
   test('it creates a login form', async () => {
     renderWithTheme(
       <LoginForm
+        sdk={sdk}
         configurator={defaultConfigurator}
         requestContent={{}}
         setVersionsUrl={runItNoSet}

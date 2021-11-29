@@ -24,23 +24,17 @@
 
  */
 
-import { functionalSdk40 } from '@looker/sdk'
-import type { IAPIMethods, IApiSection, IApiSettings } from '@looker/sdk-rtl'
+import type { IApiSection, IApiSettings } from '@looker/sdk-rtl'
 import {
   ApiSettings,
   BrowserSession,
   BrowserTransport,
   DefaultSettings,
 } from '@looker/sdk-rtl'
+import { functionalSdk40 } from '@looker/sdk'
 import type { RunItConfigurator } from '../components'
-import { RunItConfigKey } from '../components'
 
-// https://docs.looker.com/reference/api-and-integration/api-cors
-const settings = {
-  ...DefaultSettings(),
-  base_url: 'https://self-signed.looker.com:19999',
-  agentTag: 'RunIt 0.8',
-} as IApiSettings
+import { defaultConfigurator, RunItConfigKey } from '../components'
 
 /**
  * An OAuth Session configuration provider
@@ -99,43 +93,20 @@ export class RunItSettings extends ApiSettings {
   }
 }
 
-const perfSDK = (
-  settings: Partial<IApiSettings>,
-  configurator: RunItConfigurator
-): IAPIMethods => {
-  const options = new RunItSettings(settings, configurator)
+export const initRunItSdk = () => {
+  // https://docs.looker.com/reference/api-and-integration/api-cors
+  const settings = {
+    ...DefaultSettings(),
+    base_url: 'https://self-signed.looker.com:19999',
+    agentTag: 'RunIt 0.8',
+  } as IApiSettings
+
+  const options = new RunItSettings(settings, defaultConfigurator)
   const transport = new BrowserTransport(options)
   const session = new BrowserSession(options, transport)
   const sdk = functionalSdk40(session)
   BrowserTransport.trackPerformance = true
   return sdk
-}
-
-/** stand-alone API test runner */
-export let runItSDK: IAPIMethods
-// And this which sucks
-export const initRunItSdk = (configurator: RunItConfigurator) => {
-  if (!runItSDK) {
-    runItSDK = perfSDK(settings, configurator)
-  }
-  return runItSDK
-}
-
-/**
- * Is this a stand-alone version of Run-It that needs server and auth configuration?
- * @param sdk to check
- */
-export const sdkNeedsConfig = (sdk: IAPIMethods | undefined) =>
-  sdk?.authSession.settings instanceof RunItSettings
-
-/**
- * Determines if authentication is required
- * @param sdk to check
- */
-export const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
-  if (!sdk) return false
-  const configIsNeeded = sdkNeedsConfig(sdk)
-  return configIsNeeded && !sdk.authSession.isAuthenticated()
 }
 
 export enum StoreConstants {
