@@ -28,7 +28,8 @@
 
 import Foundation
 
-public let agentTag = "Swift-SDK \(Constants.sdkVersion)"
+/** agentTag may be modified to identify the application using the Swift SDK */
+public var agentTag = "Swift-SDK \(Constants.sdkVersion)"
 
 /**
  * ResponseMode for an HTTP request - either binary or "string"
