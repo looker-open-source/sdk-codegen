@@ -24,6 +24,7 @@
 
  */
 
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { ThemeOverrides } from './adaptorUtils'
 import { getThemeOverrides } from './adaptorUtils'
 import { BrowserAdaptor } from './browserAdaptor'
@@ -43,7 +44,9 @@ describe('BrowserAdaptor', () => {
         ...saveLoc,
         hostname,
       }
-      expect(new BrowserAdaptor().themeOverrides()).toEqual(expectedOverrides)
+      expect(new BrowserAdaptor({} as IAPIMethods).themeOverrides()).toEqual(
+        expectedOverrides
+      )
       window.location = saveLoc
     }
   )
