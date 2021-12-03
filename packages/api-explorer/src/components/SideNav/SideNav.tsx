@@ -65,12 +65,8 @@ interface SideNavState {
 
 interface SideNavProps {
   headless?: boolean
-  /** Specs to choose from */
-  specs: SpecList
   /** Current selected spec */
   spec: SpecItem
-  /** Spec state setter */
-  specDispatch: Dispatch<SpecAction>
 }
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {

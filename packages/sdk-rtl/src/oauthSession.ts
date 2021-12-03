@@ -50,6 +50,7 @@ interface IRefreshTokenGrantTypeParams {
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
   crypto: ICryptoHash
+  reentry = false
   private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
   public static readonly returnUrlKey = 'looker_oauth_return_url'
 
@@ -129,8 +130,10 @@ export class OAuthSession extends AuthSession {
    */
   set returnUrl(value: string | null) {
     if (!value) {
+      console.log('Removing return url')
       sessionStorage.removeItem(OAuthSession.returnUrlKey)
     } else {
+      console.log(`Saving return url ${value}`)
       sessionStorage.setItem(OAuthSession.returnUrlKey, value)
     }
   }
@@ -145,7 +148,9 @@ export class OAuthSession extends AuthSession {
 
   async login(_sudoId?: string | number): Promise<any> {
     if (!this.isAuthenticated()) {
-      if (!this.returnUrl) {
+      if (this.reentry) {
+        // do nothing
+      } else if (!this.returnUrl) {
         // OAuth has not been initiated
         const authUrl = await this.createAuthCodeRequestUrl(
           'cors_api',
@@ -156,6 +161,7 @@ export class OAuthSession extends AuthSession {
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
+        this.reentry = true
         // If return URL is stored, we must be coming back from an OAuth request
         // so release the stored return url at the start of the redemption
         this.returnUrl = null
@@ -177,7 +183,8 @@ export class OAuthSession extends AuthSession {
         }
         await this.redeemAuthCode(code)
       }
-      return await this.getToken()
+      const token = await this.getToken()
+      return token
     }
     return this.activeToken
   }
@@ -253,7 +260,9 @@ export class OAuthSession extends AuthSession {
    * @returns {Promise<AuthToken>}
    */
   async redeemAuthCode(authCode: string, codeVerifier?: string) {
-    return this.requestToken(this.redeemAuthCodeBody(authCode, codeVerifier))
+    const body = this.redeemAuthCodeBody(authCode, codeVerifier)
+    const token = await this.requestToken(body)
+    return token
   }
 
   async getToken() {

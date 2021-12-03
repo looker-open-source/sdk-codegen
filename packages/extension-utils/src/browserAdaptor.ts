@@ -25,18 +25,24 @@
  */
 
 import type { IAPIMethods } from '@looker/sdk-rtl'
-import { getThemeOverrides, hostedInternally } from './adaptorUtils'
 import type {
   IAuthAdaptor,
   IEnvironmentAdaptor,
   ThemeOverrides,
 } from './adaptorUtils'
+import { getThemeOverrides, hostedInternally } from './adaptorUtils'
+import type { OAuthConfigProvider } from './authUtils'
 
 export class BrowserAuthAdaptor implements IAuthAdaptor {
   constructor(public readonly sdk: IAPIMethods) {}
 
   async login() {
-    await this.sdk.authSession.login()
+    let token
+    const settings = this.sdk.authSession.settings as OAuthConfigProvider
+    if (settings.authIsConfigured()) {
+      token = await this.sdk.authSession.login()
+    }
+    return !!token
   }
 }
 

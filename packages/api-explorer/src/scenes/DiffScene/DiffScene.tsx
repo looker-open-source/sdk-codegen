@@ -38,9 +38,9 @@ import {
   SelectMulti,
 } from '@looker/components'
 import { SyncAlt } from '@styled-icons/material/SyncAlt'
-import { fallbackFetch, funFetch } from '@looker/run-it'
+
 import { getDefaultSpecKey } from '../../reducers/spec/utils'
-import { diffPath } from '../../utils'
+import { diffPath, fallbackFetch, funFetch } from '../../utils'
 import { ApixSection } from '../../components'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'

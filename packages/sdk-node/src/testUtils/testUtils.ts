@@ -83,7 +83,7 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
   if (!fs.existsSync(testIni)) testIni = ''
 
   return {
-    baseUrl,
+    baseUrl: api_server_url,
     dataFile,
     localIni,
     rootPath,

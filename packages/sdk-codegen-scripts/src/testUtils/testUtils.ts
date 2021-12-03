@@ -89,7 +89,7 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
   const apiTestModel = specFromFile(`${testPath}openApiRef.json`)
   return {
     apiTestModel,
-    baseUrl,
+    baseUrl: api_server_url,
     config,
     configContents,
     dataFile,

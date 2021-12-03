@@ -98,3 +98,8 @@ export const buildPath = (
   }
   return path
 }
+
+export const specKeyFromPath = (path: string) => {
+  const match = path.match(/^\/(\w+.\w+).*$/)
+  return match ? match[1] : null
+}

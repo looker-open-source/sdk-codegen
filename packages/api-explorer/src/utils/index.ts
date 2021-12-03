@@ -33,3 +33,5 @@ export {
 } from './path'
 export { getLoded } from './lodeUtils'
 export { useWindowSize } from './useWindowSize'
+export * from './apixAdaptor'
+export * from './adaptorUtils'

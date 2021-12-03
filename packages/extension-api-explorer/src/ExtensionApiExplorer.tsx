@@ -25,40 +25,42 @@
  */
 
 import type { FC } from 'react'
-import React, { useContext, useEffect, useState } from 'react'
-import { RunItProvider, runItNoSet, sdkSpecFetch } from '@looker/run-it'
+import React, { useContext } from 'react'
+import { RunItProvider } from '@looker/run-it'
 import type { ExtensionContextData } from '@looker/extension-sdk-react'
 import { ExtensionContext } from '@looker/extension-sdk-react'
-import type { SpecItem, SpecList } from '@looker/sdk-codegen'
-import { getSpecsFromVersions } from '@looker/sdk-codegen'
-import { ApiExplorer, store, Loader } from '@looker/api-explorer'
+import type { IApixAdaptor } from '@looker/api-explorer'
+import { ApiExplorer, store, sdkSpecFetch } from '@looker/api-explorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Provider } from 'react-redux'
 import { ExtensionAdaptor } from '@looker/extension-utils'
+import type { SpecItem } from '@looker/sdk-codegen'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
+import cloneDeep from 'lodash/cloneDeep'
+import type { ILooker40SDK } from '@looker/sdk'
+
+class ApixExtensionAdaptor extends ExtensionAdaptor implements IApixAdaptor {
+  async fetchSpecList() {
+    const sdk = this.sdk as ILooker40SDK
+    const versions = await sdk.ok(sdk.versions())
+    const result = await getSpecsFromVersions(versions)
+    return result
+  }
+
+  async fetchSpec(spec: SpecItem): Promise<SpecItem> {
+    const sdk = this.sdk as ILooker40SDK
+    const _spec = cloneDeep(spec)
+    _spec.api = await sdkSpecFetch(spec, (version, name) =>
+      sdk.ok(sdk.api_spec(version, name))
+    )
+    return _spec
+  }
+}
 
 export const ExtensionApiExplorer: FC = () => {
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const [specs, setSpecs] = useState<SpecList>()
 
-  const sdk = extensionContext.core40SDK
-
-  useEffect(() => {
-    /** Load Looker /versions information and retrieve all supported specs */
-    async function loadSpecs() {
-      const versions = await sdk.ok(sdk.versions())
-      const result = await getSpecsFromVersions(versions, (spec: SpecItem) =>
-        sdkSpecFetch(spec, (version, name) =>
-          sdk.ok(sdk.api_spec(version, name))
-        )
-      )
-
-      setSpecs(result)
-    }
-
-    if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
-  }, [specs, sdk])
-
-  const extensionAdaptor = new ExtensionAdaptor(
+  const extensionAdaptor = new ApixExtensionAdaptor(
     getExtensionSDK(),
     extensionContext.core40SDK
   )
@@ -66,19 +68,11 @@ export const ExtensionApiExplorer: FC = () => {
   return (
     <Provider store={store}>
       <RunItProvider basePath="">
-        <>
-          {specs ? (
-            <ApiExplorer
-              specs={specs}
-              adaptor={extensionAdaptor}
-              setVersionsUrl={runItNoSet}
-              // TODO We need expand/collapse side nav for the headless extension before we enabled this
-              headless={false}
-            />
-          ) : (
-            <Loader themeOverrides={extensionAdaptor.themeOverrides()} />
-          )}
-        </>
+        <ApiExplorer
+          adaptor={extensionAdaptor}
+          // TODO We need expand/collapse side nav for the headless extension before we enabled this
+          headless={false}
+        />
       </RunItProvider>
     </Provider>
   )

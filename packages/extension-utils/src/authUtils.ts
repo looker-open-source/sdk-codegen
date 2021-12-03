@@ -68,6 +68,11 @@ export class OAuthConfigProvider extends ApiSettings {
     }
   }
 
+  isConfigured(): boolean {
+    // Required to be true otherwise SDK initialization fails
+    return true
+  }
+
   getStoredConfig() {
     const storage = this.getStorage(this.configKey)
     let config = { base_url: '', looker_url: '' }
