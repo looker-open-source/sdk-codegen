@@ -1,0 +1,54 @@
+name: Hackathon CI
+on:
+  pull_request:
+    paths:
+      - packages/wholly-sheet/**
+      - packages/hackathon/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - packages/wholly-sheet/**
+      - packages/hackathon/**
+
+  workflow_dispatch:
+
+env:
+  TS_JUNIT_OUTPUT_DIR: results/hackathon
+
+jobs:
+  unit:
+    name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    env:
+      JEST_JUNIT_OUTPUT_DIR: results/hackathon
+      JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.apix${{ matrix.node-version }}.xml
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        node-version: [12.x]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn lint:es --quiet
+          yarn lint:ts
+          yarn build
+          yarn dedupe:ci
