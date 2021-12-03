@@ -55,8 +55,8 @@ jobs:
         run: |
           yarn
           yarn lint:es --quiet
+          yarn lint:ts
           yarn build
-          yarn build-extensions
           yarn dedupe:ci
 
       - name: Run unit tests
