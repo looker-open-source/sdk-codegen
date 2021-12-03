@@ -54,6 +54,7 @@ module.exports = {
   testPathIgnorePatterns: ['packages/.*?/lib'],
   globals: {
     'ts-jest': {
+      tsconfig: 'tsconfig.json',
       isolatedModules: true,
       diagnostics: false,
     },
