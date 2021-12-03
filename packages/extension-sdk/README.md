@@ -6,7 +6,7 @@ A Looker extension is JavaScript code that code that runs inside of the Looker U
 
 Extensions are implemented as a sandboxed `<iframe>` and communication with Looker is accomplished through this SDK. Internally, the SDK will translate function calls into messages passed safely across the iframe boundary. The specific format of those messages is considered private, and this SDK is the only supported interface for interacting with the host from an extension.
 
-[React bindings for extensions](https://github.com/looker-open-source/extension-template-react) are also available, as well as [a template project in React and TypeScript to help you get started](https://github.com/looker-open-source/extension-template-react).
+[React bindings for extensions](https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-sdk-react) are also available, as well as [examples to help you get started](https://github.com/looker-open-source/extension-examples). The [create looker extension utility](https://docs.looker.com/data-modeling/extension-framework/installing-extension#generating_the_extension_template_files) is also available to help you get started quickly.
 
 ## Installation
 
@@ -29,21 +29,21 @@ npm install @looker/extension-sdk
 The Extension SDK must establish a connection with its host before further functionality will be available.
 
 ```ts
-import { LookerExtensionSDK, connectExtensionHost } from '@looker/extension-sdk'
-import { Looker40SDK } from '@looker/sdk'
+import {
+  connectExtensionHost,
+  LookerExtensionSDK40,
+} from '@looker/extension-sdk'
 
-let extensionSDK
-let coreSDK
+;(async () => {
+  // This `extensionSDK` can perform extension-specific actions
+  const extensionSdk = await connectExtensionHost()
+  // This `coreSDK` is an automatically credentialed variant of the standard Looker Core SDK for performing API calls
+  const coreSDK = LookerExtensionSDK40.createClient(extensionSdk)
+  const result = await sdk40.me()
+  const name = result.ok ? result.value.display_name : 'Unknown'
 
-// Establish connection
-connectExtensionHost()
-  .then((host) => {
-    // This `extensionSDK` can perform extension-specific actions
-    extensionSDK = host
-    // This `coreSDK` is an automatically credentialed variant of the standard Looker Core SDK for performing API calls
-    coreSDK = LookerExtensionSDK.create40Client(extensionSDK)
-  })
-  .catch((error) => console.error())
+  // DO OTHER THINGS
+})()
 ```
 
 The following create methods are also available
