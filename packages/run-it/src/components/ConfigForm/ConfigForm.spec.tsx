@@ -28,30 +28,24 @@ import React from 'react'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { defaultConfigurator } from '..'
-import { runItNoSet } from '../..'
+import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
+
+import { initRunItSdk, runItNoSet } from '../..'
 import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
 
-// jest.mock('./configUtils', () => ({
-//   loadSpecsFromVersions: jest.fn(),
-// }))
-
 describe('ConfigForm', () => {
+  const adaptor = new BrowserAdaptor(initRunItSdk())
+  registerTestEnvAdaptor(adaptor)
+
   const apiLabel = /API server URL/i
   const authLabel = /OAuth server URL/i
-  // https://testing-library.com/docs/guide-which-query
-
   beforeEach(() => {
-    defaultConfigurator.removeStorage(RunItConfigKey)
+    localStorage.removeItem(RunItConfigKey)
   })
 
   test('it creates an empty config form without stored config', async () => {
     renderWithTheme(
-      <ConfigForm
-        configurator={defaultConfigurator}
-        setVersionsUrl={runItNoSet}
-        requestContent={{}}
-      />
+      <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
     )
     expect(
       screen.getByRole('heading', { name: 'RunIt Configuration' })
@@ -88,11 +82,7 @@ describe('ConfigForm', () => {
 
   test('it disables and enables verify for bad and good urls', async () => {
     renderWithTheme(
-      <ConfigForm
-        configurator={defaultConfigurator}
-        setVersionsUrl={runItNoSet}
-        requestContent={{}}
-      />
+      <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
     )
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
@@ -126,7 +116,6 @@ describe('ConfigForm', () => {
     const title = 'New title'
     renderWithTheme(
       <ConfigForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         title={title}
         requestContent={{}}
@@ -145,11 +134,7 @@ describe('ConfigForm', () => {
         })
       )
       renderWithTheme(
-        <ConfigForm
-          configurator={defaultConfigurator}
-          setVersionsUrl={runItNoSet}
-          requestContent={{}}
-        />
+        <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
       )
       const apiUrl = screen.getByRole('textbox', {
         name: apiLabel,
@@ -176,9 +161,9 @@ describe('ConfigForm', () => {
       userEvent.type(apiUrl, 'https://foo:199')
       userEvent.click(save)
       await waitFor(() => {
-        const storage = defaultConfigurator.getStorage(RunItConfigKey)
-        expect(storage.location).toEqual('local')
-        expect(JSON.parse(storage.value)).toEqual({
+        const value = localStorage.getItem(RunItConfigKey)
+        expect(value).toBeDefined()
+        expect(JSON.parse(value!)).toEqual({
           base_url: 'https://foo:199',
           looker_url: 'https://foo:99',
         })
@@ -186,28 +171,22 @@ describe('ConfigForm', () => {
 
       await userEvent.click(remove)
       await waitFor(() => {
-        const storage = defaultConfigurator.getStorage(RunItConfigKey)
-        expect(storage.location).toEqual('session')
-        expect(storage.value).toEqual('')
+        const value = localStorage.getItem(RunItConfigKey)
+        expect(value).toBeEmpty()
       })
     })
 
     test('it shows login section when configured', async () => {
-      defaultConfigurator.setStorage(
+      localStorage.setItem(
         RunItConfigKey,
         JSON.stringify({
           base_url: 'http://locb',
           looker_url: 'http://local',
-        }),
-        'local'
+        })
       )
 
       renderWithTheme(
-        <ConfigForm
-          configurator={defaultConfigurator}
-          setVersionsUrl={runItNoSet}
-          requestContent={{}}
-        />
+        <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
       )
       expect(
         screen.getByRole('heading', { name: 'RunIt Configuration' })

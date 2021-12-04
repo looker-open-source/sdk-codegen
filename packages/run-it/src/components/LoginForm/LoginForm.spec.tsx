@@ -28,21 +28,18 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { defaultConfigurator, readyToLogin } from '..'
-import { runItNoSet } from '../..'
+import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
+
+import { readyToLogin } from '..'
+import { initRunItSdk } from '../..'
 import { LoginForm } from './LoginForm'
 
 describe('LoginForm', () => {
-  // https://testing-library.com/docs/guide-which-query
+  const sdk = initRunItSdk()
+  registerTestEnvAdaptor(new BrowserAdaptor(sdk))
 
   test('it creates a login form', async () => {
-    renderWithTheme(
-      <LoginForm
-        configurator={defaultConfigurator}
-        requestContent={{}}
-        setVersionsUrl={runItNoSet}
-      />
-    )
+    renderWithTheme(<LoginForm requestContent={{}} />)
     const login = screen.getByRole('button', {
       name: 'Login',
     })

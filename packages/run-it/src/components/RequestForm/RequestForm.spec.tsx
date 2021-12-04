@@ -29,16 +29,14 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
 import { formatDateString } from '@looker/components-date'
-import { defaultConfigurator } from '..'
 import type { RunItInput } from '../..'
-import { initRequestContent, runItNoSet } from '../..'
+import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
-  const mockSdk = {} as unknown as IAPIMethods
+  // const mockSdk = {} as unknown as IAPIMethods
   let requestContent = {}
   const setRequestContent = jest.fn((content) => {
     requestContent = content
@@ -54,7 +52,6 @@ describe('RequestForm', () => {
       const message = 'Invalid message'
       renderWithTheme(
         <RequestForm
-          configurator={defaultConfigurator}
           setVersionsUrl={runItNoSet}
           inputs={[
             {
@@ -71,7 +68,6 @@ describe('RequestForm', () => {
           setRequestContent={setRequestContent}
           needsAuth={false}
           hasConfig={true}
-          sdk={mockSdk}
           setHasConfig={() => true}
           isExtension={false}
           validationMessage={message}
@@ -90,7 +86,6 @@ describe('RequestForm', () => {
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -107,7 +102,6 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         setHasConfig={() => true}
         isExtension={false}
         handleConfig={runItNoSet}
@@ -125,7 +119,6 @@ describe('RequestForm', () => {
   test('it creates a form with a simple item, submit button, and config button if running as an extension', () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -143,7 +136,6 @@ describe('RequestForm', () => {
         isExtension={true}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         handleConfig={runItNoSet}
       />
     )
@@ -163,7 +155,6 @@ describe('RequestForm', () => {
     const name = 'boolean_item'
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -180,7 +171,6 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         handleConfig={runItNoSet}
       />
     )
@@ -210,7 +200,6 @@ describe('RequestForm', () => {
     const name = 'date_item'
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -227,7 +216,6 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         handleConfig={runItNoSet}
       />
     )
@@ -250,7 +238,6 @@ describe('RequestForm', () => {
     const name = 'number_item'
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -268,7 +255,6 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         handleConfig={runItNoSet}
-        sdk={mockSdk}
       />
     )
 
@@ -282,7 +268,6 @@ describe('RequestForm', () => {
   test('interacting with a text simple item changes the request content', async () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -300,7 +285,6 @@ describe('RequestForm', () => {
         needsAuth={false}
         hasConfig={true}
         handleConfig={runItNoSet}
-        sdk={mockSdk}
       />
     )
 
@@ -330,16 +314,14 @@ describe('RequestForm', () => {
     ]
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={inputs}
         handleSubmit={handleSubmit}
         httpMethod={'POST'}
-        requestContent={initRequestContent(defaultConfigurator, inputs)}
+        requestContent={{ body: JSON.stringify(inputs[0].type) }}
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         handleConfig={runItNoSet}
       />
     )
@@ -358,7 +340,6 @@ describe('RequestForm', () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         setVersionsUrl={runItNoSet}
         inputs={[
           {
@@ -375,7 +356,6 @@ describe('RequestForm', () => {
         setRequestContent={setRequestContent}
         needsAuth={false}
         hasConfig={true}
-        sdk={mockSdk}
         handleConfig={runItNoSet}
       />
     )

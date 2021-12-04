@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react'
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Aside,
   Button,
@@ -37,7 +37,7 @@ import {
 import { Beaker } from '@looker/icons'
 import { useHistory, useParams } from 'react-router-dom'
 import type { RunItSetter } from '@looker/run-it'
-import { RunIt, RunItContext, RunItFormKey } from '@looker/run-it'
+import { RunIt, RunItFormKey } from '@looker/run-it'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
@@ -83,7 +83,6 @@ export const MethodScene: FC<MethodSceneProps> = ({
   setVersionsUrl,
 }) => {
   const history = useHistory()
-  const { sdk } = useContext(RunItContext)
   const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
@@ -157,7 +156,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
           <DocSchema object={method.schema} />
         </ApixSection>
       )}
-      {sdk && value && (
+      {value && (
         <Aside width="50rem">
           <ExtendComponentsThemeProvider
             themeCustomizations={{
@@ -171,6 +170,7 @@ export const MethodScene: FC<MethodSceneProps> = ({
             }}
           >
             <RunIt
+              adaptor={adaptor}
               key={method.operationId}
               sdkLanguage={sdkLanguage}
               api={api}

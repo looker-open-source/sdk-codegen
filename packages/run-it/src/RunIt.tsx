@@ -35,6 +35,12 @@ import {
   useTabs,
 } from '@looker/components'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+import type {
+  IEnvironmentAdaptor,
+  OAuthConfigProvider,
+} from '@looker/extension-utils'
+import { registerEnvAdaptor } from '@looker/extension-utils'
+
 import type { ResponseContent } from './components'
 import {
   RequestForm,
@@ -46,15 +52,12 @@ import {
   PerfTimings,
   PerfTracker,
 } from './components'
-import type { RunItSettings } from './utils'
 import {
   initRequestContent,
   createRequestParams,
   runRequest,
   pathify,
-  sdkNeedsConfig,
   prepareInputs,
-  sdkNeedsAuth,
   createInputs,
 } from './utils'
 import type { RunItSetter } from '.'
@@ -98,6 +101,7 @@ export interface RunItInput {
 }
 
 interface RunItProps {
+  adaptor: IEnvironmentAdaptor
   /** spec model to use for sdk call generation */
   api: ApiModel
   /** Method to test */
@@ -113,6 +117,7 @@ interface RunItProps {
  * which on submit performs a REST request and renders the response with the appropriate MIME type handler
  */
 export const RunIt: FC<RunItProps> = ({
+  adaptor,
   api,
   method,
   setVersionsUrl = runItNoSet,
@@ -120,36 +125,39 @@ export const RunIt: FC<RunItProps> = ({
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
   const endpoint = method.endpoint
-  const { sdk, configurator, basePath } = useContext(RunItContext)
+  const sdk = adaptor.sdk
+  const [initialized, setInitialized] = useState(false)
+  const { basePath } = useContext(RunItContext)
   const [inputs] = useState(() => createInputs(api, method))
-  const [requestContent, setRequestContent] = useState(() =>
-    initRequestContent(configurator, inputs)
+
+  /** Request related state */
+  const [requestContent, setRequestContent] = useState(
+    initRequestContent(inputs)
   )
   const [activePathParams, setActivePathParams] = useState({})
   const [loading, setLoading] = useState(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
-  const [isExtension, setIsExtension] = useState<boolean>(false)
-  const [hasConfig, setHasConfig] = useState<boolean>(true)
-  const [needsAuth, setNeedsAuth] = useState<boolean>(() => sdkNeedsAuth(sdk))
+
+  /** Auth config related state */
+  const isExtension = adaptor.isExtension()
+  const [hasConfig, setHasConfig] = useState<boolean>(
+    isExtension ||
+      (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured()
+  )
+  const [needsAuth] = useState<boolean>(
+    () => !isExtension && !sdk.authSession.isAuthenticated()
+  )
+
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
 
   const perf = new PerfTimings()
 
   useEffect(() => {
-    if (sdk) {
-      const settings = sdk.authSession.settings as RunItSettings
-      const configIsNeeded = sdkNeedsConfig(sdk)
-      setIsExtension(!configIsNeeded)
-      setHasConfig(!configIsNeeded || settings.authIsConfigured())
-      setNeedsAuth(configIsNeeded && !sdk.authSession.isAuthenticated())
-    } else {
-      setIsExtension(true)
-      setHasConfig(true)
-      setNeedsAuth(false)
-    }
-  }, [sdk])
+    registerEnvAdaptor(adaptor)
+    setInitialized(true)
+  }, [])
 
   const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
@@ -205,77 +213,77 @@ export const RunIt: FC<RunItProps> = ({
     }
   }
 
-  // No SDK, no RunIt for you!
-  if (!sdk) return <></>
-
   return (
     <Box bg="background" py="large" height="100%">
-      <TabList distribute {...tabs}>
-        <Tab key="request">Request</Tab>
-        <Tab key="response">Response</Tab>
-        <Tab key="makeTheCall">SDK Call</Tab>
-        {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
-        {isExtension ? <></> : <Tab key="configuration">Configure</Tab>}
-      </TabList>
-      <TabPanels px="xxlarge" {...tabs} overflow="auto" height="87vh">
-        <TabPanel key="request">
-          <RequestForm
-            sdk={sdk}
-            httpMethod={httpMethod}
-            inputs={inputs}
-            requestContent={requestContent}
-            setRequestContent={setRequestContent}
-            handleSubmit={handleSubmit}
-            needsAuth={needsAuth}
-            hasConfig={hasConfig}
-            handleConfig={handleConfig}
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-            isExtension={isExtension}
-            validationMessage={validationMessage}
-            setValidationMessage={setValidationMessage}
-            setVersionsUrl={setVersionsUrl}
-          />
-        </TabPanel>
-        <TabPanel key="response">
-          <Loading
-            loading={loading}
-            message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
-          />
-          <ResponseExplorer
-            response={responseContent}
-            verb={httpMethod}
-            path={pathify(endpoint, activePathParams)}
-          />
-        </TabPanel>
-        <TabPanel key="makeTheCall">
-          <DocSdkCalls
-            sdkLanguage={sdkLanguage}
-            api={api}
-            method={method}
-            inputs={prepareInputs(inputs, requestContent)}
-          />
-        </TabPanel>
-        {isExtension ? (
-          <></>
-        ) : (
-          <TabPanel key="performance">
-            <PerfTracker perf={perf} configurator={configurator} />
-          </TabPanel>
-        )}
-        {isExtension ? (
-          <></>
-        ) : (
-          <TabPanel key="config">
-            <ConfigForm
-              setHasConfig={setHasConfig}
-              configurator={configurator}
-              setVersionsUrl={setVersionsUrl}
-              requestContent={requestContent}
-            />
-          </TabPanel>
-        )}
-      </TabPanels>
+      {!initialized ? (
+        <Loading loading={true} />
+      ) : (
+        <>
+          <TabList distribute {...tabs}>
+            <Tab key="request">Request</Tab>
+            <Tab key="response">Response</Tab>
+            <Tab key="makeTheCall">SDK Call</Tab>
+            {isExtension ? <></> : <Tab key="performance">Performance</Tab>}
+            {isExtension ? <></> : <Tab key="configuration">Configure</Tab>}
+          </TabList>
+          <TabPanels px="xxlarge" {...tabs} overflow="auto" height="87vh">
+            <TabPanel key="request">
+              <RequestForm
+                httpMethod={httpMethod}
+                inputs={inputs}
+                requestContent={requestContent}
+                setRequestContent={setRequestContent}
+                handleSubmit={handleSubmit}
+                needsAuth={needsAuth}
+                hasConfig={hasConfig}
+                handleConfig={handleConfig}
+                setHasConfig={setHasConfig}
+                isExtension={isExtension}
+                validationMessage={validationMessage}
+                setValidationMessage={setValidationMessage}
+                setVersionsUrl={setVersionsUrl}
+              />
+            </TabPanel>
+            <TabPanel key="response">
+              <Loading
+                loading={loading}
+                message={`${httpMethod} ${pathify(endpoint, activePathParams)}`}
+              />
+              <ResponseExplorer
+                response={responseContent}
+                verb={httpMethod}
+                path={pathify(endpoint, activePathParams)}
+              />
+            </TabPanel>
+            <TabPanel key="makeTheCall">
+              <DocSdkCalls
+                sdkLanguage={sdkLanguage}
+                api={api}
+                method={method}
+                inputs={prepareInputs(inputs, requestContent)}
+              />
+            </TabPanel>
+            {isExtension ? (
+              <></>
+            ) : (
+              <TabPanel key="performance">
+                <PerfTracker perf={perf} />
+              </TabPanel>
+            )}
+            {isExtension ? (
+              <></>
+            ) : (
+              <TabPanel key="config">
+                <ConfigForm
+                  setHasConfig={setHasConfig}
+                  setVersionsUrl={setVersionsUrl}
+                  requestContent={requestContent}
+                />
+              </TabPanel>
+            )}
+          </TabPanels>
+        </>
+      )}
     </Box>
   )
 }

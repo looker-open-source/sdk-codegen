@@ -24,118 +24,30 @@
 
  */
 
-import { functionalSdk40 } from '@looker/sdk'
-import type { IAPIMethods, IApiSection, IApiSettings } from '@looker/sdk-rtl'
+import type { IApiSettings } from '@looker/sdk-rtl'
 import {
-  ApiSettings,
   BrowserSession,
   BrowserTransport,
   DefaultSettings,
 } from '@looker/sdk-rtl'
-import type { RunItConfigurator } from '../components'
+import { functionalSdk40 } from '@looker/sdk'
+import { OAuthConfigProvider } from '@looker/extension-utils'
+
 import { RunItConfigKey } from '../components'
 
-// https://docs.looker.com/reference/api-and-integration/api-cors
-const settings = {
-  ...DefaultSettings(),
-  base_url: 'https://self-signed.looker.com:19999',
-  agentTag: 'RunIt 0.8',
-} as IApiSettings
+export const initRunItSdk = () => {
+  const settings = {
+    ...DefaultSettings(),
+    base_url: 'https://self-signed.looker.com:19999',
+    agentTag: 'RunIt 0.8',
+  } as IApiSettings
 
-/**
- * An OAuth Session configuration provider
- *
- * @class RunItSettings
- */
-export class RunItSettings extends ApiSettings {
-  configurator: RunItConfigurator
-  constructor(
-    settings: Partial<IApiSettings>,
-    configurator: RunItConfigurator
-  ) {
-    super(settings)
-    this.configurator = configurator
-  }
-
-  getStoredConfig() {
-    const storage = this.configurator.getStorage(RunItConfigKey)
-    let config = { base_url: '', looker_url: '' }
-    if (storage.value) {
-      config = JSON.parse(storage.value)
-    }
-    return config
-  }
-
-  authIsConfigured(): boolean {
-    const config = this.getStoredConfig()
-    return config.base_url !== '' && config.looker_url !== ''
-  }
-
-  readConfig(_section?: string): IApiSection {
-    // Read server url values from storage
-    let config = this.getStoredConfig()
-    if (!this.authIsConfigured()) {
-      // derive Looker server URL from base_url
-      const url = new URL(this.base_url)
-      const authServer = `${url.protocol}//${url.hostname}`
-      config = {
-        base_url: this.base_url,
-        looker_url: `${authServer}:9999`,
-      }
-    }
-
-    const { base_url, looker_url } = config
-    /* update base_url to the dynamically determined value for standard transport requests */
-    this.base_url = base_url
-    return {
-      ...super.readConfig(_section),
-      ...{
-        base_url,
-        looker_url,
-        client_id: 'looker.api-explorer',
-        redirect_uri: `${window.location.origin}/oauth`,
-      },
-    }
-  }
-}
-
-const perfSDK = (
-  settings: Partial<IApiSettings>,
-  configurator: RunItConfigurator
-): IAPIMethods => {
-  const options = new RunItSettings(settings, configurator)
+  const options = new OAuthConfigProvider(settings, RunItConfigKey)
   const transport = new BrowserTransport(options)
   const session = new BrowserSession(options, transport)
   const sdk = functionalSdk40(session)
   BrowserTransport.trackPerformance = true
   return sdk
-}
-
-/** stand-alone API test runner */
-export let runItSDK: IAPIMethods
-// And this which sucks
-export const initRunItSdk = (configurator: RunItConfigurator) => {
-  if (!runItSDK) {
-    runItSDK = perfSDK(settings, configurator)
-  }
-  return runItSDK
-}
-
-/**
- * Is this a stand-alone version of Run-It that needs server and auth configuration?
- * @param sdk to check
- */
-export const sdkNeedsConfig = (sdk: IAPIMethods | undefined) =>
-  sdk?.authSession.settings instanceof RunItSettings
-
-/**
- * Determines if authentication is required
- * @param sdk to check
- */
-export const sdkNeedsAuth = (sdk: IAPIMethods | undefined) => {
-  if (!sdk) return false
-  const configIsNeeded = sdkNeedsConfig(sdk)
-  return configIsNeeded && !sdk.authSession.isAuthenticated()
 }
 
 export enum StoreConstants {

@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk'
 import { ExtensionAdaptor } from './extensionAdaptor'
 import type { ThemeOverrides } from '@looker/extension-utils'
@@ -38,11 +39,14 @@ describe('ExtensionAdaptor', () => {
     'returns correct font overrides',
     (hostType?: string, expectedOverrides?: ThemeOverrides) => {
       expect(
-        new ExtensionAdaptor({
-          lookerHostData: {
-            hostType,
-          } as Readonly<LookerHostData>,
-        } as ExtensionSDK).themeOverrides()
+        new ExtensionAdaptor(
+          {
+            lookerHostData: {
+              hostType,
+            } as Readonly<LookerHostData>,
+          } as ExtensionSDK,
+          {} as IAPIMethods
+        ).themeOverrides()
       ).toEqual(expectedOverrides)
     }
   )

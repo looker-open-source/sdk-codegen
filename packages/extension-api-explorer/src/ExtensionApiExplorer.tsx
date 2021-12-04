@@ -26,7 +26,6 @@
 
 import type { FC } from 'react'
 import React, { useContext, useEffect, useState } from 'react'
-import type { IStorageValue, RunItConfigurator } from '@looker/run-it'
 import { RunItProvider, runItNoSet, sdkSpecFetch } from '@looker/run-it'
 import type { ExtensionContextData } from '@looker/extension-sdk-react'
 import { ExtensionContext } from '@looker/extension-sdk-react'
@@ -36,34 +35,6 @@ import { ApiExplorer, store, Loader } from '@looker/api-explorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Provider } from 'react-redux'
 import { ExtensionAdaptor } from '@looker/extension-utils'
-
-class ExtensionConfigurator implements RunItConfigurator {
-  storage: Record<string, string> = {}
-  getStorage(key: string, defaultValue = ''): IStorageValue {
-    const value = this.storage[key]
-    if (value) {
-      return {
-        location: 'session',
-        value,
-      }
-    }
-    return {
-      location: 'session',
-      value: defaultValue,
-    }
-  }
-
-  setStorage(key: string, value: string): string {
-    this.storage[key] = value
-    return value
-  }
-
-  removeStorage(key: string) {
-    delete this.storage[key]
-  }
-}
-
-const configurator = new ExtensionConfigurator()
 
 export const ExtensionApiExplorer: FC = () => {
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
@@ -87,11 +58,14 @@ export const ExtensionApiExplorer: FC = () => {
     if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
   }, [specs, sdk])
 
-  const extensionAdaptor = new ExtensionAdaptor(getExtensionSDK())
+  const extensionAdaptor = new ExtensionAdaptor(
+    getExtensionSDK(),
+    extensionContext.core40SDK
+  )
 
   return (
     <Provider store={store}>
-      <RunItProvider sdk={sdk} configurator={configurator} basePath="">
+      <RunItProvider basePath="">
         <>
           {specs ? (
             <ApiExplorer

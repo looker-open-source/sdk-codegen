@@ -24,41 +24,9 @@
 
  */
 
-import { defaultConfigurator } from '..'
-import { RunItConfigKey, validateUrl } from './configUtils'
+import { validateUrl } from './configUtils'
 
 describe('configUtils', () => {
-  describe('storage', () => {
-    const testConfig = 'Try it config values'
-    beforeEach(() => {
-      defaultConfigurator.removeStorage(RunItConfigKey)
-    })
-
-    afterEach(() => {
-      defaultConfigurator.removeStorage(RunItConfigKey)
-    })
-
-    test('it saves config values to sessionStorage by default', () => {
-      defaultConfigurator.setStorage(RunItConfigKey, testConfig)
-      const actual = defaultConfigurator.getStorage(RunItConfigKey)
-      expect(actual).toEqual({ location: 'session', value: testConfig })
-    })
-
-    test('it reads config values from localStorage if they are not in sessionStorage', () => {
-      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'local')
-      const actual = defaultConfigurator.getStorage(RunItConfigKey)
-      expect(actual).toEqual({ location: 'local', value: testConfig })
-    })
-
-    test('removeConfig clears both session and local storage', () => {
-      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'local')
-      defaultConfigurator.setStorage(RunItConfigKey, testConfig, 'session')
-      defaultConfigurator.removeStorage(RunItConfigKey)
-      const actual = defaultConfigurator.getStorage(RunItConfigKey)
-      expect(actual).toEqual({ location: 'session', value: '' })
-    })
-  })
-
   describe('validateUrl', () => {
     test('invalid urls are empty', () => {
       const actual = validateUrl('foo')

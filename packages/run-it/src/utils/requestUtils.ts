@@ -36,11 +36,10 @@ import {
   IntrinsicType,
   trimInputs,
 } from '@looker/sdk-codegen'
+import { getEnvAdaptor } from '@looker/extension-utils'
 
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
-import type { RunItConfigurator } from '../components'
 import { RunItFormKey } from '../components'
-import { runItSDK } from './RunItSDK'
 
 /** Hook to set a URL somewhere else in APIX */
 export type RunItSetter = (value: any) => any
@@ -113,10 +112,11 @@ export const prepareInputs = (
  * Load and clear any saved form values from the session
  * @param configurator storage service
  */
-export const formValues = (configurator: RunItConfigurator) => {
-  const storage = configurator.getStorage(RunItFormKey)
-  const result = storage.value ? JSON.parse(storage.value) : {}
-  configurator.removeStorage(RunItFormKey)
+export const formValues = async () => {
+  const adaptor = getEnvAdaptor()
+  const formValue = await adaptor.localStorageGetItem(RunItFormKey)
+  const result = formValue ? JSON.parse(formValue) : {}
+  adaptor.localStorageRemoveItem(RunItFormKey)
   return result
 }
 
@@ -127,11 +127,12 @@ export const formValues = (configurator: RunItConfigurator) => {
  * @param requestContent the current request content
  */
 export const initRequestContent = (
-  configurator: RunItConfigurator,
   inputs: RunItInput[],
   requestContent = {}
 ) => {
-  let content = formValues(configurator)
+  // TODO: Temporarily disabling request form state persistence until RunIt is using redux
+  // let content = await formValues()
+  let content = {}
   if (isEmpty(content)) {
     content = prepareInputs(inputs, requestContent)
   }
@@ -192,7 +193,7 @@ export const runRequest = async (
   body: any
 ): Promise<IRawResponse> => {
   if (!sdk.authSession.isAuthenticated()) {
-    await sdk.ok(runItSDK.authSession.login())
+    await sdk.ok(sdk.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
   const raw = await sdk.authSession.transport.rawRequest(
@@ -200,7 +201,7 @@ export const runRequest = async (
     url,
     queryParams,
     body,
-    (props) => runItSDK.authSession.authenticate(props)
+    (props) => sdk.authSession.authenticate(props)
   )
   return raw
 }

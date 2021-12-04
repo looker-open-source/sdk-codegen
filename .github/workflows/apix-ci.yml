@@ -55,6 +55,7 @@ jobs:
         run: |
           yarn
           yarn lint:es --quiet
+          yarn lint:ts
           yarn build
           yarn dedupe:ci
 
