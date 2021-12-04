@@ -1686,7 +1686,12 @@ export class Type implements IType {
   load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = api.resolveType(propSchema, undefined, propName)
+        const propType = api.resolveType(
+          propSchema,
+          undefined,
+          propName,
+          this.name
+        )
         // Using class name instead of instanceof check because TypeScript
         // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
@@ -2190,7 +2195,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     schema: string | OAS.SchemaObject | OAS.ReferenceObject,
     style?: string,
     typeName?: string,
-    methodName?: string
+    ownerName?: string
   ): IType {
     const getRef = (schema: OAS.SchemaObject | OAS.ReferenceObject) => {
       const ref = schema.$ref
@@ -2217,7 +2222,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           ['content', 'application/json', 'schema', '$ref'],
           deref
         )
-        if (ref) return this.resolveType(ref, style, typeName, methodName)
+        if (ref) return this.resolveType(ref, style, typeName, ownerName)
       }
     } else if (OAS.isReferenceObject(schema)) {
       return getRef(schema)
@@ -2243,9 +2248,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
             schema,
             this.types,
             typeName,
-            methodName
+            ownerName
           )
-          this.registerEnum(num, methodName)
+          this.registerEnum(num, ownerName)
           const result = new ArrayType(num, schema)
           return result
         }
@@ -2257,11 +2262,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
           schema,
           this.types,
           typeName,
-          methodName
+          ownerName
         )
         if (result) {
           // If defined, it may get reassigned
-          return this.registerEnum(result, methodName)
+          return this.registerEnum(result, ownerName)
         }
         return result
       }
@@ -2305,25 +2310,33 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return request
   }
 
-  registerEnum(type: IType, methodName?: string) {
+  registerEnum(type: IType, ownerName?: string) {
     if (!(type instanceof EnumType)) return type
-    const hash = md5(type.asHashString())
 
-    if (hash in this.enumTypes) {
-      /**
-       * whatever type this was, it's now the same as the existing enum type
-       */
-      return this.enumTypes[hash]
+    // TODO - find this name, see if it's an enum with the same hash string. If so, just return the exact match. Otherwise, continue with the rename logic
+    // TODO need to do this same thing in EnumType.findName(). Need to figure out how to abstract. Tomorrow.
+    if (type.name in this.types) {
+      const hash = md5(type.asHashString())
+      const matched = this.enumTypes[hash]
+      if (matched && matched.name === type.name) {
+        /**
+         * this type is basically the same as the other enum of the same name.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         */
+        return this.enumTypes[hash]
+      }
     }
 
-    if (methodName) {
-      const method = this.methods[methodName]
+    if (ownerName) {
+      const method = this.methods[ownerName]
       if (method) {
+        // add a type reference for the method
         method.types.add(type.name)
         method.customTypes.add(type.name)
       }
     }
-    this.enumTypes[hash] = type
+    // tail end of dedupe logic
+    // this.enumTypes[hash] = type
     this.types[type.name] = type
     return type
   }
@@ -2334,8 +2347,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * if needed, create the request type from method parameters
    * add to this.types collection
    *
-   * @param {IMethod} method for request type
-   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   * @param method for request type
+   * @returns returns type if request type is needed, otherwise it doesn't
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
