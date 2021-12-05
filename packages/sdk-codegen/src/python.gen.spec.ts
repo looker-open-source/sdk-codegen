@@ -710,7 +710,7 @@ class ApiVersion(model.Model):
       const expected = `
 class PermissionType(enum.Enum):
     """
-    Type of permission: "view" or "edit" Valid values are: "view", "edit".
+    Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 
     """
     view = "view"

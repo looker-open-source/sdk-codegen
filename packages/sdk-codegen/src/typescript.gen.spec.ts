@@ -1037,8 +1037,7 @@ async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSetting
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * Type defined in CreateQueryTask
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -1059,8 +1058,7 @@ export enum ResultFormat {
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * Type defined in LookmlModelExploreField
- * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 export enum Align {
   left = 'left',

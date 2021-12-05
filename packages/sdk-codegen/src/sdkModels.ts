@@ -1825,7 +1825,7 @@ export class EnumType extends Type implements IEnumType {
   constructor(
     public elementType: IType,
     schema: OAS.SchemaObject,
-    types: TypeList,
+    api: ApiModel,
     typeName?: string,
     methodName?: string
   ) {
@@ -1841,24 +1841,40 @@ export class EnumType extends Type implements IEnumType {
       )
     }
     if (methodName) {
-      this.description = `Type defined in ${methodName}\n${this.description}`
+      this.description = `${this.description}${
+        this.description ? ' ' : ''
+      }(Enum defined in ${methodName})`
     }
 
-    this.name = this.findName(types, typeName, methodName)
+    this.name = this.findName(api, typeName, methodName)
   }
 
-  private findName(types: TypeList, typeName?: string, methodName?: string) {
+  private findName(api: ApiModel, typeName?: string, methodName?: string) {
+    const hash = md5(this.asHashString())
+    const enums = api.getEnumList()
     let name = titleCase(this.name || typeName || 'Enum')
-    if (name in types) {
+    if (name in api.types) {
+      const matched = enums[hash]
+      if (matched && matched.name === name) {
+        /**
+         * this type is the same as the other enum of the same name, although description may vary.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         * since this has the same name, it will replace the previous version in the keyed collection of types
+         */
+        return name
+      }
+
       // Enum values don't match existing enum of this name. Pick a new name
       const baseName = methodName ? titleCase(`${methodName}_${name}`) : name
       let newName = baseName
       let i = 0
-      while (newName in types) {
+      while (newName in api.types) {
         newName = `${baseName}${++i}`
       }
       name = newName
     }
+    // register the enum hash value
+    enums[hash] = this
     return name
   }
 
@@ -2034,7 +2050,7 @@ export interface IApiModel extends IModel {
 
 export class ApiModel implements ISymbolTable, IApiModel {
   private requestTypes: TypeList = {}
-  private enumTypes: TypeList = {}
+  protected enumTypes: TypeList = {}
   private refs: TypeList = {}
   methods: MethodList = {}
   types: TypeList = {}
@@ -2195,7 +2211,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     schema: string | OAS.SchemaObject | OAS.ReferenceObject,
     style?: string,
     typeName?: string,
-    ownerName?: string
+    methodName?: string
   ): IType {
     const getRef = (schema: OAS.SchemaObject | OAS.ReferenceObject) => {
       const ref = schema.$ref
@@ -2222,7 +2238,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           ['content', 'application/json', 'schema', '$ref'],
           deref
         )
-        if (ref) return this.resolveType(ref, style, typeName, ownerName)
+        if (ref) return this.resolveType(ref, style, typeName, methodName)
       }
     } else if (OAS.isReferenceObject(schema)) {
       return getRef(schema)
@@ -2243,30 +2259,30 @@ export class ApiModel implements ISymbolTable, IApiModel {
           return new DelimArrayType(resolved, schema)
         }
         if (this.schemaHasEnums(schema)) {
-          const num = new EnumType(
-            resolved,
-            schema,
-            this.types,
-            typeName,
-            ownerName
-          )
-          this.registerEnum(num, ownerName)
+          const num = new EnumType(resolved, schema, this, typeName, methodName)
+          this.registerEnum(num, methodName)
           const result = new ArrayType(num, schema)
           return result
         }
         return new ArrayType(resolved, schema)
       }
       if (this.schemaHasEnums(schema)) {
-        const result = new EnumType(
-          this.resolveType(schema.type),
-          schema,
-          this.types,
+        const resolved = this.resolveType(
+          schema.type,
+          style,
           typeName,
-          ownerName
+          methodName
+        )
+        const result = new EnumType(
+          resolved,
+          schema,
+          this,
+          typeName,
+          methodName
         )
         if (result) {
           // If defined, it may get reassigned
-          return this.registerEnum(result, ownerName)
+          return this.registerEnum(result, methodName)
         }
         return result
       }
@@ -2310,25 +2326,23 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return request
   }
 
-  registerEnum(type: IType, ownerName?: string) {
+  registerEnum(type: IType, methodName?: string) {
     if (!(type instanceof EnumType)) return type
 
-    // TODO - find this name, see if it's an enum with the same hash string. If so, just return the exact match. Otherwise, continue with the rename logic
-    // TODO need to do this same thing in EnumType.findName(). Need to figure out how to abstract. Tomorrow.
     if (type.name in this.types) {
       const hash = md5(type.asHashString())
       const matched = this.enumTypes[hash]
       if (matched && matched.name === type.name) {
         /**
-         * this type is basically the same as the other enum of the same name.
+         * this type is the same as the other enum of the same name, although description may vary.
          * The descriptions may vary, but we prioritize type name over description for identical enum values
          */
         return this.enumTypes[hash]
       }
     }
 
-    if (ownerName) {
-      const method = this.methods[ownerName]
+    if (methodName) {
+      const method = this.methods[methodName]
       if (method) {
         // add a type reference for the method
         method.types.add(type.name)
@@ -2375,6 +2389,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const result = this._getRequestType(method)
     if (result) result.refCount++
     return result
+  }
+
+  /**
+   * Read-only accessor for private enum collection used within this source file as a "friend"
+   */
+  getEnumList(): TypeList {
+    return this.enumTypes
   }
 
   makeWriteableType(hash: string, type: IType) {
