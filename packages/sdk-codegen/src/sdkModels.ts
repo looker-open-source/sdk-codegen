@@ -2050,7 +2050,7 @@ export interface IApiModel extends IModel {
 
 export class ApiModel implements ISymbolTable, IApiModel {
   private requestTypes: TypeList = {}
-  protected enumTypes: TypeList = {}
+  private enumTypes: TypeList = {}
   private refs: TypeList = {}
   methods: MethodList = {}
   types: TypeList = {}
