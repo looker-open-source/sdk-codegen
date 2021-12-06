@@ -1037,7 +1037,7 @@ async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSetting
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -1058,7 +1058,7 @@ export enum ResultFormat {
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 export enum Align {
   left = 'left',
@@ -1077,6 +1077,54 @@ export enum Align {
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
   result_format: ResultFormat
+  /**
+   * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
+   */
+  an_array_of_enums?: AnArrayOfEnums[]
+  user: IUserPublic
+  /**
+   * Roles assigned to group (read-only)
+   */
+  roles?: IRole[]
+}`)
+      })
+
+      it('duplicate enum resolution', () => {
+        const type = apiTestModel.types.SecondResponseWithEnums
+        // Should have:
+        // - a fully named ResultFormat type because it doesn't match the other `ResultFormat` type declared previously
+        // - an `another_format` property with `AnotherFormat` enum name with the same values as the previously declared `ResultFormat` type
+        const type1 = apiTestModel.types.RequiredResponseWithEnums
+        const rf1 = type1.properties.result_format.type as EnumType
+        const rf2 = type.properties.another_format.type as EnumType
+        const rf3 = type.properties.result_format.type as EnumType
+        const otherValues = [
+          'other',
+          'json',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ]
+        expect(rf1.values).toEqual(rf2.values)
+        expect(rf3.values).toEqual(otherValues)
+
+        const actual = gen.declareType(indent, type)
+        expect(actual).toEqual(`export interface ISecondResponseWithEnums {
+  /**
+   * Id of query to run
+   */
+  query_id: number
+  /**
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   */
+  result_format: SecondResponseWithEnumsResultFormat
+  /**
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   */
+  another_format?: AnotherFormat
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */

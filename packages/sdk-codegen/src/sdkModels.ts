@@ -1686,7 +1686,12 @@ export class Type implements IType {
   load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = api.resolveType(propSchema, undefined, propName)
+        const propType = api.resolveType(
+          propSchema,
+          undefined,
+          propName,
+          this.name
+        )
         // Using class name instead of instanceof check because TypeScript
         // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
@@ -1820,7 +1825,7 @@ export class EnumType extends Type implements IEnumType {
   constructor(
     public elementType: IType,
     schema: OAS.SchemaObject,
-    types: TypeList,
+    api: ApiModel,
     typeName?: string,
     methodName?: string
   ) {
@@ -1836,24 +1841,40 @@ export class EnumType extends Type implements IEnumType {
       )
     }
     if (methodName) {
-      this.description = `Type defined in ${methodName}\n${this.description}`
+      this.description = `${this.description}${
+        this.description ? ' ' : ''
+      }(Enum defined in ${methodName})`
     }
 
-    this.name = this.findName(types, typeName, methodName)
+    this.name = this.findName(api, typeName, methodName)
   }
 
-  private findName(types: TypeList, typeName?: string, methodName?: string) {
+  private findName(api: ApiModel, typeName?: string, methodName?: string) {
+    const hash = md5(this.asHashString())
+    const enums = api.getEnumList()
     let name = titleCase(this.name || typeName || 'Enum')
-    if (name in types) {
+    if (name in api.types) {
+      const matched = enums[hash]
+      if (matched?.name === name) {
+        /**
+         * this type is the same as the other enum of the same name, although description may vary.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         * since this has the same name, it will replace the previous version in the keyed collection of types
+         */
+        return name
+      }
+
       // Enum values don't match existing enum of this name. Pick a new name
       const baseName = methodName ? titleCase(`${methodName}_${name}`) : name
       let newName = baseName
       let i = 0
-      while (newName in types) {
+      while (newName in api.types) {
         newName = `${baseName}${++i}`
       }
       name = newName
     }
+    // register the enum hash value
+    enums[hash] = this
     return name
   }
 
@@ -2238,13 +2259,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           return new DelimArrayType(resolved, schema)
         }
         if (this.schemaHasEnums(schema)) {
-          const num = new EnumType(
-            resolved,
-            schema,
-            this.types,
-            typeName,
-            methodName
-          )
+          const num = new EnumType(resolved, schema, this, typeName, methodName)
           this.registerEnum(num, methodName)
           const result = new ArrayType(num, schema)
           return result
@@ -2252,10 +2267,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return new ArrayType(resolved, schema)
       }
       if (this.schemaHasEnums(schema)) {
+        const resolved = this.resolveType(
+          schema.type,
+          style,
+          typeName,
+          methodName
+        )
         const result = new EnumType(
-          this.resolveType(schema.type),
+          resolved,
           schema,
-          this.types,
+          this,
           typeName,
           methodName
         )
@@ -2307,23 +2328,27 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   registerEnum(type: IType, methodName?: string) {
     if (!(type instanceof EnumType)) return type
-    const hash = md5(type.asHashString())
 
-    if (hash in this.enumTypes) {
-      /**
-       * whatever type this was, it's now the same as the existing enum type
-       */
-      return this.enumTypes[hash]
+    if (type.name in this.types) {
+      const hash = md5(type.asHashString())
+      const matched = this.enumTypes[hash]
+      if (matched?.name === type.name) {
+        /**
+         * this type is the same as the other enum of the same name, although description may vary.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         */
+        return this.enumTypes[hash]
+      }
     }
 
     if (methodName) {
       const method = this.methods[methodName]
       if (method) {
+        // add a type reference for the method
         method.types.add(type.name)
         method.customTypes.add(type.name)
       }
     }
-    this.enumTypes[hash] = type
     this.types[type.name] = type
     return type
   }
@@ -2334,8 +2359,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * if needed, create the request type from method parameters
    * add to this.types collection
    *
-   * @param {IMethod} method for request type
-   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   * @param method for request type
+   * @returns returns type if request type is needed, otherwise it doesn't
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
@@ -2362,6 +2387,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
     const result = this._getRequestType(method)
     if (result) result.refCount++
     return result
+  }
+
+  /**
+   * Read-only accessor for private enum collection used within this source file as a "friend"
+   */
+  getEnumList(): TypeList {
+    return this.enumTypes
   }
 
   makeWriteableType(hash: string, type: IType) {

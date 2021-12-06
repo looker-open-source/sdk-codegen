@@ -56,7 +56,7 @@ describe('Kotlin generator', () => {
       expect(type).toBeDefined()
       expect(type.values).toEqual(['view', 'edit'])
       const expected = `/**
- * Type of permission: "view" or "edit" Valid values are: "view", "edit".
+ * Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
  */
 enum class PermissionType : Serializable {
     view,
