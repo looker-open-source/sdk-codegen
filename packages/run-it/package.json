@@ -55,7 +55,7 @@
     "@looker/components": "^2.8.1",
     "@looker/components-date": "^2.4.1",
     "@looker/design-tokens": "^2.7.1",
-    "@looker/extension-utils": "^0.1.0",
+    "@looker/extension-utils": "^0.1.1",
     "@looker/icons": "^1.5.3",
     "@looker/sdk": "^21.20.0",
     "@looker/sdk-codegen": "^21.2.0",

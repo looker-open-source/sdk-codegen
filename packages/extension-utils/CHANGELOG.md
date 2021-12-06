@@ -1,6 +1,6 @@
 # Changelog
 
-## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.0...extension-utils-v0.1.0) (2021-11-10)
+## [0.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.17.1...extension-utils-v0.1.0) (2021-11-10)
 
 
 ### Features
