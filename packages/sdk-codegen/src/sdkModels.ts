@@ -2349,8 +2349,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
         method.customTypes.add(type.name)
       }
     }
-    // tail end of dedupe logic
-    // this.enumTypes[hash] = type
     this.types[type.name] = type
     return type
   }
