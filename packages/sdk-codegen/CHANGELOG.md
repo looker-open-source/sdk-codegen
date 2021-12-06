@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.2.0...sdk-codegen-v21.2.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
 ## [21.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.1.1...sdk-codegen-v21.2.0) (2021-11-10)
 
 
