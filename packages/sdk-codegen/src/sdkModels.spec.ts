@@ -1051,13 +1051,13 @@ describe('sdkModels', () => {
           const actual = apiTestModel.search('beta', statusCriteria)
           expect(Object.entries(allMethods(actual.tags))).toHaveLength(238)
           const types = Object.entries(actual.types)
-          expect(types).toHaveLength(127)
+          expect(types).toHaveLength(128)
         })
 
         it('stable items', () => {
           const actual = apiTestModel.search('stable', statusCriteria)
           expect(Object.entries(allMethods(actual.tags))).toHaveLength(154)
-          expect(Object.entries(actual.types)).toHaveLength(90)
+          expect(Object.entries(actual.types)).toHaveLength(91)
         })
 
         it('db queries', () => {

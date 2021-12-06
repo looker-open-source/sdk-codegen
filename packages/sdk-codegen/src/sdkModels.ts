@@ -1855,7 +1855,7 @@ export class EnumType extends Type implements IEnumType {
     let name = titleCase(this.name || typeName || 'Enum')
     if (name in api.types) {
       const matched = enums[hash]
-      if (matched && matched.name === name) {
+      if (matched?.name === name) {
         /**
          * this type is the same as the other enum of the same name, although description may vary.
          * The descriptions may vary, but we prioritize type name over description for identical enum values
@@ -2332,7 +2332,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (type.name in this.types) {
       const hash = md5(type.asHashString())
       const matched = this.enumTypes[hash]
-      if (matched && matched.name === type.name) {
+      if (matched?.name === type.name) {
         /**
          * this type is the same as the other enum of the same name, although description may vary.
          * The descriptions may vary, but we prioritize type name over description for identical enum values
