@@ -1,6 +1,6 @@
 {
   "name": "@looker/wholly-sheet",
-  "version": "0.5.20",
+  "version": "0.5.21",
   "description": "Google sheets API wrapper for data table mimicking",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",

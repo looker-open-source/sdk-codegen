@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.19.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.18.0...sdk-codegen-all-v1.19.0) (2021-12-06)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+* hackathon build ([#915](https://www.github.com/looker-open-source/sdk-codegen/issues/915)) ([67df146](https://www.github.com/looker-open-source/sdk-codegen/commit/67df1465d1ec04709c0c20d9a1b157f9199f795e))
+* make sheetCell always return a Span ([#907](https://www.github.com/looker-open-source/sdk-codegen/issues/907)) ([f1fe4f5](https://www.github.com/looker-open-source/sdk-codegen/commit/f1fe4f5a5265008507ee29ff7e92149fc2869a82))
+* Remove hackathon project invite only UI ([#905](https://www.github.com/looker-open-source/sdk-codegen/issues/905)) ([2f10dd3](https://www.github.com/looker-open-source/sdk-codegen/commit/2f10dd3c07e6ddb076893932f4eccb2ac6dc3565))
+* restore join/leave project functionality ([#904](https://www.github.com/looker-open-source/sdk-codegen/issues/904)) ([42b2c0f](https://www.github.com/looker-open-source/sdk-codegen/commit/42b2c0f80a99685e02acc1a7b466b39029f15cad))
+* Updated hackathon agenda links ([#901](https://www.github.com/looker-open-source/sdk-codegen/issues/901)) ([7f58b6c](https://www.github.com/looker-open-source/sdk-codegen/commit/7f58b6c096ab8a6b983ea515b38be9877d9faa20))
+
 ## [1.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.17.1...sdk-codegen-all-v1.18.0) (2021-11-10)
 
 

@@ -1,5 +1,26 @@
 # Changelog
 
+### [0.9.24](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.23...run-it-v0.9.24) (2021-12-06)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* hackathon build ([#915](https://www.github.com/looker-open-source/sdk-codegen/issues/915)) ([67df146](https://www.github.com/looker-open-source/sdk-codegen/commit/67df1465d1ec04709c0c20d9a1b157f9199f795e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.14 to ^0.1.15
+    * @looker/extension-utils bumped from ^0.1.0 to ^0.1.1
+    * @looker/sdk-codegen bumped from ^21.2.0 to ^21.2.1
+
 ### [0.9.23](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.22...run-it-v0.9.23) (2021-11-10)
 
 
