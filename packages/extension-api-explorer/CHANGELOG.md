@@ -1,5 +1,22 @@
 # Changelog
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.20.0...extension-api-explorer-v21.20.0) (2021-12-06)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.23 to ^0.9.24
+    * @looker/extension-utils bumped from ^0.1.0 to ^0.1.1
+    * @looker/run-it bumped from ^0.9.23 to ^0.9.24
+    * @looker/sdk-codegen bumped from ^21.2.0 to ^21.2.1
+
 ## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.18.1...extension-api-explorer-v21.20.0) (2021-11-10)
 
 

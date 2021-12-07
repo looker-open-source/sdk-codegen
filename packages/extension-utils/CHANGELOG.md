@@ -1,6 +1,18 @@
 # Changelog
 
-## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.0...extension-utils-v0.1.0) (2021-11-10)
+### [0.1.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.0...extension-utils-v0.1.1) (2021-12-06)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* hackathon build ([#915](https://www.github.com/looker-open-source/sdk-codegen/issues/915)) ([67df146](https://www.github.com/looker-open-source/sdk-codegen/commit/67df1465d1ec04709c0c20d9a1b157f9199f795e))
+
+## [0.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.17.1...extension-utils-v0.1.0) (2021-11-10)
 
 
 ### Features
