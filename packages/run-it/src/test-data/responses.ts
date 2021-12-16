@@ -27,6 +27,7 @@
 import type { IRawResponse } from '@looker/sdk-rtl'
 
 export const testJsonResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/json/data',
   headers: { 'content-type': 'application/json' },
   contentType: 'application/json',
@@ -37,6 +38,7 @@ export const testJsonResponse: IRawResponse = {
 }
 
 export const testOneRowComplexJson: IRawResponse = {
+  method: 'GET',
   url: 'https://some/json/data',
   headers: { 'content-type': 'application/json' },
   contentType: 'application/json',
@@ -98,6 +100,7 @@ export const testOneRowComplexJson: IRawResponse = {
 }
 
 export const testTextResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/text/data',
   headers: { 'content-type': 'text/plain;charset=utf-8' },
   contentType: 'text/plain;charset=utf-8',
@@ -108,6 +111,7 @@ export const testTextResponse: IRawResponse = {
 }
 
 export const testHtmlResponse: IRawResponse = {
+  method: 'GET',
   url: `https://some/html`,
   headers: { 'content-type': 'text/html;charset=utf-8' },
   contentType: 'text/html;charset=utf-8',
@@ -123,6 +127,7 @@ export const testHtmlResponse: IRawResponse = {
 }
 
 export const testSqlResponse: IRawResponse = {
+  method: 'GET',
   url: `https://some/sql`,
   headers: { 'content-type': 'application/sql' },
   contentType: 'application/sql',
@@ -137,6 +142,7 @@ LIMIT 500`),
 }
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
+  method: 'GET',
   url: `http://${contentType}`,
   headers: { 'content-type': contentType },
   contentType,
@@ -147,6 +153,7 @@ export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
 })
 
 export const testUnknownResponse: IRawResponse = {
+  method: 'GET',
   url: 'http://bogus',
   headers: {},
   contentType: 'bogus',
@@ -157,6 +164,7 @@ export const testUnknownResponse: IRawResponse = {
 }
 
 export const testErrorResponse: IRawResponse = {
+  method: 'GET',
   url: 'http://error',
   headers: {},
   body: Buffer.from(
@@ -169,6 +177,7 @@ export const testErrorResponse: IRawResponse = {
 }
 
 export const testBogusJsonResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/json/data',
   headers: {},
   contentType: 'application/json',

@@ -88,6 +88,7 @@ const totalCount = 10
 
 const mockRawResponse = (url?: string, body?: any): IRawResponse => {
   const result: IRawResponse = {
+    method: 'GET',
     ok: true,
     body: JSON.stringify(mockedRows),
     headers: { [LinkHeader]: allLinks, [TotalCountHeader]: ` ${totalCount}` },

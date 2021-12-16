@@ -911,7 +911,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * The local state of each project in the workspace (read-only)
    */
-  projects?: IProject[]
+  projects?: IProject[] | null
 }`)
     })
     it('with refs, arrays and nullable', () => {
@@ -921,12 +921,12 @@ body: ICreateDashboardRenderTask`)
   /**
    * Current Looker release version number (read-only)
    */
-  looker_release_version?: string
+  looker_release_version?: string | null
   current_version?: IApiVersionElement
   /**
    * Array of versions supported by this Looker instance (read-only)
    */
-  supported_versions?: IApiVersionElement[]
+  supported_versions?: IApiVersionElement[] | null
 }`)
     })
     it('required properties', () => {
@@ -941,15 +941,15 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ${name}
+  result_format: ${name} | null
   /**
    * Source of query task
    */
-  source?: string
+  source?: string | null
   /**
    * Create the task but defer execution
    */
@@ -957,11 +957,11 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of look associated with query.
    */
-  look_id?: number
+  look_id?: number | null
   /**
    * Id of dashboard associated with query.
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
 }`)
     })
 
@@ -1072,11 +1072,11 @@ export enum Align {
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormat
+  result_format: ResultFormat | null
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
@@ -1085,7 +1085,7 @@ export enum Align {
   /**
    * Roles assigned to group (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
 }`)
       })
 
@@ -1116,15 +1116,15 @@ export enum Align {
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: SecondResponseWithEnumsResultFormat
+  result_format: SecondResponseWithEnumsResultFormat | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  another_format?: AnotherFormat
+  another_format?: AnotherFormat | null
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
@@ -1133,7 +1133,7 @@ export enum Align {
   /**
    * Roles assigned to group (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
 }`)
       })
     })

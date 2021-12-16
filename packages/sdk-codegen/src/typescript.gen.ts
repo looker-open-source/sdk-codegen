@@ -230,6 +230,7 @@ export class ${this.packageName}Stream extends APIMethods {
 
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '?' : ''
+    const nullify = property.nullable ? ' | null' : ''
     if (property.name === strBody) {
       // TODO refactor this hack to track context when the body parameter is created for the request type
       property.type.refCount++
@@ -239,13 +240,17 @@ export class ${this.packageName}Stream extends APIMethods {
           property.description ||
             'body parameter for dynamically created request type'
         ) +
-        `${indent}${property.name}${optional}: ${this.typeName(property.type)}`
+        `${indent}${property.name}${optional}: ${this.typeName(
+          property.type
+        )}${nullify}`
       )
     }
     const mapped = this.typeMap(property.type)
     return (
       this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}${this.reserve(property.name)}${optional}: ${mapped.name}`
+      `${indent}${this.reserve(property.name)}${optional}: ${
+        mapped.name
+      }${nullify}`
     )
   }
 
