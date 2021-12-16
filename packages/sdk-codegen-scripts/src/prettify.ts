@@ -45,6 +45,5 @@ const prettierTs: prettier.Options = {
  */
 export const prettify = (code: string, options: prettier.Options = {}) => {
   const merged: prettier.Options = { ...prettierTs, ...{ options } }
-  const source = prettier.format(code, merged)
-  return source.trimRight()
+  return prettier.format(code, merged)
 }
