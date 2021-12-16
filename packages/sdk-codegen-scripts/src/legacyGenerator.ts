@@ -25,9 +25,8 @@
  */
 
 import { log } from '@looker/sdk-codegen-utils'
-import type { IGeneratorSpec } from '@looker/sdk-codegen'
+import type { IGeneratorSpec, IApiVersion } from '@looker/sdk-codegen'
 import { getSpecsFromVersions, legacyLanguages } from '@looker/sdk-codegen'
-import type { IApiVersion } from '@looker/sdk'
 import type { ISDKConfigProps } from './sdkConfig'
 import { run } from './nodeUtils'
 import { fetchLookerVersions, logConvertSpec } from './fetchSpec'

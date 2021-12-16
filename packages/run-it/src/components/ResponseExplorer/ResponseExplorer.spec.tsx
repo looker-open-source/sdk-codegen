@@ -31,6 +31,7 @@ import userEvent from '@testing-library/user-event'
 import { ResponseExplorer, ResponseHeaders } from '.'
 
 const response: IRawResponse = {
+  method: 'GET',
   url: '/sample/url',
   ok: true,
   statusCode: 200,

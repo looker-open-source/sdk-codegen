@@ -25,7 +25,7 @@
  */
 
 import isEmpty from 'lodash/isEmpty'
-import type { APIMethods, Url } from '@looker/sdk-rtl'
+import type { APIMethods } from '@looker/sdk-rtl'
 import type { ArgValues, IApiModel, KeyedCollection } from './sdkModels'
 import { ApiModel } from './sdkModels'
 
@@ -35,7 +35,7 @@ const warn = (warning: string) => {
 
 const appJson = 'application/json'
 
-/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+/** This declaration is duplicated DIRECTLY from @looker/sdk API 4.0 models to detach dependency */
 export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
@@ -50,28 +50,30 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
-  /** Web server url */
+  /**
+   * Web server base url (read-only)
+   */
   web_server_url?: string
 }
 
-/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+/** This declaration is duplicated DIRECTLY from @looker/sdk API 4.0 models to detach dependency */
 export interface IApiVersionElement {
   /**
    * Version number as it appears in '/api/xxx/' urls (read-only)
    */
-  version?: string
+  version?: string | null
   /**
    * Full version number including minor version (read-only)
    */
-  full_version?: string
+  full_version?: string | null
   /**
    * Status of this version (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * Url for swagger.json for this version (read-only)
    */
-  swagger_url?: Url
+  swagger_url?: string | null
 }
 
 /**

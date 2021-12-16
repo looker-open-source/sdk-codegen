@@ -161,6 +161,8 @@ export enum StatusCode {
 
 /** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
+  /** Http method of the request */
+  method: HttpMethod
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
   /** HTTP request url */

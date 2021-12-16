@@ -109,6 +109,7 @@ export class NodeTransport extends BaseTransport {
       const res = await req
       const resTyped = res as rq.Response
       rawResponse = {
+        method,
         url: resTyped.url || init.url.toString() || '',
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
@@ -144,6 +145,7 @@ export class NodeTransport extends BaseTransport {
         contentType = 'application/json'
       }
       rawResponse = {
+        method,
         url: init.url.toString(),
         body,
         contentType,
