@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.19.0...sdk-codegen-all-v1.20.0) (2021-12-16)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+* Python SDK example: write query result to BigQuery using Cloud Functions  ([#908](https://www.github.com/looker-open-source/sdk-codegen/issues/908)) ([53ee684](https://www.github.com/looker-open-source/sdk-codegen/commit/53ee684c7a230865d40a464d2836f653fabaa386))
+
 ## [1.19.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.18.0...sdk-codegen-all-v1.19.0) (2021-12-06)
 
 
