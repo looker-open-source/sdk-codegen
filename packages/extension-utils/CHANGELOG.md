@@ -1,5 +1,14 @@
 # Changelog
 
+### [0.1.2](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.1...extension-utils-v0.1.2) (2021-12-16)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.2.0 to ^21.3.0
+
 ### [0.1.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.0...extension-utils-v0.1.1) (2021-12-06)
 
 
