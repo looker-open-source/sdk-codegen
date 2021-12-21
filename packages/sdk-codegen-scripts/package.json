@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "21.2.0",
+  "version": "21.2.1",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,10 +28,10 @@
   },
   "dependencies": {
     "@looker/sdk": "^21.20.0",
-    "@looker/sdk-codegen": "^21.3.0",
+    "@looker/sdk-codegen": "^21.3.1",
     "@looker/sdk-codegen-utils": "^21.0.11",
     "@looker/sdk-node": "^21.20.0",
-    "@looker/sdk-rtl": "^21.3.0",
+    "@looker/sdk-rtl": "^21.3.1",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },
