@@ -8,6 +8,7 @@
 		"outDir": "tmp/compiled-typescript",
 		"baseUrl": ".",
 		"types": ["node"],
+		"lib":["es2019"],
 		"paths": {
 			"*": [
 				"node_modules/*"
