@@ -2,6 +2,7 @@
   "name": "looker-resources-index",
   "description": "A listing of Looker-related resources, and some automation for publishing the listing in consumable formats",
   "main": "src/resource-data/resources.ts",
+  "private": true,
   "scripts": {
     "start": "echo \"No 'start' command available. Did you want to 'build'?\"",
     "build": "node_modules/.bin/tsc --project . && node tmp/compiled-typescript/scripts/build.js",
