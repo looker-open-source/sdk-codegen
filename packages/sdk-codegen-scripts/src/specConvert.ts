@@ -25,7 +25,7 @@
  */
 import * as path from 'path'
 import { log } from '@looker/sdk-codegen-utils'
-import type { IApiVersion } from '@looker/sdk'
+import type { IApiVersion } from '@looker/sdk-codegen'
 import { getSpecsFromVersions } from '@looker/sdk-codegen'
 import type { ISDKConfigProps } from './sdkConfig'
 import { SDKConfig } from './sdkConfig'

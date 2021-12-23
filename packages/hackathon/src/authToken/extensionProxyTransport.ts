@@ -133,6 +133,7 @@ export class ExtensionProxyTransport extends BaseTransport {
     // const responseBody =
     //   mode === ResponseMode.binary ? await res.body : await res.body.toString()
     return {
+      method,
       url: requestPath,
       body: res.body,
       contentType,

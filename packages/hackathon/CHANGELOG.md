@@ -1,5 +1,34 @@
 # Changelog
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.20.0...hackathon-v21.20.0) (2021-12-20)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.16 to ^0.1.17
+    * @looker/extension-utils bumped from ^0.1.2 to ^0.1.3
+    * @looker/sdk-rtl bumped from ^21.3.0 to ^21.3.1
+    * @looker/wholly-sheet bumped from ^0.5.22 to ^0.5.23
+
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.20.0...hackathon-v21.20.0) (2021-12-16)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.15 to ^0.1.16
+    * @looker/extension-utils bumped from ^0.1.1 to ^0.1.2
+    * @looker/sdk-rtl bumped from ^21.2.0 to ^21.3.0
+    * @looker/wholly-sheet bumped from ^0.5.21 to ^0.5.22
+
 ## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.20.0...hackathon-v21.20.0) (2021-12-06)
 
 

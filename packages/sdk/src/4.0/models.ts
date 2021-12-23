@@ -50,14 +50,14 @@ export interface IAccessToken {
   /**
    * Refresh token which can be used to obtain a new access token (read-only)
    */
-  refresh_token?: string
+  refresh_token?: string | null
 }
 
 export interface IAlert {
   /**
    * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
    */
-  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
@@ -69,19 +69,19 @@ export interface IAlert {
   /**
    * An optional, user-defined title for the alert
    */
-  custom_title?: string
+  custom_title?: string | null
   /**
    * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
    */
-  dashboard_element_id?: number
+  dashboard_element_id?: number | null
   /**
    * An optional description for the alert. This supplements the title
    */
-  description?: string
+  description?: string | null
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations: IAlertDestination[]
+  destinations: IAlertDestination[] | null
   field: IAlertField
   /**
    * Whether or not the user follows this alert. (read-only)
@@ -102,7 +102,7 @@ export interface IAlert {
   /**
    * Reason for disabling alert
    */
-  disabled_reason?: string
+  disabled_reason?: string | null
   /**
    * Whether or not the alert is public
    */
@@ -110,23 +110,23 @@ export interface IAlert {
   /**
    * The type of the investigative content Valid values are: "dashboard".
    */
-  investigative_content_type?: InvestigativeContentType
+  investigative_content_type?: InvestigativeContentType | null
   /**
    * The ID of the investigative content. For dashboards, this will be the dashboard ID
    */
-  investigative_content_id?: string
+  investigative_content_id?: string | null
   /**
    * The title of the investigative content. (read-only)
    */
-  investigative_content_title?: string
+  investigative_content_title?: string | null
   /**
    * ID of the LookML dashboard associated with the alert
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * ID of the LookML dashboard element associated with the alert
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * User id of alert owner
    */
@@ -134,7 +134,7 @@ export interface IAlert {
   /**
    * Alert owner's display name (read-only)
    */
-  owner_display_name?: string
+  owner_display_name?: string | null
   /**
    * Value of the alert threshold
    */
@@ -146,7 +146,7 @@ export interface IAlertAppliedDashboardFilter {
   /**
    * Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
    */
-  filter_title: string
+  filter_title: string | null
   /**
    * Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
    */
@@ -158,18 +158,18 @@ export interface IAlertAppliedDashboardFilter {
   /**
    * Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
    */
-  filter_description?: string
+  filter_description?: string | null
 }
 
 export interface IAlertConditionState {
   /**
    * (Write-Only) The second latest time string the alert has seen.
    */
-  previous_time_series_id?: string
+  previous_time_series_id?: string | null
   /**
    * (Write-Only) Latest time string the alert has seen.
    */
-  latest_time_series_id?: string
+  latest_time_series_id?: string | null
 }
 
 export interface IAlertDestination {
@@ -180,15 +180,15 @@ export interface IAlertDestination {
   /**
    * Email address for the 'email' type
    */
-  email_address?: string
+  email_address?: string | null
   /**
    * Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
    */
-  action_hub_integration_id?: string
+  action_hub_integration_id?: string | null
   /**
    * Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
    */
-  action_hub_form_params_json?: string
+  action_hub_form_params_json?: string | null
 }
 
 export interface IAlertField {
@@ -203,7 +203,7 @@ export interface IAlertField {
   /**
    * (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
    */
-  filter?: IAlertFieldFilter[]
+  filter?: IAlertFieldFilter[] | null
 }
 
 export interface IAlertFieldFilter {
@@ -218,30 +218,30 @@ export interface IAlertFieldFilter {
   /**
    * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
-  filter_value?: string
+  filter_value?: string | null
 }
 
 export interface IAlertPatch {
   /**
    * New owner ID of the alert
    */
-  owner_id?: number
+  owner_id?: number | null
   /**
    * Set alert enabled or disabled
    */
-  is_disabled?: boolean
+  is_disabled?: boolean | null
   /**
    * The reason this alert is disabled
    */
-  disabled_reason?: string
+  disabled_reason?: string | null
   /**
    * Set alert public or private
    */
-  is_public?: boolean
+  is_public?: boolean | null
   /**
    * New threshold value
    */
-  threshold?: number
+  threshold?: number | null
 }
 
 /**
@@ -260,11 +260,11 @@ export interface IApiSession {
   /**
    * The id of active workspace for this session
    */
-  workspace_id?: string
+  workspace_id?: string | null
   /**
    * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
    */
-  sudo_user_id?: number
+  sudo_user_id?: number | null
 }
 
 export interface IApiVersion {
@@ -291,19 +291,19 @@ export interface IApiVersionElement {
   /**
    * Version number as it appears in '/api/xxx/' urls (read-only)
    */
-  version?: string
+  version?: string | null
   /**
    * Full version number including minor version (read-only)
    */
-  full_version?: string
+  full_version?: string | null
   /**
    * Status of this version (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * Url for swagger.json for this version (read-only)
    */
-  swagger_url?: string
+  swagger_url?: string | null
 }
 
 export interface IBackupConfiguration {
@@ -314,27 +314,27 @@ export interface IBackupConfiguration {
   /**
    * Type of backup: looker-s3 or custom-s3
    */
-  type?: string
+  type?: string | null
   /**
    * Name of bucket for custom-s3 backups
    */
-  custom_s3_bucket?: string
+  custom_s3_bucket?: string | null
   /**
    * Name of region where the bucket is located
    */
-  custom_s3_bucket_region?: string
+  custom_s3_bucket_region?: string | null
   /**
    * (Write-Only) AWS S3 key used for custom-s3 backups
    */
-  custom_s3_key?: string
+  custom_s3_key?: string | null
   /**
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
-  custom_s3_secret?: string
+  custom_s3_secret?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IBoard {
@@ -345,23 +345,23 @@ export interface IBoard {
   /**
    * Id of associated content_metadata record (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Date of board creation (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Date of board deletion
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Description of the board
    */
-  description?: string
+  description?: string | null
   /**
    * Sections of the board (read-only)
    */
-  board_sections?: IBoardSection[]
+  board_sections?: IBoardSection[] | null
   /**
    * Unique Id (read-only)
    */
@@ -369,19 +369,19 @@ export interface IBoard {
   /**
    * ids of the board sections in the order they should be displayed
    */
-  section_order?: number[]
+  section_order?: number[] | null
   /**
    * Title of the board
    */
-  title?: string
+  title?: string | null
   /**
    * Date of last board update (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * User id of board creator (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Whether the board is the primary homepage or not (read-only)
    */
@@ -396,47 +396,47 @@ export interface IBoardItem {
   /**
    * Name of user who created the content this item is based on (read-only)
    */
-  content_created_by?: string
+  content_created_by?: string | null
   /**
    * Content favorite id associated with the item this content is based on (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Content metadata id associated with the item this content is based on (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Last time the content that this item is based on was updated (read-only)
    */
-  content_updated_at?: string
+  content_updated_at?: string | null
   /**
    * Custom description entered by the user, if present
    */
-  custom_description?: string
+  custom_description?: string | null
   /**
    * Custom title entered by the user, if present
    */
-  custom_title?: string
+  custom_title?: string | null
   /**
    * Custom url entered by the user, if present
    */
-  custom_url?: string
+  custom_url?: string | null
   /**
    * Dashboard to base this item on
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * The actual description for display (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Number of times content has been favorited, if present (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Associated Board Section
    */
-  board_section_id?: number
+  board_section_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -444,27 +444,27 @@ export interface IBoardItem {
   /**
    * The actual image_url for display (read-only)
    */
-  image_url?: string
+  image_url?: string | null
   /**
    * The container folder name of the content (read-only)
    */
-  location?: string
+  location?: string | null
   /**
    * Look to base this item on
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * LookML Dashboard to base this item on
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * An arbitrary integer representing the sort order within the section
    */
-  order?: number
+  order?: number | null
   /**
    * The actual title for display (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * Relative url for the associated content (read-only)
    */
@@ -472,7 +472,7 @@ export interface IBoardItem {
   /**
    * Number of times content has been viewed, if present (read-only)
    */
-  view_count?: number
+  view_count?: number | null
 }
 
 export interface IBoardSection {
@@ -483,23 +483,23 @@ export interface IBoardSection {
   /**
    * Time at which this section was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Time at which this section was deleted.
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Description of the content found in this section.
    */
-  description?: string
+  description?: string | null
   /**
    * Id reference to parent board
    */
-  board_id?: number
+  board_id?: number | null
   /**
    * Items in the board section (read-only)
    */
-  board_items?: IBoardItem[]
+  board_items?: IBoardItem[] | null
   /**
    * Unique Id (read-only)
    */
@@ -507,19 +507,19 @@ export interface IBoardSection {
   /**
    * ids of the board items in the order they should be displayed
    */
-  item_order?: number[]
+  item_order?: number[] | null
   /**
    * ids of the homepage items the user can see in the order they should be displayed (read-only)
    */
-  visible_item_order?: number[]
+  visible_item_order?: number[] | null
   /**
    * Name of row
    */
-  title?: string
+  title?: string | null
   /**
    * Time at which this section was last updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
 }
 
 /**
@@ -570,19 +570,19 @@ export interface IColumnSearch {
   /**
    * Name of schema containing the table (read-only)
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * Name of table containing the column (read-only)
    */
-  table_name?: string
+  table_name?: string | null
   /**
    * Name of column (read-only)
    */
-  column_name?: string
+  column_name?: string | null
   /**
    * Column data type (read-only)
    */
-  data_type?: string
+  data_type?: string | null
 }
 
 export interface ICommand {
@@ -601,7 +601,7 @@ export interface ICommand {
   /**
    * Description of the command
    */
-  description?: string
+  description?: string | null
   /**
    * Id of the content associated with the command
    */
@@ -709,17 +709,17 @@ export interface IContentFavorite {
   /**
    * Id of a look (read-only)
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of a dashboard (read-only)
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   look?: ILookBasic
   dashboard?: IDashboardBase
   /**
    * Id of a board (read-only)
    */
-  board_id?: number
+  board_id?: number | null
 }
 
 export interface IContentMeta {
@@ -734,27 +734,27 @@ export interface IContentMeta {
   /**
    * Name or title of underlying content (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Id of Parent Content (read-only)
    */
-  parent_id?: number
+  parent_id?: number | null
   /**
    * Id of associated dashboard when content_type is "dashboard" (read-only)
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Id of associated look when content_type is "look" (read-only)
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of associated folder when content_type is "space" (read-only)
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Content Type ("dashboard", "look", or "folder") (read-only)
    */
-  content_type?: string
+  content_type?: string | null
   /**
    * Whether content inherits its access levels from parent
    */
@@ -762,11 +762,11 @@ export interface IContentMeta {
   /**
    * Id of Inherited Content (read-only)
    */
-  inheriting_id?: number
+  inheriting_id?: number | null
   /**
    * Content Slug (read-only)
    */
-  slug?: string
+  slug?: string | null
 }
 
 /**
@@ -784,54 +784,54 @@ export interface IContentMetaGroupUser {
   /**
    * Id of associated Content Metadata (read-only)
    */
-  content_metadata_id?: string
+  content_metadata_id?: string | null
   /**
    * Type of permission: "view" or "edit" Valid values are: "view", "edit". (read-only)
    */
-  permission_type?: PermissionType
+  permission_type?: PermissionType | null
   /**
    * ID of associated group (read-only)
    */
-  group_id?: number
+  group_id?: number | null
   /**
    * ID of associated user (read-only)
    */
-  user_id?: number
+  user_id?: number | null
 }
 
 export interface IContentValidation {
   /**
    * A list of content errors (read-only)
    */
-  content_with_errors?: IContentValidatorError[]
+  content_with_errors?: IContentValidatorError[] | null
   /**
    * Duration of content validation in seconds (read-only)
    */
-  computation_time?: number
+  computation_time?: number | null
   /**
    * The number of looks validated (read-only)
    */
-  total_looks_validated?: number
+  total_looks_validated?: number | null
   /**
    * The number of dashboard elements validated (read-only)
    */
-  total_dashboard_elements_validated?: number
+  total_dashboard_elements_validated?: number | null
   /**
    * The number of dashboard filters validated (read-only)
    */
-  total_dashboard_filters_validated?: number
+  total_dashboard_filters_validated?: number | null
   /**
    * The number of scheduled plans validated (read-only)
    */
-  total_scheduled_plans_validated?: number
+  total_scheduled_plans_validated?: number | null
   /**
    * The number of alerts validated (read-only)
    */
-  total_alerts_validated?: number
+  total_alerts_validated?: number | null
   /**
    * The number of explores used across all content validated (read-only)
    */
-  total_explores_validated?: number
+  total_explores_validated?: number | null
 }
 
 export interface IContentValidationAlert {
@@ -842,22 +842,22 @@ export interface IContentValidationAlert {
   /**
    * ID of the LookML dashboard associated with the alert
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * ID of the LookML dashboard element associated with the alert
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * An optional, user-defined title for the alert
    */
-  custom_title?: string
+  custom_title?: string | null
 }
 
 export interface IContentValidationDashboard {
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -866,22 +866,22 @@ export interface IContentValidationDashboard {
   /**
    * Dashboard Title
    */
-  title?: string
+  title?: string | null
   /**
    * Relative URL of the dashboard (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IContentValidationDashboardElement {
   /**
    * Text tile body text
    */
-  body_text?: string
+  body_text?: string | null
   /**
    * Id of Dashboard
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -889,35 +889,35 @@ export interface IContentValidationDashboardElement {
   /**
    * Id Of Look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Note Display
    */
-  note_display?: string
+  note_display?: string | null
   /**
    * Note State
    */
-  note_state?: string
+  note_state?: string | null
   /**
    * Note Text
    */
-  note_text?: string
+  note_text?: string | null
   /**
    * Note Text as Html (read-only)
    */
-  note_text_as_html?: string
+  note_text_as_html?: string | null
   /**
    * Id Of Query
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Text tile subtitle text
    */
-  subtitle_text?: string
+  subtitle_text?: string | null
   /**
    * Title of dashboard element
    */
-  title?: string
+  title?: string | null
   /**
    * Whether title is hidden
    */
@@ -925,11 +925,11 @@ export interface IContentValidationDashboardElement {
   /**
    * Text tile title
    */
-  title_text?: string
+  title_text?: string | null
   /**
    * Type
    */
-  type?: string
+  type?: string | null
 }
 
 export interface IContentValidationDashboardFilter {
@@ -940,54 +940,54 @@ export interface IContentValidationDashboardFilter {
   /**
    * Id of Dashboard (read-only)
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Name of filter
    */
-  name?: string
+  name?: string | null
   /**
    * Title of filter
    */
-  title?: string
+  title?: string | null
   /**
    * Type of filter: one of date, number, string, or field
    */
-  type?: string
+  type?: string | null
   /**
    * Default value of filter
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Model of filter (required if type = field)
    */
-  model?: string
+  model?: string | null
   /**
    * Explore of filter (required if type = field)
    */
-  explore?: string
+  explore?: string | null
   /**
    * Dimension of filter (required if type = field)
    */
-  dimension?: string
+  dimension?: string | null
 }
 
 export interface IContentValidationError {
   /**
    * Error message (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Name of the field involved in the error (read-only)
    */
-  field_name?: string
+  field_name?: string | null
   /**
    * Name of the model involved in the error (read-only)
    */
-  model_name?: string
+  model_name?: string | null
   /**
    * Name of the explore involved in the error (read-only)
    */
-  explore_name?: string
+  explore_name?: string | null
   /**
    * Whether this validation error is removable (read-only)
    */
@@ -1013,11 +1013,11 @@ export interface IContentValidationLook {
   /**
    * Look Title
    */
-  title?: string
+  title?: string | null
   /**
    * Short Url (read-only)
    */
-  short_url?: string
+  short_url?: string | null
   folder?: IContentValidationFolder
 }
 
@@ -1029,33 +1029,33 @@ export interface IContentValidationLookMLDashboard {
   /**
    * Title of the LookML Dashboard (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * ID of Space (read-only)
    */
-  space_id?: string
+  space_id?: string | null
 }
 
 export interface IContentValidationLookMLDashboardElement {
   /**
    * Link ID of the LookML Dashboard Element (read-only)
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * Title of the LookML Dashboard Element (read-only)
    */
-  title?: string
+  title?: string | null
 }
 
 export interface IContentValidationScheduledPlan {
   /**
    * Name of this scheduled plan
    */
-  name?: string
+  name?: string | null
   /**
    * Id of a look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -1074,7 +1074,7 @@ export interface IContentValidatorError {
   /**
    * A list of errors found for this piece of content (read-only)
    */
-  errors?: IContentValidationError[]
+  errors?: IContentValidationError[] | null
   /**
    * An id unique to this piece of content for this validation run (read-only)
    */
@@ -1093,43 +1093,43 @@ export interface IContentView {
   /**
    * Id of viewed Look (read-only)
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of the viewed Dashboard (read-only)
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Name or title of underlying content (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * Content metadata id of the Look or Dashboard (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Id of user content was viewed by (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Id of group content was viewed by (read-only)
    */
-  group_id?: number
+  group_id?: number | null
   /**
    * Number of times piece of content was viewed (read-only)
    */
-  view_count?: number
+  view_count?: number | null
   /**
    * Number of times piece of content was favorited (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Date the piece of content was last viewed (read-only)
    */
-  last_viewed_at?: string
+  last_viewed_at?: string | null
   /**
    * Week start date for the view and favorite count during that given week (read-only)
    */
-  start_of_week_date?: string
+  start_of_week_date?: string | null
 }
 
 export interface IContinuousPalette {
@@ -1140,7 +1140,7 @@ export interface IContinuousPalette {
   /**
    * Label for palette
    */
-  label?: string
+  label?: string | null
   /**
    * Type of palette
    */
@@ -1192,11 +1192,11 @@ export interface ICreateCredentialsApi3 {
   /**
    * API key client_id (read-only)
    */
-  client_id?: string
+  client_id?: string | null
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1204,15 +1204,15 @@ export interface ICreateCredentialsApi3 {
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * API key client_secret (read-only)
    */
-  client_secret?: string
+  client_secret?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICreateDashboardFilter {
@@ -1223,47 +1223,47 @@ export interface ICreateDashboardFilter {
   /**
    * Id of Dashboard
    */
-  dashboard_id: string
+  dashboard_id: string | null
   /**
    * Name of filter
    */
-  name: string
+  name: string | null
   /**
    * Title of filter
    */
-  title: string
+  title: string | null
   /**
    * Type of filter: one of date, number, string, or field
    */
-  type: string
+  type: string | null
   /**
    * Default value of filter
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Model of filter (required if type = field)
    */
-  model?: string
+  model?: string | null
   /**
    * Explore of filter (required if type = field)
    */
-  explore?: string
+  explore?: string | null
   /**
    * Dimension of filter (required if type = field)
    */
-  dimension?: string
+  dimension?: string | null
   /**
    * Field information (read-only)
    */
-  field?: IDictionary<any>
+  field?: IDictionary<any> | null
   /**
    * Display order of this filter relative to other filters
    */
-  row?: number
+  row?: number | null
   /**
    * Array of listeners for faceted filters
    */
-  listens_to_filters?: string[]
+  listens_to_filters?: string[] | null
   /**
    * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
    */
@@ -1275,18 +1275,18 @@ export interface ICreateDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<any>
+  ui_config?: IDictionary<any> | null
 }
 
 export interface ICreateDashboardRenderTask {
   /**
    * Filter values to apply to the dashboard queries, in URL query format
    */
-  dashboard_filters?: string
+  dashboard_filters?: string | null
   /**
    * Dashboard layout style: single_column or tiled
    */
-  dashboard_style?: string
+  dashboard_style?: string | null
 }
 
 export interface ICreateEmbedUserRequest {
@@ -1309,8 +1309,8 @@ export interface ICreateOAuthApplicationUserStateRequest {
   oauth_application_id: string
   access_token: string
   access_token_expires_at: Date
-  refresh_token?: string
-  refresh_token_expires_at?: Date
+  refresh_token?: string | null
+  refresh_token_expires_at?: Date | null
 }
 
 export interface ICreateOAuthApplicationUserStateResponse {
@@ -1332,15 +1332,15 @@ export interface ICreateQueryTask {
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormat
+  result_format: ResultFormat | null
   /**
    * Source of query task
    */
-  source?: string
+  source?: string | null
   /**
    * Create the task but defer execution
    */
@@ -1348,11 +1348,11 @@ export interface ICreateQueryTask {
   /**
    * Id of look associated with query.
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of dashboard associated with query.
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
 }
 
 export interface ICredentialsApi3 {
@@ -1367,11 +1367,11 @@ export interface ICredentialsApi3 {
   /**
    * API key client_id (read-only)
    */
-  client_id?: string
+  client_id?: string | null
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1379,11 +1379,11 @@ export interface ICredentialsApi3 {
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICredentialsEmail {
@@ -1394,11 +1394,11 @@ export interface ICredentialsEmail {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address used for user login
    */
-  email?: string
+  email?: string | null
   /**
    * Force the user to change their password upon their next login
    */
@@ -1410,23 +1410,23 @@ export interface ICredentialsEmail {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
-  password_reset_url?: string
+  password_reset_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Link to get this user (read-only)
    */
-  user_url?: string
+  user_url?: string | null
 }
 
 export interface ICredentialsEmailSearch {
@@ -1437,11 +1437,11 @@ export interface ICredentialsEmailSearch {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address used for user login
    */
-  email?: string
+  email?: string | null
   /**
    * Force the user to change their password upon their next login
    */
@@ -1453,23 +1453,23 @@ export interface ICredentialsEmailSearch {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
-  password_reset_url?: string
+  password_reset_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Link to get this user (read-only)
    */
-  user_url?: string
+  user_url?: string | null
 }
 
 export interface ICredentialsEmbed {
@@ -1480,15 +1480,15 @@ export interface ICredentialsEmbed {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Embedder's id for a group to which this user was added during the most recent login (read-only)
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * Embedder's unique id for the user (read-only)
    */
-  external_user_id?: string
+  external_user_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -1500,15 +1500,15 @@ export interface ICredentialsEmbed {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICredentialsGoogle {
@@ -1519,19 +1519,19 @@ export interface ICredentialsGoogle {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Google domain (read-only)
    */
-  domain?: string
+  domain?: string | null
   /**
    * EMail address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Google's Unique ID for this user (read-only)
    */
-  google_user_id?: string
+  google_user_id?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1539,15 +1539,15 @@ export interface ICredentialsGoogle {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICredentialsLDAP {
@@ -1558,11 +1558,11 @@ export interface ICredentialsLDAP {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1570,23 +1570,23 @@ export interface ICredentialsLDAP {
   /**
    * LDAP Distinguished name for this user (as-of the last login) (read-only)
    */
-  ldap_dn?: string
+  ldap_dn?: string | null
   /**
    * LDAP Unique ID for this user (read-only)
    */
-  ldap_id?: string
+  ldap_id?: string | null
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICredentialsLookerOpenid {
@@ -1597,11 +1597,11 @@ export interface ICredentialsLookerOpenid {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address used for user login (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1609,23 +1609,23 @@ export interface ICredentialsLookerOpenid {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * IP address of client for most recent login using credential (read-only)
    */
-  logged_in_ip?: string
+  logged_in_ip?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Link to get this user (read-only)
    */
-  user_url?: string
+  user_url?: string | null
 }
 
 export interface ICredentialsOIDC {
@@ -1636,11 +1636,11 @@ export interface ICredentialsOIDC {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1648,19 +1648,19 @@ export interface ICredentialsOIDC {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * OIDC OP's Unique ID for this user (read-only)
    */
-  oidc_user_id?: string
+  oidc_user_id?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICredentialsSaml {
@@ -1671,11 +1671,11 @@ export interface ICredentialsSaml {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * EMail address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1683,19 +1683,19 @@ export interface ICredentialsSaml {
   /**
    * Timestamp for most recent login using credential (read-only)
    */
-  logged_in_at?: string
+  logged_in_at?: string | null
   /**
    * Saml IdP's Unique ID for this user (read-only)
    */
-  saml_user_id?: string
+  saml_user_id?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 /**
@@ -1709,7 +1709,7 @@ export interface ICredentialsTotp {
   /**
    * Timestamp for the creation of this credential (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Has this credential been disabled? (read-only)
    */
@@ -1717,7 +1717,7 @@ export interface ICredentialsTotp {
   /**
    * Short name for the type of this kind of credential (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * User has verified (read-only)
    */
@@ -1725,7 +1725,7 @@ export interface ICredentialsTotp {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ICustomWelcomeEmail {
@@ -1736,15 +1736,15 @@ export interface ICustomWelcomeEmail {
   /**
    * The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
    */
-  content?: string
+  content?: string | null
   /**
    * The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
-  subject?: string
+  subject?: string | null
   /**
    * The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
    */
-  header?: string
+  header?: string | null
 }
 
 export interface IDashboard {
@@ -1755,15 +1755,15 @@ export interface IDashboard {
   /**
    * Content Favorite Id (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Is Hidden
    */
@@ -1776,7 +1776,7 @@ export interface IDashboard {
   /**
    * Timezone in which the Dashboard will run by default.
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Is Read-only (read-only)
    */
@@ -1784,28 +1784,28 @@ export interface IDashboard {
   /**
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
-  refresh_interval?: string
+  refresh_interval?: string | null
   /**
    * Refresh Interval in milliseconds (read-only)
    */
-  refresh_interval_to_i?: number
+  refresh_interval_to_i?: number | null
   folder?: IFolderBase
   /**
    * Dashboard Title
    */
-  title?: string
+  title?: string | null
   /**
    * Id of User (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Content Metadata Slug
    */
-  slug?: string
+  slug?: string | null
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
-  preferred_viewer?: string
+  preferred_viewer?: string | null
   /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
@@ -1813,11 +1813,11 @@ export interface IDashboard {
   /**
    * Background color
    */
-  background_color?: string
+  background_color?: string | null
   /**
    * Time that the Dashboard was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
    */
@@ -1825,15 +1825,15 @@ export interface IDashboard {
   /**
    * Elements (read-only)
    */
-  dashboard_elements?: IDashboardElement[]
+  dashboard_elements?: IDashboardElement[] | null
   /**
    * Filters (read-only)
    */
-  dashboard_filters?: IDashboardFilter[]
+  dashboard_filters?: IDashboardFilter[] | null
   /**
    * Layouts (read-only)
    */
-  dashboard_layouts?: IDashboardLayout[]
+  dashboard_layouts?: IDashboardLayout[] | null
   /**
    * Whether or not a dashboard is 'soft' deleted.
    */
@@ -1841,19 +1841,19 @@ export interface IDashboard {
   /**
    * Time that the Dashboard was 'soft' deleted. (read-only)
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Id of User that 'soft' deleted the dashboard. (read-only)
    */
-  deleter_id?: number
+  deleter_id?: number | null
   /**
    * Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
    */
-  edit_uri?: string
+  edit_uri?: string | null
   /**
    * Number of times favorited (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Sets the default state of the filters bar to collapsed or open
    */
@@ -1861,35 +1861,35 @@ export interface IDashboard {
   /**
    * Time the dashboard was last accessed (read-only)
    */
-  last_accessed_at?: Date
+  last_accessed_at?: Date | null
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  last_viewed_at?: Date
+  last_viewed_at?: Date | null
   /**
    * Time that the Dashboard was most recently updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Id of User that most recently updated the dashboard. (read-only)
    */
-  last_updater_id?: number
+  last_updater_id?: number | null
   /**
    * Name of User that most recently updated the dashboard. (read-only)
    */
-  last_updater_name?: string
+  last_updater_name?: string | null
   /**
    * Name of User that created the dashboard. (read-only)
    */
-  user_name?: string
+  user_name?: string | null
   /**
    * configuration option that governs how dashboard loading will happen.
    */
-  load_configuration?: string
+  load_configuration?: string | null
   /**
    * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
    */
@@ -1901,74 +1901,74 @@ export interface IDashboard {
   /**
    * Id of folder
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Color of text on text tiles
    */
-  text_tile_text_color?: string
+  text_tile_text_color?: string | null
   /**
    * Tile background color
    */
-  tile_background_color?: string
+  tile_background_color?: string | null
   /**
    * Tile text color
    */
-  tile_text_color?: string
+  tile_text_color?: string | null
   /**
    * Title color
    */
-  title_color?: string
+  title_color?: string | null
   /**
    * Number of times viewed in the Looker web UI (read-only)
    */
-  view_count?: number
+  view_count?: number | null
   appearance?: IDashboardAppearance
   /**
    * Relative URL of the dashboard (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IDashboardAggregateTableLookml {
   /**
    * Dashboard Id (read-only)
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Aggregate Table LookML (read-only)
    */
-  aggregate_table_lookml?: string
+  aggregate_table_lookml?: string | null
 }
 
 export interface IDashboardAppearance {
   /**
    * Page margin (side) width
    */
-  page_side_margins?: number
+  page_side_margins?: number | null
   /**
    * Background color for the dashboard
    */
-  page_background_color?: string
+  page_background_color?: string | null
   /**
    * Title alignment on dashboard tiles
    */
-  tile_title_alignment?: string
+  tile_title_alignment?: string | null
   /**
    * Space between tiles
    */
-  tile_space_between?: number
+  tile_space_between?: number | null
   /**
    * Background color for tiles
    */
-  tile_background_color?: string
+  tile_background_color?: string | null
   /**
    * Tile shadow on/off
    */
-  tile_shadow?: boolean
+  tile_shadow?: boolean | null
   /**
    * Key color
    */
-  key_color?: string
+  key_color?: string | null
 }
 
 export interface IDashboardBase {
@@ -1979,15 +1979,15 @@ export interface IDashboardBase {
   /**
    * Content Favorite Id (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Description (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Is Hidden (read-only)
    */
@@ -2000,7 +2000,7 @@ export interface IDashboardBase {
   /**
    * Timezone in which the Dashboard will run by default. (read-only)
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Is Read-only (read-only)
    */
@@ -2008,28 +2008,28 @@ export interface IDashboardBase {
   /**
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds. (read-only)
    */
-  refresh_interval?: string
+  refresh_interval?: string | null
   /**
    * Refresh Interval in milliseconds (read-only)
    */
-  refresh_interval_to_i?: number
+  refresh_interval_to_i?: number | null
   folder?: IFolderBase
   /**
    * Dashboard Title (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * Id of User (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Content Metadata Slug (read-only)
    */
-  slug?: string
+  slug?: string | null
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)
    */
-  preferred_viewer?: string
+  preferred_viewer?: string | null
 }
 
 export interface IDashboardElement {
@@ -2040,19 +2040,19 @@ export interface IDashboardElement {
   /**
    * Text tile body text
    */
-  body_text?: string
+  body_text?: string | null
   /**
    * Text tile body text as Html (read-only)
    */
-  body_text_as_html?: string
+  body_text_as_html?: string | null
   /**
    * Id of Dashboard
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
    */
-  edit_uri?: string
+  edit_uri?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -2061,57 +2061,57 @@ export interface IDashboardElement {
   /**
    * Id Of Look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * LookML link ID (read-only)
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * ID of merge result
    */
-  merge_result_id?: string
+  merge_result_id?: string | null
   /**
    * Note Display
    */
-  note_display?: string
+  note_display?: string | null
   /**
    * Note State
    */
-  note_state?: string
+  note_state?: string | null
   /**
    * Note Text
    */
-  note_text?: string
+  note_text?: string | null
   /**
    * Note Text as Html (read-only)
    */
-  note_text_as_html?: string
+  note_text_as_html?: string | null
   query?: IQuery
   /**
    * Id Of Query
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Refresh Interval
    */
-  refresh_interval?: string
+  refresh_interval?: string | null
   /**
    * Refresh Interval as integer (read-only)
    */
-  refresh_interval_to_i?: number
+  refresh_interval_to_i?: number | null
   result_maker?: IResultMakerWithIdVisConfigAndDynamicFields
   /**
    * ID of the ResultMakerLookup entry.
    */
-  result_maker_id?: number
+  result_maker_id?: number | null
   /**
    * Text tile subtitle text
    */
-  subtitle_text?: string
+  subtitle_text?: string | null
   /**
    * Title of dashboard element
    */
-  title?: string
+  title?: string | null
   /**
    * Whether title is hidden
    */
@@ -2119,23 +2119,23 @@ export interface IDashboardElement {
   /**
    * Text tile title
    */
-  title_text?: string
+  title_text?: string | null
   /**
    * Type
    */
-  type?: string
+  type?: string | null
   /**
    * Count of Alerts associated to a dashboard element (read-only)
    */
-  alert_count?: number
+  alert_count?: number | null
   /**
    * Text tile title text as Html (read-only)
    */
-  title_text_as_html?: string
+  title_text_as_html?: string | null
   /**
    * Text tile subtitle text as Html (read-only)
    */
-  subtitle_text_as_html?: string
+  subtitle_text_as_html?: string | null
 }
 
 export interface IDashboardFilter {
@@ -2150,47 +2150,47 @@ export interface IDashboardFilter {
   /**
    * Id of Dashboard (read-only)
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Name of filter
    */
-  name?: string
+  name?: string | null
   /**
    * Title of filter
    */
-  title?: string
+  title?: string | null
   /**
    * Type of filter: one of date, number, string, or field
    */
-  type?: string
+  type?: string | null
   /**
    * Default value of filter
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Model of filter (required if type = field)
    */
-  model?: string
+  model?: string | null
   /**
    * Explore of filter (required if type = field)
    */
-  explore?: string
+  explore?: string | null
   /**
    * Dimension of filter (required if type = field)
    */
-  dimension?: string
+  dimension?: string | null
   /**
    * Field information (read-only)
    */
-  field?: IDictionary<any>
+  field?: IDictionary<any> | null
   /**
    * Display order of this filter relative to other filters
    */
-  row?: number
+  row?: number | null
   /**
    * Array of listeners for faceted filters
    */
-  listens_to_filters?: string[]
+  listens_to_filters?: string[] | null
   /**
    * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
    */
@@ -2202,7 +2202,7 @@ export interface IDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<any>
+  ui_config?: IDictionary<any> | null
 }
 
 export interface IDashboardLayout {
@@ -2217,11 +2217,11 @@ export interface IDashboardLayout {
   /**
    * Id of Dashboard
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Type
    */
-  type?: string
+  type?: string | null
   /**
    * Is Active
    */
@@ -2229,11 +2229,11 @@ export interface IDashboardLayout {
   /**
    * Column Width
    */
-  column_width?: number
+  column_width?: number | null
   /**
    * Width
    */
-  width?: number
+  width?: number | null
   /**
    * Whether or not the dashboard layout is deleted. (read-only)
    */
@@ -2241,11 +2241,11 @@ export interface IDashboardLayout {
   /**
    * Title extracted from the dashboard this layout represents. (read-only)
    */
-  dashboard_title?: string
+  dashboard_title?: string | null
   /**
    * Components (read-only)
    */
-  dashboard_layout_components?: IDashboardLayoutComponent[]
+  dashboard_layout_components?: IDashboardLayoutComponent[] | null
 }
 
 export interface IDashboardLayoutComponent {
@@ -2260,27 +2260,27 @@ export interface IDashboardLayoutComponent {
   /**
    * Id of Dashboard Layout
    */
-  dashboard_layout_id?: string
+  dashboard_layout_id?: string | null
   /**
    * Id Of Dashboard Element
    */
-  dashboard_element_id?: string
+  dashboard_element_id?: string | null
   /**
    * Row
    */
-  row?: number
+  row?: number | null
   /**
    * Column
    */
-  column?: number
+  column?: number | null
   /**
    * Width
    */
-  width?: number
+  width?: number | null
   /**
    * Height
    */
-  height?: number
+  height?: number | null
   /**
    * Whether or not the dashboard layout component is deleted (read-only)
    */
@@ -2288,7 +2288,7 @@ export interface IDashboardLayoutComponent {
   /**
    * Dashboard element title, extracted from the Dashboard Element. (read-only)
    */
-  element_title?: string
+  element_title?: string | null
   /**
    * Whether or not the dashboard element title is displayed. (read-only)
    */
@@ -2296,18 +2296,18 @@ export interface IDashboardLayoutComponent {
   /**
    * Visualization type, extracted from a query's vis_config (read-only)
    */
-  vis_type?: string
+  vis_type?: string | null
 }
 
 export interface IDashboardLookml {
   /**
    * Id of Dashboard (read-only)
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * lookml of UDD (read-only)
    */
-  lookml?: string
+  lookml?: string | null
 }
 
 export interface IDataActionForm {
@@ -2315,34 +2315,34 @@ export interface IDataActionForm {
   /**
    * Array of form fields. (read-only)
    */
-  fields?: IDataActionFormField[]
+  fields?: IDataActionFormField[] | null
 }
 
 export interface IDataActionFormField {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Human-readable label (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Description of field (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Type of field. (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Default value of the field. (read-only)
    */
-  default?: string
+  default?: string | null
   /**
    * The URL for an oauth link, if type is 'oauth_link'. (read-only)
    */
-  oauth_url?: string
+  oauth_url?: string | null
   /**
    * Whether or not a field supports interactive forms. (read-only)
    */
@@ -2354,36 +2354,36 @@ export interface IDataActionFormField {
   /**
    * If the form type is 'select', a list of options to be selected from. (read-only)
    */
-  options?: IDataActionFormSelectOption[]
+  options?: IDataActionFormSelectOption[] | null
 }
 
 export interface IDataActionFormSelectOption {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Human-readable label (read-only)
    */
-  label?: string
+  label?: string | null
 }
 
 export interface IDataActionRequest {
   /**
    * The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
    */
-  action?: IDictionary<any>
+  action?: IDictionary<any> | null
   /**
    * User input for any form values the data action might use.
    */
-  form_values?: IDictionary<string>
+  form_values?: IDictionary<string> | null
 }
 
 export interface IDataActionResponse {
   /**
    * ID of the webhook event that sent this data action. In some error conditions, this may be null. (read-only)
    */
-  webhook_id?: string
+  webhook_id?: string | null
   /**
    * Whether the data action was successful. (read-only)
    */
@@ -2396,18 +2396,18 @@ export interface IDataActionResponse {
   /**
    * Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future. (read-only)
    */
-  message?: string
+  message?: string | null
 }
 
 export interface IDataActionUserState {
   /**
    * User state data (read-only)
    */
-  data?: string
+  data?: string | null
   /**
    * Time in seconds until the state needs to be refreshed (read-only)
    */
-  refresh_time?: number
+  refresh_time?: number | null
 }
 
 export interface IDatagroup {
@@ -2418,7 +2418,7 @@ export interface IDatagroup {
   /**
    * UNIX timestamp at which this entry was created. (read-only)
    */
-  created_at?: number
+  created_at?: number | null
   /**
    * Unique ID of the datagroup (read-only)
    */
@@ -2426,31 +2426,31 @@ export interface IDatagroup {
   /**
    * Name of the model containing the datagroup. Unique when combined with name. (read-only)
    */
-  model_name?: string
+  model_name?: string | null
   /**
    * Name of the datagroup. Unique when combined with model_name. (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
    */
-  stale_before?: number
+  stale_before?: number | null
   /**
    * UNIX timestamp at which this entry trigger was last checked. (read-only)
    */
-  trigger_check_at?: number
+  trigger_check_at?: number | null
   /**
    * The message returned with the error of the last trigger check. (read-only)
    */
-  trigger_error?: string
+  trigger_error?: string | null
   /**
    * The value of the trigger when last checked. (read-only)
    */
-  trigger_value?: string
+  trigger_value?: string | null
   /**
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
-  triggered_at?: number
+  triggered_at?: number | null
 }
 
 export interface IDBConnection {
@@ -2474,19 +2474,19 @@ export interface IDBConnection {
   /**
    * Host name/address of server
    */
-  host?: string
+  host?: string | null
   /**
    * Port number on server
    */
-  port?: string
+  port?: string | null
   /**
    * Username for server authentication
    */
-  username?: string
+  username?: string | null
   /**
    * (Write-Only) Password for server authentication
    */
-  password?: string
+  password?: string | null
   /**
    * Whether the connection uses OAuth for authentication. (read-only)
    */
@@ -2494,35 +2494,35 @@ export interface IDBConnection {
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
-  certificate?: string
+  certificate?: string | null
   /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
-  file_type?: string
+  file_type?: string | null
   /**
    * Database name
    */
-  database?: string
+  database?: string | null
   /**
    * Time zone of database
    */
-  db_timezone?: string
+  db_timezone?: string | null
   /**
    * Timezone to use in queries
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Scheme name
    */
-  schema?: string
+  schema?: string | null
   /**
    * Maximum number of concurrent connection to use
    */
-  max_connections?: number
+  max_connections?: number | null
   /**
    * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
    */
-  max_billing_gigabytes?: string
+  max_billing_gigabytes?: string | null
   /**
    * Use SSL/TLS when connecting to server
    */
@@ -2534,27 +2534,27 @@ export interface IDBConnection {
   /**
    * Name of temporary database (if used)
    */
-  tmp_db_name?: string
+  tmp_db_name?: string | null
   /**
    * Additional params to add to JDBC connection string
    */
-  jdbc_additional_params?: string
+  jdbc_additional_params?: string | null
   /**
    * Connection Pool Timeout, in seconds
    */
-  pool_timeout?: number
+  pool_timeout?: number | null
   /**
    * (Read/Write) SQL Dialect name
    */
-  dialect_name?: string
+  dialect_name?: string | null
   /**
    * Creation date for this connection (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Id of user who last modified this connection configuration (read-only)
    */
-  user_id?: string
+  user_id?: string | null
   /**
    * Is this an example connection? (read-only)
    */
@@ -2562,23 +2562,23 @@ export interface IDBConnection {
   /**
    * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
    */
-  user_db_credentials?: boolean
+  user_db_credentials?: boolean | null
   /**
    * Fields whose values map to user attribute names
    */
-  user_attribute_fields?: string[]
+  user_attribute_fields?: string[] | null
   /**
    * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
    */
-  maintenance_cron?: string
+  maintenance_cron?: string | null
   /**
    * Unix timestamp at start of last completed PDT trigger check process (read-only)
    */
-  last_regen_at?: string
+  last_regen_at?: string | null
   /**
    * Unix timestamp at start of last completed PDT reap process (read-only)
    */
-  last_reap_at?: string
+  last_reap_at?: string | null
   /**
    * Precache tables in the SQL Runner
    */
@@ -2590,7 +2590,7 @@ export interface IDBConnection {
   /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
-  after_connect_statements?: string
+  after_connect_statements?: string | null
   pdt_context_override?: IDBConnectionOverride
   /**
    * Is this connection created and managed by Looker (read-only)
@@ -2599,23 +2599,23 @@ export interface IDBConnection {
   /**
    * The Id of the ssh tunnel this connection uses
    */
-  tunnel_id?: string
+  tunnel_id?: string | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
-  pdt_concurrency?: number
+  pdt_concurrency?: number | null
   /**
    * When disable_context_comment is true comment will not be added to SQL
    */
-  disable_context_comment?: boolean
+  disable_context_comment?: boolean | null
   /**
    * An External OAuth Application to use for authenticating to the database
    */
-  oauth_application_id?: number
+  oauth_application_id?: number | null
   /**
    * When true, error PDTs will be retried every regenerator cycle
    */
-  always_retry_failed_builds?: boolean
+  always_retry_failed_builds?: boolean | null
 }
 
 export interface IDBConnectionBase {
@@ -2646,19 +2646,19 @@ export interface IDBConnectionOverride {
   /**
    * Host name/address of server
    */
-  host?: string
+  host?: string | null
   /**
    * Port number on server
    */
-  port?: string
+  port?: string | null
   /**
    * Username for server authentication
    */
-  username?: string
+  username?: string | null
   /**
    * (Write-Only) Password for server authentication
    */
-  password?: string
+  password?: string | null
   /**
    * Whether or not the password is overridden in this context (read-only)
    */
@@ -2666,27 +2666,27 @@ export interface IDBConnectionOverride {
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
-  certificate?: string
+  certificate?: string | null
   /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
-  file_type?: string
+  file_type?: string | null
   /**
    * Database name
    */
-  database?: string
+  database?: string | null
   /**
    * Scheme name
    */
-  schema?: string
+  schema?: string | null
   /**
    * Additional params to add to JDBC connection string
    */
-  jdbc_additional_params?: string
+  jdbc_additional_params?: string | null
   /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
-  after_connect_statements?: string
+  after_connect_statements?: string | null
 }
 
 export interface IDBConnectionTestResult {
@@ -2697,19 +2697,19 @@ export interface IDBConnectionTestResult {
   /**
    * JDBC connection string. (only populated in the 'connect' test) (read-only)
    */
-  connection_string?: string
+  connection_string?: string | null
   /**
    * Result message of test (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Name of test (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Result code of test (read-only)
    */
-  status?: string
+  status?: string | null
 }
 
 export interface IDelegateOauthTest {
@@ -2819,11 +2819,11 @@ export interface IDialectInfo {
   /**
    * Default number max connections (read-only)
    */
-  default_max_connections?: string
+  default_max_connections?: string | null
   /**
    * Default port number (read-only)
    */
-  default_port?: string
+  default_port?: string | null
   /**
    * Is the supporting driver installed (read-only)
    */
@@ -2831,15 +2831,15 @@ export interface IDialectInfo {
   /**
    * The human-readable label of the connection (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * What the dialect calls the equivalent of a normal SQL table (read-only)
    */
-  label_for_database_equivalent?: string
+  label_for_database_equivalent?: string | null
   /**
    * The name of the dialect (read-only)
    */
-  name?: string
+  name?: string | null
   supported_options?: IDialectInfoOptions
 }
 
@@ -2908,7 +2908,7 @@ export interface IDiscretePalette {
   /**
    * Label for palette
    */
-  label?: string
+  label?: string | null
   /**
    * Type of palette
    */
@@ -2927,7 +2927,7 @@ export interface IEmbedParams {
   /**
    * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
-  session_length?: number
+  session_length?: number | null
   /**
    * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
    */
@@ -2938,11 +2938,11 @@ export interface IEmbedSecret {
   /**
    * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
    */
-  algorithm?: string
+  algorithm?: string | null
   /**
    * When secret was created (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Is this secret currently enabled
    */
@@ -2954,11 +2954,11 @@ export interface IEmbedSecret {
   /**
    * Secret for use with SSO embedding (read-only)
    */
-  secret?: string
+  secret?: string | null
   /**
    * Id of user who created this secret (read-only)
    */
-  user_id?: number
+  user_id?: number | null
 }
 
 export interface IEmbedSsoParams {
@@ -2969,7 +2969,7 @@ export interface IEmbedSsoParams {
   /**
    * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
-  session_length?: number
+  session_length?: number | null
   /**
    * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
    */
@@ -2977,43 +2977,43 @@ export interface IEmbedSsoParams {
   /**
    * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
    */
-  external_user_id?: string
+  external_user_id?: string | null
   /**
    * First name of the embed user. Defaults to 'Embed' if not specified
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * Last name of the embed user. Defaults to 'User' if not specified
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
    */
-  user_timezone?: string
+  user_timezone?: string | null
   /**
    * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
    */
-  permissions?: string[]
+  permissions?: string[] | null
   /**
    * List of model names that the embed user may access
    */
-  models?: string[]
+  models?: string[] | null
   /**
    * List of Looker group ids in which to enroll the embed user
    */
-  group_ids?: number[]
+  group_ids?: number[] | null
   /**
    * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * A dictionary of name-value pairs associating a Looker user attribute name with a value.
    */
-  user_attributes?: IDictionary<any>
+  user_attributes?: IDictionary<any> | null
   /**
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
-  secret_id?: number
+  secret_id?: number | null
 }
 
 export interface IEmbedUrlResponse {
@@ -3027,11 +3027,11 @@ export interface IError {
   /**
    * Error details (read-only)
    */
-  message: string
+  message: string | null
   /**
    * Documentation link (read-only)
    */
-  documentation_url: string
+  documentation_url: string | null
 }
 
 export interface IExternalOauthApplication {
@@ -3058,7 +3058,7 @@ export interface IExternalOauthApplication {
   /**
    * The database dialect for this application.
    */
-  dialect_name?: string
+  dialect_name?: string | null
   /**
    * Creation time for this application (read-only)
    */
@@ -3081,7 +3081,7 @@ export interface IFolder {
   /**
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
-  parent_id?: string
+  parent_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -3089,23 +3089,23 @@ export interface IFolder {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Time the space was created (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * User Id of Creator (read-only)
    */
-  creator_id?: number
+  creator_id?: number | null
   /**
    * Children Count (read-only)
    */
-  child_count?: number
+  child_count?: number | null
   /**
    * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
    */
-  external_id?: string
+  external_id?: string | null
   /**
    * Folder is an embed folder (read-only)
    */
@@ -3141,11 +3141,11 @@ export interface IFolder {
   /**
    * Dashboards (read-only)
    */
-  dashboards?: IDashboardBase[]
+  dashboards?: IDashboardBase[] | null
   /**
    * Looks (read-only)
    */
-  looks?: ILookWithDashboards[]
+  looks?: ILookWithDashboards[] | null
 }
 
 export interface IFolderBase {
@@ -3156,7 +3156,7 @@ export interface IFolderBase {
   /**
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
-  parent_id?: string
+  parent_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -3164,23 +3164,23 @@ export interface IFolderBase {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Time the folder was created (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * User Id of Creator (read-only)
    */
-  creator_id?: number
+  creator_id?: number | null
   /**
    * Children Count (read-only)
    */
-  child_count?: number
+  child_count?: number | null
   /**
    * Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)
    */
-  external_id?: string
+  external_id?: string | null
   /**
    * Folder is an embed folder (read-only)
    */
@@ -3231,27 +3231,27 @@ export interface IGitBranch {
   /**
    * The short name on the local. Updating `name` results in `git checkout <new_name>`
    */
-  name?: string
+  name?: string | null
   /**
    * The name of the remote (read-only)
    */
-  remote?: string
+  remote?: string | null
   /**
    * The short name on the remote (read-only)
    */
-  remote_name?: string
+  remote_name?: string | null
   /**
    * Name of error (read-only)
    */
-  error?: string
+  error?: string | null
   /**
    * Message describing an error if present (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Name of the owner of a personal branch (read-only)
    */
-  owner_name?: string
+  owner_name?: string | null
   /**
    * Whether or not this branch is readonly (read-only)
    */
@@ -3275,23 +3275,23 @@ export interface IGitBranch {
   /**
    * Number of commits the local branch is ahead of the remote (read-only)
    */
-  ahead_count?: number
+  ahead_count?: number | null
   /**
    * Number of commits the local branch is behind the remote (read-only)
    */
-  behind_count?: number
+  behind_count?: number | null
   /**
    * UNIX timestamp at which this branch was last committed. (read-only)
    */
-  commit_at?: number
+  commit_at?: number | null
   /**
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
-  ref?: string
+  ref?: string | null
   /**
    * The resolved ref of this branch remote. (read-only)
    */
-  remote_ref?: string
+  remote_ref?: string | null
 }
 
 export interface IGitConnectionTest {
@@ -3302,7 +3302,7 @@ export interface IGitConnectionTest {
   /**
    * Human readable string describing the test (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * A short string, uniquely naming this test (read-only)
    */
@@ -3321,18 +3321,18 @@ export interface IGitConnectionTestResult {
   /**
    * Additional data from the test (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Either 'pass' or 'fail' (read-only)
    */
-  status?: string
+  status?: string | null
 }
 
 export interface IGitStatus {
   /**
    * Git action: add, delete, etc (read-only)
    */
-  action?: string
+  action?: string | null
   /**
    * When true, changes to the local file conflict with the remote repository (read-only)
    */
@@ -3344,7 +3344,7 @@ export interface IGitStatus {
   /**
    * Git description of the action (read-only)
    */
-  text?: string
+  text?: string | null
 }
 
 export interface IGroup {
@@ -3363,7 +3363,7 @@ export interface IGroup {
   /**
    * External Id group if embed group (read-only)
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * Group membership controlled outside of Looker (read-only)
    */
@@ -3379,11 +3379,11 @@ export interface IGroup {
   /**
    * Name of group
    */
-  name?: string
+  name?: string | null
   /**
    * Number of users included in this group (read-only)
    */
-  user_count?: number
+  user_count?: number | null
 }
 
 export interface IGroupHierarchy {
@@ -3402,7 +3402,7 @@ export interface IGroupHierarchy {
   /**
    * External Id group if embed group (read-only)
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * Group membership controlled outside of Looker (read-only)
    */
@@ -3418,19 +3418,19 @@ export interface IGroupHierarchy {
   /**
    * Name of group
    */
-  name?: string
+  name?: string | null
   /**
    * Number of users included in this group (read-only)
    */
-  user_count?: number
+  user_count?: number | null
   /**
    * IDs of parents of this group (read-only)
    */
-  parent_group_ids?: number[]
+  parent_group_ids?: number[] | null
   /**
    * Role IDs assigned to group (read-only)
    */
-  role_ids?: number[]
+  role_ids?: number[] | null
 }
 
 /**
@@ -3440,7 +3440,7 @@ export interface IGroupIdForGroupInclusion {
   /**
    * Id of group (read-only)
    */
-  group_id?: number
+  group_id?: number | null
 }
 
 /**
@@ -3450,7 +3450,7 @@ export interface IGroupIdForGroupUserInclusion {
   /**
    * Id of user (read-only)
    */
-  user_id?: number
+  user_id?: number | null
 }
 
 export interface IGroupSearch {
@@ -3469,7 +3469,7 @@ export interface IGroupSearch {
   /**
    * External Id group if embed group (read-only)
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * Group membership controlled outside of Looker (read-only)
    */
@@ -3485,15 +3485,15 @@ export interface IGroupSearch {
   /**
    * Name of group
    */
-  name?: string
+  name?: string | null
   /**
    * Number of users included in this group (read-only)
    */
-  user_count?: number
+  user_count?: number | null
   /**
    * Roles assigned to group (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
 }
 
 export interface IHomepageItem {
@@ -3504,55 +3504,55 @@ export interface IHomepageItem {
   /**
    * Name of user who created the content this item is based on (read-only)
    */
-  content_created_by?: string
+  content_created_by?: string | null
   /**
    * Content favorite id associated with the item this content is based on (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Content metadata id associated with the item this content is based on (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Last time the content that this item is based on was updated (read-only)
    */
-  content_updated_at?: string
+  content_updated_at?: string | null
   /**
    * Custom description entered by the user, if present
    */
-  custom_description?: string
+  custom_description?: string | null
   /**
    * (Write-Only) base64 encoded image data
    */
-  custom_image_data_base64?: string
+  custom_image_data_base64?: string | null
   /**
    * Custom image_url entered by the user, if present (read-only)
    */
-  custom_image_url?: string
+  custom_image_url?: string | null
   /**
    * Custom title entered by the user, if present
    */
-  custom_title?: string
+  custom_title?: string | null
   /**
    * Custom url entered by the user, if present
    */
-  custom_url?: string
+  custom_url?: string | null
   /**
    * Dashboard to base this item on
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * The actual description for display (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Number of times content has been favorited, if present (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Associated Homepage Section
    */
-  homepage_section_id?: number
+  homepage_section_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -3560,35 +3560,35 @@ export interface IHomepageItem {
   /**
    * The actual image_url for display (read-only)
    */
-  image_url?: string
+  image_url?: string | null
   /**
    * The container folder name of the content (read-only)
    */
-  location?: string
+  location?: string | null
   /**
    * Look to base this item on
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * LookML Dashboard to base this item on
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * An arbitrary integer representing the sort order within the section
    */
-  order?: number
+  order?: number | null
   /**
    * Number of seconds it took to fetch the section this item is in (read-only)
    */
-  section_fetch_time?: number
+  section_fetch_time?: number | null
   /**
    * The actual title for display (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * The actual url for display (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Whether the custom description should be used instead of the content description, if the item is associated with content
    */
@@ -3608,7 +3608,7 @@ export interface IHomepageItem {
   /**
    * Number of times content has been viewed, if present (read-only)
    */
-  view_count?: number
+  view_count?: number | null
 }
 
 export interface IHomepageSection {
@@ -3619,23 +3619,23 @@ export interface IHomepageSection {
   /**
    * Time at which this section was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Time at which this section was deleted.
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * A URL pointing to a page showing further information about the content in the section. (read-only)
    */
-  detail_url?: string
+  detail_url?: string | null
   /**
    * Id reference to parent homepage
    */
-  homepage_id?: number
+  homepage_id?: number | null
   /**
    * Items in the homepage section (read-only)
    */
-  homepage_items?: IHomepageItem[]
+  homepage_items?: IHomepageItem[] | null
   /**
    * Unique Id (read-only)
    */
@@ -3647,38 +3647,38 @@ export interface IHomepageSection {
   /**
    * ids of the homepage items in the order they should be displayed
    */
-  item_order?: number[]
+  item_order?: number[] | null
   /**
    * Name of row
    */
-  title?: string
+  title?: string | null
   /**
    * Time at which this section was last updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Description of the content found in this section.
    */
-  description?: string
+  description?: string | null
   /**
    * ids of the homepage items the user can see in the order they should be displayed (read-only)
    */
-  visible_item_order?: number[]
+  visible_item_order?: number[] | null
 }
 
 export interface IImportedProject {
   /**
    * Dependency name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Url for a remote dependency (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Ref for a remote dependency (read-only)
    */
-  ref?: string
+  ref?: string | null
   /**
    * Flag signifying if a dependency is remote or local (read-only)
    */
@@ -3705,7 +3705,7 @@ export interface IIntegration {
   /**
    * Description of the integration. (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Whether the integration is available to users.
    */
@@ -3737,11 +3737,11 @@ export interface IIntegration {
   /**
    * URL to an icon for the integration. (read-only)
    */
-  icon_url?: string
+  icon_url?: string | null
   /**
    * Whether the integration uses oauth. (read-only)
    */
-  uses_oauth?: boolean
+  uses_oauth?: boolean | null
   /**
    * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
    */
@@ -3749,7 +3749,7 @@ export interface IIntegration {
   /**
    * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
    */
-  delegate_oauth?: boolean
+  delegate_oauth?: boolean | null
   /**
    * Whether the integration is available to users.
    */
@@ -3780,11 +3780,11 @@ export interface IIntegrationHub {
   /**
    * An error message, present if the integration hub metadata could not be fetched. If this is present, the integration hub is unusable. (read-only)
    */
-  fetch_error_message?: string
+  fetch_error_message?: string | null
   /**
    * (Write-Only) An authorization key that will be sent to the integration hub on every request.
    */
-  authorization_token?: string
+  authorization_token?: string | null
   /**
    * Whether the authorization_token is set for the hub. (read-only)
    */
@@ -3800,22 +3800,22 @@ export interface IIntegrationHub {
   /**
    * The legal agreement text for this integration hub. (read-only)
    */
-  legal_agreement_text?: string
+  legal_agreement_text?: string | null
 }
 
 export interface IIntegrationParam {
   /**
    * Name of the parameter.
    */
-  name?: string
+  name?: string | null
   /**
    * Label of the parameter. (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Short description of the parameter. (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Whether the parameter is required to be set to use the destination. If unspecified, this defaults to false. (read-only)
    */
@@ -3827,15 +3827,15 @@ export interface IIntegrationParam {
   /**
    * The current value of the parameter. Always null if the value is sensitive. When writing, null values will be ignored. Set the value to an empty string to clear it.
    */
-  value?: string
+  value?: string | null
   /**
    * When present, the param's value comes from this user attribute instead of the 'value' parameter. Set to null to use the 'value'.
    */
-  user_attribute_name?: string
+  user_attribute_name?: string | null
   /**
    * Whether the parameter contains sensitive data like API credentials. If unspecified, this defaults to true. (read-only)
    */
-  sensitive?: boolean
+  sensitive?: boolean | null
   /**
    * When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow. (read-only)
    */
@@ -3843,22 +3843,22 @@ export interface IIntegrationParam {
   /**
    * When present, the param represents the oauth url the user will be taken to. (read-only)
    */
-  delegate_oauth_url?: string
+  delegate_oauth_url?: string | null
 }
 
 export interface IIntegrationRequiredField {
   /**
    * Matches a field that has this tag. (read-only)
    */
-  tag?: string
+  tag?: string | null
   /**
    * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
    */
-  any_tag?: string[]
+  any_tag?: string[] | null
   /**
    * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
    */
-  all_tags?: string[]
+  all_tags?: string[] | null
 }
 
 export interface IIntegrationTestResult {
@@ -3869,11 +3869,11 @@ export interface IIntegrationTestResult {
   /**
    * A message representing the results of the test. (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * An array of connection test result for delegate oauth actions. (read-only)
    */
-  delegate_oauth_result?: IDelegateOauthTest[]
+  delegate_oauth_result?: IDelegateOauthTest[] | null
 }
 
 export interface IInternalHelpResources {
@@ -3895,11 +3895,11 @@ export interface IInternalHelpResourcesContent {
   /**
    * Text to display in the help menu item which will display the internal help resources
    */
-  organization_name?: string
+  organization_name?: string | null
   /**
    * Content to be displayed in the internal help resources page/modal
    */
-  markdown_content?: string
+  markdown_content?: string | null
 }
 
 /**
@@ -3921,7 +3921,7 @@ export interface ILDAPConfig {
   /**
    * (Write-Only)  Password for the LDAP account used to access the LDAP server
    */
-  auth_password?: string
+  auth_password?: string | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
    */
@@ -3929,15 +3929,15 @@ export interface ILDAPConfig {
   /**
    * Distinguished name of LDAP account used to access the LDAP server
    */
-  auth_username?: string
+  auth_username?: string | null
   /**
    * LDAP server hostname
    */
-  connection_host?: string
+  connection_host?: string | null
   /**
    * LDAP host port
    */
-  connection_port?: string
+  connection_port?: string | null
   /**
    * Use Transport Layer Security
    */
@@ -3949,19 +3949,19 @@ export interface ILDAPConfig {
   /**
    * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
    */
-  default_new_user_groups?: IGroup[]
+  default_new_user_groups?: IGroup[] | null
   /**
    * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
    */
-  default_new_user_roles?: IRole[]
+  default_new_user_roles?: IRole[] | null
   /**
    * Enable/Disable LDAP authentication for the server
    */
@@ -3973,31 +3973,31 @@ export interface ILDAPConfig {
   /**
    * (Read-only) Array of mappings between LDAP Groups and Looker Roles (read-only)
    */
-  groups?: ILDAPGroupRead[]
+  groups?: ILDAPGroupRead[] | null
   /**
    * Base dn for finding groups in LDAP searches
    */
-  groups_base_dn?: string
+  groups_base_dn?: string | null
   /**
    * Identifier for a strategy for how Looker will search for groups in the LDAP server
    */
-  groups_finder_type?: string
+  groups_finder_type?: string | null
   /**
    * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
    */
-  groups_member_attribute?: string
+  groups_member_attribute?: string | null
   /**
    * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
    */
-  groups_objectclasses?: string
+  groups_objectclasses?: string | null
   /**
    * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
    */
-  groups_user_attribute?: string
+  groups_user_attribute?: string | null
   /**
    * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: ILDAPGroupWrite[]
+  groups_with_role_ids?: ILDAPGroupWrite[] | null
   /**
    * (Read-only) Has the password been set for the LDAP account used to access the LDAP server (read-only)
    */
@@ -4009,11 +4009,11 @@ export interface ILDAPConfig {
   /**
    * When this config was last modified (read-only)
    */
-  modified_at?: string
+  modified_at?: string | null
   /**
    * User id of user who last modified this config (read-only)
    */
-  modified_by?: string
+  modified_by?: string | null
   /**
    * Set user roles in Looker based on groups from LDAP
    */
@@ -4021,51 +4021,51 @@ export interface ILDAPConfig {
   /**
    * (Write-Only)  Test LDAP user password. For ldap tests only.
    */
-  test_ldap_password?: string
+  test_ldap_password?: string | null
   /**
    * (Write-Only)  Test LDAP user login id. For ldap tests only.
    */
-  test_ldap_user?: string
+  test_ldap_user?: string | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * Name of user record attributes used to indicate unique record id
    */
-  user_attribute_map_ldap_id?: string
+  user_attribute_map_ldap_id?: string | null
   /**
    * (Read-only) Array of mappings between LDAP User Attributes and Looker User Attributes (read-only)
    */
-  user_attributes?: ILDAPUserAttributeRead[]
+  user_attributes?: ILDAPUserAttributeRead[] | null
   /**
    * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: ILDAPUserAttributeWrite[]
+  user_attributes_with_ids?: ILDAPUserAttributeWrite[] | null
   /**
    * Distinguished name of LDAP node used as the base for user searches
    */
-  user_bind_base_dn?: string
+  user_bind_base_dn?: string | null
   /**
    * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
    */
-  user_custom_filter?: string
+  user_custom_filter?: string | null
   /**
    * Name(s) of user record attributes used for matching user login id (comma separated list)
    */
-  user_id_attribute_names?: string
+  user_id_attribute_names?: string | null
   /**
    * (Optional) Name of user record objectclass used for finding user during login id
    */
-  user_objectclass?: string
+  user_objectclass?: string | null
   /**
    * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
    */
@@ -4081,46 +4081,46 @@ export interface ILDAPConfig {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPConfigTestIssue {
   /**
    * Severity of the issue. Error or Warning (read-only)
    */
-  severity?: string
+  severity?: string | null
   /**
    * Message describing the issue (read-only)
    */
-  message?: string
+  message?: string | null
 }
 
 export interface ILDAPConfigTestResult {
   /**
    * Additional details for error cases (read-only)
    */
-  details?: string
+  details?: string | null
   /**
    * Array of issues/considerations about the result (read-only)
    */
-  issues?: ILDAPConfigTestIssue[]
+  issues?: ILDAPConfigTestIssue[] | null
   /**
    * Short human readable test about the result (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Test status code: always 'success' or 'error' (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * A more detailed trace of incremental results during auth tests (read-only)
    */
-  trace?: string
+  trace?: string | null
   user?: ILDAPUser
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPGroupRead {
@@ -4131,100 +4131,100 @@ export interface ILDAPGroupRead {
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker (read-only)
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in LDAP (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Roles (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPGroupWrite {
   /**
    * Unique Id
    */
-  id?: number
+  id?: number | null
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in LDAP
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Role Ids
    */
-  role_ids?: number[]
+  role_ids?: number[] | null
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPUser {
   /**
    * Array of user's email addresses and aliases for use in migration (read-only)
    */
-  all_emails?: string[]
+  all_emails?: string[] | null
   /**
    * Dictionary of user's attributes (name/value) (read-only)
    */
-  attributes?: IDictionary<string>
+  attributes?: IDictionary<string> | null
   /**
    * Primary email address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * First name (read-only)
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * Array of user's groups (group names only) (read-only)
    */
-  groups?: string[]
+  groups?: string[] | null
   /**
    * Last Name (read-only)
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * LDAP's distinguished name for the user record (read-only)
    */
-  ldap_dn?: string
+  ldap_dn?: string | null
   /**
    * LDAP's Unique ID for the user (read-only)
    */
-  ldap_id?: string
+  ldap_id?: string | null
   /**
    * Array of user's roles (role names only) (read-only)
    */
-  roles?: string[]
+  roles?: string[] | null
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPUserAttributeRead {
   /**
    * Name of User Attribute in LDAP (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in LDAP assertion for login to be allowed to succeed (read-only)
    */
@@ -4232,18 +4232,18 @@ export interface ILDAPUserAttributeRead {
   /**
    * Looker User Attributes (read-only)
    */
-  user_attributes?: IUserAttribute[]
+  user_attributes?: IUserAttribute[] | null
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILDAPUserAttributeWrite {
   /**
    * Name of User Attribute in LDAP
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in LDAP assertion for login to be allowed to succeed
    */
@@ -4251,11 +4251,11 @@ export interface ILDAPUserAttributeWrite {
   /**
    * Looker User Attribute Ids
    */
-  user_attribute_ids?: number[]
+  user_attribute_ids?: number[] | null
   /**
    * Link to ldap config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ILegacyFeature {
@@ -4270,11 +4270,11 @@ export interface ILegacyFeature {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Description (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Whether this feature has been enabled by a user
    */
@@ -4286,27 +4286,27 @@ export interface ILegacyFeature {
   /**
    * Looker version where this feature became a legacy feature (read-only)
    */
-  disallowed_as_of_version?: string
+  disallowed_as_of_version?: string | null
   /**
    * Looker version where this feature will be automatically disabled (read-only)
    */
-  disable_on_upgrade_to_version?: string
+  disable_on_upgrade_to_version?: string | null
   /**
    * Future Looker version where this feature will be removed (read-only)
    */
-  end_of_life_version?: string
+  end_of_life_version?: string | null
   /**
    * URL for documentation about this feature (read-only)
    */
-  documentation_url?: string
+  documentation_url?: string | null
   /**
    * Approximate date that this feature will be automatically disabled. (read-only)
    */
-  approximate_disable_date?: Date
+  approximate_disable_date?: Date | null
   /**
    * Approximate date that this feature will be removed. (read-only)
    */
-  approximate_end_of_life_date?: Date
+  approximate_end_of_life_date?: Date | null
   /**
    * Whether this legacy feature may have been automatically disabled when upgrading to the current version. (read-only)
    */
@@ -4325,26 +4325,26 @@ export interface ILocale {
   /**
    * Code for Locale (read-only)
    */
-  code?: string
+  code?: string | null
   /**
    * Name of Locale in its own language (read-only)
    */
-  native_name?: string
+  native_name?: string | null
   /**
    * Name of Locale in English (read-only)
    */
-  english_name?: string
+  english_name?: string | null
 }
 
 export interface ILocalizationSettings {
   /**
    * Default locale for localization (read-only)
    */
-  default_locale?: string
+  default_locale?: string | null
   /**
    * Localization level - strict or permissive (read-only)
    */
-  localization_level?: string
+  localization_level?: string | null
 }
 
 export interface ILook {
@@ -4355,7 +4355,7 @@ export interface ILook {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -4363,19 +4363,19 @@ export interface ILook {
   /**
    * Look Title
    */
-  title?: string
+  title?: string | null
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Content Favorite Id (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Time that the Look was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -4383,35 +4383,35 @@ export interface ILook {
   /**
    * Time that the Look was deleted. (read-only)
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Id of User that deleted the look. (read-only)
    */
-  deleter_id?: number
+  deleter_id?: number | null
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Embed Url (read-only)
    */
-  embed_url?: string
+  embed_url?: string | null
   /**
    * Excel File Url (read-only)
    */
-  excel_file_url?: string
+  excel_file_url?: string | null
   /**
    * Number of times favorited (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Google Spreadsheet Formula (read-only)
    */
-  google_spreadsheet_formula?: string
+  google_spreadsheet_formula?: string | null
   /**
    * Image Embed Url (read-only)
    */
-  image_embed_url?: string
+  image_embed_url?: string | null
   /**
    * auto-run query when Look viewed
    */
@@ -4419,15 +4419,15 @@ export interface ILook {
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  last_accessed_at?: Date
+  last_accessed_at?: Date | null
   /**
    * Id of User that last updated the look. (read-only)
    */
-  last_updater_id?: number
+  last_updater_id?: number | null
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  last_viewed_at?: Date
+  last_viewed_at?: Date | null
   model?: ILookModel
   /**
    * Is Public
@@ -4436,32 +4436,32 @@ export interface ILook {
   /**
    * Public Slug (read-only)
    */
-  public_slug?: string
+  public_slug?: string | null
   /**
    * Public Url (read-only)
    */
-  public_url?: string
+  public_url?: string | null
   /**
    * Query Id
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Short Url (read-only)
    */
-  short_url?: string
+  short_url?: string | null
   folder?: IFolderBase
   /**
    * Folder Id
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Time that the Look was updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Number of times viewed in the Looker web UI (read-only)
    */
-  view_count?: number
+  view_count?: number | null
 }
 
 export interface ILookBasic {
@@ -4472,7 +4472,7 @@ export interface ILookBasic {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -4480,11 +4480,11 @@ export interface ILookBasic {
   /**
    * Look Title (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
 }
 
 export interface ILookmlModel {
@@ -4495,11 +4495,11 @@ export interface ILookmlModel {
   /**
    * Array of names of connections this model is allowed to use
    */
-  allowed_db_connection_names?: string[]
+  allowed_db_connection_names?: string[] | null
   /**
    * Array of explores (if has_content) (read-only)
    */
-  explores?: ILookmlModelNavExplore[]
+  explores?: ILookmlModelNavExplore[] | null
   /**
    * Does this model declaration have have lookml content? (read-only)
    */
@@ -4507,15 +4507,15 @@ export interface ILookmlModel {
   /**
    * UI-friendly name for this model (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Name of the model. Also used as the unique identifier
    */
-  name?: string
+  name?: string | null
   /**
    * Name of project containing the model
    */
-  project_name?: string
+  project_name?: string | null
   /**
    * Is this model allowed to use all current and future connections
    */
@@ -4530,23 +4530,23 @@ export interface ILookmlModelExplore {
   /**
    * Explore name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Description (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Label (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Explore title (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * Scopes (read-only)
    */
-  scopes?: string[]
+  scopes?: string[] | null
   /**
    * Can Total (read-only)
    */
@@ -4562,7 +4562,7 @@ export interface ILookmlModelExplore {
   /**
    * A URL linking to the definition of this explore in the LookML IDE. (read-only)
    */
-  lookml_link?: string
+  lookml_link?: string | null
   /**
    * Can Save (read-only)
    */
@@ -4590,31 +4590,31 @@ export interface ILookmlModelExplore {
   /**
    * Connection name (read-only)
    */
-  connection_name?: string
+  connection_name?: string | null
   /**
    * How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
    */
-  null_sort_treatment?: string
+  null_sort_treatment?: string | null
   /**
    * List of model source files (read-only)
    */
-  files?: string[]
+  files?: string[] | null
   /**
    * Primary source_file file (read-only)
    */
-  source_file?: string
+  source_file?: string | null
   /**
    * Name of project (read-only)
    */
-  project_name?: string
+  project_name?: string | null
   /**
    * Name of model (read-only)
    */
-  model_name?: string
+  model_name?: string | null
   /**
    * Name of view (read-only)
    */
-  view_name?: string
+  view_name?: string | null
   /**
    * Is hidden (read-only)
    */
@@ -4622,52 +4622,52 @@ export interface ILookmlModelExplore {
   /**
    * A sql_table_name expression that defines what sql table the view/explore maps onto. Example: "prod_orders2 AS orders" in a view named orders. (read-only)
    */
-  sql_table_name?: string
+  sql_table_name?: string | null
   /**
    * (DEPRECATED) Array of access filter field names (read-only)
    */
-  access_filter_fields?: string[]
+  access_filter_fields?: string[] | null
   /**
    * Access filters (read-only)
    */
-  access_filters?: ILookmlModelExploreAccessFilter[]
+  access_filters?: ILookmlModelExploreAccessFilter[] | null
   /**
    * Aliases (read-only)
    */
-  aliases?: ILookmlModelExploreAlias[]
+  aliases?: ILookmlModelExploreAlias[] | null
   /**
    * Always filter (read-only)
    */
-  always_filter?: ILookmlModelExploreAlwaysFilter[]
+  always_filter?: ILookmlModelExploreAlwaysFilter[] | null
   /**
    * Conditionally filter (read-only)
    */
-  conditionally_filter?: ILookmlModelExploreConditionallyFilter[]
+  conditionally_filter?: ILookmlModelExploreConditionallyFilter[] | null
   /**
    * Array of index fields (read-only)
    */
-  index_fields?: string[]
+  index_fields?: string[] | null
   /**
    * Sets (read-only)
    */
-  sets?: ILookmlModelExploreSet[]
+  sets?: ILookmlModelExploreSet[] | null
   /**
    * An array of arbitrary string tags provided in the model for this explore. (read-only)
    */
-  tags?: string[]
+  tags?: string[] | null
   /**
    * Errors (read-only)
    */
-  errors?: ILookmlModelExploreError[]
+  errors?: ILookmlModelExploreError[] | null
   fields?: ILookmlModelExploreFieldset
   /**
    * Views joined into this explore (read-only)
    */
-  joins?: ILookmlModelExploreJoins[]
+  joins?: ILookmlModelExploreJoins[] | null
   /**
    * Label used to group explores in the navigation menus (read-only)
    */
-  group_label?: string
+  group_label?: string | null
   /**
    * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
    */
@@ -4678,59 +4678,59 @@ export interface ILookmlModelExploreAccessFilter {
   /**
    * Field to be filtered (read-only)
    */
-  field?: string
+  field?: string | null
   /**
    * User attribute name (read-only)
    */
-  user_attribute?: string
+  user_attribute?: string | null
 }
 
 export interface ILookmlModelExploreAlias {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Value (read-only)
    */
-  value?: string
+  value?: string | null
 }
 
 export interface ILookmlModelExploreAlwaysFilter {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Value (read-only)
    */
-  value?: string
+  value?: string | null
 }
 
 export interface ILookmlModelExploreConditionallyFilter {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Value (read-only)
    */
-  value?: string
+  value?: string | null
 }
 
 export interface ILookmlModelExploreError {
   /**
    * Error Message (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Details (read-only)
    */
-  details?: any
+  details?: any | null
   /**
    * Error source location (read-only)
    */
-  error_pos?: string
+  error_pos?: string | null
   /**
    * Is this a field error (read-only)
    */
@@ -4749,39 +4749,39 @@ export interface ILookmlModelExploreField {
   /**
    * Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)
    */
-  category?: Category
+  category?: Category | null
   /**
    * The default value that this field uses when filtering. Null if there is no default value. (read-only)
    */
-  default_filter_value?: string
+  default_filter_value?: string | null
   /**
    * Description (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Dimension group if this field is part of a dimension group. If not, this will be null. (read-only)
    */
-  dimension_group?: string
+  dimension_group?: string | null
   /**
    * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
    */
-  enumerations?: ILookmlModelExploreFieldEnumeration[]
+  enumerations?: ILookmlModelExploreFieldEnumeration[] | null
   /**
    * An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)
    */
-  error?: string
+  error?: string | null
   /**
    * A label creating a grouping of fields. All fields with this label should be presented together when displayed in a UI. (read-only)
    */
-  field_group_label?: string
+  field_group_label?: string | null
   /**
    * When presented in a field group via field_group_label, a shorter name of the field to be displayed in that context. (read-only)
    */
-  field_group_variant?: string
+  field_group_variant?: string | null
   /**
    * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (read-only)
    */
-  fill_style?: FillStyle
+  fill_style?: FillStyle | null
   /**
    * An offset (in months) from the calendar start month to the fiscal start month defined in the LookML model this field belongs to. (read-only)
    */
@@ -4822,7 +4822,7 @@ export interface ILookmlModelExploreField {
   /**
    * The name of the parameter that will provide a parameterized label for this field, if available in the current context. (read-only)
    */
-  label_from_parameter?: string
+  label_from_parameter?: string | null
   /**
    * The human-readable label of the field, without the view label. (read-only)
    */
@@ -4830,7 +4830,7 @@ export interface ILookmlModelExploreField {
   /**
    * A URL linking to the definition of this field in the LookML IDE. (read-only)
    */
-  lookml_link?: string
+  lookml_link?: string | null
   map_layer?: ILookmlModelExploreFieldMapLayer
   /**
    * Whether this field is a measure. (read-only)
@@ -4851,7 +4851,7 @@ export interface ILookmlModelExploreField {
   /**
    * Whether this field can be removed from a query. (read-only)
    */
-  permanent?: boolean
+  permanent?: boolean | null
   /**
    * Whether or not the field represents a primary key. (read-only)
    */
@@ -4859,7 +4859,7 @@ export interface ILookmlModelExploreField {
   /**
    * The name of the project this field is defined in. (read-only)
    */
-  project_name?: string
+  project_name?: string | null
   /**
    * When true, it's not possible to re-sort this field's values without re-running the SQL query, due to database logic that affects the sort. (read-only)
    */
@@ -4883,15 +4883,15 @@ export interface ILookmlModelExploreField {
   /**
    * SQL expression as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
    */
-  sql?: string
+  sql?: string | null
   /**
    * An array of conditions and values that make up a SQL Case expression, as defined in the LookML model. The SQL syntax shown here is a representation intended for auditability, and is not neccessarily an exact match for what will ultimately be run in the database. It may contain special LookML syntax or annotations that are not valid SQL. This will be null if the current user does not have the see_lookml permission for the field's model. (read-only)
    */
-  sql_case?: ILookmlModelExploreFieldSqlCase[]
+  sql_case?: ILookmlModelExploreFieldSqlCase[] | null
   /**
    * Array of filter conditions defined for the measure in LookML. (read-only)
    */
-  filters?: ILookmlModelExploreFieldMeasureFilters[]
+  filters?: ILookmlModelExploreFieldMeasureFilters[] | null
   /**
    * The name of the dimension to base suggest queries from. (read-only)
    */
@@ -4907,7 +4907,7 @@ export interface ILookmlModelExploreField {
   /**
    * If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
    */
-  suggestions?: string[]
+  suggestions?: string[] | null
   /**
    * An array of arbitrary string tags provided in the model for this field. (read-only)
    */
@@ -4923,7 +4923,7 @@ export interface ILookmlModelExploreField {
   /**
    * If specified, the LookML value format string for formatting values of this field. (read-only)
    */
-  value_format?: string
+  value_format?: string | null
   /**
    * The name of the view this field belongs to. (read-only)
    */
@@ -4954,11 +4954,11 @@ export interface ILookmlModelExploreFieldEnumeration {
   /**
    * Label (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Value (read-only)
    */
-  value?: any
+  value?: any | null
 }
 
 export interface ILookmlModelExploreFieldMapLayer {
@@ -4973,19 +4973,19 @@ export interface ILookmlModelExploreFieldMapLayer {
   /**
    * Specifies the name of the TopoJSON object that the map layer references. If not specified, use the first object.. (read-only)
    */
-  feature_key?: string
+  feature_key?: string | null
   /**
    * Selects which property from the TopoJSON data to plot against. TopoJSON supports arbitrary metadata for each region. When null, the first matching property should be used. (read-only)
    */
-  property_key?: string
+  property_key?: string | null
   /**
    * Which property from the TopoJSON data to use to label the region. When null, property_key should be used. (read-only)
    */
-  property_label_key?: string
+  property_label_key?: string | null
   /**
    * The preferred geographic projection of the map layer when displayed in a visualization that supports multiple geographic projections. (read-only)
    */
-  projection?: string
+  projection?: string | null
   /**
    * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (read-only)
    */
@@ -4993,56 +4993,56 @@ export interface ILookmlModelExploreFieldMapLayer {
   /**
    * Specifies the URL to a JSON file that defines the geographic extents of each region available in the map layer. This data is used to automatically center the map on the available data for visualization purposes. The JSON file must be a JSON object where the keys are the mapping value of the feature (as specified by property_key) and the values are arrays of four numbers representing the west longitude, south latitude, east longitude, and north latitude extents of the region. The object must include a key for every possible value of property_key. (read-only)
    */
-  extents_json_url?: string
+  extents_json_url?: string | null
   /**
    * The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
    */
-  max_zoom_level?: number
+  max_zoom_level?: number | null
   /**
    * The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming. (read-only)
    */
-  min_zoom_level?: number
+  min_zoom_level?: number | null
 }
 
 export interface ILookmlModelExploreFieldMeasureFilters {
   /**
    * Filter field name (read-only)
    */
-  field?: string
+  field?: string | null
   /**
    * Filter condition value (read-only)
    */
-  condition?: string
+  condition?: string | null
 }
 
 export interface ILookmlModelExploreFieldset {
   /**
    * Array of dimensions (read-only)
    */
-  dimensions?: ILookmlModelExploreField[]
+  dimensions?: ILookmlModelExploreField[] | null
   /**
    * Array of measures (read-only)
    */
-  measures?: ILookmlModelExploreField[]
+  measures?: ILookmlModelExploreField[] | null
   /**
    * Array of filters (read-only)
    */
-  filters?: ILookmlModelExploreField[]
+  filters?: ILookmlModelExploreField[] | null
   /**
    * Array of parameters (read-only)
    */
-  parameters?: ILookmlModelExploreField[]
+  parameters?: ILookmlModelExploreField[] | null
 }
 
 export interface ILookmlModelExploreFieldSqlCase {
   /**
    * SQL Case label value (read-only)
    */
-  value?: string
+  value?: string | null
   /**
    * SQL Case condition expression (read-only)
    */
-  condition?: string
+  condition?: string | null
 }
 
 export interface ILookmlModelExploreFieldTimeInterval {
@@ -5060,92 +5060,92 @@ export interface ILookmlModelExploreJoins {
   /**
    * Name of this join (and name of the view to join) (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Fields referenced by the join (read-only)
    */
-  dependent_fields?: string[]
+  dependent_fields?: string[] | null
   /**
    * Fields of the joined view to pull into this explore (read-only)
    */
-  fields?: string[]
+  fields?: string[] | null
   /**
    * Name of the dimension in this explore whose value is in the primary key of the joined view (read-only)
    */
-  foreign_key?: string
+  foreign_key?: string | null
   /**
    * Name of view to join (read-only)
    */
-  from?: string
+  from?: string | null
   /**
    * Specifies whether all queries must use an outer join (read-only)
    */
-  outer_only?: boolean
+  outer_only?: boolean | null
   /**
    * many_to_one, one_to_one, one_to_many, many_to_many (read-only)
    */
-  relationship?: string
+  relationship?: string | null
   /**
    * Names of joins that must always be included in SQL queries (read-only)
    */
-  required_joins?: string[]
+  required_joins?: string[] | null
   /**
    * SQL expression that produces a foreign key (read-only)
    */
-  sql_foreign_key?: string
+  sql_foreign_key?: string | null
   /**
    * SQL ON expression describing the join condition (read-only)
    */
-  sql_on?: string
+  sql_on?: string | null
   /**
    * SQL table name to join (read-only)
    */
-  sql_table_name?: string
+  sql_table_name?: string | null
   /**
    * The join type: left_outer, full_outer, inner, or cross (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * Label to display in UI selectors (read-only)
    */
-  view_label?: string
+  view_label?: string | null
 }
 
 export interface ILookmlModelExploreSet {
   /**
    * Name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Value set (read-only)
    */
-  value?: string[]
+  value?: string[] | null
 }
 
 export interface ILookmlModelExploreSupportedMeasureType {
   /**
    *  (read-only)
    */
-  dimension_type?: string
+  dimension_type?: string | null
   /**
    *  (read-only)
    */
-  measure_types?: string[]
+  measure_types?: string[] | null
 }
 
 export interface ILookmlModelNavExplore {
   /**
    * Name of the explore (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Description for the explore (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Label for the explore (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Is this explore marked as hidden (read-only)
    */
@@ -5153,7 +5153,7 @@ export interface ILookmlModelNavExplore {
   /**
    * Label used to group explores in the navigation menus (read-only)
    */
-  group_label?: string
+  group_label?: string | null
 }
 
 export interface ILookmlTest {
@@ -5184,7 +5184,7 @@ export interface ILookmlTest {
   /**
    * Line number of this test in LookML. (read-only)
    */
-  line?: number
+  line?: number | null
 }
 
 export interface ILookmlTestResult {
@@ -5211,11 +5211,11 @@ export interface ILookmlTestResult {
   /**
    * A list of any errors encountered by the test. (read-only)
    */
-  errors?: IProjectError[]
+  errors?: IProjectError[] | null
   /**
    * A list of any warnings encountered by the test. (read-only)
    */
-  warnings?: IProjectError[]
+  warnings?: IProjectError[] | null
   /**
    * True if this test passsed without errors. (read-only)
    */
@@ -5230,7 +5230,7 @@ export interface ILookModel {
   /**
    * Model Label (read-only)
    */
-  label?: string
+  label?: string | null
 }
 
 export interface ILookWithDashboards {
@@ -5241,7 +5241,7 @@ export interface ILookWithDashboards {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -5249,19 +5249,19 @@ export interface ILookWithDashboards {
   /**
    * Look Title
    */
-  title?: string
+  title?: string | null
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Content Favorite Id (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Time that the Look was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -5269,35 +5269,35 @@ export interface ILookWithDashboards {
   /**
    * Time that the Look was deleted. (read-only)
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Id of User that deleted the look. (read-only)
    */
-  deleter_id?: number
+  deleter_id?: number | null
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Embed Url (read-only)
    */
-  embed_url?: string
+  embed_url?: string | null
   /**
    * Excel File Url (read-only)
    */
-  excel_file_url?: string
+  excel_file_url?: string | null
   /**
    * Number of times favorited (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Google Spreadsheet Formula (read-only)
    */
-  google_spreadsheet_formula?: string
+  google_spreadsheet_formula?: string | null
   /**
    * Image Embed Url (read-only)
    */
-  image_embed_url?: string
+  image_embed_url?: string | null
   /**
    * auto-run query when Look viewed
    */
@@ -5305,15 +5305,15 @@ export interface ILookWithDashboards {
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  last_accessed_at?: Date
+  last_accessed_at?: Date | null
   /**
    * Id of User that last updated the look. (read-only)
    */
-  last_updater_id?: number
+  last_updater_id?: number | null
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  last_viewed_at?: Date
+  last_viewed_at?: Date | null
   model?: ILookModel
   /**
    * Is Public
@@ -5322,36 +5322,36 @@ export interface ILookWithDashboards {
   /**
    * Public Slug (read-only)
    */
-  public_slug?: string
+  public_slug?: string | null
   /**
    * Public Url (read-only)
    */
-  public_url?: string
+  public_url?: string | null
   /**
    * Query Id
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Short Url (read-only)
    */
-  short_url?: string
+  short_url?: string | null
   folder?: IFolderBase
   /**
    * Folder Id
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Time that the Look was updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Number of times viewed in the Looker web UI (read-only)
    */
-  view_count?: number
+  view_count?: number | null
   /**
    * Dashboards (read-only)
    */
-  dashboards?: IDashboardBase[]
+  dashboards?: IDashboardBase[] | null
 }
 
 export interface ILookWithQuery {
@@ -5362,7 +5362,7 @@ export interface ILookWithQuery {
   /**
    * Id of content metadata (read-only)
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -5370,19 +5370,19 @@ export interface ILookWithQuery {
   /**
    * Look Title
    */
-  title?: string
+  title?: string | null
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Content Favorite Id (read-only)
    */
-  content_favorite_id?: number
+  content_favorite_id?: number | null
   /**
    * Time that the Look was created. (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -5390,35 +5390,35 @@ export interface ILookWithQuery {
   /**
    * Time that the Look was deleted. (read-only)
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Id of User that deleted the look. (read-only)
    */
-  deleter_id?: number
+  deleter_id?: number | null
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Embed Url (read-only)
    */
-  embed_url?: string
+  embed_url?: string | null
   /**
    * Excel File Url (read-only)
    */
-  excel_file_url?: string
+  excel_file_url?: string | null
   /**
    * Number of times favorited (read-only)
    */
-  favorite_count?: number
+  favorite_count?: number | null
   /**
    * Google Spreadsheet Formula (read-only)
    */
-  google_spreadsheet_formula?: string
+  google_spreadsheet_formula?: string | null
   /**
    * Image Embed Url (read-only)
    */
-  image_embed_url?: string
+  image_embed_url?: string | null
   /**
    * auto-run query when Look viewed
    */
@@ -5426,15 +5426,15 @@ export interface ILookWithQuery {
   /**
    * Time that the Look was last accessed by any user (read-only)
    */
-  last_accessed_at?: Date
+  last_accessed_at?: Date | null
   /**
    * Id of User that last updated the look. (read-only)
    */
-  last_updater_id?: number
+  last_updater_id?: number | null
   /**
    * Time last viewed in the Looker web UI (read-only)
    */
-  last_viewed_at?: Date
+  last_viewed_at?: Date | null
   model?: ILookModel
   /**
    * Is Public
@@ -5443,37 +5443,37 @@ export interface ILookWithQuery {
   /**
    * Public Slug (read-only)
    */
-  public_slug?: string
+  public_slug?: string | null
   /**
    * Public Url (read-only)
    */
-  public_url?: string
+  public_url?: string | null
   /**
    * Query Id
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Short Url (read-only)
    */
-  short_url?: string
+  short_url?: string | null
   folder?: IFolderBase
   /**
    * Folder Id
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Time that the Look was updated. (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Number of times viewed in the Looker web UI (read-only)
    */
-  view_count?: number
+  view_count?: number | null
   query?: IQuery
   /**
    * Url (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IManifest {
@@ -5484,11 +5484,11 @@ export interface IManifest {
   /**
    * Manifest project name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Imports for a project (read-only)
    */
-  imports?: IImportedProject[]
+  imports?: IImportedProject[] | null
   localization_settings?: ILocalizationSettings
 }
 
@@ -5496,11 +5496,11 @@ export interface IMergeFields {
   /**
    * Field name to map onto in the merged results
    */
-  field_name?: string
+  field_name?: string | null
   /**
    * Field name from the source query
    */
-  source_field_name?: string
+  source_field_name?: string | null
 }
 
 export interface IMergeQuery {
@@ -5511,11 +5511,11 @@ export interface IMergeQuery {
   /**
    * Column Limit
    */
-  column_limit?: string
+  column_limit?: string | null
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string
+  dynamic_fields?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -5523,19 +5523,19 @@ export interface IMergeQuery {
   /**
    * Pivots
    */
-  pivots?: string[]
+  pivots?: string[] | null
   /**
    * Unique to get results (read-only)
    */
-  result_maker_id?: number
+  result_maker_id?: number | null
   /**
    * Sorts
    */
-  sorts?: string[]
+  sorts?: string[] | null
   /**
    * Source Queries defining the results to be merged.
    */
-  source_queries?: IMergeQuerySourceQuery[]
+  source_queries?: IMergeQuerySourceQuery[] | null
   /**
    * Total
    */
@@ -5543,22 +5543,22 @@ export interface IMergeQuery {
   /**
    * Visualization Config
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<string> | null
 }
 
 export interface IMergeQuerySourceQuery {
   /**
    * An array defining which fields of the source query are mapped onto fields of the merge query
    */
-  merge_fields?: IMergeFields[]
+  merge_fields?: IMergeFields[] | null
   /**
    * Display name
    */
-  name?: string
+  name?: string | null
   /**
    * Id of the query to merge
    */
-  query_id?: number
+  query_id?: number | null
 }
 
 export interface IMobileSettings {
@@ -5576,7 +5576,7 @@ export interface IModel {
   /**
    *  (read-only)
    */
-  connection?: string
+  connection?: string | null
   /**
    *  (read-only)
    */
@@ -5584,7 +5584,7 @@ export interface IModel {
   /**
    * Array of named value formats (read-only)
    */
-  value_formats?: IModelNamedValueFormats[]
+  value_formats?: IModelNamedValueFormats[] | null
 }
 
 export interface IModelFieldSuggestions {
@@ -5595,7 +5595,7 @@ export interface IModelFieldSuggestions {
   /**
    * Error message (read-only)
    */
-  error?: string
+  error?: string | null
   /**
    * True if result came from the cache (read-only)
    */
@@ -5646,26 +5646,26 @@ export interface IModelSet {
    * Unique Id (read-only)
    */
   id?: number
-  models?: string[]
+  models?: string[] | null
   /**
    * Name of ModelSet
    */
-  name?: string
+  name?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IModelsNotValidated {
   /**
    * Model name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Project file (read-only)
    */
-  project_file_id?: string
+  project_file_id?: string | null
 }
 
 /**
@@ -5712,7 +5712,7 @@ export interface IOauthClientApp {
   /**
    * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
    */
-  group_id?: number
+  group_id?: number | null
   /**
    * All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
    */
@@ -5735,7 +5735,7 @@ export interface IOIDCConfig {
   /**
    * OpenID Provider Audience
    */
-  audience?: string
+  audience?: string | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
    */
@@ -5743,23 +5743,23 @@ export interface IOIDCConfig {
   /**
    * OpenID Provider Authorization Url
    */
-  authorization_endpoint?: string
+  authorization_endpoint?: string | null
   /**
    * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
    */
-  default_new_user_groups?: IGroup[]
+  default_new_user_groups?: IGroup[] | null
   /**
    * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
    */
-  default_new_user_roles?: IRole[]
+  default_new_user_roles?: IRole[] | null
   /**
    * Enable/Disable OIDC authentication for the server
    */
@@ -5767,43 +5767,43 @@ export interface IOIDCConfig {
   /**
    * (Read-only) Array of mappings between OIDC Groups and Looker Roles (read-only)
    */
-  groups?: IOIDCGroupRead[]
+  groups?: IOIDCGroupRead[] | null
   /**
    * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
    */
-  groups_attribute?: string
+  groups_attribute?: string | null
   /**
    * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: IOIDCGroupWrite[]
+  groups_with_role_ids?: IOIDCGroupWrite[] | null
   /**
    * Relying Party Identifier (provided by OpenID Provider)
    */
-  identifier?: string
+  identifier?: string | null
   /**
    * OpenID Provider Issuer
    */
-  issuer?: string
+  issuer?: string | null
   /**
    * When this config was last modified (read-only)
    */
-  modified_at?: Date
+  modified_at?: Date | null
   /**
    * User id of user who last modified this config (read-only)
    */
-  modified_by?: number
+  modified_by?: number | null
   /**
    * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
    */
-  new_user_migration_types?: string
+  new_user_migration_types?: string | null
   /**
    * Array of scopes to request.
    */
-  scopes?: string[]
+  scopes?: string[] | null
   /**
    * (Write-Only) Relying Party Secret (provided by OpenID Provider)
    */
-  secret?: string
+  secret?: string | null
   /**
    * Set user roles in Looker based on groups from OIDC
    */
@@ -5811,35 +5811,35 @@ export interface IOIDCConfig {
   /**
    * Slug to identify configurations that are created in order to run a OIDC config test (read-only)
    */
-  test_slug?: string
+  test_slug?: string | null
   /**
    * OpenID Provider Token Url
    */
-  token_endpoint?: string
+  token_endpoint?: string | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * (Read-only) Array of mappings between OIDC User Attributes and Looker User Attributes (read-only)
    */
-  user_attributes?: IOIDCUserAttributeRead[]
+  user_attributes?: IOIDCUserAttributeRead[] | null
   /**
    * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: IOIDCUserAttributeWrite[]
+  user_attributes_with_ids?: IOIDCUserAttributeWrite[] | null
   /**
    * OpenID Provider User Information Url
    */
-  userinfo_endpoint?: string
+  userinfo_endpoint?: string | null
   /**
    * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
    */
@@ -5855,7 +5855,7 @@ export interface IOIDCConfig {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IOIDCGroupRead {
@@ -5866,49 +5866,49 @@ export interface IOIDCGroupRead {
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker (read-only)
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in OIDC (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Roles (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
 }
 
 export interface IOIDCGroupWrite {
   /**
    * Unique Id
    */
-  id?: number
+  id?: number | null
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in OIDC
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Role Ids
    */
-  role_ids?: number[]
+  role_ids?: number[] | null
 }
 
 export interface IOIDCUserAttributeRead {
   /**
    * Name of User Attribute in OIDC (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in OIDC assertion for login to be allowed to succeed (read-only)
    */
@@ -5916,14 +5916,14 @@ export interface IOIDCUserAttributeRead {
   /**
    * Looker User Attributes (read-only)
    */
-  user_attributes?: IUserAttribute[]
+  user_attributes?: IUserAttribute[] | null
 }
 
 export interface IOIDCUserAttributeWrite {
   /**
    * Name of User Attribute in OIDC
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in OIDC assertion for login to be allowed to succeed
    */
@@ -5931,7 +5931,7 @@ export interface IOIDCUserAttributeWrite {
   /**
    * Looker User Attribute Ids
    */
-  user_attribute_ids?: number[]
+  user_attribute_ids?: number[] | null
 }
 
 export interface IPasswordConfig {
@@ -5942,7 +5942,7 @@ export interface IPasswordConfig {
   /**
    * Minimum number of characters required for a new password.  Must be between 7 and 100
    */
-  min_length?: number
+  min_length?: number | null
   /**
    * Require at least one numeric character
    */
@@ -5965,15 +5965,15 @@ export interface IPermission {
   /**
    * Permission symbol (read-only)
    */
-  permission?: string
+  permission?: string | null
   /**
    * Dependency parent symbol (read-only)
    */
-  parent?: string
+  parent?: string | null
   /**
    * Description (read-only)
    */
-  description?: string
+  description?: string | null
 }
 
 export interface IPermissionSet {
@@ -5996,12 +5996,12 @@ export interface IPermissionSet {
   /**
    * Name of PermissionSet
    */
-  name?: string
-  permissions?: string[]
+  name?: string | null
+  permissions?: string[] | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 /**
@@ -6032,15 +6032,15 @@ export interface IProject {
   /**
    * Git remote repository url
    */
-  git_remote_url?: string
+  git_remote_url?: string | null
   /**
    * Git username for HTTPS authentication. (For production only, if using user attributes.)
    */
-  git_username?: string
+  git_username?: string | null
   /**
    * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
    */
-  git_password?: string
+  git_password?: string | null
   /**
    * Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
    */
@@ -6052,27 +6052,27 @@ export interface IProject {
   /**
    * User attribute name for username in per-user HTTPS authentication.
    */
-  git_username_user_attribute?: string
+  git_username_user_attribute?: string | null
   /**
    * User attribute name for password in per-user HTTPS authentication.
    */
-  git_password_user_attribute?: string
+  git_password_user_attribute?: string | null
   /**
    * Name of the git service provider
    */
-  git_service_name?: string
+  git_service_name?: string | null
   /**
    * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
    */
-  git_application_server_http_port?: number
+  git_application_server_http_port?: number | null
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.)
    */
-  git_application_server_http_scheme?: string
+  git_application_server_http_scheme?: string | null
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
-  deploy_secret?: string
+  deploy_secret?: string | null
   /**
    * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
    */
@@ -6100,58 +6100,58 @@ export interface IProject {
   /**
    * Status of dependencies in your manifest & lockfile
    */
-  dependency_status?: string
+  dependency_status?: string | null
 }
 
 export interface IProjectError {
   /**
    * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
    */
-  code?: string
+  code?: string | null
   /**
    * Severity: fatal, error, warning, info, success (read-only)
    */
-  severity?: string
+  severity?: string | null
   /**
    * Error classification: syntax, deprecation, model_configuration, etc (read-only)
    */
-  kind?: string
+  kind?: string | null
   /**
    * Error message which may contain information such as dashboard or model names that may be considered sensitive in some use cases. Avoid storing or sending this message outside of Looker (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * The field associated with this error (read-only)
    */
-  field_name?: string
+  field_name?: string | null
   /**
    * Name of the file containing this error (read-only)
    */
-  file_path?: string
+  file_path?: string | null
   /**
    * Line number in the file of this error (read-only)
    */
-  line_number?: number
+  line_number?: number | null
   /**
    * The model associated with this error (read-only)
    */
-  model_id?: string
+  model_id?: string | null
   /**
    * The explore associated with this error (read-only)
    */
-  explore?: string
+  explore?: string | null
   /**
    * A link to Looker documentation about this error (read-only)
    */
-  help_url?: string
+  help_url?: string | null
   /**
    * Error parameters (read-only)
    */
-  params?: IDictionary<any>
+  params?: IDictionary<any> | null
   /**
    * A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message (read-only)
    */
-  sanitized_message?: string
+  sanitized_message?: string | null
 }
 
 export interface IProjectFile {
@@ -6166,23 +6166,23 @@ export interface IProjectFile {
   /**
    * Path, file name, and extension of the file relative to the project root directory (read-only)
    */
-  path?: string
+  path?: string | null
   /**
    * Display name (read-only)
    */
-  title?: string
+  title?: string | null
   /**
    * File type: model, view, etc (read-only)
    */
-  type?: string
+  type?: string | null
   /**
    * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
    */
-  extension?: string
+  extension?: string | null
   /**
    * File mime type (read-only)
    */
-  mime_type?: string
+  mime_type?: string | null
   /**
    * State of editability for the file. (read-only)
    */
@@ -6194,38 +6194,38 @@ export interface IProjectValidation {
   /**
    * A list of project errors (read-only)
    */
-  errors?: IProjectError[]
+  errors?: IProjectError[] | null
   /**
    * A hash value computed from the project's current state (read-only)
    */
-  project_digest?: string
+  project_digest?: string | null
   /**
    * A list of models which were not fully validated (read-only)
    */
-  models_not_validated?: IModelsNotValidated[]
+  models_not_validated?: IModelsNotValidated[] | null
   /**
    * Duration of project validation in seconds (read-only)
    */
-  computation_time?: number
+  computation_time?: number | null
 }
 
 export interface IProjectValidationCache {
   /**
    * A list of project errors (read-only)
    */
-  errors?: IProjectError[]
+  errors?: IProjectError[] | null
   /**
    * A hash value computed from the project's current state (read-only)
    */
-  project_digest?: string
+  project_digest?: string | null
   /**
    * A list of models which were not fully validated (read-only)
    */
-  models_not_validated?: IModelsNotValidated[]
+  models_not_validated?: IModelsNotValidated[] | null
   /**
    * Duration of project validation in seconds (read-only)
    */
-  computation_time?: number
+  computation_time?: number | null
   /**
    * If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated (read-only)
    */
@@ -6240,28 +6240,28 @@ export interface IProjectWorkspace {
   /**
    * The id of the project (read-only)
    */
-  project_id?: string
+  project_id?: string | null
   /**
    * The id of the local workspace containing the project files (read-only)
    */
-  workspace_id?: string
+  workspace_id?: string | null
   /**
    * The status of the local git directory (read-only)
    */
-  git_status?: string
+  git_status?: string | null
   /**
    * Git head revision name (read-only)
    */
-  git_head?: string
+  git_head?: string | null
   /**
    * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (read-only)
    */
-  dependency_status?: DependencyStatus
+  dependency_status?: DependencyStatus | null
   git_branch?: IGitBranch
   /**
    * The lookml syntax used by all files in this project (read-only)
    */
-  lookml_type?: string
+  lookml_type?: string | null
 }
 
 /**
@@ -6294,87 +6294,87 @@ export interface IQuery {
   /**
    * Fields
    */
-  fields?: string[]
+  fields?: string[] | null
   /**
    * Pivots
    */
-  pivots?: string[]
+  pivots?: string[] | null
   /**
    * Fill Fields
    */
-  fill_fields?: string[]
+  fill_fields?: string[] | null
   /**
    * Filters
    */
-  filters?: IDictionary<string>
+  filters?: IDictionary<string> | null
   /**
    * Filter Expression
    */
-  filter_expression?: string
+  filter_expression?: string | null
   /**
    * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
    */
-  sorts?: string[]
+  sorts?: string[] | null
   /**
    * Limit
    */
-  limit?: string
+  limit?: string | null
   /**
    * Column Limit
    */
-  column_limit?: string
+  column_limit?: string | null
   /**
    * Total
    */
-  total?: boolean
+  total?: boolean | null
   /**
    * Raw Total
    */
-  row_total?: string
+  row_total?: string | null
   /**
    * Fields on which to run subtotals
    */
-  subtotals?: string[]
+  subtotals?: string[] | null
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<any>
+  vis_config?: IDictionary<any> | null
   /**
    * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
    */
-  filter_config?: IDictionary<any>
+  filter_config?: IDictionary<any> | null
   /**
    * Visible UI Sections
    */
-  visible_ui_sections?: string
+  visible_ui_sections?: string | null
   /**
    * Slug (read-only)
    */
-  slug?: string
+  slug?: string | null
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string
+  dynamic_fields?: string | null
   /**
    * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
    */
-  client_id?: string
+  client_id?: string | null
   /**
    * Share Url (read-only)
    */
-  share_url?: string
+  share_url?: string | null
   /**
    * Expanded Share Url (read-only)
    */
-  expanded_share_url?: string
+  expanded_share_url?: string | null
   /**
    * Expanded Url (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Query Timezone
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Has Table Calculations (read-only)
    */
@@ -6393,7 +6393,7 @@ export interface IQueryTask {
   /**
    * Id of query
    */
-  query_id?: number
+  query_id?: number | null
   query?: IQuery
   /**
    * whether or not to generate links in the query response.
@@ -6406,7 +6406,7 @@ export interface IQueryTask {
   /**
    * Prefix to use for drill links.
    */
-  path_prefix?: string
+  path_prefix?: string | null
   /**
    * Whether or not to use the cache
    */
@@ -6422,19 +6422,19 @@ export interface IQueryTask {
   /**
    * cache key used to cache query. (read-only)
    */
-  cache_key?: string
+  cache_key?: string | null
   /**
    * Status of query task.
    */
-  status?: string
+  status?: string | null
   /**
    * Source of query task.
    */
-  source?: string
+  source?: string | null
   /**
    * Runtime of prior queries. (read-only)
    */
-  runtime?: number
+  runtime?: number | null
   /**
    * Rebuild PDTS used in query.
    */
@@ -6442,19 +6442,19 @@ export interface IQueryTask {
   /**
    * Source of the results of the query. (read-only)
    */
-  result_source?: string
+  result_source?: string | null
   /**
    * Id of look associated with query.
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of dashboard associated with query.
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * The data format of the query results. (read-only)
    */
-  result_format?: string
+  result_format?: string | null
 }
 
 export interface IRenderTask {
@@ -6465,27 +6465,27 @@ export interface IRenderTask {
   /**
    * Date/Time render task was created (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Filter values to apply to the dashboard queries, in URL query format (read-only)
    */
-  dashboard_filters?: string
+  dashboard_filters?: string | null
   /**
    * Id of dashboard to render (read-only)
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Dashboard layout style: single_column or tiled (read-only)
    */
-  dashboard_style?: string
+  dashboard_style?: string | null
   /**
    * Date/Time render task was completed (read-only)
    */
-  finalized_at?: string
+  finalized_at?: string | null
   /**
    * Output height in pixels. Flowed layouts may ignore this value. (read-only)
    */
-  height?: number
+  height?: number | null
   /**
    * Id of this render task (read-only)
    */
@@ -6493,51 +6493,51 @@ export interface IRenderTask {
   /**
    * Id of look to render (read-only)
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of lookml dashboard to render (read-only)
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * Id of query to render (read-only)
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
    */
-  dashboard_element_id?: string
+  dashboard_element_id?: string | null
   /**
    * Number of seconds elapsed running queries (read-only)
    */
-  query_runtime?: number
+  query_runtime?: number | null
   /**
    * Number of seconds elapsed rendering data (read-only)
    */
-  render_runtime?: number
+  render_runtime?: number | null
   /**
    * Output format: pdf, png, or jpg (read-only)
    */
-  result_format?: string
+  result_format?: string | null
   /**
    * Total seconds elapsed for render task (read-only)
    */
-  runtime?: number
+  runtime?: number | null
   /**
    * Render task status: enqueued_for_query, querying, enqueued_for_render, rendering, success, failure (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * Additional information about the current status (read-only)
    */
-  status_detail?: string
+  status_detail?: string | null
   /**
    * The user account permissions in which the render task will execute (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Output width in pixels (read-only)
    */
-  width?: number
+  width?: number | null
 }
 
 export interface IRepositoryCredential {
@@ -6560,15 +6560,15 @@ export interface IRepositoryCredential {
   /**
    * Git username for HTTPS authentication.
    */
-  git_username?: string
+  git_username?: string | null
   /**
    * (Write-Only) Git password for HTTPS authentication.
    */
-  git_password?: string
+  git_password?: string | null
   /**
    * Public deploy key for SSH authentication.
    */
-  ssh_public_key?: string
+  ssh_public_key?: string | null
   /**
    * Whether the credentials have been configured for the Git Repository. (read-only)
    */
@@ -6582,15 +6582,15 @@ export interface IRequestActiveThemes {
   /**
    * Name of theme
    */
-  name?: string
+  name?: string | null
   /**
    * Timestamp representing the target datetime for the active period. Defaults to 'now'
    */
-  ts?: Date
+  ts?: Date | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -6600,15 +6600,15 @@ export interface IRequestAllBoardItems {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Filter to a specific board section
    */
-  board_section_id?: string
+  board_section_id?: string | null
 }
 
 /**
@@ -6618,11 +6618,11 @@ export interface IRequestAllBoardSections {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
 }
 
 /**
@@ -6632,11 +6632,11 @@ export interface IRequestAllExternalOauthApplications {
   /**
    * Application name
    */
-  name?: string
+  name?: string | null
   /**
    * Application Client ID
    */
-  client_id?: string
+  client_id?: string | null
 }
 
 /**
@@ -6646,31 +6646,31 @@ export interface IRequestAllGroups {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Optional of ids to get specific groups.
    */
-  ids?: DelimArray<number>
+  ids?: DelimArray<number> | null
   /**
    * Id of content metadata to which groups must have access.
    */
-  content_metadata_id?: number
+  content_metadata_id?: number | null
   /**
    * Select only groups that either can/cannot be given access to content.
    */
-  can_add_to_content_metadata?: boolean
+  can_add_to_content_metadata?: boolean | null
 }
 
 /**
@@ -6684,19 +6684,19 @@ export interface IRequestAllGroupUsers {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
 }
 
 /**
@@ -6706,11 +6706,11 @@ export interface IRequestAllIntegrations {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Filter to a specific provider
    */
-  integration_hub_id?: string
+  integration_hub_id?: string | null
 }
 
 /**
@@ -6720,15 +6720,15 @@ export interface IRequestAllLookmlModels {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return. (can be used with offset)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
    */
-  offset?: number
+  offset?: number | null
 }
 
 /**
@@ -6738,11 +6738,11 @@ export interface IRequestAllRoles {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Optional list of ids to get specific roles.
    */
-  ids?: DelimArray<number>
+  ids?: DelimArray<number> | null
 }
 
 /**
@@ -6752,15 +6752,15 @@ export interface IRequestAllScheduledPlans {
   /**
    * Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Comma delimited list of field names. If provided, only the fields specified will be included in the response
    */
-  fields?: string
+  fields?: string | null
   /**
    * Return scheduled plans belonging to all users (caller needs see_schedules permission)
    */
-  all_users?: boolean
+  all_users?: boolean | null
 }
 
 /**
@@ -6770,31 +6770,31 @@ export interface IRequestAllUsers {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
-  page?: number
+  page?: number | null
   /**
    * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Optional list of ids to get specific users.
    */
-  ids?: DelimArray<number>
+  ids?: DelimArray<number> | null
 }
 
 /**
@@ -6808,27 +6808,27 @@ export interface IRequestConnectionColumns {
   /**
    * For dialects that support multiple databases, optionally identify which to use
    */
-  database?: string
+  database?: string | null
   /**
    * Name of schema to use.
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * True to fetch from cache, false to load fresh
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * limits the tables per schema returned
    */
-  table_limit?: number
+  table_limit?: number | null
   /**
    * only fetch columns for a given (comma-separated) list of tables
    */
-  table_names?: string
+  table_names?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -6842,15 +6842,15 @@ export interface IRequestConnectionSchemas {
   /**
    * For dialects that support multiple databases, optionally identify which to use
    */
-  database?: string
+  database?: string | null
   /**
    * True to use fetch from cache, false to load fresh
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -6864,11 +6864,11 @@ export interface IRequestConnectionSearchColumns {
   /**
    * Column name to find
    */
-  column_name?: string
+  column_name?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -6882,19 +6882,19 @@ export interface IRequestConnectionTables {
   /**
    * Optional. Name of database to use for the query, only if applicable
    */
-  database?: string
+  database?: string | null
   /**
    * Optional. Return only tables for this schema
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * True to fetch from cache, false to load fresh
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -6912,19 +6912,19 @@ export interface IRequestContentThumbnail {
   /**
    * Whether or not to refresh the rendered image with the latest content
    */
-  reload?: string
+  reload?: string | null
   /**
    * A value of png produces a thumbnail in PNG format instead of SVG (default)
    */
-  format?: string
+  format?: string | null
   /**
    * The width of the image if format is supplied
    */
-  width?: number
+  width?: number | null
   /**
    * The height of the image if format is supplied
    */
-  height?: number
+  height?: number | null
 }
 
 /**
@@ -6954,19 +6954,19 @@ export interface IRequestCreateDashboardRenderTask {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
    */
-  pdf_paper_size?: string
+  pdf_paper_size?: string | null
   /**
    * Whether to render pdf in landscape paper orientation
    */
-  pdf_landscape?: boolean
+  pdf_landscape?: boolean | null
   /**
    * Whether or not to expand table vis to full length
    */
-  long_tables?: boolean
+  long_tables?: boolean | null
 }
 
 /**
@@ -6980,55 +6980,55 @@ export interface IRequestCreateQueryTask {
   /**
    * Row limit (may override the limit in the saved query).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Apply model-specified formatting to each result.
    */
-  apply_formatting?: boolean
+  apply_formatting?: boolean | null
   /**
    * Apply visualization options to results.
    */
-  apply_vis?: boolean
+  apply_vis?: boolean | null
   /**
    * Get results from cache if available.
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Render width for image formats.
    */
-  image_width?: number
+  image_width?: number | null
   /**
    * Render height for image formats.
    */
-  image_height?: number
+  image_height?: number | null
   /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
-  generate_drill_links?: boolean
+  generate_drill_links?: boolean | null
   /**
    * Force use of production models even if the user is in development mode.
    */
-  force_production?: boolean
+  force_production?: boolean | null
   /**
    * Retrieve any results from cache even if the results have expired.
    */
-  cache_only?: boolean
+  cache_only?: boolean | null
   /**
    * Prefix to use for drill links (url encoded).
    */
-  path_prefix?: string
+  path_prefix?: string | null
   /**
    * Rebuild PDTS used in query.
    */
-  rebuild_pdts?: boolean
+  rebuild_pdts?: boolean | null
   /**
    * Perform table calculations on query results
    */
-  server_table_calcs?: boolean
+  server_table_calcs?: boolean | null
   /**
    * Requested fields
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -7042,11 +7042,11 @@ export interface IRequestCreateUserCredentialsEmailPasswordReset {
   /**
    * Expiring token.
    */
-  expires?: boolean
+  expires?: boolean | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -7060,11 +7060,11 @@ export interface IRequestDeployRefToProduction {
   /**
    * Branch to deploy to production
    */
-  branch?: string
+  branch?: string | null
   /**
    * Ref to deploy to production
    */
-  ref?: string
+  ref?: string | null
 }
 
 /**
@@ -7078,19 +7078,19 @@ export interface IRequestFolderChildren {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
 }
 
 /**
@@ -7104,15 +7104,15 @@ export interface IRequestFolderChildrenSearch {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match folder name.
    */
-  name?: string
+  name?: string | null
 }
 
 /**
@@ -7122,15 +7122,15 @@ export interface IRequestGetAllCommands {
   /**
    * Id of the associated content. This must be accompanied with content_type.
    */
-  content_id?: string
+  content_id?: string | null
   /**
    * Type of the associated content. This must be accompanied with content_id.
    */
-  content_type?: string
+  content_type?: string | null
   /**
    * Number of results to return.
    */
-  limit?: number
+  limit?: number | null
 }
 
 /**
@@ -7144,11 +7144,11 @@ export interface IRequestGraphDerivedTablesForModel {
   /**
    * The format of the graph. Valid values are [dot]. Default is `dot`
    */
-  format?: string
+  format?: string | null
   /**
    * Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
    */
-  color?: string
+  color?: string | null
 }
 
 /**
@@ -7162,11 +7162,11 @@ export interface IRequestGraphDerivedTablesForView {
   /**
    * The models where this derived table is defined.
    */
-  models?: string
+  models?: string | null
   /**
    * The model directory to look in, either `dev` or `production`.
    */
-  workspace?: string
+  workspace?: string | null
 }
 
 /**
@@ -7176,11 +7176,11 @@ export interface IRequestLogin {
   /**
    * client_id part of API3 Key.
    */
-  client_id?: string
+  client_id?: string | null
   /**
    * client_secret part of API3 Key.
    */
-  client_secret?: string
+  client_secret?: string | null
 }
 
 /**
@@ -7202,11 +7202,11 @@ export interface IRequestModelFieldnameSuggestions {
   /**
    * Search term
    */
-  term?: string
+  term?: string | null
   /**
    * Suggestion filters
    */
-  filters?: string
+  filters?: string | null
 }
 
 /**
@@ -7220,11 +7220,11 @@ export interface IRequestRoleUsers {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Get only users associated directly with the role: exclude those only associated through groups.
    */
-  direct_association_only?: boolean
+  direct_association_only?: boolean | null
 }
 
 /**
@@ -7242,11 +7242,11 @@ export interface IRequestRunGitConnectionTest {
   /**
    * (Optional: leave blank for root project) The remote url for remote dependency to test.
    */
-  remote_url?: string
+  remote_url?: string | null
   /**
    * (Optional: leave blank for dev credentials) Whether to use git production credentials.
    */
-  use_production?: string
+  use_production?: string | null
 }
 
 /**
@@ -7264,51 +7264,51 @@ export interface IRequestRunInlineQuery {
   /**
    * Row limit (may override the limit in the saved query).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Apply model-specified formatting to each result.
    */
-  apply_formatting?: boolean
+  apply_formatting?: boolean | null
   /**
    * Apply visualization options to results.
    */
-  apply_vis?: boolean
+  apply_vis?: boolean | null
   /**
    * Get results from cache if available.
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Render width for image formats.
    */
-  image_width?: number
+  image_width?: number | null
   /**
    * Render height for image formats.
    */
-  image_height?: number
+  image_height?: number | null
   /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
-  generate_drill_links?: boolean
+  generate_drill_links?: boolean | null
   /**
    * Force use of production models even if the user is in development mode.
    */
-  force_production?: boolean
+  force_production?: boolean | null
   /**
    * Retrieve any results from cache even if the results have expired.
    */
-  cache_only?: boolean
+  cache_only?: boolean | null
   /**
    * Prefix to use for drill links (url encoded).
    */
-  path_prefix?: string
+  path_prefix?: string | null
   /**
    * Rebuild PDTS used in query.
    */
-  rebuild_pdts?: boolean
+  rebuild_pdts?: boolean | null
   /**
    * Perform table calculations on query results
    */
-  server_table_calcs?: boolean
+  server_table_calcs?: boolean | null
 }
 
 /**
@@ -7326,51 +7326,51 @@ export interface IRequestRunLook {
   /**
    * Row limit (may override the limit in the saved query).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Apply model-specified formatting to each result.
    */
-  apply_formatting?: boolean
+  apply_formatting?: boolean | null
   /**
    * Apply visualization options to results.
    */
-  apply_vis?: boolean
+  apply_vis?: boolean | null
   /**
    * Get results from cache if available.
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Render width for image formats.
    */
-  image_width?: number
+  image_width?: number | null
   /**
    * Render height for image formats.
    */
-  image_height?: number
+  image_height?: number | null
   /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
-  generate_drill_links?: boolean
+  generate_drill_links?: boolean | null
   /**
    * Force use of production models even if the user is in development mode.
    */
-  force_production?: boolean
+  force_production?: boolean | null
   /**
    * Retrieve any results from cache even if the results have expired.
    */
-  cache_only?: boolean
+  cache_only?: boolean | null
   /**
    * Prefix to use for drill links (url encoded).
    */
-  path_prefix?: string
+  path_prefix?: string | null
   /**
    * Rebuild PDTS used in query.
    */
-  rebuild_pdts?: boolean
+  rebuild_pdts?: boolean | null
   /**
    * Perform table calculations on query results
    */
-  server_table_calcs?: boolean
+  server_table_calcs?: boolean | null
 }
 
 /**
@@ -7384,15 +7384,15 @@ export interface IRequestRunLookmlTest {
   /**
    * File Name
    */
-  file_id?: string
+  file_id?: string | null
   /**
    * Test Name
    */
-  test?: string
+  test?: string | null
   /**
    * Model Name
    */
-  model?: string
+  model?: string | null
 }
 
 /**
@@ -7410,55 +7410,55 @@ export interface IRequestRunQuery {
   /**
    * Row limit (may override the limit in the saved query).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Apply model-specified formatting to each result.
    */
-  apply_formatting?: boolean
+  apply_formatting?: boolean | null
   /**
    * Apply visualization options to results.
    */
-  apply_vis?: boolean
+  apply_vis?: boolean | null
   /**
    * Get results from cache if available.
    */
-  cache?: boolean
+  cache?: boolean | null
   /**
    * Render width for image formats.
    */
-  image_width?: number
+  image_width?: number | null
   /**
    * Render height for image formats.
    */
-  image_height?: number
+  image_height?: number | null
   /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
-  generate_drill_links?: boolean
+  generate_drill_links?: boolean | null
   /**
    * Force use of production models even if the user is in development mode.
    */
-  force_production?: boolean
+  force_production?: boolean | null
   /**
    * Retrieve any results from cache even if the results have expired.
    */
-  cache_only?: boolean
+  cache_only?: boolean | null
   /**
    * Prefix to use for drill links (url encoded).
    */
-  path_prefix?: string
+  path_prefix?: string | null
   /**
    * Rebuild PDTS used in query.
    */
-  rebuild_pdts?: boolean
+  rebuild_pdts?: boolean | null
   /**
    * Perform table calculations on query results
    */
-  server_table_calcs?: boolean
+  server_table_calcs?: boolean | null
   /**
    * Specifies the source of this call.
    */
-  source?: string
+  source?: string | null
 }
 
 /**
@@ -7472,15 +7472,15 @@ export interface IRequestScheduledPlansForDashboard {
   /**
    * User Id (default is requesting user if not specified)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Return scheduled plans belonging to all users for the dashboard
    */
-  all_users?: boolean
+  all_users?: boolean | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
 }
 
 /**
@@ -7494,15 +7494,15 @@ export interface IRequestScheduledPlansForLook {
   /**
    * User Id (default is requesting user if not specified)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Return scheduled plans belonging to all users for the look
    */
-  all_users?: boolean
+  all_users?: boolean | null
 }
 
 /**
@@ -7516,15 +7516,15 @@ export interface IRequestScheduledPlansForLookmlDashboard {
   /**
    * User Id (default is requesting user if not specified)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Return scheduled plans belonging to all users for the dashboard
    */
-  all_users?: boolean
+  all_users?: boolean | null
 }
 
 /**
@@ -7534,43 +7534,43 @@ export interface IRequestSearchAlerts {
   /**
    * (Optional) Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * (Optional) Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * (Optional) Dimension by which to order the results(`dashboard` | `owner`)
    */
-  group_by?: string
+  group_by?: string | null
   /**
    * (Optional) Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * (Optional) Filter on returning only enabled or disabled alerts.
    */
-  disabled?: boolean
+  disabled?: boolean | null
   /**
    * (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
    */
-  frequency?: string
+  frequency?: string | null
   /**
    * (Optional) Filter on whether the alert has met its condition when it last executed
    */
-  condition_met?: boolean
+  condition_met?: boolean | null
   /**
    * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
    */
-  last_run_start?: string
+  last_run_start?: string | null
   /**
    * (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
    */
-  last_run_end?: string
+  last_run_end?: string | null
   /**
    * (Admin only) (Optional) Filter for all owners.
    */
-  all_owners?: boolean
+  all_owners?: boolean | null
 }
 
 /**
@@ -7580,55 +7580,55 @@ export interface IRequestSearchBoards {
   /**
    * Matches board title.
    */
-  title?: string
+  title?: string | null
   /**
    * Matches the timestamp for when the board was created.
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * The first name of the user who created this board.
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * The last name of the user who created this board.
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Return favorited boards when true.
    */
-  favorited?: boolean
+  favorited?: boolean | null
   /**
    * Filter on boards created by a particular user.
    */
-  creator_id?: string
+  creator_id?: string | null
   /**
    * The fields to sort the results by
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * The page to return.
    */
-  page?: number
+  page?: number | null
   /**
    * The number of items in the returned page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * The maximum number of items to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -7638,47 +7638,47 @@ export interface IRequestSearchContentFavorites {
   /**
    * Match content favorite id(s)
    */
-  id?: number
+  id?: number | null
   /**
    * Match user id(s).To create a list of multiple ids, use commas as separators
    */
-  user_id?: string
+  user_id?: string | null
   /**
    * Match content metadata id(s).To create a list of multiple ids, use commas as separators
    */
-  content_metadata_id?: string
+  content_metadata_id?: string | null
   /**
    * Match dashboard id(s).To create a list of multiple ids, use commas as separators
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Match look id(s).To create a list of multiple ids, use commas as separators
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Match board id(s).To create a list of multiple ids, use commas as separators
    */
-  board_id?: string
+  board_id?: string | null
   /**
    * Number of results to return. (used with offset)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit)
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -7688,55 +7688,55 @@ export interface IRequestSearchContentViews {
   /**
    * Match view count
    */
-  view_count?: string
+  view_count?: string | null
   /**
    * Match Group Id
    */
-  group_id?: string
+  group_id?: string | null
   /**
    * Match look_id
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Match dashboard_id
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Match content metadata id
    */
-  content_metadata_id?: string
+  content_metadata_id?: string | null
   /**
    * Match start of week date (format is "YYYY-MM-DD")
    */
-  start_of_week_date?: string
+  start_of_week_date?: string | null
   /**
    * True if only all time view records should be returned
    */
-  all_time?: boolean
+  all_time?: boolean | null
   /**
    * Match user id
    */
-  user_id?: string
+  user_id?: string | null
   /**
    * Requested fields
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return. Use with `offset` to manage pagination of results
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning data
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -7746,35 +7746,35 @@ export interface IRequestSearchCredentialsEmail {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match credentials_email id.
    */
-  id?: number
+  id?: number | null
   /**
    * Match credentials_email email.
    */
-  email?: string
+  email?: string | null
   /**
    * Find credentials_email that match given emails.
    */
-  emails?: string
+  emails?: string | null
   /**
    * Combine given search criteria in a boolean OR expression.
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -7784,31 +7784,31 @@ export interface IRequestSearchDashboardElements {
   /**
    * Select elements that refer to a given dashboard id
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Select elements that refer to a given look id
    */
-  look_id?: number
+  look_id?: number | null
   /**
    * Match the title of element
    */
-  title?: string
+  title?: string | null
   /**
    * Select soft-deleted dashboard elements
    */
-  deleted?: boolean
+  deleted?: boolean | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
   /**
    * Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
    */
-  sorts?: string
+  sorts?: string | null
 }
 
 /**
@@ -7818,79 +7818,79 @@ export interface IRequestSearchDashboards {
   /**
    * Match dashboard id.
    */
-  id?: string
+  id?: string | null
   /**
    * Match dashboard slug.
    */
-  slug?: string
+  slug?: string | null
   /**
    * Match Dashboard title.
    */
-  title?: string
+  title?: string | null
   /**
    * Match Dashboard description.
    */
-  description?: string
+  description?: string | null
   /**
    * Filter on a content favorite id.
    */
-  content_favorite_id?: string
+  content_favorite_id?: string | null
   /**
    * Filter on a particular space.
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Filter on dashboards deleted status.
    */
-  deleted?: string
+  deleted?: string | null
   /**
    * Filter on dashboards created by a particular user.
    */
-  user_id?: string
+  user_id?: string | null
   /**
    * Filter on a particular value of view_count
    */
-  view_count?: string
+  view_count?: string | null
   /**
    * Filter on a content favorite id.
    */
-  content_metadata_id?: string
+  content_metadata_id?: string | null
   /**
    * Exclude items that exist only in personal spaces other than the users
    */
-  curate?: boolean
+  curate?: boolean | null
   /**
    * Select dashboards based on when they were last viewed
    */
-  last_viewed_at?: string
+  last_viewed_at?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -7900,51 +7900,51 @@ export interface IRequestSearchFolders {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match Space title.
    */
-  name?: string
+  name?: string | null
   /**
    * Match Space id
    */
-  id?: number
+  id?: number | null
   /**
    * Filter on a children of a particular folder.
    */
-  parent_id?: string
+  parent_id?: string | null
   /**
    * Filter on folder created by a particular user.
    */
-  creator_id?: string
+  creator_id?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
   /**
    * Match is shared root
    */
-  is_shared_root?: boolean
+  is_shared_root?: boolean | null
 }
 
 /**
@@ -7954,43 +7954,43 @@ export interface IRequestSearchGroups {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
   /**
    * Match group id.
    */
-  id?: number
+  id?: number | null
   /**
    * Match group name.
    */
-  name?: string
+  name?: string | null
   /**
    * Match group external_group_id.
    */
-  external_group_id?: string
+  external_group_id?: string | null
   /**
    * Match group externally_managed.
    */
-  externally_managed?: boolean
+  externally_managed?: boolean | null
   /**
    * Match group externally_orphaned.
    */
-  externally_orphaned?: boolean
+  externally_orphaned?: boolean | null
 }
 
 /**
@@ -8000,75 +8000,75 @@ export interface IRequestSearchLooks {
   /**
    * Match look id.
    */
-  id?: string
+  id?: string | null
   /**
    * Match Look title.
    */
-  title?: string
+  title?: string | null
   /**
    * Match Look description.
    */
-  description?: string
+  description?: string | null
   /**
    * Select looks with a particular content favorite id
    */
-  content_favorite_id?: string
+  content_favorite_id?: string | null
   /**
    * Select looks in a particular folder.
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Select looks created by a particular user.
    */
-  user_id?: string
+  user_id?: string | null
   /**
    * Select looks with particular view_count value
    */
-  view_count?: string
+  view_count?: string | null
   /**
    * Select soft-deleted looks
    */
-  deleted?: boolean
+  deleted?: boolean | null
   /**
    * Select looks that reference a particular query by query_id
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Exclude items that exist only in personal spaces other than the users
    */
-  curate?: boolean
+  curate?: boolean | null
   /**
    * Select looks based on when they were last viewed
    */
-  last_viewed_at?: string
+  last_viewed_at?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Requested page.
    */
-  page?: number
+  page?: number | null
   /**
    * Results per page.
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -8078,39 +8078,39 @@ export interface IRequestSearchModelSets {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match model set id.
    */
-  id?: number
+  id?: number | null
   /**
    * Match model set name.
    */
-  name?: string
+  name?: string | null
   /**
    * Match model sets by all_access status.
    */
-  all_access?: boolean
+  all_access?: boolean | null
   /**
    * Match model sets by built_in status.
    */
-  built_in?: boolean
+  built_in?: boolean | null
   /**
    * Combine given search criteria in a boolean OR expression.
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -8120,35 +8120,35 @@ export interface IRequestSearchRoles {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match role id.
    */
-  id?: number
+  id?: number | null
   /**
    * Match role name.
    */
-  name?: string
+  name?: string | null
   /**
    * Match roles by built_in status.
    */
-  built_in?: boolean
+  built_in?: boolean | null
   /**
    * Combine given search criteria in a boolean OR expression.
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -8158,39 +8158,39 @@ export interface IRequestSearchThemes {
   /**
    * Match theme id.
    */
-  id?: number
+  id?: number | null
   /**
    * Match theme name.
    */
-  name?: string
+  name?: string | null
   /**
    * Timestamp for activation.
    */
-  begin_at?: Date
+  begin_at?: Date | null
   /**
    * Timestamp for expiration.
    */
-  end_at?: Date
+  end_at?: Date | null
   /**
    * Number of results to return (used with `offset`).
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any (used with `limit`).
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -8200,39 +8200,39 @@ export interface IRequestSearchUserLoginLockouts {
   /**
    * Include only these fields in the response
    */
-  fields?: string
+  fields?: string | null
   /**
    * Return only page N of paginated results
    */
-  page?: number
+  page?: number | null
   /**
    * Return N rows of data per page
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Auth type user is locked out for (email, ldap, totp, api)
    */
-  auth_type?: string
+  auth_type?: string | null
   /**
    * Match name
    */
-  full_name?: string
+  full_name?: string | null
   /**
    * Match email
    */
-  email?: string
+  email?: string | null
   /**
    * Match remote LDAP ID
    */
-  remote_id?: string
+  remote_id?: string | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
 }
 
 /**
@@ -8242,67 +8242,67 @@ export interface IRequestSearchUsers {
   /**
    * Include only these fields in the response
    */
-  fields?: string
+  fields?: string | null
   /**
    * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
-  page?: number
+  page?: number | null
   /**
    * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match User Id.
    */
-  id?: string
+  id?: string | null
   /**
    * Match First name.
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * Match Last name.
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * Search for user accounts associated with Looker employees
    */
-  verified_looker_employee?: boolean
+  verified_looker_employee?: boolean | null
   /**
    * Search for only embed users
    */
-  embed_user?: boolean
+  embed_user?: boolean | null
   /**
    * Search for the user with this email address
    */
-  email?: string
+  email?: string | null
   /**
    * Search for disabled user accounts
    */
-  is_disabled?: boolean
+  is_disabled?: boolean | null
   /**
    * Combine given search criteria in a boolean OR expression
    */
-  filter_or?: boolean
+  filter_or?: boolean | null
   /**
    * Search for users who have access to this content_metadata item
    */
-  content_metadata_id?: string
+  content_metadata_id?: string | null
   /**
    * Search for users who are direct members of this group
    */
-  group_id?: string
+  group_id?: string | null
 }
 
 /**
@@ -8316,51 +8316,51 @@ export interface IRequestSearchUsersNames {
   /**
    * Include only these fields in the response
    */
-  fields?: string
+  fields?: string | null
   /**
    * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
-  page?: number
+  page?: number | null
   /**
    * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
-  per_page?: number
+  per_page?: number | null
   /**
    * Number of results to return. (used with offset and takes priority over page and per_page)
    */
-  limit?: number
+  limit?: number | null
   /**
    * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
-  offset?: number
+  offset?: number | null
   /**
    * Fields to sort by
    */
-  sorts?: string
+  sorts?: string | null
   /**
    * Match User Id
    */
-  id?: number
+  id?: number | null
   /**
    * Match First name
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * Match Last name
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * Match Verified Looker employee
    */
-  verified_looker_employee?: boolean
+  verified_looker_employee?: boolean | null
   /**
    * Match Email Address
    */
-  email?: string
+  email?: string | null
   /**
    * Include or exclude disabled accounts in the results
    */
-  is_disabled?: boolean
+  is_disabled?: boolean | null
 }
 
 /**
@@ -8378,15 +8378,15 @@ export interface IRequestTagRef {
   /**
    * (Optional): Commit Sha to Tag
    */
-  commit_sha?: string
+  commit_sha?: string | null
   /**
    * Tag Name
    */
-  tag_name?: string
+  tag_name?: string | null
   /**
    * (Optional): Tag Message
    */
-  tag_message?: string
+  tag_message?: string | null
 }
 
 /**
@@ -8400,19 +8400,19 @@ export interface IRequestUserAttributeUserValues {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Specific user attributes to request. Omit or leave blank to request all user attributes.
    */
-  user_attribute_ids?: DelimArray<number>
+  user_attribute_ids?: DelimArray<number> | null
   /**
    * If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
    */
-  all_values?: boolean
+  all_values?: boolean | null
   /**
    * If true, returns an empty record for each requested attribute that has no user, group, or default value.
    */
-  include_unset?: boolean
+  include_unset?: boolean | null
 }
 
 /**
@@ -8426,11 +8426,11 @@ export interface IRequestUserRoles {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string | null
   /**
    * Get only roles associated directly with the user: exclude those only associated through groups.
    */
-  direct_association_only?: boolean
+  direct_association_only?: boolean | null
 }
 
 /**
@@ -8453,30 +8453,30 @@ export interface IResultMakerFilterables {
   /**
    * The model this filterable comes from (used for field suggestions). (read-only)
    */
-  model?: string
+  model?: string | null
   /**
    * The view this filterable comes from (used for field suggestions). (read-only)
    */
-  view?: string
+  view?: string | null
   /**
    * The name of the filterable thing (Query or Merged Results). (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * array of dashboard_filter_name: and field: objects. (read-only)
    */
-  listen?: IResultMakerFilterablesListen[]
+  listen?: IResultMakerFilterablesListen[] | null
 }
 
 export interface IResultMakerFilterablesListen {
   /**
    * The name of a dashboard filter to listen to.
    */
-  dashboard_filter_name?: string
+  dashboard_filter_name?: string | null
   /**
    * The name of the field in the filterable to filter with the value of the dashboard filter.
    */
-  field?: string
+  field?: string | null
 }
 
 export interface IResultMakerWithIdVisConfigAndDynamicFields {
@@ -8487,19 +8487,19 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
   /**
    * JSON string of dynamic field information. (read-only)
    */
-  dynamic_fields?: string
+  dynamic_fields?: string | null
   /**
    * array of items that can be filtered and information about them. (read-only)
    */
-  filterables?: IResultMakerFilterables[]
+  filterables?: IResultMakerFilterables[] | null
   /**
    * Sorts of the constituent Look, Query, or Merge Query (read-only)
    */
-  sorts?: string[]
+  sorts?: string[] | null
   /**
    * ID of merge result if this is a merge_result. (read-only)
    */
-  merge_result_id?: string
+  merge_result_id?: string | null
   /**
    * Total of the constituent Look, Query, or Merge Query (read-only)
    */
@@ -8507,16 +8507,16 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
   /**
    * ID of query if this is a query. (read-only)
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * ID of SQL Query if this is a SQL Runner Query (read-only)
    */
-  sql_query_id?: string
+  sql_query_id?: string | null
   query?: IQuery
   /**
    * Vis config of the constituent Query, or Merge Query. (read-only)
    */
-  vis_config?: IDictionary<any>
+  vis_config?: IDictionary<any> | null
 }
 
 export interface IRole {
@@ -8531,25 +8531,25 @@ export interface IRole {
   /**
    * Name of Role
    */
-  name?: string
+  name?: string | null
   permission_set?: IPermissionSet
   /**
    * (Write-Only) Id of permission set
    */
-  permission_set_id?: number
+  permission_set_id?: number | null
   model_set?: IModelSet
   /**
    * (Write-Only) Id of model set
    */
-  model_set_id?: number
+  model_set_id?: number | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Link to get list of users with this role (read-only)
    */
-  users_url?: string
+  users_url?: string | null
 }
 
 export interface IRoleSearch {
@@ -8564,29 +8564,29 @@ export interface IRoleSearch {
   /**
    * Name of Role
    */
-  name?: string
+  name?: string | null
   permission_set?: IPermissionSet
   /**
    * (Write-Only) Id of permission set
    */
-  permission_set_id?: number
+  permission_set_id?: number | null
   model_set?: IModelSet
   /**
    * (Write-Only) Id of model set
    */
-  model_set_id?: number
+  model_set_id?: number | null
   /**
    * Count of users with this role (read-only)
    */
-  user_count?: number
+  user_count?: number | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
   /**
    * Link to get list of users with this role (read-only)
    */
-  users_url?: string
+  users_url?: string | null
 }
 
 export interface IRunningQueries {
@@ -8605,63 +8605,63 @@ export interface IRunningQueries {
   /**
    * Date/Time Query was initiated (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Date/Time Query was completed (read-only)
    */
-  completed_at?: string
+  completed_at?: string | null
   /**
    * Query Id (read-only)
    */
-  query_id?: string
+  query_id?: string | null
   /**
    * Source (look, dashboard, queryrunner, explore, etc.) (read-only)
    */
-  source?: string
+  source?: string | null
   /**
    * Node Id (read-only)
    */
-  node_id?: string
+  node_id?: string | null
   /**
    * Slug (read-only)
    */
-  slug?: string
+  slug?: string | null
   /**
    * ID of a Query Task (read-only)
    */
-  query_task_id?: string
+  query_task_id?: string | null
   /**
    * Cache Key (read-only)
    */
-  cache_key?: string
+  cache_key?: string | null
   /**
    * Connection (read-only)
    */
-  connection_name?: string
+  connection_name?: string | null
   /**
    * Dialect (read-only)
    */
-  dialect?: string
+  dialect?: string | null
   /**
    * Connection ID (read-only)
    */
-  connection_id?: string
+  connection_id?: string | null
   /**
    * Additional Information(Error message or verbose status) (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Status description (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * Number of seconds elapsed running the Query (read-only)
    */
-  runtime?: number
+  runtime?: number | null
   /**
    * SQL text of the query as run (read-only)
    */
-  sql?: string
+  sql?: string | null
 }
 
 export interface ISamlConfig {
@@ -8676,39 +8676,39 @@ export interface ISamlConfig {
   /**
    * Identity Provider Certificate (provided by IdP)
    */
-  idp_cert?: string
+  idp_cert?: string | null
   /**
    * Identity Provider Url (provided by IdP)
    */
-  idp_url?: string
+  idp_url?: string | null
   /**
    * Identity Provider Issuer (provided by IdP)
    */
-  idp_issuer?: string
+  idp_issuer?: string | null
   /**
    * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
    */
-  idp_audience?: string
+  idp_audience?: string | null
   /**
    * Count of seconds of clock drift to allow when validating timestamps of assertions.
    */
-  allowed_clock_drift?: number
+  allowed_clock_drift?: number | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
    */
-  new_user_migration_types?: string
+  new_user_migration_types?: string | null
   /**
    * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
    */
@@ -8716,31 +8716,31 @@ export interface ISamlConfig {
   /**
    * Slug to identify configurations that are created in order to run a Saml config test (read-only)
    */
-  test_slug?: string
+  test_slug?: string | null
   /**
    * When this config was last modified (read-only)
    */
-  modified_at?: string
+  modified_at?: string | null
   /**
    * User id of user who last modified this config (read-only)
    */
-  modified_by?: string
+  modified_by?: string | null
   /**
    * (Read-only) Roles that will be applied to new users the first time they login via Saml (read-only)
    */
-  default_new_user_roles?: IRole[]
+  default_new_user_roles?: IRole[] | null
   /**
    * (Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)
    */
-  default_new_user_groups?: IGroup[]
+  default_new_user_groups?: IGroup[] | null
   /**
    * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * Set user roles in Looker based on groups from Saml
    */
@@ -8748,15 +8748,15 @@ export interface ISamlConfig {
   /**
    * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
    */
-  groups_attribute?: string
+  groups_attribute?: string | null
   /**
    * (Read-only) Array of mappings between Saml Groups and Looker Roles (read-only)
    */
-  groups?: ISamlGroupRead[]
+  groups?: ISamlGroupRead[] | null
   /**
    * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: ISamlGroupWrite[]
+  groups_with_role_ids?: ISamlGroupWrite[] | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
    */
@@ -8764,19 +8764,19 @@ export interface ISamlConfig {
   /**
    * (Read-only) Array of mappings between Saml User Attributes and Looker User Attributes (read-only)
    */
-  user_attributes?: ISamlUserAttributeRead[]
+  user_attributes?: ISamlUserAttributeRead[] | null
   /**
    * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: ISamlUserAttributeWrite[]
+  user_attributes_with_ids?: ISamlUserAttributeWrite[] | null
   /**
    * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
    */
-  groups_finder_type?: string
+  groups_finder_type?: string | null
   /**
    * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
    */
-  groups_member_value?: string
+  groups_member_value?: string | null
   /**
    * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
    */
@@ -8796,7 +8796,7 @@ export interface ISamlConfig {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ISamlGroupRead {
@@ -8807,50 +8807,50 @@ export interface ISamlGroupRead {
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker (read-only)
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in Saml (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Roles (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
   /**
    * Link to saml config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ISamlGroupWrite {
   /**
    * Unique Id
    */
-  id?: number
+  id?: number | null
   /**
    * Unique Id of group in Looker (read-only)
    */
-  looker_group_id?: number
+  looker_group_id?: number | null
   /**
    * Name of group in Looker
    */
-  looker_group_name?: string
+  looker_group_name?: string | null
   /**
    * Name of group in Saml
    */
-  name?: string
+  name?: string | null
   /**
    * Looker Role Ids
    */
-  role_ids?: number[]
+  role_ids?: number[] | null
   /**
    * Link to saml config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ISamlMetadataParseResult {
@@ -8861,22 +8861,22 @@ export interface ISamlMetadataParseResult {
   /**
    * Identify Provider Issuer (read-only)
    */
-  idp_issuer?: string
+  idp_issuer?: string | null
   /**
    * Identify Provider Url (read-only)
    */
-  idp_url?: string
+  idp_url?: string | null
   /**
    * Identify Provider Certificate (read-only)
    */
-  idp_cert?: string
+  idp_cert?: string | null
 }
 
 export interface ISamlUserAttributeRead {
   /**
    * Name of User Attribute in Saml (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in Saml assertion for login to be allowed to succeed (read-only)
    */
@@ -8884,18 +8884,18 @@ export interface ISamlUserAttributeRead {
   /**
    * Looker User Attributes (read-only)
    */
-  user_attributes?: IUserAttribute[]
+  user_attributes?: IUserAttribute[] | null
   /**
    * Link to saml config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ISamlUserAttributeWrite {
   /**
    * Name of User Attribute in Saml
    */
-  name?: string
+  name?: string | null
   /**
    * Required to be in Saml assertion for login to be allowed to succeed
    */
@@ -8903,22 +8903,22 @@ export interface ISamlUserAttributeWrite {
   /**
    * Looker User Attribute Ids
    */
-  user_attribute_ids?: number[]
+  user_attribute_ids?: number[] | null
   /**
    * Link to saml config (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IScheduledPlan {
   /**
    * Name of this scheduled plan
    */
-  name?: string
+  name?: string | null
   /**
    * User Id which owns this scheduled plan
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Whether schedule is run as recipient (only applicable for email recipients)
    */
@@ -8930,23 +8930,23 @@ export interface IScheduledPlan {
   /**
    * Id of a look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of a dashboard
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Id of a LookML dashboard
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * Query string to run look or dashboard with
    */
-  filters_string?: string
+  filters_string?: string | null
   /**
    * (DEPRECATED) Alias for filters_string field
    */
-  dashboard_filters?: string
+  dashboard_filters?: string | null
   /**
    * Delivery should occur if running the dashboard or look returns results
    */
@@ -8966,23 +8966,23 @@ export interface IScheduledPlan {
   /**
    * Vixie-Style crontab specification when to run
    */
-  crontab?: string
+  crontab?: string | null
   /**
    * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
    */
-  datagroup?: string
+  datagroup?: string | null
   /**
    * Timezone for interpreting the specified crontab (default is Looker instance timezone)
    */
-  timezone?: string
+  timezone?: string | null
   /**
    * Query id
    */
-  query_id?: string
+  query_id?: string | null
   /**
    * Scheduled plan destinations
    */
-  scheduled_plan_destination?: IScheduledPlanDestination[]
+  scheduled_plan_destination?: IScheduledPlanDestination[] | null
   /**
    * Whether the plan in question should only be run once (usually for testing)
    */
@@ -8994,7 +8994,7 @@ export interface IScheduledPlan {
   /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
-  pdf_paper_size?: string
+  pdf_paper_size?: string | null
   /**
    * Whether the PDF should be formatted for landscape orientation
    */
@@ -9006,7 +9006,7 @@ export interface IScheduledPlan {
   /**
    * Color scheme of the dashboard if applicable
    */
-  color_theme?: string
+  color_theme?: string | null
   /**
    * Whether or not to expand table vis to full length
    */
@@ -9014,7 +9014,7 @@ export interface IScheduledPlan {
   /**
    * The pixel width at which we render the inline table visualizations
    */
-  inline_table_width?: number
+  inline_table_width?: number | null
   /**
    * Unique Id (read-only)
    */
@@ -9022,24 +9022,24 @@ export interface IScheduledPlan {
   /**
    * Date and time when ScheduledPlan was created (read-only)
    */
-  created_at?: Date
+  created_at?: Date | null
   /**
    * Date and time when ScheduledPlan was last updated (read-only)
    */
-  updated_at?: Date
+  updated_at?: Date | null
   /**
    * Title (read-only)
    */
-  title?: string
+  title?: string | null
   user?: IUserPublic
   /**
    * When the ScheduledPlan will next run (null if running once) (read-only)
    */
-  next_run_at?: Date
+  next_run_at?: Date | null
   /**
    * When the ScheduledPlan was last run (read-only)
    */
-  last_run_at?: Date
+  last_run_at?: Date | null
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
@@ -9054,11 +9054,11 @@ export interface IScheduledPlanDestination {
   /**
    * Id of a scheduled plan you own
    */
-  scheduled_plan_id?: number
+  scheduled_plan_id?: number | null
   /**
    * The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
    */
-  format?: string
+  format?: string | null
   /**
    * Are values formatted? (containing currency symbols, digit separators, etc.
    */
@@ -9070,7 +9070,7 @@ export interface IScheduledPlanDestination {
   /**
    * Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
    */
-  address?: string
+  address?: string | null
   /**
    * Whether the recipient is a Looker user on the current instance (only applicable for email recipients) (read-only)
    */
@@ -9078,19 +9078,19 @@ export interface IScheduledPlanDestination {
   /**
    * Type of the address ('email', 'webhook', 's3', or 'sftp')
    */
-  type?: string
+  type?: string | null
   /**
    * JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
    */
-  parameters?: string
+  parameters?: string | null
   /**
    * (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
    */
-  secret_parameters?: string
+  secret_parameters?: string | null
   /**
    * Optional message to be included in scheduled emails
    */
-  message?: string
+  message?: string | null
 }
 
 export interface ISchema {
@@ -9108,15 +9108,15 @@ export interface ISchemaColumn {
   /**
    * Schema item name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Full name of item (read-only)
    */
-  sql_escaped_name?: string
+  sql_escaped_name?: string | null
   /**
    * Name of schema (read-only)
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * SQL dialect data type (read-only)
    */
@@ -9132,11 +9132,11 @@ export interface ISchemaColumn {
   /**
    * SQL data type (read-only)
    */
-  description?: string
+  description?: string | null
   /**
    * Column data size (read-only)
    */
-  column_size?: number
+  column_size?: number | null
   /**
    * SQL Runner snippets for this connection (read-only)
    */
@@ -9147,15 +9147,15 @@ export interface ISchemaColumns {
   /**
    * Schema item name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Full name of item (read-only)
    */
-  sql_escaped_name?: string
+  sql_escaped_name?: string | null
   /**
    * Name of schema (read-only)
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * Columns for this schema (read-only)
    */
@@ -9166,23 +9166,23 @@ export interface ISchemaTable {
   /**
    * Schema item name (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Full name of item (read-only)
    */
-  sql_escaped_name?: string
+  sql_escaped_name?: string | null
   /**
    * Name of schema (read-only)
    */
-  schema_name?: string
+  schema_name?: string | null
   /**
    * Number of data rows (read-only)
    */
-  rows?: number
+  rows?: number | null
   /**
    * External reference??? (read-only)
    */
-  external?: string
+  external?: string | null
   /**
    * SQL Runner snippets for connection (read-only)
    */
@@ -9216,55 +9216,55 @@ export interface ISession {
   /**
    * IP address of user when this session was initiated (read-only)
    */
-  ip_address?: string
+  ip_address?: string | null
   /**
    * User's browser type (read-only)
    */
-  browser?: string
+  browser?: string | null
   /**
    * User's Operating System (read-only)
    */
-  operating_system?: string
+  operating_system?: string | null
   /**
    * City component of user location (derived from IP address) (read-only)
    */
-  city?: string
+  city?: string | null
   /**
    * State component of user location (derived from IP address) (read-only)
    */
-  state?: string
+  state?: string | null
   /**
    * Country component of user location (derived from IP address) (read-only)
    */
-  country?: string
+  country?: string | null
   /**
    * Type of credentials used for logging in this session (read-only)
    */
-  credentials_type?: string
+  credentials_type?: string | null
   /**
    * Time when this session was last extended by the user (read-only)
    */
-  extended_at?: string
+  extended_at?: string | null
   /**
    * Number of times this session was extended (read-only)
    */
-  extended_count?: number
+  extended_count?: number | null
   /**
    * Actual user in the case when this session represents one user sudo'ing as another (read-only)
    */
-  sudo_user_id?: number
+  sudo_user_id?: number | null
   /**
    * Time when this session was initiated (read-only)
    */
-  created_at?: string
+  created_at?: string | null
   /**
    * Time when this session will expire (read-only)
    */
-  expires_at?: string
+  expires_at?: string | null
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface ISessionConfig {
@@ -9279,7 +9279,7 @@ export interface ISessionConfig {
   /**
    * Number of minutes for user sessions.  Must be between 5 and 43200
    */
-  session_minutes?: number
+  session_minutes?: number | null
   /**
    * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
    */
@@ -9338,7 +9338,7 @@ export interface ISqlQuery {
   /**
    * Number of seconds this query took to run the most recent time it was run (read-only)
    */
-  last_runtime?: number
+  last_runtime?: number | null
   /**
    * Number of times this query has been run (read-only)
    */
@@ -9354,17 +9354,17 @@ export interface ISqlQuery {
   /**
    * The most recent time this query was run (read-only)
    */
-  last_run_at?: string
+  last_run_at?: string | null
   connection?: IDBConnectionBase
   /**
    * Model name this query uses (read-only)
    */
-  model_name?: string
+  model_name?: string | null
   creator?: IUserPublic
   /**
    * Explore page URL for this SQL query (read-only)
    */
-  explore_url?: string
+  explore_url?: string | null
   /**
    * Should this query be rendered as plain text (read-only)
    */
@@ -9372,34 +9372,34 @@ export interface ISqlQuery {
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<any>
+  vis_config?: IDictionary<any> | null
   /**
    * ID of the ResultMakerLookup entry.
    */
-  result_maker_id?: number
+  result_maker_id?: number | null
 }
 
 export interface ISqlQueryCreate {
   /**
    * Name of the db connection on which to run this query
    */
-  connection_name?: string
+  connection_name?: string | null
   /**
    * (DEPRECATED) Use `connection_name` instead
    */
-  connection_id?: string
+  connection_id?: string | null
   /**
    * Name of LookML Model (this or `connection_id` required)
    */
-  model_name?: string
+  model_name?: string | null
   /**
    * SQL query
    */
-  sql?: string
+  sql?: string | null
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<any>
+  vis_config?: IDictionary<any> | null
 }
 
 export interface ISshPublicKey {
@@ -9555,11 +9555,11 @@ export interface ITheme {
   /**
    * Timestamp for when this theme becomes active. Null=always
    */
-  begin_at?: Date
+  begin_at?: Date | null
   /**
    * Timestamp for when this theme expires. Null=never
    */
-  end_at?: Date
+  end_at?: Date | null
   /**
    * Unique Id (read-only)
    */
@@ -9579,7 +9579,7 @@ export interface IThemeSettings {
   /**
    * Base font size for scaling fonts
    */
-  base_font_size?: string
+  base_font_size?: string | null
   /**
    * Optional. ID of color collection to use with the theme. Use an empty string for none.
    */
@@ -9587,7 +9587,7 @@ export interface IThemeSettings {
   /**
    * Default font color
    */
-  font_color?: string
+  font_color?: string | null
   /**
    * Primary font family
    */
@@ -9595,7 +9595,7 @@ export interface IThemeSettings {
   /**
    * Source specification for font
    */
-  font_source?: string
+  font_source?: string | null
   /**
    * Info button color
    */
@@ -9646,26 +9646,26 @@ export interface ITimezone {
   /**
    * Timezone (read-only)
    */
-  value?: string
+  value?: string | null
   /**
    * Description of timezone (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Timezone group (e.g Common, Other, etc.) (read-only)
    */
-  group?: string
+  group?: string | null
 }
 
 export interface IUpdateCommand {
   /**
    * Name of the command
    */
-  name?: string
+  name?: string | null
   /**
    * Description of the command
    */
-  description?: string
+  description?: string | null
 }
 
 export interface IUpdateFolder {
@@ -9687,20 +9687,20 @@ export interface IUser {
   /**
    * URL for the avatar image (may be generic) (read-only)
    */
-  avatar_url?: string
+  avatar_url?: string | null
   /**
    * URL for the avatar image (may be generic), does not specify size (read-only)
    */
-  avatar_url_without_sizing?: string
+  avatar_url_without_sizing?: string | null
   /**
    * API 3 credentials (read-only)
    */
-  credentials_api3?: ICredentialsApi3[]
+  credentials_api3?: ICredentialsApi3[] | null
   credentials_email?: ICredentialsEmail
   /**
    * Embed credentials (read-only)
    */
-  credentials_embed?: ICredentialsEmbed[]
+  credentials_embed?: ICredentialsEmbed[] | null
   credentials_google?: ICredentialsGoogle
   credentials_ldap?: ICredentialsLDAP
   credentials_looker_openid?: ICredentialsLookerOpenid
@@ -9710,27 +9710,27 @@ export interface IUser {
   /**
    * Full name for display (available only if both first_name and last_name are set) (read-only)
    */
-  display_name?: string
+  display_name?: string | null
   /**
    * EMail address (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
    */
-  embed_group_space_id?: number
+  embed_group_space_id?: number | null
   /**
    * First name
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * Array of ids of the groups for this user (read-only)
    */
-  group_ids?: number[]
+  group_ids?: number[] | null
   /**
    * ID string for user's home folder
    */
-  home_folder_id?: string
+  home_folder_id?: string | null
   /**
    * Unique Id (read-only)
    */
@@ -9742,23 +9742,23 @@ export interface IUser {
   /**
    * Last name
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
    */
-  locale?: string
+  locale?: string | null
   /**
    * Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
    */
-  looker_versions?: string[]
+  looker_versions?: string[] | null
   /**
    * User's dev workspace has been checked for presence of applicable production projects
    */
-  models_dir_validated?: boolean
+  models_dir_validated?: boolean | null
   /**
    * ID of user's personal folder (read-only)
    */
-  personal_folder_id?: number
+  personal_folder_id?: number | null
   /**
    * User is identified as an employee of Looker (read-only)
    */
@@ -9766,15 +9766,15 @@ export interface IUser {
   /**
    * Array of ids of the roles for this user (read-only)
    */
-  role_ids?: number[]
+  role_ids?: number[] | null
   /**
    * Active sessions (read-only)
    */
-  sessions?: ISession[]
+  sessions?: ISession[] | null
   /**
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
-  ui_state?: IDictionary<string>
+  ui_state?: IDictionary<string> | null
   /**
    * User is identified as an employee of Looker who has been verified via Looker corporate authentication (read-only)
    */
@@ -9798,7 +9798,7 @@ export interface IUser {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IUserAttribute {
@@ -9813,19 +9813,19 @@ export interface IUserAttribute {
   /**
    * Name of user attribute
    */
-  name: string
+  name: string | null
   /**
    * Human-friendly label for user attribute
    */
-  label: string
+  label: string | null
   /**
    * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
    */
-  type: string
+  type: string | null
   /**
    * Default value for when no value is set on the user
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Attribute is a system default (read-only)
    */
@@ -9849,7 +9849,7 @@ export interface IUserAttribute {
   /**
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
-  hidden_value_domain_whitelist?: string
+  hidden_value_domain_whitelist?: string | null
 }
 
 /**
@@ -9882,11 +9882,11 @@ export interface IUserAttributeGroupValue {
   /**
    * Id of group (read-only)
    */
-  group_id?: number
+  group_id?: number | null
   /**
    * Id of user attribute (read-only)
    */
-  user_attribute_id?: number
+  user_attribute_id?: number | null
   /**
    * If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
    */
@@ -9894,11 +9894,11 @@ export interface IUserAttributeGroupValue {
   /**
    * Precedence for resolving value for user (read-only)
    */
-  rank?: number
+  rank?: number | null
   /**
    * Value of user attribute for group (read-only)
    */
-  value?: string
+  value?: string | null
 }
 
 export interface IUserAttributeWithValue {
@@ -9909,23 +9909,23 @@ export interface IUserAttributeWithValue {
   /**
    * Name of user attribute (read-only)
    */
-  name?: string
+  name?: string | null
   /**
    * Human-friendly label for user attribute (read-only)
    */
-  label?: string
+  label?: string | null
   /**
    * Precedence for setting value on user (lowest wins) (read-only)
    */
-  rank?: number
+  rank?: number | null
   /**
    * Value of attribute for user
    */
-  value?: string
+  value?: string | null
   /**
    * Id of User (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Can the user set this value (read-only)
    */
@@ -9937,15 +9937,15 @@ export interface IUserAttributeWithValue {
   /**
    * Id of User Attribute (read-only)
    */
-  user_attribute_id?: number
+  user_attribute_id?: number | null
   /**
    * How user got this value for this attribute (read-only)
    */
-  source?: string
+  source?: string | null
   /**
    * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
    */
-  hidden_value_domain_whitelist?: string
+  hidden_value_domain_whitelist?: string | null
 }
 
 export interface IUserEmailOnly {
@@ -9963,39 +9963,39 @@ export interface IUserLoginLockout {
   /**
    * Hash of user's client id (read-only)
    */
-  key?: string
+  key?: string | null
   /**
    * Authentication method for login failures (read-only)
    */
-  auth_type?: string
+  auth_type?: string | null
   /**
    * IP address of most recent failed attempt (read-only)
    */
-  ip?: string
+  ip?: string | null
   /**
    * User ID (read-only)
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Remote ID of user if using LDAP (read-only)
    */
-  remote_id?: string
+  remote_id?: string | null
   /**
    * User's name (read-only)
    */
-  full_name?: string
+  full_name?: string | null
   /**
    * Email address associated with the user's account (read-only)
    */
-  email?: string
+  email?: string | null
   /**
    * Number of failures that triggered the lockout (read-only)
    */
-  fail_count?: number
+  fail_count?: number | null
   /**
    * Time when lockout was triggered (read-only)
    */
-  lockout_at?: Date
+  lockout_at?: Date | null
 }
 
 export interface IUserPublic {
@@ -10018,7 +10018,7 @@ export interface IUserPublic {
   /**
    * Full name for display (available only if both first_name and last_name are set) (read-only)
    */
-  display_name?: string
+  display_name?: string | null
   /**
    * URL for the avatar image (may be generic) (read-only)
    */
@@ -10026,41 +10026,41 @@ export interface IUserPublic {
   /**
    * Link to get this item (read-only)
    */
-  url?: string
+  url?: string | null
 }
 
 export interface IValidationError {
   /**
    * Error details (read-only)
    */
-  message: string
+  message: string | null
   /**
    * Error detail array (read-only)
    */
-  errors?: IValidationErrorDetail[]
+  errors?: IValidationErrorDetail[] | null
   /**
    * Documentation link (read-only)
    */
-  documentation_url: string
+  documentation_url: string | null
 }
 
 export interface IValidationErrorDetail {
   /**
    * Field with error (read-only)
    */
-  field?: string
+  field?: string | null
   /**
    * Error code (read-only)
    */
-  code?: string
+  code?: string | null
   /**
    * Error info message (read-only)
    */
-  message?: string
+  message?: string | null
   /**
    * Documentation link (read-only)
    */
-  documentation_url: string
+  documentation_url: string | null
 }
 
 /**
@@ -10080,15 +10080,15 @@ export interface IWelcomeEmailTest {
   /**
    * The content that would be sent in the body of a custom welcome email
    */
-  content?: string
+  content?: string | null
   /**
    * The subject that would be sent for the custom welcome email
    */
-  subject?: string
+  subject?: string | null
   /**
    * The header that would be sent in the body of a custom welcome email
    */
-  header?: string
+  header?: string | null
 }
 
 export interface IWhitelabelConfiguration {
@@ -10099,23 +10099,23 @@ export interface IWhitelabelConfiguration {
   /**
    * Customer logo image. Expected base64 encoded data (write-only)
    */
-  logo_file?: string
+  logo_file?: string | null
   /**
    * Logo image url (read-only) (read-only)
    */
-  logo_url?: string
+  logo_url?: string | null
   /**
    * Custom favicon image. Expected base64 encoded data (write-only)
    */
-  favicon_file?: string
+  favicon_file?: string | null
   /**
    * Favicon image url (read-only) (read-only)
    */
-  favicon_url?: string
+  favicon_url?: string | null
   /**
    * Default page title
    */
-  default_title?: string
+  default_title?: string | null
   /**
    * Boolean to toggle showing help menus
    */
@@ -10170,7 +10170,7 @@ export interface IWorkspace {
   /**
    * The local state of each project in the workspace (read-only)
    */
-  projects?: IProject[]
+  projects?: IProject[] | null
 }
 
 /**
@@ -10181,11 +10181,11 @@ export interface IWriteAlert {
   /**
    * Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
    */
-  applied_dashboard_filters?: IAlertAppliedDashboardFilter[]
+  applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
    * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
-  comparison_type: ComparisonType
+  comparison_type: ComparisonType | null
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
@@ -10193,20 +10193,20 @@ export interface IWriteAlert {
   /**
    * An optional, user-defined title for the alert
    */
-  custom_title?: string
+  custom_title?: string | null
   /**
    * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
    */
-  dashboard_element_id?: number
+  dashboard_element_id?: number | null
   /**
    * An optional description for the alert. This supplements the title
    */
-  description?: string
+  description?: string | null
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
-  destinations: IAlertDestination[]
-  field: IAlertField
+  destinations: IAlertDestination[] | null
+  field: IAlertField | null
   /**
    * Whether or not the alert is disabled
    */
@@ -10214,7 +10214,7 @@ export interface IWriteAlert {
   /**
    * Reason for disabling alert
    */
-  disabled_reason?: string
+  disabled_reason?: string | null
   /**
    * Whether or not the alert is public
    */
@@ -10222,19 +10222,19 @@ export interface IWriteAlert {
   /**
    * The type of the investigative content Valid values are: "dashboard".
    */
-  investigative_content_type?: InvestigativeContentType
+  investigative_content_type?: InvestigativeContentType | null
   /**
    * The ID of the investigative content. For dashboards, this will be the dashboard ID
    */
-  investigative_content_id?: string
+  investigative_content_id?: string | null
   /**
    * ID of the LookML dashboard associated with the alert
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * ID of the LookML dashboard element associated with the alert
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * User id of alert owner
    */
@@ -10243,7 +10243,7 @@ export interface IWriteAlert {
    * Value of the alert threshold
    */
   threshold: number
-  time_series_condition_state?: IAlertConditionState
+  time_series_condition_state?: IAlertConditionState | null
 }
 
 /**
@@ -10254,7 +10254,7 @@ export interface IWriteApiSession {
   /**
    * The id of active workspace for this session
    */
-  workspace_id?: string
+  workspace_id?: string | null
 }
 
 /**
@@ -10265,23 +10265,23 @@ export interface IWriteBackupConfiguration {
   /**
    * Type of backup: looker-s3 or custom-s3
    */
-  type?: string
+  type?: string | null
   /**
    * Name of bucket for custom-s3 backups
    */
-  custom_s3_bucket?: string
+  custom_s3_bucket?: string | null
   /**
    * Name of region where the bucket is located
    */
-  custom_s3_bucket_region?: string
+  custom_s3_bucket_region?: string | null
   /**
    * (Write-Only) AWS S3 key used for custom-s3 backups
    */
-  custom_s3_key?: string
+  custom_s3_key?: string | null
   /**
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
-  custom_s3_secret?: string
+  custom_s3_secret?: string | null
 }
 
 /**
@@ -10292,19 +10292,19 @@ export interface IWriteBoard {
   /**
    * Date of board deletion
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Description of the board
    */
-  description?: string
+  description?: string | null
   /**
    * ids of the board sections in the order they should be displayed
    */
-  section_order?: number[]
+  section_order?: number[] | null
   /**
    * Title of the board
    */
-  title?: string
+  title?: string | null
 }
 
 /**
@@ -10315,35 +10315,35 @@ export interface IWriteBoardItem {
   /**
    * Custom description entered by the user, if present
    */
-  custom_description?: string
+  custom_description?: string | null
   /**
    * Custom title entered by the user, if present
    */
-  custom_title?: string
+  custom_title?: string | null
   /**
    * Custom url entered by the user, if present
    */
-  custom_url?: string
+  custom_url?: string | null
   /**
    * Dashboard to base this item on
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Associated Board Section
    */
-  board_section_id?: number
+  board_section_id?: number | null
   /**
    * Look to base this item on
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * LookML Dashboard to base this item on
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * An arbitrary integer representing the sort order within the section
    */
-  order?: number
+  order?: number | null
 }
 
 /**
@@ -10354,23 +10354,23 @@ export interface IWriteBoardSection {
   /**
    * Time at which this section was deleted.
    */
-  deleted_at?: Date
+  deleted_at?: Date | null
   /**
    * Description of the content found in this section.
    */
-  description?: string
+  description?: string | null
   /**
    * Id reference to parent board
    */
-  board_id?: number
+  board_id?: number | null
   /**
    * ids of the board items in the order they should be displayed
    */
-  item_order?: number[]
+  item_order?: number[] | null
   /**
    * Name of row
    */
-  title?: string
+  title?: string | null
 }
 
 /**
@@ -10385,15 +10385,15 @@ export interface IWriteColorCollection {
   /**
    * Array of categorical palette definitions
    */
-  categoricalPalettes?: IDiscretePalette[]
+  categoricalPalettes?: IDiscretePalette[] | null
   /**
    * Array of discrete palette definitions
    */
-  sequentialPalettes?: IContinuousPalette[]
+  sequentialPalettes?: IContinuousPalette[] | null
   /**
    * Array of diverging palette definitions
    */
-  divergingPalettes?: IContinuousPalette[]
+  divergingPalettes?: IContinuousPalette[] | null
 }
 
 /**
@@ -10408,7 +10408,7 @@ export interface IWriteCommand {
   /**
    * Description of the command
    */
-  description?: string
+  description?: string | null
   /**
    * Id of the content associated with the command
    */
@@ -10416,7 +10416,7 @@ export interface IWriteCommand {
   /**
    * Name of the command Valid values are: "dashboard", "lookml_dashboard".
    */
-  linked_content_type?: LinkedContentType
+  linked_content_type?: LinkedContentType | null
 }
 
 /**
@@ -10436,12 +10436,12 @@ export interface IWriteContentFavorite {
    * Dynamic writeable type for LookBasic removes:
    * can, content_metadata_id, id, title
    */
-  look?: IWriteLookBasic
+  look?: IWriteLookBasic | null
   /**
    * Dynamic writeable type for DashboardBase removes:
    * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
    */
-  dashboard?: IWriteDashboardBase
+  dashboard?: IWriteDashboardBase | null
 }
 
 /**
@@ -10463,43 +10463,43 @@ export interface IWriteCreateDashboardFilter {
   /**
    * Id of Dashboard
    */
-  dashboard_id: string
+  dashboard_id: string | null
   /**
    * Name of filter
    */
-  name: string
+  name: string | null
   /**
    * Title of filter
    */
-  title: string
+  title: string | null
   /**
    * Type of filter: one of date, number, string, or field
    */
-  type: string
+  type: string | null
   /**
    * Default value of filter
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Model of filter (required if type = field)
    */
-  model?: string
+  model?: string | null
   /**
    * Explore of filter (required if type = field)
    */
-  explore?: string
+  explore?: string | null
   /**
    * Dimension of filter (required if type = field)
    */
-  dimension?: string
+  dimension?: string | null
   /**
    * Display order of this filter relative to other filters
    */
-  row?: number
+  row?: number | null
   /**
    * Array of listeners for faceted filters
    */
-  listens_to_filters?: string[]
+  listens_to_filters?: string[] | null
   /**
    * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
    */
@@ -10511,7 +10511,7 @@ export interface IWriteCreateDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<any>
+  ui_config?: IDictionary<any> | null
 }
 
 /**
@@ -10522,15 +10522,15 @@ export interface IWriteCreateQueryTask {
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormat
+  result_format: ResultFormat | null
   /**
    * Source of query task
    */
-  source?: string
+  source?: string | null
   /**
    * Create the task but defer execution
    */
@@ -10538,11 +10538,11 @@ export interface IWriteCreateQueryTask {
   /**
    * Id of look associated with query.
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of dashboard associated with query.
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
 }
 
 /**
@@ -10553,7 +10553,7 @@ export interface IWriteCredentialsEmail {
   /**
    * EMail address used for user login
    */
-  email?: string
+  email?: string | null
   /**
    * Force the user to change their password upon their next login
    */
@@ -10568,7 +10568,7 @@ export interface IWriteDashboard {
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * Is Hidden
    */
@@ -10576,28 +10576,28 @@ export interface IWriteDashboard {
   /**
    * Timezone in which the Dashboard will run by default.
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
-  refresh_interval?: string
+  refresh_interval?: string | null
   /**
    * Dynamic writeable type for FolderBase removes:
    * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
    */
-  folder?: IWriteFolderBase
+  folder?: IWriteFolderBase | null
   /**
    * Dashboard Title
    */
-  title?: string
+  title?: string | null
   /**
    * Content Metadata Slug
    */
-  slug?: string
+  slug?: string | null
   /**
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
-  preferred_viewer?: string
+  preferred_viewer?: string | null
   /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
@@ -10605,7 +10605,7 @@ export interface IWriteDashboard {
   /**
    * Background color
    */
-  background_color?: string
+  background_color?: string | null
   /**
    * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
    */
@@ -10621,11 +10621,11 @@ export interface IWriteDashboard {
   /**
    * configuration option that governs how dashboard loading will happen.
    */
-  load_configuration?: string
+  load_configuration?: string | null
   /**
    * Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
    */
-  lookml_link_id?: string
+  lookml_link_id?: string | null
   /**
    * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
    */
@@ -10637,24 +10637,24 @@ export interface IWriteDashboard {
   /**
    * Id of folder
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Color of text on text tiles
    */
-  text_tile_text_color?: string
+  text_tile_text_color?: string | null
   /**
    * Tile background color
    */
-  tile_background_color?: string
+  tile_background_color?: string | null
   /**
    * Tile text color
    */
-  tile_text_color?: string
+  tile_text_color?: string | null
   /**
    * Title color
    */
-  title_color?: string
-  appearance?: IDashboardAppearance
+  title_color?: string | null
+  appearance?: IDashboardAppearance | null
 }
 
 /**
@@ -10666,7 +10666,7 @@ export interface IWriteDashboardBase {
    * Dynamic writeable type for FolderBase removes:
    * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
    */
-  folder?: IWriteFolderBase
+  folder?: IWriteFolderBase | null
 }
 
 /**
@@ -10677,66 +10677,66 @@ export interface IWriteDashboardElement {
   /**
    * Text tile body text
    */
-  body_text?: string
+  body_text?: string | null
   /**
    * Id of Dashboard
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Dynamic writeable type for LookWithQuery removes:
    * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
    */
-  look?: IWriteLookWithQuery
+  look?: IWriteLookWithQuery | null
   /**
    * Id Of Look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * ID of merge result
    */
-  merge_result_id?: string
+  merge_result_id?: string | null
   /**
    * Note Display
    */
-  note_display?: string
+  note_display?: string | null
   /**
    * Note State
    */
-  note_state?: string
+  note_state?: string | null
   /**
    * Note Text
    */
-  note_text?: string
+  note_text?: string | null
   /**
    * Dynamic writeable type for Query removes:
    * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
    */
-  query?: IWriteQuery
+  query?: IWriteQuery | null
   /**
    * Id Of Query
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Refresh Interval
    */
-  refresh_interval?: string
+  refresh_interval?: string | null
   /**
    * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
    * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
    */
-  result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields
+  result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields | null
   /**
    * ID of the ResultMakerLookup entry.
    */
-  result_maker_id?: number
+  result_maker_id?: number | null
   /**
    * Text tile subtitle text
    */
-  subtitle_text?: string
+  subtitle_text?: string | null
   /**
    * Title of dashboard element
    */
-  title?: string
+  title?: string | null
   /**
    * Whether title is hidden
    */
@@ -10744,11 +10744,11 @@ export interface IWriteDashboardElement {
   /**
    * Text tile title
    */
-  title_text?: string
+  title_text?: string | null
   /**
    * Type
    */
-  type?: string
+  type?: string | null
 }
 
 /**
@@ -10759,39 +10759,39 @@ export interface IWriteDashboardFilter {
   /**
    * Name of filter
    */
-  name?: string
+  name?: string | null
   /**
    * Title of filter
    */
-  title?: string
+  title?: string | null
   /**
    * Type of filter: one of date, number, string, or field
    */
-  type?: string
+  type?: string | null
   /**
    * Default value of filter
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * Model of filter (required if type = field)
    */
-  model?: string
+  model?: string | null
   /**
    * Explore of filter (required if type = field)
    */
-  explore?: string
+  explore?: string | null
   /**
    * Dimension of filter (required if type = field)
    */
-  dimension?: string
+  dimension?: string | null
   /**
    * Display order of this filter relative to other filters
    */
-  row?: number
+  row?: number | null
   /**
    * Array of listeners for faceted filters
    */
-  listens_to_filters?: string[]
+  listens_to_filters?: string[] | null
   /**
    * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
    */
@@ -10803,7 +10803,7 @@ export interface IWriteDashboardFilter {
   /**
    * The visual configuration for this filter. Used to set up how the UI for this filter should appear.
    */
-  ui_config?: IDictionary<any>
+  ui_config?: IDictionary<any> | null
 }
 
 /**
@@ -10814,11 +10814,11 @@ export interface IWriteDashboardLayout {
   /**
    * Id of Dashboard
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
   /**
    * Type
    */
-  type?: string
+  type?: string | null
   /**
    * Is Active
    */
@@ -10826,11 +10826,11 @@ export interface IWriteDashboardLayout {
   /**
    * Column Width
    */
-  column_width?: number
+  column_width?: number | null
   /**
    * Width
    */
-  width?: number
+  width?: number | null
 }
 
 /**
@@ -10841,27 +10841,27 @@ export interface IWriteDashboardLayoutComponent {
   /**
    * Id of Dashboard Layout
    */
-  dashboard_layout_id?: string
+  dashboard_layout_id?: string | null
   /**
    * Id Of Dashboard Element
    */
-  dashboard_element_id?: string
+  dashboard_element_id?: string | null
   /**
    * Row
    */
-  row?: number
+  row?: number | null
   /**
    * Column
    */
-  column?: number
+  column?: number | null
   /**
    * Width
    */
-  width?: number
+  width?: number | null
   /**
    * Height
    */
-  height?: number
+  height?: number | null
 }
 
 /**
@@ -10872,11 +10872,11 @@ export interface IWriteDatagroup {
   /**
    * UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
    */
-  stale_before?: number
+  stale_before?: number | null
   /**
    * UNIX timestamp at which this entry became triggered. Cannot be in the future.
    */
-  triggered_at?: number
+  triggered_at?: number | null
 }
 
 /**
@@ -10891,51 +10891,51 @@ export interface IWriteDBConnection {
   /**
    * Host name/address of server
    */
-  host?: string
+  host?: string | null
   /**
    * Port number on server
    */
-  port?: string
+  port?: string | null
   /**
    * Username for server authentication
    */
-  username?: string
+  username?: string | null
   /**
    * (Write-Only) Password for server authentication
    */
-  password?: string
+  password?: string | null
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
-  certificate?: string
+  certificate?: string | null
   /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
-  file_type?: string
+  file_type?: string | null
   /**
    * Database name
    */
-  database?: string
+  database?: string | null
   /**
    * Time zone of database
    */
-  db_timezone?: string
+  db_timezone?: string | null
   /**
    * Timezone to use in queries
    */
-  query_timezone?: string
+  query_timezone?: string | null
   /**
    * Scheme name
    */
-  schema?: string
+  schema?: string | null
   /**
    * Maximum number of concurrent connection to use
    */
-  max_connections?: number
+  max_connections?: number | null
   /**
    * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
    */
-  max_billing_gigabytes?: string
+  max_billing_gigabytes?: string | null
   /**
    * Use SSL/TLS when connecting to server
    */
@@ -10947,31 +10947,31 @@ export interface IWriteDBConnection {
   /**
    * Name of temporary database (if used)
    */
-  tmp_db_name?: string
+  tmp_db_name?: string | null
   /**
    * Additional params to add to JDBC connection string
    */
-  jdbc_additional_params?: string
+  jdbc_additional_params?: string | null
   /**
    * Connection Pool Timeout, in seconds
    */
-  pool_timeout?: number
+  pool_timeout?: number | null
   /**
    * (Read/Write) SQL Dialect name
    */
-  dialect_name?: string
+  dialect_name?: string | null
   /**
    * (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
    */
-  user_db_credentials?: boolean
+  user_db_credentials?: boolean | null
   /**
    * Fields whose values map to user attribute names
    */
-  user_attribute_fields?: string[]
+  user_attribute_fields?: string[] | null
   /**
    * Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
    */
-  maintenance_cron?: string
+  maintenance_cron?: string | null
   /**
    * Precache tables in the SQL Runner
    */
@@ -10983,32 +10983,32 @@ export interface IWriteDBConnection {
   /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
-  after_connect_statements?: string
+  after_connect_statements?: string | null
   /**
    * Dynamic writeable type for DBConnectionOverride removes:
    * has_password
    */
-  pdt_context_override?: IWriteDBConnectionOverride
+  pdt_context_override?: IWriteDBConnectionOverride | null
   /**
    * The Id of the ssh tunnel this connection uses
    */
-  tunnel_id?: string
+  tunnel_id?: string | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
-  pdt_concurrency?: number
+  pdt_concurrency?: number | null
   /**
    * When disable_context_comment is true comment will not be added to SQL
    */
-  disable_context_comment?: boolean
+  disable_context_comment?: boolean | null
   /**
    * An External OAuth Application to use for authenticating to the database
    */
-  oauth_application_id?: number
+  oauth_application_id?: number | null
   /**
    * When true, error PDTs will be retried every regenerator cycle
    */
-  always_retry_failed_builds?: boolean
+  always_retry_failed_builds?: boolean | null
 }
 
 /**
@@ -11023,43 +11023,43 @@ export interface IWriteDBConnectionOverride {
   /**
    * Host name/address of server
    */
-  host?: string
+  host?: string | null
   /**
    * Port number on server
    */
-  port?: string
+  port?: string | null
   /**
    * Username for server authentication
    */
-  username?: string
+  username?: string | null
   /**
    * (Write-Only) Password for server authentication
    */
-  password?: string
+  password?: string | null
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
-  certificate?: string
+  certificate?: string | null
   /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
-  file_type?: string
+  file_type?: string | null
   /**
    * Database name
    */
-  database?: string
+  database?: string | null
   /**
    * Scheme name
    */
-  schema?: string
+  schema?: string | null
   /**
    * Additional params to add to JDBC connection string
    */
-  jdbc_additional_params?: string
+  jdbc_additional_params?: string | null
   /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
-  after_connect_statements?: string
+  after_connect_statements?: string | null
 }
 
 /**
@@ -11070,7 +11070,7 @@ export interface IWriteEmbedSecret {
   /**
    * Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
    */
-  algorithm?: string
+  algorithm?: string | null
   /**
    * Is this secret currently enabled
    */
@@ -11097,7 +11097,7 @@ export interface IWriteExternalOauthApplication {
   /**
    * The database dialect for this application.
    */
-  dialect_name?: string
+  dialect_name?: string | null
 }
 
 /**
@@ -11112,7 +11112,7 @@ export interface IWriteFolderBase {
   /**
    * Id of Parent. If the parent id is null, this is a root-level entry
    */
-  parent_id?: string
+  parent_id?: string | null
 }
 
 /**
@@ -11123,11 +11123,11 @@ export interface IWriteGitBranch {
   /**
    * The short name on the local. Updating `name` results in `git checkout <new_name>`
    */
-  name?: string
+  name?: string | null
   /**
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
-  ref?: string
+  ref?: string | null
 }
 
 /**
@@ -11142,7 +11142,7 @@ export interface IWriteGroup {
   /**
    * Name of group
    */
-  name?: string
+  name?: string | null
 }
 
 /**
@@ -11157,11 +11157,11 @@ export interface IWriteIntegration {
   /**
    * Array of params for the integration.
    */
-  params?: IIntegrationParam[]
+  params?: IIntegrationParam[] | null
   /**
    * Whether the integration is available to users.
    */
-  installed_delegate_oauth_targets?: number[]
+  installed_delegate_oauth_targets?: number[] | null
 }
 
 /**
@@ -11176,7 +11176,7 @@ export interface IWriteIntegrationHub {
   /**
    * (Write-Only) An authorization key that will be sent to the integration hub on every request.
    */
-  authorization_token?: string
+  authorization_token?: string | null
 }
 
 /**
@@ -11198,11 +11198,11 @@ export interface IWriteInternalHelpResourcesContent {
   /**
    * Text to display in the help menu item which will display the internal help resources
    */
-  organization_name?: string
+  organization_name?: string | null
   /**
    * Content to be displayed in the internal help resources page/modal
    */
-  markdown_content?: string
+  markdown_content?: string | null
 }
 
 /**
@@ -11217,7 +11217,7 @@ export interface IWriteLDAPConfig {
   /**
    * (Write-Only)  Password for the LDAP account used to access the LDAP server
    */
-  auth_password?: string
+  auth_password?: string | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
    */
@@ -11225,15 +11225,15 @@ export interface IWriteLDAPConfig {
   /**
    * Distinguished name of LDAP account used to access the LDAP server
    */
-  auth_username?: string
+  auth_username?: string | null
   /**
    * LDAP server hostname
    */
-  connection_host?: string
+  connection_host?: string | null
   /**
    * LDAP host port
    */
-  connection_port?: string
+  connection_port?: string | null
   /**
    * Use Transport Layer Security
    */
@@ -11245,11 +11245,11 @@ export interface IWriteLDAPConfig {
   /**
    * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * Enable/Disable LDAP authentication for the server
    */
@@ -11261,27 +11261,27 @@ export interface IWriteLDAPConfig {
   /**
    * Base dn for finding groups in LDAP searches
    */
-  groups_base_dn?: string
+  groups_base_dn?: string | null
   /**
    * Identifier for a strategy for how Looker will search for groups in the LDAP server
    */
-  groups_finder_type?: string
+  groups_finder_type?: string | null
   /**
    * LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
    */
-  groups_member_attribute?: string
+  groups_member_attribute?: string | null
   /**
    * Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
    */
-  groups_objectclasses?: string
+  groups_objectclasses?: string | null
   /**
    * LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
    */
-  groups_user_attribute?: string
+  groups_user_attribute?: string | null
   /**
    * (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: ILDAPGroupWrite[]
+  groups_with_role_ids?: ILDAPGroupWrite[] | null
   /**
    * Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
    */
@@ -11293,47 +11293,47 @@ export interface IWriteLDAPConfig {
   /**
    * (Write-Only)  Test LDAP user password. For ldap tests only.
    */
-  test_ldap_password?: string
+  test_ldap_password?: string | null
   /**
    * (Write-Only)  Test LDAP user login id. For ldap tests only.
    */
-  test_ldap_user?: string
+  test_ldap_user?: string | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * Name of user record attributes used to indicate unique record id
    */
-  user_attribute_map_ldap_id?: string
+  user_attribute_map_ldap_id?: string | null
   /**
    * (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: ILDAPUserAttributeWrite[]
+  user_attributes_with_ids?: ILDAPUserAttributeWrite[] | null
   /**
    * Distinguished name of LDAP node used as the base for user searches
    */
-  user_bind_base_dn?: string
+  user_bind_base_dn?: string | null
   /**
    * (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
    */
-  user_custom_filter?: string
+  user_custom_filter?: string | null
   /**
    * Name(s) of user record attributes used for matching user login id (comma separated list)
    */
-  user_id_attribute_names?: string
+  user_id_attribute_names?: string | null
   /**
    * (Optional) Name of user record objectclass used for finding user during login id
    */
-  user_objectclass?: string
+  user_objectclass?: string | null
   /**
    * Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
    */
@@ -11367,7 +11367,7 @@ export interface IWriteLookBasic {
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
 }
 
 /**
@@ -11378,15 +11378,15 @@ export interface IWriteLookmlModel {
   /**
    * Array of names of connections this model is allowed to use
    */
-  allowed_db_connection_names?: string[]
+  allowed_db_connection_names?: string[] | null
   /**
    * Name of the model. Also used as the unique identifier
    */
-  name?: string
+  name?: string | null
   /**
    * Name of project containing the model
    */
-  project_name?: string
+  project_name?: string | null
   /**
    * Is this model allowed to use all current and future connections
    */
@@ -11401,11 +11401,11 @@ export interface IWriteLookWithQuery {
   /**
    * Look Title
    */
-  title?: string
+  title?: string | null
   /**
    * User Id
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -11413,7 +11413,7 @@ export interface IWriteLookWithQuery {
   /**
    * Description
    */
-  description?: string
+  description?: string | null
   /**
    * auto-run query when Look viewed
    */
@@ -11425,21 +11425,21 @@ export interface IWriteLookWithQuery {
   /**
    * Query Id
    */
-  query_id?: number
+  query_id?: number | null
   /**
    * Dynamic writeable type for FolderBase removes:
    * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
    */
-  folder?: IWriteFolderBase
+  folder?: IWriteFolderBase | null
   /**
    * Folder Id
    */
-  folder_id?: string
+  folder_id?: string | null
   /**
    * Dynamic writeable type for Query removes:
    * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
    */
-  query?: IWriteQuery
+  query?: IWriteQuery | null
 }
 
 /**
@@ -11450,23 +11450,23 @@ export interface IWriteMergeQuery {
   /**
    * Column Limit
    */
-  column_limit?: string
+  column_limit?: string | null
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string
+  dynamic_fields?: string | null
   /**
    * Pivots
    */
-  pivots?: string[]
+  pivots?: string[] | null
   /**
    * Sorts
    */
-  sorts?: string[]
+  sorts?: string[] | null
   /**
    * Source Queries defining the results to be merged.
    */
-  source_queries?: IMergeQuerySourceQuery[]
+  source_queries?: IMergeQuerySourceQuery[] | null
   /**
    * Total
    */
@@ -11474,7 +11474,7 @@ export interface IWriteMergeQuery {
   /**
    * Visualization Config
    */
-  vis_config?: IDictionary<string>
+  vis_config?: IDictionary<string> | null
 }
 
 /**
@@ -11482,11 +11482,11 @@ export interface IWriteMergeQuery {
  * can, all_access, built_in, id, url
  */
 export interface IWriteModelSet {
-  models?: string[]
+  models?: string[] | null
   /**
    * Name of ModelSet
    */
-  name?: string
+  name?: string | null
 }
 
 /**
@@ -11513,7 +11513,7 @@ export interface IWriteOauthClientApp {
   /**
    * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
    */
-  group_id?: number
+  group_id?: number | null
 }
 
 /**
@@ -11528,7 +11528,7 @@ export interface IWriteOIDCConfig {
   /**
    * OpenID Provider Audience
    */
-  audience?: string
+  audience?: string | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
    */
@@ -11536,15 +11536,15 @@ export interface IWriteOIDCConfig {
   /**
    * OpenID Provider Authorization Url
    */
-  authorization_endpoint?: string
+  authorization_endpoint?: string | null
   /**
    * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * Enable/Disable OIDC authentication for the server
    */
@@ -11552,31 +11552,31 @@ export interface IWriteOIDCConfig {
   /**
    * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
    */
-  groups_attribute?: string
+  groups_attribute?: string | null
   /**
    * (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: IOIDCGroupWrite[]
+  groups_with_role_ids?: IOIDCGroupWrite[] | null
   /**
    * Relying Party Identifier (provided by OpenID Provider)
    */
-  identifier?: string
+  identifier?: string | null
   /**
    * OpenID Provider Issuer
    */
-  issuer?: string
+  issuer?: string | null
   /**
    * Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
    */
-  new_user_migration_types?: string
+  new_user_migration_types?: string | null
   /**
    * Array of scopes to request.
    */
-  scopes?: string[]
+  scopes?: string[] | null
   /**
    * (Write-Only) Relying Party Secret (provided by OpenID Provider)
    */
-  secret?: string
+  secret?: string | null
   /**
    * Set user roles in Looker based on groups from OIDC
    */
@@ -11584,27 +11584,27 @@ export interface IWriteOIDCConfig {
   /**
    * OpenID Provider Token Url
    */
-  token_endpoint?: string
+  token_endpoint?: string | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: IOIDCUserAttributeWrite[]
+  user_attributes_with_ids?: IOIDCUserAttributeWrite[] | null
   /**
    * OpenID Provider User Information Url
    */
-  userinfo_endpoint?: string
+  userinfo_endpoint?: string | null
   /**
    * Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
    */
@@ -11627,7 +11627,7 @@ export interface IWritePasswordConfig {
   /**
    * Minimum number of characters required for a new password.  Must be between 7 and 100
    */
-  min_length?: number
+  min_length?: number | null
   /**
    * Require at least one numeric character
    */
@@ -11650,8 +11650,8 @@ export interface IWritePermissionSet {
   /**
    * Name of PermissionSet
    */
-  name?: string
-  permissions?: string[]
+  name?: string | null
+  permissions?: string[] | null
 }
 
 /**
@@ -11666,15 +11666,15 @@ export interface IWriteProject {
   /**
    * Git remote repository url
    */
-  git_remote_url?: string
+  git_remote_url?: string | null
   /**
    * Git username for HTTPS authentication. (For production only, if using user attributes.)
    */
-  git_username?: string
+  git_username?: string | null
   /**
    * (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
    */
-  git_password?: string
+  git_password?: string | null
   /**
    * Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
    */
@@ -11686,27 +11686,27 @@ export interface IWriteProject {
   /**
    * User attribute name for username in per-user HTTPS authentication.
    */
-  git_username_user_attribute?: string
+  git_username_user_attribute?: string | null
   /**
    * User attribute name for password in per-user HTTPS authentication.
    */
-  git_password_user_attribute?: string
+  git_password_user_attribute?: string | null
   /**
    * Name of the git service provider
    */
-  git_service_name?: string
+  git_service_name?: string | null
   /**
    * Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
    */
-  git_application_server_http_port?: number
+  git_application_server_http_port?: number | null
   /**
    * Scheme that is running on application server (for PRs, file browsing, etc.)
    */
-  git_application_server_http_scheme?: string
+  git_application_server_http_scheme?: string | null
   /**
    * (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
    */
-  deploy_secret?: string
+  deploy_secret?: string | null
   /**
    * (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
    */
@@ -11714,7 +11714,7 @@ export interface IWriteProject {
   /**
    * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
    */
-  pull_request_mode?: PullRequestMode
+  pull_request_mode?: PullRequestMode | null
   /**
    * Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
    */
@@ -11730,7 +11730,7 @@ export interface IWriteProject {
   /**
    * Status of dependencies in your manifest & lockfile
    */
-  dependency_status?: string
+  dependency_status?: string | null
 }
 
 /**
@@ -11749,71 +11749,71 @@ export interface IWriteQuery {
   /**
    * Fields
    */
-  fields?: string[]
+  fields?: string[] | null
   /**
    * Pivots
    */
-  pivots?: string[]
+  pivots?: string[] | null
   /**
    * Fill Fields
    */
-  fill_fields?: string[]
+  fill_fields?: string[] | null
   /**
    * Filters
    */
-  filters?: IDictionary<string>
+  filters?: IDictionary<string> | null
   /**
    * Filter Expression
    */
-  filter_expression?: string
+  filter_expression?: string | null
   /**
    * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
    */
-  sorts?: string[]
+  sorts?: string[] | null
   /**
    * Limit
    */
-  limit?: string
+  limit?: string | null
   /**
    * Column Limit
    */
-  column_limit?: string
+  column_limit?: string | null
   /**
    * Total
    */
-  total?: boolean
+  total?: boolean | null
   /**
    * Raw Total
    */
-  row_total?: string
+  row_total?: string | null
   /**
    * Fields on which to run subtotals
    */
-  subtotals?: string[]
+  subtotals?: string[] | null
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
-  vis_config?: IDictionary<any>
+  vis_config?: IDictionary<any> | null
   /**
    * The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
    */
-  filter_config?: IDictionary<any>
+  filter_config?: IDictionary<any> | null
   /**
    * Visible UI Sections
    */
-  visible_ui_sections?: string
+  visible_ui_sections?: string | null
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string
+  dynamic_fields?: string | null
   /**
    * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
    */
-  client_id?: string
+  client_id?: string | null
   /**
    * Query Timezone
    */
-  query_timezone?: string
+  query_timezone?: string | null
 }
 
 /**
@@ -11824,15 +11824,15 @@ export interface IWriteRepositoryCredential {
   /**
    * Git username for HTTPS authentication.
    */
-  git_username?: string
+  git_username?: string | null
   /**
    * (Write-Only) Git password for HTTPS authentication.
    */
-  git_password?: string
+  git_password?: string | null
   /**
    * Public deploy key for SSH authentication.
    */
-  ssh_public_key?: string
+  ssh_public_key?: string | null
 }
 
 /**
@@ -11844,7 +11844,7 @@ export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
    * Dynamic writeable type for Query removes:
    * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
    */
-  query?: IWriteQuery
+  query?: IWriteQuery | null
 }
 
 /**
@@ -11855,25 +11855,25 @@ export interface IWriteRole {
   /**
    * Name of Role
    */
-  name?: string
+  name?: string | null
   /**
    * Dynamic writeable type for PermissionSet removes:
    * can, all_access, built_in, id, url
    */
-  permission_set?: IWritePermissionSet
+  permission_set?: IWritePermissionSet | null
   /**
    * (Write-Only) Id of permission set
    */
-  permission_set_id?: number
+  permission_set_id?: number | null
   /**
    * Dynamic writeable type for ModelSet removes:
    * can, all_access, built_in, id, url
    */
-  model_set?: IWriteModelSet
+  model_set?: IWriteModelSet | null
   /**
    * (Write-Only) Id of model set
    */
-  model_set_id?: number
+  model_set_id?: number | null
 }
 
 /**
@@ -11888,39 +11888,39 @@ export interface IWriteSamlConfig {
   /**
    * Identity Provider Certificate (provided by IdP)
    */
-  idp_cert?: string
+  idp_cert?: string | null
   /**
    * Identity Provider Url (provided by IdP)
    */
-  idp_url?: string
+  idp_url?: string | null
   /**
    * Identity Provider Issuer (provided by IdP)
    */
-  idp_issuer?: string
+  idp_issuer?: string | null
   /**
    * Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
    */
-  idp_audience?: string
+  idp_audience?: string | null
   /**
    * Count of seconds of clock drift to allow when validating timestamps of assertions.
    */
-  allowed_clock_drift?: number
+  allowed_clock_drift?: number | null
   /**
    * Name of user record attributes used to indicate email address field
    */
-  user_attribute_map_email?: string
+  user_attribute_map_email?: string | null
   /**
    * Name of user record attributes used to indicate first name
    */
-  user_attribute_map_first_name?: string
+  user_attribute_map_first_name?: string | null
   /**
    * Name of user record attributes used to indicate last name
    */
-  user_attribute_map_last_name?: string
+  user_attribute_map_last_name?: string | null
   /**
    * Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
    */
-  new_user_migration_types?: string
+  new_user_migration_types?: string | null
   /**
    * Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
    */
@@ -11928,11 +11928,11 @@ export interface IWriteSamlConfig {
   /**
    * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
    */
-  default_new_user_role_ids?: number[]
+  default_new_user_role_ids?: number[] | null
   /**
    * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
    */
-  default_new_user_group_ids?: number[]
+  default_new_user_group_ids?: number[] | null
   /**
    * Set user roles in Looker based on groups from Saml
    */
@@ -11940,11 +11940,11 @@ export interface IWriteSamlConfig {
   /**
    * Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
    */
-  groups_attribute?: string
+  groups_attribute?: string | null
   /**
    * (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
    */
-  groups_with_role_ids?: ISamlGroupWrite[]
+  groups_with_role_ids?: ISamlGroupWrite[] | null
   /**
    * Users will not be allowed to login at all unless a role for them is found in Saml if set to true
    */
@@ -11952,15 +11952,15 @@ export interface IWriteSamlConfig {
   /**
    * (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
    */
-  user_attributes_with_ids?: ISamlUserAttributeWrite[]
+  user_attributes_with_ids?: ISamlUserAttributeWrite[] | null
   /**
    * Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
    */
-  groups_finder_type?: string
+  groups_finder_type?: string | null
   /**
    * Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
    */
-  groups_member_value?: string
+  groups_member_value?: string | null
   /**
    * Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
    */
@@ -11987,11 +11987,11 @@ export interface IWriteScheduledPlan {
   /**
    * Name of this scheduled plan
    */
-  name?: string
+  name?: string | null
   /**
    * User Id which owns this scheduled plan
    */
-  user_id?: number
+  user_id?: number | null
   /**
    * Whether schedule is run as recipient (only applicable for email recipients)
    */
@@ -12003,23 +12003,23 @@ export interface IWriteScheduledPlan {
   /**
    * Id of a look
    */
-  look_id?: string
+  look_id?: string | null
   /**
    * Id of a dashboard
    */
-  dashboard_id?: number
+  dashboard_id?: number | null
   /**
    * Id of a LookML dashboard
    */
-  lookml_dashboard_id?: string
+  lookml_dashboard_id?: string | null
   /**
    * Query string to run look or dashboard with
    */
-  filters_string?: string
+  filters_string?: string | null
   /**
    * (DEPRECATED) Alias for filters_string field
    */
-  dashboard_filters?: string
+  dashboard_filters?: string | null
   /**
    * Delivery should occur if running the dashboard or look returns results
    */
@@ -12039,23 +12039,23 @@ export interface IWriteScheduledPlan {
   /**
    * Vixie-Style crontab specification when to run
    */
-  crontab?: string
+  crontab?: string | null
   /**
    * Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
    */
-  datagroup?: string
+  datagroup?: string | null
   /**
    * Timezone for interpreting the specified crontab (default is Looker instance timezone)
    */
-  timezone?: string
+  timezone?: string | null
   /**
    * Query id
    */
-  query_id?: string
+  query_id?: string | null
   /**
    * Scheduled plan destinations
    */
-  scheduled_plan_destination?: IScheduledPlanDestination[]
+  scheduled_plan_destination?: IScheduledPlanDestination[] | null
   /**
    * Whether the plan in question should only be run once (usually for testing)
    */
@@ -12067,7 +12067,7 @@ export interface IWriteScheduledPlan {
   /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
-  pdf_paper_size?: string
+  pdf_paper_size?: string | null
   /**
    * Whether the PDF should be formatted for landscape orientation
    */
@@ -12079,7 +12079,7 @@ export interface IWriteScheduledPlan {
   /**
    * Color scheme of the dashboard if applicable
    */
-  color_theme?: string
+  color_theme?: string | null
   /**
    * Whether or not to expand table vis to full length
    */
@@ -12087,7 +12087,7 @@ export interface IWriteScheduledPlan {
   /**
    * The pixel width at which we render the inline table visualizations
    */
-  inline_table_width?: number
+  inline_table_width?: number | null
 }
 
 /**
@@ -12102,7 +12102,7 @@ export interface IWriteSessionConfig {
   /**
    * Number of minutes for user sessions.  Must be between 5 and 43200
    */
-  session_minutes?: number
+  session_minutes?: number | null
   /**
    * Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
    */
@@ -12137,8 +12137,8 @@ export interface IWriteSetting {
    * Dynamic writeable type for WhitelabelConfiguration removes:
    * id, logo_url, favicon_url
    */
-  whitelabel_configuration?: IWriteWhitelabelConfiguration
-  custom_welcome_email?: ICustomWelcomeEmail
+  whitelabel_configuration?: IWriteWhitelabelConfiguration | null
+  custom_welcome_email?: ICustomWelcomeEmail | null
 }
 
 /**
@@ -12191,16 +12191,16 @@ export interface IWriteTheme {
   /**
    * Timestamp for when this theme becomes active. Null=always
    */
-  begin_at?: Date
+  begin_at?: Date | null
   /**
    * Timestamp for when this theme expires. Null=never
    */
-  end_at?: Date
+  end_at?: Date | null
   /**
    * Name of theme. Can only be alphanumeric and underscores.
    */
   name?: string
-  settings?: IThemeSettings
+  settings?: IThemeSettings | null
 }
 
 /**
@@ -12212,15 +12212,15 @@ export interface IWriteUser {
    * Dynamic writeable type for CredentialsEmail removes:
    * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
    */
-  credentials_email?: IWriteCredentialsEmail
+  credentials_email?: IWriteCredentialsEmail | null
   /**
    * First name
    */
-  first_name?: string
+  first_name?: string | null
   /**
    * ID string for user's home folder
    */
-  home_folder_id?: string
+  home_folder_id?: string | null
   /**
    * Account has been disabled
    */
@@ -12228,19 +12228,19 @@ export interface IWriteUser {
   /**
    * Last name
    */
-  last_name?: string
+  last_name?: string | null
   /**
    * User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
    */
-  locale?: string
+  locale?: string | null
   /**
    * User's dev workspace has been checked for presence of applicable production projects
    */
-  models_dir_validated?: boolean
+  models_dir_validated?: boolean | null
   /**
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
-  ui_state?: IDictionary<string>
+  ui_state?: IDictionary<string> | null
 }
 
 /**
@@ -12251,19 +12251,19 @@ export interface IWriteUserAttribute {
   /**
    * Name of user attribute
    */
-  name: string
+  name: string | null
   /**
    * Human-friendly label for user attribute
    */
-  label: string
+  label: string | null
   /**
    * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
    */
-  type: string
+  type: string | null
   /**
    * Default value for when no value is set on the user
    */
-  default_value?: string
+  default_value?: string | null
   /**
    * If true, users will not be able to view values of this attribute
    */
@@ -12279,7 +12279,7 @@ export interface IWriteUserAttribute {
   /**
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
-  hidden_value_domain_whitelist?: string
+  hidden_value_domain_whitelist?: string | null
 }
 
 /**
@@ -12290,7 +12290,7 @@ export interface IWriteUserAttributeWithValue {
   /**
    * Value of attribute for user
    */
-  value?: string
+  value?: string | null
 }
 
 /**
@@ -12301,15 +12301,15 @@ export interface IWriteWhitelabelConfiguration {
   /**
    * Customer logo image. Expected base64 encoded data (write-only)
    */
-  logo_file?: string
+  logo_file?: string | null
   /**
    * Custom favicon image. Expected base64 encoded data (write-only)
    */
-  favicon_file?: string
+  favicon_file?: string | null
   /**
    * Default page title
    */
-  default_title?: string
+  default_title?: string | null
   /**
    * Boolean to toggle showing help menus
    */

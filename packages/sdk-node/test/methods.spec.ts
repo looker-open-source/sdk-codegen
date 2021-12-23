@@ -267,7 +267,7 @@ describe('LookerNodeSDK', () => {
         expect(looks).toBeDefined()
         if (looks.length > 0) {
           type = 'look'
-          id = looks[0].id!.toString(10)
+          id = looks[0].id!.toString()
         } else {
           const dashboards = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
           expect(dashboards).toBeDefined()
