@@ -246,6 +246,7 @@
       }
     ]
   },
+  "eslintignore": ["bin/looker-resources-index/tmp/compiled-typescript/**/*.js"],
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1",
