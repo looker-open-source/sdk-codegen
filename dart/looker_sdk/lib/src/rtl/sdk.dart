@@ -1,4 +1,4 @@
-import 'package:looker_sdk/looker_sdk.dart';
+import '../../index.dart';
 
 class Sdk {
   static LookerSDK _sdk;

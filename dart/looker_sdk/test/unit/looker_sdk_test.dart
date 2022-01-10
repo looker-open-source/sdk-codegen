@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:looker_sdk/looker_sdk.dart';
+import 'package:looker_sdk/index.dart';
 
 void main() {
   test('DelimList', () {

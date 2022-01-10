@@ -1,4 +1,4 @@
-import 'package:looker_sdk/looker_sdk.dart';
+import '../../index.dart';
 
 class AuthSession {
   Transport transport;

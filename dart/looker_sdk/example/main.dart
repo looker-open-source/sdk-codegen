@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:looker_sdk/looker_sdk.dart';
+import 'package:looker_sdk/index.dart';
 import 'package:dotenv/dotenv.dart' show load, env;
 
 void main() async {

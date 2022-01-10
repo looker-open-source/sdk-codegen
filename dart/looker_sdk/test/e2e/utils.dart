@@ -1,5 +1,5 @@
 import 'package:dotenv/dotenv.dart' show load, env;
-import 'package:looker_sdk/looker_sdk.dart';
+import 'package:looker_sdk/index.dart';
 
 class Utils {
   Utils() {

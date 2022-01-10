@@ -114,7 +114,7 @@ export class DartGen extends CodeGen {
   methodsPrologue(_indent: string): string {
     return `
 // ${this.warnEditing()}
-import 'package:looker_sdk/looker_sdk.dart';
+import '../looker_sdk.dart';
 
 class ${this.sdkClassName()} extends APIMethods {
   ${this.sdkClassName()}(AuthSession authSession) : super(authSession);
