@@ -58,7 +58,10 @@ class AuthSession {
   }
 
   Future<bool> logout() async {
-    Function jsonHandler = (Map json) => json;
+    dynamic jsonHandler(dynamic json, String contentType) {
+      return json;
+    }
+
     try {
       await ok(transport.request(
           jsonHandler,

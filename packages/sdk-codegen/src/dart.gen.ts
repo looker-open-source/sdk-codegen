@@ -26,14 +26,7 @@
 
 import type { IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
-import type {
-  IMethod,
-  IParameter,
-  IProperty,
-  IType,
-  Arg,
-  EnumValueType,
-} from './sdkModels'
+import type { IMethod, IParameter, IProperty, IType, Arg } from './sdkModels'
 import { EnumType, mayQuote, strBody, camelCase } from './sdkModels'
 
 /**
@@ -177,7 +170,7 @@ class ${this.sdkClassName()} extends APIMethods {
       ender = `\n}`
       const num = type as EnumType
       num.values.forEach((value) =>
-        props.push(this.declareEnumValue(bump, value))
+        props.push(this.declareEnumValue(bump, value as string))
       )
       propertyValues = props.join(this.enumDelimiter)
       return (
@@ -214,7 +207,7 @@ class ${this.sdkClassName()} extends APIMethods {
   enumMapper(type: EnumType) {
     const toMaps = type.values
       .map(
-        (v) => `case ${type.name}.${camelCase(v as string)}:
+        (v) => `case ${type.name}.${camelCase((v as string).toLowerCase())}:
        return '${v}';
 `
       )
@@ -223,7 +216,7 @@ class ${this.sdkClassName()} extends APIMethods {
       .map(
         (v) => `
      if (s == '${v}') {
-       return ${type.name}.${camelCase(v as string)};
+       return ${type.name}.${camelCase((v as string).toLowerCase())};
      }`
       )
       .join('')
@@ -243,8 +236,8 @@ ${fromMaps}
      }`
   }
 
-  declareEnumValue(indent: string, value: EnumValueType) {
-    return `${indent}${mayQuote(camelCase(value as string))}`
+  declareEnumValue(indent: string, value: string) {
+    return `${indent}${mayQuote(camelCase(value.toLowerCase()))}`
   }
 
   defaultConstructor(type: IType) {
@@ -310,12 +303,10 @@ String get apiResponseContentType {
         if (prop.type.customType) {
           if (prop.type.className === 'ArrayType') {
             props.push(
-              `json['${prop.name}'] = ${name} == null ? null : ${name}.map((i) => i.toJson()).toList();`
+              `json['${prop.name}'] = ${name}?.map((i) => i.toJson())?.toList();`
             )
           } else {
-            props.push(
-              `json['${prop.name}'] =  ${name} == null ? null : ${name}.toJson();`
-            )
+            props.push(`json['${prop.name}'] = ${name}?.toJson();`)
           }
         } else {
           if (prop.type instanceof EnumType) {
@@ -328,9 +319,7 @@ String get apiResponseContentType {
           } else {
             const mapped = this.typeMap(prop.type)
             if (mapped.name === 'DateTime') {
-              props.push(
-                `json['${prop.name}'] = ${name} == null ? null : ${name}.toIso8601String();`
-              )
+              props.push(`json['${prop.name}'] = ${name}?.toIso8601String();`)
             } else {
               props.push(`json['${prop.name}'] = ${name};`)
             }
@@ -380,12 +369,12 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
         return `${name} = ${prop.type.name}Mapper.fromStringValue(${sourceName}['${prop.name}'])`
       } else if (prop.type.className === 'ArrayType') {
         const listType = this.typeMap(prop.type!.elementType!).name
-        return `${name} = ${sourceName}['${prop.name}'] == null ? null : ${sourceName}['${prop.name}'].map<${listType}>((i) => i as ${listType}).toList()`
+        return `${name} = ${sourceName}['${prop.name}']?.map<${listType}>((i) => i as ${listType})?.toList()`
       } else {
         const propType = this.typeMap(prop.type!).name
         if (propType === 'String') {
           // Dart is very picky about types. Coorce type to string
-          return `${name} = ${sourceName}['${prop.name}'] == null ? null : ${sourceName}['${prop.name}'].toString()`
+          return `${name} = ${sourceName}['${prop.name}']?.toString()`
         } else if (propType === 'DateTime') {
           return `${name} = ${sourceName}['${prop.name}'] == null ? null : DateTime.parse(${sourceName}['${prop.name}'])`
         } else {
@@ -478,7 +467,7 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
     const mapped = this.typeMap(type)
     return (
       this.commentHeader(indent, this.paramComment(param, mapped)) +
-      `${indent}${mapped.name} ${param.name}` +
+      `${indent}${mapped.name} ${camelCase(param.name)}` +
       (param.required
         ? ''
         : mapped.default && mapped.default !== 'null'
@@ -533,7 +522,7 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
     // const callback = `callback: (readable: Readable) => Promise<${type.name}>,`
     const header =
       this.commentHeader(indent, headComment) +
-      `${indent}Future<SDKResponse<${returnType}>>  ${method.name}(`
+      `${indent}Future<SDKResponse<${returnType}>>  ${camelCase(method.name)}(`
 
     return header + fragment + `) async {\n`
   }
@@ -547,7 +536,9 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
     let encodings = ''
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
-        encodings += `${bump}var path_${param.name} = encodeParam(${param.name});\n`
+        encodings += `${bump}var ${camelCase(
+          'path_' + param.name
+        )} = encodeParam(${camelCase(param.name)});\n`
       }
     }
     return encodings
@@ -599,13 +590,14 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
     });`
   }
 
-  httpPath(path: string, prefix?: string) {
-    prefix = prefix || ''
-    if (path.indexOf('{') >= 0)
-      return (
-        "'" + path.replace(/{/gi, '$path_' + prefix).replace(/}/gi, '') + "'"
-      )
-    return `'${path}'`
+  httpPath(path: string, _prefix?: string) {
+    const pathNodes = path.split('/').map((node) => {
+      if (node.startsWith('{')) {
+        return camelCase(node.replace(/{/gi, '$path_').replace(/}/gi, ''))
+      }
+      return node
+    })
+    return `'${pathNodes.join('/')}'`
   }
 
   httpArgs(indent: string, method: IMethod) {
@@ -631,9 +623,9 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
     for (const arg of args) {
       const reserved = this.reserve(arg)
       if (prefix) {
-        hash.push(`'${reserved}': ${this.accessor(arg, prefix)}`)
+        hash.push(`'${reserved}': ${camelCase(this.accessor(arg, prefix))}`)
       } else {
-        hash.push(`'${reserved}': ${reserved}`)
+        hash.push(`'${reserved}': ${camelCase(reserved)}`)
       }
     }
     return `\n${indent}{${hash.join(this.argDelimiter)}}`
@@ -651,7 +643,7 @@ ${type.name}.fromResponse(Object apiRawResponse, String apiResponseContentType) 
         ) {
           result = `${request}${method.bodyArg}`
         } else {
-          result = `${request}${method.bodyArg} == null ? null : ${request}${method.bodyArg} .toJson()`
+          result = `${request}${method.bodyArg}?.toJson()`
         }
       } else {
         result = `${request}${method.bodyArg}`

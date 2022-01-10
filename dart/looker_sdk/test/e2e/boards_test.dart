@@ -9,7 +9,7 @@ void main() {
   });
 
   test('boards', () async {
-    var boards = await sdk.ok(sdk.all_boards());
+    var boards = await sdk.ok(sdk.allBoards());
     if (boards.isNotEmpty) {
       expect(boards[0].createdAt, isNotNull);
       print(boards[0].createdAt.toIso8601String());

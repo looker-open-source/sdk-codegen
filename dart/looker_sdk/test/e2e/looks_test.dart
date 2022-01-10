@@ -9,12 +9,11 @@ void main() {
   });
 
   test('looks', () async {
-    var looks = await sdk.ok(sdk.all_looks());
+    var looks = await sdk.ok(sdk.allLooks());
     if (looks.isNotEmpty) {
-      var result =
-          await sdk.ok(sdk.run_look(looks[looks.length - 1].id, 'png'));
+      var result = await sdk.ok(sdk.runLook(looks[looks.length - 1].id, 'png'));
       expect(result.runtimeType.toString(), equals('Uint8List'));
-      result = await sdk.ok(sdk.run_look(looks[looks.length - 1].id, 'csv'));
+      result = await sdk.ok(sdk.runLook(looks[looks.length - 1].id, 'csv'));
       expect(result.runtimeType.toString(), equals('String'));
     } else {
       print('No looks to run tests against');

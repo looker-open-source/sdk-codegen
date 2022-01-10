@@ -9,9 +9,11 @@ void main() {
   });
 
   test('get dashboards', () async {
-    var dashboards = await sdk.ok(sdk.all_dashboards());
+    var dashboards = await sdk.ok(sdk.allDashboards());
     expect(dashboards.length, isNonNegative);
-    dashboards.forEach((dashboard) => expect(dashboard.id, isNotNull));
+    for (var dashboard in dashboards) {
+      expect(dashboard.id, isNotNull);
+    }
     if (dashboards.isNotEmpty) {
       var dashboard = await sdk.ok(sdk.dashboard(dashboards[0].id));
       expect(dashboard.id, isNotNull);

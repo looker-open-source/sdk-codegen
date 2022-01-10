@@ -128,8 +128,8 @@ class Transport {
   SDKResponse<T> handleResponse<T>(http.Response response,
       T Function(dynamic response, String contentType) responseHandler) {
     var ok = response.statusCode >= 200 && response.statusCode <= 299;
-    var result;
-    var responseBody;
+    Object result;
+    Object responseBody;
     var contentType = response.headers['content-type'] ?? '';
     if (contentType.startsWith('application/json')) {
       responseBody = jsonDecode(response.body);

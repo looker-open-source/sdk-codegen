@@ -89,7 +89,7 @@ describe('Dart generator', () => {
       `
        String get myProp {
          if (!_myPropSet && _apiMapResponse.containsKey('my_prop')) {
-           _myProp = _apiMapResponse['my_prop'] == null ? null : _apiMapResponse['my_prop'].toString();
+           _myProp = _apiMapResponse['my_prop']?.toString();
            _myPropSet = true;
          }
          return _myProp;
@@ -110,7 +110,7 @@ describe('Dart generator', () => {
       `
        String get defaultValue {
          if (!_defaultValueSet && _apiMapResponse.containsKey('default')) {
-           _defaultValue = _apiMapResponse['default'] == null ? null : _apiMapResponse['default'].toString();
+           _defaultValue = _apiMapResponse['default']?.toString();
            _defaultValueSet = true;
          }
          return _defaultValue;
@@ -309,9 +309,7 @@ MyType.fromResponse(Object apiRawResponse, String apiResponseContentType) {
       { name: 'my_prop', type: { name: 'String' } } as IProperty,
       '_apiMapResponse'
     )
-    expect(s).toEqual(
-      "_myProp = _apiMapResponse['my_prop'] == null ? null : _apiMapResponse['my_prop'].toString()"
-    )
+    expect(s).toEqual("_myProp = _apiMapResponse['my_prop']?.toString()")
   })
 
   it('summary', () => {

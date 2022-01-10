@@ -21,16 +21,18 @@ Future<LookerSDK> createSdk() async {
 
 Future<void> runLooks(LookerSDK sdk) async {
   try {
-    var looks = await sdk.ok(sdk.all_looks());
+    var looks = await sdk.ok(sdk.allLooks());
     if (looks.isNotEmpty) {
-      looks.forEach((look) => print(look.title));
-      var look = await sdk.ok(sdk.run_look(looks[looks.length - 1].id, 'png'));
+      for (var look in looks) {
+        print(look.title);
+      }
+      var look = await sdk.ok(sdk.runLook(looks[looks.length - 1].id, 'png'));
       var dir = Directory('./temp');
       if (!dir.existsSync()) {
         dir.createSync();
       }
       File('./temp/look.png').writeAsBytesSync(look as Uint8List);
-      look = await sdk.ok(sdk.run_look(looks[looks.length - 1].id, 'csv'));
+      look = await sdk.ok(sdk.runLook(looks[looks.length - 1].id, 'csv'));
       File('./temp/look.csv').writeAsStringSync(look as String);
     }
   } catch (error, stacktrace) {
@@ -41,8 +43,10 @@ Future<void> runLooks(LookerSDK sdk) async {
 
 Future<void> runDashboardApis(LookerSDK sdk) async {
   try {
-    var dashboards = await sdk.ok(sdk.all_dashboards());
-    dashboards.forEach((dashboard) => print(dashboard.title));
+    var dashboards = await sdk.ok(sdk.allDashboards());
+    for (var dashboard in dashboards) {
+      print(dashboard.title);
+    }
     var dashboard = await sdk.ok(sdk.dashboard(dashboards[0].id));
     print(dashboard.toJson());
   } catch (error, stacktrace) {
@@ -53,8 +57,10 @@ Future<void> runDashboardApis(LookerSDK sdk) async {
 
 Future<void> runConnectionApis(LookerSDK sdk) async {
   try {
-    var connections = await sdk.ok(sdk.all_connections());
-    connections.forEach((connection) => print(connection.name));
+    var connections = await sdk.ok(sdk.allConnections());
+    for (var connection in connections) {
+      print(connection.name);
+    }
     var connection = await sdk
         .ok(sdk.connection(connections[0].name, fields: 'name,host,port'));
     print(
@@ -72,22 +78,24 @@ Future<void> runConnectionApis(LookerSDK sdk) async {
       newConnection.password = 'look_your_data';
       newConnection.database = 'demo_db2';
       newConnection.tmpDbName = 'looker_demo_scratch';
-      connection = await sdk.ok(sdk.create_connection(newConnection));
+      connection = await sdk.ok(sdk.createConnection(newConnection));
       print('created ${connection.name}');
     }
     var updateConnection = WriteDBConnection();
     updateConnection.username = 'looker_demo';
     connection =
-        await sdk.ok(sdk.update_connection('TestConnection', updateConnection));
+        await sdk.ok(sdk.updateConnection('TestConnection', updateConnection));
     print('Connection updated: username=${connection.username}');
     var testResults = await sdk.ok(
-        sdk.test_connection('TestConnection', tests: DelimList(['connect'])));
+        sdk.testConnection('TestConnection', tests: DelimList(['connect'])));
     if (testResults.isEmpty) {
       print('No connection tests run');
     } else {
-      testResults.forEach((i) => print('test result: ${i.name}=${i.message}'));
+      for (var i in testResults) {
+        print('test result: ${i.name}=${i.message}');
+      }
     }
-    var deleteResult = await sdk.ok(sdk.delete_connection('TestConnection'));
+    var deleteResult = await sdk.ok(sdk.deleteConnection('TestConnection'));
     print('Delete result $deleteResult');
   } catch (error, stacktrace) {
     print(error);

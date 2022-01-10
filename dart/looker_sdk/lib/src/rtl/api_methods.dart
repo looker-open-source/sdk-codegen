@@ -48,8 +48,7 @@ class APIMethods {
       T Function(dynamic responseData, String contentType) responseHandler,
       String path,
       [dynamic queryParams,
-      dynamic body,
-      T responseInstance]) async {
+      dynamic body]) async {
     var headers = await _getHeaders();
     return _authSession.transport.request(responseHandler, HttpMethod.delete,
         '${_authSession.apiPath}$path', queryParams, body, headers);
@@ -59,8 +58,7 @@ class APIMethods {
       T Function(dynamic responseData, String contentType) responseHandler,
       String path,
       [dynamic queryParams,
-      dynamic body,
-      T responseInstance]) async {
+      dynamic body]) async {
     var headers = await _getHeaders();
     var requestBody = body == null ? null : jsonEncode(body);
     return _authSession.transport.request(responseHandler, HttpMethod.post,
@@ -71,8 +69,7 @@ class APIMethods {
       T Function(dynamic responseData, String contentType) responseHandler,
       String path,
       [dynamic queryParams,
-      dynamic body,
-      T responseInstance]) async {
+      dynamic body]) async {
     var headers = await _getHeaders();
     return _authSession.transport.request(responseHandler, HttpMethod.put,
         '${_authSession.apiPath}$path', queryParams, body, headers);
@@ -82,10 +79,9 @@ class APIMethods {
       T Function(dynamic responseData, String contentType) responseHandler,
       String path,
       [dynamic queryParams,
-      dynamic body,
-      T responseInstance]) async {
+      dynamic body]) async {
     var headers = await _getHeaders();
-    var requestBody;
+    Object requestBody;
     if (body != null) {
       body.removeWhere((key, value) => value == null);
       requestBody = jsonEncode(body);

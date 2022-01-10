@@ -38,7 +38,7 @@ class LookerSDK extends APIMethods {
   /// ### Search Alerts
   ///
   /// GET /alerts/search -> List<Alert>
-  Future<SDKResponse<List<Alert>>> search_alerts(
+  Future<SDKResponse<List<Alert>>> searchAlerts(
       {
 
       /// @param {int} limit (Optional) Number of results to return (used with `offset`).
@@ -48,7 +48,7 @@ class LookerSDK extends APIMethods {
       int offset,
 
       /// @param {String} group_by (Optional) Dimension by which to order the results(`dashboard` | `owner`)
-      String group_by,
+      String groupBy,
 
       /// @param {String} fields (Optional) Requested fields.
       String fields,
@@ -60,16 +60,16 @@ class LookerSDK extends APIMethods {
       String frequency,
 
       /// @param {bool} condition_met (Optional) Filter on whether the alert has met its condition when it last executed
-      bool condition_met,
+      bool conditionMet,
 
       /// @param {String} last_run_start (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
-      String last_run_start,
+      String lastRunStart,
 
       /// @param {String} last_run_end (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
-      String last_run_end,
+      String lastRunEnd,
 
       /// @param {bool} all_owners (Admin only) (Optional) Filter for all owners.
-      bool all_owners}) async {
+      bool allOwners}) async {
     List<Alert> responseHandler(dynamic json, String contentType) {
       return json
           .map<Alert>((i) => Alert.fromResponse(i, contentType))
@@ -79,31 +79,31 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/alerts/search', {
       'limit': limit,
       'offset': offset,
-      'group_by': group_by,
+      'group_by': groupBy,
       'fields': fields,
       'disabled': disabled,
       'frequency': frequency,
-      'condition_met': condition_met,
-      'last_run_start': last_run_start,
-      'last_run_end': last_run_end,
-      'all_owners': all_owners
+      'condition_met': conditionMet,
+      'last_run_start': lastRunStart,
+      'last_run_end': lastRunEnd,
+      'all_owners': allOwners
     });
   }
 
   /// ### Get an alert by a given alert ID
   ///
   /// GET /alerts/{alert_id} -> Alert
-  Future<SDKResponse<Alert>> get_alert(
+  Future<SDKResponse<Alert>> getAlert(
 
       /// @param {int} alert_id ID of an alert
-      int alert_id) async {
-    var path_alert_id = encodeParam(alert_id);
+      int alertId) async {
+    var pathAlertId = encodeParam(alertId);
 
     Alert responseHandler(dynamic json, String contentType) {
       return Alert.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/alerts/$path_alert_id');
+    return get(responseHandler, '/alerts/$pathAlertId');
   }
 
   /// ### Update an alert
@@ -111,21 +111,20 @@ class LookerSDK extends APIMethods {
   /// #
   ///
   /// PUT /alerts/{alert_id} -> Alert
-  Future<SDKResponse<Alert>> update_alert(
+  Future<SDKResponse<Alert>> updateAlert(
 
       /// @param {int} alert_id ID of an alert
-      int alert_id,
+      int alertId,
 
       /// @param {WriteAlert} body
       WriteAlert body) async {
-    var path_alert_id = encodeParam(alert_id);
+    var pathAlertId = encodeParam(alertId);
 
     Alert responseHandler(dynamic json, String contentType) {
       return Alert.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/alerts/$path_alert_id', null,
-        body == null ? null : body.toJson());
+    return put(responseHandler, '/alerts/$pathAlertId', null, body?.toJson());
   }
 
   /// ### Update select alert fields
@@ -133,34 +132,33 @@ class LookerSDK extends APIMethods {
   /// #
   ///
   /// PATCH /alerts/{alert_id} -> Alert
-  Future<SDKResponse<Alert>> update_alert_field(
+  Future<SDKResponse<Alert>> updateAlertField(
 
       /// @param {int} alert_id ID of an alert
-      int alert_id,
+      int alertId,
 
       /// @param {AlertPatch} body
       AlertPatch body) async {
-    var path_alert_id = encodeParam(alert_id);
+    var pathAlertId = encodeParam(alertId);
 
     Alert responseHandler(dynamic json, String contentType) {
       return Alert.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/alerts/$path_alert_id', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/alerts/$pathAlertId', null, body?.toJson());
   }
 
   /// ### Delete an alert by a given alert ID
   ///
   /// DELETE /alerts/{alert_id} -> void
-  Future<SDKResponse<void>> delete_alert(
+  Future<SDKResponse<void>> deleteAlert(
 
       /// @param {int} alert_id ID of an alert
-      int alert_id) async {
-    var path_alert_id = encodeParam(alert_id);
+      int alertId) async {
+    var pathAlertId = encodeParam(alertId);
 
     void responseHandler(dynamic json, String contentType) {}
-    return delete(responseHandler, '/alerts/$path_alert_id');
+    return delete(responseHandler, '/alerts/$pathAlertId');
   }
 
   /// ### Create a new alert and return details of the newly created object
@@ -200,7 +198,7 @@ class LookerSDK extends APIMethods {
   /// ```
   ///
   /// POST /alerts -> Alert
-  Future<SDKResponse<Alert>> create_alert(
+  Future<SDKResponse<Alert>> createAlert(
 
       /// @param {WriteAlert} body
       WriteAlert body) async {
@@ -208,26 +206,25 @@ class LookerSDK extends APIMethods {
       return Alert.fromResponse(json, contentType);
     }
 
-    return post(
-        responseHandler, '/alerts', null, body == null ? null : body.toJson());
+    return post(responseHandler, '/alerts', null, body?.toJson());
   }
 
   /// ### Enqueue an Alert by ID
   ///
   /// POST /alerts/{alert_id}/enqueue -> void
-  Future<SDKResponse<void>> enqueue_alert(
+  Future<SDKResponse<void>> enqueueAlert(
 
       /// @param {int} alert_id ID of an alert
-      int alert_id,
+      int alertId,
       {
 
       /// @param {bool} force Whether to enqueue an alert again if its already running.
       bool force}) async {
-    var path_alert_id = encodeParam(alert_id);
+    var pathAlertId = encodeParam(alertId);
 
     void responseHandler(dynamic json, String contentType) {}
     return post(
-        responseHandler, '/alerts/$path_alert_id/enqueue', {'force': force});
+        responseHandler, '/alerts/$pathAlertId/enqueue', {'force': force});
   }
 
   // #endregion Alert: Alert
@@ -268,16 +265,16 @@ class LookerSDK extends APIMethods {
       {
 
       /// @param {String} client_id client_id part of API3 Key.
-      String client_id,
+      String clientId,
 
       /// @param {String} client_secret client_secret part of API3 Key.
-      String client_secret}) async {
+      String clientSecret}) async {
     AccessToken responseHandler(dynamic json, String contentType) {
       return AccessToken.fromResponse(json, contentType);
     }
 
     return post(responseHandler, '/login',
-        {'client_id': client_id, 'client_secret': client_secret});
+        {'client_id': clientId, 'client_secret': clientSecret});
   }
 
   /// ### Create an access token that runs as a given user.
@@ -298,22 +295,22 @@ class LookerSDK extends APIMethods {
   /// See 'login' for more detail on the access token and how to use it.
   ///
   /// POST /login/{user_id} -> AccessToken
-  Future<SDKResponse<AccessToken>> login_user(
+  Future<SDKResponse<AccessToken>> loginUser(
 
       /// @param {int} user_id Id of user.
-      int user_id,
+      int userId,
       {
 
       /// @param {bool} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
       bool associative}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     AccessToken responseHandler(dynamic json, String contentType) {
       return AccessToken.fromResponse(json, contentType);
     }
 
     return post(
-        responseHandler, '/login/$path_user_id', {'associative': associative});
+        responseHandler, '/login/$pathUserId', {'associative': associative});
   }
 
   /// ### Logout of the API and invalidate the current access token.
@@ -336,7 +333,7 @@ class LookerSDK extends APIMethods {
   /// The value of the `secret` field will be set by Looker and returned.
   ///
   /// POST /embed_config/secrets -> EmbedSecret
-  Future<SDKResponse<EmbedSecret>> create_embed_secret(
+  Future<SDKResponse<EmbedSecret>> createEmbedSecret(
       {
 
       /// @param {WriteEmbedSecret} body
@@ -345,25 +342,23 @@ class LookerSDK extends APIMethods {
       return EmbedSecret.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/embed_config/secrets', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/embed_config/secrets', null, body?.toJson());
   }
 
   /// ### Delete an embed secret.
   ///
   /// DELETE /embed_config/secrets/{embed_secret_id} -> String
-  Future<SDKResponse<String>> delete_embed_secret(
+  Future<SDKResponse<String>> deleteEmbedSecret(
 
       /// @param {int} embed_secret_id Id of Embed Secret
-      int embed_secret_id) async {
-    var path_embed_secret_id = encodeParam(embed_secret_id);
+      int embedSecretId) async {
+    var pathEmbedSecretId = encodeParam(embedSecretId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/embed_config/secrets/$path_embed_secret_id');
+    return delete(responseHandler, '/embed_config/secrets/$pathEmbedSecretId');
   }
 
   /// ### Create SSO Embed URL
@@ -402,7 +397,7 @@ class LookerSDK extends APIMethods {
   /// encrypted transport.
   ///
   /// POST /embed/sso_url -> EmbedUrlResponse
-  Future<SDKResponse<EmbedUrlResponse>> create_sso_embed_url(
+  Future<SDKResponse<EmbedUrlResponse>> createSsoEmbedUrl(
 
       /// @param {EmbedSsoParams} body
       EmbedSsoParams body) async {
@@ -410,8 +405,7 @@ class LookerSDK extends APIMethods {
       return EmbedUrlResponse.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/embed/sso_url', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/embed/sso_url', null, body?.toJson());
   }
 
   /// ### Create an Embed URL
@@ -441,7 +435,7 @@ class LookerSDK extends APIMethods {
   /// encrypted transport.
   ///
   /// POST /embed/token_url/me -> EmbedUrlResponse
-  Future<SDKResponse<EmbedUrlResponse>> create_embed_url_as_me(
+  Future<SDKResponse<EmbedUrlResponse>> createEmbedUrlAsMe(
 
       /// @param {EmbedParams} body
       EmbedParams body) async {
@@ -449,8 +443,7 @@ class LookerSDK extends APIMethods {
       return EmbedUrlResponse.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/embed/token_url/me', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/embed/token_url/me', null, body?.toJson());
   }
 
   /// ### Get the LDAP configuration.
@@ -471,7 +464,7 @@ class LookerSDK extends APIMethods {
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   ///
   /// GET /ldap_config -> LDAPConfig
-  Future<SDKResponse<LDAPConfig>> ldap_config() async {
+  Future<SDKResponse<LDAPConfig>> ldapConfig() async {
     LDAPConfig responseHandler(dynamic json, String contentType) {
       return LDAPConfig.fromResponse(json, contentType);
     }
@@ -492,7 +485,7 @@ class LookerSDK extends APIMethods {
   /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
   ///
   /// PATCH /ldap_config -> LDAPConfig
-  Future<SDKResponse<LDAPConfig>> update_ldap_config(
+  Future<SDKResponse<LDAPConfig>> updateLdapConfig(
 
       /// @param {WriteLDAPConfig} body
       WriteLDAPConfig body) async {
@@ -500,8 +493,7 @@ class LookerSDK extends APIMethods {
       return LDAPConfig.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/ldap_config', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/ldap_config', null, body?.toJson());
   }
 
   /// ### Test the connection settings for an LDAP configuration.
@@ -524,7 +516,7 @@ class LookerSDK extends APIMethods {
   /// The active LDAP settings are not modified.
   ///
   /// PUT /ldap_config/test_connection -> LDAPConfigTestResult
-  Future<SDKResponse<LDAPConfigTestResult>> test_ldap_config_connection(
+  Future<SDKResponse<LDAPConfigTestResult>> testLdapConfigConnection(
 
       /// @param {WriteLDAPConfig} body
       WriteLDAPConfig body) async {
@@ -532,8 +524,8 @@ class LookerSDK extends APIMethods {
       return LDAPConfigTestResult.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/ldap_config/test_connection', null,
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/ldap_config/test_connection', null, body?.toJson());
   }
 
   /// ### Test the connection authentication settings for an LDAP configuration.
@@ -558,7 +550,7 @@ class LookerSDK extends APIMethods {
   /// The active LDAP settings are not modified.
   ///
   /// PUT /ldap_config/test_auth -> LDAPConfigTestResult
-  Future<SDKResponse<LDAPConfigTestResult>> test_ldap_config_auth(
+  Future<SDKResponse<LDAPConfigTestResult>> testLdapConfigAuth(
 
       /// @param {WriteLDAPConfig} body
       WriteLDAPConfig body) async {
@@ -566,8 +558,7 @@ class LookerSDK extends APIMethods {
       return LDAPConfigTestResult.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/ldap_config/test_auth', null,
-        body == null ? null : body.toJson());
+    return put(responseHandler, '/ldap_config/test_auth', null, body?.toJson());
   }
 
   /// ### Test the user authentication settings for an LDAP configuration without authenticating the user.
@@ -581,7 +572,7 @@ class LookerSDK extends APIMethods {
   /// The active LDAP settings are not modified.
   ///
   /// PUT /ldap_config/test_user_info -> LDAPConfigTestResult
-  Future<SDKResponse<LDAPConfigTestResult>> test_ldap_config_user_info(
+  Future<SDKResponse<LDAPConfigTestResult>> testLdapConfigUserInfo(
 
       /// @param {WriteLDAPConfig} body
       WriteLDAPConfig body) async {
@@ -589,8 +580,8 @@ class LookerSDK extends APIMethods {
       return LDAPConfigTestResult.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/ldap_config/test_user_info', null,
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/ldap_config/test_user_info', null, body?.toJson());
   }
 
   /// ### Test the user authentication settings for an LDAP configuration.
@@ -604,7 +595,7 @@ class LookerSDK extends APIMethods {
   /// The active LDAP settings are not modified.
   ///
   /// PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
-  Future<SDKResponse<LDAPConfigTestResult>> test_ldap_config_user_auth(
+  Future<SDKResponse<LDAPConfigTestResult>> testLdapConfigUserAuth(
 
       /// @param {WriteLDAPConfig} body
       WriteLDAPConfig body) async {
@@ -612,8 +603,8 @@ class LookerSDK extends APIMethods {
       return LDAPConfigTestResult.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/ldap_config/test_user_auth', null,
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/ldap_config/test_user_auth', null, body?.toJson());
   }
 
   /// ### List All OAuth Client Apps
@@ -625,7 +616,7 @@ class LookerSDK extends APIMethods {
   /// has permission to see.
   ///
   /// GET /oauth_client_apps -> List<OauthClientApp>
-  Future<SDKResponse<List<OauthClientApp>>> all_oauth_client_apps(
+  Future<SDKResponse<List<OauthClientApp>>> allOauthClientApps(
       {
 
       /// @param {String} fields Requested fields.
@@ -645,21 +636,21 @@ class LookerSDK extends APIMethods {
   /// Returns the registered app client with matching client_guid.
   ///
   /// GET /oauth_client_apps/{client_guid} -> OauthClientApp
-  Future<SDKResponse<OauthClientApp>> oauth_client_app(
+  Future<SDKResponse<OauthClientApp>> oauthClientApp(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid,
+      String clientGuid,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_client_guid = encodeParam(client_guid);
+    var pathClientGuid = encodeParam(clientGuid);
 
     OauthClientApp responseHandler(dynamic json, String contentType) {
       return OauthClientApp.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/oauth_client_apps/$path_client_guid',
+    return get(responseHandler, '/oauth_client_apps/$pathClientGuid',
         {'fields': fields});
   }
 
@@ -671,10 +662,10 @@ class LookerSDK extends APIMethods {
   /// the app details registered with the Looker instance, the request is assumed to be a forgery and is rejected.
   ///
   /// POST /oauth_client_apps/{client_guid} -> OauthClientApp
-  Future<SDKResponse<OauthClientApp>> register_oauth_client_app(
+  Future<SDKResponse<OauthClientApp>> registerOauthClientApp(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid,
+      String clientGuid,
 
       /// @param {WriteOauthClientApp} body
       WriteOauthClientApp body,
@@ -682,14 +673,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_client_guid = encodeParam(client_guid);
+    var pathClientGuid = encodeParam(clientGuid);
 
     OauthClientApp responseHandler(dynamic json, String contentType) {
       return OauthClientApp.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/oauth_client_apps/$path_client_guid',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return post(responseHandler, '/oauth_client_apps/$pathClientGuid',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Update OAuth2 Client App Details
@@ -697,10 +688,10 @@ class LookerSDK extends APIMethods {
   /// Modifies the details a previously registered OAuth2 login client app.
   ///
   /// PATCH /oauth_client_apps/{client_guid} -> OauthClientApp
-  Future<SDKResponse<OauthClientApp>> update_oauth_client_app(
+  Future<SDKResponse<OauthClientApp>> updateOauthClientApp(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid,
+      String clientGuid,
 
       /// @param {WriteOauthClientApp} body
       WriteOauthClientApp body,
@@ -708,14 +699,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_client_guid = encodeParam(client_guid);
+    var pathClientGuid = encodeParam(clientGuid);
 
     OauthClientApp responseHandler(dynamic json, String contentType) {
       return OauthClientApp.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/oauth_client_apps/$path_client_guid',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/oauth_client_apps/$pathClientGuid',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete OAuth Client App
@@ -726,17 +717,17 @@ class LookerSDK extends APIMethods {
   /// ### Note: this deletion cannot be undone.
   ///
   /// DELETE /oauth_client_apps/{client_guid} -> String
-  Future<SDKResponse<String>> delete_oauth_client_app(
+  Future<SDKResponse<String>> deleteOauthClientApp(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid) async {
-    var path_client_guid = encodeParam(client_guid);
+      String clientGuid) async {
+    var pathClientGuid = encodeParam(clientGuid);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/oauth_client_apps/$path_client_guid');
+    return delete(responseHandler, '/oauth_client_apps/$pathClientGuid');
   }
 
   /// ### Invalidate All Issued Tokens
@@ -745,18 +736,17 @@ class LookerSDK extends APIMethods {
   /// this app for ALL USERS of this app.
   ///
   /// DELETE /oauth_client_apps/{client_guid}/tokens -> String
-  Future<SDKResponse<String>> invalidate_tokens(
+  Future<SDKResponse<String>> invalidateTokens(
 
       /// @param {String} client_guid The unique id of the application
-      String client_guid) async {
-    var path_client_guid = encodeParam(client_guid);
+      String clientGuid) async {
+    var pathClientGuid = encodeParam(clientGuid);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/oauth_client_apps/$path_client_guid/tokens');
+    return delete(responseHandler, '/oauth_client_apps/$pathClientGuid/tokens');
   }
 
   /// ### Activate an app for a user
@@ -768,19 +758,19 @@ class LookerSDK extends APIMethods {
   /// Activating a user for an app that the user is already activated with returns a success response.
   ///
   /// POST /oauth_client_apps/{client_guid}/users/{user_id} -> String
-  Future<SDKResponse<dynamic>> activate_app_user(
+  Future<SDKResponse<dynamic>> activateAppUser(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid,
+      String clientGuid,
 
       /// @param {int} user_id The id of the user to enable use of this app
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_client_guid = encodeParam(client_guid);
-    var path_user_id = encodeParam(user_id);
+    var pathClientGuid = encodeParam(clientGuid);
+    var pathUserId = encodeParam(userId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
@@ -788,7 +778,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/oauth_client_apps/$path_client_guid/users/$path_user_id',
+        '/oauth_client_apps/$pathClientGuid/users/$pathUserId',
         {'fields': fields});
   }
 
@@ -804,19 +794,19 @@ class LookerSDK extends APIMethods {
   /// resource (app or user) does not exist or has already been deactivated.
   ///
   /// DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> String
-  Future<SDKResponse<String>> deactivate_app_user(
+  Future<SDKResponse<String>> deactivateAppUser(
 
       /// @param {String} client_guid The unique id of this application
-      String client_guid,
+      String clientGuid,
 
       /// @param {int} user_id The id of the user to enable use of this app
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_client_guid = encodeParam(client_guid);
-    var path_user_id = encodeParam(user_id);
+    var pathClientGuid = encodeParam(clientGuid);
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
@@ -824,7 +814,7 @@ class LookerSDK extends APIMethods {
 
     return delete(
         responseHandler,
-        '/oauth_client_apps/$path_client_guid/users/$path_user_id',
+        '/oauth_client_apps/$pathClientGuid/users/$pathUserId',
         {'fields': fields});
   }
 
@@ -842,7 +832,7 @@ class LookerSDK extends APIMethods {
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
   ///
   /// GET /oidc_config -> OIDCConfig
-  Future<SDKResponse<OIDCConfig>> oidc_config() async {
+  Future<SDKResponse<OIDCConfig>> oidcConfig() async {
     OIDCConfig responseHandler(dynamic json, String contentType) {
       return OIDCConfig.fromResponse(json, contentType);
     }
@@ -861,7 +851,7 @@ class LookerSDK extends APIMethods {
   /// It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
   ///
   /// PATCH /oidc_config -> OIDCConfig
-  Future<SDKResponse<OIDCConfig>> update_oidc_config(
+  Future<SDKResponse<OIDCConfig>> updateOidcConfig(
 
       /// @param {WriteOIDCConfig} body
       WriteOIDCConfig body) async {
@@ -869,46 +859,45 @@ class LookerSDK extends APIMethods {
       return OIDCConfig.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/oidc_config', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/oidc_config', null, body?.toJson());
   }
 
   /// ### Get a OIDC test configuration by test_slug.
   ///
   /// GET /oidc_test_configs/{test_slug} -> OIDCConfig
-  Future<SDKResponse<OIDCConfig>> oidc_test_config(
+  Future<SDKResponse<OIDCConfig>> oidcTestConfig(
 
       /// @param {String} test_slug Slug of test config
-      String test_slug) async {
-    var path_test_slug = encodeParam(test_slug);
+      String testSlug) async {
+    var pathTestSlug = encodeParam(testSlug);
 
     OIDCConfig responseHandler(dynamic json, String contentType) {
       return OIDCConfig.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/oidc_test_configs/$path_test_slug');
+    return get(responseHandler, '/oidc_test_configs/$pathTestSlug');
   }
 
   /// ### Delete a OIDC test configuration.
   ///
   /// DELETE /oidc_test_configs/{test_slug} -> String
-  Future<SDKResponse<String>> delete_oidc_test_config(
+  Future<SDKResponse<String>> deleteOidcTestConfig(
 
       /// @param {String} test_slug Slug of test config
-      String test_slug) async {
-    var path_test_slug = encodeParam(test_slug);
+      String testSlug) async {
+    var pathTestSlug = encodeParam(testSlug);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/oidc_test_configs/$path_test_slug');
+    return delete(responseHandler, '/oidc_test_configs/$pathTestSlug');
   }
 
   /// ### Create a OIDC test configuration.
   ///
   /// POST /oidc_test_configs -> OIDCConfig
-  Future<SDKResponse<OIDCConfig>> create_oidc_test_config(
+  Future<SDKResponse<OIDCConfig>> createOidcTestConfig(
 
       /// @param {WriteOIDCConfig} body
       WriteOIDCConfig body) async {
@@ -916,14 +905,13 @@ class LookerSDK extends APIMethods {
       return OIDCConfig.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/oidc_test_configs', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/oidc_test_configs', null, body?.toJson());
   }
 
   /// ### Get password config.
   ///
   /// GET /password_config -> PasswordConfig
-  Future<SDKResponse<PasswordConfig>> password_config() async {
+  Future<SDKResponse<PasswordConfig>> passwordConfig() async {
     PasswordConfig responseHandler(dynamic json, String contentType) {
       return PasswordConfig.fromResponse(json, contentType);
     }
@@ -934,7 +922,7 @@ class LookerSDK extends APIMethods {
   /// ### Update password config.
   ///
   /// PATCH /password_config -> PasswordConfig
-  Future<SDKResponse<PasswordConfig>> update_password_config(
+  Future<SDKResponse<PasswordConfig>> updatePasswordConfig(
 
       /// @param {WritePasswordConfig} body
       WritePasswordConfig body) async {
@@ -942,15 +930,13 @@ class LookerSDK extends APIMethods {
       return PasswordConfig.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/password_config', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/password_config', null, body?.toJson());
   }
 
   /// ### Force all credentials_email users to reset their login passwords upon their next login.
   ///
   /// PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
-  Future<SDKResponse<String>>
-      force_password_reset_at_next_login_for_all_users() async {
+  Future<SDKResponse<String>> forcePasswordResetAtNextLoginForAllUsers() async {
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
@@ -973,7 +959,7 @@ class LookerSDK extends APIMethods {
   /// SAML is enabled or disabled for Looker using the **enabled** field.
   ///
   /// GET /saml_config -> SamlConfig
-  Future<SDKResponse<SamlConfig>> saml_config() async {
+  Future<SDKResponse<SamlConfig>> samlConfig() async {
     SamlConfig responseHandler(dynamic json, String contentType) {
       return SamlConfig.fromResponse(json, contentType);
     }
@@ -992,7 +978,7 @@ class LookerSDK extends APIMethods {
   /// It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
   ///
   /// PATCH /saml_config -> SamlConfig
-  Future<SDKResponse<SamlConfig>> update_saml_config(
+  Future<SDKResponse<SamlConfig>> updateSamlConfig(
 
       /// @param {WriteSamlConfig} body
       WriteSamlConfig body) async {
@@ -1000,46 +986,45 @@ class LookerSDK extends APIMethods {
       return SamlConfig.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/saml_config', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/saml_config', null, body?.toJson());
   }
 
   /// ### Get a SAML test configuration by test_slug.
   ///
   /// GET /saml_test_configs/{test_slug} -> SamlConfig
-  Future<SDKResponse<SamlConfig>> saml_test_config(
+  Future<SDKResponse<SamlConfig>> samlTestConfig(
 
       /// @param {String} test_slug Slug of test config
-      String test_slug) async {
-    var path_test_slug = encodeParam(test_slug);
+      String testSlug) async {
+    var pathTestSlug = encodeParam(testSlug);
 
     SamlConfig responseHandler(dynamic json, String contentType) {
       return SamlConfig.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/saml_test_configs/$path_test_slug');
+    return get(responseHandler, '/saml_test_configs/$pathTestSlug');
   }
 
   /// ### Delete a SAML test configuration.
   ///
   /// DELETE /saml_test_configs/{test_slug} -> String
-  Future<SDKResponse<String>> delete_saml_test_config(
+  Future<SDKResponse<String>> deleteSamlTestConfig(
 
       /// @param {String} test_slug Slug of test config
-      String test_slug) async {
-    var path_test_slug = encodeParam(test_slug);
+      String testSlug) async {
+    var pathTestSlug = encodeParam(testSlug);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/saml_test_configs/$path_test_slug');
+    return delete(responseHandler, '/saml_test_configs/$pathTestSlug');
   }
 
   /// ### Create a SAML test configuration.
   ///
   /// POST /saml_test_configs -> SamlConfig
-  Future<SDKResponse<SamlConfig>> create_saml_test_config(
+  Future<SDKResponse<SamlConfig>> createSamlTestConfig(
 
       /// @param {WriteSamlConfig} body
       WriteSamlConfig body) async {
@@ -1047,14 +1032,13 @@ class LookerSDK extends APIMethods {
       return SamlConfig.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/saml_test_configs', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/saml_test_configs', null, body?.toJson());
   }
 
   /// ### Parse the given xml as a SAML IdP metadata document and return the result.
   ///
   /// POST /parse_saml_idp_metadata -> SamlMetadataParseResult
-  Future<SDKResponse<SamlMetadataParseResult>> parse_saml_idp_metadata(
+  Future<SDKResponse<SamlMetadataParseResult>> parseSamlIdpMetadata(
 
       /// @param {String} body
       String body) async {
@@ -1070,11 +1054,10 @@ class LookerSDK extends APIMethods {
   /// can fetch it without requiring any special authentication.
   ///
   /// POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
-  Future<SDKResponse<SamlMetadataParseResult>>
-      fetch_and_parse_saml_idp_metadata(
+  Future<SDKResponse<SamlMetadataParseResult>> fetchAndParseSamlIdpMetadata(
 
-          /// @param {String} body
-          String body) async {
+      /// @param {String} body
+      String body) async {
     SamlMetadataParseResult responseHandler(dynamic json, String contentType) {
       return SamlMetadataParseResult.fromResponse(json, contentType);
     }
@@ -1086,7 +1069,7 @@ class LookerSDK extends APIMethods {
   /// ### Get session config.
   ///
   /// GET /session_config -> SessionConfig
-  Future<SDKResponse<SessionConfig>> session_config() async {
+  Future<SDKResponse<SessionConfig>> sessionConfig() async {
     SessionConfig responseHandler(dynamic json, String contentType) {
       return SessionConfig.fromResponse(json, contentType);
     }
@@ -1097,7 +1080,7 @@ class LookerSDK extends APIMethods {
   /// ### Update session config.
   ///
   /// PATCH /session_config -> SessionConfig
-  Future<SDKResponse<SessionConfig>> update_session_config(
+  Future<SDKResponse<SessionConfig>> updateSessionConfig(
 
       /// @param {WriteSessionConfig} body
       WriteSessionConfig body) async {
@@ -1105,8 +1088,7 @@ class LookerSDK extends APIMethods {
       return SessionConfig.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/session_config', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/session_config', null, body?.toJson());
   }
 
   /// ### Get Support Access Allowlist Users
@@ -1115,7 +1097,7 @@ class LookerSDK extends APIMethods {
   ///
   /// GET /support_access/allowlist -> List<SupportAccessAllowlistEntry>
   Future<SDKResponse<List<SupportAccessAllowlistEntry>>>
-      get_support_access_allowlist_entries(
+      getSupportAccessAllowlistEntries(
           {
 
           /// @param {String} fields Requested fields.
@@ -1138,7 +1120,7 @@ class LookerSDK extends APIMethods {
   ///
   /// POST /support_access/allowlist -> List<SupportAccessAllowlistEntry>
   Future<SDKResponse<List<SupportAccessAllowlistEntry>>>
-      add_support_access_allowlist_entries(
+      addSupportAccessAllowlistEntries(
 
           /// @param {SupportAccessAddEntries} body
           SupportAccessAddEntries body) async {
@@ -1150,8 +1132,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return post(responseHandler, '/support_access/allowlist', null,
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/support_access/allowlist', null, body?.toJson());
   }
 
   /// ### Delete Support Access Allowlist User
@@ -1159,17 +1141,17 @@ class LookerSDK extends APIMethods {
   /// Deletes the specified Allowlist Entry Id
   ///
   /// DELETE /support_access/allowlist/{entry_id} -> String
-  Future<SDKResponse<String>> delete_support_access_allowlist_entry(
+  Future<SDKResponse<String>> deleteSupportAccessAllowlistEntry(
 
       /// @param {String} entry_id Id of Allowlist Entry
-      String entry_id) async {
-    var path_entry_id = encodeParam(entry_id);
+      String entryId) async {
+    var pathEntryId = encodeParam(entryId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/support_access/allowlist/$path_entry_id');
+    return delete(responseHandler, '/support_access/allowlist/$pathEntryId');
   }
 
   /// ### Enable Support Access
@@ -1177,7 +1159,7 @@ class LookerSDK extends APIMethods {
   /// Enables Support Access for the provided duration
   ///
   /// PUT /support_access/enable -> SupportAccessStatus
-  Future<SDKResponse<SupportAccessStatus>> enable_support_access(
+  Future<SDKResponse<SupportAccessStatus>> enableSupportAccess(
 
       /// @param {SupportAccessEnable} body
       SupportAccessEnable body) async {
@@ -1185,8 +1167,7 @@ class LookerSDK extends APIMethods {
       return SupportAccessStatus.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/support_access/enable', null,
-        body == null ? null : body.toJson());
+    return put(responseHandler, '/support_access/enable', null, body?.toJson());
   }
 
   /// ### Disable Support Access
@@ -1194,7 +1175,7 @@ class LookerSDK extends APIMethods {
   /// Disables Support Access immediately
   ///
   /// PUT /support_access/disable -> SupportAccessStatus
-  Future<SDKResponse<SupportAccessStatus>> disable_support_access() async {
+  Future<SDKResponse<SupportAccessStatus>> disableSupportAccess() async {
     SupportAccessStatus responseHandler(dynamic json, String contentType) {
       return SupportAccessStatus.fromResponse(json, contentType);
     }
@@ -1207,7 +1188,7 @@ class LookerSDK extends APIMethods {
   /// Returns the current Support Access Status
   ///
   /// GET /support_access/status -> SupportAccessStatus
-  Future<SDKResponse<SupportAccessStatus>> support_access_status() async {
+  Future<SDKResponse<SupportAccessStatus>> supportAccessStatus() async {
     SupportAccessStatus responseHandler(dynamic json, String contentType) {
       return SupportAccessStatus.fromResponse(json, contentType);
     }
@@ -1218,7 +1199,7 @@ class LookerSDK extends APIMethods {
   /// ### Get currently locked-out users.
   ///
   /// GET /user_login_lockouts -> List<UserLoginLockout>
-  Future<SDKResponse<List<UserLoginLockout>>> all_user_login_lockouts(
+  Future<SDKResponse<List<UserLoginLockout>>> allUserLoginLockouts(
       {
 
       /// @param {String} fields Include only these fields in the response
@@ -1236,7 +1217,7 @@ class LookerSDK extends APIMethods {
   /// ### Search currently locked-out users.
   ///
   /// GET /user_login_lockouts/search -> List<UserLoginLockout>
-  Future<SDKResponse<List<UserLoginLockout>>> search_user_login_lockouts(
+  Future<SDKResponse<List<UserLoginLockout>>> searchUserLoginLockouts(
       {
 
       /// @param {String} fields Include only these fields in the response
@@ -1246,25 +1227,25 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Return N rows of data per page
-      int per_page,
+      int perPage,
 
       /// @param {String} sorts Fields to sort by.
       String sorts,
 
       /// @param {String} auth_type Auth type user is locked out for (email, ldap, totp, api)
-      String auth_type,
+      String authType,
 
       /// @param {String} full_name Match name
-      String full_name,
+      String fullName,
 
       /// @param {String} email Match email
       String email,
 
       /// @param {String} remote_id Match remote LDAP ID
-      String remote_id,
+      String remoteId,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<UserLoginLockout> responseHandler(dynamic json, String contentType) {
       return json
           .map<UserLoginLockout>(
@@ -1275,30 +1256,30 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/user_login_lockouts/search', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'sorts': sorts,
-      'auth_type': auth_type,
-      'full_name': full_name,
+      'auth_type': authType,
+      'full_name': fullName,
       'email': email,
-      'remote_id': remote_id,
-      'filter_or': filter_or
+      'remote_id': remoteId,
+      'filter_or': filterOr
     });
   }
 
   /// ### Removes login lockout for the associated user.
   ///
   /// DELETE /user_login_lockout/{key} -> String
-  Future<SDKResponse<String>> delete_user_login_lockout(
+  Future<SDKResponse<String>> deleteUserLoginLockout(
 
       /// @param {String} key The key associated with the locked user
       String key) async {
-    var path_key = encodeParam(key);
+    var pathKey = encodeParam(key);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/user_login_lockout/$path_key');
+    return delete(responseHandler, '/user_login_lockout/$pathKey');
   }
 
   // #endregion Auth: Manage User Authentication Configuration
@@ -1308,7 +1289,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all boards.
   ///
   /// GET /boards -> List<Board>
-  Future<SDKResponse<List<Board>>> all_boards(
+  Future<SDKResponse<List<Board>>> allBoards(
       {
 
       /// @param {String} fields Requested fields.
@@ -1325,7 +1306,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a new board.
   ///
   /// POST /boards -> Board
-  Future<SDKResponse<Board>> create_board(
+  Future<SDKResponse<Board>> createBoard(
 
       /// @param {WriteBoard} body
       WriteBoard body,
@@ -1337,8 +1318,7 @@ class LookerSDK extends APIMethods {
       return Board.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/boards', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/boards', {'fields': fields}, body?.toJson());
   }
 
   /// ### Search Boards
@@ -1365,20 +1345,20 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /boards/search -> List<Board>
-  Future<SDKResponse<List<Board>>> search_boards(
+  Future<SDKResponse<List<Board>>> searchBoards(
       {
 
       /// @param {String} title Matches board title.
       String title,
 
       /// @param {String} created_at Matches the timestamp for when the board was created.
-      String created_at,
+      String createdAt,
 
       /// @param {String} first_name The first name of the user who created this board.
-      String first_name,
+      String firstName,
 
       /// @param {String} last_name The last name of the user who created this board.
-      String last_name,
+      String lastName,
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -1387,7 +1367,7 @@ class LookerSDK extends APIMethods {
       bool favorited,
 
       /// @param {String} creator_id Filter on boards created by a particular user.
-      String creator_id,
+      String creatorId,
 
       /// @param {String} sorts The fields to sort the results by
       String sorts,
@@ -1396,7 +1376,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page The number of items in the returned page.
-      int per_page,
+      int perPage,
 
       /// @param {int} offset The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
       int offset,
@@ -1405,7 +1385,7 @@ class LookerSDK extends APIMethods {
       int limit,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<Board> responseHandler(dynamic json, String contentType) {
       return json
           .map<Board>((i) => Board.fromResponse(i, contentType))
@@ -1414,18 +1394,18 @@ class LookerSDK extends APIMethods {
 
     return get(responseHandler, '/boards/search', {
       'title': title,
-      'created_at': created_at,
-      'first_name': first_name,
-      'last_name': last_name,
+      'created_at': createdAt,
+      'first_name': firstName,
+      'last_name': lastName,
       'fields': fields,
       'favorited': favorited,
-      'creator_id': creator_id,
+      'creator_id': creatorId,
       'sorts': sorts,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'offset': offset,
       'limit': limit,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -1435,27 +1415,27 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Board>> board(
 
       /// @param {int} board_id Id of board
-      int board_id,
+      int boardId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_id = encodeParam(board_id);
+    var pathBoardId = encodeParam(boardId);
 
     Board responseHandler(dynamic json, String contentType) {
       return Board.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/boards/$path_board_id', {'fields': fields});
+    return get(responseHandler, '/boards/$pathBoardId', {'fields': fields});
   }
 
   /// ### Update a board definition.
   ///
   /// PATCH /boards/{board_id} -> Board
-  Future<SDKResponse<Board>> update_board(
+  Future<SDKResponse<Board>> updateBoard(
 
       /// @param {int} board_id Id of board
-      int board_id,
+      int boardId,
 
       /// @param {WriteBoard} body
       WriteBoard body,
@@ -1463,36 +1443,36 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_id = encodeParam(board_id);
+    var pathBoardId = encodeParam(boardId);
 
     Board responseHandler(dynamic json, String contentType) {
       return Board.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/boards/$path_board_id', {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/boards/$pathBoardId', {'fields': fields},
+        body?.toJson());
   }
 
   /// ### Delete a board.
   ///
   /// DELETE /boards/{board_id} -> String
-  Future<SDKResponse<String>> delete_board(
+  Future<SDKResponse<String>> deleteBoard(
 
       /// @param {int} board_id Id of board
-      int board_id) async {
-    var path_board_id = encodeParam(board_id);
+      int boardId) async {
+    var pathBoardId = encodeParam(boardId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/boards/$path_board_id');
+    return delete(responseHandler, '/boards/$pathBoardId');
   }
 
   /// ### Get information about all board items.
   ///
   /// GET /board_items -> List<BoardItem>
-  Future<SDKResponse<List<BoardItem>>> all_board_items(
+  Future<SDKResponse<List<BoardItem>>> allBoardItems(
       {
 
       /// @param {String} fields Requested fields.
@@ -1502,24 +1482,21 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {String} board_section_id Filter to a specific board section
-      String board_section_id}) async {
+      String boardSectionId}) async {
     List<BoardItem> responseHandler(dynamic json, String contentType) {
       return json
           .map<BoardItem>((i) => BoardItem.fromResponse(i, contentType))
           .toList();
     }
 
-    return get(responseHandler, '/board_items', {
-      'fields': fields,
-      'sorts': sorts,
-      'board_section_id': board_section_id
-    });
+    return get(responseHandler, '/board_items',
+        {'fields': fields, 'sorts': sorts, 'board_section_id': boardSectionId});
   }
 
   /// ### Create a new board item.
   ///
   /// POST /board_items -> BoardItem
-  Future<SDKResponse<BoardItem>> create_board_item(
+  Future<SDKResponse<BoardItem>> createBoardItem(
 
       /// @param {WriteBoardItem} body
       WriteBoardItem body,
@@ -1531,38 +1508,38 @@ class LookerSDK extends APIMethods {
       return BoardItem.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/board_items', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/board_items', {'fields': fields}, body?.toJson());
   }
 
   /// ### Get information about a board item.
   ///
   /// GET /board_items/{board_item_id} -> BoardItem
-  Future<SDKResponse<BoardItem>> board_item(
+  Future<SDKResponse<BoardItem>> boardItem(
 
       /// @param {int} board_item_id Id of board item
-      int board_item_id,
+      int boardItemId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_item_id = encodeParam(board_item_id);
+    var pathBoardItemId = encodeParam(boardItemId);
 
     BoardItem responseHandler(dynamic json, String contentType) {
       return BoardItem.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/board_items/$path_board_item_id',
-        {'fields': fields});
+    return get(
+        responseHandler, '/board_items/$pathBoardItemId', {'fields': fields});
   }
 
   /// ### Update a board item definition.
   ///
   /// PATCH /board_items/{board_item_id} -> BoardItem
-  Future<SDKResponse<BoardItem>> update_board_item(
+  Future<SDKResponse<BoardItem>> updateBoardItem(
 
       /// @param {int} board_item_id Id of board item
-      int board_item_id,
+      int boardItemId,
 
       /// @param {WriteBoardItem} body
       WriteBoardItem body,
@@ -1570,36 +1547,36 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_item_id = encodeParam(board_item_id);
+    var pathBoardItemId = encodeParam(boardItemId);
 
     BoardItem responseHandler(dynamic json, String contentType) {
       return BoardItem.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/board_items/$path_board_item_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/board_items/$pathBoardItemId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a board item.
   ///
   /// DELETE /board_items/{board_item_id} -> String
-  Future<SDKResponse<String>> delete_board_item(
+  Future<SDKResponse<String>> deleteBoardItem(
 
       /// @param {int} board_item_id Id of board_item
-      int board_item_id) async {
-    var path_board_item_id = encodeParam(board_item_id);
+      int boardItemId) async {
+    var pathBoardItemId = encodeParam(boardItemId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/board_items/$path_board_item_id');
+    return delete(responseHandler, '/board_items/$pathBoardItemId');
   }
 
   /// ### Get information about all board sections.
   ///
   /// GET /board_sections -> List<BoardSection>
-  Future<SDKResponse<List<BoardSection>>> all_board_sections(
+  Future<SDKResponse<List<BoardSection>>> allBoardSections(
       {
 
       /// @param {String} fields Requested fields.
@@ -1620,7 +1597,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a new board section.
   ///
   /// POST /board_sections -> BoardSection
-  Future<SDKResponse<BoardSection>> create_board_section(
+  Future<SDKResponse<BoardSection>> createBoardSection(
 
       /// @param {WriteBoardSection} body
       WriteBoardSection body,
@@ -1632,38 +1609,38 @@ class LookerSDK extends APIMethods {
       return BoardSection.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/board_sections', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/board_sections', {'fields': fields}, body?.toJson());
   }
 
   /// ### Get information about a board section.
   ///
   /// GET /board_sections/{board_section_id} -> BoardSection
-  Future<SDKResponse<BoardSection>> board_section(
+  Future<SDKResponse<BoardSection>> boardSection(
 
       /// @param {int} board_section_id Id of board section
-      int board_section_id,
+      int boardSectionId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_section_id = encodeParam(board_section_id);
+    var pathBoardSectionId = encodeParam(boardSectionId);
 
     BoardSection responseHandler(dynamic json, String contentType) {
       return BoardSection.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/board_sections/$path_board_section_id',
+    return get(responseHandler, '/board_sections/$pathBoardSectionId',
         {'fields': fields});
   }
 
   /// ### Update a board section definition.
   ///
   /// PATCH /board_sections/{board_section_id} -> BoardSection
-  Future<SDKResponse<BoardSection>> update_board_section(
+  Future<SDKResponse<BoardSection>> updateBoardSection(
 
       /// @param {int} board_section_id Id of board section
-      int board_section_id,
+      int boardSectionId,
 
       /// @param {WriteBoardSection} body
       WriteBoardSection body,
@@ -1671,30 +1648,30 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_board_section_id = encodeParam(board_section_id);
+    var pathBoardSectionId = encodeParam(boardSectionId);
 
     BoardSection responseHandler(dynamic json, String contentType) {
       return BoardSection.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/board_sections/$path_board_section_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/board_sections/$pathBoardSectionId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a board section.
   ///
   /// DELETE /board_sections/{board_section_id} -> String
-  Future<SDKResponse<String>> delete_board_section(
+  Future<SDKResponse<String>> deleteBoardSection(
 
       /// @param {int} board_section_id Id of board section
-      int board_section_id) async {
-    var path_board_section_id = encodeParam(board_section_id);
+      int boardSectionId) async {
+    var pathBoardSectionId = encodeParam(boardSectionId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/board_sections/$path_board_section_id');
+    return delete(responseHandler, '/board_sections/$pathBoardSectionId');
   }
 
   // #endregion Board: Manage Boards
@@ -1711,7 +1688,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// GET /color_collections -> List<ColorCollection>
-  Future<SDKResponse<List<ColorCollection>>> all_color_collections(
+  Future<SDKResponse<List<ColorCollection>>> allColorCollections(
       {
 
       /// @param {String} fields Requested fields.
@@ -1737,7 +1714,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// POST /color_collections -> ColorCollection
-  Future<SDKResponse<ColorCollection>> create_color_collection(
+  Future<SDKResponse<ColorCollection>> createColorCollection(
 
       /// @param {WriteColorCollection} body
       WriteColorCollection body) async {
@@ -1745,8 +1722,7 @@ class LookerSDK extends APIMethods {
       return ColorCollection.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/color_collections', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/color_collections', null, body?.toJson());
   }
 
   /// ### Get an array of all existing **Custom** Color Collections
@@ -1757,7 +1733,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// GET /color_collections/custom -> List<ColorCollection>
-  Future<SDKResponse<List<ColorCollection>>> color_collections_custom(
+  Future<SDKResponse<List<ColorCollection>>> colorCollectionsCustom(
       {
 
       /// @param {String} fields Requested fields.
@@ -1781,7 +1757,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// GET /color_collections/standard -> List<ColorCollection>
-  Future<SDKResponse<List<ColorCollection>>> color_collections_standard(
+  Future<SDKResponse<List<ColorCollection>>> colorCollectionsStandard(
       {
 
       /// @param {String} fields Requested fields.
@@ -1804,7 +1780,7 @@ class LookerSDK extends APIMethods {
   /// Set the default color collection with [ColorCollection](#!/ColorCollection/set_default_color_collection)
   ///
   /// GET /color_collections/default -> ColorCollection
-  Future<SDKResponse<ColorCollection>> default_color_collection() async {
+  Future<SDKResponse<ColorCollection>> defaultColorCollection() async {
     ColorCollection responseHandler(dynamic json, String contentType) {
       return ColorCollection.fromResponse(json, contentType);
     }
@@ -1818,16 +1794,16 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// PUT /color_collections/default -> ColorCollection
-  Future<SDKResponse<ColorCollection>> set_default_color_collection(
+  Future<SDKResponse<ColorCollection>> setDefaultColorCollection(
 
       /// @param {String} collection_id ID of color collection to set as default
-      String collection_id) async {
+      String collectionId) async {
     ColorCollection responseHandler(dynamic json, String contentType) {
       return ColorCollection.fromResponse(json, contentType);
     }
 
     return put(responseHandler, '/color_collections/default',
-        {'collection_id': collection_id});
+        {'collection_id': collectionId});
   }
 
   /// ### Get a Color Collection by ID
@@ -1842,21 +1818,21 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// GET /color_collections/{collection_id} -> ColorCollection
-  Future<SDKResponse<ColorCollection>> color_collection(
+  Future<SDKResponse<ColorCollection>> colorCollection(
 
       /// @param {String} collection_id Id of Color Collection
-      String collection_id,
+      String collectionId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_collection_id = encodeParam(collection_id);
+    var pathCollectionId = encodeParam(collectionId);
 
     ColorCollection responseHandler(dynamic json, String contentType) {
       return ColorCollection.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/color_collections/$path_collection_id',
+    return get(responseHandler, '/color_collections/$pathCollectionId',
         {'fields': fields});
   }
 
@@ -1864,21 +1840,21 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// PATCH /color_collections/{collection_id} -> ColorCollection
-  Future<SDKResponse<ColorCollection>> update_color_collection(
+  Future<SDKResponse<ColorCollection>> updateColorCollection(
 
       /// @param {String} collection_id Id of Custom Color Collection
-      String collection_id,
+      String collectionId,
 
       /// @param {WriteColorCollection} body
       WriteColorCollection body) async {
-    var path_collection_id = encodeParam(collection_id);
+    var pathCollectionId = encodeParam(collectionId);
 
     ColorCollection responseHandler(dynamic json, String contentType) {
       return ColorCollection.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/color_collections/$path_collection_id',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/color_collections/$pathCollectionId', null,
+        body?.toJson());
   }
 
   /// ### Delete a custom color collection by id
@@ -1891,17 +1867,17 @@ class LookerSDK extends APIMethods {
   /// **Note**: Only an API user with the Admin role can call this endpoint. Unauthorized requests will return `Not Found` (404) errors.
   ///
   /// DELETE /color_collections/{collection_id} -> String
-  Future<SDKResponse<String>> delete_color_collection(
+  Future<SDKResponse<String>> deleteColorCollection(
 
       /// @param {String} collection_id Id of Color Collection
-      String collection_id) async {
-    var path_collection_id = encodeParam(collection_id);
+      String collectionId) async {
+    var pathCollectionId = encodeParam(collectionId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/color_collections/$path_collection_id');
+    return delete(responseHandler, '/color_collections/$pathCollectionId');
   }
 
   // #endregion ColorCollection: Manage Color Collections
@@ -1911,14 +1887,14 @@ class LookerSDK extends APIMethods {
   /// ### Get All Commands.
   ///
   /// GET /commands -> List<Command>
-  Future<SDKResponse<List<Command>>> get_all_commands(
+  Future<SDKResponse<List<Command>>> getAllCommands(
       {
 
       /// @param {String} content_id Id of the associated content. This must be accompanied with content_type.
-      String content_id,
+      String contentId,
 
       /// @param {String} content_type Type of the associated content. This must be accompanied with content_id.
-      String content_type,
+      String contentType,
 
       /// @param {int} limit Number of results to return.
       int limit}) async {
@@ -1928,11 +1904,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/commands', {
-      'content_id': content_id,
-      'content_type': content_type,
-      'limit': limit
-    });
+    return get(responseHandler, '/commands',
+        {'content_id': contentId, 'content_type': contentType, 'limit': limit});
   }
 
   /// ### Create a new command.
@@ -1941,7 +1914,7 @@ class LookerSDK extends APIMethods {
   /// #
   ///
   /// POST /commands -> Command
-  Future<SDKResponse<Command>> create_command(
+  Future<SDKResponse<Command>> createCommand(
 
       /// @param {WriteCommand} body
       WriteCommand body) async {
@@ -1949,8 +1922,7 @@ class LookerSDK extends APIMethods {
       return Command.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/commands', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/commands', null, body?.toJson());
   }
 
   /// ### Update an existing custom command.
@@ -1958,34 +1930,34 @@ class LookerSDK extends APIMethods {
   /// #
   ///
   /// PATCH /commands/{command_id} -> Command
-  Future<SDKResponse<Command>> update_command(
+  Future<SDKResponse<Command>> updateCommand(
 
       /// @param {int} command_id ID of a command
-      int command_id,
+      int commandId,
 
       /// @param {UpdateCommand} body
       UpdateCommand body) async {
-    var path_command_id = encodeParam(command_id);
+    var pathCommandId = encodeParam(commandId);
 
     Command responseHandler(dynamic json, String contentType) {
       return Command.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/commands/$path_command_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/commands/$pathCommandId', null, body?.toJson());
   }
 
   /// ### Delete an existing custom command.
   ///
   /// DELETE /commands/{command_id} -> void
-  Future<SDKResponse<void>> delete_command(
+  Future<SDKResponse<void>> deleteCommand(
 
       /// @param {int} command_id ID of a command
-      int command_id) async {
-    var path_command_id = encodeParam(command_id);
+      int commandId) async {
+    var pathCommandId = encodeParam(commandId);
 
     void responseHandler(dynamic json, String contentType) {}
-    return delete(responseHandler, '/commands/$path_command_id');
+    return delete(responseHandler, '/commands/$pathCommandId');
   }
 
   // #endregion Command: Manage Commands
@@ -1995,7 +1967,7 @@ class LookerSDK extends APIMethods {
   /// Get the current Cloud Storage Configuration.
   ///
   /// GET /cloud_storage -> BackupConfiguration
-  Future<SDKResponse<BackupConfiguration>> cloud_storage_configuration() async {
+  Future<SDKResponse<BackupConfiguration>> cloudStorageConfiguration() async {
     BackupConfiguration responseHandler(dynamic json, String contentType) {
       return BackupConfiguration.fromResponse(json, contentType);
     }
@@ -2006,7 +1978,7 @@ class LookerSDK extends APIMethods {
   /// Update the current Cloud Storage Configuration.
   ///
   /// PATCH /cloud_storage -> BackupConfiguration
-  Future<SDKResponse<BackupConfiguration>> update_cloud_storage_configuration(
+  Future<SDKResponse<BackupConfiguration>> updateCloudStorageConfiguration(
 
       /// @param {WriteBackupConfiguration} body
       WriteBackupConfiguration body) async {
@@ -2014,14 +1986,13 @@ class LookerSDK extends APIMethods {
       return BackupConfiguration.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/cloud_storage', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/cloud_storage', null, body?.toJson());
   }
 
   /// ### Get the current status and content of custom welcome emails
   ///
   /// GET /custom_welcome_email -> CustomWelcomeEmail
-  Future<SDKResponse<CustomWelcomeEmail>> custom_welcome_email() async {
+  Future<SDKResponse<CustomWelcomeEmail>> customWelcomeEmail() async {
     CustomWelcomeEmail responseHandler(dynamic json, String contentType) {
       return CustomWelcomeEmail.fromResponse(json, contentType);
     }
@@ -2032,29 +2003,26 @@ class LookerSDK extends APIMethods {
   /// Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
   ///
   /// PATCH /custom_welcome_email -> CustomWelcomeEmail
-  Future<SDKResponse<CustomWelcomeEmail>> update_custom_welcome_email(
+  Future<SDKResponse<CustomWelcomeEmail>> updateCustomWelcomeEmail(
 
       /// @param {CustomWelcomeEmail} body
       CustomWelcomeEmail body,
       {
 
       /// @param {bool} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
-      bool send_test_welcome_email}) async {
+      bool sendTestWelcomeEmail}) async {
     CustomWelcomeEmail responseHandler(dynamic json, String contentType) {
       return CustomWelcomeEmail.fromResponse(json, contentType);
     }
 
-    return patch(
-        responseHandler,
-        '/custom_welcome_email',
-        {'send_test_welcome_email': send_test_welcome_email},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/custom_welcome_email',
+        {'send_test_welcome_email': sendTestWelcomeEmail}, body?.toJson());
   }
 
   /// Requests to this endpoint will send a welcome email with the custom content provided in the body to the currently logged in user.
   ///
   /// PUT /custom_welcome_email_test -> WelcomeEmailTest
-  Future<SDKResponse<WelcomeEmailTest>> update_custom_welcome_email_test(
+  Future<SDKResponse<WelcomeEmailTest>> updateCustomWelcomeEmailTest(
 
       /// @param {WelcomeEmailTest} body
       WelcomeEmailTest body) async {
@@ -2062,14 +2030,14 @@ class LookerSDK extends APIMethods {
       return WelcomeEmailTest.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/custom_welcome_email_test', null,
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/custom_welcome_email_test', null, body?.toJson());
   }
 
   /// ### Retrieve the value for whether or not digest emails is enabled
   ///
   /// GET /digest_emails_enabled -> DigestEmails
-  Future<SDKResponse<DigestEmails>> digest_emails_enabled() async {
+  Future<SDKResponse<DigestEmails>> digestEmailsEnabled() async {
     DigestEmails responseHandler(dynamic json, String contentType) {
       return DigestEmails.fromResponse(json, contentType);
     }
@@ -2080,7 +2048,7 @@ class LookerSDK extends APIMethods {
   /// ### Update the setting for enabling/disabling digest emails
   ///
   /// PATCH /digest_emails_enabled -> DigestEmails
-  Future<SDKResponse<DigestEmails>> update_digest_emails_enabled(
+  Future<SDKResponse<DigestEmails>> updateDigestEmailsEnabled(
 
       /// @param {DigestEmails} body
       DigestEmails body) async {
@@ -2088,8 +2056,8 @@ class LookerSDK extends APIMethods {
       return DigestEmails.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/digest_emails_enabled', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/digest_emails_enabled', null, body?.toJson());
   }
 
   /// ### Trigger the generation of digest email records and send them to Looker's internal system. This does not send
@@ -2097,7 +2065,7 @@ class LookerSDK extends APIMethods {
   /// Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
   ///
   /// POST /digest_email_send -> DigestEmailSend
-  Future<SDKResponse<DigestEmailSend>> create_digest_email_send() async {
+  Future<SDKResponse<DigestEmailSend>> createDigestEmailSend() async {
     DigestEmailSend responseHandler(dynamic json, String contentType) {
       return DigestEmailSend.fromResponse(json, contentType);
     }
@@ -2109,7 +2077,7 @@ class LookerSDK extends APIMethods {
   ///
   /// GET /internal_help_resources_content -> InternalHelpResourcesContent
   Future<SDKResponse<InternalHelpResourcesContent>>
-      internal_help_resources_content() async {
+      internalHelpResourcesContent() async {
     InternalHelpResourcesContent responseHandler(
         dynamic json, String contentType) {
       return InternalHelpResourcesContent.fromResponse(json, contentType);
@@ -2122,7 +2090,7 @@ class LookerSDK extends APIMethods {
   ///
   /// PATCH /internal_help_resources_content -> InternalHelpResourcesContent
   Future<SDKResponse<InternalHelpResourcesContent>>
-      update_internal_help_resources_content(
+      updateInternalHelpResourcesContent(
 
           /// @param {WriteInternalHelpResourcesContent} body
           WriteInternalHelpResourcesContent body) async {
@@ -2132,13 +2100,13 @@ class LookerSDK extends APIMethods {
     }
 
     return patch(responseHandler, '/internal_help_resources_content', null,
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get and set the options for internal help resources
   ///
   /// GET /internal_help_resources_enabled -> InternalHelpResources
-  Future<SDKResponse<InternalHelpResources>> internal_help_resources() async {
+  Future<SDKResponse<InternalHelpResources>> internalHelpResources() async {
     InternalHelpResources responseHandler(dynamic json, String contentType) {
       return InternalHelpResources.fromResponse(json, contentType);
     }
@@ -2149,7 +2117,7 @@ class LookerSDK extends APIMethods {
   /// Update internal help resources settings
   ///
   /// PATCH /internal_help_resources -> InternalHelpResources
-  Future<SDKResponse<InternalHelpResources>> update_internal_help_resources(
+  Future<SDKResponse<InternalHelpResources>> updateInternalHelpResources(
 
       /// @param {WriteInternalHelpResources} body
       WriteInternalHelpResources body) async {
@@ -2157,14 +2125,14 @@ class LookerSDK extends APIMethods {
       return InternalHelpResources.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/internal_help_resources', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/internal_help_resources', null, body?.toJson());
   }
 
   /// ### Get all legacy features.
   ///
   /// GET /legacy_features -> List<LegacyFeature>
-  Future<SDKResponse<List<LegacyFeature>>> all_legacy_features() async {
+  Future<SDKResponse<List<LegacyFeature>>> allLegacyFeatures() async {
     List<LegacyFeature> responseHandler(dynamic json, String contentType) {
       return json
           .map<LegacyFeature>((i) => LegacyFeature.fromResponse(i, contentType))
@@ -2177,43 +2145,43 @@ class LookerSDK extends APIMethods {
   /// ### Get information about the legacy feature with a specific id.
   ///
   /// GET /legacy_features/{legacy_feature_id} -> LegacyFeature
-  Future<SDKResponse<LegacyFeature>> legacy_feature(
+  Future<SDKResponse<LegacyFeature>> legacyFeature(
 
       /// @param {String} legacy_feature_id id of legacy feature
-      String legacy_feature_id) async {
-    var path_legacy_feature_id = encodeParam(legacy_feature_id);
+      String legacyFeatureId) async {
+    var pathLegacyFeatureId = encodeParam(legacyFeatureId);
 
     LegacyFeature responseHandler(dynamic json, String contentType) {
       return LegacyFeature.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/legacy_features/$path_legacy_feature_id');
+    return get(responseHandler, '/legacy_features/$pathLegacyFeatureId');
   }
 
   /// ### Update information about the legacy feature with a specific id.
   ///
   /// PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
-  Future<SDKResponse<LegacyFeature>> update_legacy_feature(
+  Future<SDKResponse<LegacyFeature>> updateLegacyFeature(
 
       /// @param {String} legacy_feature_id id of legacy feature
-      String legacy_feature_id,
+      String legacyFeatureId,
 
       /// @param {WriteLegacyFeature} body
       WriteLegacyFeature body) async {
-    var path_legacy_feature_id = encodeParam(legacy_feature_id);
+    var pathLegacyFeatureId = encodeParam(legacyFeatureId);
 
     LegacyFeature responseHandler(dynamic json, String contentType) {
       return LegacyFeature.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/legacy_features/$path_legacy_feature_id',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/legacy_features/$pathLegacyFeatureId', null,
+        body?.toJson());
   }
 
   /// ### Get a list of locales that Looker supports.
   ///
   /// GET /locales -> List<Locale>
-  Future<SDKResponse<List<Locale>>> all_locales() async {
+  Future<SDKResponse<List<Locale>>> allLocales() async {
     List<Locale> responseHandler(dynamic json, String contentType) {
       return json
           .map<Locale>((i) => Locale.fromResponse(i, contentType))
@@ -2226,7 +2194,7 @@ class LookerSDK extends APIMethods {
   /// ### Get all mobile settings.
   ///
   /// GET /mobile/settings -> MobileSettings
-  Future<SDKResponse<MobileSettings>> mobile_settings() async {
+  Future<SDKResponse<MobileSettings>> mobileSettings() async {
     MobileSettings responseHandler(dynamic json, String contentType) {
       return MobileSettings.fromResponse(json, contentType);
     }
@@ -2244,7 +2212,7 @@ class LookerSDK extends APIMethods {
   ///  - custom_welcome_email
   ///
   /// GET /setting -> Setting
-  Future<SDKResponse<Setting>> get_setting(
+  Future<SDKResponse<Setting>> getSetting(
       {
 
       /// @param {String} fields Requested fields
@@ -2268,7 +2236,7 @@ class LookerSDK extends APIMethods {
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
   /// PATCH /setting -> Setting
-  Future<SDKResponse<Setting>> set_setting(
+  Future<SDKResponse<Setting>> setSetting(
 
       /// @param {WriteSetting} body
       WriteSetting body,
@@ -2280,14 +2248,14 @@ class LookerSDK extends APIMethods {
       return Setting.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/setting', {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/setting', {'fields': fields}, body?.toJson());
   }
 
   /// ### Get current SMTP status.
   ///
   /// GET /smtp_status -> SmtpStatus
-  Future<SDKResponse<SmtpStatus>> smtp_status(
+  Future<SDKResponse<SmtpStatus>> smtpStatus(
       {
 
       /// @param {String} fields Include only these fields in the response
@@ -2302,7 +2270,7 @@ class LookerSDK extends APIMethods {
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
   ///
   /// GET /timezones -> List<Timezone>
-  Future<SDKResponse<List<Timezone>>> all_timezones() async {
+  Future<SDKResponse<List<Timezone>>> allTimezones() async {
     List<Timezone> responseHandler(dynamic json, String contentType) {
       return json
           .map<Timezone>((i) => Timezone.fromResponse(i, contentType))
@@ -2332,29 +2300,28 @@ class LookerSDK extends APIMethods {
   /// The specification is returned as a JSON document in Swagger 2.x format
   ///
   /// GET /api_spec/{api_version}/{specification} -> dynamic
-  Future<SDKResponse<dynamic>> api_spec(
+  Future<SDKResponse<dynamic>> apiSpec(
 
       /// @param {String} api_version API version
-      String api_version,
+      String apiVersion,
 
       /// @param {String} specification Specification name. Typically, this is "swagger.json"
       String specification) async {
-    var path_api_version = encodeParam(api_version);
-    var path_specification = encodeParam(specification);
+    var pathApiVersion = encodeParam(apiVersion);
+    var pathSpecification = encodeParam(specification);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(
-        responseHandler, '/api_spec/$path_api_version/$path_specification');
+    return get(responseHandler, '/api_spec/$pathApiVersion/$pathSpecification');
   }
 
   /// ### This feature is enabled only by special license.
   /// ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
   ///
   /// GET /whitelabel_configuration -> WhitelabelConfiguration
-  Future<SDKResponse<WhitelabelConfiguration>> whitelabel_configuration(
+  Future<SDKResponse<WhitelabelConfiguration>> whitelabelConfiguration(
       {
 
       /// @param {String} fields Requested fields.
@@ -2370,7 +2337,7 @@ class LookerSDK extends APIMethods {
   /// ### Update the whitelabel configuration
   ///
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
-  Future<SDKResponse<WhitelabelConfiguration>> update_whitelabel_configuration(
+  Future<SDKResponse<WhitelabelConfiguration>> updateWhitelabelConfiguration(
 
       /// @param {WriteWhitelabelConfiguration} body
       WriteWhitelabelConfiguration body) async {
@@ -2378,8 +2345,8 @@ class LookerSDK extends APIMethods {
       return WhitelabelConfiguration.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/whitelabel_configuration', null,
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/whitelabel_configuration', null, body?.toJson());
   }
 
   // #endregion Config: Manage General Configuration
@@ -2389,7 +2356,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all connections.
   ///
   /// GET /connections -> List<DBConnection>
-  Future<SDKResponse<List<DBConnection>>> all_connections(
+  Future<SDKResponse<List<DBConnection>>> allConnections(
       {
 
       /// @param {String} fields Requested fields.
@@ -2406,7 +2373,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a connection using the specified configuration.
   ///
   /// POST /connections -> DBConnection
-  Future<SDKResponse<DBConnection>> create_connection(
+  Future<SDKResponse<DBConnection>> createConnection(
 
       /// @param {WriteDBConnection} body
       WriteDBConnection body) async {
@@ -2414,8 +2381,7 @@ class LookerSDK extends APIMethods {
       return DBConnection.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/connections', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/connections', null, body?.toJson());
   }
 
   /// ### Get information about a connection.
@@ -2424,76 +2390,76 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<DBConnection>> connection(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     DBConnection responseHandler(dynamic json, String contentType) {
       return DBConnection.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/connections/$path_connection_name',
+    return get(responseHandler, '/connections/$pathConnectionName',
         {'fields': fields});
   }
 
   /// ### Update a connection using the specified configuration.
   ///
   /// PATCH /connections/{connection_name} -> DBConnection
-  Future<SDKResponse<DBConnection>> update_connection(
+  Future<SDKResponse<DBConnection>> updateConnection(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
 
       /// @param {WriteDBConnection} body
       WriteDBConnection body) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     DBConnection responseHandler(dynamic json, String contentType) {
       return DBConnection.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/connections/$path_connection_name', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/connections/$pathConnectionName', null,
+        body?.toJson());
   }
 
   /// ### Delete a connection.
   ///
   /// DELETE /connections/{connection_name} -> String
-  Future<SDKResponse<String>> delete_connection(
+  Future<SDKResponse<String>> deleteConnection(
 
       /// @param {String} connection_name Name of connection
-      String connection_name) async {
-    var path_connection_name = encodeParam(connection_name);
+      String connectionName) async {
+    var pathConnectionName = encodeParam(connectionName);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/connections/$path_connection_name');
+    return delete(responseHandler, '/connections/$pathConnectionName');
   }
 
   /// ### Delete a connection override.
   ///
   /// DELETE /connections/{connection_name}/connection_override/{override_context} -> String
-  Future<SDKResponse<String>> delete_connection_override(
+  Future<SDKResponse<String>> deleteConnectionOverride(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
 
       /// @param {String} override_context Context of connection override
-      String override_context) async {
-    var path_connection_name = encodeParam(connection_name);
-    var path_override_context = encodeParam(override_context);
+      String overrideContext) async {
+    var pathConnectionName = encodeParam(connectionName);
+    var pathOverrideContext = encodeParam(overrideContext);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(responseHandler,
-        '/connections/$path_connection_name/connection_override/$path_override_context');
+        '/connections/$pathConnectionName/connection_override/$pathOverrideContext');
   }
 
   /// ### Test an existing connection.
@@ -2506,15 +2472,15 @@ class LookerSDK extends APIMethods {
   /// Unsupported tests in the request will be ignored.
   ///
   /// PUT /connections/{connection_name}/test -> List<DBConnectionTestResult>
-  Future<SDKResponse<List<DBConnectionTestResult>>> test_connection(
+  Future<SDKResponse<List<DBConnectionTestResult>>> testConnection(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {DelimList<String>} tests Array of names of tests to run
       DelimList<String> tests}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     List<DBConnectionTestResult> responseHandler(
         dynamic json, String contentType) {
@@ -2524,7 +2490,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return put(responseHandler, '/connections/$path_connection_name/test',
+    return put(responseHandler, '/connections/$pathConnectionName/test',
         {'tests': tests});
   }
 
@@ -2538,7 +2504,7 @@ class LookerSDK extends APIMethods {
   /// Unsupported tests in the request will be ignored.
   ///
   /// PUT /connections/test -> List<DBConnectionTestResult>
-  Future<SDKResponse<List<DBConnectionTestResult>>> test_connection_config(
+  Future<SDKResponse<List<DBConnectionTestResult>>> testConnectionConfig(
 
       /// @param {WriteDBConnection} body
       WriteDBConnection body,
@@ -2554,14 +2520,14 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return put(responseHandler, '/connections/test', {'tests': tests},
-        body == null ? null : body.toJson());
+    return put(
+        responseHandler, '/connections/test', {'tests': tests}, body?.toJson());
   }
 
   /// ### Get information about all dialects.
   ///
   /// GET /dialect_info -> List<DialectInfo>
-  Future<SDKResponse<List<DialectInfo>>> all_dialect_infos(
+  Future<SDKResponse<List<DialectInfo>>> allDialectInfos(
       {
 
       /// @param {String} fields Requested fields.
@@ -2581,14 +2547,14 @@ class LookerSDK extends APIMethods {
   ///
   /// GET /external_oauth_applications -> List<ExternalOauthApplication>
   Future<SDKResponse<List<ExternalOauthApplication>>>
-      all_external_oauth_applications(
+      allExternalOauthApplications(
           {
 
           /// @param {String} name Application name
           String name,
 
           /// @param {String} client_id Application Client ID
-          String client_id}) async {
+          String clientId}) async {
     List<ExternalOauthApplication> responseHandler(
         dynamic json, String contentType) {
       return json
@@ -2598,7 +2564,7 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/external_oauth_applications',
-        {'name': name, 'client_id': client_id});
+        {'name': name, 'client_id': clientId});
   }
 
   /// ### Create an OAuth Application using the specified configuration.
@@ -2606,24 +2572,23 @@ class LookerSDK extends APIMethods {
   /// This is an OAuth Application which Looker uses to access external systems.
   ///
   /// POST /external_oauth_applications -> ExternalOauthApplication
-  Future<SDKResponse<ExternalOauthApplication>>
-      create_external_oauth_application(
+  Future<SDKResponse<ExternalOauthApplication>> createExternalOauthApplication(
 
-          /// @param {WriteExternalOauthApplication} body
-          WriteExternalOauthApplication body) async {
+      /// @param {WriteExternalOauthApplication} body
+      WriteExternalOauthApplication body) async {
     ExternalOauthApplication responseHandler(dynamic json, String contentType) {
       return ExternalOauthApplication.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/external_oauth_applications', null,
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/external_oauth_applications', null, body?.toJson());
   }
 
   /// ### Create OAuth User state.
   ///
   /// POST /external_oauth_applications/user_state -> CreateOAuthApplicationUserStateResponse
   Future<SDKResponse<CreateOAuthApplicationUserStateResponse>>
-      create_oauth_application_user_state(
+      createOauthApplicationUserState(
 
           /// @param {CreateOAuthApplicationUserStateRequest} body
           CreateOAuthApplicationUserStateRequest body) async {
@@ -2634,13 +2599,13 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/external_oauth_applications/user_state',
-        null, body == null ? null : body.toJson());
+        null, body?.toJson());
   }
 
   /// ### Get information about all SSH Servers.
   ///
   /// GET /ssh_servers -> List<SshServer>
-  Future<SDKResponse<List<SshServer>>> all_ssh_servers(
+  Future<SDKResponse<List<SshServer>>> allSshServers(
       {
 
       /// @param {String} fields Requested fields.
@@ -2657,7 +2622,7 @@ class LookerSDK extends APIMethods {
   /// ### Create an SSH Server.
   ///
   /// POST /ssh_servers -> SshServer
-  Future<SDKResponse<SshServer>> create_ssh_server(
+  Future<SDKResponse<SshServer>> createSshServer(
 
       /// @param {WriteSshServer} body
       WriteSshServer body) async {
@@ -2665,82 +2630,81 @@ class LookerSDK extends APIMethods {
       return SshServer.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/ssh_servers', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/ssh_servers', null, body?.toJson());
   }
 
   /// ### Get information about an SSH Server.
   ///
   /// GET /ssh_server/{ssh_server_id} -> SshServer
-  Future<SDKResponse<SshServer>> ssh_server(
+  Future<SDKResponse<SshServer>> sshServer(
 
       /// @param {String} ssh_server_id Id of SSH Server
-      String ssh_server_id) async {
-    var path_ssh_server_id = encodeParam(ssh_server_id);
+      String sshServerId) async {
+    var pathSshServerId = encodeParam(sshServerId);
 
     SshServer responseHandler(dynamic json, String contentType) {
       return SshServer.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/ssh_server/$path_ssh_server_id');
+    return get(responseHandler, '/ssh_server/$pathSshServerId');
   }
 
   /// ### Update an SSH Server.
   ///
   /// PATCH /ssh_server/{ssh_server_id} -> SshServer
-  Future<SDKResponse<SshServer>> update_ssh_server(
+  Future<SDKResponse<SshServer>> updateSshServer(
 
       /// @param {String} ssh_server_id Id of SSH Server
-      String ssh_server_id,
+      String sshServerId,
 
       /// @param {WriteSshServer} body
       WriteSshServer body) async {
-    var path_ssh_server_id = encodeParam(ssh_server_id);
+    var pathSshServerId = encodeParam(sshServerId);
 
     SshServer responseHandler(dynamic json, String contentType) {
       return SshServer.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/ssh_server/$path_ssh_server_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/ssh_server/$pathSshServerId', null, body?.toJson());
   }
 
   /// ### Delete an SSH Server.
   ///
   /// DELETE /ssh_server/{ssh_server_id} -> String
-  Future<SDKResponse<String>> delete_ssh_server(
+  Future<SDKResponse<String>> deleteSshServer(
 
       /// @param {String} ssh_server_id Id of SSH Server
-      String ssh_server_id) async {
-    var path_ssh_server_id = encodeParam(ssh_server_id);
+      String sshServerId) async {
+    var pathSshServerId = encodeParam(sshServerId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/ssh_server/$path_ssh_server_id');
+    return delete(responseHandler, '/ssh_server/$pathSshServerId');
   }
 
   /// ### Test the SSH Server
   ///
   /// GET /ssh_server/{ssh_server_id}/test -> SshServer
-  Future<SDKResponse<SshServer>> test_ssh_server(
+  Future<SDKResponse<SshServer>> testSshServer(
 
       /// @param {String} ssh_server_id Id of SSH Server
-      String ssh_server_id) async {
-    var path_ssh_server_id = encodeParam(ssh_server_id);
+      String sshServerId) async {
+    var pathSshServerId = encodeParam(sshServerId);
 
     SshServer responseHandler(dynamic json, String contentType) {
       return SshServer.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/ssh_server/$path_ssh_server_id/test');
+    return get(responseHandler, '/ssh_server/$pathSshServerId/test');
   }
 
   /// ### Get information about all SSH Tunnels.
   ///
   /// GET /ssh_tunnels -> List<SshTunnel>
-  Future<SDKResponse<List<SshTunnel>>> all_ssh_tunnels(
+  Future<SDKResponse<List<SshTunnel>>> allSshTunnels(
       {
 
       /// @param {String} fields Requested fields.
@@ -2757,7 +2721,7 @@ class LookerSDK extends APIMethods {
   /// ### Create an SSH Tunnel
   ///
   /// POST /ssh_tunnels -> SshTunnel
-  Future<SDKResponse<SshTunnel>> create_ssh_tunnel(
+  Future<SDKResponse<SshTunnel>> createSshTunnel(
 
       /// @param {WriteSshTunnel} body
       WriteSshTunnel body) async {
@@ -2765,76 +2729,75 @@ class LookerSDK extends APIMethods {
       return SshTunnel.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/ssh_tunnels', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/ssh_tunnels', null, body?.toJson());
   }
 
   /// ### Get information about an SSH Tunnel.
   ///
   /// GET /ssh_tunnel/{ssh_tunnel_id} -> SshTunnel
-  Future<SDKResponse<SshTunnel>> ssh_tunnel(
+  Future<SDKResponse<SshTunnel>> sshTunnel(
 
       /// @param {String} ssh_tunnel_id Id of SSH Tunnel
-      String ssh_tunnel_id) async {
-    var path_ssh_tunnel_id = encodeParam(ssh_tunnel_id);
+      String sshTunnelId) async {
+    var pathSshTunnelId = encodeParam(sshTunnelId);
 
     SshTunnel responseHandler(dynamic json, String contentType) {
       return SshTunnel.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/ssh_tunnel/$path_ssh_tunnel_id');
+    return get(responseHandler, '/ssh_tunnel/$pathSshTunnelId');
   }
 
   /// ### Update an SSH Tunnel
   ///
   /// PATCH /ssh_tunnel/{ssh_tunnel_id} -> SshTunnel
-  Future<SDKResponse<SshTunnel>> update_ssh_tunnel(
+  Future<SDKResponse<SshTunnel>> updateSshTunnel(
 
       /// @param {String} ssh_tunnel_id Id of SSH Tunnel
-      String ssh_tunnel_id,
+      String sshTunnelId,
 
       /// @param {WriteSshTunnel} body
       WriteSshTunnel body) async {
-    var path_ssh_tunnel_id = encodeParam(ssh_tunnel_id);
+    var pathSshTunnelId = encodeParam(sshTunnelId);
 
     SshTunnel responseHandler(dynamic json, String contentType) {
       return SshTunnel.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/ssh_tunnel/$path_ssh_tunnel_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/ssh_tunnel/$pathSshTunnelId', null, body?.toJson());
   }
 
   /// ### Delete an SSH Tunnel
   ///
   /// DELETE /ssh_tunnel/{ssh_tunnel_id} -> String
-  Future<SDKResponse<String>> delete_ssh_tunnel(
+  Future<SDKResponse<String>> deleteSshTunnel(
 
       /// @param {String} ssh_tunnel_id Id of SSH Tunnel
-      String ssh_tunnel_id) async {
-    var path_ssh_tunnel_id = encodeParam(ssh_tunnel_id);
+      String sshTunnelId) async {
+    var pathSshTunnelId = encodeParam(sshTunnelId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/ssh_tunnel/$path_ssh_tunnel_id');
+    return delete(responseHandler, '/ssh_tunnel/$pathSshTunnelId');
   }
 
   /// ### Test the SSH Tunnel
   ///
   /// GET /ssh_tunnel/{ssh_tunnel_id}/test -> SshTunnel
-  Future<SDKResponse<SshTunnel>> test_ssh_tunnel(
+  Future<SDKResponse<SshTunnel>> testSshTunnel(
 
       /// @param {String} ssh_tunnel_id Id of SSH Tunnel
-      String ssh_tunnel_id) async {
-    var path_ssh_tunnel_id = encodeParam(ssh_tunnel_id);
+      String sshTunnelId) async {
+    var pathSshTunnelId = encodeParam(sshTunnelId);
 
     SshTunnel responseHandler(dynamic json, String contentType) {
       return SshTunnel.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/ssh_tunnel/$path_ssh_tunnel_id/test');
+    return get(responseHandler, '/ssh_tunnel/$pathSshTunnelId/test');
   }
 
   /// ### Get the SSH public key
@@ -2842,7 +2805,7 @@ class LookerSDK extends APIMethods {
   /// Get the public key created for this instance to identify itself to a remote SSH server.
   ///
   /// GET /ssh_public_key -> SshPublicKey
-  Future<SDKResponse<SshPublicKey>> ssh_public_key() async {
+  Future<SDKResponse<SshPublicKey>> sshPublicKey() async {
     SshPublicKey responseHandler(dynamic json, String contentType) {
       return SshPublicKey.fromResponse(json, contentType);
     }
@@ -2878,26 +2841,26 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /content_favorite/search -> List<ContentFavorite>
-  Future<SDKResponse<List<ContentFavorite>>> search_content_favorites(
+  Future<SDKResponse<List<ContentFavorite>>> searchContentFavorites(
       {
 
       /// @param {int} id Match content favorite id(s)
       int id,
 
       /// @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
-      String user_id,
+      String userId,
 
       /// @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
-      String content_metadata_id,
+      String contentMetadataId,
 
       /// @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
-      String dashboard_id,
+      String dashboardId,
 
       /// @param {String} look_id Match look id(s).To create a list of multiple ids, use commas as separators
-      String look_id,
+      String lookId,
 
       /// @param {String} board_id Match board id(s).To create a list of multiple ids, use commas as separators
-      String board_id,
+      String boardId,
 
       /// @param {int} limit Number of results to return. (used with offset)
       int limit,
@@ -2912,7 +2875,7 @@ class LookerSDK extends APIMethods {
       String fields,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<ContentFavorite> responseHandler(dynamic json, String contentType) {
       return json
           .map<ContentFavorite>(
@@ -2922,61 +2885,60 @@ class LookerSDK extends APIMethods {
 
     return get(responseHandler, '/content_favorite/search', {
       'id': id,
-      'user_id': user_id,
-      'content_metadata_id': content_metadata_id,
-      'dashboard_id': dashboard_id,
-      'look_id': look_id,
-      'board_id': board_id,
+      'user_id': userId,
+      'content_metadata_id': contentMetadataId,
+      'dashboard_id': dashboardId,
+      'look_id': lookId,
+      'board_id': boardId,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
       'fields': fields,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
   /// ### Get favorite content by its id
   ///
   /// GET /content_favorite/{content_favorite_id} -> ContentFavorite
-  Future<SDKResponse<ContentFavorite>> content_favorite(
+  Future<SDKResponse<ContentFavorite>> contentFavorite(
 
       /// @param {int} content_favorite_id Id of favorite content
-      int content_favorite_id,
+      int contentFavoriteId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_content_favorite_id = encodeParam(content_favorite_id);
+    var pathContentFavoriteId = encodeParam(contentFavoriteId);
 
     ContentFavorite responseHandler(dynamic json, String contentType) {
       return ContentFavorite.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/content_favorite/$path_content_favorite_id',
+    return get(responseHandler, '/content_favorite/$pathContentFavoriteId',
         {'fields': fields});
   }
 
   /// ### Delete favorite content
   ///
   /// DELETE /content_favorite/{content_favorite_id} -> String
-  Future<SDKResponse<String>> delete_content_favorite(
+  Future<SDKResponse<String>> deleteContentFavorite(
 
       /// @param {int} content_favorite_id Id of favorite content
-      int content_favorite_id) async {
-    var path_content_favorite_id = encodeParam(content_favorite_id);
+      int contentFavoriteId) async {
+    var pathContentFavoriteId = encodeParam(contentFavoriteId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/content_favorite/$path_content_favorite_id');
+    return delete(responseHandler, '/content_favorite/$pathContentFavoriteId');
   }
 
   /// ### Create favorite content
   ///
   /// POST /content_favorite -> ContentFavorite
-  Future<SDKResponse<ContentFavorite>> create_content_favorite(
+  Future<SDKResponse<ContentFavorite>> createContentFavorite(
 
       /// @param {WriteContentFavorite} body
       WriteContentFavorite body) async {
@@ -2984,17 +2946,16 @@ class LookerSDK extends APIMethods {
       return ContentFavorite.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/content_favorite', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/content_favorite', null, body?.toJson());
   }
 
   /// ### Get information about all content metadata in a space.
   ///
   /// GET /content_metadata -> List<ContentMeta>
-  Future<SDKResponse<List<ContentMeta>>> all_content_metadatas(
+  Future<SDKResponse<List<ContentMeta>>> allContentMetadatas(
 
       /// @param {int} parent_id Parent space of content.
-      int parent_id,
+      int parentId,
       {
 
       /// @param {String} fields Requested fields.
@@ -3006,57 +2967,57 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/content_metadata',
-        {'parent_id': parent_id, 'fields': fields});
+        {'parent_id': parentId, 'fields': fields});
   }
 
   /// ### Get information about an individual content metadata record.
   ///
   /// GET /content_metadata/{content_metadata_id} -> ContentMeta
-  Future<SDKResponse<ContentMeta>> content_metadata(
+  Future<SDKResponse<ContentMeta>> contentMetadata(
 
       /// @param {int} content_metadata_id Id of content metadata
-      int content_metadata_id,
+      int contentMetadataId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_content_metadata_id = encodeParam(content_metadata_id);
+    var pathContentMetadataId = encodeParam(contentMetadataId);
 
     ContentMeta responseHandler(dynamic json, String contentType) {
       return ContentMeta.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/content_metadata/$path_content_metadata_id',
+    return get(responseHandler, '/content_metadata/$pathContentMetadataId',
         {'fields': fields});
   }
 
   /// ### Move a piece of content.
   ///
   /// PATCH /content_metadata/{content_metadata_id} -> ContentMeta
-  Future<SDKResponse<ContentMeta>> update_content_metadata(
+  Future<SDKResponse<ContentMeta>> updateContentMetadata(
 
       /// @param {int} content_metadata_id Id of content metadata
-      int content_metadata_id,
+      int contentMetadataId,
 
       /// @param {WriteContentMeta} body
       WriteContentMeta body) async {
-    var path_content_metadata_id = encodeParam(content_metadata_id);
+    var pathContentMetadataId = encodeParam(contentMetadataId);
 
     ContentMeta responseHandler(dynamic json, String contentType) {
       return ContentMeta.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/content_metadata/$path_content_metadata_id',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/content_metadata/$pathContentMetadataId',
+        null, body?.toJson());
   }
 
   /// ### All content metadata access records for a content metadata item.
   ///
   /// GET /content_metadata_access -> List<ContentMetaGroupUser>
-  Future<SDKResponse<List<ContentMetaGroupUser>>> all_content_metadata_accesses(
+  Future<SDKResponse<List<ContentMetaGroupUser>>> allContentMetadataAccesses(
 
       /// @param {int} content_metadata_id Id of content metadata
-      int content_metadata_id,
+      int contentMetadataId,
       {
 
       /// @param {String} fields Requested fields.
@@ -3070,20 +3031,20 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/content_metadata_access',
-        {'content_metadata_id': content_metadata_id, 'fields': fields});
+        {'content_metadata_id': contentMetadataId, 'fields': fields});
   }
 
   /// ### Create content metadata access.
   ///
   /// POST /content_metadata_access -> ContentMetaGroupUser
-  Future<SDKResponse<ContentMetaGroupUser>> create_content_metadata_access(
+  Future<SDKResponse<ContentMetaGroupUser>> createContentMetadataAccess(
 
       /// @param {ContentMetaGroupUser} body
       ContentMetaGroupUser body,
       {
 
       /// @param {bool} send_boards_notification_email Optionally sends notification email when granting access to a board.
-      bool send_boards_notification_email}) async {
+      bool sendBoardsNotificationEmail}) async {
     ContentMetaGroupUser responseHandler(dynamic json, String contentType) {
       return ContentMetaGroupUser.fromResponse(json, contentType);
     }
@@ -3091,22 +3052,21 @@ class LookerSDK extends APIMethods {
     return post(
         responseHandler,
         '/content_metadata_access',
-        {'send_boards_notification_email': send_boards_notification_email},
-        body == null ? null : body.toJson());
+        {'send_boards_notification_email': sendBoardsNotificationEmail},
+        body?.toJson());
   }
 
   /// ### Update type of access for content metadata.
   ///
   /// PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
-  Future<SDKResponse<ContentMetaGroupUser>> update_content_metadata_access(
+  Future<SDKResponse<ContentMetaGroupUser>> updateContentMetadataAccess(
 
       /// @param {String} content_metadata_access_id Id of content metadata access
-      String content_metadata_access_id,
+      String contentMetadataAccessId,
 
       /// @param {ContentMetaGroupUser} body
       ContentMetaGroupUser body) async {
-    var path_content_metadata_access_id =
-        encodeParam(content_metadata_access_id);
+    var pathContentMetadataAccessId = encodeParam(contentMetadataAccessId);
 
     ContentMetaGroupUser responseHandler(dynamic json, String contentType) {
       return ContentMetaGroupUser.fromResponse(json, contentType);
@@ -3114,27 +3074,26 @@ class LookerSDK extends APIMethods {
 
     return put(
         responseHandler,
-        '/content_metadata_access/$path_content_metadata_access_id',
+        '/content_metadata_access/$pathContentMetadataAccessId',
         null,
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Remove content metadata access.
   ///
   /// DELETE /content_metadata_access/{content_metadata_access_id} -> String
-  Future<SDKResponse<String>> delete_content_metadata_access(
+  Future<SDKResponse<String>> deleteContentMetadataAccess(
 
       /// @param {int} content_metadata_access_id Id of content metadata access
-      int content_metadata_access_id) async {
-    var path_content_metadata_access_id =
-        encodeParam(content_metadata_access_id);
+      int contentMetadataAccessId) async {
+    var pathContentMetadataAccessId = encodeParam(contentMetadataAccessId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(responseHandler,
-        '/content_metadata_access/$path_content_metadata_access_id');
+        '/content_metadata_access/$pathContentMetadataAccessId');
   }
 
   /// ### Get an image representing the contents of a dashboard or look.
@@ -3145,13 +3104,13 @@ class LookerSDK extends APIMethods {
   /// GET /content_thumbnail/{type}/{resource_id} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> content_thumbnail(
+  Future<SDKResponse<dynamic>> contentThumbnail(
 
       /// @param {String} type Either dashboard or look
       String type,
 
       /// @param {String} resource_id ID of the dashboard or look to render
-      String resource_id,
+      String resourceId,
       {
 
       /// @param {String} reload Whether or not to refresh the rendered image with the latest content
@@ -3165,16 +3124,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {int} height The height of the image if format is supplied
       int height}) async {
-    var path_type = encodeParam(type);
-    var path_resource_id = encodeParam(resource_id);
+    var pathType = encodeParam(type);
+    var pathResourceId = encodeParam(resourceId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(
-        responseHandler,
-        '/content_thumbnail/$path_type/$path_resource_id',
+    return get(responseHandler, '/content_thumbnail/$pathType/$pathResourceId',
         {'reload': reload, 'format': format, 'width': width, 'height': height});
   }
 
@@ -3184,7 +3141,7 @@ class LookerSDK extends APIMethods {
   /// Returns a list of errors found as well as metadata about the content validation run.
   ///
   /// GET /content_validation -> ContentValidation
-  Future<SDKResponse<ContentValidation>> content_validation(
+  Future<SDKResponse<ContentValidation>> contentValidation(
       {
 
       /// @param {String} fields Requested fields.
@@ -3220,32 +3177,32 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /content_view/search -> List<ContentView>
-  Future<SDKResponse<List<ContentView>>> search_content_views(
+  Future<SDKResponse<List<ContentView>>> searchContentViews(
       {
 
       /// @param {String} view_count Match view count
-      String view_count,
+      String viewCount,
 
       /// @param {String} group_id Match Group Id
-      String group_id,
+      String groupId,
 
       /// @param {String} look_id Match look_id
-      String look_id,
+      String lookId,
 
       /// @param {String} dashboard_id Match dashboard_id
-      String dashboard_id,
+      String dashboardId,
 
       /// @param {String} content_metadata_id Match content metadata id
-      String content_metadata_id,
+      String contentMetadataId,
 
       /// @param {String} start_of_week_date Match start of week date (format is "YYYY-MM-DD")
-      String start_of_week_date,
+      String startOfWeekDate,
 
       /// @param {bool} all_time True if only all time view records should be returned
-      bool all_time,
+      bool allTime,
 
       /// @param {String} user_id Match user id
-      String user_id,
+      String userId,
 
       /// @param {String} fields Requested fields
       String fields,
@@ -3260,7 +3217,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<ContentView> responseHandler(dynamic json, String contentType) {
       return json
           .map<ContentView>((i) => ContentView.fromResponse(i, contentType))
@@ -3268,19 +3225,19 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/content_view/search', {
-      'view_count': view_count,
-      'group_id': group_id,
-      'look_id': look_id,
-      'dashboard_id': dashboard_id,
-      'content_metadata_id': content_metadata_id,
-      'start_of_week_date': start_of_week_date,
-      'all_time': all_time,
-      'user_id': user_id,
+      'view_count': viewCount,
+      'group_id': groupId,
+      'look_id': lookId,
+      'dashboard_id': dashboardId,
+      'content_metadata_id': contentMetadataId,
+      'start_of_week_date': startOfWeekDate,
+      'all_time': allTime,
+      'user_id': userId,
       'fields': fields,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -3292,26 +3249,26 @@ class LookerSDK extends APIMethods {
   /// reflect the actual data displayed in the respective visualizations.
   ///
   /// GET /vector_thumbnail/{type}/{resource_id} -> String
-  Future<SDKResponse<String>> vector_thumbnail(
+  Future<SDKResponse<String>> vectorThumbnail(
 
       /// @param {String} type Either dashboard or look
       String type,
 
       /// @param {String} resource_id ID of the dashboard or look to render
-      String resource_id,
+      String resourceId,
       {
 
       /// @param {String} reload Whether or not to refresh the rendered image with the latest content
       String reload}) async {
-    var path_type = encodeParam(type);
-    var path_resource_id = encodeParam(resource_id);
+    var pathType = encodeParam(type);
+    var pathResourceId = encodeParam(resourceId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(responseHandler,
-        '/vector_thumbnail/$path_type/$path_resource_id', {'reload': reload});
+    return get(responseHandler, '/vector_thumbnail/$pathType/$pathResourceId',
+        {'reload': reload});
   }
 
   // #endregion Content: Manage Content
@@ -3327,7 +3284,7 @@ class LookerSDK extends APIMethods {
   /// Find **deleted dashboards** with [search_dashboards()](#!/Dashboard/search_dashboards)
   ///
   /// GET /dashboards -> List<DashboardBase>
-  Future<SDKResponse<List<DashboardBase>>> all_dashboards(
+  Future<SDKResponse<List<DashboardBase>>> allDashboards(
       {
 
       /// @param {String} fields Requested fields.
@@ -3357,7 +3314,7 @@ class LookerSDK extends APIMethods {
   /// You can **permanently delete** an existing dashboard with [delete_dashboard()](#!/Dashboard/delete_dashboard)
   ///
   /// POST /dashboards -> Dashboard
-  Future<SDKResponse<Dashboard>> create_dashboard(
+  Future<SDKResponse<Dashboard>> createDashboard(
 
       /// @param {WriteDashboard} body
       WriteDashboard body) async {
@@ -3365,8 +3322,7 @@ class LookerSDK extends APIMethods {
       return Dashboard.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/dashboards', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/dashboards', null, body?.toJson());
   }
 
   /// ### Search Dashboards
@@ -3400,7 +3356,7 @@ class LookerSDK extends APIMethods {
   /// Get a **single dashboard** by id with [dashboard()](#!/Dashboard/dashboard)
   ///
   /// GET /dashboards/search -> List<Dashboard>
-  Future<SDKResponse<List<Dashboard>>> search_dashboards(
+  Future<SDKResponse<List<Dashboard>>> searchDashboards(
       {
 
       /// @param {String} id Match dashboard id.
@@ -3416,28 +3372,28 @@ class LookerSDK extends APIMethods {
       String description,
 
       /// @param {String} content_favorite_id Filter on a content favorite id.
-      String content_favorite_id,
+      String contentFavoriteId,
 
       /// @param {String} folder_id Filter on a particular space.
-      String folder_id,
+      String folderId,
 
       /// @param {String} deleted Filter on dashboards deleted status.
       String deleted,
 
       /// @param {String} user_id Filter on dashboards created by a particular user.
-      String user_id,
+      String userId,
 
       /// @param {String} view_count Filter on a particular value of view_count
-      String view_count,
+      String viewCount,
 
       /// @param {String} content_metadata_id Filter on a content favorite id.
-      String content_metadata_id,
+      String contentMetadataId,
 
       /// @param {bool} curate Exclude items that exist only in personal spaces other than the users
       bool curate,
 
       /// @param {String} last_viewed_at Select dashboards based on when they were last viewed
-      String last_viewed_at,
+      String lastViewedAt,
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -3446,7 +3402,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -3458,7 +3414,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<Dashboard> responseHandler(dynamic json, String contentType) {
       return json
           .map<Dashboard>((i) => Dashboard.fromResponse(i, contentType))
@@ -3470,21 +3426,21 @@ class LookerSDK extends APIMethods {
       'slug': slug,
       'title': title,
       'description': description,
-      'content_favorite_id': content_favorite_id,
-      'folder_id': folder_id,
+      'content_favorite_id': contentFavoriteId,
+      'folder_id': folderId,
       'deleted': deleted,
-      'user_id': user_id,
-      'view_count': view_count,
-      'content_metadata_id': content_metadata_id,
+      'user_id': userId,
+      'view_count': viewCount,
+      'content_metadata_id': contentMetadataId,
       'curate': curate,
-      'last_viewed_at': last_viewed_at,
+      'last_viewed_at': lastViewedAt,
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -3502,22 +3458,22 @@ class LookerSDK extends APIMethods {
   /// **Unlink** a linked UDD by setting lookml_link_id to null with [update_dashboard()](#!/Dashboard/update_dashboard)
   ///
   /// POST /dashboards/{lookml_dashboard_id}/import/{space_id} -> Dashboard
-  Future<SDKResponse<Dashboard>> import_lookml_dashboard(
+  Future<SDKResponse<Dashboard>> importLookmlDashboard(
 
       /// @param {String} lookml_dashboard_id Id of LookML dashboard
-      String lookml_dashboard_id,
+      String lookmlDashboardId,
 
       /// @param {String} space_id Id of space to import the dashboard to
-      String space_id,
+      String spaceId,
       {
 
       /// @param {WriteDashboard} body
       WriteDashboard body,
 
       /// @param {bool} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-      bool raw_locale}) async {
-    var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
-    var path_space_id = encodeParam(space_id);
+      bool rawLocale}) async {
+    var pathLookmlDashboardId = encodeParam(lookmlDashboardId);
+    var pathSpaceId = encodeParam(spaceId);
 
     Dashboard responseHandler(dynamic json, String contentType) {
       return Dashboard.fromResponse(json, contentType);
@@ -3525,9 +3481,9 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/dashboards/$path_lookml_dashboard_id/import/$path_space_id',
-        {'raw_locale': raw_locale},
-        body == null ? null : body.toJson());
+        '/dashboards/$pathLookmlDashboardId/import/$pathSpaceId',
+        {'raw_locale': rawLocale},
+        body?.toJson());
   }
 
   /// ### Update all linked dashboards to match the specified LookML dashboard.
@@ -3541,25 +3497,25 @@ class LookerSDK extends APIMethods {
   /// To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
   ///
   /// PATCH /dashboards/{lookml_dashboard_id}/sync -> List<int>
-  Future<SDKResponse<List<int>>> sync_lookml_dashboard(
+  Future<SDKResponse<List<int>>> syncLookmlDashboard(
 
       /// @param {String} lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
-      String lookml_dashboard_id,
+      String lookmlDashboardId,
 
       /// @param {WriteDashboard} body
       WriteDashboard body,
       {
 
       /// @param {bool} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
-      bool raw_locale}) async {
-    var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
+      bool rawLocale}) async {
+    var pathLookmlDashboardId = encodeParam(lookmlDashboardId);
 
     List<int> responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return patch(responseHandler, '/dashboards/$path_lookml_dashboard_id/sync',
-        {'raw_locale': raw_locale}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/dashboards/$pathLookmlDashboardId/sync',
+        {'raw_locale': rawLocale}, body?.toJson());
   }
 
   /// ### Get information about a dashboard
@@ -3574,19 +3530,19 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Dashboard>> dashboard(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id,
+      String dashboardId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     Dashboard responseHandler(dynamic json, String contentType) {
       return Dashboard.fromResponse(json, contentType);
     }
 
     return get(
-        responseHandler, '/dashboards/$path_dashboard_id', {'fields': fields});
+        responseHandler, '/dashboards/$pathDashboardId', {'fields': fields});
   }
 
   /// ### Update a dashboard
@@ -3601,21 +3557,21 @@ class LookerSDK extends APIMethods {
   /// response body for information about exactly which fields are missing or contain invalid data.
   ///
   /// PATCH /dashboards/{dashboard_id} -> Dashboard
-  Future<SDKResponse<Dashboard>> update_dashboard(
+  Future<SDKResponse<Dashboard>> updateDashboard(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id,
+      String dashboardId,
 
       /// @param {WriteDashboard} body
       WriteDashboard body) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     Dashboard responseHandler(dynamic json, String contentType) {
       return Dashboard.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/dashboards/$path_dashboard_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/dashboards/$pathDashboardId', null, body?.toJson());
   }
 
   /// ### Delete the dashboard with the specified id
@@ -3627,17 +3583,17 @@ class LookerSDK extends APIMethods {
   /// Note: When a dashboard is deleted in the UI, it is soft deleted. Use this API call to permanently remove it, if desired.
   ///
   /// DELETE /dashboards/{dashboard_id} -> String
-  Future<SDKResponse<String>> delete_dashboard(
+  Future<SDKResponse<String>> deleteDashboard(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+      String dashboardId) async {
+    var pathDashboardId = encodeParam(dashboardId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/dashboards/$path_dashboard_id');
+    return delete(responseHandler, '/dashboards/$pathDashboardId');
   }
 
   /// ### Get Aggregate Table LookML for Each Query on a Dahboard
@@ -3646,19 +3602,19 @@ class LookerSDK extends APIMethods {
   ///
   /// GET /dashboards/aggregate_table_lookml/{dashboard_id} -> DashboardAggregateTableLookml
   Future<SDKResponse<DashboardAggregateTableLookml>>
-      dashboard_aggregate_table_lookml(
+      dashboardAggregateTableLookml(
 
           /// @param {String} dashboard_id Id of dashboard
-          String dashboard_id) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+          String dashboardId) async {
+    var pathDashboardId = encodeParam(dashboardId);
 
     DashboardAggregateTableLookml responseHandler(
         dynamic json, String contentType) {
       return DashboardAggregateTableLookml.fromResponse(json, contentType);
     }
 
-    return get(responseHandler,
-        '/dashboards/aggregate_table_lookml/$path_dashboard_id');
+    return get(
+        responseHandler, '/dashboards/aggregate_table_lookml/$pathDashboardId');
   }
 
   /// ### Get lookml of a UDD
@@ -3666,17 +3622,17 @@ class LookerSDK extends APIMethods {
   /// Returns a JSON object that contains the dashboard id and the full lookml
   ///
   /// GET /dashboards/lookml/{dashboard_id} -> DashboardLookml
-  Future<SDKResponse<DashboardLookml>> dashboard_lookml(
+  Future<SDKResponse<DashboardLookml>> dashboardLookml(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+      String dashboardId) async {
+    var pathDashboardId = encodeParam(dashboardId);
 
     DashboardLookml responseHandler(dynamic json, String contentType) {
       return DashboardLookml.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/dashboards/lookml/$path_dashboard_id');
+    return get(responseHandler, '/dashboards/lookml/$pathDashboardId');
   }
 
   /// ### Move an existing dashboard
@@ -3687,21 +3643,21 @@ class LookerSDK extends APIMethods {
   /// `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
   ///
   /// PATCH /dashboards/{dashboard_id}/move -> Dashboard
-  Future<SDKResponse<Dashboard>> move_dashboard(
+  Future<SDKResponse<Dashboard>> moveDashboard(
 
       /// @param {String} dashboard_id Dashboard id to move.
-      String dashboard_id,
+      String dashboardId,
 
       /// @param {String} folder_id Folder id to move to.
-      String folder_id) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+      String folderId) async {
+    var pathDashboardId = encodeParam(dashboardId);
 
     Dashboard responseHandler(dynamic json, String contentType) {
       return Dashboard.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/dashboards/$path_dashboard_id/move',
-        {'folder_id': folder_id});
+    return patch(responseHandler, '/dashboards/$pathDashboardId/move',
+        {'folder_id': folderId});
   }
 
   /// ### Copy an existing dashboard
@@ -3715,22 +3671,22 @@ class LookerSDK extends APIMethods {
   ///   or '(copy <# of copies>)' appended.
   ///
   /// POST /dashboards/{dashboard_id}/copy -> Dashboard
-  Future<SDKResponse<Dashboard>> copy_dashboard(
+  Future<SDKResponse<Dashboard>> copyDashboard(
 
       /// @param {String} dashboard_id Dashboard id to copy.
-      String dashboard_id,
+      String dashboardId,
       {
 
       /// @param {String} folder_id Folder id to copy to.
-      String folder_id}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+      String folderId}) async {
+    var pathDashboardId = encodeParam(dashboardId);
 
     Dashboard responseHandler(dynamic json, String contentType) {
       return Dashboard.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/dashboards/$path_dashboard_id/copy',
-        {'folder_id': folder_id});
+    return post(responseHandler, '/dashboards/$pathDashboardId/copy',
+        {'folder_id': folderId});
   }
 
   /// ### Search Dashboard Elements
@@ -3759,14 +3715,14 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /dashboard_elements/search -> List<DashboardElement>
-  Future<SDKResponse<List<DashboardElement>>> search_dashboard_elements(
+  Future<SDKResponse<List<DashboardElement>>> searchDashboardElements(
       {
 
       /// @param {int} dashboard_id Select elements that refer to a given dashboard id
-      int dashboard_id,
+      int dashboardId,
 
       /// @param {int} look_id Select elements that refer to a given look id
-      int look_id,
+      int lookId,
 
       /// @param {String} title Match the title of element
       String title,
@@ -3778,7 +3734,7 @@ class LookerSDK extends APIMethods {
       String fields,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {String} sorts Fields to sort by. Sortable fields: [:look_id, :dashboard_id, :deleted, :title]
       String sorts}) async {
@@ -3790,12 +3746,12 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/dashboard_elements/search', {
-      'dashboard_id': dashboard_id,
-      'look_id': look_id,
+      'dashboard_id': dashboardId,
+      'look_id': lookId,
       'title': title,
       'deleted': deleted,
       'fields': fields,
-      'filter_or': filter_or,
+      'filter_or': filterOr,
       'sorts': sorts
     });
   }
@@ -3803,31 +3759,31 @@ class LookerSDK extends APIMethods {
   /// ### Get information about the dashboard element with a specific id.
   ///
   /// GET /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  Future<SDKResponse<DashboardElement>> dashboard_element(
+  Future<SDKResponse<DashboardElement>> dashboardElement(
 
       /// @param {String} dashboard_element_id Id of dashboard element
-      String dashboard_element_id,
+      String dashboardElementId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_element_id = encodeParam(dashboard_element_id);
+    var pathDashboardElementId = encodeParam(dashboardElementId);
 
     DashboardElement responseHandler(dynamic json, String contentType) {
       return DashboardElement.fromResponse(json, contentType);
     }
 
-    return get(responseHandler,
-        '/dashboard_elements/$path_dashboard_element_id', {'fields': fields});
+    return get(responseHandler, '/dashboard_elements/$pathDashboardElementId',
+        {'fields': fields});
   }
 
   /// ### Update the dashboard element with a specific id.
   ///
   /// PATCH /dashboard_elements/{dashboard_element_id} -> DashboardElement
-  Future<SDKResponse<DashboardElement>> update_dashboard_element(
+  Future<SDKResponse<DashboardElement>> updateDashboardElement(
 
       /// @param {String} dashboard_element_id Id of dashboard element
-      String dashboard_element_id,
+      String dashboardElementId,
 
       /// @param {WriteDashboardElement} body
       WriteDashboardElement body,
@@ -3835,48 +3791,45 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_element_id = encodeParam(dashboard_element_id);
+    var pathDashboardElementId = encodeParam(dashboardElementId);
 
     DashboardElement responseHandler(dynamic json, String contentType) {
       return DashboardElement.fromResponse(json, contentType);
     }
 
-    return patch(
-        responseHandler,
-        '/dashboard_elements/$path_dashboard_element_id',
-        {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/dashboard_elements/$pathDashboardElementId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a dashboard element with a specific id.
   ///
   /// DELETE /dashboard_elements/{dashboard_element_id} -> String
-  Future<SDKResponse<String>> delete_dashboard_element(
+  Future<SDKResponse<String>> deleteDashboardElement(
 
       /// @param {String} dashboard_element_id Id of dashboard element
-      String dashboard_element_id) async {
-    var path_dashboard_element_id = encodeParam(dashboard_element_id);
+      String dashboardElementId) async {
+    var pathDashboardElementId = encodeParam(dashboardElementId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(
-        responseHandler, '/dashboard_elements/$path_dashboard_element_id');
+        responseHandler, '/dashboard_elements/$pathDashboardElementId');
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
   ///
   /// GET /dashboards/{dashboard_id}/dashboard_elements -> List<DashboardElement>
-  Future<SDKResponse<List<DashboardElement>>> dashboard_dashboard_elements(
+  Future<SDKResponse<List<DashboardElement>>> dashboardDashboardElements(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id,
+      String dashboardId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     List<DashboardElement> responseHandler(dynamic json, String contentType) {
       return json
@@ -3885,16 +3838,14 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(
-        responseHandler,
-        '/dashboards/$path_dashboard_id/dashboard_elements',
-        {'fields': fields});
+    return get(responseHandler,
+        '/dashboards/$pathDashboardId/dashboard_elements', {'fields': fields});
   }
 
   /// ### Create a dashboard element on the dashboard with a specific id.
   ///
   /// POST /dashboard_elements -> DashboardElement
-  Future<SDKResponse<DashboardElement>> create_dashboard_element(
+  Future<SDKResponse<DashboardElement>> createDashboardElement(
 
       /// @param {WriteDashboardElement} body
       WriteDashboardElement body,
@@ -3907,37 +3858,37 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/dashboard_elements', {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about the dashboard filters with a specific id.
   ///
   /// GET /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  Future<SDKResponse<DashboardFilter>> dashboard_filter(
+  Future<SDKResponse<DashboardFilter>> dashboardFilter(
 
       /// @param {String} dashboard_filter_id Id of dashboard filters
-      String dashboard_filter_id,
+      String dashboardFilterId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
+    var pathDashboardFilterId = encodeParam(dashboardFilterId);
 
     DashboardFilter responseHandler(dynamic json, String contentType) {
       return DashboardFilter.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/dashboard_filters/$path_dashboard_filter_id',
+    return get(responseHandler, '/dashboard_filters/$pathDashboardFilterId',
         {'fields': fields});
   }
 
   /// ### Update the dashboard filter with a specific id.
   ///
   /// PATCH /dashboard_filters/{dashboard_filter_id} -> DashboardFilter
-  Future<SDKResponse<DashboardFilter>> update_dashboard_filter(
+  Future<SDKResponse<DashboardFilter>> updateDashboardFilter(
 
       /// @param {String} dashboard_filter_id Id of dashboard filter
-      String dashboard_filter_id,
+      String dashboardFilterId,
 
       /// @param {WriteDashboardFilter} body
       WriteDashboardFilter body,
@@ -3945,48 +3896,44 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
+    var pathDashboardFilterId = encodeParam(dashboardFilterId);
 
     DashboardFilter responseHandler(dynamic json, String contentType) {
       return DashboardFilter.fromResponse(json, contentType);
     }
 
-    return patch(
-        responseHandler,
-        '/dashboard_filters/$path_dashboard_filter_id',
-        {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/dashboard_filters/$pathDashboardFilterId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a dashboard filter with a specific id.
   ///
   /// DELETE /dashboard_filters/{dashboard_filter_id} -> String
-  Future<SDKResponse<String>> delete_dashboard_filter(
+  Future<SDKResponse<String>> deleteDashboardFilter(
 
       /// @param {String} dashboard_filter_id Id of dashboard filter
-      String dashboard_filter_id) async {
-    var path_dashboard_filter_id = encodeParam(dashboard_filter_id);
+      String dashboardFilterId) async {
+    var pathDashboardFilterId = encodeParam(dashboardFilterId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/dashboard_filters/$path_dashboard_filter_id');
+    return delete(responseHandler, '/dashboard_filters/$pathDashboardFilterId');
   }
 
   /// ### Get information about all the dashboard filters on a dashboard with a specific id.
   ///
   /// GET /dashboards/{dashboard_id}/dashboard_filters -> List<DashboardFilter>
-  Future<SDKResponse<List<DashboardFilter>>> dashboard_dashboard_filters(
+  Future<SDKResponse<List<DashboardFilter>>> dashboardDashboardFilters(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id,
+      String dashboardId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     List<DashboardFilter> responseHandler(dynamic json, String contentType) {
       return json
@@ -3996,13 +3943,13 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler,
-        '/dashboards/$path_dashboard_id/dashboard_filters', {'fields': fields});
+        '/dashboards/$pathDashboardId/dashboard_filters', {'fields': fields});
   }
 
   /// ### Create a dashboard filter on the dashboard with a specific id.
   ///
   /// POST /dashboard_filters -> DashboardFilter
-  Future<SDKResponse<DashboardFilter>> create_dashboard_filter(
+  Future<SDKResponse<DashboardFilter>> createDashboardFilter(
 
       /// @param {WriteCreateDashboardFilter} body
       WriteCreateDashboardFilter body,
@@ -4015,22 +3962,22 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/dashboard_filters', {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about the dashboard elements with a specific id.
   ///
   /// GET /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  Future<SDKResponse<DashboardLayoutComponent>> dashboard_layout_component(
+  Future<SDKResponse<DashboardLayoutComponent>> dashboardLayoutComponent(
 
       /// @param {String} dashboard_layout_component_id Id of dashboard layout component
-      String dashboard_layout_component_id,
+      String dashboardLayoutComponentId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_layout_component_id =
-        encodeParam(dashboard_layout_component_id);
+    var pathDashboardLayoutComponentId =
+        encodeParam(dashboardLayoutComponentId);
 
     DashboardLayoutComponent responseHandler(dynamic json, String contentType) {
       return DashboardLayoutComponent.fromResponse(json, contentType);
@@ -4038,17 +3985,17 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/dashboard_layout_components/$path_dashboard_layout_component_id',
+        '/dashboard_layout_components/$pathDashboardLayoutComponentId',
         {'fields': fields});
   }
 
   /// ### Update the dashboard element with a specific id.
   ///
   /// PATCH /dashboard_layout_components/{dashboard_layout_component_id} -> DashboardLayoutComponent
-  Future<SDKResponse<DashboardLayoutComponent>> update_dashboard_layout_component(
+  Future<SDKResponse<DashboardLayoutComponent>> updateDashboardLayoutComponent(
 
       /// @param {String} dashboard_layout_component_id Id of dashboard layout component
-      String dashboard_layout_component_id,
+      String dashboardLayoutComponentId,
 
       /// @param {WriteDashboardLayoutComponent} body
       WriteDashboardLayoutComponent body,
@@ -4056,8 +4003,8 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_layout_component_id =
-        encodeParam(dashboard_layout_component_id);
+    var pathDashboardLayoutComponentId =
+        encodeParam(dashboardLayoutComponentId);
 
     DashboardLayoutComponent responseHandler(dynamic json, String contentType) {
       return DashboardLayoutComponent.fromResponse(json, contentType);
@@ -4065,24 +4012,24 @@ class LookerSDK extends APIMethods {
 
     return patch(
         responseHandler,
-        '/dashboard_layout_components/$path_dashboard_layout_component_id',
+        '/dashboard_layout_components/$pathDashboardLayoutComponentId',
         {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
   ///
   /// GET /dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components -> List<DashboardLayoutComponent>
   Future<SDKResponse<List<DashboardLayoutComponent>>>
-      dashboard_layout_dashboard_layout_components(
+      dashboardLayoutDashboardLayoutComponents(
 
           /// @param {String} dashboard_layout_id Id of dashboard layout component
-          String dashboard_layout_id,
+          String dashboardLayoutId,
           {
 
           /// @param {String} fields Requested fields.
           String fields}) async {
-    var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
+    var pathDashboardLayoutId = encodeParam(dashboardLayoutId);
 
     List<DashboardLayoutComponent> responseHandler(
         dynamic json, String contentType) {
@@ -4094,38 +4041,38 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/dashboard_layouts/$path_dashboard_layout_id/dashboard_layout_components',
+        '/dashboard_layouts/$pathDashboardLayoutId/dashboard_layout_components',
         {'fields': fields});
   }
 
   /// ### Get information about the dashboard layouts with a specific id.
   ///
   /// GET /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  Future<SDKResponse<DashboardLayout>> dashboard_layout(
+  Future<SDKResponse<DashboardLayout>> dashboardLayout(
 
       /// @param {String} dashboard_layout_id Id of dashboard layouts
-      String dashboard_layout_id,
+      String dashboardLayoutId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
+    var pathDashboardLayoutId = encodeParam(dashboardLayoutId);
 
     DashboardLayout responseHandler(dynamic json, String contentType) {
       return DashboardLayout.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/dashboard_layouts/$path_dashboard_layout_id',
+    return get(responseHandler, '/dashboard_layouts/$pathDashboardLayoutId',
         {'fields': fields});
   }
 
   /// ### Update the dashboard layout with a specific id.
   ///
   /// PATCH /dashboard_layouts/{dashboard_layout_id} -> DashboardLayout
-  Future<SDKResponse<DashboardLayout>> update_dashboard_layout(
+  Future<SDKResponse<DashboardLayout>> updateDashboardLayout(
 
       /// @param {String} dashboard_layout_id Id of dashboard layout
-      String dashboard_layout_id,
+      String dashboardLayoutId,
 
       /// @param {WriteDashboardLayout} body
       WriteDashboardLayout body,
@@ -4133,48 +4080,44 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
+    var pathDashboardLayoutId = encodeParam(dashboardLayoutId);
 
     DashboardLayout responseHandler(dynamic json, String contentType) {
       return DashboardLayout.fromResponse(json, contentType);
     }
 
-    return patch(
-        responseHandler,
-        '/dashboard_layouts/$path_dashboard_layout_id',
-        {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/dashboard_layouts/$pathDashboardLayoutId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a dashboard layout with a specific id.
   ///
   /// DELETE /dashboard_layouts/{dashboard_layout_id} -> String
-  Future<SDKResponse<String>> delete_dashboard_layout(
+  Future<SDKResponse<String>> deleteDashboardLayout(
 
       /// @param {String} dashboard_layout_id Id of dashboard layout
-      String dashboard_layout_id) async {
-    var path_dashboard_layout_id = encodeParam(dashboard_layout_id);
+      String dashboardLayoutId) async {
+    var pathDashboardLayoutId = encodeParam(dashboardLayoutId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/dashboard_layouts/$path_dashboard_layout_id');
+    return delete(responseHandler, '/dashboard_layouts/$pathDashboardLayoutId');
   }
 
   /// ### Get information about all the dashboard elements on a dashboard with a specific id.
   ///
   /// GET /dashboards/{dashboard_id}/dashboard_layouts -> List<DashboardLayout>
-  Future<SDKResponse<List<DashboardLayout>>> dashboard_dashboard_layouts(
+  Future<SDKResponse<List<DashboardLayout>>> dashboardDashboardLayouts(
 
       /// @param {String} dashboard_id Id of dashboard
-      String dashboard_id,
+      String dashboardId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     List<DashboardLayout> responseHandler(dynamic json, String contentType) {
       return json
@@ -4184,13 +4127,13 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler,
-        '/dashboards/$path_dashboard_id/dashboard_layouts', {'fields': fields});
+        '/dashboards/$pathDashboardId/dashboard_layouts', {'fields': fields});
   }
 
   /// ### Create a dashboard layout on the dashboard with a specific id.
   ///
   /// POST /dashboard_layouts -> DashboardLayout
-  Future<SDKResponse<DashboardLayout>> create_dashboard_layout(
+  Future<SDKResponse<DashboardLayout>> createDashboardLayout(
 
       /// @param {WriteDashboardLayout} body
       WriteDashboardLayout body,
@@ -4203,7 +4146,7 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/dashboard_layouts', {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   // #endregion Dashboard: Manage Dashboards
@@ -4213,7 +4156,7 @@ class LookerSDK extends APIMethods {
   /// Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
   ///
   /// POST /data_actions -> DataActionResponse
-  Future<SDKResponse<DataActionResponse>> perform_data_action(
+  Future<SDKResponse<DataActionResponse>> performDataAction(
 
       /// @param {DataActionRequest} body
       DataActionRequest body) async {
@@ -4221,14 +4164,13 @@ class LookerSDK extends APIMethods {
       return DataActionResponse.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/data_actions', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/data_actions', null, body?.toJson());
   }
 
   /// For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
   ///
   /// POST /data_actions/form -> DataActionForm
-  Future<SDKResponse<DataActionForm>> fetch_remote_data_action_form(
+  Future<SDKResponse<DataActionForm>> fetchRemoteDataActionForm(
 
       /// @param {Map<String,dynamic>} body
       Map<String, dynamic> body) async {
@@ -4246,7 +4188,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all datagroups.
   ///
   /// GET /datagroups -> List<Datagroup>
-  Future<SDKResponse<List<Datagroup>>> all_datagroups() async {
+  Future<SDKResponse<List<Datagroup>>> allDatagroups() async {
     List<Datagroup> responseHandler(dynamic json, String contentType) {
       return json
           .map<Datagroup>((i) => Datagroup.fromResponse(i, contentType))
@@ -4262,34 +4204,34 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Datagroup>> datagroup(
 
       /// @param {int} datagroup_id ID of datagroup.
-      int datagroup_id) async {
-    var path_datagroup_id = encodeParam(datagroup_id);
+      int datagroupId) async {
+    var pathDatagroupId = encodeParam(datagroupId);
 
     Datagroup responseHandler(dynamic json, String contentType) {
       return Datagroup.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/datagroups/$path_datagroup_id');
+    return get(responseHandler, '/datagroups/$pathDatagroupId');
   }
 
   /// ### Update a datagroup using the specified params.
   ///
   /// PATCH /datagroups/{datagroup_id} -> Datagroup
-  Future<SDKResponse<Datagroup>> update_datagroup(
+  Future<SDKResponse<Datagroup>> updateDatagroup(
 
       /// @param {int} datagroup_id ID of datagroup.
-      int datagroup_id,
+      int datagroupId,
 
       /// @param {WriteDatagroup} body
       WriteDatagroup body) async {
-    var path_datagroup_id = encodeParam(datagroup_id);
+    var pathDatagroupId = encodeParam(datagroupId);
 
     Datagroup responseHandler(dynamic json, String contentType) {
       return Datagroup.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/datagroups/$path_datagroup_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/datagroups/$pathDatagroupId', null, body?.toJson());
   }
 
   // #endregion Datagroup: Manage Datagroups
@@ -4299,7 +4241,7 @@ class LookerSDK extends APIMethods {
   /// ### Discover information about derived tables
   ///
   /// GET /derived_table/graph/model/{model} -> DependencyGraph
-  Future<SDKResponse<DependencyGraph>> graph_derived_tables_for_model(
+  Future<SDKResponse<DependencyGraph>> graphDerivedTablesForModel(
 
       /// @param {String} model The name of the Lookml model.
       String model,
@@ -4310,20 +4252,20 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
       String color}) async {
-    var path_model = encodeParam(model);
+    var pathModel = encodeParam(model);
 
     DependencyGraph responseHandler(dynamic json, String contentType) {
       return DependencyGraph.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/derived_table/graph/model/$path_model',
+    return get(responseHandler, '/derived_table/graph/model/$pathModel',
         {'format': format, 'color': color});
   }
 
   /// ### Get the subgraph representing this derived table and its dependencies.
   ///
   /// GET /derived_table/graph/view/{view} -> DependencyGraph
-  Future<SDKResponse<DependencyGraph>> graph_derived_tables_for_view(
+  Future<SDKResponse<DependencyGraph>> graphDerivedTablesForView(
 
       /// @param {String} view The derived table's view name.
       String view,
@@ -4334,13 +4276,13 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} workspace The model directory to look in, either `dev` or `production`.
       String workspace}) async {
-    var path_view = encodeParam(view);
+    var pathView = encodeParam(view);
 
     DependencyGraph responseHandler(dynamic json, String contentType) {
       return DependencyGraph.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/derived_table/graph/view/$path_view',
+    return get(responseHandler, '/derived_table/graph/view/$pathView',
         {'models': models, 'workspace': workspace});
   }
 
@@ -4351,7 +4293,7 @@ class LookerSDK extends APIMethods {
   /// Search for folders by creator id, parent id, name, etc
   ///
   /// GET /folders/search -> List<Folder>
-  Future<SDKResponse<List<Folder>>> search_folders(
+  Future<SDKResponse<List<Folder>>> searchFolders(
       {
 
       /// @param {String} fields Requested fields.
@@ -4361,7 +4303,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -4379,16 +4321,16 @@ class LookerSDK extends APIMethods {
       int id,
 
       /// @param {String} parent_id Filter on a children of a particular folder.
-      String parent_id,
+      String parentId,
 
       /// @param {String} creator_id Filter on folder created by a particular user.
-      String creator_id,
+      String creatorId,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {bool} is_shared_root Match is shared root
-      bool is_shared_root}) async {
+      bool isSharedRoot}) async {
     List<Folder> responseHandler(dynamic json, String contentType) {
       return json
           .map<Folder>((i) => Folder.fromResponse(i, contentType))
@@ -4398,16 +4340,16 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/folders/search', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
       'name': name,
       'id': id,
-      'parent_id': parent_id,
-      'creator_id': creator_id,
-      'filter_or': filter_or,
-      'is_shared_root': is_shared_root
+      'parent_id': parentId,
+      'creator_id': creatorId,
+      'filter_or': filterOr,
+      'is_shared_root': isSharedRoot
     });
   }
 
@@ -4417,55 +4359,55 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Folder>> folder(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     Folder responseHandler(dynamic json, String contentType) {
       return Folder.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/folders/$path_folder_id', {'fields': fields});
+    return get(responseHandler, '/folders/$pathFolderId', {'fields': fields});
   }
 
   /// ### Update the folder with a specific id.
   ///
   /// PATCH /folders/{folder_id} -> Folder
-  Future<SDKResponse<Folder>> update_folder(
+  Future<SDKResponse<Folder>> updateFolder(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
 
       /// @param {UpdateFolder} body
       UpdateFolder body) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     Folder responseHandler(dynamic json, String contentType) {
       return Folder.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/folders/$path_folder_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/folders/$pathFolderId', null, body?.toJson());
   }
 
   /// ### Delete the folder with a specific id including any children folders.
   /// **DANGER** this will delete all looks and dashboards in the folder.
   ///
   /// DELETE /folders/{folder_id} -> String
-  Future<SDKResponse<String>> delete_folder(
+  Future<SDKResponse<String>> deleteFolder(
 
       /// @param {String} folder_id Id of folder
-      String folder_id) async {
-    var path_folder_id = encodeParam(folder_id);
+      String folderId) async {
+    var pathFolderId = encodeParam(folderId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/folders/$path_folder_id');
+    return delete(responseHandler, '/folders/$pathFolderId');
   }
 
   /// ### Get information about all folders.
@@ -4476,7 +4418,7 @@ class LookerSDK extends APIMethods {
   /// In API 4.0+, all personal folders will be returned.
   ///
   /// GET /folders -> List<Folder>
-  Future<SDKResponse<List<Folder>>> all_folders(
+  Future<SDKResponse<List<Folder>>> allFolders(
       {
 
       /// @param {String} fields Requested fields.
@@ -4496,7 +4438,7 @@ class LookerSDK extends APIMethods {
   /// returns 404 Not Found.
   ///
   /// POST /folders -> Folder
-  Future<SDKResponse<Folder>> create_folder(
+  Future<SDKResponse<Folder>> createFolder(
 
       /// @param {CreateFolder} body
       CreateFolder body) async {
@@ -4504,17 +4446,16 @@ class LookerSDK extends APIMethods {
       return Folder.fromResponse(json, contentType);
     }
 
-    return post(
-        responseHandler, '/folders', null, body == null ? null : body.toJson());
+    return post(responseHandler, '/folders', null, body?.toJson());
   }
 
   /// ### Get the children of a folder.
   ///
   /// GET /folders/{folder_id}/children -> List<Folder>
-  Future<SDKResponse<List<Folder>>> folder_children(
+  Future<SDKResponse<List<Folder>>> folderChildren(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
@@ -4524,11 +4465,11 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {String} sorts Fields to sort by.
       String sorts}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     List<Folder> responseHandler(dynamic json, String contentType) {
       return json
@@ -4536,17 +4477,17 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/folders/$path_folder_id/children',
-        {'fields': fields, 'page': page, 'per_page': per_page, 'sorts': sorts});
+    return get(responseHandler, '/folders/$pathFolderId/children',
+        {'fields': fields, 'page': page, 'per_page': perPage, 'sorts': sorts});
   }
 
   /// ### Search the children of a folder
   ///
   /// GET /folders/{folder_id}/children/search -> List<Folder>
-  Future<SDKResponse<List<Folder>>> folder_children_search(
+  Future<SDKResponse<List<Folder>>> folderChildrenSearch(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
@@ -4557,7 +4498,7 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} name Match folder name.
       String name}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     List<Folder> responseHandler(dynamic json, String contentType) {
       return json
@@ -4565,43 +4506,43 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/folders/$path_folder_id/children/search',
+    return get(responseHandler, '/folders/$pathFolderId/children/search',
         {'fields': fields, 'sorts': sorts, 'name': name});
   }
 
   /// ### Get the parent of a folder
   ///
   /// GET /folders/{folder_id}/parent -> Folder
-  Future<SDKResponse<Folder>> folder_parent(
+  Future<SDKResponse<Folder>> folderParent(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     Folder responseHandler(dynamic json, String contentType) {
       return Folder.fromResponse(json, contentType);
     }
 
     return get(
-        responseHandler, '/folders/$path_folder_id/parent', {'fields': fields});
+        responseHandler, '/folders/$pathFolderId/parent', {'fields': fields});
   }
 
   /// ### Get the ancestors of a folder
   ///
   /// GET /folders/{folder_id}/ancestors -> List<Folder>
-  Future<SDKResponse<List<Folder>>> folder_ancestors(
+  Future<SDKResponse<List<Folder>>> folderAncestors(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     List<Folder> responseHandler(dynamic json, String contentType) {
       return json
@@ -4609,7 +4550,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/folders/$path_folder_id/ancestors',
+    return get(responseHandler, '/folders/$pathFolderId/ancestors',
         {'fields': fields});
   }
 
@@ -4618,15 +4559,15 @@ class LookerSDK extends APIMethods {
   /// In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
   ///
   /// GET /folders/{folder_id}/looks -> List<LookWithQuery>
-  Future<SDKResponse<List<LookWithQuery>>> folder_looks(
+  Future<SDKResponse<List<LookWithQuery>>> folderLooks(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     List<LookWithQuery> responseHandler(dynamic json, String contentType) {
       return json
@@ -4635,21 +4576,21 @@ class LookerSDK extends APIMethods {
     }
 
     return get(
-        responseHandler, '/folders/$path_folder_id/looks', {'fields': fields});
+        responseHandler, '/folders/$pathFolderId/looks', {'fields': fields});
   }
 
   /// ### Get the dashboards in a folder
   ///
   /// GET /folders/{folder_id}/dashboards -> List<Dashboard>
-  Future<SDKResponse<List<Dashboard>>> folder_dashboards(
+  Future<SDKResponse<List<Dashboard>>> folderDashboards(
 
       /// @param {String} folder_id Id of folder
-      String folder_id,
+      String folderId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_folder_id = encodeParam(folder_id);
+    var pathFolderId = encodeParam(folderId);
 
     List<Dashboard> responseHandler(dynamic json, String contentType) {
       return json
@@ -4657,7 +4598,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/folders/$path_folder_id/dashboards',
+    return get(responseHandler, '/folders/$pathFolderId/dashboards',
         {'fields': fields});
   }
 
@@ -4668,7 +4609,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all groups.
   ///
   /// GET /groups -> List<Group>
-  Future<SDKResponse<List<Group>>> all_groups(
+  Future<SDKResponse<List<Group>>> allGroups(
       {
 
       /// @param {String} fields Requested fields.
@@ -4678,7 +4619,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {String} sorts Fields to sort by.
       String sorts,
@@ -4687,10 +4628,10 @@ class LookerSDK extends APIMethods {
       DelimList<int> ids,
 
       /// @param {int} content_metadata_id Id of content metadata to which groups must have access.
-      int content_metadata_id,
+      int contentMetadataId,
 
       /// @param {bool} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
-      bool can_add_to_content_metadata}) async {
+      bool canAddToContentMetadata}) async {
     List<Group> responseHandler(dynamic json, String contentType) {
       return json
           .map<Group>((i) => Group.fromResponse(i, contentType))
@@ -4700,18 +4641,18 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/groups', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'sorts': sorts,
       'ids': ids,
-      'content_metadata_id': content_metadata_id,
-      'can_add_to_content_metadata': can_add_to_content_metadata
+      'content_metadata_id': contentMetadataId,
+      'can_add_to_content_metadata': canAddToContentMetadata
     });
   }
 
   /// ### Creates a new group (admin only).
   ///
   /// POST /groups -> Group
-  Future<SDKResponse<Group>> create_group(
+  Future<SDKResponse<Group>> createGroup(
 
       /// @param {WriteGroup} body
       WriteGroup body,
@@ -4723,8 +4664,7 @@ class LookerSDK extends APIMethods {
       return Group.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/groups', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/groups', {'fields': fields}, body?.toJson());
   }
 
   /// ### Search groups
@@ -4753,7 +4693,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /groups/search -> List<Group>
-  Future<SDKResponse<List<Group>>> search_groups(
+  Future<SDKResponse<List<Group>>> searchGroups(
       {
 
       /// @param {String} fields Requested fields.
@@ -4769,7 +4709,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {int} id Match group id.
       int id,
@@ -4778,13 +4718,13 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {String} external_group_id Match group external_group_id.
-      String external_group_id,
+      String externalGroupId,
 
       /// @param {bool} externally_managed Match group externally_managed.
-      bool externally_managed,
+      bool externallyManaged,
 
       /// @param {bool} externally_orphaned Match group externally_orphaned.
-      bool externally_orphaned}) async {
+      bool externallyOrphaned}) async {
     List<Group> responseHandler(dynamic json, String contentType) {
       return json
           .map<Group>((i) => Group.fromResponse(i, contentType))
@@ -4796,12 +4736,12 @@ class LookerSDK extends APIMethods {
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or,
+      'filter_or': filterOr,
       'id': id,
       'name': name,
-      'external_group_id': external_group_id,
-      'externally_managed': externally_managed,
-      'externally_orphaned': externally_orphaned
+      'external_group_id': externalGroupId,
+      'externally_managed': externallyManaged,
+      'externally_orphaned': externallyOrphaned
     });
   }
 
@@ -4831,7 +4771,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /groups/search/with_roles -> List<GroupSearch>
-  Future<SDKResponse<List<GroupSearch>>> search_groups_with_roles(
+  Future<SDKResponse<List<GroupSearch>>> searchGroupsWithRoles(
       {
 
       /// @param {String} fields Requested fields.
@@ -4847,7 +4787,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {int} id Match group id.
       int id,
@@ -4856,13 +4796,13 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {String} external_group_id Match group external_group_id.
-      String external_group_id,
+      String externalGroupId,
 
       /// @param {bool} externally_managed Match group externally_managed.
-      bool externally_managed,
+      bool externallyManaged,
 
       /// @param {bool} externally_orphaned Match group externally_orphaned.
-      bool externally_orphaned}) async {
+      bool externallyOrphaned}) async {
     List<GroupSearch> responseHandler(dynamic json, String contentType) {
       return json
           .map<GroupSearch>((i) => GroupSearch.fromResponse(i, contentType))
@@ -4874,12 +4814,12 @@ class LookerSDK extends APIMethods {
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or,
+      'filter_or': filterOr,
       'id': id,
       'name': name,
-      'external_group_id': external_group_id,
-      'externally_managed': externally_managed,
-      'externally_orphaned': externally_orphaned
+      'external_group_id': externalGroupId,
+      'externally_managed': externallyManaged,
+      'externally_orphaned': externallyOrphaned
     });
   }
 
@@ -4910,7 +4850,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /groups/search/with_hierarchy -> List<GroupHierarchy>
-  Future<SDKResponse<List<GroupHierarchy>>> search_groups_with_hierarchy(
+  Future<SDKResponse<List<GroupHierarchy>>> searchGroupsWithHierarchy(
       {
 
       /// @param {String} fields Requested fields.
@@ -4926,7 +4866,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {int} id Match group id.
       int id,
@@ -4935,13 +4875,13 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {String} external_group_id Match group external_group_id.
-      String external_group_id,
+      String externalGroupId,
 
       /// @param {bool} externally_managed Match group externally_managed.
-      bool externally_managed,
+      bool externallyManaged,
 
       /// @param {bool} externally_orphaned Match group externally_orphaned.
-      bool externally_orphaned}) async {
+      bool externallyOrphaned}) async {
     List<GroupHierarchy> responseHandler(dynamic json, String contentType) {
       return json
           .map<GroupHierarchy>(
@@ -4954,12 +4894,12 @@ class LookerSDK extends APIMethods {
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or,
+      'filter_or': filterOr,
       'id': id,
       'name': name,
-      'external_group_id': external_group_id,
-      'externally_managed': externally_managed,
-      'externally_orphaned': externally_orphaned
+      'external_group_id': externalGroupId,
+      'externally_managed': externallyManaged,
+      'externally_orphaned': externallyOrphaned
     });
   }
 
@@ -4969,27 +4909,27 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Group>> group(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     Group responseHandler(dynamic json, String contentType) {
       return Group.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/groups/$path_group_id', {'fields': fields});
+    return get(responseHandler, '/groups/$pathGroupId', {'fields': fields});
   }
 
   /// ### Updates the a group (admin only).
   ///
   /// PATCH /groups/{group_id} -> Group
-  Future<SDKResponse<Group>> update_group(
+  Future<SDKResponse<Group>> updateGroup(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {WriteGroup} body
       WriteGroup body,
@@ -4997,44 +4937,44 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     Group responseHandler(dynamic json, String contentType) {
       return Group.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/groups/$path_group_id', {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/groups/$pathGroupId', {'fields': fields},
+        body?.toJson());
   }
 
   /// ### Deletes a group (admin only).
   ///
   /// DELETE /groups/{group_id} -> String
-  Future<SDKResponse<String>> delete_group(
+  Future<SDKResponse<String>> deleteGroup(
 
       /// @param {int} group_id Id of group
-      int group_id) async {
-    var path_group_id = encodeParam(group_id);
+      int groupId) async {
+    var pathGroupId = encodeParam(groupId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/groups/$path_group_id');
+    return delete(responseHandler, '/groups/$pathGroupId');
   }
 
   /// ### Get information about all the groups in a group
   ///
   /// GET /groups/{group_id}/groups -> List<Group>
-  Future<SDKResponse<List<Group>>> all_group_groups(
+  Future<SDKResponse<List<Group>>> allGroupGroups(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     List<Group> responseHandler(dynamic json, String contentType) {
       return json
@@ -5043,36 +4983,36 @@ class LookerSDK extends APIMethods {
     }
 
     return get(
-        responseHandler, '/groups/$path_group_id/groups', {'fields': fields});
+        responseHandler, '/groups/$pathGroupId/groups', {'fields': fields});
   }
 
   /// ### Adds a new group to a group.
   ///
   /// POST /groups/{group_id}/groups -> Group
-  Future<SDKResponse<Group>> add_group_group(
+  Future<SDKResponse<Group>> addGroupGroup(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {GroupIdForGroupInclusion} body
       GroupIdForGroupInclusion body) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     Group responseHandler(dynamic json, String contentType) {
       return Group.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/groups/$path_group_id/groups', null,
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/groups/$pathGroupId/groups', null, body?.toJson());
   }
 
   /// ### Get information about all the users directly included in a group.
   ///
   /// GET /groups/{group_id}/users -> List<User>
-  Future<SDKResponse<List<User>>> all_group_users(
+  Future<SDKResponse<List<User>>> allGroupUsers(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
       {
 
       /// @param {String} fields Requested fields.
@@ -5082,74 +5022,73 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {String} sorts Fields to sort by.
       String sorts}) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     List<User> responseHandler(dynamic json, String contentType) {
       return json.map<User>((i) => User.fromResponse(i, contentType)).toList();
     }
 
-    return get(responseHandler, '/groups/$path_group_id/users',
-        {'fields': fields, 'page': page, 'per_page': per_page, 'sorts': sorts});
+    return get(responseHandler, '/groups/$pathGroupId/users',
+        {'fields': fields, 'page': page, 'per_page': perPage, 'sorts': sorts});
   }
 
   /// ### Adds a new user to a group.
   ///
   /// POST /groups/{group_id}/users -> User
-  Future<SDKResponse<User>> add_group_user(
+  Future<SDKResponse<User>> addGroupUser(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {GroupIdForGroupUserInclusion} body
       GroupIdForGroupUserInclusion body) async {
-    var path_group_id = encodeParam(group_id);
+    var pathGroupId = encodeParam(groupId);
 
     User responseHandler(dynamic json, String contentType) {
       return User.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/groups/$path_group_id/users', null,
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/groups/$pathGroupId/users', null, body?.toJson());
   }
 
   /// ### Removes a user from a group.
   ///
   /// DELETE /groups/{group_id}/users/{user_id} -> void
-  Future<SDKResponse<void>> delete_group_user(
+  Future<SDKResponse<void>> deleteGroupUser(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {int} user_id Id of user to remove from group
-      int user_id) async {
-    var path_group_id = encodeParam(group_id);
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathGroupId = encodeParam(groupId);
+    var pathUserId = encodeParam(userId);
 
     void responseHandler(dynamic json, String contentType) {}
-    return delete(
-        responseHandler, '/groups/$path_group_id/users/$path_user_id');
+    return delete(responseHandler, '/groups/$pathGroupId/users/$pathUserId');
   }
 
   /// ### Removes a group from a group.
   ///
   /// DELETE /groups/{group_id}/groups/{deleting_group_id} -> void
-  Future<SDKResponse<void>> delete_group_from_group(
+  Future<SDKResponse<void>> deleteGroupFromGroup(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {int} deleting_group_id Id of group to delete
-      int deleting_group_id) async {
-    var path_group_id = encodeParam(group_id);
-    var path_deleting_group_id = encodeParam(deleting_group_id);
+      int deletingGroupId) async {
+    var pathGroupId = encodeParam(groupId);
+    var pathDeletingGroupId = encodeParam(deletingGroupId);
 
     void responseHandler(dynamic json, String contentType) {}
-    return delete(responseHandler,
-        '/groups/$path_group_id/groups/$path_deleting_group_id');
+    return delete(
+        responseHandler, '/groups/$pathGroupId/groups/$pathDeletingGroupId');
   }
 
   /// ### Set the value of a user attribute for a group.
@@ -5157,19 +5096,18 @@ class LookerSDK extends APIMethods {
   /// For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
   ///
   /// PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
-  Future<SDKResponse<UserAttributeGroupValue>>
-      update_user_attribute_group_value(
+  Future<SDKResponse<UserAttributeGroupValue>> updateUserAttributeGroupValue(
 
-          /// @param {int} group_id Id of group
-          int group_id,
+      /// @param {int} group_id Id of group
+      int groupId,
 
-          /// @param {int} user_attribute_id Id of user attribute
-          int user_attribute_id,
+      /// @param {int} user_attribute_id Id of user attribute
+      int userAttributeId,
 
-          /// @param {UserAttributeGroupValue} body
-          UserAttributeGroupValue body) async {
-    var path_group_id = encodeParam(group_id);
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+      /// @param {UserAttributeGroupValue} body
+      UserAttributeGroupValue body) async {
+    var pathGroupId = encodeParam(groupId);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     UserAttributeGroupValue responseHandler(dynamic json, String contentType) {
       return UserAttributeGroupValue.fromResponse(json, contentType);
@@ -5177,27 +5115,27 @@ class LookerSDK extends APIMethods {
 
     return patch(
         responseHandler,
-        '/groups/$path_group_id/attribute_values/$path_user_attribute_id',
+        '/groups/$pathGroupId/attribute_values/$pathUserAttributeId',
         null,
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Remove a user attribute value from a group.
   ///
   /// DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> void
-  Future<SDKResponse<void>> delete_user_attribute_group_value(
+  Future<SDKResponse<void>> deleteUserAttributeGroupValue(
 
       /// @param {int} group_id Id of group
-      int group_id,
+      int groupId,
 
       /// @param {int} user_attribute_id Id of user attribute
-      int user_attribute_id) async {
-    var path_group_id = encodeParam(group_id);
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+      int userAttributeId) async {
+    var pathGroupId = encodeParam(groupId);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     void responseHandler(dynamic json, String contentType) {}
     return delete(responseHandler,
-        '/groups/$path_group_id/attribute_values/$path_user_attribute_id');
+        '/groups/$pathGroupId/attribute_values/$pathUserAttributeId');
   }
 
   // #endregion Group: Manage Groups
@@ -5207,7 +5145,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about the primary homepage's sections.
   ///
   /// GET /primary_homepage_sections -> List<HomepageSection>
-  Future<SDKResponse<List<HomepageSection>>> all_primary_homepage_sections(
+  Future<SDKResponse<List<HomepageSection>>> allPrimaryHomepageSections(
       {
 
       /// @param {String} fields Requested fields.
@@ -5230,7 +5168,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all Integration Hubs.
   ///
   /// GET /integration_hubs -> List<IntegrationHub>
-  Future<SDKResponse<List<IntegrationHub>>> all_integration_hubs(
+  Future<SDKResponse<List<IntegrationHub>>> allIntegrationHubs(
       {
 
       /// @param {String} fields Requested fields.
@@ -5250,7 +5188,7 @@ class LookerSDK extends APIMethods {
   /// This API is rate limited to prevent it from being used for SSRF attacks
   ///
   /// POST /integration_hubs -> IntegrationHub
-  Future<SDKResponse<IntegrationHub>> create_integration_hub(
+  Future<SDKResponse<IntegrationHub>> createIntegrationHub(
 
       /// @param {WriteIntegrationHub} body
       WriteIntegrationHub body,
@@ -5263,27 +5201,27 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/integration_hubs', {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about a Integration Hub.
   ///
   /// GET /integration_hubs/{integration_hub_id} -> IntegrationHub
-  Future<SDKResponse<IntegrationHub>> integration_hub(
+  Future<SDKResponse<IntegrationHub>> integrationHub(
 
       /// @param {int} integration_hub_id Id of Integration Hub
-      int integration_hub_id,
+      int integrationHubId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_integration_hub_id = encodeParam(integration_hub_id);
+    var pathIntegrationHubId = encodeParam(integrationHubId);
 
     IntegrationHub responseHandler(dynamic json, String contentType) {
       return IntegrationHub.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/integration_hubs/$path_integration_hub_id',
+    return get(responseHandler, '/integration_hubs/$pathIntegrationHubId',
         {'fields': fields});
   }
 
@@ -5292,10 +5230,10 @@ class LookerSDK extends APIMethods {
   /// This API is rate limited to prevent it from being used for SSRF attacks
   ///
   /// PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
-  Future<SDKResponse<IntegrationHub>> update_integration_hub(
+  Future<SDKResponse<IntegrationHub>> updateIntegrationHub(
 
       /// @param {int} integration_hub_id Id of Integration Hub
-      int integration_hub_id,
+      int integrationHubId,
 
       /// @param {WriteIntegrationHub} body
       WriteIntegrationHub body,
@@ -5303,61 +5241,60 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_integration_hub_id = encodeParam(integration_hub_id);
+    var pathIntegrationHubId = encodeParam(integrationHubId);
 
     IntegrationHub responseHandler(dynamic json, String contentType) {
       return IntegrationHub.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/integration_hubs/$path_integration_hub_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/integration_hubs/$pathIntegrationHubId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a Integration Hub.
   ///
   /// DELETE /integration_hubs/{integration_hub_id} -> String
-  Future<SDKResponse<String>> delete_integration_hub(
+  Future<SDKResponse<String>> deleteIntegrationHub(
 
       /// @param {int} integration_hub_id Id of integration_hub
-      int integration_hub_id) async {
-    var path_integration_hub_id = encodeParam(integration_hub_id);
+      int integrationHubId) async {
+    var pathIntegrationHubId = encodeParam(integrationHubId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(
-        responseHandler, '/integration_hubs/$path_integration_hub_id');
+    return delete(responseHandler, '/integration_hubs/$pathIntegrationHubId');
   }
 
   /// Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
   ///
   /// POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
-  Future<SDKResponse<IntegrationHub>> accept_integration_hub_legal_agreement(
+  Future<SDKResponse<IntegrationHub>> acceptIntegrationHubLegalAgreement(
 
       /// @param {int} integration_hub_id Id of integration_hub
-      int integration_hub_id) async {
-    var path_integration_hub_id = encodeParam(integration_hub_id);
+      int integrationHubId) async {
+    var pathIntegrationHubId = encodeParam(integrationHubId);
 
     IntegrationHub responseHandler(dynamic json, String contentType) {
       return IntegrationHub.fromResponse(json, contentType);
     }
 
     return post(responseHandler,
-        '/integration_hubs/$path_integration_hub_id/accept_legal_agreement');
+        '/integration_hubs/$pathIntegrationHubId/accept_legal_agreement');
   }
 
   /// ### Get information about all Integrations.
   ///
   /// GET /integrations -> List<Integration>
-  Future<SDKResponse<List<Integration>>> all_integrations(
+  Future<SDKResponse<List<Integration>>> allIntegrations(
       {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {String} integration_hub_id Filter to a specific provider
-      String integration_hub_id}) async {
+      String integrationHubId}) async {
     List<Integration> responseHandler(dynamic json, String contentType) {
       return json
           .map<Integration>((i) => Integration.fromResponse(i, contentType))
@@ -5365,7 +5302,7 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/integrations',
-        {'fields': fields, 'integration_hub_id': integration_hub_id});
+        {'fields': fields, 'integration_hub_id': integrationHubId});
   }
 
   /// ### Get information about a Integration.
@@ -5374,28 +5311,28 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Integration>> integration(
 
       /// @param {String} integration_id Id of integration
-      String integration_id,
+      String integrationId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_integration_id = encodeParam(integration_id);
+    var pathIntegrationId = encodeParam(integrationId);
 
     Integration responseHandler(dynamic json, String contentType) {
       return Integration.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/integrations/$path_integration_id',
+    return get(responseHandler, '/integrations/$pathIntegrationId',
         {'fields': fields});
   }
 
   /// ### Update parameters on a Integration.
   ///
   /// PATCH /integrations/{integration_id} -> Integration
-  Future<SDKResponse<Integration>> update_integration(
+  Future<SDKResponse<Integration>> updateIntegration(
 
       /// @param {String} integration_id Id of integration
-      String integration_id,
+      String integrationId,
 
       /// @param {WriteIntegration} body
       WriteIntegration body,
@@ -5403,51 +5340,51 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_integration_id = encodeParam(integration_id);
+    var pathIntegrationId = encodeParam(integrationId);
 
     Integration responseHandler(dynamic json, String contentType) {
       return Integration.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/integrations/$path_integration_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/integrations/$pathIntegrationId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// Returns the Integration form for presentation to the user.
   ///
   /// POST /integrations/{integration_id}/form -> DataActionForm
-  Future<SDKResponse<DataActionForm>> fetch_integration_form(
+  Future<SDKResponse<DataActionForm>> fetchIntegrationForm(
 
       /// @param {String} integration_id Id of integration
-      String integration_id,
+      String integrationId,
       {
 
       /// @param {Map<String,dynamic>} body
       Map<String, dynamic> body}) async {
-    var path_integration_id = encodeParam(integration_id);
+    var pathIntegrationId = encodeParam(integrationId);
 
     DataActionForm responseHandler(dynamic json, String contentType) {
       return DataActionForm.fromResponse(json, contentType);
     }
 
     return post(
-        responseHandler, '/integrations/$path_integration_id/form', null, body);
+        responseHandler, '/integrations/$pathIntegrationId/form', null, body);
   }
 
   /// Tests the integration to make sure all the settings are working.
   ///
   /// POST /integrations/{integration_id}/test -> IntegrationTestResult
-  Future<SDKResponse<IntegrationTestResult>> test_integration(
+  Future<SDKResponse<IntegrationTestResult>> testIntegration(
 
       /// @param {String} integration_id Id of integration
-      String integration_id) async {
-    var path_integration_id = encodeParam(integration_id);
+      String integrationId) async {
+    var pathIntegrationId = encodeParam(integrationId);
 
     IntegrationTestResult responseHandler(dynamic json, String contentType) {
       return IntegrationTestResult.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/integrations/$path_integration_id/test');
+    return post(responseHandler, '/integrations/$pathIntegrationId/test');
   }
 
   // #endregion Integration: Manage Integrations
@@ -5463,7 +5400,7 @@ class LookerSDK extends APIMethods {
   /// Find **soft-deleted looks** with [search_looks()](#!/Look/search_looks)
   ///
   /// GET /looks -> List<Look>
-  Future<SDKResponse<List<Look>>> all_looks(
+  Future<SDKResponse<List<Look>>> allLooks(
       {
 
       /// @param {String} fields Requested fields.
@@ -5484,7 +5421,7 @@ class LookerSDK extends APIMethods {
   /// in the call to `create_look()`.
   ///
   /// POST /looks -> LookWithQuery
-  Future<SDKResponse<LookWithQuery>> create_look(
+  Future<SDKResponse<LookWithQuery>> createLook(
 
       /// @param {WriteLookWithQuery} body
       WriteLookWithQuery body,
@@ -5496,8 +5433,7 @@ class LookerSDK extends APIMethods {
       return LookWithQuery.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/looks', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/looks', {'fields': fields}, body?.toJson());
   }
 
   /// ### Search Looks
@@ -5529,7 +5465,7 @@ class LookerSDK extends APIMethods {
   /// Get a **single look** by id with [look(id)](#!/Look/look)
   ///
   /// GET /looks/search -> List<Look>
-  Future<SDKResponse<List<Look>>> search_looks(
+  Future<SDKResponse<List<Look>>> searchLooks(
       {
 
       /// @param {String} id Match look id.
@@ -5542,28 +5478,28 @@ class LookerSDK extends APIMethods {
       String description,
 
       /// @param {String} content_favorite_id Select looks with a particular content favorite id
-      String content_favorite_id,
+      String contentFavoriteId,
 
       /// @param {String} folder_id Select looks in a particular folder.
-      String folder_id,
+      String folderId,
 
       /// @param {String} user_id Select looks created by a particular user.
-      String user_id,
+      String userId,
 
       /// @param {String} view_count Select looks with particular view_count value
-      String view_count,
+      String viewCount,
 
       /// @param {bool} deleted Select soft-deleted looks
       bool deleted,
 
       /// @param {int} query_id Select looks that reference a particular query by query_id
-      int query_id,
+      int queryId,
 
       /// @param {bool} curate Exclude items that exist only in personal spaces other than the users
       bool curate,
 
       /// @param {String} last_viewed_at Select looks based on when they were last viewed
-      String last_viewed_at,
+      String lastViewedAt,
 
       /// @param {String} fields Requested fields.
       String fields,
@@ -5572,7 +5508,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page Results per page.
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -5584,7 +5520,7 @@ class LookerSDK extends APIMethods {
       String sorts,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<Look> responseHandler(dynamic json, String contentType) {
       return json.map<Look>((i) => Look.fromResponse(i, contentType)).toList();
     }
@@ -5593,21 +5529,21 @@ class LookerSDK extends APIMethods {
       'id': id,
       'title': title,
       'description': description,
-      'content_favorite_id': content_favorite_id,
-      'folder_id': folder_id,
-      'user_id': user_id,
-      'view_count': view_count,
+      'content_favorite_id': contentFavoriteId,
+      'folder_id': folderId,
+      'user_id': userId,
+      'view_count': viewCount,
       'deleted': deleted,
-      'query_id': query_id,
+      'query_id': queryId,
       'curate': curate,
-      'last_viewed_at': last_viewed_at,
+      'last_viewed_at': lastViewedAt,
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -5619,18 +5555,18 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<LookWithQuery>> look(
 
       /// @param {String} look_id Id of look
-      String look_id,
+      String lookId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_look_id = encodeParam(look_id);
+    var pathLookId = encodeParam(lookId);
 
     LookWithQuery responseHandler(dynamic json, String contentType) {
       return LookWithQuery.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/looks/$path_look_id', {'fields': fields});
+    return get(responseHandler, '/looks/$pathLookId', {'fields': fields});
   }
 
   /// ### Modify a Look
@@ -5655,10 +5591,10 @@ class LookerSDK extends APIMethods {
   /// database and destroyed. There is no "undo" for `delete_look()`.
   ///
   /// PATCH /looks/{look_id} -> LookWithQuery
-  Future<SDKResponse<LookWithQuery>> update_look(
+  Future<SDKResponse<LookWithQuery>> updateLook(
 
       /// @param {String} look_id Id of look
-      String look_id,
+      String lookId,
 
       /// @param {WriteLookWithQuery} body
       WriteLookWithQuery body,
@@ -5666,14 +5602,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_look_id = encodeParam(look_id);
+    var pathLookId = encodeParam(lookId);
 
     LookWithQuery responseHandler(dynamic json, String contentType) {
       return LookWithQuery.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/looks/$path_look_id', {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/looks/$pathLookId', {'fields': fields},
+        body?.toJson());
   }
 
   /// ### Permanently Delete a Look
@@ -5685,17 +5621,17 @@ class LookerSDK extends APIMethods {
   /// For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
   ///
   /// DELETE /looks/{look_id} -> String
-  Future<SDKResponse<String>> delete_look(
+  Future<SDKResponse<String>> deleteLook(
 
       /// @param {String} look_id Id of look
-      String look_id) async {
-    var path_look_id = encodeParam(look_id);
+      String lookId) async {
+    var pathLookId = encodeParam(lookId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/looks/$path_look_id');
+    return delete(responseHandler, '/looks/$pathLookId');
   }
 
   /// ### Run a Look
@@ -5720,71 +5656,70 @@ class LookerSDK extends APIMethods {
   /// GET /looks/{look_id}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> run_look(
+  Future<SDKResponse<dynamic>> runLook(
 
       /// @param {String} look_id Id of look
-      String look_id,
+      String lookId,
 
       /// @param {String} result_format Format of result
-      String result_format,
+      String resultFormat,
       {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
 
       /// @param {bool} apply_formatting Apply model-specified formatting to each result.
-      bool apply_formatting,
+      bool applyFormatting,
 
       /// @param {bool} apply_vis Apply visualization options to results.
-      bool apply_vis,
+      bool applyVis,
 
       /// @param {bool} cache Get results from cache if available.
       bool cache,
 
       /// @param {int} image_width Render width for image formats.
-      int image_width,
+      int imageWidth,
 
       /// @param {int} image_height Render height for image formats.
-      int image_height,
+      int imageHeight,
 
       /// @param {bool} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-      bool generate_drill_links,
+      bool generateDrillLinks,
 
       /// @param {bool} force_production Force use of production models even if the user is in development mode.
-      bool force_production,
+      bool forceProduction,
 
       /// @param {bool} cache_only Retrieve any results from cache even if the results have expired.
-      bool cache_only,
+      bool cacheOnly,
 
       /// @param {String} path_prefix Prefix to use for drill links (url encoded).
-      String path_prefix,
+      String pathPrefix,
 
       /// @param {bool} rebuild_pdts Rebuild PDTS used in query.
-      bool rebuild_pdts,
+      bool rebuildPdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs}) async {
-    var path_look_id = encodeParam(look_id);
-    var path_result_format = encodeParam(result_format);
+      bool serverTableCalcs}) async {
+    var pathLookId = encodeParam(lookId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(
-        responseHandler, '/looks/$path_look_id/run/$path_result_format', {
+    return get(responseHandler, '/looks/$pathLookId/run/$pathResultFormat', {
       'limit': limit,
-      'apply_formatting': apply_formatting,
-      'apply_vis': apply_vis,
+      'apply_formatting': applyFormatting,
+      'apply_vis': applyVis,
       'cache': cache,
-      'image_width': image_width,
-      'image_height': image_height,
-      'generate_drill_links': generate_drill_links,
-      'force_production': force_production,
-      'cache_only': cache_only,
-      'path_prefix': path_prefix,
-      'rebuild_pdts': rebuild_pdts,
-      'server_table_calcs': server_table_calcs
+      'image_width': imageWidth,
+      'image_height': imageHeight,
+      'generate_drill_links': generateDrillLinks,
+      'force_production': forceProduction,
+      'cache_only': cacheOnly,
+      'path_prefix': pathPrefix,
+      'rebuild_pdts': rebuildPdts,
+      'server_table_calcs': serverTableCalcs
     });
   }
 
@@ -5797,22 +5732,22 @@ class LookerSDK extends APIMethods {
   /// `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
   ///
   /// POST /looks/{look_id}/copy -> LookWithQuery
-  Future<SDKResponse<LookWithQuery>> copy_look(
+  Future<SDKResponse<LookWithQuery>> copyLook(
 
       /// @param {String} look_id Look id to copy.
-      String look_id,
+      String lookId,
       {
 
       /// @param {String} folder_id Folder id to copy to.
-      String folder_id}) async {
-    var path_look_id = encodeParam(look_id);
+      String folderId}) async {
+    var pathLookId = encodeParam(lookId);
 
     LookWithQuery responseHandler(dynamic json, String contentType) {
       return LookWithQuery.fromResponse(json, contentType);
     }
 
     return post(
-        responseHandler, '/looks/$path_look_id/copy', {'folder_id': folder_id});
+        responseHandler, '/looks/$pathLookId/copy', {'folder_id': folderId});
   }
 
   /// ### Move an existing look
@@ -5823,21 +5758,21 @@ class LookerSDK extends APIMethods {
   /// `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
   ///
   /// PATCH /looks/{look_id}/move -> LookWithQuery
-  Future<SDKResponse<LookWithQuery>> move_look(
+  Future<SDKResponse<LookWithQuery>> moveLook(
 
       /// @param {String} look_id Look id to move.
-      String look_id,
+      String lookId,
 
       /// @param {String} folder_id Folder id to move to.
-      String folder_id) async {
-    var path_look_id = encodeParam(look_id);
+      String folderId) async {
+    var pathLookId = encodeParam(lookId);
 
     LookWithQuery responseHandler(dynamic json, String contentType) {
       return LookWithQuery.fromResponse(json, contentType);
     }
 
     return patch(
-        responseHandler, '/looks/$path_look_id/move', {'folder_id': folder_id});
+        responseHandler, '/looks/$pathLookId/move', {'folder_id': folderId});
   }
 
   // #endregion Look: Run and Manage Looks
@@ -5847,7 +5782,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all lookml models.
   ///
   /// GET /lookml_models -> List<LookmlModel>
-  Future<SDKResponse<List<LookmlModel>>> all_lookml_models(
+  Future<SDKResponse<List<LookmlModel>>> allLookmlModels(
       {
 
       /// @param {String} fields Requested fields.
@@ -5871,7 +5806,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a lookml model using the specified configuration.
   ///
   /// POST /lookml_models -> LookmlModel
-  Future<SDKResponse<LookmlModel>> create_lookml_model(
+  Future<SDKResponse<LookmlModel>> createLookmlModel(
 
       /// @param {WriteLookmlModel} body
       WriteLookmlModel body) async {
@@ -5879,83 +5814,82 @@ class LookerSDK extends APIMethods {
       return LookmlModel.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/lookml_models', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/lookml_models', null, body?.toJson());
   }
 
   /// ### Get information about a lookml model.
   ///
   /// GET /lookml_models/{lookml_model_name} -> LookmlModel
-  Future<SDKResponse<LookmlModel>> lookml_model(
+  Future<SDKResponse<LookmlModel>> lookmlModel(
 
       /// @param {String} lookml_model_name Name of lookml model.
-      String lookml_model_name,
+      String lookmlModelName,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_lookml_model_name = encodeParam(lookml_model_name);
+    var pathLookmlModelName = encodeParam(lookmlModelName);
 
     LookmlModel responseHandler(dynamic json, String contentType) {
       return LookmlModel.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/lookml_models/$path_lookml_model_name',
+    return get(responseHandler, '/lookml_models/$pathLookmlModelName',
         {'fields': fields});
   }
 
   /// ### Update a lookml model using the specified configuration.
   ///
   /// PATCH /lookml_models/{lookml_model_name} -> LookmlModel
-  Future<SDKResponse<LookmlModel>> update_lookml_model(
+  Future<SDKResponse<LookmlModel>> updateLookmlModel(
 
       /// @param {String} lookml_model_name Name of lookml model.
-      String lookml_model_name,
+      String lookmlModelName,
 
       /// @param {WriteLookmlModel} body
       WriteLookmlModel body) async {
-    var path_lookml_model_name = encodeParam(lookml_model_name);
+    var pathLookmlModelName = encodeParam(lookmlModelName);
 
     LookmlModel responseHandler(dynamic json, String contentType) {
       return LookmlModel.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/lookml_models/$path_lookml_model_name',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/lookml_models/$pathLookmlModelName', null,
+        body?.toJson());
   }
 
   /// ### Delete a lookml model.
   ///
   /// DELETE /lookml_models/{lookml_model_name} -> String
-  Future<SDKResponse<String>> delete_lookml_model(
+  Future<SDKResponse<String>> deleteLookmlModel(
 
       /// @param {String} lookml_model_name Name of lookml model.
-      String lookml_model_name) async {
-    var path_lookml_model_name = encodeParam(lookml_model_name);
+      String lookmlModelName) async {
+    var pathLookmlModelName = encodeParam(lookmlModelName);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/lookml_models/$path_lookml_model_name');
+    return delete(responseHandler, '/lookml_models/$pathLookmlModelName');
   }
 
   /// ### Get information about a lookml model explore.
   ///
   /// GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
-  Future<SDKResponse<LookmlModelExplore>> lookml_model_explore(
+  Future<SDKResponse<LookmlModelExplore>> lookmlModelExplore(
 
       /// @param {String} lookml_model_name Name of lookml model.
-      String lookml_model_name,
+      String lookmlModelName,
 
       /// @param {String} explore_name Name of explore.
-      String explore_name,
+      String exploreName,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_lookml_model_name = encodeParam(lookml_model_name);
-    var path_explore_name = encodeParam(explore_name);
+    var pathLookmlModelName = encodeParam(lookmlModelName);
+    var pathExploreName = encodeParam(exploreName);
 
     LookmlModelExplore responseHandler(dynamic json, String contentType) {
       return LookmlModelExplore.fromResponse(json, contentType);
@@ -5963,7 +5897,7 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/lookml_models/$path_lookml_model_name/explores/$path_explore_name',
+        '/lookml_models/$pathLookmlModelName/explores/$pathExploreName',
         {'fields': fields});
   }
 
@@ -5992,16 +5926,16 @@ class LookerSDK extends APIMethods {
   /// ```
   ///
   /// GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
-  Future<SDKResponse<ModelFieldSuggestions>> model_fieldname_suggestions(
+  Future<SDKResponse<ModelFieldSuggestions>> modelFieldnameSuggestions(
 
       /// @param {String} model_name Name of model
-      String model_name,
+      String modelName,
 
       /// @param {String} view_name Name of view
-      String view_name,
+      String viewName,
 
       /// @param {String} field_name Name of field to use for suggestions
-      String field_name,
+      String fieldName,
       {
 
       /// @param {String} term Search term pattern (evaluated as as `%term%`)
@@ -6009,9 +5943,9 @@ class LookerSDK extends APIMethods {
 
       /// @param {Map} filters Suggestion filters with field name keys and comparison expressions
       Map filters}) async {
-    var path_model_name = encodeParam(model_name);
-    var path_view_name = encodeParam(view_name);
-    var path_field_name = encodeParam(field_name);
+    var pathModelName = encodeParam(modelName);
+    var pathViewName = encodeParam(viewName);
+    var pathFieldName = encodeParam(fieldName);
 
     ModelFieldSuggestions responseHandler(dynamic json, String contentType) {
       return ModelFieldSuggestions.fromResponse(json, contentType);
@@ -6019,24 +5953,24 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/models/$path_model_name/views/$path_view_name/fields/$path_field_name/suggestions',
+        '/models/$pathModelName/views/$pathViewName/fields/$pathFieldName/suggestions',
         {'term': term, 'filters': filters});
   }
 
   /// ### Get a single model
   ///
   /// GET /models/{model_name} -> Model
-  Future<SDKResponse<Model>> get_model(
+  Future<SDKResponse<Model>> getModel(
 
       /// @param {String} model_name Name of model
-      String model_name) async {
-    var path_model_name = encodeParam(model_name);
+      String modelName) async {
+    var pathModelName = encodeParam(modelName);
 
     Model responseHandler(dynamic json, String contentType) {
       return Model.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/models/$path_model_name');
+    return get(responseHandler, '/models/$pathModelName');
   }
 
   /// ### List databases available to this connection
@@ -6050,17 +5984,17 @@ class LookerSDK extends APIMethods {
   /// multiple databases.
   ///
   /// GET /connections/{connection_name}/databases -> List<String>
-  Future<SDKResponse<List<String>>> connection_databases(
+  Future<SDKResponse<List<String>>> connectionDatabases(
 
       /// @param {String} connection_name Name of connection
-      String connection_name) async {
-    var path_connection_name = encodeParam(connection_name);
+      String connectionName) async {
+    var pathConnectionName = encodeParam(connectionName);
 
     List<String> responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(responseHandler, '/connections/$path_connection_name/databases');
+    return get(responseHandler, '/connections/$pathConnectionName/databases');
   }
 
   /// ### Retrieve metadata features for this connection
@@ -6068,31 +6002,31 @@ class LookerSDK extends APIMethods {
   /// Returns a list of feature names with `true` (available) or `false` (not available)
   ///
   /// GET /connections/{connection_name}/features -> ConnectionFeatures
-  Future<SDKResponse<ConnectionFeatures>> connection_features(
+  Future<SDKResponse<ConnectionFeatures>> connectionFeatures(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     ConnectionFeatures responseHandler(dynamic json, String contentType) {
       return ConnectionFeatures.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/connections/$path_connection_name/features',
+    return get(responseHandler, '/connections/$pathConnectionName/features',
         {'fields': fields});
   }
 
   /// ### Get the list of schemas and tables for a connection
   ///
   /// GET /connections/{connection_name}/schemas -> List<Schema>
-  Future<SDKResponse<List<Schema>>> connection_schemas(
+  Future<SDKResponse<List<Schema>>> connectionSchemas(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} database For dialects that support multiple databases, optionally identify which to use
@@ -6103,7 +6037,7 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     List<Schema> responseHandler(dynamic json, String contentType) {
       return json
@@ -6111,7 +6045,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/connections/$path_connection_name/schemas',
+    return get(responseHandler, '/connections/$pathConnectionName/schemas',
         {'database': database, 'cache': cache, 'fields': fields});
   }
 
@@ -6123,17 +6057,17 @@ class LookerSDK extends APIMethods {
   /// For dialects that do **not** support multiple databases, **do not use** the database parameter
   ///
   /// GET /connections/{connection_name}/tables -> List<SchemaTables>
-  Future<SDKResponse<List<SchemaTables>>> connection_tables(
+  Future<SDKResponse<List<SchemaTables>>> connectionTables(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} database Optional. Name of database to use for the query, only if applicable
       String database,
 
       /// @param {String} schema_name Optional. Return only tables for this schema
-      String schema_name,
+      String schemaName,
 
       /// @param {bool} cache True to fetch from cache, false to load fresh
       bool cache,
@@ -6142,11 +6076,11 @@ class LookerSDK extends APIMethods {
       String fields,
 
       /// @param {String} table_filter Optional. Return tables with names that contain this value
-      String table_filter,
+      String tableFilter,
 
       /// @param {int} table_limit Optional. Return tables up to the table_limit
-      int table_limit}) async {
-    var path_connection_name = encodeParam(connection_name);
+      int tableLimit}) async {
+    var pathConnectionName = encodeParam(connectionName);
 
     List<SchemaTables> responseHandler(dynamic json, String contentType) {
       return json
@@ -6154,43 +6088,43 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/connections/$path_connection_name/tables', {
+    return get(responseHandler, '/connections/$pathConnectionName/tables', {
       'database': database,
-      'schema_name': schema_name,
+      'schema_name': schemaName,
       'cache': cache,
       'fields': fields,
-      'table_filter': table_filter,
-      'table_limit': table_limit
+      'table_filter': tableFilter,
+      'table_limit': tableLimit
     });
   }
 
   /// ### Get the columns (and therefore also the tables) in a specific schema
   ///
   /// GET /connections/{connection_name}/columns -> List<SchemaColumns>
-  Future<SDKResponse<List<SchemaColumns>>> connection_columns(
+  Future<SDKResponse<List<SchemaColumns>>> connectionColumns(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} database For dialects that support multiple databases, optionally identify which to use
       String database,
 
       /// @param {String} schema_name Name of schema to use.
-      String schema_name,
+      String schemaName,
 
       /// @param {bool} cache True to fetch from cache, false to load fresh
       bool cache,
 
       /// @param {int} table_limit limits the tables per schema returned
-      int table_limit,
+      int tableLimit,
 
       /// @param {String} table_names only fetch columns for a given (comma-separated) list of tables
-      String table_names,
+      String tableNames,
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     List<SchemaColumns> responseHandler(dynamic json, String contentType) {
       return json
@@ -6198,12 +6132,12 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/connections/$path_connection_name/columns', {
+    return get(responseHandler, '/connections/$pathConnectionName/columns', {
       'database': database,
-      'schema_name': schema_name,
+      'schema_name': schemaName,
       'cache': cache,
-      'table_limit': table_limit,
-      'table_names': table_names,
+      'table_limit': tableLimit,
+      'table_names': tableNames,
       'fields': fields
     });
   }
@@ -6213,18 +6147,18 @@ class LookerSDK extends APIMethods {
   /// **Note**: `column_name` must be a valid column name. It is not a search pattern.
   ///
   /// GET /connections/{connection_name}/search_columns -> List<ColumnSearch>
-  Future<SDKResponse<List<ColumnSearch>>> connection_search_columns(
+  Future<SDKResponse<List<ColumnSearch>>> connectionSearchColumns(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
       {
 
       /// @param {String} column_name Column name to find
-      String column_name,
+      String columnName,
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     List<ColumnSearch> responseHandler(dynamic json, String contentType) {
       return json
@@ -6234,8 +6168,8 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/connections/$path_connection_name/search_columns',
-        {'column_name': column_name, 'fields': fields});
+        '/connections/$pathConnectionName/search_columns',
+        {'column_name': columnName, 'fields': fields});
   }
 
   /// ### Connection cost estimating
@@ -6245,10 +6179,10 @@ class LookerSDK extends APIMethods {
   /// **Note**: If the connection's dialect has no support for cost estimates, an error will be returned
   ///
   /// POST /connections/{connection_name}/cost_estimate -> CostEstimate
-  Future<SDKResponse<CostEstimate>> connection_cost_estimate(
+  Future<SDKResponse<CostEstimate>> connectionCostEstimate(
 
       /// @param {String} connection_name Name of connection
-      String connection_name,
+      String connectionName,
 
       /// @param {CreateCostEstimate} body
       CreateCostEstimate body,
@@ -6256,7 +6190,7 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_connection_name = encodeParam(connection_name);
+    var pathConnectionName = encodeParam(connectionName);
 
     CostEstimate responseHandler(dynamic json, String contentType) {
       return CostEstimate.fromResponse(json, contentType);
@@ -6264,9 +6198,9 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/connections/$path_connection_name/cost_estimate',
+        '/connections/$pathConnectionName/cost_estimate',
         {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   // #endregion Metadata: Connection Metadata Features
@@ -6282,21 +6216,21 @@ class LookerSDK extends APIMethods {
   ///       2. The project will then write out a lockfile including each remote_dependency with its resolved ref.
   ///
   /// POST /projects/{project_id}/manifest/lock_all -> String
-  Future<SDKResponse<dynamic>> lock_all(
+  Future<SDKResponse<dynamic>> lockAll(
 
       /// @param {String} project_id Id of project
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return post(responseHandler, '/projects/$path_project_id/manifest/lock_all',
+    return post(responseHandler, '/projects/$pathProjectId/manifest/lock_all',
         {'fields': fields});
   }
 
@@ -6305,11 +6239,11 @@ class LookerSDK extends APIMethods {
   /// Returns a list of git branches in the project repository
   ///
   /// GET /projects/{project_id}/git_branches -> List<GitBranch>
-  Future<SDKResponse<List<GitBranch>>> all_git_branches(
+  Future<SDKResponse<List<GitBranch>>> allGitBranches(
 
       /// @param {String} project_id Project Id
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     List<GitBranch> responseHandler(dynamic json, String contentType) {
       return json
@@ -6317,7 +6251,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/projects/$path_project_id/git_branches');
+    return get(responseHandler, '/projects/$pathProjectId/git_branches');
   }
 
   /// ### Get the Current Git Branch
@@ -6325,17 +6259,17 @@ class LookerSDK extends APIMethods {
   /// Returns the git branch currently checked out in the given project repository
   ///
   /// GET /projects/{project_id}/git_branch -> GitBranch
-  Future<SDKResponse<GitBranch>> git_branch(
+  Future<SDKResponse<GitBranch>> gitBranch(
 
       /// @param {String} project_id Project Id
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     GitBranch responseHandler(dynamic json, String contentType) {
       return GitBranch.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/projects/$path_project_id/git_branch');
+    return get(responseHandler, '/projects/$pathProjectId/git_branch');
   }
 
   /// ### Checkout and/or reset --hard an existing Git Branch
@@ -6349,21 +6283,21 @@ class LookerSDK extends APIMethods {
   ///   **DANGER** hard reset will be force pushed to the remote. Unsaved changes and commits may be permanently lost.
   ///
   /// PUT /projects/{project_id}/git_branch -> GitBranch
-  Future<SDKResponse<GitBranch>> update_git_branch(
+  Future<SDKResponse<GitBranch>> updateGitBranch(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {WriteGitBranch} body
       WriteGitBranch body) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     GitBranch responseHandler(dynamic json, String contentType) {
       return GitBranch.fromResponse(json, contentType);
     }
 
-    return put(responseHandler, '/projects/$path_project_id/git_branch', null,
-        body == null ? null : body.toJson());
+    return put(responseHandler, '/projects/$pathProjectId/git_branch', null,
+        body?.toJson());
   }
 
   /// ### Create and Checkout a Git Branch
@@ -6376,21 +6310,21 @@ class LookerSDK extends APIMethods {
   ///   If no ref is specified, HEAD of the current branch will be used as the start point for the new branch.
   ///
   /// POST /projects/{project_id}/git_branch -> GitBranch
-  Future<SDKResponse<GitBranch>> create_git_branch(
+  Future<SDKResponse<GitBranch>> createGitBranch(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {WriteGitBranch} body
       WriteGitBranch body) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     GitBranch responseHandler(dynamic json, String contentType) {
       return GitBranch.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/projects/$path_project_id/git_branch', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/projects/$pathProjectId/git_branch', null,
+        body?.toJson());
   }
 
   /// ### Get the specified Git Branch
@@ -6398,22 +6332,22 @@ class LookerSDK extends APIMethods {
   /// Returns the git branch specified in branch_name path param if it exists in the given project repository
   ///
   /// GET /projects/{project_id}/git_branch/{branch_name} -> GitBranch
-  Future<SDKResponse<GitBranch>> find_git_branch(
+  Future<SDKResponse<GitBranch>> findGitBranch(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {String} branch_name Branch Name
-      String branch_name) async {
-    var path_project_id = encodeParam(project_id);
-    var path_branch_name = encodeParam(branch_name);
+      String branchName) async {
+    var pathProjectId = encodeParam(projectId);
+    var pathBranchName = encodeParam(branchName);
 
     GitBranch responseHandler(dynamic json, String contentType) {
       return GitBranch.fromResponse(json, contentType);
     }
 
-    return get(responseHandler,
-        '/projects/$path_project_id/git_branch/$path_branch_name');
+    return get(
+        responseHandler, '/projects/$pathProjectId/git_branch/$pathBranchName');
   }
 
   /// ### Delete the specified Git Branch
@@ -6421,22 +6355,22 @@ class LookerSDK extends APIMethods {
   /// Delete git branch specified in branch_name path param from local and remote of specified project repository
   ///
   /// DELETE /projects/{project_id}/git_branch/{branch_name} -> String
-  Future<SDKResponse<String>> delete_git_branch(
+  Future<SDKResponse<String>> deleteGitBranch(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {String} branch_name Branch Name
-      String branch_name) async {
-    var path_project_id = encodeParam(project_id);
-    var path_branch_name = encodeParam(branch_name);
+      String branchName) async {
+    var pathProjectId = encodeParam(projectId);
+    var pathBranchName = encodeParam(branchName);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler,
-        '/projects/$path_project_id/git_branch/$path_branch_name');
+    return delete(
+        responseHandler, '/projects/$pathProjectId/git_branch/$pathBranchName');
   }
 
   /// ### Deploy a Remote Branch or Ref to Production
@@ -6450,10 +6384,10 @@ class LookerSDK extends APIMethods {
   /// Can only specify either a branch or a ref.
   ///
   /// POST /projects/{project_id}/deploy_ref_to_production -> String
-  Future<SDKResponse<dynamic>> deploy_ref_to_production(
+  Future<SDKResponse<dynamic>> deployRefToProduction(
 
       /// @param {String} project_id Id of project
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} branch Branch to deploy to production
@@ -6461,7 +6395,7 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} ref Ref to deploy to production
       String ref}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
@@ -6469,7 +6403,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/projects/$path_project_id/deploy_ref_to_production',
+        '/projects/$pathProjectId/deploy_ref_to_production',
         {'branch': branch, 'ref': ref});
   }
 
@@ -6487,18 +6421,18 @@ class LookerSDK extends APIMethods {
   /// 3. Pull the production branch into the production project.
   ///
   /// POST /projects/{project_id}/deploy_to_production -> String
-  Future<SDKResponse<dynamic>> deploy_to_production(
+  Future<SDKResponse<dynamic>> deployToProduction(
 
       /// @param {String} project_id Id of project
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return post(
-        responseHandler, '/projects/$path_project_id/deploy_to_production');
+        responseHandler, '/projects/$pathProjectId/deploy_to_production');
   }
 
   /// ### Reset a project to the revision of the project that is in production.
@@ -6506,18 +6440,18 @@ class LookerSDK extends APIMethods {
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   ///
   /// POST /projects/{project_id}/reset_to_production -> String
-  Future<SDKResponse<dynamic>> reset_project_to_production(
+  Future<SDKResponse<dynamic>> resetProjectToProduction(
 
       /// @param {String} project_id Id of project
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return post(
-        responseHandler, '/projects/$path_project_id/reset_to_production');
+        responseHandler, '/projects/$pathProjectId/reset_to_production');
   }
 
   /// ### Reset a project development branch to the revision of the project that is on the remote.
@@ -6525,17 +6459,17 @@ class LookerSDK extends APIMethods {
   /// **DANGER** this will delete any changes that have not been pushed to a remote repository.
   ///
   /// POST /projects/{project_id}/reset_to_remote -> String
-  Future<SDKResponse<dynamic>> reset_project_to_remote(
+  Future<SDKResponse<dynamic>> resetProjectToRemote(
 
       /// @param {String} project_id Id of project
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return post(responseHandler, '/projects/$path_project_id/reset_to_remote');
+    return post(responseHandler, '/projects/$pathProjectId/reset_to_remote');
   }
 
   /// ### Get All Projects
@@ -6543,7 +6477,7 @@ class LookerSDK extends APIMethods {
   /// Returns all projects visible to the current user
   ///
   /// GET /projects -> List<Project>
-  Future<SDKResponse<List<Project>>> all_projects(
+  Future<SDKResponse<List<Project>>> allProjects(
       {
 
       /// @param {String} fields Requested fields
@@ -6566,7 +6500,7 @@ class LookerSDK extends APIMethods {
   /// `git_remote_url` is not allowed. To configure Git for the newly created project, follow the instructions in `update_project`.
   ///
   /// POST /projects -> Project
-  Future<SDKResponse<Project>> create_project(
+  Future<SDKResponse<Project>> createProject(
 
       /// @param {WriteProject} body
       WriteProject body) async {
@@ -6574,8 +6508,7 @@ class LookerSDK extends APIMethods {
       return Project.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/projects', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/projects', null, body?.toJson());
   }
 
   /// ### Get A Project
@@ -6586,19 +6519,18 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Project>> project(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     Project responseHandler(dynamic json, String contentType) {
       return Project.fromResponse(json, contentType);
     }
 
-    return get(
-        responseHandler, '/projects/$path_project_id', {'fields': fields});
+    return get(responseHandler, '/projects/$pathProjectId', {'fields': fields});
   }
 
   /// ### Update Project Configuration
@@ -6625,10 +6557,10 @@ class LookerSDK extends APIMethods {
   /// 1. Call `update_project` setting `git_remote_url` to null and `git_service_name` to "bare".
   ///
   /// PATCH /projects/{project_id} -> Project
-  Future<SDKResponse<Project>> update_project(
+  Future<SDKResponse<Project>> updateProject(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {WriteProject} body
       WriteProject body,
@@ -6636,14 +6568,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     Project responseHandler(dynamic json, String contentType) {
       return Project.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/projects/$path_project_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/projects/$pathProjectId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Get A Projects Manifest object
@@ -6654,14 +6586,14 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Manifest>> manifest(
 
       /// @param {String} project_id Project Id
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     Manifest responseHandler(dynamic json, String contentType) {
       return Manifest.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/projects/$path_project_id/manifest');
+    return get(responseHandler, '/projects/$pathProjectId/manifest');
   }
 
   /// ### Git Deploy Key
@@ -6669,17 +6601,17 @@ class LookerSDK extends APIMethods {
   /// Returns the ssh public key previously created for a project's git repository.
   ///
   /// GET /projects/{project_id}/git/deploy_key -> String
-  Future<SDKResponse<String>> git_deploy_key(
+  Future<SDKResponse<String>> gitDeployKey(
 
       /// @param {String} project_id Project Id
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(responseHandler, '/projects/$path_project_id/git/deploy_key');
+    return get(responseHandler, '/projects/$pathProjectId/git/deploy_key');
   }
 
   /// ### Create Git Deploy Key
@@ -6693,17 +6625,17 @@ class LookerSDK extends APIMethods {
   /// validate and accept git requests from the Looker server.
   ///
   /// POST /projects/{project_id}/git/deploy_key -> String
-  Future<SDKResponse<String>> create_git_deploy_key(
+  Future<SDKResponse<String>> createGitDeployKey(
 
       /// @param {String} project_id Project Id
-      String project_id) async {
-    var path_project_id = encodeParam(project_id);
+      String projectId) async {
+    var pathProjectId = encodeParam(projectId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return post(responseHandler, '/projects/$path_project_id/git/deploy_key');
+    return post(responseHandler, '/projects/$pathProjectId/git/deploy_key');
   }
 
   /// ### Get Cached Project Validation Results
@@ -6720,21 +6652,21 @@ class LookerSDK extends APIMethods {
   /// reflect the current state of the project.
   ///
   /// GET /projects/{project_id}/validate -> ProjectValidationCache
-  Future<SDKResponse<ProjectValidationCache>> project_validation_results(
+  Future<SDKResponse<ProjectValidationCache>> projectValidationResults(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     ProjectValidationCache responseHandler(dynamic json, String contentType) {
       return ProjectValidationCache.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/projects/$path_project_id/validate',
+    return get(responseHandler, '/projects/$pathProjectId/validate',
         {'fields': fields});
   }
 
@@ -6749,21 +6681,21 @@ class LookerSDK extends APIMethods {
   /// the most recent project validation (without recomputing), use `project_validation_results(project_id)`
   ///
   /// POST /projects/{project_id}/validate -> ProjectValidation
-  Future<SDKResponse<ProjectValidation>> validate_project(
+  Future<SDKResponse<ProjectValidation>> validateProject(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     ProjectValidation responseHandler(dynamic json, String contentType) {
       return ProjectValidation.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/projects/$path_project_id/validate',
+    return post(responseHandler, '/projects/$pathProjectId/validate',
         {'fields': fields});
   }
 
@@ -6772,21 +6704,21 @@ class LookerSDK extends APIMethods {
   /// Returns information about the state of the project files in the currently selected workspace
   ///
   /// GET /projects/{project_id}/current_workspace -> ProjectWorkspace
-  Future<SDKResponse<ProjectWorkspace>> project_workspace(
+  Future<SDKResponse<ProjectWorkspace>> projectWorkspace(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     ProjectWorkspace responseHandler(dynamic json, String contentType) {
       return ProjectWorkspace.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/projects/$path_project_id/current_workspace',
+    return get(responseHandler, '/projects/$pathProjectId/current_workspace',
         {'fields': fields});
   }
 
@@ -6795,15 +6727,15 @@ class LookerSDK extends APIMethods {
   /// Returns a list of the files in the project
   ///
   /// GET /projects/{project_id}/files -> List<ProjectFile>
-  Future<SDKResponse<List<ProjectFile>>> all_project_files(
+  Future<SDKResponse<List<ProjectFile>>> allProjectFiles(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     List<ProjectFile> responseHandler(dynamic json, String contentType) {
       return json
@@ -6811,8 +6743,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/projects/$path_project_id/files',
-        {'fields': fields});
+    return get(
+        responseHandler, '/projects/$pathProjectId/files', {'fields': fields});
   }
 
   /// ### Get Project File Info
@@ -6820,25 +6752,25 @@ class LookerSDK extends APIMethods {
   /// Returns information about a file in the project
   ///
   /// GET /projects/{project_id}/files/file -> ProjectFile
-  Future<SDKResponse<ProjectFile>> project_file(
+  Future<SDKResponse<ProjectFile>> projectFile(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {String} file_id File Id
-      String file_id,
+      String fileId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     ProjectFile responseHandler(dynamic json, String contentType) {
       return ProjectFile.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/projects/$path_project_id/files/file',
-        {'file_id': file_id, 'fields': fields});
+    return get(responseHandler, '/projects/$pathProjectId/files/file',
+        {'file_id': fileId, 'fields': fields});
   }
 
   /// ### Get All Git Connection Tests
@@ -6853,15 +6785,15 @@ class LookerSDK extends APIMethods {
   /// For example, a late-stage test for write access is meaningless if connecting to the git server (an early test) is failing.
   ///
   /// GET /projects/{project_id}/git_connection_tests -> List<GitConnectionTest>
-  Future<SDKResponse<List<GitConnectionTest>>> all_git_connection_tests(
+  Future<SDKResponse<List<GitConnectionTest>>> allGitConnectionTests(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
-      String remote_url}) async {
-    var path_project_id = encodeParam(project_id);
+      String remoteUrl}) async {
+    var pathProjectId = encodeParam(projectId);
 
     List<GitConnectionTest> responseHandler(dynamic json, String contentType) {
       return json
@@ -6870,10 +6802,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(
-        responseHandler,
-        '/projects/$path_project_id/git_connection_tests',
-        {'remote_url': remote_url});
+    return get(responseHandler, '/projects/$pathProjectId/git_connection_tests',
+        {'remote_url': remoteUrl});
   }
 
   /// ### Run a git connection test
@@ -6885,22 +6815,22 @@ class LookerSDK extends APIMethods {
   /// Tests should be run in the order they are returned by [Get All Git Connection Tests](#!/Project/all_git_connection_tests).
   ///
   /// GET /projects/{project_id}/git_connection_tests/{test_id} -> GitConnectionTestResult
-  Future<SDKResponse<GitConnectionTestResult>> run_git_connection_test(
+  Future<SDKResponse<GitConnectionTestResult>> runGitConnectionTest(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {String} test_id Test Id
-      String test_id,
+      String testId,
       {
 
       /// @param {String} remote_url (Optional: leave blank for root project) The remote url for remote dependency to test.
-      String remote_url,
+      String remoteUrl,
 
       /// @param {String} use_production (Optional: leave blank for dev credentials) Whether to use git production credentials.
-      String use_production}) async {
-    var path_project_id = encodeParam(project_id);
-    var path_test_id = encodeParam(test_id);
+      String useProduction}) async {
+    var pathProjectId = encodeParam(projectId);
+    var pathTestId = encodeParam(testId);
 
     GitConnectionTestResult responseHandler(dynamic json, String contentType) {
       return GitConnectionTestResult.fromResponse(json, contentType);
@@ -6908,8 +6838,8 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/projects/$path_project_id/git_connection_tests/$path_test_id',
-        {'remote_url': remote_url, 'use_production': use_production});
+        '/projects/$pathProjectId/git_connection_tests/$pathTestId',
+        {'remote_url': remoteUrl, 'use_production': useProduction});
   }
 
   /// ### Get All LookML Tests
@@ -6919,15 +6849,15 @@ class LookerSDK extends APIMethods {
   /// Call [Run LookML Test](#!/Project/run_lookml_test) to execute tests.
   ///
   /// GET /projects/{project_id}/lookml_tests -> List<LookmlTest>
-  Future<SDKResponse<List<LookmlTest>>> all_lookml_tests(
+  Future<SDKResponse<List<LookmlTest>>> allLookmlTests(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} file_id File Id
-      String file_id}) async {
-    var path_project_id = encodeParam(project_id);
+      String fileId}) async {
+    var pathProjectId = encodeParam(projectId);
 
     List<LookmlTest> responseHandler(dynamic json, String contentType) {
       return json
@@ -6935,8 +6865,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/projects/$path_project_id/lookml_tests',
-        {'file_id': file_id});
+    return get(responseHandler, '/projects/$pathProjectId/lookml_tests',
+        {'file_id': fileId});
   }
 
   /// ### Run LookML Tests
@@ -6944,21 +6874,21 @@ class LookerSDK extends APIMethods {
   /// Runs all tests in the project, optionally filtered by file, test, and/or model.
   ///
   /// GET /projects/{project_id}/lookml_tests/run -> List<LookmlTestResult>
-  Future<SDKResponse<List<LookmlTestResult>>> run_lookml_test(
+  Future<SDKResponse<List<LookmlTestResult>>> runLookmlTest(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
       {
 
       /// @param {String} file_id File Name
-      String file_id,
+      String fileId,
 
       /// @param {String} test Test Name
       String test,
 
       /// @param {String} model Model Name
       String model}) async {
-    var path_project_id = encodeParam(project_id);
+    var pathProjectId = encodeParam(projectId);
 
     List<LookmlTestResult> responseHandler(dynamic json, String contentType) {
       return json
@@ -6967,8 +6897,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/projects/$path_project_id/lookml_tests/run',
-        {'file_id': file_id, 'test': test, 'model': model});
+    return get(responseHandler, '/projects/$pathProjectId/lookml_tests/run',
+        {'file_id': fileId, 'test': test, 'model': model});
   }
 
   /// ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
@@ -6976,24 +6906,24 @@ class LookerSDK extends APIMethods {
   /// This is an internal-only, undocumented route.
   ///
   /// POST /projects/{project_id}/tag -> Project
-  Future<SDKResponse<Project>> tag_ref(
+  Future<SDKResponse<Project>> tagRef(
 
       /// @param {String} project_id Project Id
-      String project_id,
+      String projectId,
 
       /// @param {WriteProject} body
       WriteProject body,
       {
 
       /// @param {String} commit_sha (Optional): Commit Sha to Tag
-      String commit_sha,
+      String commitSha,
 
       /// @param {String} tag_name Tag Name
-      String tag_name,
+      String tagName,
 
       /// @param {String} tag_message (Optional): Tag Message
-      String tag_message}) async {
-    var path_project_id = encodeParam(project_id);
+      String tagMessage}) async {
+    var pathProjectId = encodeParam(projectId);
 
     Project responseHandler(dynamic json, String contentType) {
       return Project.fromResponse(json, contentType);
@@ -7001,13 +6931,13 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/projects/$path_project_id/tag',
+        '/projects/$pathProjectId/tag',
         {
-          'commit_sha': commit_sha,
-          'tag_name': tag_name,
-          'tag_message': tag_message
+          'commit_sha': commitSha,
+          'tag_name': tagName,
+          'tag_message': tagMessage
         },
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Configure Repository Credential for a remote dependency
@@ -7018,18 +6948,18 @@ class LookerSDK extends APIMethods {
   /// `credential_id` is required.
   ///
   /// PUT /projects/{root_project_id}/credential/{credential_id} -> RepositoryCredential
-  Future<SDKResponse<RepositoryCredential>> update_repository_credential(
+  Future<SDKResponse<RepositoryCredential>> updateRepositoryCredential(
 
       /// @param {String} root_project_id Root Project Id
-      String root_project_id,
+      String rootProjectId,
 
       /// @param {String} credential_id Credential Id
-      String credential_id,
+      String credentialId,
 
       /// @param {WriteRepositoryCredential} body
       WriteRepositoryCredential body) async {
-    var path_root_project_id = encodeParam(root_project_id);
-    var path_credential_id = encodeParam(credential_id);
+    var pathRootProjectId = encodeParam(rootProjectId);
+    var pathCredentialId = encodeParam(credentialId);
 
     RepositoryCredential responseHandler(dynamic json, String contentType) {
       return RepositoryCredential.fromResponse(json, contentType);
@@ -7037,9 +6967,9 @@ class LookerSDK extends APIMethods {
 
     return put(
         responseHandler,
-        '/projects/$path_root_project_id/credential/$path_credential_id',
+        '/projects/$pathRootProjectId/credential/$pathCredentialId',
         null,
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Repository Credential for a remote dependency
@@ -7050,22 +6980,22 @@ class LookerSDK extends APIMethods {
   /// `credential_id` is required.
   ///
   /// DELETE /projects/{root_project_id}/credential/{credential_id} -> String
-  Future<SDKResponse<String>> delete_repository_credential(
+  Future<SDKResponse<String>> deleteRepositoryCredential(
 
       /// @param {String} root_project_id Root Project Id
-      String root_project_id,
+      String rootProjectId,
 
       /// @param {String} credential_id Credential Id
-      String credential_id) async {
-    var path_root_project_id = encodeParam(root_project_id);
-    var path_credential_id = encodeParam(credential_id);
+      String credentialId) async {
+    var pathRootProjectId = encodeParam(rootProjectId);
+    var pathCredentialId = encodeParam(credentialId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(responseHandler,
-        '/projects/$path_root_project_id/credential/$path_credential_id');
+        '/projects/$pathRootProjectId/credential/$pathCredentialId');
   }
 
   /// ### Get all Repository Credentials for a project
@@ -7073,12 +7003,11 @@ class LookerSDK extends APIMethods {
   /// `root_project_id` is required.
   ///
   /// GET /projects/{root_project_id}/credentials -> List<RepositoryCredential>
-  Future<SDKResponse<List<RepositoryCredential>>>
-      get_all_repository_credentials(
+  Future<SDKResponse<List<RepositoryCredential>>> getAllRepositoryCredentials(
 
-          /// @param {String} root_project_id Root Project Id
-          String root_project_id) async {
-    var path_root_project_id = encodeParam(root_project_id);
+      /// @param {String} root_project_id Root Project Id
+      String rootProjectId) async {
+    var pathRootProjectId = encodeParam(rootProjectId);
 
     List<RepositoryCredential> responseHandler(
         dynamic json, String contentType) {
@@ -7088,7 +7017,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/projects/$path_root_project_id/credentials');
+    return get(responseHandler, '/projects/$pathRootProjectId/credentials');
   }
 
   // #endregion Project: Manage Projects
@@ -7103,7 +7032,7 @@ class LookerSDK extends APIMethods {
   /// After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
   ///
   /// POST /query_tasks -> QueryTask
-  Future<SDKResponse<QueryTask>> create_query_task(
+  Future<SDKResponse<QueryTask>> createQueryTask(
 
       /// @param {WriteCreateQueryTask} body
       WriteCreateQueryTask body,
@@ -7113,37 +7042,37 @@ class LookerSDK extends APIMethods {
       int limit,
 
       /// @param {bool} apply_formatting Apply model-specified formatting to each result.
-      bool apply_formatting,
+      bool applyFormatting,
 
       /// @param {bool} apply_vis Apply visualization options to results.
-      bool apply_vis,
+      bool applyVis,
 
       /// @param {bool} cache Get results from cache if available.
       bool cache,
 
       /// @param {int} image_width Render width for image formats.
-      int image_width,
+      int imageWidth,
 
       /// @param {int} image_height Render height for image formats.
-      int image_height,
+      int imageHeight,
 
       /// @param {bool} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-      bool generate_drill_links,
+      bool generateDrillLinks,
 
       /// @param {bool} force_production Force use of production models even if the user is in development mode.
-      bool force_production,
+      bool forceProduction,
 
       /// @param {bool} cache_only Retrieve any results from cache even if the results have expired.
-      bool cache_only,
+      bool cacheOnly,
 
       /// @param {String} path_prefix Prefix to use for drill links (url encoded).
-      String path_prefix,
+      String pathPrefix,
 
       /// @param {bool} rebuild_pdts Rebuild PDTS used in query.
-      bool rebuild_pdts,
+      bool rebuildPdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs,
+      bool serverTableCalcs,
 
       /// @param {String} fields Requested fields
       String fields}) async {
@@ -7156,20 +7085,20 @@ class LookerSDK extends APIMethods {
         '/query_tasks',
         {
           'limit': limit,
-          'apply_formatting': apply_formatting,
-          'apply_vis': apply_vis,
+          'apply_formatting': applyFormatting,
+          'apply_vis': applyVis,
           'cache': cache,
-          'image_width': image_width,
-          'image_height': image_height,
-          'generate_drill_links': generate_drill_links,
-          'force_production': force_production,
-          'cache_only': cache_only,
-          'path_prefix': path_prefix,
-          'rebuild_pdts': rebuild_pdts,
-          'server_table_calcs': server_table_calcs,
+          'image_width': imageWidth,
+          'image_height': imageHeight,
+          'generate_drill_links': generateDrillLinks,
+          'force_production': forceProduction,
+          'cache_only': cacheOnly,
+          'path_prefix': pathPrefix,
+          'rebuild_pdts': rebuildPdts,
+          'server_table_calcs': serverTableCalcs,
           'fields': fields
         },
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Fetch results of multiple async queries
@@ -7181,16 +7110,16 @@ class LookerSDK extends APIMethods {
   /// If the user making the API request does not have sufficient privileges to view a Query Task result, the result will have a status of 'missing'
   ///
   /// GET /query_tasks/multi_results -> Map<String,dynamic>
-  Future<SDKResponse<Map<String, dynamic>>> query_task_multi_results(
+  Future<SDKResponse<Map<String, dynamic>>> queryTaskMultiResults(
 
       /// @param {DelimList<String>} query_task_ids List of Query Task IDs
-      DelimList<String> query_task_ids) async {
+      DelimList<String> queryTaskIds) async {
     Map<String, dynamic> responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return get(responseHandler, '/query_tasks/multi_results',
-        {'query_task_ids': query_task_ids});
+        {'query_task_ids': queryTaskIds});
   }
 
   /// ### Get Query Task details
@@ -7202,22 +7131,22 @@ class LookerSDK extends APIMethods {
   /// Use [create_query_task()](#!/Query/create_query_task) to create an async query task.
   ///
   /// GET /query_tasks/{query_task_id} -> QueryTask
-  Future<SDKResponse<QueryTask>> query_task(
+  Future<SDKResponse<QueryTask>> queryTask(
 
       /// @param {String} query_task_id ID of the Query Task
-      String query_task_id,
+      String queryTaskId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_query_task_id = encodeParam(query_task_id);
+    var pathQueryTaskId = encodeParam(queryTaskId);
 
     QueryTask responseHandler(dynamic json, String contentType) {
       return QueryTask.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/query_tasks/$path_query_task_id',
-        {'fields': fields});
+    return get(
+        responseHandler, '/query_tasks/$pathQueryTaskId', {'fields': fields});
   }
 
   /// ### Get Async Query Results
@@ -7245,17 +7174,17 @@ class LookerSDK extends APIMethods {
   /// These data formats can only carry row data, and error info is not row data.
   ///
   /// GET /query_tasks/{query_task_id}/results -> String
-  Future<SDKResponse<dynamic>> query_task_results(
+  Future<SDKResponse<dynamic>> queryTaskResults(
 
       /// @param {String} query_task_id ID of the Query Task
-      String query_task_id) async {
-    var path_query_task_id = encodeParam(query_task_id);
+      String queryTaskId) async {
+    var pathQueryTaskId = encodeParam(queryTaskId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(responseHandler, '/query_tasks/$path_query_task_id/results');
+    return get(responseHandler, '/query_tasks/$pathQueryTaskId/results');
   }
 
   /// ### Get a previously created query by id.
@@ -7280,18 +7209,18 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Query>> query(
 
       /// @param {int} query_id Id of query
-      int query_id,
+      int queryId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_query_id = encodeParam(query_id);
+    var pathQueryId = encodeParam(queryId);
 
     Query responseHandler(dynamic json, String contentType) {
       return Query.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/queries/$path_query_id', {'fields': fields});
+    return get(responseHandler, '/queries/$pathQueryId', {'fields': fields});
   }
 
   /// ### Get the query for a given query slug.
@@ -7313,7 +7242,7 @@ class LookerSDK extends APIMethods {
   /// 'aogBgL6o3cKK1jN3RoZl5s' is the slug.
   ///
   /// GET /queries/slug/{slug} -> Query
-  Future<SDKResponse<Query>> query_for_slug(
+  Future<SDKResponse<Query>> queryForSlug(
 
       /// @param {String} slug Slug of query
       String slug,
@@ -7321,13 +7250,13 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_slug = encodeParam(slug);
+    var pathSlug = encodeParam(slug);
 
     Query responseHandler(dynamic json, String contentType) {
       return Query.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/queries/slug/$path_slug', {'fields': fields});
+    return get(responseHandler, '/queries/slug/$pathSlug', {'fields': fields});
   }
 
   /// ### Create a query.
@@ -7340,7 +7269,7 @@ class LookerSDK extends APIMethods {
   /// The query parameters are passed as json in the body of the request.
   ///
   /// POST /queries -> Query
-  Future<SDKResponse<Query>> create_query(
+  Future<SDKResponse<Query>> createQuery(
 
       /// @param {WriteQuery} body
       WriteQuery body,
@@ -7352,8 +7281,8 @@ class LookerSDK extends APIMethods {
       return Query.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/queries', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/queries', {'fields': fields}, body?.toJson());
   }
 
   /// ### Run a saved query.
@@ -7381,74 +7310,73 @@ class LookerSDK extends APIMethods {
   /// GET /queries/{query_id}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> run_query(
+  Future<SDKResponse<dynamic>> runQuery(
 
       /// @param {int} query_id Id of query
-      int query_id,
+      int queryId,
 
       /// @param {String} result_format Format of result
-      String result_format,
+      String resultFormat,
       {
 
       /// @param {int} limit Row limit (may override the limit in the saved query).
       int limit,
 
       /// @param {bool} apply_formatting Apply model-specified formatting to each result.
-      bool apply_formatting,
+      bool applyFormatting,
 
       /// @param {bool} apply_vis Apply visualization options to results.
-      bool apply_vis,
+      bool applyVis,
 
       /// @param {bool} cache Get results from cache if available.
       bool cache,
 
       /// @param {int} image_width Render width for image formats.
-      int image_width,
+      int imageWidth,
 
       /// @param {int} image_height Render height for image formats.
-      int image_height,
+      int imageHeight,
 
       /// @param {bool} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-      bool generate_drill_links,
+      bool generateDrillLinks,
 
       /// @param {bool} force_production Force use of production models even if the user is in development mode.
-      bool force_production,
+      bool forceProduction,
 
       /// @param {bool} cache_only Retrieve any results from cache even if the results have expired.
-      bool cache_only,
+      bool cacheOnly,
 
       /// @param {String} path_prefix Prefix to use for drill links (url encoded).
-      String path_prefix,
+      String pathPrefix,
 
       /// @param {bool} rebuild_pdts Rebuild PDTS used in query.
-      bool rebuild_pdts,
+      bool rebuildPdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs,
+      bool serverTableCalcs,
 
       /// @param {String} source Specifies the source of this call.
       String source}) async {
-    var path_query_id = encodeParam(query_id);
-    var path_result_format = encodeParam(result_format);
+    var pathQueryId = encodeParam(queryId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(
-        responseHandler, '/queries/$path_query_id/run/$path_result_format', {
+    return get(responseHandler, '/queries/$pathQueryId/run/$pathResultFormat', {
       'limit': limit,
-      'apply_formatting': apply_formatting,
-      'apply_vis': apply_vis,
+      'apply_formatting': applyFormatting,
+      'apply_vis': applyVis,
       'cache': cache,
-      'image_width': image_width,
-      'image_height': image_height,
-      'generate_drill_links': generate_drill_links,
-      'force_production': force_production,
-      'cache_only': cache_only,
-      'path_prefix': path_prefix,
-      'rebuild_pdts': rebuild_pdts,
-      'server_table_calcs': server_table_calcs,
+      'image_width': imageWidth,
+      'image_height': imageHeight,
+      'generate_drill_links': generateDrillLinks,
+      'force_production': forceProduction,
+      'cache_only': cacheOnly,
+      'path_prefix': pathPrefix,
+      'rebuild_pdts': rebuildPdts,
+      'server_table_calcs': serverTableCalcs,
       'source': source
     });
   }
@@ -7507,10 +7435,10 @@ class LookerSDK extends APIMethods {
   /// POST /queries/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> run_inline_query(
+  Future<SDKResponse<dynamic>> runInlineQuery(
 
       /// @param {String} result_format Format of result
-      String result_format,
+      String resultFormat,
 
       /// @param {WriteQuery} body
       WriteQuery body,
@@ -7520,38 +7448,38 @@ class LookerSDK extends APIMethods {
       int limit,
 
       /// @param {bool} apply_formatting Apply model-specified formatting to each result.
-      bool apply_formatting,
+      bool applyFormatting,
 
       /// @param {bool} apply_vis Apply visualization options to results.
-      bool apply_vis,
+      bool applyVis,
 
       /// @param {bool} cache Get results from cache if available.
       bool cache,
 
       /// @param {int} image_width Render width for image formats.
-      int image_width,
+      int imageWidth,
 
       /// @param {int} image_height Render height for image formats.
-      int image_height,
+      int imageHeight,
 
       /// @param {bool} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-      bool generate_drill_links,
+      bool generateDrillLinks,
 
       /// @param {bool} force_production Force use of production models even if the user is in development mode.
-      bool force_production,
+      bool forceProduction,
 
       /// @param {bool} cache_only Retrieve any results from cache even if the results have expired.
-      bool cache_only,
+      bool cacheOnly,
 
       /// @param {String} path_prefix Prefix to use for drill links (url encoded).
-      String path_prefix,
+      String pathPrefix,
 
       /// @param {bool} rebuild_pdts Rebuild PDTS used in query.
-      bool rebuild_pdts,
+      bool rebuildPdts,
 
       /// @param {bool} server_table_calcs Perform table calculations on query results
-      bool server_table_calcs}) async {
-    var path_result_format = encodeParam(result_format);
+      bool serverTableCalcs}) async {
+    var pathResultFormat = encodeParam(resultFormat);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
@@ -7559,22 +7487,22 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/queries/run/$path_result_format',
+        '/queries/run/$pathResultFormat',
         {
           'limit': limit,
-          'apply_formatting': apply_formatting,
-          'apply_vis': apply_vis,
+          'apply_formatting': applyFormatting,
+          'apply_vis': applyVis,
           'cache': cache,
-          'image_width': image_width,
-          'image_height': image_height,
-          'generate_drill_links': generate_drill_links,
-          'force_production': force_production,
-          'cache_only': cache_only,
-          'path_prefix': path_prefix,
-          'rebuild_pdts': rebuild_pdts,
-          'server_table_calcs': server_table_calcs
+          'image_width': imageWidth,
+          'image_height': imageHeight,
+          'generate_drill_links': generateDrillLinks,
+          'force_production': forceProduction,
+          'cache_only': cacheOnly,
+          'path_prefix': pathPrefix,
+          'rebuild_pdts': rebuildPdts,
+          'server_table_calcs': serverTableCalcs
         },
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Run an URL encoded query.
@@ -7633,26 +7561,26 @@ class LookerSDK extends APIMethods {
   /// GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> run_url_encoded_query(
+  Future<SDKResponse<dynamic>> runUrlEncodedQuery(
 
       /// @param {String} model_name Model name
-      String model_name,
+      String modelName,
 
       /// @param {String} view_name View name
-      String view_name,
+      String viewName,
 
       /// @param {String} result_format Format of result
-      String result_format) async {
-    var path_model_name = encodeParam(model_name);
-    var path_view_name = encodeParam(view_name);
-    var path_result_format = encodeParam(result_format);
+      String resultFormat) async {
+    var pathModelName = encodeParam(modelName);
+    var pathViewName = encodeParam(viewName);
+    var pathResultFormat = encodeParam(resultFormat);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return get(responseHandler,
-        '/queries/models/$path_model_name/views/$path_view_name/run/$path_result_format');
+        '/queries/models/$pathModelName/views/$pathViewName/run/$pathResultFormat');
   }
 
   /// ### Get Merge Query
@@ -7660,21 +7588,21 @@ class LookerSDK extends APIMethods {
   /// Returns a merge query object given its id.
   ///
   /// GET /merge_queries/{merge_query_id} -> MergeQuery
-  Future<SDKResponse<MergeQuery>> merge_query(
+  Future<SDKResponse<MergeQuery>> mergeQuery(
 
       /// @param {String} merge_query_id Merge Query Id
-      String merge_query_id,
+      String mergeQueryId,
       {
 
       /// @param {String} fields Requested fields
       String fields}) async {
-    var path_merge_query_id = encodeParam(merge_query_id);
+    var pathMergeQueryId = encodeParam(mergeQueryId);
 
     MergeQuery responseHandler(dynamic json, String contentType) {
       return MergeQuery.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/merge_queries/$path_merge_query_id',
+    return get(responseHandler, '/merge_queries/$pathMergeQueryId',
         {'fields': fields});
   }
 
@@ -7697,7 +7625,7 @@ class LookerSDK extends APIMethods {
   /// change to the contents of a merge query will produce a new object with a new id.
   ///
   /// POST /merge_queries -> MergeQuery
-  Future<SDKResponse<MergeQuery>> create_merge_query(
+  Future<SDKResponse<MergeQuery>> createMergeQuery(
       {
 
       /// @param {WriteMergeQuery} body
@@ -7709,14 +7637,14 @@ class LookerSDK extends APIMethods {
       return MergeQuery.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/merge_queries', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/merge_queries', {'fields': fields}, body?.toJson());
   }
 
   /// Get information about all running queries.
   ///
   /// GET /running_queries -> List<RunningQueries>
-  Future<SDKResponse<List<RunningQueries>>> all_running_queries() async {
+  Future<SDKResponse<List<RunningQueries>>> allRunningQueries() async {
     List<RunningQueries> responseHandler(dynamic json, String contentType) {
       return json
           .map<RunningQueries>(
@@ -7730,33 +7658,33 @@ class LookerSDK extends APIMethods {
   /// Kill a query with a specific query_task_id.
   ///
   /// DELETE /running_queries/{query_task_id} -> String
-  Future<SDKResponse<String>> kill_query(
+  Future<SDKResponse<String>> killQuery(
 
       /// @param {String} query_task_id Query task id.
-      String query_task_id) async {
-    var path_query_task_id = encodeParam(query_task_id);
+      String queryTaskId) async {
+    var pathQueryTaskId = encodeParam(queryTaskId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/running_queries/$path_query_task_id');
+    return delete(responseHandler, '/running_queries/$pathQueryTaskId');
   }
 
   /// Get a SQL Runner query.
   ///
   /// GET /sql_queries/{slug} -> SqlQuery
-  Future<SDKResponse<SqlQuery>> sql_query(
+  Future<SDKResponse<SqlQuery>> sqlQuery(
 
       /// @param {String} slug slug of query
       String slug) async {
-    var path_slug = encodeParam(slug);
+    var pathSlug = encodeParam(slug);
 
     SqlQuery responseHandler(dynamic json, String contentType) {
       return SqlQuery.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/sql_queries/$path_slug');
+    return get(responseHandler, '/sql_queries/$pathSlug');
   }
 
   /// ### Create a SQL Runner Query
@@ -7764,7 +7692,7 @@ class LookerSDK extends APIMethods {
   /// Either the `connection_name` or `model_name` parameter MUST be provided.
   ///
   /// POST /sql_queries -> SqlQuery
-  Future<SDKResponse<SqlQuery>> create_sql_query(
+  Future<SDKResponse<SqlQuery>> createSqlQuery(
 
       /// @param {SqlQueryCreate} body
       SqlQueryCreate body) async {
@@ -7772,8 +7700,7 @@ class LookerSDK extends APIMethods {
       return SqlQuery.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/sql_queries', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/sql_queries', null, body?.toJson());
   }
 
   /// Execute a SQL Runner query in a given result_format.
@@ -7781,27 +7708,25 @@ class LookerSDK extends APIMethods {
   /// POST /sql_queries/{slug}/run/{result_format} -> String
   ///
   /// **Note**: Binary content may be returned by this method.
-  Future<SDKResponse<dynamic>> run_sql_query(
+  Future<SDKResponse<dynamic>> runSqlQuery(
 
       /// @param {String} slug slug of query
       String slug,
 
       /// @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
-      String result_format,
+      String resultFormat,
       {
 
       /// @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
       String download}) async {
-    var path_slug = encodeParam(slug);
-    var path_result_format = encodeParam(result_format);
+    var pathSlug = encodeParam(slug);
+    var pathResultFormat = encodeParam(resultFormat);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return post(
-        responseHandler,
-        '/sql_queries/$path_slug/run/$path_result_format',
+    return post(responseHandler, '/sql_queries/$pathSlug/run/$pathResultFormat',
         {'download': download});
   }
 
@@ -7816,13 +7741,13 @@ class LookerSDK extends APIMethods {
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   ///
   /// POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
-  Future<SDKResponse<RenderTask>> create_look_render_task(
+  Future<SDKResponse<RenderTask>> createLookRenderTask(
 
       /// @param {int} look_id Id of look to render
-      int look_id,
+      int lookId,
 
       /// @param {String} result_format Output type: png, or jpg
-      String result_format,
+      String resultFormat,
 
       /// @param {int} width Output width in pixels
       int width,
@@ -7833,8 +7758,8 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_look_id = encodeParam(look_id);
-    var path_result_format = encodeParam(result_format);
+    var pathLookId = encodeParam(lookId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     RenderTask responseHandler(dynamic json, String contentType) {
       return RenderTask.fromResponse(json, contentType);
@@ -7842,7 +7767,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/render_tasks/looks/$path_look_id/$path_result_format',
+        '/render_tasks/looks/$pathLookId/$pathResultFormat',
         {'width': width, 'height': height, 'fields': fields});
   }
 
@@ -7853,13 +7778,13 @@ class LookerSDK extends APIMethods {
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   ///
   /// POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
-  Future<SDKResponse<RenderTask>> create_query_render_task(
+  Future<SDKResponse<RenderTask>> createQueryRenderTask(
 
       /// @param {int} query_id Id of the query to render
-      int query_id,
+      int queryId,
 
       /// @param {String} result_format Output type: png or jpg
-      String result_format,
+      String resultFormat,
 
       /// @param {int} width Output width in pixels
       int width,
@@ -7870,8 +7795,8 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_query_id = encodeParam(query_id);
-    var path_result_format = encodeParam(result_format);
+    var pathQueryId = encodeParam(queryId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     RenderTask responseHandler(dynamic json, String contentType) {
       return RenderTask.fromResponse(json, contentType);
@@ -7879,7 +7804,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/render_tasks/queries/$path_query_id/$path_result_format',
+        '/render_tasks/queries/$pathQueryId/$pathResultFormat',
         {'width': width, 'height': height, 'fields': fields});
   }
 
@@ -7890,13 +7815,13 @@ class LookerSDK extends APIMethods {
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   ///
   /// POST /render_tasks/dashboards/{dashboard_id}/{result_format} -> RenderTask
-  Future<SDKResponse<RenderTask>> create_dashboard_render_task(
+  Future<SDKResponse<RenderTask>> createDashboardRenderTask(
 
       /// @param {String} dashboard_id Id of dashboard to render. The ID can be a LookML dashboard also.
-      String dashboard_id,
+      String dashboardId,
 
       /// @param {String} result_format Output type: pdf, png, or jpg
-      String result_format,
+      String resultFormat,
 
       /// @param {CreateDashboardRenderTask} body
       CreateDashboardRenderTask body,
@@ -7912,15 +7837,15 @@ class LookerSDK extends APIMethods {
       String fields,
 
       /// @param {String} pdf_paper_size Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]
-      String pdf_paper_size,
+      String pdfPaperSize,
 
       /// @param {bool} pdf_landscape Whether to render pdf in landscape paper orientation
-      bool pdf_landscape,
+      bool pdfLandscape,
 
       /// @param {bool} long_tables Whether or not to expand table vis to full length
-      bool long_tables}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
-    var path_result_format = encodeParam(result_format);
+      bool longTables}) async {
+    var pathDashboardId = encodeParam(dashboardId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     RenderTask responseHandler(dynamic json, String contentType) {
       return RenderTask.fromResponse(json, contentType);
@@ -7928,16 +7853,16 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/render_tasks/dashboards/$path_dashboard_id/$path_result_format',
+        '/render_tasks/dashboards/$pathDashboardId/$pathResultFormat',
         {
           'width': width,
           'height': height,
           'fields': fields,
-          'pdf_paper_size': pdf_paper_size,
-          'pdf_landscape': pdf_landscape,
-          'long_tables': long_tables
+          'pdf_paper_size': pdfPaperSize,
+          'pdf_landscape': pdfLandscape,
+          'long_tables': longTables
         },
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about a render task.
@@ -7947,22 +7872,22 @@ class LookerSDK extends APIMethods {
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   ///
   /// GET /render_tasks/{render_task_id} -> RenderTask
-  Future<SDKResponse<RenderTask>> render_task(
+  Future<SDKResponse<RenderTask>> renderTask(
 
       /// @param {String} render_task_id Id of render task
-      String render_task_id,
+      String renderTaskId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_render_task_id = encodeParam(render_task_id);
+    var pathRenderTaskId = encodeParam(renderTaskId);
 
     RenderTask responseHandler(dynamic json, String contentType) {
       return RenderTask.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/render_tasks/$path_render_task_id',
-        {'fields': fields});
+    return get(
+        responseHandler, '/render_tasks/$pathRenderTaskId', {'fields': fields});
   }
 
   /// ### Get the document or image produced by a completed render task.
@@ -7987,17 +7912,17 @@ class LookerSDK extends APIMethods {
   ///
   /// **Note**: Binary content is returned by this method.
   ///
-  Future<SDKResponse<dynamic>> render_task_results(
+  Future<SDKResponse<dynamic>> renderTaskResults(
 
       /// @param {String} render_task_id Id of render task
-      String render_task_id) async {
-    var path_render_task_id = encodeParam(render_task_id);
+      String renderTaskId) async {
+    var pathRenderTaskId = encodeParam(renderTaskId);
 
     dynamic responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return get(responseHandler, '/render_tasks/$path_render_task_id/results');
+    return get(responseHandler, '/render_tasks/$pathRenderTaskId/results');
   }
 
   /// ### Create a new task to render a dashboard element to an image.
@@ -8007,13 +7932,13 @@ class LookerSDK extends APIMethods {
   /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
   ///
   /// POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
-  Future<SDKResponse<RenderTask>> create_dashboard_element_render_task(
+  Future<SDKResponse<RenderTask>> createDashboardElementRenderTask(
 
       /// @param {String} dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
-      String dashboard_element_id,
+      String dashboardElementId,
 
       /// @param {String} result_format Output type: png or jpg
-      String result_format,
+      String resultFormat,
 
       /// @param {int} width Output width in pixels
       int width,
@@ -8024,8 +7949,8 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_element_id = encodeParam(dashboard_element_id);
-    var path_result_format = encodeParam(result_format);
+    var pathDashboardElementId = encodeParam(dashboardElementId);
+    var pathResultFormat = encodeParam(resultFormat);
 
     RenderTask responseHandler(dynamic json, String contentType) {
       return RenderTask.fromResponse(json, contentType);
@@ -8033,7 +7958,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/render_tasks/dashboard_elements/$path_dashboard_element_id/$path_result_format',
+        '/render_tasks/dashboard_elements/$pathDashboardElementId/$pathResultFormat',
         {'width': width, 'height': height, 'fields': fields});
   }
 
@@ -8065,7 +7990,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /model_sets/search -> List<ModelSet>
-  Future<SDKResponse<List<ModelSet>>> search_model_sets(
+  Future<SDKResponse<List<ModelSet>>> searchModelSets(
       {
 
       /// @param {String} fields Requested fields.
@@ -8087,13 +8012,13 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {bool} all_access Match model sets by all_access status.
-      bool all_access,
+      bool allAccess,
 
       /// @param {bool} built_in Match model sets by built_in status.
-      bool built_in,
+      bool builtIn,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<ModelSet> responseHandler(dynamic json, String contentType) {
       return json
           .map<ModelSet>((i) => ModelSet.fromResponse(i, contentType))
@@ -8107,73 +8032,73 @@ class LookerSDK extends APIMethods {
       'sorts': sorts,
       'id': id,
       'name': name,
-      'all_access': all_access,
-      'built_in': built_in,
-      'filter_or': filter_or
+      'all_access': allAccess,
+      'built_in': builtIn,
+      'filter_or': filterOr
     });
   }
 
   /// ### Get information about the model set with a specific id.
   ///
   /// GET /model_sets/{model_set_id} -> ModelSet
-  Future<SDKResponse<ModelSet>> model_set(
+  Future<SDKResponse<ModelSet>> modelSet(
 
       /// @param {int} model_set_id Id of model set
-      int model_set_id,
+      int modelSetId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_model_set_id = encodeParam(model_set_id);
+    var pathModelSetId = encodeParam(modelSetId);
 
     ModelSet responseHandler(dynamic json, String contentType) {
       return ModelSet.fromResponse(json, contentType);
     }
 
     return get(
-        responseHandler, '/model_sets/$path_model_set_id', {'fields': fields});
+        responseHandler, '/model_sets/$pathModelSetId', {'fields': fields});
   }
 
   /// ### Update information about the model set with a specific id.
   ///
   /// PATCH /model_sets/{model_set_id} -> ModelSet
-  Future<SDKResponse<ModelSet>> update_model_set(
+  Future<SDKResponse<ModelSet>> updateModelSet(
 
       /// @param {int} model_set_id id of model set
-      int model_set_id,
+      int modelSetId,
 
       /// @param {WriteModelSet} body
       WriteModelSet body) async {
-    var path_model_set_id = encodeParam(model_set_id);
+    var pathModelSetId = encodeParam(modelSetId);
 
     ModelSet responseHandler(dynamic json, String contentType) {
       return ModelSet.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/model_sets/$path_model_set_id', null,
-        body == null ? null : body.toJson());
+    return patch(
+        responseHandler, '/model_sets/$pathModelSetId', null, body?.toJson());
   }
 
   /// ### Delete the model set with a specific id.
   ///
   /// DELETE /model_sets/{model_set_id} -> String
-  Future<SDKResponse<String>> delete_model_set(
+  Future<SDKResponse<String>> deleteModelSet(
 
       /// @param {int} model_set_id id of model set
-      int model_set_id) async {
-    var path_model_set_id = encodeParam(model_set_id);
+      int modelSetId) async {
+    var pathModelSetId = encodeParam(modelSetId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/model_sets/$path_model_set_id');
+    return delete(responseHandler, '/model_sets/$pathModelSetId');
   }
 
   /// ### Get information about all model sets.
   ///
   /// GET /model_sets -> List<ModelSet>
-  Future<SDKResponse<List<ModelSet>>> all_model_sets(
+  Future<SDKResponse<List<ModelSet>>> allModelSets(
       {
 
       /// @param {String} fields Requested fields.
@@ -8190,7 +8115,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a model set with the specified information. Model sets are used by Roles.
   ///
   /// POST /model_sets -> ModelSet
-  Future<SDKResponse<ModelSet>> create_model_set(
+  Future<SDKResponse<ModelSet>> createModelSet(
 
       /// @param {WriteModelSet} body
       WriteModelSet body) async {
@@ -8198,14 +8123,13 @@ class LookerSDK extends APIMethods {
       return ModelSet.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/model_sets', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/model_sets', null, body?.toJson());
   }
 
   /// ### Get all supported permissions.
   ///
   /// GET /permissions -> List<Permission>
-  Future<SDKResponse<List<Permission>>> all_permissions() async {
+  Future<SDKResponse<List<Permission>>> allPermissions() async {
     List<Permission> responseHandler(dynamic json, String contentType) {
       return json
           .map<Permission>((i) => Permission.fromResponse(i, contentType))
@@ -8239,7 +8163,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /permission_sets/search -> List<PermissionSet>
-  Future<SDKResponse<List<PermissionSet>>> search_permission_sets(
+  Future<SDKResponse<List<PermissionSet>>> searchPermissionSets(
       {
 
       /// @param {String} fields Requested fields.
@@ -8261,13 +8185,13 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {bool} all_access Match permission sets by all_access status.
-      bool all_access,
+      bool allAccess,
 
       /// @param {bool} built_in Match permission sets by built_in status.
-      bool built_in,
+      bool builtIn,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<PermissionSet> responseHandler(dynamic json, String contentType) {
       return json
           .map<PermissionSet>((i) => PermissionSet.fromResponse(i, contentType))
@@ -8281,73 +8205,73 @@ class LookerSDK extends APIMethods {
       'sorts': sorts,
       'id': id,
       'name': name,
-      'all_access': all_access,
-      'built_in': built_in,
-      'filter_or': filter_or
+      'all_access': allAccess,
+      'built_in': builtIn,
+      'filter_or': filterOr
     });
   }
 
   /// ### Get information about the permission set with a specific id.
   ///
   /// GET /permission_sets/{permission_set_id} -> PermissionSet
-  Future<SDKResponse<PermissionSet>> permission_set(
+  Future<SDKResponse<PermissionSet>> permissionSet(
 
       /// @param {int} permission_set_id Id of permission set
-      int permission_set_id,
+      int permissionSetId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_permission_set_id = encodeParam(permission_set_id);
+    var pathPermissionSetId = encodeParam(permissionSetId);
 
     PermissionSet responseHandler(dynamic json, String contentType) {
       return PermissionSet.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/permission_sets/$path_permission_set_id',
+    return get(responseHandler, '/permission_sets/$pathPermissionSetId',
         {'fields': fields});
   }
 
   /// ### Update information about the permission set with a specific id.
   ///
   /// PATCH /permission_sets/{permission_set_id} -> PermissionSet
-  Future<SDKResponse<PermissionSet>> update_permission_set(
+  Future<SDKResponse<PermissionSet>> updatePermissionSet(
 
       /// @param {int} permission_set_id id of permission set
-      int permission_set_id,
+      int permissionSetId,
 
       /// @param {WritePermissionSet} body
       WritePermissionSet body) async {
-    var path_permission_set_id = encodeParam(permission_set_id);
+    var pathPermissionSetId = encodeParam(permissionSetId);
 
     PermissionSet responseHandler(dynamic json, String contentType) {
       return PermissionSet.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/permission_sets/$path_permission_set_id',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/permission_sets/$pathPermissionSetId', null,
+        body?.toJson());
   }
 
   /// ### Delete the permission set with a specific id.
   ///
   /// DELETE /permission_sets/{permission_set_id} -> String
-  Future<SDKResponse<String>> delete_permission_set(
+  Future<SDKResponse<String>> deletePermissionSet(
 
       /// @param {int} permission_set_id Id of permission set
-      int permission_set_id) async {
-    var path_permission_set_id = encodeParam(permission_set_id);
+      int permissionSetId) async {
+    var pathPermissionSetId = encodeParam(permissionSetId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/permission_sets/$path_permission_set_id');
+    return delete(responseHandler, '/permission_sets/$pathPermissionSetId');
   }
 
   /// ### Get information about all permission sets.
   ///
   /// GET /permission_sets -> List<PermissionSet>
-  Future<SDKResponse<List<PermissionSet>>> all_permission_sets(
+  Future<SDKResponse<List<PermissionSet>>> allPermissionSets(
       {
 
       /// @param {String} fields Requested fields.
@@ -8364,7 +8288,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a permission set with the specified information. Permission sets are used by Roles.
   ///
   /// POST /permission_sets -> PermissionSet
-  Future<SDKResponse<PermissionSet>> create_permission_set(
+  Future<SDKResponse<PermissionSet>> createPermissionSet(
 
       /// @param {WritePermissionSet} body
       WritePermissionSet body) async {
@@ -8372,14 +8296,13 @@ class LookerSDK extends APIMethods {
       return PermissionSet.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/permission_sets', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/permission_sets', null, body?.toJson());
   }
 
   /// ### Get information about all roles.
   ///
   /// GET /roles -> List<Role>
-  Future<SDKResponse<List<Role>>> all_roles(
+  Future<SDKResponse<List<Role>>> allRoles(
       {
 
       /// @param {String} fields Requested fields.
@@ -8397,7 +8320,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a role with the specified information.
   ///
   /// POST /roles -> Role
-  Future<SDKResponse<Role>> create_role(
+  Future<SDKResponse<Role>> createRole(
 
       /// @param {WriteRole} body
       WriteRole body) async {
@@ -8405,8 +8328,7 @@ class LookerSDK extends APIMethods {
       return Role.fromResponse(json, contentType);
     }
 
-    return post(
-        responseHandler, '/roles', null, body == null ? null : body.toJson());
+    return post(responseHandler, '/roles', null, body?.toJson());
   }
 
   /// ### Search roles
@@ -8435,7 +8357,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /roles/search -> List<Role>
-  Future<SDKResponse<List<Role>>> search_roles(
+  Future<SDKResponse<List<Role>>> searchRoles(
       {
 
       /// @param {String} fields Requested fields.
@@ -8457,10 +8379,10 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {bool} built_in Match roles by built_in status.
-      bool built_in,
+      bool builtIn,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<Role> responseHandler(dynamic json, String contentType) {
       return json.map<Role>((i) => Role.fromResponse(i, contentType)).toList();
     }
@@ -8472,8 +8394,8 @@ class LookerSDK extends APIMethods {
       'sorts': sorts,
       'id': id,
       'name': name,
-      'built_in': built_in,
-      'filter_or': filter_or
+      'built_in': builtIn,
+      'filter_or': filterOr
     });
   }
 
@@ -8504,7 +8426,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /roles/search/with_user_count -> List<RoleSearch>
-  Future<SDKResponse<List<RoleSearch>>> search_roles_with_user_count(
+  Future<SDKResponse<List<RoleSearch>>> searchRolesWithUserCount(
       {
 
       /// @param {String} fields Requested fields.
@@ -8526,10 +8448,10 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {bool} built_in Match roles by built_in status.
-      bool built_in,
+      bool builtIn,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<RoleSearch> responseHandler(dynamic json, String contentType) {
       return json
           .map<RoleSearch>((i) => RoleSearch.fromResponse(i, contentType))
@@ -8543,8 +8465,8 @@ class LookerSDK extends APIMethods {
       'sorts': sorts,
       'id': id,
       'name': name,
-      'built_in': built_in,
-      'filter_or': filter_or
+      'built_in': builtIn,
+      'filter_or': filterOr
     });
   }
 
@@ -8554,64 +8476,63 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Role>> role(
 
       /// @param {int} role_id id of role
-      int role_id) async {
-    var path_role_id = encodeParam(role_id);
+      int roleId) async {
+    var pathRoleId = encodeParam(roleId);
 
     Role responseHandler(dynamic json, String contentType) {
       return Role.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/roles/$path_role_id');
+    return get(responseHandler, '/roles/$pathRoleId');
   }
 
   /// ### Update information about the role with a specific id.
   ///
   /// PATCH /roles/{role_id} -> Role
-  Future<SDKResponse<Role>> update_role(
+  Future<SDKResponse<Role>> updateRole(
 
       /// @param {int} role_id id of role
-      int role_id,
+      int roleId,
 
       /// @param {WriteRole} body
       WriteRole body) async {
-    var path_role_id = encodeParam(role_id);
+    var pathRoleId = encodeParam(roleId);
 
     Role responseHandler(dynamic json, String contentType) {
       return Role.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/roles/$path_role_id', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/roles/$pathRoleId', null, body?.toJson());
   }
 
   /// ### Delete the role with a specific id.
   ///
   /// DELETE /roles/{role_id} -> String
-  Future<SDKResponse<String>> delete_role(
+  Future<SDKResponse<String>> deleteRole(
 
       /// @param {int} role_id id of role
-      int role_id) async {
-    var path_role_id = encodeParam(role_id);
+      int roleId) async {
+    var pathRoleId = encodeParam(roleId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/roles/$path_role_id');
+    return delete(responseHandler, '/roles/$pathRoleId');
   }
 
   /// ### Get information about all the groups with the role that has a specific id.
   ///
   /// GET /roles/{role_id}/groups -> List<Group>
-  Future<SDKResponse<List<Group>>> role_groups(
+  Future<SDKResponse<List<Group>>> roleGroups(
 
       /// @param {int} role_id id of role
-      int role_id,
+      int roleId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_role_id = encodeParam(role_id);
+    var pathRoleId = encodeParam(roleId);
 
     List<Group> responseHandler(dynamic json, String contentType) {
       return json
@@ -8620,20 +8541,20 @@ class LookerSDK extends APIMethods {
     }
 
     return get(
-        responseHandler, '/roles/$path_role_id/groups', {'fields': fields});
+        responseHandler, '/roles/$pathRoleId/groups', {'fields': fields});
   }
 
   /// ### Set all groups for a role, removing all existing group associations from that role.
   ///
   /// PUT /roles/{role_id}/groups -> List<Group>
-  Future<SDKResponse<List<Group>>> set_role_groups(
+  Future<SDKResponse<List<Group>>> setRoleGroups(
 
       /// @param {int} role_id Id of Role
-      int role_id,
+      int roleId,
 
       /// @param {List<int>} body
       List<int> body) async {
-    var path_role_id = encodeParam(role_id);
+    var pathRoleId = encodeParam(roleId);
 
     List<Group> responseHandler(dynamic json, String contentType) {
       return json
@@ -8641,50 +8562,50 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return put(responseHandler, '/roles/$path_role_id/groups', null, body);
+    return put(responseHandler, '/roles/$pathRoleId/groups', null, body);
   }
 
   /// ### Get information about all the users with the role that has a specific id.
   ///
   /// GET /roles/{role_id}/users -> List<User>
-  Future<SDKResponse<List<User>>> role_users(
+  Future<SDKResponse<List<User>>> roleUsers(
 
       /// @param {int} role_id id of user
-      int role_id,
+      int roleId,
       {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} direct_association_only Get only users associated directly with the role: exclude those only associated through groups.
-      bool direct_association_only}) async {
-    var path_role_id = encodeParam(role_id);
+      bool directAssociationOnly}) async {
+    var pathRoleId = encodeParam(roleId);
 
     List<User> responseHandler(dynamic json, String contentType) {
       return json.map<User>((i) => User.fromResponse(i, contentType)).toList();
     }
 
-    return get(responseHandler, '/roles/$path_role_id/users',
-        {'fields': fields, 'direct_association_only': direct_association_only});
+    return get(responseHandler, '/roles/$pathRoleId/users',
+        {'fields': fields, 'direct_association_only': directAssociationOnly});
   }
 
   /// ### Set all the users of the role with a specific id.
   ///
   /// PUT /roles/{role_id}/users -> List<User>
-  Future<SDKResponse<List<User>>> set_role_users(
+  Future<SDKResponse<List<User>>> setRoleUsers(
 
       /// @param {int} role_id id of role
-      int role_id,
+      int roleId,
 
       /// @param {List<int>} body
       List<int> body) async {
-    var path_role_id = encodeParam(role_id);
+    var pathRoleId = encodeParam(roleId);
 
     List<User> responseHandler(dynamic json, String contentType) {
       return json.map<User>((i) => User.fromResponse(i, contentType)).toList();
     }
 
-    return put(responseHandler, '/roles/$path_role_id/users', null, body);
+    return put(responseHandler, '/roles/$pathRoleId/users', null, body);
   }
 
   // #endregion Role: Manage Roles
@@ -8696,15 +8617,15 @@ class LookerSDK extends APIMethods {
   /// Returns scheduled plans owned by the caller for a given space id.
   ///
   /// GET /scheduled_plans/space/{space_id} -> List<ScheduledPlan>
-  Future<SDKResponse<List<ScheduledPlan>>> scheduled_plans_for_space(
+  Future<SDKResponse<List<ScheduledPlan>>> scheduledPlansForSpace(
 
       /// @param {int} space_id Space Id
-      int space_id,
+      int spaceId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_space_id = encodeParam(space_id);
+    var pathSpaceId = encodeParam(spaceId);
 
     List<ScheduledPlan> responseHandler(dynamic json, String contentType) {
       return json
@@ -8712,7 +8633,7 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/scheduled_plans/space/$path_space_id',
+    return get(responseHandler, '/scheduled_plans/space/$pathSpaceId',
         {'fields': fields});
   }
 
@@ -8721,21 +8642,21 @@ class LookerSDK extends APIMethods {
   /// Admins can fetch information about other users' Scheduled Plans.
   ///
   /// GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  Future<SDKResponse<ScheduledPlan>> scheduled_plan(
+  Future<SDKResponse<ScheduledPlan>> scheduledPlan(
 
       /// @param {int} scheduled_plan_id Scheduled Plan Id
-      int scheduled_plan_id,
+      int scheduledPlanId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
+    var pathScheduledPlanId = encodeParam(scheduledPlanId);
 
     ScheduledPlan responseHandler(dynamic json, String contentType) {
       return ScheduledPlan.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/scheduled_plans/$path_scheduled_plan_id',
+    return get(responseHandler, '/scheduled_plans/$pathScheduledPlanId',
         {'fields': fields});
   }
 
@@ -8783,21 +8704,21 @@ class LookerSDK extends APIMethods {
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   ///
   /// PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
-  Future<SDKResponse<ScheduledPlan>> update_scheduled_plan(
+  Future<SDKResponse<ScheduledPlan>> updateScheduledPlan(
 
       /// @param {int} scheduled_plan_id Scheduled Plan Id
-      int scheduled_plan_id,
+      int scheduledPlanId,
 
       /// @param {WriteScheduledPlan} body
       WriteScheduledPlan body) async {
-    var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
+    var pathScheduledPlanId = encodeParam(scheduledPlanId);
 
     ScheduledPlan responseHandler(dynamic json, String contentType) {
       return ScheduledPlan.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/scheduled_plans/$path_scheduled_plan_id',
-        null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/scheduled_plans/$pathScheduledPlanId', null,
+        body?.toJson());
   }
 
   /// ### Delete a Scheduled Plan
@@ -8807,17 +8728,17 @@ class LookerSDK extends APIMethods {
   /// This delete cannot be undone.
   ///
   /// DELETE /scheduled_plans/{scheduled_plan_id} -> String
-  Future<SDKResponse<String>> delete_scheduled_plan(
+  Future<SDKResponse<String>> deleteScheduledPlan(
 
       /// @param {int} scheduled_plan_id Scheduled Plan Id
-      int scheduled_plan_id) async {
-    var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
+      int scheduledPlanId) async {
+    var pathScheduledPlanId = encodeParam(scheduledPlanId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/scheduled_plans/$path_scheduled_plan_id');
+    return delete(responseHandler, '/scheduled_plans/$pathScheduledPlanId');
   }
 
   /// ### List All Scheduled Plans
@@ -8833,17 +8754,17 @@ class LookerSDK extends APIMethods {
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   ///
   /// GET /scheduled_plans -> List<ScheduledPlan>
-  Future<SDKResponse<List<ScheduledPlan>>> all_scheduled_plans(
+  Future<SDKResponse<List<ScheduledPlan>>> allScheduledPlans(
       {
 
       /// @param {int} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
-      int user_id,
+      int userId,
 
       /// @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
-      bool all_users}) async {
+      bool allUsers}) async {
     List<ScheduledPlan> responseHandler(dynamic json, String contentType) {
       return json
           .map<ScheduledPlan>((i) => ScheduledPlan.fromResponse(i, contentType))
@@ -8851,7 +8772,7 @@ class LookerSDK extends APIMethods {
     }
 
     return get(responseHandler, '/scheduled_plans',
-        {'user_id': user_id, 'fields': fields, 'all_users': all_users});
+        {'user_id': userId, 'fields': fields, 'all_users': allUsers});
   }
 
   /// ### Create a Scheduled Plan
@@ -8914,7 +8835,7 @@ class LookerSDK extends APIMethods {
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   ///
   /// POST /scheduled_plans -> ScheduledPlan
-  Future<SDKResponse<ScheduledPlan>> create_scheduled_plan(
+  Future<SDKResponse<ScheduledPlan>> createScheduledPlan(
 
       /// @param {WriteScheduledPlan} body
       WriteScheduledPlan body) async {
@@ -8922,8 +8843,7 @@ class LookerSDK extends APIMethods {
       return ScheduledPlan.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/scheduled_plans', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/scheduled_plans', null, body?.toJson());
   }
 
   /// ### Run a Scheduled Plan Immediately
@@ -8965,7 +8885,7 @@ class LookerSDK extends APIMethods {
   /// Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
   ///
   /// POST /scheduled_plans/run_once -> ScheduledPlan
-  Future<SDKResponse<ScheduledPlan>> scheduled_plan_run_once(
+  Future<SDKResponse<ScheduledPlan>> scheduledPlanRunOnce(
 
       /// @param {WriteScheduledPlan} body
       WriteScheduledPlan body) async {
@@ -8973,8 +8893,8 @@ class LookerSDK extends APIMethods {
       return ScheduledPlan.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/scheduled_plans/run_once', null,
-        body == null ? null : body.toJson());
+    return post(
+        responseHandler, '/scheduled_plans/run_once', null, body?.toJson());
   }
 
   /// ### Get Scheduled Plans for a Look
@@ -8990,21 +8910,21 @@ class LookerSDK extends APIMethods {
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   ///
   /// GET /scheduled_plans/look/{look_id} -> List<ScheduledPlan>
-  Future<SDKResponse<List<ScheduledPlan>>> scheduled_plans_for_look(
+  Future<SDKResponse<List<ScheduledPlan>>> scheduledPlansForLook(
 
       /// @param {int} look_id Look Id
-      int look_id,
+      int lookId,
       {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
-      int user_id,
+      int userId,
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users for the look
-      bool all_users}) async {
-    var path_look_id = encodeParam(look_id);
+      bool allUsers}) async {
+    var pathLookId = encodeParam(lookId);
 
     List<ScheduledPlan> responseHandler(dynamic json, String contentType) {
       return json
@@ -9012,8 +8932,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/scheduled_plans/look/$path_look_id',
-        {'user_id': user_id, 'fields': fields, 'all_users': all_users});
+    return get(responseHandler, '/scheduled_plans/look/$pathLookId',
+        {'user_id': userId, 'fields': fields, 'all_users': allUsers});
   }
 
   /// ### Get Scheduled Plans for a Dashboard
@@ -9029,21 +8949,21 @@ class LookerSDK extends APIMethods {
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   ///
   /// GET /scheduled_plans/dashboard/{dashboard_id} -> List<ScheduledPlan>
-  Future<SDKResponse<List<ScheduledPlan>>> scheduled_plans_for_dashboard(
+  Future<SDKResponse<List<ScheduledPlan>>> scheduledPlansForDashboard(
 
       /// @param {int} dashboard_id Dashboard Id
-      int dashboard_id,
+      int dashboardId,
       {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
-      int user_id,
+      int userId,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users for the dashboard
-      bool all_users,
+      bool allUsers,
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_dashboard_id = encodeParam(dashboard_id);
+    var pathDashboardId = encodeParam(dashboardId);
 
     List<ScheduledPlan> responseHandler(dynamic json, String contentType) {
       return json
@@ -9051,8 +8971,8 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/scheduled_plans/dashboard/$path_dashboard_id',
-        {'user_id': user_id, 'all_users': all_users, 'fields': fields});
+    return get(responseHandler, '/scheduled_plans/dashboard/$pathDashboardId',
+        {'user_id': userId, 'all_users': allUsers, 'fields': fields});
   }
 
   /// ### Get Scheduled Plans for a LookML Dashboard
@@ -9068,21 +8988,21 @@ class LookerSDK extends APIMethods {
   /// The caller must have `see_schedules` permission to see other users' scheduled plans.
   ///
   /// GET /scheduled_plans/lookml_dashboard/{lookml_dashboard_id} -> List<ScheduledPlan>
-  Future<SDKResponse<List<ScheduledPlan>>> scheduled_plans_for_lookml_dashboard(
+  Future<SDKResponse<List<ScheduledPlan>>> scheduledPlansForLookmlDashboard(
 
       /// @param {String} lookml_dashboard_id LookML Dashboard Id
-      String lookml_dashboard_id,
+      String lookmlDashboardId,
       {
 
       /// @param {int} user_id User Id (default is requesting user if not specified)
-      int user_id,
+      int userId,
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} all_users Return scheduled plans belonging to all users for the dashboard
-      bool all_users}) async {
-    var path_lookml_dashboard_id = encodeParam(lookml_dashboard_id);
+      bool allUsers}) async {
+    var pathLookmlDashboardId = encodeParam(lookmlDashboardId);
 
     List<ScheduledPlan> responseHandler(dynamic json, String contentType) {
       return json
@@ -9092,8 +9012,8 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/scheduled_plans/lookml_dashboard/$path_lookml_dashboard_id',
-        {'user_id': user_id, 'fields': fields, 'all_users': all_users});
+        '/scheduled_plans/lookml_dashboard/$pathLookmlDashboardId',
+        {'user_id': userId, 'fields': fields, 'all_users': allUsers});
   }
 
   /// ### Run a Scheduled Plan By Id Immediately
@@ -9145,25 +9065,22 @@ class LookerSDK extends APIMethods {
   /// This API is rate limited to prevent it from being used for relay spam or DoS attacks
   ///
   /// POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
-  Future<SDKResponse<ScheduledPlan>> scheduled_plan_run_once_by_id(
+  Future<SDKResponse<ScheduledPlan>> scheduledPlanRunOnceById(
 
       /// @param {int} scheduled_plan_id Id of schedule plan to copy and run
-      int scheduled_plan_id,
+      int scheduledPlanId,
       {
 
       /// @param {WriteScheduledPlan} body
       WriteScheduledPlan body}) async {
-    var path_scheduled_plan_id = encodeParam(scheduled_plan_id);
+    var pathScheduledPlanId = encodeParam(scheduledPlanId);
 
     ScheduledPlan responseHandler(dynamic json, String contentType) {
       return ScheduledPlan.fromResponse(json, contentType);
     }
 
-    return post(
-        responseHandler,
-        '/scheduled_plans/$path_scheduled_plan_id/run_once',
-        null,
-        body == null ? null : body.toJson());
+    return post(responseHandler,
+        '/scheduled_plans/$pathScheduledPlanId/run_once', null, body?.toJson());
   }
 
   // #endregion ScheduledPlan: Manage Scheduled Plans
@@ -9205,7 +9122,7 @@ class LookerSDK extends APIMethods {
   /// API sessions, be sure to select the dev workspace after each login.
   ///
   /// PATCH /session -> ApiSession
-  Future<SDKResponse<ApiSession>> update_session(
+  Future<SDKResponse<ApiSession>> updateSession(
 
       /// @param {WriteApiSession} body
       WriteApiSession body) async {
@@ -9213,8 +9130,7 @@ class LookerSDK extends APIMethods {
       return ApiSession.fromResponse(json, contentType);
     }
 
-    return patch(
-        responseHandler, '/session', null, body == null ? null : body.toJson());
+    return patch(responseHandler, '/session', null, body?.toJson());
   }
 
   // #endregion Session: Session Information
@@ -9230,7 +9146,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// GET /themes -> List<Theme>
-  Future<SDKResponse<List<Theme>>> all_themes(
+  Future<SDKResponse<List<Theme>>> allThemes(
       {
 
       /// @param {String} fields Requested fields.
@@ -9261,7 +9177,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// POST /themes -> Theme
-  Future<SDKResponse<Theme>> create_theme(
+  Future<SDKResponse<Theme>> createTheme(
 
       /// @param {WriteTheme} body
       WriteTheme body) async {
@@ -9269,8 +9185,7 @@ class LookerSDK extends APIMethods {
       return Theme.fromResponse(json, contentType);
     }
 
-    return post(
-        responseHandler, '/themes', null, body == null ? null : body.toJson());
+    return post(responseHandler, '/themes', null, body?.toJson());
   }
 
   /// ### Search all themes for matching criteria.
@@ -9313,7 +9228,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// GET /themes/search -> List<Theme>
-  Future<SDKResponse<List<Theme>>> search_themes(
+  Future<SDKResponse<List<Theme>>> searchThemes(
       {
 
       /// @param {int} id Match theme id.
@@ -9323,10 +9238,10 @@ class LookerSDK extends APIMethods {
       String name,
 
       /// @param {DateTime} begin_at Timestamp for activation.
-      DateTime begin_at,
+      DateTime beginAt,
 
       /// @param {DateTime} end_at Timestamp for expiration.
-      DateTime end_at,
+      DateTime endAt,
 
       /// @param {int} limit Number of results to return (used with `offset`).
       int limit,
@@ -9341,7 +9256,7 @@ class LookerSDK extends APIMethods {
       String fields,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<Theme> responseHandler(dynamic json, String contentType) {
       return json
           .map<Theme>((i) => Theme.fromResponse(i, contentType))
@@ -9351,13 +9266,13 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/themes/search', {
       'id': id,
       'name': name,
-      'begin_at': begin_at,
-      'end_at': end_at,
+      'begin_at': beginAt,
+      'end_at': endAt,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
       'fields': fields,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -9370,7 +9285,7 @@ class LookerSDK extends APIMethods {
   /// The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
   ///
   /// GET /themes/default -> Theme
-  Future<SDKResponse<Theme>> default_theme(
+  Future<SDKResponse<Theme>> defaultTheme(
       {
 
       /// @param {DateTime} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
@@ -9395,7 +9310,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// PUT /themes/default -> Theme
-  Future<SDKResponse<Theme>> set_default_theme(
+  Future<SDKResponse<Theme>> setDefaultTheme(
 
       /// @param {String} name Name of theme to set as default
       String name) async {
@@ -9417,7 +9332,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// GET /themes/active -> List<Theme>
-  Future<SDKResponse<List<Theme>>> active_themes(
+  Future<SDKResponse<List<Theme>>> activeThemes(
       {
 
       /// @param {String} name Name of theme
@@ -9446,7 +9361,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// GET /themes/theme_or_default -> Theme
-  Future<SDKResponse<Theme>> theme_or_default(
+  Future<SDKResponse<Theme>> themeOrDefault(
 
       /// @param {String} name Name of theme
       String name,
@@ -9471,7 +9386,7 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// POST /themes/validate -> ValidationError
-  Future<SDKResponse<ValidationError>> validate_theme(
+  Future<SDKResponse<ValidationError>> validateTheme(
 
       /// @param {WriteTheme} body
       WriteTheme body) async {
@@ -9479,8 +9394,7 @@ class LookerSDK extends APIMethods {
       return ValidationError.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/themes/validate', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/themes/validate', null, body?.toJson());
   }
 
   /// ### Get a theme by ID
@@ -9493,18 +9407,18 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Theme>> theme(
 
       /// @param {int} theme_id Id of theme
-      int theme_id,
+      int themeId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_theme_id = encodeParam(theme_id);
+    var pathThemeId = encodeParam(themeId);
 
     Theme responseHandler(dynamic json, String contentType) {
       return Theme.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/themes/$path_theme_id', {'fields': fields});
+    return get(responseHandler, '/themes/$pathThemeId', {'fields': fields});
   }
 
   /// ### Update the theme by id.
@@ -9512,21 +9426,20 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// PATCH /themes/{theme_id} -> Theme
-  Future<SDKResponse<Theme>> update_theme(
+  Future<SDKResponse<Theme>> updateTheme(
 
       /// @param {int} theme_id Id of theme
-      int theme_id,
+      int themeId,
 
       /// @param {WriteTheme} body
       WriteTheme body) async {
-    var path_theme_id = encodeParam(theme_id);
+    var pathThemeId = encodeParam(themeId);
 
     Theme responseHandler(dynamic json, String contentType) {
       return Theme.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/themes/$path_theme_id', null,
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/themes/$pathThemeId', null, body?.toJson());
   }
 
   /// ### Delete a specific theme by id
@@ -9540,17 +9453,17 @@ class LookerSDK extends APIMethods {
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///
   /// DELETE /themes/{theme_id} -> String
-  Future<SDKResponse<String>> delete_theme(
+  Future<SDKResponse<String>> deleteTheme(
 
       /// @param {String} theme_id Id of theme
-      String theme_id) async {
-    var path_theme_id = encodeParam(theme_id);
+      String themeId) async {
+    var pathThemeId = encodeParam(themeId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/themes/$path_theme_id');
+    return delete(responseHandler, '/themes/$pathThemeId');
   }
 
   // #endregion Theme: Manage Themes
@@ -9583,7 +9496,7 @@ class LookerSDK extends APIMethods {
   /// Boolean search params accept only "true" and "false" as values.
   ///
   /// GET /credentials_email/search -> List<CredentialsEmailSearch>
-  Future<SDKResponse<List<CredentialsEmailSearch>>> search_credentials_email(
+  Future<SDKResponse<List<CredentialsEmailSearch>>> searchCredentialsEmail(
       {
 
       /// @param {String} fields Requested fields.
@@ -9608,7 +9521,7 @@ class LookerSDK extends APIMethods {
       String emails,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression.
-      bool filter_or}) async {
+      bool filterOr}) async {
     List<CredentialsEmailSearch> responseHandler(
         dynamic json, String contentType) {
       return json
@@ -9625,7 +9538,7 @@ class LookerSDK extends APIMethods {
       'id': id,
       'email': email,
       'emails': emails,
-      'filter_or': filter_or
+      'filter_or': filterOr
     });
   }
 
@@ -9647,7 +9560,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all users.
   ///
   /// GET /users -> List<User>
-  Future<SDKResponse<List<User>>> all_users(
+  Future<SDKResponse<List<User>>> allUsers(
       {
 
       /// @param {String} fields Requested fields.
@@ -9657,7 +9570,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -9677,7 +9590,7 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/users', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
@@ -9688,7 +9601,7 @@ class LookerSDK extends APIMethods {
   /// ### Create a user with the specified information.
   ///
   /// POST /users -> User
-  Future<SDKResponse<User>> create_user(
+  Future<SDKResponse<User>> createUser(
       {
 
       /// @param {WriteUser} body
@@ -9700,8 +9613,7 @@ class LookerSDK extends APIMethods {
       return User.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users', {'fields': fields},
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/users', {'fields': fields}, body?.toJson());
   }
 
   /// ### Search users
@@ -9736,7 +9648,7 @@ class LookerSDK extends APIMethods {
   /// names of other users who are members of the same group as the user.
   ///
   /// GET /users/search -> List<User>
-  Future<SDKResponse<List<User>>> search_users(
+  Future<SDKResponse<List<User>>> searchUsers(
       {
 
       /// @param {String} fields Include only these fields in the response
@@ -9746,7 +9658,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -9761,31 +9673,31 @@ class LookerSDK extends APIMethods {
       String id,
 
       /// @param {String} first_name Match First name.
-      String first_name,
+      String firstName,
 
       /// @param {String} last_name Match Last name.
-      String last_name,
+      String lastName,
 
       /// @param {bool} verified_looker_employee Search for user accounts associated with Looker employees
-      bool verified_looker_employee,
+      bool verifiedLookerEmployee,
 
       /// @param {bool} embed_user Search for only embed users
-      bool embed_user,
+      bool embedUser,
 
       /// @param {String} email Search for the user with this email address
       String email,
 
       /// @param {bool} is_disabled Search for disabled user accounts
-      bool is_disabled,
+      bool isDisabled,
 
       /// @param {bool} filter_or Combine given search criteria in a boolean OR expression
-      bool filter_or,
+      bool filterOr,
 
       /// @param {String} content_metadata_id Search for users who have access to this content_metadata item
-      String content_metadata_id,
+      String contentMetadataId,
 
       /// @param {String} group_id Search for users who are direct members of this group
-      String group_id}) async {
+      String groupId}) async {
     List<User> responseHandler(dynamic json, String contentType) {
       return json.map<User>((i) => User.fromResponse(i, contentType)).toList();
     }
@@ -9793,20 +9705,20 @@ class LookerSDK extends APIMethods {
     return get(responseHandler, '/users/search', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
       'id': id,
-      'first_name': first_name,
-      'last_name': last_name,
-      'verified_looker_employee': verified_looker_employee,
-      'embed_user': embed_user,
+      'first_name': firstName,
+      'last_name': lastName,
+      'verified_looker_employee': verifiedLookerEmployee,
+      'embed_user': embedUser,
       'email': email,
-      'is_disabled': is_disabled,
-      'filter_or': filter_or,
-      'content_metadata_id': content_metadata_id,
-      'group_id': group_id
+      'is_disabled': isDisabled,
+      'filter_or': filterOr,
+      'content_metadata_id': contentMetadataId,
+      'group_id': groupId
     });
   }
 
@@ -9818,7 +9730,7 @@ class LookerSDK extends APIMethods {
   /// Any additional search params will be combined into a logical AND expression.
   ///
   /// GET /users/search/names/{pattern} -> List<User>
-  Future<SDKResponse<List<User>>> search_users_names(
+  Future<SDKResponse<List<User>>> searchUsersNames(
 
       /// @param {String} pattern Pattern to match
       String pattern,
@@ -9831,7 +9743,7 @@ class LookerSDK extends APIMethods {
       int page,
 
       /// @param {int} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
-      int per_page,
+      int perPage,
 
       /// @param {int} limit Number of results to return. (used with offset and takes priority over page and per_page)
       int limit,
@@ -9846,38 +9758,38 @@ class LookerSDK extends APIMethods {
       int id,
 
       /// @param {String} first_name Match First name
-      String first_name,
+      String firstName,
 
       /// @param {String} last_name Match Last name
-      String last_name,
+      String lastName,
 
       /// @param {bool} verified_looker_employee Match Verified Looker employee
-      bool verified_looker_employee,
+      bool verifiedLookerEmployee,
 
       /// @param {String} email Match Email Address
       String email,
 
       /// @param {bool} is_disabled Include or exclude disabled accounts in the results
-      bool is_disabled}) async {
-    var path_pattern = encodeParam(pattern);
+      bool isDisabled}) async {
+    var pathPattern = encodeParam(pattern);
 
     List<User> responseHandler(dynamic json, String contentType) {
       return json.map<User>((i) => User.fromResponse(i, contentType)).toList();
     }
 
-    return get(responseHandler, '/users/search/names/$path_pattern', {
+    return get(responseHandler, '/users/search/names/$pathPattern', {
       'fields': fields,
       'page': page,
-      'per_page': per_page,
+      'per_page': perPage,
       'limit': limit,
       'offset': offset,
       'sorts': sorts,
       'id': id,
-      'first_name': first_name,
-      'last_name': last_name,
-      'verified_looker_employee': verified_looker_employee,
+      'first_name': firstName,
+      'last_name': lastName,
+      'verified_looker_employee': verifiedLookerEmployee,
       'email': email,
-      'is_disabled': is_disabled
+      'is_disabled': isDisabled
     });
   }
 
@@ -9891,27 +9803,27 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<User>> user(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     User responseHandler(dynamic json, String contentType) {
       return User.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id', {'fields': fields});
+    return get(responseHandler, '/users/$pathUserId', {'fields': fields});
   }
 
   /// ### Update information about the user with a specific id.
   ///
   /// PATCH /users/{user_id} -> User
-  Future<SDKResponse<User>> update_user(
+  Future<SDKResponse<User>> updateUser(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {WriteUser} body
       WriteUser body,
@@ -9919,14 +9831,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     User responseHandler(dynamic json, String contentType) {
       return User.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/users/$path_user_id', {'fields': fields},
-        body == null ? null : body.toJson());
+    return patch(responseHandler, '/users/$pathUserId', {'fields': fields},
+        body?.toJson());
   }
 
   /// ### Delete the user with a specific id.
@@ -9934,17 +9846,17 @@ class LookerSDK extends APIMethods {
   /// **DANGER** this will delete the user and all looks and other information owned by the user.
   ///
   /// DELETE /users/{user_id} -> String
-  Future<SDKResponse<String>> delete_user(
+  Future<SDKResponse<String>> deleteUser(
 
       /// @param {int} user_id Id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id');
+    return delete(responseHandler, '/users/$pathUserId');
   }
 
   /// ### Get information about the user with a credential of given type with specific id.
@@ -9977,19 +9889,19 @@ class LookerSDK extends APIMethods {
   /// **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
   ///
   /// GET /users/credential/{credential_type}/{credential_id} -> User
-  Future<SDKResponse<User>> user_for_credential(
+  Future<SDKResponse<User>> userForCredential(
 
       /// @param {String} credential_type Type name of credential
-      String credential_type,
+      String credentialType,
 
       /// @param {String} credential_id Id of credential
-      String credential_id,
+      String credentialId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_credential_type = encodeParam(credential_type);
-    var path_credential_id = encodeParam(credential_id);
+    var pathCredentialType = encodeParam(credentialType);
+    var pathCredentialId = encodeParam(credentialId);
 
     User responseHandler(dynamic json, String contentType) {
       return User.fromResponse(json, contentType);
@@ -9997,38 +9909,38 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/users/credential/$path_credential_type/$path_credential_id',
+        '/users/credential/$pathCredentialType/$pathCredentialId',
         {'fields': fields});
   }
 
   /// ### Email/password login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_email -> CredentialsEmail
-  Future<SDKResponse<CredentialsEmail>> user_credentials_email(
+  Future<SDKResponse<CredentialsEmail>> userCredentialsEmail(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsEmail responseHandler(dynamic json, String contentType) {
       return CredentialsEmail.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_email',
+    return get(responseHandler, '/users/$pathUserId/credentials_email',
         {'fields': fields});
   }
 
   /// ### Email/password login information for the specified user.
   ///
   /// POST /users/{user_id}/credentials_email -> CredentialsEmail
-  Future<SDKResponse<CredentialsEmail>> create_user_credentials_email(
+  Future<SDKResponse<CredentialsEmail>> createUserCredentialsEmail(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {WriteCredentialsEmail} body
       WriteCredentialsEmail body,
@@ -10036,23 +9948,23 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsEmail responseHandler(dynamic json, String contentType) {
       return CredentialsEmail.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users/$path_user_id/credentials_email',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return post(responseHandler, '/users/$pathUserId/credentials_email',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Email/password login information for the specified user.
   ///
   /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
-  Future<SDKResponse<CredentialsEmail>> update_user_credentials_email(
+  Future<SDKResponse<CredentialsEmail>> updateUserCredentialsEmail(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {WriteCredentialsEmail} body
       WriteCredentialsEmail body,
@@ -10060,60 +9972,60 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsEmail responseHandler(dynamic json, String contentType) {
       return CredentialsEmail.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/users/$path_user_id/credentials_email',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/users/$pathUserId/credentials_email',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Email/password login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_email -> String
-  Future<SDKResponse<String>> delete_user_credentials_email(
+  Future<SDKResponse<String>> deleteUserCredentialsEmail(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_email');
+    return delete(responseHandler, '/users/$pathUserId/credentials_email');
   }
 
   /// ### Two-factor login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_totp -> CredentialsTotp
-  Future<SDKResponse<CredentialsTotp>> user_credentials_totp(
+  Future<SDKResponse<CredentialsTotp>> userCredentialsTotp(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsTotp responseHandler(dynamic json, String contentType) {
       return CredentialsTotp.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_totp',
+    return get(responseHandler, '/users/$pathUserId/credentials_totp',
         {'fields': fields});
   }
 
   /// ### Two-factor login information for the specified user.
   ///
   /// POST /users/{user_id}/credentials_totp -> CredentialsTotp
-  Future<SDKResponse<CredentialsTotp>> create_user_credentials_totp(
+  Future<SDKResponse<CredentialsTotp>> createUserCredentialsTotp(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {CredentialsTotp} body
@@ -10121,196 +10033,196 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsTotp responseHandler(dynamic json, String contentType) {
       return CredentialsTotp.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users/$path_user_id/credentials_totp',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return post(responseHandler, '/users/$pathUserId/credentials_totp',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Two-factor login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_totp -> String
-  Future<SDKResponse<String>> delete_user_credentials_totp(
+  Future<SDKResponse<String>> deleteUserCredentialsTotp(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_totp');
+    return delete(responseHandler, '/users/$pathUserId/credentials_totp');
   }
 
   /// ### LDAP login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
-  Future<SDKResponse<CredentialsLDAP>> user_credentials_ldap(
+  Future<SDKResponse<CredentialsLDAP>> userCredentialsLdap(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsLDAP responseHandler(dynamic json, String contentType) {
       return CredentialsLDAP.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_ldap',
+    return get(responseHandler, '/users/$pathUserId/credentials_ldap',
         {'fields': fields});
   }
 
   /// ### LDAP login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_ldap -> String
-  Future<SDKResponse<String>> delete_user_credentials_ldap(
+  Future<SDKResponse<String>> deleteUserCredentialsLdap(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_ldap');
+    return delete(responseHandler, '/users/$pathUserId/credentials_ldap');
   }
 
   /// ### Google authentication login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_google -> CredentialsGoogle
-  Future<SDKResponse<CredentialsGoogle>> user_credentials_google(
+  Future<SDKResponse<CredentialsGoogle>> userCredentialsGoogle(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsGoogle responseHandler(dynamic json, String contentType) {
       return CredentialsGoogle.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_google',
+    return get(responseHandler, '/users/$pathUserId/credentials_google',
         {'fields': fields});
   }
 
   /// ### Google authentication login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_google -> String
-  Future<SDKResponse<String>> delete_user_credentials_google(
+  Future<SDKResponse<String>> deleteUserCredentialsGoogle(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_google');
+    return delete(responseHandler, '/users/$pathUserId/credentials_google');
   }
 
   /// ### Saml authentication login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
-  Future<SDKResponse<CredentialsSaml>> user_credentials_saml(
+  Future<SDKResponse<CredentialsSaml>> userCredentialsSaml(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsSaml responseHandler(dynamic json, String contentType) {
       return CredentialsSaml.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_saml',
+    return get(responseHandler, '/users/$pathUserId/credentials_saml',
         {'fields': fields});
   }
 
   /// ### Saml authentication login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_saml -> String
-  Future<SDKResponse<String>> delete_user_credentials_saml(
+  Future<SDKResponse<String>> deleteUserCredentialsSaml(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_saml');
+    return delete(responseHandler, '/users/$pathUserId/credentials_saml');
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
-  Future<SDKResponse<CredentialsOIDC>> user_credentials_oidc(
+  Future<SDKResponse<CredentialsOIDC>> userCredentialsOidc(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsOIDC responseHandler(dynamic json, String contentType) {
       return CredentialsOIDC.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_oidc',
+    return get(responseHandler, '/users/$pathUserId/credentials_oidc',
         {'fields': fields});
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_oidc -> String
-  Future<SDKResponse<String>> delete_user_credentials_oidc(
+  Future<SDKResponse<String>> deleteUserCredentialsOidc(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/users/$path_user_id/credentials_oidc');
+    return delete(responseHandler, '/users/$pathUserId/credentials_oidc');
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
   /// GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
-  Future<SDKResponse<CredentialsApi3>> user_credentials_api3(
+  Future<SDKResponse<CredentialsApi3>> userCredentialsApi3(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {int} credentials_api3_id Id of API 3 Credential
-      int credentials_api3_id,
+      int credentialsApi3Id,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
-    var path_credentials_api3_id = encodeParam(credentials_api3_id);
+    var pathUserId = encodeParam(userId);
+    var pathCredentialsApi3Id = encodeParam(credentialsApi3Id);
 
     CredentialsApi3 responseHandler(dynamic json, String contentType) {
       return CredentialsApi3.fromResponse(json, contentType);
@@ -10318,43 +10230,43 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/users/$path_user_id/credentials_api3/$path_credentials_api3_id',
+        '/users/$pathUserId/credentials_api3/$pathCredentialsApi3Id',
         {'fields': fields});
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
   /// DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
-  Future<SDKResponse<String>> delete_user_credentials_api3(
+  Future<SDKResponse<String>> deleteUserCredentialsApi3(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {int} credentials_api3_id id of API 3 Credential
-      int credentials_api3_id) async {
-    var path_user_id = encodeParam(user_id);
-    var path_credentials_api3_id = encodeParam(credentials_api3_id);
+      int credentialsApi3Id) async {
+    var pathUserId = encodeParam(userId);
+    var pathCredentialsApi3Id = encodeParam(credentialsApi3Id);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(responseHandler,
-        '/users/$path_user_id/credentials_api3/$path_credentials_api3_id');
+        '/users/$pathUserId/credentials_api3/$pathCredentialsApi3Id');
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
   /// GET /users/{user_id}/credentials_api3 -> List<CredentialsApi3>
-  Future<SDKResponse<List<CredentialsApi3>>> all_user_credentials_api3s(
+  Future<SDKResponse<List<CredentialsApi3>>> allUserCredentialsApi3s(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     List<CredentialsApi3> responseHandler(dynamic json, String contentType) {
       return json
@@ -10363,47 +10275,47 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_api3',
+    return get(responseHandler, '/users/$pathUserId/credentials_api3',
         {'fields': fields});
   }
 
   /// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
   /// POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
-  Future<SDKResponse<CreateCredentialsApi3>> create_user_credentials_api3(
+  Future<SDKResponse<CreateCredentialsApi3>> createUserCredentialsApi3(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CreateCredentialsApi3 responseHandler(dynamic json, String contentType) {
       return CreateCredentialsApi3.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users/$path_user_id/credentials_api3',
+    return post(responseHandler, '/users/$pathUserId/credentials_api3',
         {'fields': fields});
   }
 
   /// ### Embed login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
-  Future<SDKResponse<CredentialsEmbed>> user_credentials_embed(
+  Future<SDKResponse<CredentialsEmbed>> userCredentialsEmbed(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {int} credentials_embed_id Id of Embedding Credential
-      int credentials_embed_id,
+      int credentialsEmbedId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
-    var path_credentials_embed_id = encodeParam(credentials_embed_id);
+    var pathUserId = encodeParam(userId);
+    var pathCredentialsEmbedId = encodeParam(credentialsEmbedId);
 
     CredentialsEmbed responseHandler(dynamic json, String contentType) {
       return CredentialsEmbed.fromResponse(json, contentType);
@@ -10411,43 +10323,43 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/users/$path_user_id/credentials_embed/$path_credentials_embed_id',
+        '/users/$pathUserId/credentials_embed/$pathCredentialsEmbedId',
         {'fields': fields});
   }
 
   /// ### Embed login information for the specified user.
   ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
-  Future<SDKResponse<String>> delete_user_credentials_embed(
+  Future<SDKResponse<String>> deleteUserCredentialsEmbed(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {int} credentials_embed_id id of Embedding Credential
-      int credentials_embed_id) async {
-    var path_user_id = encodeParam(user_id);
-    var path_credentials_embed_id = encodeParam(credentials_embed_id);
+      int credentialsEmbedId) async {
+    var pathUserId = encodeParam(userId);
+    var pathCredentialsEmbedId = encodeParam(credentialsEmbedId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(responseHandler,
-        '/users/$path_user_id/credentials_embed/$path_credentials_embed_id');
+        '/users/$pathUserId/credentials_embed/$pathCredentialsEmbedId');
   }
 
   /// ### Embed login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_embed -> List<CredentialsEmbed>
-  Future<SDKResponse<List<CredentialsEmbed>>> all_user_credentials_embeds(
+  Future<SDKResponse<List<CredentialsEmbed>>> allUserCredentialsEmbeds(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     List<CredentialsEmbed> responseHandler(dynamic json, String contentType) {
       return json
@@ -10456,106 +10368,106 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/users/$path_user_id/credentials_embed',
+    return get(responseHandler, '/users/$pathUserId/credentials_embed',
         {'fields': fields});
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   ///
   /// GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
-  Future<SDKResponse<CredentialsLookerOpenid>> user_credentials_looker_openid(
+  Future<SDKResponse<CredentialsLookerOpenid>> userCredentialsLookerOpenid(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     CredentialsLookerOpenid responseHandler(dynamic json, String contentType) {
       return CredentialsLookerOpenid.fromResponse(json, contentType);
     }
 
-    return get(responseHandler,
-        '/users/$path_user_id/credentials_looker_openid', {'fields': fields});
+    return get(responseHandler, '/users/$pathUserId/credentials_looker_openid',
+        {'fields': fields});
   }
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   ///
   /// DELETE /users/{user_id}/credentials_looker_openid -> String
-  Future<SDKResponse<String>> delete_user_credentials_looker_openid(
+  Future<SDKResponse<String>> deleteUserCredentialsLookerOpenid(
 
       /// @param {int} user_id id of user
-      int user_id) async {
-    var path_user_id = encodeParam(user_id);
+      int userId) async {
+    var pathUserId = encodeParam(userId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(
-        responseHandler, '/users/$path_user_id/credentials_looker_openid');
+        responseHandler, '/users/$pathUserId/credentials_looker_openid');
   }
 
   /// ### Web login session for the specified user.
   ///
   /// GET /users/{user_id}/sessions/{session_id} -> Session
-  Future<SDKResponse<Session>> user_session(
+  Future<SDKResponse<Session>> userSession(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {int} session_id Id of Web Login Session
-      int session_id,
+      int sessionId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
-    var path_session_id = encodeParam(session_id);
+    var pathUserId = encodeParam(userId);
+    var pathSessionId = encodeParam(sessionId);
 
     Session responseHandler(dynamic json, String contentType) {
       return Session.fromResponse(json, contentType);
     }
 
-    return get(responseHandler,
-        '/users/$path_user_id/sessions/$path_session_id', {'fields': fields});
+    return get(responseHandler, '/users/$pathUserId/sessions/$pathSessionId',
+        {'fields': fields});
   }
 
   /// ### Web login session for the specified user.
   ///
   /// DELETE /users/{user_id}/sessions/{session_id} -> String
-  Future<SDKResponse<String>> delete_user_session(
+  Future<SDKResponse<String>> deleteUserSession(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {int} session_id id of Web Login Session
-      int session_id) async {
-    var path_user_id = encodeParam(user_id);
-    var path_session_id = encodeParam(session_id);
+      int sessionId) async {
+    var pathUserId = encodeParam(userId);
+    var pathSessionId = encodeParam(sessionId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
     return delete(
-        responseHandler, '/users/$path_user_id/sessions/$path_session_id');
+        responseHandler, '/users/$pathUserId/sessions/$pathSessionId');
   }
 
   /// ### Web login session for the specified user.
   ///
   /// GET /users/{user_id}/sessions -> List<Session>
-  Future<SDKResponse<List<Session>>> all_user_sessions(
+  Future<SDKResponse<List<Session>>> allUserSessions(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     List<Session> responseHandler(dynamic json, String contentType) {
       return json
@@ -10564,7 +10476,7 @@ class LookerSDK extends APIMethods {
     }
 
     return get(
-        responseHandler, '/users/$path_user_id/sessions', {'fields': fields});
+        responseHandler, '/users/$pathUserId/sessions', {'fields': fields});
   }
 
   /// ### Create a password reset token.
@@ -10578,19 +10490,18 @@ class LookerSDK extends APIMethods {
   /// This method can be called with an empty body.
   ///
   /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
-  Future<SDKResponse<CredentialsEmail>>
-      create_user_credentials_email_password_reset(
+  Future<SDKResponse<CredentialsEmail>> createUserCredentialsEmailPasswordReset(
 
-          /// @param {int} user_id Id of user
-          int user_id,
-          {
+      /// @param {int} user_id Id of user
+      int userId,
+      {
 
-          /// @param {bool} expires Expiring token.
-          bool expires,
+      /// @param {bool} expires Expiring token.
+      bool expires,
 
-          /// @param {String} fields Requested fields.
-          String fields}) async {
-    var path_user_id = encodeParam(user_id);
+      /// @param {String} fields Requested fields.
+      String fields}) async {
+    var pathUserId = encodeParam(userId);
 
     CredentialsEmail responseHandler(dynamic json, String contentType) {
       return CredentialsEmail.fromResponse(json, contentType);
@@ -10598,41 +10509,41 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/users/$path_user_id/credentials_email/password_reset',
+        '/users/$pathUserId/credentials_email/password_reset',
         {'expires': expires, 'fields': fields});
   }
 
   /// ### Get information about roles of a given user
   ///
   /// GET /users/{user_id}/roles -> List<Role>
-  Future<SDKResponse<List<Role>>> user_roles(
+  Future<SDKResponse<List<Role>>> userRoles(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {bool} direct_association_only Get only roles associated directly with the user: exclude those only associated through groups.
-      bool direct_association_only}) async {
-    var path_user_id = encodeParam(user_id);
+      bool directAssociationOnly}) async {
+    var pathUserId = encodeParam(userId);
 
     List<Role> responseHandler(dynamic json, String contentType) {
       return json.map<Role>((i) => Role.fromResponse(i, contentType)).toList();
     }
 
-    return get(responseHandler, '/users/$path_user_id/roles',
-        {'fields': fields, 'direct_association_only': direct_association_only});
+    return get(responseHandler, '/users/$pathUserId/roles',
+        {'fields': fields, 'direct_association_only': directAssociationOnly});
   }
 
   /// ### Set roles of the user with a specific id.
   ///
   /// PUT /users/{user_id}/roles -> List<Role>
-  Future<SDKResponse<List<Role>>> set_user_roles(
+  Future<SDKResponse<List<Role>>> setUserRoles(
 
       /// @param {int} user_id id of user
-      int user_id,
+      int userId,
 
       /// @param {List<int>} body
       List<int> body,
@@ -10640,14 +10551,14 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     List<Role> responseHandler(dynamic json, String contentType) {
       return json.map<Role>((i) => Role.fromResponse(i, contentType)).toList();
     }
 
-    return put(responseHandler, '/users/$path_user_id/roles',
-        {'fields': fields}, body);
+    return put(
+        responseHandler, '/users/$pathUserId/roles', {'fields': fields}, body);
   }
 
   /// ### Get user attribute values for a given user.
@@ -10668,24 +10579,24 @@ class LookerSDK extends APIMethods {
   /// The value of all hidden user attributes will be blank.
   ///
   /// GET /users/{user_id}/attribute_values -> List<UserAttributeWithValue>
-  Future<SDKResponse<List<UserAttributeWithValue>>> user_attribute_user_values(
+  Future<SDKResponse<List<UserAttributeWithValue>>> userAttributeUserValues(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
       {
 
       /// @param {String} fields Requested fields.
       String fields,
 
       /// @param {DelimList<int>} user_attribute_ids Specific user attributes to request. Omit or leave blank to request all user attributes.
-      DelimList<int> user_attribute_ids,
+      DelimList<int> userAttributeIds,
 
       /// @param {bool} all_values If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
-      bool all_values,
+      bool allValues,
 
       /// @param {bool} include_unset If true, returns an empty record for each requested attribute that has no user, group, or default value.
-      bool include_unset}) async {
-    var path_user_id = encodeParam(user_id);
+      bool includeUnset}) async {
+    var pathUserId = encodeParam(userId);
 
     List<UserAttributeWithValue> responseHandler(
         dynamic json, String contentType) {
@@ -10695,11 +10606,11 @@ class LookerSDK extends APIMethods {
           .toList();
     }
 
-    return get(responseHandler, '/users/$path_user_id/attribute_values', {
+    return get(responseHandler, '/users/$pathUserId/attribute_values', {
       'fields': fields,
-      'user_attribute_ids': user_attribute_ids,
-      'all_values': all_values,
-      'include_unset': include_unset
+      'user_attribute_ids': userAttributeIds,
+      'all_values': allValues,
+      'include_unset': includeUnset
     });
   }
 
@@ -10708,18 +10619,18 @@ class LookerSDK extends APIMethods {
   /// Per-user user attribute values take precedence over group or default values.
   ///
   /// PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
-  Future<SDKResponse<UserAttributeWithValue>> set_user_attribute_user_value(
+  Future<SDKResponse<UserAttributeWithValue>> setUserAttributeUserValue(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {int} user_attribute_id Id of user attribute
-      int user_attribute_id,
+      int userAttributeId,
 
       /// @param {WriteUserAttributeWithValue} body
       WriteUserAttributeWithValue body) async {
-    var path_user_id = encodeParam(user_id);
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+    var pathUserId = encodeParam(userId);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     UserAttributeWithValue responseHandler(dynamic json, String contentType) {
       return UserAttributeWithValue.fromResponse(json, contentType);
@@ -10727,9 +10638,9 @@ class LookerSDK extends APIMethods {
 
     return patch(
         responseHandler,
-        '/users/$path_user_id/attribute_values/$path_user_attribute_id',
+        '/users/$pathUserId/attribute_values/$pathUserAttributeId',
         null,
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Delete a user attribute value from a user's account settings.
@@ -10740,19 +10651,19 @@ class LookerSDK extends APIMethods {
   /// information about how user attribute values are resolved.
   ///
   /// DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> void
-  Future<SDKResponse<void>> delete_user_attribute_user_value(
+  Future<SDKResponse<void>> deleteUserAttributeUserValue(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {int} user_attribute_id Id of user attribute
-      int user_attribute_id) async {
-    var path_user_id = encodeParam(user_id);
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+      int userAttributeId) async {
+    var pathUserId = encodeParam(userId);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     void responseHandler(dynamic json, String contentType) {}
     return delete(responseHandler,
-        '/users/$path_user_id/attribute_values/$path_user_attribute_id');
+        '/users/$pathUserId/attribute_values/$pathUserAttributeId');
   }
 
   /// ### Send a password reset token.
@@ -10764,16 +10675,15 @@ class LookerSDK extends APIMethods {
   /// This method can be called with an empty body.
   ///
   /// POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
-  Future<SDKResponse<CredentialsEmail>>
-      send_user_credentials_email_password_reset(
+  Future<SDKResponse<CredentialsEmail>> sendUserCredentialsEmailPasswordReset(
 
-          /// @param {int} user_id Id of user
-          int user_id,
-          {
+      /// @param {int} user_id Id of user
+      int userId,
+      {
 
-          /// @param {String} fields Requested fields.
-          String fields}) async {
-    var path_user_id = encodeParam(user_id);
+      /// @param {String} fields Requested fields.
+      String fields}) async {
+    var pathUserId = encodeParam(userId);
 
     CredentialsEmail responseHandler(dynamic json, String contentType) {
       return CredentialsEmail.fromResponse(json, contentType);
@@ -10781,7 +10691,7 @@ class LookerSDK extends APIMethods {
 
     return post(
         responseHandler,
-        '/users/$path_user_id/credentials_email/send_password_reset',
+        '/users/$pathUserId/credentials_email/send_password_reset',
         {'fields': fields});
   }
 
@@ -10793,10 +10703,10 @@ class LookerSDK extends APIMethods {
   /// The user's 'is_disabled' status must be true.
   ///
   /// POST /users/{user_id}/update_emails -> User
-  Future<SDKResponse<User>> wipeout_user_emails(
+  Future<SDKResponse<User>> wipeoutUserEmails(
 
       /// @param {int} user_id Id of user
-      int user_id,
+      int userId,
 
       /// @param {UserEmailOnly} body
       UserEmailOnly body,
@@ -10804,20 +10714,20 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_id = encodeParam(user_id);
+    var pathUserId = encodeParam(userId);
 
     User responseHandler(dynamic json, String contentType) {
       return User.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users/$path_user_id/update_emails',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return post(responseHandler, '/users/$pathUserId/update_emails',
+        {'fields': fields}, body?.toJson());
   }
 
   /// Create an embed user from an external user ID
   ///
   /// POST /users/embed_user -> UserPublic
-  Future<SDKResponse<UserPublic>> create_embed_user(
+  Future<SDKResponse<UserPublic>> createEmbedUser(
 
       /// @param {CreateEmbedUserRequest} body
       CreateEmbedUserRequest body) async {
@@ -10825,8 +10735,7 @@ class LookerSDK extends APIMethods {
       return UserPublic.fromResponse(json, contentType);
     }
 
-    return post(responseHandler, '/users/embed_user', null,
-        body == null ? null : body.toJson());
+    return post(responseHandler, '/users/embed_user', null, body?.toJson());
   }
 
   // #endregion User: Manage Users
@@ -10836,7 +10745,7 @@ class LookerSDK extends APIMethods {
   /// ### Get information about all user attributes.
   ///
   /// GET /user_attributes -> List<UserAttribute>
-  Future<SDKResponse<List<UserAttribute>>> all_user_attributes(
+  Future<SDKResponse<List<UserAttribute>>> allUserAttributes(
       {
 
       /// @param {String} fields Requested fields.
@@ -10866,7 +10775,7 @@ class LookerSDK extends APIMethods {
   /// user attribute will fail with a 422 error.
   ///
   /// POST /user_attributes -> UserAttribute
-  Future<SDKResponse<UserAttribute>> create_user_attribute(
+  Future<SDKResponse<UserAttribute>> createUserAttribute(
 
       /// @param {WriteUserAttribute} body
       WriteUserAttribute body,
@@ -10879,37 +10788,37 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler, '/user_attributes', {'fields': fields},
-        body == null ? null : body.toJson());
+        body?.toJson());
   }
 
   /// ### Get information about a user attribute.
   ///
   /// GET /user_attributes/{user_attribute_id} -> UserAttribute
-  Future<SDKResponse<UserAttribute>> user_attribute(
+  Future<SDKResponse<UserAttribute>> userAttribute(
 
       /// @param {int} user_attribute_id Id of user attribute
-      int user_attribute_id,
+      int userAttributeId,
       {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     UserAttribute responseHandler(dynamic json, String contentType) {
       return UserAttribute.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/user_attributes/$path_user_attribute_id',
+    return get(responseHandler, '/user_attributes/$pathUserAttributeId',
         {'fields': fields});
   }
 
   /// ### Update a user attribute definition.
   ///
   /// PATCH /user_attributes/{user_attribute_id} -> UserAttribute
-  Future<SDKResponse<UserAttribute>> update_user_attribute(
+  Future<SDKResponse<UserAttribute>> updateUserAttribute(
 
       /// @param {int} user_attribute_id Id of user attribute
-      int user_attribute_id,
+      int userAttributeId,
 
       /// @param {WriteUserAttribute} body
       WriteUserAttribute body,
@@ -10917,30 +10826,30 @@ class LookerSDK extends APIMethods {
 
       /// @param {String} fields Requested fields.
       String fields}) async {
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     UserAttribute responseHandler(dynamic json, String contentType) {
       return UserAttribute.fromResponse(json, contentType);
     }
 
-    return patch(responseHandler, '/user_attributes/$path_user_attribute_id',
-        {'fields': fields}, body == null ? null : body.toJson());
+    return patch(responseHandler, '/user_attributes/$pathUserAttributeId',
+        {'fields': fields}, body?.toJson());
   }
 
   /// ### Delete a user attribute (admin only).
   ///
   /// DELETE /user_attributes/{user_attribute_id} -> String
-  Future<SDKResponse<String>> delete_user_attribute(
+  Future<SDKResponse<String>> deleteUserAttribute(
 
       /// @param {int} user_attribute_id Id of user_attribute
-      int user_attribute_id) async {
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+      int userAttributeId) async {
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     String responseHandler(dynamic json, String contentType) {
       return json;
     }
 
-    return delete(responseHandler, '/user_attributes/$path_user_attribute_id');
+    return delete(responseHandler, '/user_attributes/$pathUserAttributeId');
   }
 
   /// ### Returns all values of a user attribute defined by user groups, in precedence order.
@@ -10953,15 +10862,15 @@ class LookerSDK extends APIMethods {
   ///
   /// GET /user_attributes/{user_attribute_id}/group_values -> List<UserAttributeGroupValue>
   Future<SDKResponse<List<UserAttributeGroupValue>>>
-      all_user_attribute_group_values(
+      allUserAttributeGroupValues(
 
           /// @param {int} user_attribute_id Id of user attribute
-          int user_attribute_id,
+          int userAttributeId,
           {
 
           /// @param {String} fields Requested fields.
           String fields}) async {
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     List<UserAttributeGroupValue> responseHandler(
         dynamic json, String contentType) {
@@ -10973,7 +10882,7 @@ class LookerSDK extends APIMethods {
 
     return get(
         responseHandler,
-        '/user_attributes/$path_user_attribute_id/group_values',
+        '/user_attributes/$pathUserAttributeId/group_values',
         {'fields': fields});
   }
 
@@ -11000,14 +10909,14 @@ class LookerSDK extends APIMethods {
   ///
   /// POST /user_attributes/{user_attribute_id}/group_values -> List<UserAttributeGroupValue>
   Future<SDKResponse<List<UserAttributeGroupValue>>>
-      set_user_attribute_group_values(
+      setUserAttributeGroupValues(
 
           /// @param {int} user_attribute_id Id of user attribute
-          int user_attribute_id,
+          int userAttributeId,
 
           /// @param {List<UserAttributeGroupValue>} body
           List<UserAttributeGroupValue> body) async {
-    var path_user_attribute_id = encodeParam(user_attribute_id);
+    var pathUserAttributeId = encodeParam(userAttributeId);
 
     List<UserAttributeGroupValue> responseHandler(
         dynamic json, String contentType) {
@@ -11018,7 +10927,7 @@ class LookerSDK extends APIMethods {
     }
 
     return post(responseHandler,
-        '/user_attributes/$path_user_attribute_id/group_values', null, body);
+        '/user_attributes/$pathUserAttributeId/group_values', null, body);
   }
 
   // #endregion UserAttribute: Manage User Attributes
@@ -11030,7 +10939,7 @@ class LookerSDK extends APIMethods {
   /// Returns all workspaces available to the calling user.
   ///
   /// GET /workspaces -> List<Workspace>
-  Future<SDKResponse<List<Workspace>>> all_workspaces() async {
+  Future<SDKResponse<List<Workspace>>> allWorkspaces() async {
     List<Workspace> responseHandler(dynamic json, String contentType) {
       return json
           .map<Workspace>((i) => Workspace.fromResponse(i, contentType))
@@ -11074,14 +10983,14 @@ class LookerSDK extends APIMethods {
   Future<SDKResponse<Workspace>> workspace(
 
       /// @param {String} workspace_id Id of the workspace
-      String workspace_id) async {
-    var path_workspace_id = encodeParam(workspace_id);
+      String workspaceId) async {
+    var pathWorkspaceId = encodeParam(workspaceId);
 
     Workspace responseHandler(dynamic json, String contentType) {
       return Workspace.fromResponse(json, contentType);
     }
 
-    return get(responseHandler, '/workspaces/$path_workspace_id');
+    return get(responseHandler, '/workspaces/$pathWorkspaceId');
   }
 
   // #endregion Workspace: Manage Workspaces

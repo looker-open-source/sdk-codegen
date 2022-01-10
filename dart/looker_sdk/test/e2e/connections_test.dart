@@ -10,7 +10,7 @@ void main() {
 
   void cleanup() async {
     try {
-      await sdk.ok(sdk.delete_connection('TestConnection'));
+      await sdk.ok(sdk.deleteConnection('TestConnection'));
     } catch (error) {
       // ignore
     }
@@ -18,9 +18,11 @@ void main() {
 
   test('connections', () async {
     cleanup();
-    var connections = await sdk.ok(sdk.all_connections());
+    var connections = await sdk.ok(sdk.allConnections());
     expect(connections.length, isNonNegative);
-    connections.forEach((connection) => expect(connection.name, isNotNull));
+    for (var connection in connections) {
+      expect(connection.name, isNotNull);
+    }
     if (connections.isNotEmpty) {
       var connection = await sdk
           .ok(sdk.connection(connections[0].name, fields: 'name,host,port'));
@@ -37,7 +39,7 @@ void main() {
     newConnection.password = 'look_your_data';
     newConnection.database = 'demo_db2';
     newConnection.tmpDbName = 'looker_demo_scratch';
-    var connection = await sdk.ok(sdk.create_connection(newConnection));
+    var connection = await sdk.ok(sdk.createConnection(newConnection));
     expect(connection.name, equals(newConnection.name.toLowerCase()));
     expect(connection.username, equals(newConnection.username));
     connection = await sdk
@@ -49,14 +51,14 @@ void main() {
     var updateConnection = WriteDBConnection();
     updateConnection.username = 'looker_demo';
     connection =
-        await sdk.ok(sdk.update_connection('TestConnection', updateConnection));
+        await sdk.ok(sdk.updateConnection('TestConnection', updateConnection));
     expect(connection.name, equals(newConnection.name.toLowerCase()));
     expect(connection.username, equals(updateConnection.username));
     var testResults = await sdk.ok(
-        sdk.test_connection('TestConnection', tests: DelimList(['connect'])));
+        sdk.testConnection('TestConnection', tests: DelimList(['connect'])));
     expect(testResults[0].name, equals('connect'));
     expect(testResults[0].message, equals('Can connect'));
-    var deleteResult = await sdk.ok(sdk.delete_connection('TestConnection'));
+    var deleteResult = await sdk.ok(sdk.deleteConnection('TestConnection'));
     expect(deleteResult, equals(''));
   });
 }

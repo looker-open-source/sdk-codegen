@@ -55,9 +55,13 @@ Run `yarn test` from `{reporoot}/dart/looker_sdk` to run all tests.
 
 Run `yarn format` from `{reporoot}/dart/looker_sdk` to format the `dart` files correctly. This should be run if you change any of the run time library `dart` files. The repo CI will run the linter and will fail if the files have not been correctly formatted.
 
-### Run format
+### Run format-check
 
-Run `yarn format` from `{reporoot}/dart/looker_sdk` to lint the `dart` files.
+Run `yarn format-check` from `{reporoot}/dart/looker_sdk` to check the formatting of the `dart` files.
+
+### Run analyze
+
+Run `yarn format-analyze` from `{reporoot}/dart/looker_sdk` to lint the `dart` files.
 
 ## TODOs
 

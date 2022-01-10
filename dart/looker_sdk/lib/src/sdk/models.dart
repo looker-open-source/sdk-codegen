@@ -50,9 +50,7 @@ class AccessToken {
 
   String get accessToken {
     if (!_accessTokenSet && _apiMapResponse.containsKey('access_token')) {
-      _accessToken = _apiMapResponse['access_token'] == null
-          ? null
-          : _apiMapResponse['access_token'].toString();
+      _accessToken = _apiMapResponse['access_token']?.toString();
       _accessTokenSet = true;
     }
     return _accessToken;
@@ -67,9 +65,7 @@ class AccessToken {
 
   String get tokenType {
     if (!_tokenTypeSet && _apiMapResponse.containsKey('token_type')) {
-      _tokenType = _apiMapResponse['token_type'] == null
-          ? null
-          : _apiMapResponse['token_type'].toString();
+      _tokenType = _apiMapResponse['token_type']?.toString();
       _tokenTypeSet = true;
     }
     return _tokenType;
@@ -99,9 +95,7 @@ class AccessToken {
 
   String get refreshToken {
     if (!_refreshTokenSet && _apiMapResponse.containsKey('refresh_token')) {
-      _refreshToken = _apiMapResponse['refresh_token'] == null
-          ? null
-          : _apiMapResponse['refresh_token'].toString();
+      _refreshToken = _apiMapResponse['refresh_token']?.toString();
       _refreshTokenSet = true;
     }
     return _refreshToken;
@@ -272,9 +266,7 @@ class Alert {
 
   String get cron {
     if (!_cronSet && _apiMapResponse.containsKey('cron')) {
-      _cron = _apiMapResponse['cron'] == null
-          ? null
-          : _apiMapResponse['cron'].toString();
+      _cron = _apiMapResponse['cron']?.toString();
       _cronSet = true;
     }
     return _cron;
@@ -289,9 +281,7 @@ class Alert {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -322,9 +312,7 @@ class Alert {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -435,9 +423,7 @@ class Alert {
 
   String get disabledReason {
     if (!_disabledReasonSet && _apiMapResponse.containsKey('disabled_reason')) {
-      _disabledReason = _apiMapResponse['disabled_reason'] == null
-          ? null
-          : _apiMapResponse['disabled_reason'].toString();
+      _disabledReason = _apiMapResponse['disabled_reason']?.toString();
       _disabledReasonSet = true;
     }
     return _disabledReason;
@@ -487,9 +473,7 @@ class Alert {
     if (!_investigativeContentIdSet &&
         _apiMapResponse.containsKey('investigative_content_id')) {
       _investigativeContentId =
-          _apiMapResponse['investigative_content_id'] == null
-              ? null
-              : _apiMapResponse['investigative_content_id'].toString();
+          _apiMapResponse['investigative_content_id']?.toString();
       _investigativeContentIdSet = true;
     }
     return _investigativeContentId;
@@ -506,9 +490,7 @@ class Alert {
     if (!_investigativeContentTitleSet &&
         _apiMapResponse.containsKey('investigative_content_title')) {
       _investigativeContentTitle =
-          _apiMapResponse['investigative_content_title'] == null
-              ? null
-              : _apiMapResponse['investigative_content_title'].toString();
+          _apiMapResponse['investigative_content_title']?.toString();
       _investigativeContentTitleSet = true;
     }
     return _investigativeContentTitle;
@@ -524,9 +506,7 @@ class Alert {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -541,9 +521,7 @@ class Alert {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -574,9 +552,7 @@ class Alert {
   String get ownerDisplayName {
     if (!_ownerDisplayNameSet &&
         _apiMapResponse.containsKey('owner_display_name')) {
-      _ownerDisplayName = _apiMapResponse['owner_display_name'] == null
-          ? null
-          : _apiMapResponse['owner_display_name'].toString();
+      _ownerDisplayName = _apiMapResponse['owner_display_name']?.toString();
       _ownerDisplayNameSet = true;
     }
     return _ownerDisplayName;
@@ -650,9 +626,8 @@ class Alert {
     var json = {};
     if (_appliedDashboardFiltersSet ||
         _apiMapResponse.containsKey('applied_dashboard_filters')) {
-      json['applied_dashboard_filters'] = appliedDashboardFilters == null
-          ? null
-          : appliedDashboardFilters.map((i) => i.toJson()).toList();
+      json['applied_dashboard_filters'] =
+          appliedDashboardFilters?.map((i) => i.toJson())?.toList();
     }
     if (_comparisonTypeSet || _apiMapResponse.containsKey('comparison_type')) {
       json['comparison_type'] =
@@ -672,12 +647,10 @@ class Alert {
       json['description'] = description;
     }
     if (_destinationsSet || _apiMapResponse.containsKey('destinations')) {
-      json['destinations'] = destinations == null
-          ? null
-          : destinations.map((i) => i.toJson()).toList();
+      json['destinations'] = destinations?.map((i) => i.toJson())?.toList();
     }
     if (_fieldSet || _apiMapResponse.containsKey('field')) {
-      json['field'] = field == null ? null : field.toJson();
+      json['field'] = field?.toJson();
     }
     if (_followedSet || _apiMapResponse.containsKey('followed')) {
       json['followed'] = followed;
@@ -730,9 +703,7 @@ class Alert {
     }
     if (_timeSeriesConditionStateSet ||
         _apiMapResponse.containsKey('time_series_condition_state')) {
-      json['time_series_condition_state'] = timeSeriesConditionState == null
-          ? null
-          : timeSeriesConditionState.toJson();
+      json['time_series_condition_state'] = timeSeriesConditionState?.toJson();
     }
     return json;
   }
@@ -759,9 +730,7 @@ class AlertAppliedDashboardFilter {
 
   String get filterTitle {
     if (!_filterTitleSet && _apiMapResponse.containsKey('filter_title')) {
-      _filterTitle = _apiMapResponse['filter_title'] == null
-          ? null
-          : _apiMapResponse['filter_title'].toString();
+      _filterTitle = _apiMapResponse['filter_title']?.toString();
       _filterTitleSet = true;
     }
     return _filterTitle;
@@ -776,9 +745,7 @@ class AlertAppliedDashboardFilter {
 
   String get fieldName {
     if (!_fieldNameSet && _apiMapResponse.containsKey('field_name')) {
-      _fieldName = _apiMapResponse['field_name'] == null
-          ? null
-          : _apiMapResponse['field_name'].toString();
+      _fieldName = _apiMapResponse['field_name']?.toString();
       _fieldNameSet = true;
     }
     return _fieldName;
@@ -793,9 +760,7 @@ class AlertAppliedDashboardFilter {
 
   String get filterValue {
     if (!_filterValueSet && _apiMapResponse.containsKey('filter_value')) {
-      _filterValue = _apiMapResponse['filter_value'] == null
-          ? null
-          : _apiMapResponse['filter_value'].toString();
+      _filterValue = _apiMapResponse['filter_value']?.toString();
       _filterValueSet = true;
     }
     return _filterValue;
@@ -811,9 +776,7 @@ class AlertAppliedDashboardFilter {
   String get filterDescription {
     if (!_filterDescriptionSet &&
         _apiMapResponse.containsKey('filter_description')) {
-      _filterDescription = _apiMapResponse['filter_description'] == null
-          ? null
-          : _apiMapResponse['filter_description'].toString();
+      _filterDescription = _apiMapResponse['filter_description']?.toString();
       _filterDescriptionSet = true;
     }
     return _filterDescription;
@@ -885,9 +848,8 @@ class AlertConditionState {
   String get previousTimeSeriesId {
     if (!_previousTimeSeriesIdSet &&
         _apiMapResponse.containsKey('previous_time_series_id')) {
-      _previousTimeSeriesId = _apiMapResponse['previous_time_series_id'] == null
-          ? null
-          : _apiMapResponse['previous_time_series_id'].toString();
+      _previousTimeSeriesId =
+          _apiMapResponse['previous_time_series_id']?.toString();
       _previousTimeSeriesIdSet = true;
     }
     return _previousTimeSeriesId;
@@ -903,9 +865,8 @@ class AlertConditionState {
   String get latestTimeSeriesId {
     if (!_latestTimeSeriesIdSet &&
         _apiMapResponse.containsKey('latest_time_series_id')) {
-      _latestTimeSeriesId = _apiMapResponse['latest_time_series_id'] == null
-          ? null
-          : _apiMapResponse['latest_time_series_id'].toString();
+      _latestTimeSeriesId =
+          _apiMapResponse['latest_time_series_id']?.toString();
       _latestTimeSeriesIdSet = true;
     }
     return _latestTimeSeriesId;
@@ -994,9 +955,7 @@ class AlertDestination {
 
   String get emailAddress {
     if (!_emailAddressSet && _apiMapResponse.containsKey('email_address')) {
-      _emailAddress = _apiMapResponse['email_address'] == null
-          ? null
-          : _apiMapResponse['email_address'].toString();
+      _emailAddress = _apiMapResponse['email_address']?.toString();
       _emailAddressSet = true;
     }
     return _emailAddress;
@@ -1013,9 +972,7 @@ class AlertDestination {
     if (!_actionHubIntegrationIdSet &&
         _apiMapResponse.containsKey('action_hub_integration_id')) {
       _actionHubIntegrationId =
-          _apiMapResponse['action_hub_integration_id'] == null
-              ? null
-              : _apiMapResponse['action_hub_integration_id'].toString();
+          _apiMapResponse['action_hub_integration_id']?.toString();
       _actionHubIntegrationIdSet = true;
     }
     return _actionHubIntegrationId;
@@ -1032,9 +989,7 @@ class AlertDestination {
     if (!_actionHubFormParamsJsonSet &&
         _apiMapResponse.containsKey('action_hub_form_params_json')) {
       _actionHubFormParamsJson =
-          _apiMapResponse['action_hub_form_params_json'] == null
-              ? null
-              : _apiMapResponse['action_hub_form_params_json'].toString();
+          _apiMapResponse['action_hub_form_params_json']?.toString();
       _actionHubFormParamsJsonSet = true;
     }
     return _actionHubFormParamsJson;
@@ -1111,9 +1066,7 @@ class AlertField {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -1128,9 +1081,7 @@ class AlertField {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -1196,8 +1147,7 @@ class AlertField {
       json['name'] = name;
     }
     if (_filterSet || _apiMapResponse.containsKey('filter')) {
-      json['filter'] =
-          filter == null ? null : filter.map((i) => i.toJson()).toList();
+      json['filter'] = filter?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -1221,9 +1171,7 @@ class AlertFieldFilter {
 
   String get fieldName {
     if (!_fieldNameSet && _apiMapResponse.containsKey('field_name')) {
-      _fieldName = _apiMapResponse['field_name'] == null
-          ? null
-          : _apiMapResponse['field_name'].toString();
+      _fieldName = _apiMapResponse['field_name']?.toString();
       _fieldNameSet = true;
     }
     return _fieldName;
@@ -1253,9 +1201,7 @@ class AlertFieldFilter {
 
   String get filterValue {
     if (!_filterValueSet && _apiMapResponse.containsKey('filter_value')) {
-      _filterValue = _apiMapResponse['filter_value'] == null
-          ? null
-          : _apiMapResponse['filter_value'].toString();
+      _filterValue = _apiMapResponse['filter_value']?.toString();
       _filterValueSet = true;
     }
     return _filterValue;
@@ -1361,9 +1307,7 @@ class AlertPatch {
 
   String get disabledReason {
     if (!_disabledReasonSet && _apiMapResponse.containsKey('disabled_reason')) {
-      _disabledReason = _apiMapResponse['disabled_reason'] == null
-          ? null
-          : _apiMapResponse['disabled_reason'].toString();
+      _disabledReason = _apiMapResponse['disabled_reason']?.toString();
       _disabledReasonSet = true;
     }
     return _disabledReason;
@@ -1511,9 +1455,7 @@ class ApiSession {
 
   String get workspaceId {
     if (!_workspaceIdSet && _apiMapResponse.containsKey('workspace_id')) {
-      _workspaceId = _apiMapResponse['workspace_id'] == null
-          ? null
-          : _apiMapResponse['workspace_id'].toString();
+      _workspaceId = _apiMapResponse['workspace_id']?.toString();
       _workspaceIdSet = true;
     }
     return _workspaceId;
@@ -1605,9 +1547,8 @@ class ApiVersion {
   String get lookerReleaseVersion {
     if (!_lookerReleaseVersionSet &&
         _apiMapResponse.containsKey('looker_release_version')) {
-      _lookerReleaseVersion = _apiMapResponse['looker_release_version'] == null
-          ? null
-          : _apiMapResponse['looker_release_version'].toString();
+      _lookerReleaseVersion =
+          _apiMapResponse['looker_release_version']?.toString();
       _lookerReleaseVersionSet = true;
     }
     return _lookerReleaseVersion;
@@ -1659,9 +1600,7 @@ class ApiVersion {
 
   String get apiServerUrl {
     if (!_apiServerUrlSet && _apiMapResponse.containsKey('api_server_url')) {
-      _apiServerUrl = _apiMapResponse['api_server_url'] == null
-          ? null
-          : _apiMapResponse['api_server_url'].toString();
+      _apiServerUrl = _apiMapResponse['api_server_url']?.toString();
       _apiServerUrlSet = true;
     }
     return _apiServerUrl;
@@ -1676,9 +1615,7 @@ class ApiVersion {
 
   String get webServerUrl {
     if (!_webServerUrlSet && _apiMapResponse.containsKey('web_server_url')) {
-      _webServerUrl = _apiMapResponse['web_server_url'] == null
-          ? null
-          : _apiMapResponse['web_server_url'].toString();
+      _webServerUrl = _apiMapResponse['web_server_url']?.toString();
       _webServerUrlSet = true;
     }
     return _webServerUrl;
@@ -1722,14 +1659,12 @@ class ApiVersion {
       json['looker_release_version'] = lookerReleaseVersion;
     }
     if (_currentVersionSet || _apiMapResponse.containsKey('current_version')) {
-      json['current_version'] =
-          currentVersion == null ? null : currentVersion.toJson();
+      json['current_version'] = currentVersion?.toJson();
     }
     if (_supportedVersionsSet ||
         _apiMapResponse.containsKey('supported_versions')) {
-      json['supported_versions'] = supportedVersions == null
-          ? null
-          : supportedVersions.map((i) => i.toJson()).toList();
+      json['supported_versions'] =
+          supportedVersions?.map((i) => i.toJson())?.toList();
     }
     if (_apiServerUrlSet || _apiMapResponse.containsKey('api_server_url')) {
       json['api_server_url'] = apiServerUrl;
@@ -1762,9 +1697,7 @@ class ApiVersionElement {
 
   String get version {
     if (!_versionSet && _apiMapResponse.containsKey('version')) {
-      _version = _apiMapResponse['version'] == null
-          ? null
-          : _apiMapResponse['version'].toString();
+      _version = _apiMapResponse['version']?.toString();
       _versionSet = true;
     }
     return _version;
@@ -1779,9 +1712,7 @@ class ApiVersionElement {
 
   String get fullVersion {
     if (!_fullVersionSet && _apiMapResponse.containsKey('full_version')) {
-      _fullVersion = _apiMapResponse['full_version'] == null
-          ? null
-          : _apiMapResponse['full_version'].toString();
+      _fullVersion = _apiMapResponse['full_version']?.toString();
       _fullVersionSet = true;
     }
     return _fullVersion;
@@ -1796,9 +1727,7 @@ class ApiVersionElement {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -1813,9 +1742,7 @@ class ApiVersionElement {
 
   String get swaggerUrl {
     if (!_swaggerUrlSet && _apiMapResponse.containsKey('swagger_url')) {
-      _swaggerUrl = _apiMapResponse['swagger_url'] == null
-          ? null
-          : _apiMapResponse['swagger_url'].toString();
+      _swaggerUrl = _apiMapResponse['swagger_url']?.toString();
       _swaggerUrlSet = true;
     }
     return _swaggerUrl;
@@ -1915,9 +1842,7 @@ class BackupConfiguration {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -1933,9 +1858,7 @@ class BackupConfiguration {
   String get customS3Bucket {
     if (!_customS3BucketSet &&
         _apiMapResponse.containsKey('custom_s3_bucket')) {
-      _customS3Bucket = _apiMapResponse['custom_s3_bucket'] == null
-          ? null
-          : _apiMapResponse['custom_s3_bucket'].toString();
+      _customS3Bucket = _apiMapResponse['custom_s3_bucket']?.toString();
       _customS3BucketSet = true;
     }
     return _customS3Bucket;
@@ -1951,9 +1874,8 @@ class BackupConfiguration {
   String get customS3BucketRegion {
     if (!_customS3BucketRegionSet &&
         _apiMapResponse.containsKey('custom_s3_bucket_region')) {
-      _customS3BucketRegion = _apiMapResponse['custom_s3_bucket_region'] == null
-          ? null
-          : _apiMapResponse['custom_s3_bucket_region'].toString();
+      _customS3BucketRegion =
+          _apiMapResponse['custom_s3_bucket_region']?.toString();
       _customS3BucketRegionSet = true;
     }
     return _customS3BucketRegion;
@@ -1968,9 +1890,7 @@ class BackupConfiguration {
 
   String get customS3Key {
     if (!_customS3KeySet && _apiMapResponse.containsKey('custom_s3_key')) {
-      _customS3Key = _apiMapResponse['custom_s3_key'] == null
-          ? null
-          : _apiMapResponse['custom_s3_key'].toString();
+      _customS3Key = _apiMapResponse['custom_s3_key']?.toString();
       _customS3KeySet = true;
     }
     return _customS3Key;
@@ -1986,9 +1906,7 @@ class BackupConfiguration {
   String get customS3Secret {
     if (!_customS3SecretSet &&
         _apiMapResponse.containsKey('custom_s3_secret')) {
-      _customS3Secret = _apiMapResponse['custom_s3_secret'] == null
-          ? null
-          : _apiMapResponse['custom_s3_secret'].toString();
+      _customS3Secret = _apiMapResponse['custom_s3_secret']?.toString();
       _customS3SecretSet = true;
     }
     return _customS3Secret;
@@ -2003,9 +1921,7 @@ class BackupConfiguration {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -2180,9 +2096,7 @@ class Board {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -2231,9 +2145,8 @@ class Board {
 
   List<int> get sectionOrder {
     if (!_sectionOrderSet && _apiMapResponse.containsKey('section_order')) {
-      _sectionOrder = _apiMapResponse['section_order'] == null
-          ? null
-          : _apiMapResponse['section_order'].map<int>((i) => i as int).toList();
+      _sectionOrder =
+          _apiMapResponse['section_order']?.map<int>((i) => i as int)?.toList();
       _sectionOrderSet = true;
     }
     return _sectionOrder;
@@ -2248,9 +2161,7 @@ class Board {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -2344,20 +2255,16 @@ class Board {
       json['content_metadata_id'] = contentMetadataId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_descriptionSet || _apiMapResponse.containsKey('description')) {
       json['description'] = description;
     }
     if (_boardSectionsSet || _apiMapResponse.containsKey('board_sections')) {
-      json['board_sections'] = boardSections == null
-          ? null
-          : boardSections.map((i) => i.toJson()).toList();
+      json['board_sections'] = boardSections?.map((i) => i.toJson())?.toList();
     }
     if (_idSet || _apiMapResponse.containsKey('id')) {
       json['id'] = id;
@@ -2369,8 +2276,7 @@ class Board {
       json['title'] = title;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_userIdSet || _apiMapResponse.containsKey('user_id')) {
       json['user_id'] = userId;
@@ -2471,9 +2377,7 @@ class BoardItem {
   String get contentCreatedBy {
     if (!_contentCreatedBySet &&
         _apiMapResponse.containsKey('content_created_by')) {
-      _contentCreatedBy = _apiMapResponse['content_created_by'] == null
-          ? null
-          : _apiMapResponse['content_created_by'].toString();
+      _contentCreatedBy = _apiMapResponse['content_created_by']?.toString();
       _contentCreatedBySet = true;
     }
     return _contentCreatedBy;
@@ -2521,9 +2425,7 @@ class BoardItem {
   String get contentUpdatedAt {
     if (!_contentUpdatedAtSet &&
         _apiMapResponse.containsKey('content_updated_at')) {
-      _contentUpdatedAt = _apiMapResponse['content_updated_at'] == null
-          ? null
-          : _apiMapResponse['content_updated_at'].toString();
+      _contentUpdatedAt = _apiMapResponse['content_updated_at']?.toString();
       _contentUpdatedAtSet = true;
     }
     return _contentUpdatedAt;
@@ -2539,9 +2441,7 @@ class BoardItem {
   String get customDescription {
     if (!_customDescriptionSet &&
         _apiMapResponse.containsKey('custom_description')) {
-      _customDescription = _apiMapResponse['custom_description'] == null
-          ? null
-          : _apiMapResponse['custom_description'].toString();
+      _customDescription = _apiMapResponse['custom_description']?.toString();
       _customDescriptionSet = true;
     }
     return _customDescription;
@@ -2556,9 +2456,7 @@ class BoardItem {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -2573,9 +2471,7 @@ class BoardItem {
 
   String get customUrl {
     if (!_customUrlSet && _apiMapResponse.containsKey('custom_url')) {
-      _customUrl = _apiMapResponse['custom_url'] == null
-          ? null
-          : _apiMapResponse['custom_url'].toString();
+      _customUrl = _apiMapResponse['custom_url']?.toString();
       _customUrlSet = true;
     }
     return _customUrl;
@@ -2605,9 +2501,7 @@ class BoardItem {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -2668,9 +2562,7 @@ class BoardItem {
 
   String get imageUrl {
     if (!_imageUrlSet && _apiMapResponse.containsKey('image_url')) {
-      _imageUrl = _apiMapResponse['image_url'] == null
-          ? null
-          : _apiMapResponse['image_url'].toString();
+      _imageUrl = _apiMapResponse['image_url']?.toString();
       _imageUrlSet = true;
     }
     return _imageUrl;
@@ -2685,9 +2577,7 @@ class BoardItem {
 
   String get location {
     if (!_locationSet && _apiMapResponse.containsKey('location')) {
-      _location = _apiMapResponse['location'] == null
-          ? null
-          : _apiMapResponse['location'].toString();
+      _location = _apiMapResponse['location']?.toString();
       _locationSet = true;
     }
     return _location;
@@ -2702,9 +2592,7 @@ class BoardItem {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -2720,9 +2608,7 @@ class BoardItem {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -2752,9 +2638,7 @@ class BoardItem {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -2769,9 +2653,7 @@ class BoardItem {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -2988,9 +2870,7 @@ class BoardSection {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -3054,9 +2934,8 @@ class BoardSection {
 
   List<int> get itemOrder {
     if (!_itemOrderSet && _apiMapResponse.containsKey('item_order')) {
-      _itemOrder = _apiMapResponse['item_order'] == null
-          ? null
-          : _apiMapResponse['item_order'].map<int>((i) => i as int).toList();
+      _itemOrder =
+          _apiMapResponse['item_order']?.map<int>((i) => i as int)?.toList();
       _itemOrderSet = true;
     }
     return _itemOrder;
@@ -3072,11 +2951,9 @@ class BoardSection {
   List<int> get visibleItemOrder {
     if (!_visibleItemOrderSet &&
         _apiMapResponse.containsKey('visible_item_order')) {
-      _visibleItemOrder = _apiMapResponse['visible_item_order'] == null
-          ? null
-          : _apiMapResponse['visible_item_order']
-              .map<int>((i) => i as int)
-              .toList();
+      _visibleItemOrder = _apiMapResponse['visible_item_order']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _visibleItemOrderSet = true;
     }
     return _visibleItemOrder;
@@ -3091,9 +2968,7 @@ class BoardSection {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -3153,12 +3028,10 @@ class BoardSection {
       json['can'] = can;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_descriptionSet || _apiMapResponse.containsKey('description')) {
       json['description'] = description;
@@ -3167,9 +3040,7 @@ class BoardSection {
       json['board_id'] = boardId;
     }
     if (_boardItemsSet || _apiMapResponse.containsKey('board_items')) {
-      json['board_items'] = boardItems == null
-          ? null
-          : boardItems.map((i) => i.toJson()).toList();
+      json['board_items'] = boardItems?.map((i) => i.toJson())?.toList();
     }
     if (_idSet || _apiMapResponse.containsKey('id')) {
       json['id'] = id;
@@ -3185,8 +3056,7 @@ class BoardSection {
       json['title'] = title;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     return json;
   }
@@ -3253,9 +3123,7 @@ class ColorCollection {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -3270,9 +3138,7 @@ class ColorCollection {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -3382,21 +3248,18 @@ class ColorCollection {
     }
     if (_categoricalPalettesSet ||
         _apiMapResponse.containsKey('categoricalPalettes')) {
-      json['categoricalPalettes'] = categoricalPalettes == null
-          ? null
-          : categoricalPalettes.map((i) => i.toJson()).toList();
+      json['categoricalPalettes'] =
+          categoricalPalettes?.map((i) => i.toJson())?.toList();
     }
     if (_sequentialPalettesSet ||
         _apiMapResponse.containsKey('sequentialPalettes')) {
-      json['sequentialPalettes'] = sequentialPalettes == null
-          ? null
-          : sequentialPalettes.map((i) => i.toJson()).toList();
+      json['sequentialPalettes'] =
+          sequentialPalettes?.map((i) => i.toJson())?.toList();
     }
     if (_divergingPalettesSet ||
         _apiMapResponse.containsKey('divergingPalettes')) {
-      json['divergingPalettes'] = divergingPalettes == null
-          ? null
-          : divergingPalettes.map((i) => i.toJson()).toList();
+      json['divergingPalettes'] =
+          divergingPalettes?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -3417,9 +3280,7 @@ class ColorStop {
 
   String get color {
     if (!_colorSet && _apiMapResponse.containsKey('color')) {
-      _color = _apiMapResponse['color'] == null
-          ? null
-          : _apiMapResponse['color'].toString();
+      _color = _apiMapResponse['color']?.toString();
       _colorSet = true;
     }
     return _color;
@@ -3503,9 +3364,7 @@ class ColumnSearch {
 
   String get schemaName {
     if (!_schemaNameSet && _apiMapResponse.containsKey('schema_name')) {
-      _schemaName = _apiMapResponse['schema_name'] == null
-          ? null
-          : _apiMapResponse['schema_name'].toString();
+      _schemaName = _apiMapResponse['schema_name']?.toString();
       _schemaNameSet = true;
     }
     return _schemaName;
@@ -3520,9 +3379,7 @@ class ColumnSearch {
 
   String get tableName {
     if (!_tableNameSet && _apiMapResponse.containsKey('table_name')) {
-      _tableName = _apiMapResponse['table_name'] == null
-          ? null
-          : _apiMapResponse['table_name'].toString();
+      _tableName = _apiMapResponse['table_name']?.toString();
       _tableNameSet = true;
     }
     return _tableName;
@@ -3537,9 +3394,7 @@ class ColumnSearch {
 
   String get columnName {
     if (!_columnNameSet && _apiMapResponse.containsKey('column_name')) {
-      _columnName = _apiMapResponse['column_name'] == null
-          ? null
-          : _apiMapResponse['column_name'].toString();
+      _columnName = _apiMapResponse['column_name']?.toString();
       _columnNameSet = true;
     }
     return _columnName;
@@ -3554,9 +3409,7 @@ class ColumnSearch {
 
   String get dataType {
     if (!_dataTypeSet && _apiMapResponse.containsKey('data_type')) {
-      _dataType = _apiMapResponse['data_type'] == null
-          ? null
-          : _apiMapResponse['data_type'].toString();
+      _dataType = _apiMapResponse['data_type']?.toString();
       _dataTypeSet = true;
     }
     return _dataType;
@@ -3668,9 +3521,7 @@ class Command {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -3685,9 +3536,7 @@ class Command {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -3703,9 +3552,7 @@ class Command {
   String get linkedContentId {
     if (!_linkedContentIdSet &&
         _apiMapResponse.containsKey('linked_content_id')) {
-      _linkedContentId = _apiMapResponse['linked_content_id'] == null
-          ? null
-          : _apiMapResponse['linked_content_id'].toString();
+      _linkedContentId = _apiMapResponse['linked_content_id']?.toString();
       _linkedContentIdSet = true;
     }
     return _linkedContentId;
@@ -3787,34 +3634,34 @@ class Command {
 
 /// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
 enum ComparisonType {
-  EQUALTO,
-  GREATERTHAN,
-  GREATERTHANOREQUALTO,
-  LESSTHAN,
-  LESSTHANOREQUALTO,
-  INCREASESBY,
-  DECREASESBY,
-  CHANGESBY
+  equalTo,
+  greaterThan,
+  greaterThanOrEqualTo,
+  lessThan,
+  lessThanOrEqualTo,
+  increasesBy,
+  decreasesBy,
+  changesBy
 }
 
 class ComparisonTypeMapper {
   static String toStringValue(ComparisonType e) {
     switch (e) {
-      case ComparisonType.EQUALTO:
+      case ComparisonType.equalTo:
         return 'EQUAL_TO';
-      case ComparisonType.GREATERTHAN:
+      case ComparisonType.greaterThan:
         return 'GREATER_THAN';
-      case ComparisonType.GREATERTHANOREQUALTO:
+      case ComparisonType.greaterThanOrEqualTo:
         return 'GREATER_THAN_OR_EQUAL_TO';
-      case ComparisonType.LESSTHAN:
+      case ComparisonType.lessThan:
         return 'LESS_THAN';
-      case ComparisonType.LESSTHANOREQUALTO:
+      case ComparisonType.lessThanOrEqualTo:
         return 'LESS_THAN_OR_EQUAL_TO';
-      case ComparisonType.INCREASESBY:
+      case ComparisonType.increasesBy:
         return 'INCREASES_BY';
-      case ComparisonType.DECREASESBY:
+      case ComparisonType.decreasesBy:
         return 'DECREASES_BY';
-      case ComparisonType.CHANGESBY:
+      case ComparisonType.changesBy:
         return 'CHANGES_BY';
 
       default:
@@ -3824,28 +3671,28 @@ class ComparisonTypeMapper {
 
   static ComparisonType fromStringValue(String s) {
     if (s == 'EQUAL_TO') {
-      return ComparisonType.EQUALTO;
+      return ComparisonType.equalTo;
     }
     if (s == 'GREATER_THAN') {
-      return ComparisonType.GREATERTHAN;
+      return ComparisonType.greaterThan;
     }
     if (s == 'GREATER_THAN_OR_EQUAL_TO') {
-      return ComparisonType.GREATERTHANOREQUALTO;
+      return ComparisonType.greaterThanOrEqualTo;
     }
     if (s == 'LESS_THAN') {
-      return ComparisonType.LESSTHAN;
+      return ComparisonType.lessThan;
     }
     if (s == 'LESS_THAN_OR_EQUAL_TO') {
-      return ComparisonType.LESSTHANOREQUALTO;
+      return ComparisonType.lessThanOrEqualTo;
     }
     if (s == 'INCREASES_BY') {
-      return ComparisonType.INCREASESBY;
+      return ComparisonType.increasesBy;
     }
     if (s == 'DECREASES_BY') {
-      return ComparisonType.DECREASESBY;
+      return ComparisonType.decreasesBy;
     }
     if (s == 'CHANGES_BY') {
-      return ComparisonType.CHANGESBY;
+      return ComparisonType.changesBy;
     }
     return null;
   }
@@ -3908,9 +3755,7 @@ class ConnectionFeatures {
 
   String get dialectName {
     if (!_dialectNameSet && _apiMapResponse.containsKey('dialect_name')) {
-      _dialectName = _apiMapResponse['dialect_name'] == null
-          ? null
-          : _apiMapResponse['dialect_name'].toString();
+      _dialectName = _apiMapResponse['dialect_name']?.toString();
       _dialectNameSet = true;
     }
     return _dialectName;
@@ -4315,9 +4160,7 @@ class ContentFavorite {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -4435,10 +4278,10 @@ class ContentFavorite {
       json['dashboard_id'] = dashboardId;
     }
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_dashboardSet || _apiMapResponse.containsKey('dashboard')) {
-      json['dashboard'] = dashboard == null ? null : dashboard.toJson();
+      json['dashboard'] = dashboard?.toJson();
     }
     if (_boardIdSet || _apiMapResponse.containsKey('board_id')) {
       json['board_id'] = boardId;
@@ -4519,9 +4362,7 @@ class ContentMeta {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -4551,9 +4392,7 @@ class ContentMeta {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -4568,9 +4407,7 @@ class ContentMeta {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -4585,9 +4422,7 @@ class ContentMeta {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -4602,9 +4437,7 @@ class ContentMeta {
 
   String get contentType {
     if (!_contentTypeSet && _apiMapResponse.containsKey('content_type')) {
-      _contentType = _apiMapResponse['content_type'] == null
-          ? null
-          : _apiMapResponse['content_type'].toString();
+      _contentType = _apiMapResponse['content_type']?.toString();
       _contentTypeSet = true;
     }
     return _contentType;
@@ -4649,9 +4482,7 @@ class ContentMeta {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -4770,9 +4601,7 @@ class ContentMetaGroupUser {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -4788,9 +4617,7 @@ class ContentMetaGroupUser {
   String get contentMetadataId {
     if (!_contentMetadataIdSet &&
         _apiMapResponse.containsKey('content_metadata_id')) {
-      _contentMetadataId = _apiMapResponse['content_metadata_id'] == null
-          ? null
-          : _apiMapResponse['content_metadata_id'].toString();
+      _contentMetadataId = _apiMapResponse['content_metadata_id']?.toString();
       _contentMetadataIdSet = true;
     }
     return _contentMetadataId;
@@ -5094,9 +4921,8 @@ class ContentValidation {
     var json = {};
     if (_contentWithErrorsSet ||
         _apiMapResponse.containsKey('content_with_errors')) {
-      json['content_with_errors'] = contentWithErrors == null
-          ? null
-          : contentWithErrors.map((i) => i.toJson()).toList();
+      json['content_with_errors'] =
+          contentWithErrors?.map((i) => i.toJson())?.toList();
     }
     if (_computationTimeSet ||
         _apiMapResponse.containsKey('computation_time')) {
@@ -5169,9 +4995,7 @@ class ContentValidationAlert {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -5186,9 +5010,7 @@ class ContentValidationAlert {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -5203,9 +5025,7 @@ class ContentValidationAlert {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -5285,9 +5105,7 @@ class ContentValidationDashboard {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -5302,9 +5120,7 @@ class ContentValidationDashboard {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -5335,9 +5151,7 @@ class ContentValidationDashboard {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -5352,9 +5166,7 @@ class ContentValidationDashboard {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -5400,7 +5212,7 @@ class ContentValidationDashboard {
       json['id'] = id;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_titleSet || _apiMapResponse.containsKey('title')) {
       json['title'] = title;
@@ -5463,9 +5275,7 @@ class ContentValidationDashboardElement {
 
   String get bodyText {
     if (!_bodyTextSet && _apiMapResponse.containsKey('body_text')) {
-      _bodyText = _apiMapResponse['body_text'] == null
-          ? null
-          : _apiMapResponse['body_text'].toString();
+      _bodyText = _apiMapResponse['body_text']?.toString();
       _bodyTextSet = true;
     }
     return _bodyText;
@@ -5480,9 +5290,7 @@ class ContentValidationDashboardElement {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -5497,9 +5305,7 @@ class ContentValidationDashboardElement {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -5514,9 +5320,7 @@ class ContentValidationDashboardElement {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -5531,9 +5335,7 @@ class ContentValidationDashboardElement {
 
   String get noteDisplay {
     if (!_noteDisplaySet && _apiMapResponse.containsKey('note_display')) {
-      _noteDisplay = _apiMapResponse['note_display'] == null
-          ? null
-          : _apiMapResponse['note_display'].toString();
+      _noteDisplay = _apiMapResponse['note_display']?.toString();
       _noteDisplaySet = true;
     }
     return _noteDisplay;
@@ -5548,9 +5350,7 @@ class ContentValidationDashboardElement {
 
   String get noteState {
     if (!_noteStateSet && _apiMapResponse.containsKey('note_state')) {
-      _noteState = _apiMapResponse['note_state'] == null
-          ? null
-          : _apiMapResponse['note_state'].toString();
+      _noteState = _apiMapResponse['note_state']?.toString();
       _noteStateSet = true;
     }
     return _noteState;
@@ -5565,9 +5365,7 @@ class ContentValidationDashboardElement {
 
   String get noteText {
     if (!_noteTextSet && _apiMapResponse.containsKey('note_text')) {
-      _noteText = _apiMapResponse['note_text'] == null
-          ? null
-          : _apiMapResponse['note_text'].toString();
+      _noteText = _apiMapResponse['note_text']?.toString();
       _noteTextSet = true;
     }
     return _noteText;
@@ -5583,9 +5381,7 @@ class ContentValidationDashboardElement {
   String get noteTextAsHtml {
     if (!_noteTextAsHtmlSet &&
         _apiMapResponse.containsKey('note_text_as_html')) {
-      _noteTextAsHtml = _apiMapResponse['note_text_as_html'] == null
-          ? null
-          : _apiMapResponse['note_text_as_html'].toString();
+      _noteTextAsHtml = _apiMapResponse['note_text_as_html']?.toString();
       _noteTextAsHtmlSet = true;
     }
     return _noteTextAsHtml;
@@ -5615,9 +5411,7 @@ class ContentValidationDashboardElement {
 
   String get subtitleText {
     if (!_subtitleTextSet && _apiMapResponse.containsKey('subtitle_text')) {
-      _subtitleText = _apiMapResponse['subtitle_text'] == null
-          ? null
-          : _apiMapResponse['subtitle_text'].toString();
+      _subtitleText = _apiMapResponse['subtitle_text']?.toString();
       _subtitleTextSet = true;
     }
     return _subtitleText;
@@ -5632,9 +5426,7 @@ class ContentValidationDashboardElement {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -5664,9 +5456,7 @@ class ContentValidationDashboardElement {
 
   String get titleText {
     if (!_titleTextSet && _apiMapResponse.containsKey('title_text')) {
-      _titleText = _apiMapResponse['title_text'] == null
-          ? null
-          : _apiMapResponse['title_text'].toString();
+      _titleText = _apiMapResponse['title_text']?.toString();
       _titleTextSet = true;
     }
     return _titleText;
@@ -5681,9 +5471,7 @@ class ContentValidationDashboardElement {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -5805,9 +5593,7 @@ class ContentValidationDashboardFilter {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -5822,9 +5608,7 @@ class ContentValidationDashboardFilter {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -5839,9 +5623,7 @@ class ContentValidationDashboardFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -5856,9 +5638,7 @@ class ContentValidationDashboardFilter {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -5873,9 +5653,7 @@ class ContentValidationDashboardFilter {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -5890,9 +5668,7 @@ class ContentValidationDashboardFilter {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -5907,9 +5683,7 @@ class ContentValidationDashboardFilter {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -5924,9 +5698,7 @@ class ContentValidationDashboardFilter {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -5941,9 +5713,7 @@ class ContentValidationDashboardFilter {
 
   String get dimension {
     if (!_dimensionSet && _apiMapResponse.containsKey('dimension')) {
-      _dimension = _apiMapResponse['dimension'] == null
-          ? null
-          : _apiMapResponse['dimension'].toString();
+      _dimension = _apiMapResponse['dimension']?.toString();
       _dimensionSet = true;
     }
     return _dimension;
@@ -6037,9 +5807,7 @@ class ContentValidationError {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -6054,9 +5822,7 @@ class ContentValidationError {
 
   String get fieldName {
     if (!_fieldNameSet && _apiMapResponse.containsKey('field_name')) {
-      _fieldName = _apiMapResponse['field_name'] == null
-          ? null
-          : _apiMapResponse['field_name'].toString();
+      _fieldName = _apiMapResponse['field_name']?.toString();
       _fieldNameSet = true;
     }
     return _fieldName;
@@ -6071,9 +5837,7 @@ class ContentValidationError {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -6088,9 +5852,7 @@ class ContentValidationError {
 
   String get exploreName {
     if (!_exploreNameSet && _apiMapResponse.containsKey('explore_name')) {
-      _exploreName = _apiMapResponse['explore_name'] == null
-          ? null
-          : _apiMapResponse['explore_name'].toString();
+      _exploreName = _apiMapResponse['explore_name']?.toString();
       _exploreNameSet = true;
     }
     return _exploreName;
@@ -6178,9 +5940,7 @@ class ContentValidationFolder {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -6195,9 +5955,7 @@ class ContentValidationFolder {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -6267,9 +6025,7 @@ class ContentValidationLook {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -6284,9 +6040,7 @@ class ContentValidationLook {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -6301,9 +6055,7 @@ class ContentValidationLook {
 
   String get shortUrl {
     if (!_shortUrlSet && _apiMapResponse.containsKey('short_url')) {
-      _shortUrl = _apiMapResponse['short_url'] == null
-          ? null
-          : _apiMapResponse['short_url'].toString();
+      _shortUrl = _apiMapResponse['short_url']?.toString();
       _shortUrlSet = true;
     }
     return _shortUrl;
@@ -6368,7 +6120,7 @@ class ContentValidationLook {
       json['short_url'] = shortUrl;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     return json;
   }
@@ -6392,9 +6144,7 @@ class ContentValidationLookMLDashboard {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -6409,9 +6159,7 @@ class ContentValidationLookMLDashboard {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -6426,9 +6174,7 @@ class ContentValidationLookMLDashboard {
 
   String get spaceId {
     if (!_spaceIdSet && _apiMapResponse.containsKey('space_id')) {
-      _spaceId = _apiMapResponse['space_id'] == null
-          ? null
-          : _apiMapResponse['space_id'].toString();
+      _spaceId = _apiMapResponse['space_id']?.toString();
       _spaceIdSet = true;
     }
     return _spaceId;
@@ -6495,9 +6241,7 @@ class ContentValidationLookMLDashboardElement {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -6512,9 +6256,7 @@ class ContentValidationLookMLDashboardElement {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -6581,9 +6323,7 @@ class ContentValidationScheduledPlan {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -6598,9 +6338,7 @@ class ContentValidationScheduledPlan {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -6860,9 +6598,7 @@ class ContentValidatorError {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -6902,42 +6638,35 @@ class ContentValidatorError {
   Map toJson() {
     var json = {};
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_dashboardSet || _apiMapResponse.containsKey('dashboard')) {
-      json['dashboard'] = dashboard == null ? null : dashboard.toJson();
+      json['dashboard'] = dashboard?.toJson();
     }
     if (_dashboardElementSet ||
         _apiMapResponse.containsKey('dashboard_element')) {
-      json['dashboard_element'] =
-          dashboardElement == null ? null : dashboardElement.toJson();
+      json['dashboard_element'] = dashboardElement?.toJson();
     }
     if (_dashboardFilterSet ||
         _apiMapResponse.containsKey('dashboard_filter')) {
-      json['dashboard_filter'] =
-          dashboardFilter == null ? null : dashboardFilter.toJson();
+      json['dashboard_filter'] = dashboardFilter?.toJson();
     }
     if (_scheduledPlanSet || _apiMapResponse.containsKey('scheduled_plan')) {
-      json['scheduled_plan'] =
-          scheduledPlan == null ? null : scheduledPlan.toJson();
+      json['scheduled_plan'] = scheduledPlan?.toJson();
     }
     if (_alertSet || _apiMapResponse.containsKey('alert')) {
-      json['alert'] = alert == null ? null : alert.toJson();
+      json['alert'] = alert?.toJson();
     }
     if (_lookmlDashboardSet ||
         _apiMapResponse.containsKey('lookml_dashboard')) {
-      json['lookml_dashboard'] =
-          lookmlDashboard == null ? null : lookmlDashboard.toJson();
+      json['lookml_dashboard'] = lookmlDashboard?.toJson();
     }
     if (_lookmlDashboardElementSet ||
         _apiMapResponse.containsKey('lookml_dashboard_element')) {
-      json['lookml_dashboard_element'] = lookmlDashboardElement == null
-          ? null
-          : lookmlDashboardElement.toJson();
+      json['lookml_dashboard_element'] = lookmlDashboardElement?.toJson();
     }
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_idSet || _apiMapResponse.containsKey('id')) {
       json['id'] = id;
@@ -7021,9 +6750,7 @@ class ContentView {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -7053,9 +6780,7 @@ class ContentView {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -7146,9 +6871,7 @@ class ContentView {
 
   String get lastViewedAt {
     if (!_lastViewedAtSet && _apiMapResponse.containsKey('last_viewed_at')) {
-      _lastViewedAt = _apiMapResponse['last_viewed_at'] == null
-          ? null
-          : _apiMapResponse['last_viewed_at'].toString();
+      _lastViewedAt = _apiMapResponse['last_viewed_at']?.toString();
       _lastViewedAtSet = true;
     }
     return _lastViewedAt;
@@ -7164,9 +6887,7 @@ class ContentView {
   String get startOfWeekDate {
     if (!_startOfWeekDateSet &&
         _apiMapResponse.containsKey('start_of_week_date')) {
-      _startOfWeekDate = _apiMapResponse['start_of_week_date'] == null
-          ? null
-          : _apiMapResponse['start_of_week_date'].toString();
+      _startOfWeekDate = _apiMapResponse['start_of_week_date']?.toString();
       _startOfWeekDateSet = true;
     }
     return _startOfWeekDate;
@@ -7268,9 +6989,7 @@ class ContinuousPalette {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -7285,9 +7004,7 @@ class ContinuousPalette {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -7302,9 +7019,7 @@ class ContinuousPalette {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -7372,8 +7087,7 @@ class ContinuousPalette {
       json['type'] = type;
     }
     if (_stopsSet || _apiMapResponse.containsKey('stops')) {
-      json['stops'] =
-          stops == null ? null : stops.map((i) => i.toJson()).toList();
+      json['stops'] = stops?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -7430,9 +7144,7 @@ class CostEstimate {
 
   String get costUnit {
     if (!_costUnitSet && _apiMapResponse.containsKey('cost_unit')) {
-      _costUnit = _apiMapResponse['cost_unit'] == null
-          ? null
-          : _apiMapResponse['cost_unit'].toString();
+      _costUnit = _apiMapResponse['cost_unit']?.toString();
       _costUnitSet = true;
     }
     return _costUnit;
@@ -7447,9 +7159,7 @@ class CostEstimate {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -7517,9 +7227,7 @@ class CreateCostEstimate {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -7628,9 +7336,7 @@ class CreateCredentialsApi3 {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -7645,9 +7351,7 @@ class CreateCredentialsApi3 {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -7677,9 +7381,7 @@ class CreateCredentialsApi3 {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -7694,9 +7396,7 @@ class CreateCredentialsApi3 {
 
   String get clientSecret {
     if (!_clientSecretSet && _apiMapResponse.containsKey('client_secret')) {
-      _clientSecret = _apiMapResponse['client_secret'] == null
-          ? null
-          : _apiMapResponse['client_secret'].toString();
+      _clientSecret = _apiMapResponse['client_secret']?.toString();
       _clientSecretSet = true;
     }
     return _clientSecret;
@@ -7711,9 +7411,7 @@ class CreateCredentialsApi3 {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -7834,9 +7532,7 @@ class CreateDashboardFilter {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -7851,9 +7547,7 @@ class CreateDashboardFilter {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -7868,9 +7562,7 @@ class CreateDashboardFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -7885,9 +7577,7 @@ class CreateDashboardFilter {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -7902,9 +7592,7 @@ class CreateDashboardFilter {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -7919,9 +7607,7 @@ class CreateDashboardFilter {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -7936,9 +7622,7 @@ class CreateDashboardFilter {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -7953,9 +7637,7 @@ class CreateDashboardFilter {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -7970,9 +7652,7 @@ class CreateDashboardFilter {
 
   String get dimension {
     if (!_dimensionSet && _apiMapResponse.containsKey('dimension')) {
-      _dimension = _apiMapResponse['dimension'] == null
-          ? null
-          : _apiMapResponse['dimension'].toString();
+      _dimension = _apiMapResponse['dimension']?.toString();
       _dimensionSet = true;
     }
     return _dimension;
@@ -8018,11 +7698,9 @@ class CreateDashboardFilter {
   List<String> get listensToFilters {
     if (!_listensToFiltersSet &&
         _apiMapResponse.containsKey('listens_to_filters')) {
-      _listensToFilters = _apiMapResponse['listens_to_filters'] == null
-          ? null
-          : _apiMapResponse['listens_to_filters']
-              .map<String>((i) => i as String)
-              .toList();
+      _listensToFilters = _apiMapResponse['listens_to_filters']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _listensToFiltersSet = true;
     }
     return _listensToFilters;
@@ -8174,9 +7852,7 @@ class CreateDashboardRenderTask {
   String get dashboardFilters {
     if (!_dashboardFiltersSet &&
         _apiMapResponse.containsKey('dashboard_filters')) {
-      _dashboardFilters = _apiMapResponse['dashboard_filters'] == null
-          ? null
-          : _apiMapResponse['dashboard_filters'].toString();
+      _dashboardFilters = _apiMapResponse['dashboard_filters']?.toString();
       _dashboardFiltersSet = true;
     }
     return _dashboardFilters;
@@ -8191,9 +7867,7 @@ class CreateDashboardRenderTask {
 
   String get dashboardStyle {
     if (!_dashboardStyleSet && _apiMapResponse.containsKey('dashboard_style')) {
-      _dashboardStyle = _apiMapResponse['dashboard_style'] == null
-          ? null
-          : _apiMapResponse['dashboard_style'].toString();
+      _dashboardStyle = _apiMapResponse['dashboard_style']?.toString();
       _dashboardStyleSet = true;
     }
     return _dashboardStyle;
@@ -8254,9 +7928,7 @@ class CreateEmbedUserRequest {
   String get externalUserId {
     if (!_externalUserIdSet &&
         _apiMapResponse.containsKey('external_user_id')) {
-      _externalUserId = _apiMapResponse['external_user_id'] == null
-          ? null
-          : _apiMapResponse['external_user_id'].toString();
+      _externalUserId = _apiMapResponse['external_user_id']?.toString();
       _externalUserIdSet = true;
     }
     return _externalUserId;
@@ -8317,9 +7989,7 @@ class CreateFolder {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -8334,9 +8004,7 @@ class CreateFolder {
 
   String get parentId {
     if (!_parentIdSet && _apiMapResponse.containsKey('parent_id')) {
-      _parentId = _apiMapResponse['parent_id'] == null
-          ? null
-          : _apiMapResponse['parent_id'].toString();
+      _parentId = _apiMapResponse['parent_id']?.toString();
       _parentIdSet = true;
     }
     return _parentId;
@@ -8410,9 +8078,7 @@ class CreateOAuthApplicationUserStateRequest {
 
   String get userId {
     if (!_userIdSet && _apiMapResponse.containsKey('user_id')) {
-      _userId = _apiMapResponse['user_id'] == null
-          ? null
-          : _apiMapResponse['user_id'].toString();
+      _userId = _apiMapResponse['user_id']?.toString();
       _userIdSet = true;
     }
     return _userId;
@@ -8426,9 +8092,7 @@ class CreateOAuthApplicationUserStateRequest {
   String get oauthApplicationId {
     if (!_oauthApplicationIdSet &&
         _apiMapResponse.containsKey('oauth_application_id')) {
-      _oauthApplicationId = _apiMapResponse['oauth_application_id'] == null
-          ? null
-          : _apiMapResponse['oauth_application_id'].toString();
+      _oauthApplicationId = _apiMapResponse['oauth_application_id']?.toString();
       _oauthApplicationIdSet = true;
     }
     return _oauthApplicationId;
@@ -8441,9 +8105,7 @@ class CreateOAuthApplicationUserStateRequest {
 
   String get accessToken {
     if (!_accessTokenSet && _apiMapResponse.containsKey('access_token')) {
-      _accessToken = _apiMapResponse['access_token'] == null
-          ? null
-          : _apiMapResponse['access_token'].toString();
+      _accessToken = _apiMapResponse['access_token']?.toString();
       _accessTokenSet = true;
     }
     return _accessToken;
@@ -8472,9 +8134,7 @@ class CreateOAuthApplicationUserStateRequest {
 
   String get refreshToken {
     if (!_refreshTokenSet && _apiMapResponse.containsKey('refresh_token')) {
-      _refreshToken = _apiMapResponse['refresh_token'] == null
-          ? null
-          : _apiMapResponse['refresh_token'].toString();
+      _refreshToken = _apiMapResponse['refresh_token']?.toString();
       _refreshTokenSet = true;
     }
     return _refreshToken;
@@ -8542,18 +8202,15 @@ class CreateOAuthApplicationUserStateRequest {
     }
     if (_accessTokenExpiresAtSet ||
         _apiMapResponse.containsKey('access_token_expires_at')) {
-      json['access_token_expires_at'] = accessTokenExpiresAt == null
-          ? null
-          : accessTokenExpiresAt.toIso8601String();
+      json['access_token_expires_at'] = accessTokenExpiresAt?.toIso8601String();
     }
     if (_refreshTokenSet || _apiMapResponse.containsKey('refresh_token')) {
       json['refresh_token'] = refreshToken;
     }
     if (_refreshTokenExpiresAtSet ||
         _apiMapResponse.containsKey('refresh_token_expires_at')) {
-      json['refresh_token_expires_at'] = refreshTokenExpiresAt == null
-          ? null
-          : refreshTokenExpiresAt.toIso8601String();
+      json['refresh_token_expires_at'] =
+          refreshTokenExpiresAt?.toIso8601String();
     }
     return json;
   }
@@ -8716,9 +8373,7 @@ class CreateQueryTask {
 
   String get source {
     if (!_sourceSet && _apiMapResponse.containsKey('source')) {
-      _source = _apiMapResponse['source'] == null
-          ? null
-          : _apiMapResponse['source'].toString();
+      _source = _apiMapResponse['source']?.toString();
       _sourceSet = true;
     }
     return _source;
@@ -8748,9 +8403,7 @@ class CreateQueryTask {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -8765,9 +8418,7 @@ class CreateQueryTask {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -8891,9 +8542,7 @@ class CredentialsApi3 {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -8908,9 +8557,7 @@ class CredentialsApi3 {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -8940,9 +8587,7 @@ class CredentialsApi3 {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -8957,9 +8602,7 @@ class CredentialsApi3 {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -9077,9 +8720,7 @@ class CredentialsEmail {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -9094,9 +8735,7 @@ class CredentialsEmail {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -9143,9 +8782,7 @@ class CredentialsEmail {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -9161,9 +8798,7 @@ class CredentialsEmail {
   String get passwordResetUrl {
     if (!_passwordResetUrlSet &&
         _apiMapResponse.containsKey('password_reset_url')) {
-      _passwordResetUrl = _apiMapResponse['password_reset_url'] == null
-          ? null
-          : _apiMapResponse['password_reset_url'].toString();
+      _passwordResetUrl = _apiMapResponse['password_reset_url']?.toString();
       _passwordResetUrlSet = true;
     }
     return _passwordResetUrl;
@@ -9178,9 +8813,7 @@ class CredentialsEmail {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -9195,9 +8828,7 @@ class CredentialsEmail {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -9212,9 +8843,7 @@ class CredentialsEmail {
 
   String get userUrl {
     if (!_userUrlSet && _apiMapResponse.containsKey('user_url')) {
-      _userUrl = _apiMapResponse['user_url'] == null
-          ? null
-          : _apiMapResponse['user_url'].toString();
+      _userUrl = _apiMapResponse['user_url']?.toString();
       _userUrlSet = true;
     }
     return _userUrl;
@@ -9344,9 +8973,7 @@ class CredentialsEmailSearch {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -9361,9 +8988,7 @@ class CredentialsEmailSearch {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -9410,9 +9035,7 @@ class CredentialsEmailSearch {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -9428,9 +9051,7 @@ class CredentialsEmailSearch {
   String get passwordResetUrl {
     if (!_passwordResetUrlSet &&
         _apiMapResponse.containsKey('password_reset_url')) {
-      _passwordResetUrl = _apiMapResponse['password_reset_url'] == null
-          ? null
-          : _apiMapResponse['password_reset_url'].toString();
+      _passwordResetUrl = _apiMapResponse['password_reset_url']?.toString();
       _passwordResetUrlSet = true;
     }
     return _passwordResetUrl;
@@ -9445,9 +9066,7 @@ class CredentialsEmailSearch {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -9462,9 +9081,7 @@ class CredentialsEmailSearch {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -9479,9 +9096,7 @@ class CredentialsEmailSearch {
 
   String get userUrl {
     if (!_userUrlSet && _apiMapResponse.containsKey('user_url')) {
-      _userUrl = _apiMapResponse['user_url'] == null
-          ? null
-          : _apiMapResponse['user_url'].toString();
+      _userUrl = _apiMapResponse['user_url']?.toString();
       _userUrlSet = true;
     }
     return _userUrl;
@@ -9608,9 +9223,7 @@ class CredentialsEmbed {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -9626,9 +9239,7 @@ class CredentialsEmbed {
   String get externalGroupId {
     if (!_externalGroupIdSet &&
         _apiMapResponse.containsKey('external_group_id')) {
-      _externalGroupId = _apiMapResponse['external_group_id'] == null
-          ? null
-          : _apiMapResponse['external_group_id'].toString();
+      _externalGroupId = _apiMapResponse['external_group_id']?.toString();
       _externalGroupIdSet = true;
     }
     return _externalGroupId;
@@ -9644,9 +9255,7 @@ class CredentialsEmbed {
   String get externalUserId {
     if (!_externalUserIdSet &&
         _apiMapResponse.containsKey('external_user_id')) {
-      _externalUserId = _apiMapResponse['external_user_id'] == null
-          ? null
-          : _apiMapResponse['external_user_id'].toString();
+      _externalUserId = _apiMapResponse['external_user_id']?.toString();
       _externalUserIdSet = true;
     }
     return _externalUserId;
@@ -9691,9 +9300,7 @@ class CredentialsEmbed {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -9708,9 +9315,7 @@ class CredentialsEmbed {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -9725,9 +9330,7 @@ class CredentialsEmbed {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -9849,9 +9452,7 @@ class CredentialsGoogle {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -9866,9 +9467,7 @@ class CredentialsGoogle {
 
   String get domain {
     if (!_domainSet && _apiMapResponse.containsKey('domain')) {
-      _domain = _apiMapResponse['domain'] == null
-          ? null
-          : _apiMapResponse['domain'].toString();
+      _domain = _apiMapResponse['domain']?.toString();
       _domainSet = true;
     }
     return _domain;
@@ -9883,9 +9482,7 @@ class CredentialsGoogle {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -9900,9 +9497,7 @@ class CredentialsGoogle {
 
   String get googleUserId {
     if (!_googleUserIdSet && _apiMapResponse.containsKey('google_user_id')) {
-      _googleUserId = _apiMapResponse['google_user_id'] == null
-          ? null
-          : _apiMapResponse['google_user_id'].toString();
+      _googleUserId = _apiMapResponse['google_user_id']?.toString();
       _googleUserIdSet = true;
     }
     return _googleUserId;
@@ -9932,9 +9527,7 @@ class CredentialsGoogle {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -9949,9 +9542,7 @@ class CredentialsGoogle {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -9966,9 +9557,7 @@ class CredentialsGoogle {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -10089,9 +9678,7 @@ class CredentialsLDAP {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -10106,9 +9693,7 @@ class CredentialsLDAP {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -10138,9 +9723,7 @@ class CredentialsLDAP {
 
   String get ldapDn {
     if (!_ldapDnSet && _apiMapResponse.containsKey('ldap_dn')) {
-      _ldapDn = _apiMapResponse['ldap_dn'] == null
-          ? null
-          : _apiMapResponse['ldap_dn'].toString();
+      _ldapDn = _apiMapResponse['ldap_dn']?.toString();
       _ldapDnSet = true;
     }
     return _ldapDn;
@@ -10155,9 +9738,7 @@ class CredentialsLDAP {
 
   String get ldapId {
     if (!_ldapIdSet && _apiMapResponse.containsKey('ldap_id')) {
-      _ldapId = _apiMapResponse['ldap_id'] == null
-          ? null
-          : _apiMapResponse['ldap_id'].toString();
+      _ldapId = _apiMapResponse['ldap_id']?.toString();
       _ldapIdSet = true;
     }
     return _ldapId;
@@ -10172,9 +9753,7 @@ class CredentialsLDAP {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -10189,9 +9768,7 @@ class CredentialsLDAP {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -10206,9 +9783,7 @@ class CredentialsLDAP {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -10329,9 +9904,7 @@ class CredentialsLookerOpenid {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -10346,9 +9919,7 @@ class CredentialsLookerOpenid {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -10378,9 +9949,7 @@ class CredentialsLookerOpenid {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -10395,9 +9964,7 @@ class CredentialsLookerOpenid {
 
   String get loggedInIp {
     if (!_loggedInIpSet && _apiMapResponse.containsKey('logged_in_ip')) {
-      _loggedInIp = _apiMapResponse['logged_in_ip'] == null
-          ? null
-          : _apiMapResponse['logged_in_ip'].toString();
+      _loggedInIp = _apiMapResponse['logged_in_ip']?.toString();
       _loggedInIpSet = true;
     }
     return _loggedInIp;
@@ -10412,9 +9979,7 @@ class CredentialsLookerOpenid {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -10429,9 +9994,7 @@ class CredentialsLookerOpenid {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -10446,9 +10009,7 @@ class CredentialsLookerOpenid {
 
   String get userUrl {
     if (!_userUrlSet && _apiMapResponse.containsKey('user_url')) {
-      _userUrl = _apiMapResponse['user_url'] == null
-          ? null
-          : _apiMapResponse['user_url'].toString();
+      _userUrl = _apiMapResponse['user_url']?.toString();
       _userUrlSet = true;
     }
     return _userUrl;
@@ -10566,9 +10127,7 @@ class CredentialsOIDC {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -10583,9 +10142,7 @@ class CredentialsOIDC {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -10615,9 +10172,7 @@ class CredentialsOIDC {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -10632,9 +10187,7 @@ class CredentialsOIDC {
 
   String get oidcUserId {
     if (!_oidcUserIdSet && _apiMapResponse.containsKey('oidc_user_id')) {
-      _oidcUserId = _apiMapResponse['oidc_user_id'] == null
-          ? null
-          : _apiMapResponse['oidc_user_id'].toString();
+      _oidcUserId = _apiMapResponse['oidc_user_id']?.toString();
       _oidcUserIdSet = true;
     }
     return _oidcUserId;
@@ -10649,9 +10202,7 @@ class CredentialsOIDC {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -10666,9 +10217,7 @@ class CredentialsOIDC {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -10783,9 +10332,7 @@ class CredentialsSaml {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -10800,9 +10347,7 @@ class CredentialsSaml {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -10832,9 +10377,7 @@ class CredentialsSaml {
 
   String get loggedInAt {
     if (!_loggedInAtSet && _apiMapResponse.containsKey('logged_in_at')) {
-      _loggedInAt = _apiMapResponse['logged_in_at'] == null
-          ? null
-          : _apiMapResponse['logged_in_at'].toString();
+      _loggedInAt = _apiMapResponse['logged_in_at']?.toString();
       _loggedInAtSet = true;
     }
     return _loggedInAt;
@@ -10849,9 +10392,7 @@ class CredentialsSaml {
 
   String get samlUserId {
     if (!_samlUserIdSet && _apiMapResponse.containsKey('saml_user_id')) {
-      _samlUserId = _apiMapResponse['saml_user_id'] == null
-          ? null
-          : _apiMapResponse['saml_user_id'].toString();
+      _samlUserId = _apiMapResponse['saml_user_id']?.toString();
       _samlUserIdSet = true;
     }
     return _samlUserId;
@@ -10866,9 +10407,7 @@ class CredentialsSaml {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -10883,9 +10422,7 @@ class CredentialsSaml {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -10995,9 +10532,7 @@ class CredentialsTotp {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -11027,9 +10562,7 @@ class CredentialsTotp {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -11059,9 +10592,7 @@ class CredentialsTotp {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -11158,9 +10689,7 @@ class CustomWelcomeEmail {
 
   String get content {
     if (!_contentSet && _apiMapResponse.containsKey('content')) {
-      _content = _apiMapResponse['content'] == null
-          ? null
-          : _apiMapResponse['content'].toString();
+      _content = _apiMapResponse['content']?.toString();
       _contentSet = true;
     }
     return _content;
@@ -11175,9 +10704,7 @@ class CustomWelcomeEmail {
 
   String get subject {
     if (!_subjectSet && _apiMapResponse.containsKey('subject')) {
-      _subject = _apiMapResponse['subject'] == null
-          ? null
-          : _apiMapResponse['subject'].toString();
+      _subject = _apiMapResponse['subject']?.toString();
       _subjectSet = true;
     }
     return _subject;
@@ -11192,9 +10719,7 @@ class CustomWelcomeEmail {
 
   String get header {
     if (!_headerSet && _apiMapResponse.containsKey('header')) {
-      _header = _apiMapResponse['header'] == null
-          ? null
-          : _apiMapResponse['header'].toString();
+      _header = _apiMapResponse['header']?.toString();
       _headerSet = true;
     }
     return _header;
@@ -11446,9 +10971,7 @@ class Dashboard {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -11478,9 +11001,7 @@ class Dashboard {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -11511,9 +11032,7 @@ class Dashboard {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -11544,9 +11063,7 @@ class Dashboard {
   String get refreshInterval {
     if (!_refreshIntervalSet &&
         _apiMapResponse.containsKey('refresh_interval')) {
-      _refreshInterval = _apiMapResponse['refresh_interval'] == null
-          ? null
-          : _apiMapResponse['refresh_interval'].toString();
+      _refreshInterval = _apiMapResponse['refresh_interval']?.toString();
       _refreshIntervalSet = true;
     }
     return _refreshInterval;
@@ -11593,9 +11110,7 @@ class Dashboard {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -11625,9 +11140,7 @@ class Dashboard {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -11643,9 +11156,7 @@ class Dashboard {
   String get preferredViewer {
     if (!_preferredViewerSet &&
         _apiMapResponse.containsKey('preferred_viewer')) {
-      _preferredViewer = _apiMapResponse['preferred_viewer'] == null
-          ? null
-          : _apiMapResponse['preferred_viewer'].toString();
+      _preferredViewer = _apiMapResponse['preferred_viewer']?.toString();
       _preferredViewerSet = true;
     }
     return _preferredViewer;
@@ -11679,9 +11190,7 @@ class Dashboard {
   String get backgroundColor {
     if (!_backgroundColorSet &&
         _apiMapResponse.containsKey('background_color')) {
-      _backgroundColor = _apiMapResponse['background_color'] == null
-          ? null
-          : _apiMapResponse['background_color'].toString();
+      _backgroundColor = _apiMapResponse['background_color']?.toString();
       _backgroundColorSet = true;
     }
     return _backgroundColor;
@@ -11839,9 +11348,7 @@ class Dashboard {
 
   String get editUri {
     if (!_editUriSet && _apiMapResponse.containsKey('edit_uri')) {
-      _editUri = _apiMapResponse['edit_uri'] == null
-          ? null
-          : _apiMapResponse['edit_uri'].toString();
+      _editUri = _apiMapResponse['edit_uri']?.toString();
       _editUriSet = true;
     }
     return _editUri;
@@ -11955,9 +11462,7 @@ class Dashboard {
   String get lastUpdaterName {
     if (!_lastUpdaterNameSet &&
         _apiMapResponse.containsKey('last_updater_name')) {
-      _lastUpdaterName = _apiMapResponse['last_updater_name'] == null
-          ? null
-          : _apiMapResponse['last_updater_name'].toString();
+      _lastUpdaterName = _apiMapResponse['last_updater_name']?.toString();
       _lastUpdaterNameSet = true;
     }
     return _lastUpdaterName;
@@ -11972,9 +11477,7 @@ class Dashboard {
 
   String get userName {
     if (!_userNameSet && _apiMapResponse.containsKey('user_name')) {
-      _userName = _apiMapResponse['user_name'] == null
-          ? null
-          : _apiMapResponse['user_name'].toString();
+      _userName = _apiMapResponse['user_name']?.toString();
       _userNameSet = true;
     }
     return _userName;
@@ -11990,9 +11493,7 @@ class Dashboard {
   String get loadConfiguration {
     if (!_loadConfigurationSet &&
         _apiMapResponse.containsKey('load_configuration')) {
-      _loadConfiguration = _apiMapResponse['load_configuration'] == null
-          ? null
-          : _apiMapResponse['load_configuration'].toString();
+      _loadConfiguration = _apiMapResponse['load_configuration']?.toString();
       _loadConfigurationSet = true;
     }
     return _loadConfiguration;
@@ -12007,9 +11508,7 @@ class Dashboard {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -12055,9 +11554,7 @@ class Dashboard {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -12073,9 +11570,7 @@ class Dashboard {
   String get textTileTextColor {
     if (!_textTileTextColorSet &&
         _apiMapResponse.containsKey('text_tile_text_color')) {
-      _textTileTextColor = _apiMapResponse['text_tile_text_color'] == null
-          ? null
-          : _apiMapResponse['text_tile_text_color'].toString();
+      _textTileTextColor = _apiMapResponse['text_tile_text_color']?.toString();
       _textTileTextColorSet = true;
     }
     return _textTileTextColor;
@@ -12091,9 +11586,8 @@ class Dashboard {
   String get tileBackgroundColor {
     if (!_tileBackgroundColorSet &&
         _apiMapResponse.containsKey('tile_background_color')) {
-      _tileBackgroundColor = _apiMapResponse['tile_background_color'] == null
-          ? null
-          : _apiMapResponse['tile_background_color'].toString();
+      _tileBackgroundColor =
+          _apiMapResponse['tile_background_color']?.toString();
       _tileBackgroundColorSet = true;
     }
     return _tileBackgroundColor;
@@ -12108,9 +11602,7 @@ class Dashboard {
 
   String get tileTextColor {
     if (!_tileTextColorSet && _apiMapResponse.containsKey('tile_text_color')) {
-      _tileTextColor = _apiMapResponse['tile_text_color'] == null
-          ? null
-          : _apiMapResponse['tile_text_color'].toString();
+      _tileTextColor = _apiMapResponse['tile_text_color']?.toString();
       _tileTextColorSet = true;
     }
     return _tileTextColor;
@@ -12125,9 +11617,7 @@ class Dashboard {
 
   String get titleColor {
     if (!_titleColorSet && _apiMapResponse.containsKey('title_color')) {
-      _titleColor = _apiMapResponse['title_color'] == null
-          ? null
-          : _apiMapResponse['title_color'].toString();
+      _titleColor = _apiMapResponse['title_color']?.toString();
       _titleColorSet = true;
     }
     return _titleColor;
@@ -12173,9 +11663,7 @@ class Dashboard {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -12234,7 +11722,7 @@ class Dashboard {
       json['id'] = id;
     }
     if (_modelSet || _apiMapResponse.containsKey('model')) {
-      json['model'] = model == null ? null : model.toJson();
+      json['model'] = model?.toJson();
     }
     if (_queryTimezoneSet || _apiMapResponse.containsKey('query_timezone')) {
       json['query_timezone'] = queryTimezone;
@@ -12251,7 +11739,7 @@ class Dashboard {
       json['refresh_interval_to_i'] = refreshIntervalToI;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_titleSet || _apiMapResponse.containsKey('title')) {
       json['title'] = title;
@@ -12277,8 +11765,7 @@ class Dashboard {
       json['background_color'] = backgroundColor;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_crossfilterEnabledSet ||
         _apiMapResponse.containsKey('crossfilter_enabled')) {
@@ -12286,28 +11773,24 @@ class Dashboard {
     }
     if (_dashboardElementsSet ||
         _apiMapResponse.containsKey('dashboard_elements')) {
-      json['dashboard_elements'] = dashboardElements == null
-          ? null
-          : dashboardElements.map((i) => i.toJson()).toList();
+      json['dashboard_elements'] =
+          dashboardElements?.map((i) => i.toJson())?.toList();
     }
     if (_dashboardFiltersSet ||
         _apiMapResponse.containsKey('dashboard_filters')) {
-      json['dashboard_filters'] = dashboardFilters == null
-          ? null
-          : dashboardFilters.map((i) => i.toJson()).toList();
+      json['dashboard_filters'] =
+          dashboardFilters?.map((i) => i.toJson())?.toList();
     }
     if (_dashboardLayoutsSet ||
         _apiMapResponse.containsKey('dashboard_layouts')) {
-      json['dashboard_layouts'] = dashboardLayouts == null
-          ? null
-          : dashboardLayouts.map((i) => i.toJson()).toList();
+      json['dashboard_layouts'] =
+          dashboardLayouts?.map((i) => i.toJson())?.toList();
     }
     if (_deletedSet || _apiMapResponse.containsKey('deleted')) {
       json['deleted'] = deleted;
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_deleterIdSet || _apiMapResponse.containsKey('deleter_id')) {
       json['deleter_id'] = deleterId;
@@ -12323,16 +11806,13 @@ class Dashboard {
       json['filters_bar_collapsed'] = filtersBarCollapsed;
     }
     if (_lastAccessedAtSet || _apiMapResponse.containsKey('last_accessed_at')) {
-      json['last_accessed_at'] =
-          lastAccessedAt == null ? null : lastAccessedAt.toIso8601String();
+      json['last_accessed_at'] = lastAccessedAt?.toIso8601String();
     }
     if (_lastViewedAtSet || _apiMapResponse.containsKey('last_viewed_at')) {
-      json['last_viewed_at'] =
-          lastViewedAt == null ? null : lastViewedAt.toIso8601String();
+      json['last_viewed_at'] = lastViewedAt?.toIso8601String();
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_lastUpdaterIdSet || _apiMapResponse.containsKey('last_updater_id')) {
       json['last_updater_id'] = lastUpdaterId;
@@ -12378,7 +11858,7 @@ class Dashboard {
       json['view_count'] = viewCount;
     }
     if (_appearanceSet || _apiMapResponse.containsKey('appearance')) {
-      json['appearance'] = appearance == null ? null : appearance.toJson();
+      json['appearance'] = appearance?.toJson();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -12402,9 +11882,7 @@ class DashboardAggregateTableLookml {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -12420,9 +11898,8 @@ class DashboardAggregateTableLookml {
   String get aggregateTableLookml {
     if (!_aggregateTableLookmlSet &&
         _apiMapResponse.containsKey('aggregate_table_lookml')) {
-      _aggregateTableLookml = _apiMapResponse['aggregate_table_lookml'] == null
-          ? null
-          : _apiMapResponse['aggregate_table_lookml'].toString();
+      _aggregateTableLookml =
+          _apiMapResponse['aggregate_table_lookml']?.toString();
       _aggregateTableLookmlSet = true;
     }
     return _aggregateTableLookml;
@@ -12519,9 +11996,8 @@ class DashboardAppearance {
   String get pageBackgroundColor {
     if (!_pageBackgroundColorSet &&
         _apiMapResponse.containsKey('page_background_color')) {
-      _pageBackgroundColor = _apiMapResponse['page_background_color'] == null
-          ? null
-          : _apiMapResponse['page_background_color'].toString();
+      _pageBackgroundColor =
+          _apiMapResponse['page_background_color']?.toString();
       _pageBackgroundColorSet = true;
     }
     return _pageBackgroundColor;
@@ -12537,9 +12013,7 @@ class DashboardAppearance {
   String get tileTitleAlignment {
     if (!_tileTitleAlignmentSet &&
         _apiMapResponse.containsKey('tile_title_alignment')) {
-      _tileTitleAlignment = _apiMapResponse['tile_title_alignment'] == null
-          ? null
-          : _apiMapResponse['tile_title_alignment'].toString();
+      _tileTitleAlignment = _apiMapResponse['tile_title_alignment']?.toString();
       _tileTitleAlignmentSet = true;
     }
     return _tileTitleAlignment;
@@ -12571,9 +12045,8 @@ class DashboardAppearance {
   String get tileBackgroundColor {
     if (!_tileBackgroundColorSet &&
         _apiMapResponse.containsKey('tile_background_color')) {
-      _tileBackgroundColor = _apiMapResponse['tile_background_color'] == null
-          ? null
-          : _apiMapResponse['tile_background_color'].toString();
+      _tileBackgroundColor =
+          _apiMapResponse['tile_background_color']?.toString();
       _tileBackgroundColorSet = true;
     }
     return _tileBackgroundColor;
@@ -12603,9 +12076,7 @@ class DashboardAppearance {
 
   String get keyColor {
     if (!_keyColorSet && _apiMapResponse.containsKey('key_color')) {
-      _keyColor = _apiMapResponse['key_color'] == null
-          ? null
-          : _apiMapResponse['key_color'].toString();
+      _keyColor = _apiMapResponse['key_color']?.toString();
       _keyColorSet = true;
     }
     return _keyColor;
@@ -12778,9 +12249,7 @@ class DashboardBase {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -12810,9 +12279,7 @@ class DashboardBase {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -12843,9 +12310,7 @@ class DashboardBase {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -12876,9 +12341,7 @@ class DashboardBase {
   String get refreshInterval {
     if (!_refreshIntervalSet &&
         _apiMapResponse.containsKey('refresh_interval')) {
-      _refreshInterval = _apiMapResponse['refresh_interval'] == null
-          ? null
-          : _apiMapResponse['refresh_interval'].toString();
+      _refreshInterval = _apiMapResponse['refresh_interval']?.toString();
       _refreshIntervalSet = true;
     }
     return _refreshInterval;
@@ -12925,9 +12388,7 @@ class DashboardBase {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -12957,9 +12418,7 @@ class DashboardBase {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -12975,9 +12434,7 @@ class DashboardBase {
   String get preferredViewer {
     if (!_preferredViewerSet &&
         _apiMapResponse.containsKey('preferred_viewer')) {
-      _preferredViewer = _apiMapResponse['preferred_viewer'] == null
-          ? null
-          : _apiMapResponse['preferred_viewer'].toString();
+      _preferredViewer = _apiMapResponse['preferred_viewer']?.toString();
       _preferredViewerSet = true;
     }
     return _preferredViewer;
@@ -13037,7 +12494,7 @@ class DashboardBase {
       json['id'] = id;
     }
     if (_modelSet || _apiMapResponse.containsKey('model')) {
-      json['model'] = model == null ? null : model.toJson();
+      json['model'] = model?.toJson();
     }
     if (_queryTimezoneSet || _apiMapResponse.containsKey('query_timezone')) {
       json['query_timezone'] = queryTimezone;
@@ -13054,7 +12511,7 @@ class DashboardBase {
       json['refresh_interval_to_i'] = refreshIntervalToI;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_titleSet || _apiMapResponse.containsKey('title')) {
       json['title'] = title;
@@ -13181,9 +12638,7 @@ class DashboardElement {
 
   String get bodyText {
     if (!_bodyTextSet && _apiMapResponse.containsKey('body_text')) {
-      _bodyText = _apiMapResponse['body_text'] == null
-          ? null
-          : _apiMapResponse['body_text'].toString();
+      _bodyText = _apiMapResponse['body_text']?.toString();
       _bodyTextSet = true;
     }
     return _bodyText;
@@ -13199,9 +12654,7 @@ class DashboardElement {
   String get bodyTextAsHtml {
     if (!_bodyTextAsHtmlSet &&
         _apiMapResponse.containsKey('body_text_as_html')) {
-      _bodyTextAsHtml = _apiMapResponse['body_text_as_html'] == null
-          ? null
-          : _apiMapResponse['body_text_as_html'].toString();
+      _bodyTextAsHtml = _apiMapResponse['body_text_as_html']?.toString();
       _bodyTextAsHtmlSet = true;
     }
     return _bodyTextAsHtml;
@@ -13216,9 +12669,7 @@ class DashboardElement {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -13233,9 +12684,7 @@ class DashboardElement {
 
   String get editUri {
     if (!_editUriSet && _apiMapResponse.containsKey('edit_uri')) {
-      _editUri = _apiMapResponse['edit_uri'] == null
-          ? null
-          : _apiMapResponse['edit_uri'].toString();
+      _editUri = _apiMapResponse['edit_uri']?.toString();
       _editUriSet = true;
     }
     return _editUri;
@@ -13250,9 +12699,7 @@ class DashboardElement {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -13283,9 +12730,7 @@ class DashboardElement {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -13300,9 +12745,7 @@ class DashboardElement {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -13317,9 +12760,7 @@ class DashboardElement {
 
   String get mergeResultId {
     if (!_mergeResultIdSet && _apiMapResponse.containsKey('merge_result_id')) {
-      _mergeResultId = _apiMapResponse['merge_result_id'] == null
-          ? null
-          : _apiMapResponse['merge_result_id'].toString();
+      _mergeResultId = _apiMapResponse['merge_result_id']?.toString();
       _mergeResultIdSet = true;
     }
     return _mergeResultId;
@@ -13334,9 +12775,7 @@ class DashboardElement {
 
   String get noteDisplay {
     if (!_noteDisplaySet && _apiMapResponse.containsKey('note_display')) {
-      _noteDisplay = _apiMapResponse['note_display'] == null
-          ? null
-          : _apiMapResponse['note_display'].toString();
+      _noteDisplay = _apiMapResponse['note_display']?.toString();
       _noteDisplaySet = true;
     }
     return _noteDisplay;
@@ -13351,9 +12790,7 @@ class DashboardElement {
 
   String get noteState {
     if (!_noteStateSet && _apiMapResponse.containsKey('note_state')) {
-      _noteState = _apiMapResponse['note_state'] == null
-          ? null
-          : _apiMapResponse['note_state'].toString();
+      _noteState = _apiMapResponse['note_state']?.toString();
       _noteStateSet = true;
     }
     return _noteState;
@@ -13368,9 +12805,7 @@ class DashboardElement {
 
   String get noteText {
     if (!_noteTextSet && _apiMapResponse.containsKey('note_text')) {
-      _noteText = _apiMapResponse['note_text'] == null
-          ? null
-          : _apiMapResponse['note_text'].toString();
+      _noteText = _apiMapResponse['note_text']?.toString();
       _noteTextSet = true;
     }
     return _noteText;
@@ -13386,9 +12821,7 @@ class DashboardElement {
   String get noteTextAsHtml {
     if (!_noteTextAsHtmlSet &&
         _apiMapResponse.containsKey('note_text_as_html')) {
-      _noteTextAsHtml = _apiMapResponse['note_text_as_html'] == null
-          ? null
-          : _apiMapResponse['note_text_as_html'].toString();
+      _noteTextAsHtml = _apiMapResponse['note_text_as_html']?.toString();
       _noteTextAsHtmlSet = true;
     }
     return _noteTextAsHtml;
@@ -13435,9 +12868,7 @@ class DashboardElement {
   String get refreshInterval {
     if (!_refreshIntervalSet &&
         _apiMapResponse.containsKey('refresh_interval')) {
-      _refreshInterval = _apiMapResponse['refresh_interval'] == null
-          ? null
-          : _apiMapResponse['refresh_interval'].toString();
+      _refreshInterval = _apiMapResponse['refresh_interval']?.toString();
       _refreshIntervalSet = true;
     }
     return _refreshInterval;
@@ -13499,9 +12930,7 @@ class DashboardElement {
 
   String get subtitleText {
     if (!_subtitleTextSet && _apiMapResponse.containsKey('subtitle_text')) {
-      _subtitleText = _apiMapResponse['subtitle_text'] == null
-          ? null
-          : _apiMapResponse['subtitle_text'].toString();
+      _subtitleText = _apiMapResponse['subtitle_text']?.toString();
       _subtitleTextSet = true;
     }
     return _subtitleText;
@@ -13516,9 +12945,7 @@ class DashboardElement {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -13548,9 +12975,7 @@ class DashboardElement {
 
   String get titleText {
     if (!_titleTextSet && _apiMapResponse.containsKey('title_text')) {
-      _titleText = _apiMapResponse['title_text'] == null
-          ? null
-          : _apiMapResponse['title_text'].toString();
+      _titleText = _apiMapResponse['title_text']?.toString();
       _titleTextSet = true;
     }
     return _titleText;
@@ -13565,9 +12990,7 @@ class DashboardElement {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -13598,9 +13021,7 @@ class DashboardElement {
   String get titleTextAsHtml {
     if (!_titleTextAsHtmlSet &&
         _apiMapResponse.containsKey('title_text_as_html')) {
-      _titleTextAsHtml = _apiMapResponse['title_text_as_html'] == null
-          ? null
-          : _apiMapResponse['title_text_as_html'].toString();
+      _titleTextAsHtml = _apiMapResponse['title_text_as_html']?.toString();
       _titleTextAsHtmlSet = true;
     }
     return _titleTextAsHtml;
@@ -13616,9 +13037,8 @@ class DashboardElement {
   String get subtitleTextAsHtml {
     if (!_subtitleTextAsHtmlSet &&
         _apiMapResponse.containsKey('subtitle_text_as_html')) {
-      _subtitleTextAsHtml = _apiMapResponse['subtitle_text_as_html'] == null
-          ? null
-          : _apiMapResponse['subtitle_text_as_html'].toString();
+      _subtitleTextAsHtml =
+          _apiMapResponse['subtitle_text_as_html']?.toString();
       _subtitleTextAsHtmlSet = true;
     }
     return _subtitleTextAsHtml;
@@ -13677,7 +13097,7 @@ class DashboardElement {
       json['id'] = id;
     }
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_lookIdSet || _apiMapResponse.containsKey('look_id')) {
       json['look_id'] = lookId;
@@ -13702,7 +13122,7 @@ class DashboardElement {
       json['note_text_as_html'] = noteTextAsHtml;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_queryIdSet || _apiMapResponse.containsKey('query_id')) {
       json['query_id'] = queryId;
@@ -13716,7 +13136,7 @@ class DashboardElement {
       json['refresh_interval_to_i'] = refreshIntervalToI;
     }
     if (_resultMakerSet || _apiMapResponse.containsKey('result_maker')) {
-      json['result_maker'] = resultMaker == null ? null : resultMaker.toJson();
+      json['result_maker'] = resultMaker?.toJson();
     }
     if (_resultMakerIdSet || _apiMapResponse.containsKey('result_maker_id')) {
       json['result_maker_id'] = resultMakerId;
@@ -13823,9 +13243,7 @@ class DashboardFilter {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -13840,9 +13258,7 @@ class DashboardFilter {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -13857,9 +13273,7 @@ class DashboardFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -13874,9 +13288,7 @@ class DashboardFilter {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -13891,9 +13303,7 @@ class DashboardFilter {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -13908,9 +13318,7 @@ class DashboardFilter {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -13925,9 +13333,7 @@ class DashboardFilter {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -13942,9 +13348,7 @@ class DashboardFilter {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -13959,9 +13363,7 @@ class DashboardFilter {
 
   String get dimension {
     if (!_dimensionSet && _apiMapResponse.containsKey('dimension')) {
-      _dimension = _apiMapResponse['dimension'] == null
-          ? null
-          : _apiMapResponse['dimension'].toString();
+      _dimension = _apiMapResponse['dimension']?.toString();
       _dimensionSet = true;
     }
     return _dimension;
@@ -14007,11 +13409,9 @@ class DashboardFilter {
   List<String> get listensToFilters {
     if (!_listensToFiltersSet &&
         _apiMapResponse.containsKey('listens_to_filters')) {
-      _listensToFilters = _apiMapResponse['listens_to_filters'] == null
-          ? null
-          : _apiMapResponse['listens_to_filters']
-              .map<String>((i) => i as String)
-              .toList();
+      _listensToFilters = _apiMapResponse['listens_to_filters']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _listensToFiltersSet = true;
     }
     return _listensToFilters;
@@ -14204,9 +13604,7 @@ class DashboardLayout {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -14221,9 +13619,7 @@ class DashboardLayout {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -14238,9 +13634,7 @@ class DashboardLayout {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -14315,9 +13709,7 @@ class DashboardLayout {
 
   String get dashboardTitle {
     if (!_dashboardTitleSet && _apiMapResponse.containsKey('dashboard_title')) {
-      _dashboardTitle = _apiMapResponse['dashboard_title'] == null
-          ? null
-          : _apiMapResponse['dashboard_title'].toString();
+      _dashboardTitle = _apiMapResponse['dashboard_title']?.toString();
       _dashboardTitleSet = true;
     }
     return _dashboardTitle;
@@ -14407,9 +13799,8 @@ class DashboardLayout {
     }
     if (_dashboardLayoutComponentsSet ||
         _apiMapResponse.containsKey('dashboard_layout_components')) {
-      json['dashboard_layout_components'] = dashboardLayoutComponents == null
-          ? null
-          : dashboardLayoutComponents.map((i) => i.toJson()).toList();
+      json['dashboard_layout_components'] =
+          dashboardLayoutComponents?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -14475,9 +13866,7 @@ class DashboardLayoutComponent {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -14493,9 +13882,7 @@ class DashboardLayoutComponent {
   String get dashboardLayoutId {
     if (!_dashboardLayoutIdSet &&
         _apiMapResponse.containsKey('dashboard_layout_id')) {
-      _dashboardLayoutId = _apiMapResponse['dashboard_layout_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_layout_id'].toString();
+      _dashboardLayoutId = _apiMapResponse['dashboard_layout_id']?.toString();
       _dashboardLayoutIdSet = true;
     }
     return _dashboardLayoutId;
@@ -14511,9 +13898,7 @@ class DashboardLayoutComponent {
   String get dashboardElementId {
     if (!_dashboardElementIdSet &&
         _apiMapResponse.containsKey('dashboard_element_id')) {
-      _dashboardElementId = _apiMapResponse['dashboard_element_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_element_id'].toString();
+      _dashboardElementId = _apiMapResponse['dashboard_element_id']?.toString();
       _dashboardElementIdSet = true;
     }
     return _dashboardElementId;
@@ -14603,9 +13988,7 @@ class DashboardLayoutComponent {
 
   String get elementTitle {
     if (!_elementTitleSet && _apiMapResponse.containsKey('element_title')) {
-      _elementTitle = _apiMapResponse['element_title'] == null
-          ? null
-          : _apiMapResponse['element_title'].toString();
+      _elementTitle = _apiMapResponse['element_title']?.toString();
       _elementTitleSet = true;
     }
     return _elementTitle;
@@ -14636,9 +14019,7 @@ class DashboardLayoutComponent {
 
   String get visType {
     if (!_visTypeSet && _apiMapResponse.containsKey('vis_type')) {
-      _visType = _apiMapResponse['vis_type'] == null
-          ? null
-          : _apiMapResponse['vis_type'].toString();
+      _visType = _apiMapResponse['vis_type']?.toString();
       _visTypeSet = true;
     }
     return _visType;
@@ -14735,9 +14116,7 @@ class DashboardLookml {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -14752,9 +14131,7 @@ class DashboardLookml {
 
   String get lookml {
     if (!_lookmlSet && _apiMapResponse.containsKey('lookml')) {
-      _lookml = _apiMapResponse['lookml'] == null
-          ? null
-          : _apiMapResponse['lookml'].toString();
+      _lookml = _apiMapResponse['lookml']?.toString();
       _lookmlSet = true;
     }
     return _lookml;
@@ -14879,11 +14256,10 @@ class DataActionForm {
   Map toJson() {
     var json = {};
     if (_stateSet || _apiMapResponse.containsKey('state')) {
-      json['state'] = state == null ? null : state.toJson();
+      json['state'] = state?.toJson();
     }
     if (_fieldsSet || _apiMapResponse.containsKey('fields')) {
-      json['fields'] =
-          fields == null ? null : fields.map((i) => i.toJson()).toList();
+      json['fields'] = fields?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -14925,9 +14301,7 @@ class DataActionFormField {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -14942,9 +14316,7 @@ class DataActionFormField {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -14959,9 +14331,7 @@ class DataActionFormField {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -14976,9 +14346,7 @@ class DataActionFormField {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -14993,9 +14361,7 @@ class DataActionFormField {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default')) {
-      _defaultValue = _apiMapResponse['default'] == null
-          ? null
-          : _apiMapResponse['default'].toString();
+      _defaultValue = _apiMapResponse['default']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -15010,9 +14376,7 @@ class DataActionFormField {
 
   String get oauthUrl {
     if (!_oauthUrlSet && _apiMapResponse.containsKey('oauth_url')) {
-      _oauthUrl = _apiMapResponse['oauth_url'] == null
-          ? null
-          : _apiMapResponse['oauth_url'].toString();
+      _oauthUrl = _apiMapResponse['oauth_url']?.toString();
       _oauthUrlSet = true;
     }
     return _oauthUrl;
@@ -15126,8 +14490,7 @@ class DataActionFormField {
       json['required'] = required;
     }
     if (_optionsSet || _apiMapResponse.containsKey('options')) {
-      json['options'] =
-          options == null ? null : options.map((i) => i.toJson()).toList();
+      json['options'] = options?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -15148,9 +14511,7 @@ class DataActionFormSelectOption {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -15165,9 +14526,7 @@ class DataActionFormSelectOption {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -15319,9 +14678,7 @@ class DataActionResponse {
 
   String get webhookId {
     if (!_webhookIdSet && _apiMapResponse.containsKey('webhook_id')) {
-      _webhookId = _apiMapResponse['webhook_id'] == null
-          ? null
-          : _apiMapResponse['webhook_id'].toString();
+      _webhookId = _apiMapResponse['webhook_id']?.toString();
       _webhookIdSet = true;
     }
     return _webhookId;
@@ -15383,9 +14740,7 @@ class DataActionResponse {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -15435,8 +14790,7 @@ class DataActionResponse {
     }
     if (_validationErrorsSet ||
         _apiMapResponse.containsKey('validation_errors')) {
-      json['validation_errors'] =
-          validationErrors == null ? null : validationErrors.toJson();
+      json['validation_errors'] = validationErrors?.toJson();
     }
     if (_messageSet || _apiMapResponse.containsKey('message')) {
       json['message'] = message;
@@ -15460,9 +14814,7 @@ class DataActionUserState {
 
   String get data {
     if (!_dataSet && _apiMapResponse.containsKey('data')) {
-      _data = _apiMapResponse['data'] == null
-          ? null
-          : _apiMapResponse['data'].toString();
+      _data = _apiMapResponse['data']?.toString();
       _dataSet = true;
     }
     return _data;
@@ -15610,9 +14962,7 @@ class Datagroup {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -15627,9 +14977,7 @@ class Datagroup {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -15675,9 +15023,7 @@ class Datagroup {
 
   String get triggerError {
     if (!_triggerErrorSet && _apiMapResponse.containsKey('trigger_error')) {
-      _triggerError = _apiMapResponse['trigger_error'] == null
-          ? null
-          : _apiMapResponse['trigger_error'].toString();
+      _triggerError = _apiMapResponse['trigger_error']?.toString();
       _triggerErrorSet = true;
     }
     return _triggerError;
@@ -15692,9 +15038,7 @@ class Datagroup {
 
   String get triggerValue {
     if (!_triggerValueSet && _apiMapResponse.containsKey('trigger_value')) {
-      _triggerValue = _apiMapResponse['trigger_value'] == null
-          ? null
-          : _apiMapResponse['trigger_value'].toString();
+      _triggerValue = _apiMapResponse['trigger_value']?.toString();
       _triggerValueSet = true;
     }
     return _triggerValue;
@@ -15931,9 +15275,7 @@ class DBConnection {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -15998,9 +15340,7 @@ class DBConnection {
 
   String get host {
     if (!_hostSet && _apiMapResponse.containsKey('host')) {
-      _host = _apiMapResponse['host'] == null
-          ? null
-          : _apiMapResponse['host'].toString();
+      _host = _apiMapResponse['host']?.toString();
       _hostSet = true;
     }
     return _host;
@@ -16015,9 +15355,7 @@ class DBConnection {
 
   String get port {
     if (!_portSet && _apiMapResponse.containsKey('port')) {
-      _port = _apiMapResponse['port'] == null
-          ? null
-          : _apiMapResponse['port'].toString();
+      _port = _apiMapResponse['port']?.toString();
       _portSet = true;
     }
     return _port;
@@ -16032,9 +15370,7 @@ class DBConnection {
 
   String get username {
     if (!_usernameSet && _apiMapResponse.containsKey('username')) {
-      _username = _apiMapResponse['username'] == null
-          ? null
-          : _apiMapResponse['username'].toString();
+      _username = _apiMapResponse['username']?.toString();
       _usernameSet = true;
     }
     return _username;
@@ -16049,9 +15385,7 @@ class DBConnection {
 
   String get password {
     if (!_passwordSet && _apiMapResponse.containsKey('password')) {
-      _password = _apiMapResponse['password'] == null
-          ? null
-          : _apiMapResponse['password'].toString();
+      _password = _apiMapResponse['password']?.toString();
       _passwordSet = true;
     }
     return _password;
@@ -16081,9 +15415,7 @@ class DBConnection {
 
   String get certificate {
     if (!_certificateSet && _apiMapResponse.containsKey('certificate')) {
-      _certificate = _apiMapResponse['certificate'] == null
-          ? null
-          : _apiMapResponse['certificate'].toString();
+      _certificate = _apiMapResponse['certificate']?.toString();
       _certificateSet = true;
     }
     return _certificate;
@@ -16098,9 +15430,7 @@ class DBConnection {
 
   String get fileType {
     if (!_fileTypeSet && _apiMapResponse.containsKey('file_type')) {
-      _fileType = _apiMapResponse['file_type'] == null
-          ? null
-          : _apiMapResponse['file_type'].toString();
+      _fileType = _apiMapResponse['file_type']?.toString();
       _fileTypeSet = true;
     }
     return _fileType;
@@ -16115,9 +15445,7 @@ class DBConnection {
 
   String get database {
     if (!_databaseSet && _apiMapResponse.containsKey('database')) {
-      _database = _apiMapResponse['database'] == null
-          ? null
-          : _apiMapResponse['database'].toString();
+      _database = _apiMapResponse['database']?.toString();
       _databaseSet = true;
     }
     return _database;
@@ -16132,9 +15460,7 @@ class DBConnection {
 
   String get dbTimezone {
     if (!_dbTimezoneSet && _apiMapResponse.containsKey('db_timezone')) {
-      _dbTimezone = _apiMapResponse['db_timezone'] == null
-          ? null
-          : _apiMapResponse['db_timezone'].toString();
+      _dbTimezone = _apiMapResponse['db_timezone']?.toString();
       _dbTimezoneSet = true;
     }
     return _dbTimezone;
@@ -16149,9 +15475,7 @@ class DBConnection {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -16166,9 +15490,7 @@ class DBConnection {
 
   String get schema {
     if (!_schemaSet && _apiMapResponse.containsKey('schema')) {
-      _schema = _apiMapResponse['schema'] == null
-          ? null
-          : _apiMapResponse['schema'].toString();
+      _schema = _apiMapResponse['schema']?.toString();
       _schemaSet = true;
     }
     return _schema;
@@ -16199,9 +15521,8 @@ class DBConnection {
   String get maxBillingGigabytes {
     if (!_maxBillingGigabytesSet &&
         _apiMapResponse.containsKey('max_billing_gigabytes')) {
-      _maxBillingGigabytes = _apiMapResponse['max_billing_gigabytes'] == null
-          ? null
-          : _apiMapResponse['max_billing_gigabytes'].toString();
+      _maxBillingGigabytes =
+          _apiMapResponse['max_billing_gigabytes']?.toString();
       _maxBillingGigabytesSet = true;
     }
     return _maxBillingGigabytes;
@@ -16246,9 +15567,7 @@ class DBConnection {
 
   String get tmpDbName {
     if (!_tmpDbNameSet && _apiMapResponse.containsKey('tmp_db_name')) {
-      _tmpDbName = _apiMapResponse['tmp_db_name'] == null
-          ? null
-          : _apiMapResponse['tmp_db_name'].toString();
+      _tmpDbName = _apiMapResponse['tmp_db_name']?.toString();
       _tmpDbNameSet = true;
     }
     return _tmpDbName;
@@ -16264,9 +15583,8 @@ class DBConnection {
   String get jdbcAdditionalParams {
     if (!_jdbcAdditionalParamsSet &&
         _apiMapResponse.containsKey('jdbc_additional_params')) {
-      _jdbcAdditionalParams = _apiMapResponse['jdbc_additional_params'] == null
-          ? null
-          : _apiMapResponse['jdbc_additional_params'].toString();
+      _jdbcAdditionalParams =
+          _apiMapResponse['jdbc_additional_params']?.toString();
       _jdbcAdditionalParamsSet = true;
     }
     return _jdbcAdditionalParams;
@@ -16296,9 +15614,7 @@ class DBConnection {
 
   String get dialectName {
     if (!_dialectNameSet && _apiMapResponse.containsKey('dialect_name')) {
-      _dialectName = _apiMapResponse['dialect_name'] == null
-          ? null
-          : _apiMapResponse['dialect_name'].toString();
+      _dialectName = _apiMapResponse['dialect_name']?.toString();
       _dialectNameSet = true;
     }
     return _dialectName;
@@ -16313,9 +15629,7 @@ class DBConnection {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -16330,9 +15644,7 @@ class DBConnection {
 
   String get userId {
     if (!_userIdSet && _apiMapResponse.containsKey('user_id')) {
-      _userId = _apiMapResponse['user_id'] == null
-          ? null
-          : _apiMapResponse['user_id'].toString();
+      _userId = _apiMapResponse['user_id']?.toString();
       _userIdSet = true;
     }
     return _userId;
@@ -16379,11 +15691,9 @@ class DBConnection {
   List<String> get userAttributeFields {
     if (!_userAttributeFieldsSet &&
         _apiMapResponse.containsKey('user_attribute_fields')) {
-      _userAttributeFields = _apiMapResponse['user_attribute_fields'] == null
-          ? null
-          : _apiMapResponse['user_attribute_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _userAttributeFields = _apiMapResponse['user_attribute_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _userAttributeFieldsSet = true;
     }
     return _userAttributeFields;
@@ -16399,9 +15709,7 @@ class DBConnection {
   String get maintenanceCron {
     if (!_maintenanceCronSet &&
         _apiMapResponse.containsKey('maintenance_cron')) {
-      _maintenanceCron = _apiMapResponse['maintenance_cron'] == null
-          ? null
-          : _apiMapResponse['maintenance_cron'].toString();
+      _maintenanceCron = _apiMapResponse['maintenance_cron']?.toString();
       _maintenanceCronSet = true;
     }
     return _maintenanceCron;
@@ -16416,9 +15724,7 @@ class DBConnection {
 
   String get lastRegenAt {
     if (!_lastRegenAtSet && _apiMapResponse.containsKey('last_regen_at')) {
-      _lastRegenAt = _apiMapResponse['last_regen_at'] == null
-          ? null
-          : _apiMapResponse['last_regen_at'].toString();
+      _lastRegenAt = _apiMapResponse['last_regen_at']?.toString();
       _lastRegenAtSet = true;
     }
     return _lastRegenAt;
@@ -16433,9 +15739,7 @@ class DBConnection {
 
   String get lastReapAt {
     if (!_lastReapAtSet && _apiMapResponse.containsKey('last_reap_at')) {
-      _lastReapAt = _apiMapResponse['last_reap_at'] == null
-          ? null
-          : _apiMapResponse['last_reap_at'].toString();
+      _lastReapAt = _apiMapResponse['last_reap_at']?.toString();
       _lastReapAtSet = true;
     }
     return _lastReapAt;
@@ -16485,9 +15789,7 @@ class DBConnection {
     if (!_afterConnectStatementsSet &&
         _apiMapResponse.containsKey('after_connect_statements')) {
       _afterConnectStatements =
-          _apiMapResponse['after_connect_statements'] == null
-              ? null
-              : _apiMapResponse['after_connect_statements'].toString();
+          _apiMapResponse['after_connect_statements']?.toString();
       _afterConnectStatementsSet = true;
     }
     return _afterConnectStatements;
@@ -16534,9 +15836,7 @@ class DBConnection {
 
   String get tunnelId {
     if (!_tunnelIdSet && _apiMapResponse.containsKey('tunnel_id')) {
-      _tunnelId = _apiMapResponse['tunnel_id'] == null
-          ? null
-          : _apiMapResponse['tunnel_id'].toString();
+      _tunnelId = _apiMapResponse['tunnel_id']?.toString();
       _tunnelIdSet = true;
     }
     return _tunnelId;
@@ -16645,11 +15945,10 @@ class DBConnection {
       json['name'] = name;
     }
     if (_dialectSet || _apiMapResponse.containsKey('dialect')) {
-      json['dialect'] = dialect == null ? null : dialect.toJson();
+      json['dialect'] = dialect?.toJson();
     }
     if (_snippetsSet || _apiMapResponse.containsKey('snippets')) {
-      json['snippets'] =
-          snippets == null ? null : snippets.map((i) => i.toJson()).toList();
+      json['snippets'] = snippets?.map((i) => i.toJson())?.toList();
     }
     if (_pdtsEnabledSet || _apiMapResponse.containsKey('pdts_enabled')) {
       json['pdts_enabled'] = pdtsEnabled;
@@ -16754,8 +16053,7 @@ class DBConnection {
     }
     if (_pdtContextOverrideSet ||
         _apiMapResponse.containsKey('pdt_context_override')) {
-      json['pdt_context_override'] =
-          pdtContextOverride == null ? null : pdtContextOverride.toJson();
+      json['pdt_context_override'] = pdtContextOverride?.toJson();
     }
     if (_managedSet || _apiMapResponse.containsKey('managed')) {
       json['managed'] = managed;
@@ -16821,9 +16119,7 @@ class DBConnectionBase {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -16919,11 +16215,10 @@ class DBConnectionBase {
       json['name'] = name;
     }
     if (_dialectSet || _apiMapResponse.containsKey('dialect')) {
-      json['dialect'] = dialect == null ? null : dialect.toJson();
+      json['dialect'] = dialect?.toJson();
     }
     if (_snippetsSet || _apiMapResponse.containsKey('snippets')) {
-      json['snippets'] =
-          snippets == null ? null : snippets.map((i) => i.toJson()).toList();
+      json['snippets'] = snippets?.map((i) => i.toJson())?.toList();
     }
     if (_pdtsEnabledSet || _apiMapResponse.containsKey('pdts_enabled')) {
       json['pdts_enabled'] = pdtsEnabled;
@@ -16977,9 +16272,7 @@ class DBConnectionOverride {
 
   String get context {
     if (!_contextSet && _apiMapResponse.containsKey('context')) {
-      _context = _apiMapResponse['context'] == null
-          ? null
-          : _apiMapResponse['context'].toString();
+      _context = _apiMapResponse['context']?.toString();
       _contextSet = true;
     }
     return _context;
@@ -16994,9 +16287,7 @@ class DBConnectionOverride {
 
   String get host {
     if (!_hostSet && _apiMapResponse.containsKey('host')) {
-      _host = _apiMapResponse['host'] == null
-          ? null
-          : _apiMapResponse['host'].toString();
+      _host = _apiMapResponse['host']?.toString();
       _hostSet = true;
     }
     return _host;
@@ -17011,9 +16302,7 @@ class DBConnectionOverride {
 
   String get port {
     if (!_portSet && _apiMapResponse.containsKey('port')) {
-      _port = _apiMapResponse['port'] == null
-          ? null
-          : _apiMapResponse['port'].toString();
+      _port = _apiMapResponse['port']?.toString();
       _portSet = true;
     }
     return _port;
@@ -17028,9 +16317,7 @@ class DBConnectionOverride {
 
   String get username {
     if (!_usernameSet && _apiMapResponse.containsKey('username')) {
-      _username = _apiMapResponse['username'] == null
-          ? null
-          : _apiMapResponse['username'].toString();
+      _username = _apiMapResponse['username']?.toString();
       _usernameSet = true;
     }
     return _username;
@@ -17045,9 +16332,7 @@ class DBConnectionOverride {
 
   String get password {
     if (!_passwordSet && _apiMapResponse.containsKey('password')) {
-      _password = _apiMapResponse['password'] == null
-          ? null
-          : _apiMapResponse['password'].toString();
+      _password = _apiMapResponse['password']?.toString();
       _passwordSet = true;
     }
     return _password;
@@ -17077,9 +16362,7 @@ class DBConnectionOverride {
 
   String get certificate {
     if (!_certificateSet && _apiMapResponse.containsKey('certificate')) {
-      _certificate = _apiMapResponse['certificate'] == null
-          ? null
-          : _apiMapResponse['certificate'].toString();
+      _certificate = _apiMapResponse['certificate']?.toString();
       _certificateSet = true;
     }
     return _certificate;
@@ -17094,9 +16377,7 @@ class DBConnectionOverride {
 
   String get fileType {
     if (!_fileTypeSet && _apiMapResponse.containsKey('file_type')) {
-      _fileType = _apiMapResponse['file_type'] == null
-          ? null
-          : _apiMapResponse['file_type'].toString();
+      _fileType = _apiMapResponse['file_type']?.toString();
       _fileTypeSet = true;
     }
     return _fileType;
@@ -17111,9 +16392,7 @@ class DBConnectionOverride {
 
   String get database {
     if (!_databaseSet && _apiMapResponse.containsKey('database')) {
-      _database = _apiMapResponse['database'] == null
-          ? null
-          : _apiMapResponse['database'].toString();
+      _database = _apiMapResponse['database']?.toString();
       _databaseSet = true;
     }
     return _database;
@@ -17128,9 +16407,7 @@ class DBConnectionOverride {
 
   String get schema {
     if (!_schemaSet && _apiMapResponse.containsKey('schema')) {
-      _schema = _apiMapResponse['schema'] == null
-          ? null
-          : _apiMapResponse['schema'].toString();
+      _schema = _apiMapResponse['schema']?.toString();
       _schemaSet = true;
     }
     return _schema;
@@ -17146,9 +16423,8 @@ class DBConnectionOverride {
   String get jdbcAdditionalParams {
     if (!_jdbcAdditionalParamsSet &&
         _apiMapResponse.containsKey('jdbc_additional_params')) {
-      _jdbcAdditionalParams = _apiMapResponse['jdbc_additional_params'] == null
-          ? null
-          : _apiMapResponse['jdbc_additional_params'].toString();
+      _jdbcAdditionalParams =
+          _apiMapResponse['jdbc_additional_params']?.toString();
       _jdbcAdditionalParamsSet = true;
     }
     return _jdbcAdditionalParams;
@@ -17165,9 +16441,7 @@ class DBConnectionOverride {
     if (!_afterConnectStatementsSet &&
         _apiMapResponse.containsKey('after_connect_statements')) {
       _afterConnectStatements =
-          _apiMapResponse['after_connect_statements'] == null
-              ? null
-              : _apiMapResponse['after_connect_statements'].toString();
+          _apiMapResponse['after_connect_statements']?.toString();
       _afterConnectStatementsSet = true;
     }
     return _afterConnectStatements;
@@ -17288,9 +16562,7 @@ class DBConnectionTestResult {
   String get connectionString {
     if (!_connectionStringSet &&
         _apiMapResponse.containsKey('connection_string')) {
-      _connectionString = _apiMapResponse['connection_string'] == null
-          ? null
-          : _apiMapResponse['connection_string'].toString();
+      _connectionString = _apiMapResponse['connection_string']?.toString();
       _connectionStringSet = true;
     }
     return _connectionString;
@@ -17305,9 +16577,7 @@ class DBConnectionTestResult {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -17322,9 +16592,7 @@ class DBConnectionTestResult {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -17339,9 +16607,7 @@ class DBConnectionTestResult {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -17421,9 +16687,7 @@ class DelegateOauthTest {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -17439,9 +16703,8 @@ class DelegateOauthTest {
   String get installationTargetId {
     if (!_installationTargetIdSet &&
         _apiMapResponse.containsKey('installation_target_id')) {
-      _installationTargetId = _apiMapResponse['installation_target_id'] == null
-          ? null
-          : _apiMapResponse['installation_target_id'].toString();
+      _installationTargetId =
+          _apiMapResponse['installation_target_id']?.toString();
       _installationTargetIdSet = true;
     }
     return _installationTargetId;
@@ -17539,9 +16802,7 @@ class DependencyGraph {
 
   String get graphText {
     if (!_graphTextSet && _apiMapResponse.containsKey('graph_text')) {
-      _graphText = _apiMapResponse['graph_text'] == null
-          ? null
-          : _apiMapResponse['graph_text'].toString();
+      _graphText = _apiMapResponse['graph_text']?.toString();
       _graphTextSet = true;
     }
     return _graphText;
@@ -17625,14 +16886,14 @@ class DependencyStatusMapper {
 }
 
 /// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
-enum DestinationType { EMAIL, ACTIONHUB }
+enum DestinationType { email, actionHub }
 
 class DestinationTypeMapper {
   static String toStringValue(DestinationType e) {
     switch (e) {
-      case DestinationType.EMAIL:
+      case DestinationType.email:
         return 'EMAIL';
-      case DestinationType.ACTIONHUB:
+      case DestinationType.actionHub:
         return 'ACTION_HUB';
 
       default:
@@ -17642,10 +16903,10 @@ class DestinationTypeMapper {
 
   static DestinationType fromStringValue(String s) {
     if (s == 'EMAIL') {
-      return DestinationType.EMAIL;
+      return DestinationType.email;
     }
     if (s == 'ACTION_HUB') {
-      return DestinationType.ACTIONHUB;
+      return DestinationType.actionHub;
     }
     return null;
   }
@@ -17699,9 +16960,7 @@ class Dialect {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -17716,9 +16975,7 @@ class Dialect {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -17751,9 +17008,7 @@ class Dialect {
     if (!_persistentTableIndexesSet &&
         _apiMapResponse.containsKey('persistent_table_indexes')) {
       _persistentTableIndexes =
-          _apiMapResponse['persistent_table_indexes'] == null
-              ? null
-              : _apiMapResponse['persistent_table_indexes'].toString();
+          _apiMapResponse['persistent_table_indexes']?.toString();
       _persistentTableIndexesSet = true;
     }
     return _persistentTableIndexes;
@@ -17770,9 +17025,7 @@ class Dialect {
     if (!_persistentTableSortkeysSet &&
         _apiMapResponse.containsKey('persistent_table_sortkeys')) {
       _persistentTableSortkeys =
-          _apiMapResponse['persistent_table_sortkeys'] == null
-              ? null
-              : _apiMapResponse['persistent_table_sortkeys'].toString();
+          _apiMapResponse['persistent_table_sortkeys']?.toString();
       _persistentTableSortkeysSet = true;
     }
     return _persistentTableSortkeys;
@@ -17789,9 +17042,7 @@ class Dialect {
     if (!_persistentTableDistkeySet &&
         _apiMapResponse.containsKey('persistent_table_distkey')) {
       _persistentTableDistkey =
-          _apiMapResponse['persistent_table_distkey'] == null
-              ? null
-              : _apiMapResponse['persistent_table_distkey'].toString();
+          _apiMapResponse['persistent_table_distkey']?.toString();
       _persistentTableDistkeySet = true;
     }
     return _persistentTableDistkey;
@@ -17840,11 +17091,9 @@ class Dialect {
   List<String> get connectionTests {
     if (!_connectionTestsSet &&
         _apiMapResponse.containsKey('connection_tests')) {
-      _connectionTests = _apiMapResponse['connection_tests'] == null
-          ? null
-          : _apiMapResponse['connection_tests']
-              .map<String>((i) => i as String)
-              .toList();
+      _connectionTests = _apiMapResponse['connection_tests']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _connectionTestsSet = true;
     }
     return _connectionTests;
@@ -18052,9 +17301,7 @@ class DialectInfo {
     if (!_defaultMaxConnectionsSet &&
         _apiMapResponse.containsKey('default_max_connections')) {
       _defaultMaxConnections =
-          _apiMapResponse['default_max_connections'] == null
-              ? null
-              : _apiMapResponse['default_max_connections'].toString();
+          _apiMapResponse['default_max_connections']?.toString();
       _defaultMaxConnectionsSet = true;
     }
     return _defaultMaxConnections;
@@ -18069,9 +17316,7 @@ class DialectInfo {
 
   String get defaultPort {
     if (!_defaultPortSet && _apiMapResponse.containsKey('default_port')) {
-      _defaultPort = _apiMapResponse['default_port'] == null
-          ? null
-          : _apiMapResponse['default_port'].toString();
+      _defaultPort = _apiMapResponse['default_port']?.toString();
       _defaultPortSet = true;
     }
     return _defaultPort;
@@ -18101,9 +17346,7 @@ class DialectInfo {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -18120,9 +17363,7 @@ class DialectInfo {
     if (!_labelForDatabaseEquivalentSet &&
         _apiMapResponse.containsKey('label_for_database_equivalent')) {
       _labelForDatabaseEquivalent =
-          _apiMapResponse['label_for_database_equivalent'] == null
-              ? null
-              : _apiMapResponse['label_for_database_equivalent'].toString();
+          _apiMapResponse['label_for_database_equivalent']?.toString();
       _labelForDatabaseEquivalentSet = true;
     }
     return _labelForDatabaseEquivalent;
@@ -18137,9 +17378,7 @@ class DialectInfo {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -18220,8 +17459,7 @@ class DialectInfo {
     }
     if (_supportedOptionsSet ||
         _apiMapResponse.containsKey('supported_options')) {
-      json['supported_options'] =
-          supportedOptions == null ? null : supportedOptions.toJson();
+      json['supported_options'] = supportedOptions?.toJson();
     }
     return json;
   }
@@ -18619,9 +17857,7 @@ class DiscretePalette {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -18636,9 +17872,7 @@ class DiscretePalette {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -18653,9 +17887,7 @@ class DiscretePalette {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -18670,9 +17902,8 @@ class DiscretePalette {
 
   List<String> get colors {
     if (!_colorsSet && _apiMapResponse.containsKey('colors')) {
-      _colors = _apiMapResponse['colors'] == null
-          ? null
-          : _apiMapResponse['colors'].map<String>((i) => i as String).toList();
+      _colors =
+          _apiMapResponse['colors']?.map<String>((i) => i as String)?.toList();
       _colorsSet = true;
     }
     return _colors;
@@ -18745,9 +17976,7 @@ class EmbedParams {
 
   String get targetUrl {
     if (!_targetUrlSet && _apiMapResponse.containsKey('target_url')) {
-      _targetUrl = _apiMapResponse['target_url'] == null
-          ? null
-          : _apiMapResponse['target_url'].toString();
+      _targetUrl = _apiMapResponse['target_url']?.toString();
       _targetUrlSet = true;
     }
     return _targetUrl;
@@ -18858,9 +18087,7 @@ class EmbedSecret {
 
   String get algorithm {
     if (!_algorithmSet && _apiMapResponse.containsKey('algorithm')) {
-      _algorithm = _apiMapResponse['algorithm'] == null
-          ? null
-          : _apiMapResponse['algorithm'].toString();
+      _algorithm = _apiMapResponse['algorithm']?.toString();
       _algorithmSet = true;
     }
     return _algorithm;
@@ -18875,9 +18102,7 @@ class EmbedSecret {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -18922,9 +18147,7 @@ class EmbedSecret {
 
   String get secret {
     if (!_secretSet && _apiMapResponse.containsKey('secret')) {
-      _secret = _apiMapResponse['secret'] == null
-          ? null
-          : _apiMapResponse['secret'].toString();
+      _secret = _apiMapResponse['secret']?.toString();
       _secretSet = true;
     }
     return _secret;
@@ -19048,9 +18271,7 @@ class EmbedSsoParams {
 
   String get targetUrl {
     if (!_targetUrlSet && _apiMapResponse.containsKey('target_url')) {
-      _targetUrl = _apiMapResponse['target_url'] == null
-          ? null
-          : _apiMapResponse['target_url'].toString();
+      _targetUrl = _apiMapResponse['target_url']?.toString();
       _targetUrlSet = true;
     }
     return _targetUrl;
@@ -19097,9 +18318,7 @@ class EmbedSsoParams {
   String get externalUserId {
     if (!_externalUserIdSet &&
         _apiMapResponse.containsKey('external_user_id')) {
-      _externalUserId = _apiMapResponse['external_user_id'] == null
-          ? null
-          : _apiMapResponse['external_user_id'].toString();
+      _externalUserId = _apiMapResponse['external_user_id']?.toString();
       _externalUserIdSet = true;
     }
     return _externalUserId;
@@ -19114,9 +18333,7 @@ class EmbedSsoParams {
 
   String get firstName {
     if (!_firstNameSet && _apiMapResponse.containsKey('first_name')) {
-      _firstName = _apiMapResponse['first_name'] == null
-          ? null
-          : _apiMapResponse['first_name'].toString();
+      _firstName = _apiMapResponse['first_name']?.toString();
       _firstNameSet = true;
     }
     return _firstName;
@@ -19131,9 +18348,7 @@ class EmbedSsoParams {
 
   String get lastName {
     if (!_lastNameSet && _apiMapResponse.containsKey('last_name')) {
-      _lastName = _apiMapResponse['last_name'] == null
-          ? null
-          : _apiMapResponse['last_name'].toString();
+      _lastName = _apiMapResponse['last_name']?.toString();
       _lastNameSet = true;
     }
     return _lastName;
@@ -19148,9 +18363,7 @@ class EmbedSsoParams {
 
   String get userTimezone {
     if (!_userTimezoneSet && _apiMapResponse.containsKey('user_timezone')) {
-      _userTimezone = _apiMapResponse['user_timezone'] == null
-          ? null
-          : _apiMapResponse['user_timezone'].toString();
+      _userTimezone = _apiMapResponse['user_timezone']?.toString();
       _userTimezoneSet = true;
     }
     return _userTimezone;
@@ -19165,11 +18378,9 @@ class EmbedSsoParams {
 
   List<String> get permissions {
     if (!_permissionsSet && _apiMapResponse.containsKey('permissions')) {
-      _permissions = _apiMapResponse['permissions'] == null
-          ? null
-          : _apiMapResponse['permissions']
-              .map<String>((i) => i as String)
-              .toList();
+      _permissions = _apiMapResponse['permissions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _permissionsSet = true;
     }
     return _permissions;
@@ -19184,9 +18395,8 @@ class EmbedSsoParams {
 
   List<String> get models {
     if (!_modelsSet && _apiMapResponse.containsKey('models')) {
-      _models = _apiMapResponse['models'] == null
-          ? null
-          : _apiMapResponse['models'].map<String>((i) => i as String).toList();
+      _models =
+          _apiMapResponse['models']?.map<String>((i) => i as String)?.toList();
       _modelsSet = true;
     }
     return _models;
@@ -19201,9 +18411,8 @@ class EmbedSsoParams {
 
   List<int> get groupIds {
     if (!_groupIdsSet && _apiMapResponse.containsKey('group_ids')) {
-      _groupIds = _apiMapResponse['group_ids'] == null
-          ? null
-          : _apiMapResponse['group_ids'].map<int>((i) => i as int).toList();
+      _groupIds =
+          _apiMapResponse['group_ids']?.map<int>((i) => i as int)?.toList();
       _groupIdsSet = true;
     }
     return _groupIds;
@@ -19219,9 +18428,7 @@ class EmbedSsoParams {
   String get externalGroupId {
     if (!_externalGroupIdSet &&
         _apiMapResponse.containsKey('external_group_id')) {
-      _externalGroupId = _apiMapResponse['external_group_id'] == null
-          ? null
-          : _apiMapResponse['external_group_id'].toString();
+      _externalGroupId = _apiMapResponse['external_group_id']?.toString();
       _externalGroupIdSet = true;
     }
     return _externalGroupId;
@@ -19347,9 +18554,7 @@ class EmbedUrlResponse {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -19410,9 +18615,7 @@ class Error {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -19428,9 +18631,7 @@ class Error {
   String get documentationUrl {
     if (!_documentationUrlSet &&
         _apiMapResponse.containsKey('documentation_url')) {
-      _documentationUrl = _apiMapResponse['documentation_url'] == null
-          ? null
-          : _apiMapResponse['documentation_url'].toString();
+      _documentationUrl = _apiMapResponse['documentation_url']?.toString();
       _documentationUrlSet = true;
     }
     return _documentationUrl;
@@ -19539,9 +18740,7 @@ class ExternalOauthApplication {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -19556,9 +18755,7 @@ class ExternalOauthApplication {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -19573,9 +18770,7 @@ class ExternalOauthApplication {
 
   String get clientSecret {
     if (!_clientSecretSet && _apiMapResponse.containsKey('client_secret')) {
-      _clientSecret = _apiMapResponse['client_secret'] == null
-          ? null
-          : _apiMapResponse['client_secret'].toString();
+      _clientSecret = _apiMapResponse['client_secret']?.toString();
       _clientSecretSet = true;
     }
     return _clientSecret;
@@ -19590,9 +18785,7 @@ class ExternalOauthApplication {
 
   String get dialectName {
     if (!_dialectNameSet && _apiMapResponse.containsKey('dialect_name')) {
-      _dialectName = _apiMapResponse['dialect_name'] == null
-          ? null
-          : _apiMapResponse['dialect_name'].toString();
+      _dialectName = _apiMapResponse['dialect_name']?.toString();
       _dialectNameSet = true;
     }
     return _dialectName;
@@ -19667,8 +18860,7 @@ class ExternalOauthApplication {
       json['dialect_name'] = dialectName;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     return json;
   }
@@ -19764,9 +18956,7 @@ class Folder {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -19781,9 +18971,7 @@ class Folder {
 
   String get parentId {
     if (!_parentIdSet && _apiMapResponse.containsKey('parent_id')) {
-      _parentId = _apiMapResponse['parent_id'] == null
-          ? null
-          : _apiMapResponse['parent_id'].toString();
+      _parentId = _apiMapResponse['parent_id']?.toString();
       _parentIdSet = true;
     }
     return _parentId;
@@ -19798,9 +18986,7 @@ class Folder {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -19878,9 +19064,7 @@ class Folder {
 
   String get externalId {
     if (!_externalIdSet && _apiMapResponse.containsKey('external_id')) {
-      _externalId = _apiMapResponse['external_id'] == null
-          ? null
-          : _apiMapResponse['external_id'].toString();
+      _externalId = _apiMapResponse['external_id']?.toString();
       _externalIdSet = true;
     }
     return _externalId;
@@ -20094,8 +19278,7 @@ class Folder {
       json['content_metadata_id'] = contentMetadataId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_creatorIdSet || _apiMapResponse.containsKey('creator_id')) {
       json['creator_id'] = creatorId;
@@ -20134,13 +19317,10 @@ class Folder {
       json['can'] = can;
     }
     if (_dashboardsSet || _apiMapResponse.containsKey('dashboards')) {
-      json['dashboards'] = dashboards == null
-          ? null
-          : dashboards.map((i) => i.toJson()).toList();
+      json['dashboards'] = dashboards?.map((i) => i.toJson())?.toList();
     }
     if (_looksSet || _apiMapResponse.containsKey('looks')) {
-      json['looks'] =
-          looks == null ? null : looks.map((i) => i.toJson()).toList();
+      json['looks'] = looks?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -20203,9 +19383,7 @@ class FolderBase {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -20220,9 +19398,7 @@ class FolderBase {
 
   String get parentId {
     if (!_parentIdSet && _apiMapResponse.containsKey('parent_id')) {
-      _parentId = _apiMapResponse['parent_id'] == null
-          ? null
-          : _apiMapResponse['parent_id'].toString();
+      _parentId = _apiMapResponse['parent_id']?.toString();
       _parentIdSet = true;
     }
     return _parentId;
@@ -20237,9 +19413,7 @@ class FolderBase {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -20317,9 +19491,7 @@ class FolderBase {
 
   String get externalId {
     if (!_externalIdSet && _apiMapResponse.containsKey('external_id')) {
-      _externalId = _apiMapResponse['external_id'] == null
-          ? null
-          : _apiMapResponse['external_id'].toString();
+      _externalId = _apiMapResponse['external_id']?.toString();
       _externalIdSet = true;
     }
     return _externalId;
@@ -20495,8 +19667,7 @@ class FolderBase {
       json['content_metadata_id'] = contentMetadataId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_creatorIdSet || _apiMapResponse.containsKey('creator_id')) {
       json['creator_id'] = creatorId;
@@ -20640,9 +19811,7 @@ class GitBranch {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -20657,9 +19826,7 @@ class GitBranch {
 
   String get remote {
     if (!_remoteSet && _apiMapResponse.containsKey('remote')) {
-      _remote = _apiMapResponse['remote'] == null
-          ? null
-          : _apiMapResponse['remote'].toString();
+      _remote = _apiMapResponse['remote']?.toString();
       _remoteSet = true;
     }
     return _remote;
@@ -20674,9 +19841,7 @@ class GitBranch {
 
   String get remoteName {
     if (!_remoteNameSet && _apiMapResponse.containsKey('remote_name')) {
-      _remoteName = _apiMapResponse['remote_name'] == null
-          ? null
-          : _apiMapResponse['remote_name'].toString();
+      _remoteName = _apiMapResponse['remote_name']?.toString();
       _remoteNameSet = true;
     }
     return _remoteName;
@@ -20691,9 +19856,7 @@ class GitBranch {
 
   String get error {
     if (!_errorSet && _apiMapResponse.containsKey('error')) {
-      _error = _apiMapResponse['error'] == null
-          ? null
-          : _apiMapResponse['error'].toString();
+      _error = _apiMapResponse['error']?.toString();
       _errorSet = true;
     }
     return _error;
@@ -20708,9 +19871,7 @@ class GitBranch {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -20725,9 +19886,7 @@ class GitBranch {
 
   String get ownerName {
     if (!_ownerNameSet && _apiMapResponse.containsKey('owner_name')) {
-      _ownerName = _apiMapResponse['owner_name'] == null
-          ? null
-          : _apiMapResponse['owner_name'].toString();
+      _ownerName = _apiMapResponse['owner_name']?.toString();
       _ownerNameSet = true;
     }
     return _ownerName;
@@ -20862,9 +20021,7 @@ class GitBranch {
 
   String get ref {
     if (!_refSet && _apiMapResponse.containsKey('ref')) {
-      _ref = _apiMapResponse['ref'] == null
-          ? null
-          : _apiMapResponse['ref'].toString();
+      _ref = _apiMapResponse['ref']?.toString();
       _refSet = true;
     }
     return _ref;
@@ -20879,9 +20036,7 @@ class GitBranch {
 
   String get remoteRef {
     if (!_remoteRefSet && _apiMapResponse.containsKey('remote_ref')) {
-      _remoteRef = _apiMapResponse['remote_ref'] == null
-          ? null
-          : _apiMapResponse['remote_ref'].toString();
+      _remoteRef = _apiMapResponse['remote_ref']?.toString();
       _remoteRefSet = true;
     }
     return _remoteRef;
@@ -21007,9 +20162,7 @@ class GitConnectionTest {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -21024,9 +20177,7 @@ class GitConnectionTest {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -21114,9 +20265,7 @@ class GitConnectionTestResult {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -21131,9 +20280,7 @@ class GitConnectionTestResult {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -21148,9 +20295,7 @@ class GitConnectionTestResult {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -21226,9 +20371,7 @@ class GitStatus {
 
   String get action {
     if (!_actionSet && _apiMapResponse.containsKey('action')) {
-      _action = _apiMapResponse['action'] == null
-          ? null
-          : _apiMapResponse['action'].toString();
+      _action = _apiMapResponse['action']?.toString();
       _actionSet = true;
     }
     return _action;
@@ -21273,9 +20416,7 @@ class GitStatus {
 
   String get text {
     if (!_textSet && _apiMapResponse.containsKey('text')) {
-      _text = _apiMapResponse['text'] == null
-          ? null
-          : _apiMapResponse['text'].toString();
+      _text = _apiMapResponse['text']?.toString();
       _textSet = true;
     }
     return _text;
@@ -21413,9 +20554,7 @@ class Group {
   String get externalGroupId {
     if (!_externalGroupIdSet &&
         _apiMapResponse.containsKey('external_group_id')) {
-      _externalGroupId = _apiMapResponse['external_group_id'] == null
-          ? null
-          : _apiMapResponse['external_group_id'].toString();
+      _externalGroupId = _apiMapResponse['external_group_id']?.toString();
       _externalGroupIdSet = true;
     }
     return _externalGroupId;
@@ -21477,9 +20616,7 @@ class Group {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -21658,9 +20795,7 @@ class GroupHierarchy {
   String get externalGroupId {
     if (!_externalGroupIdSet &&
         _apiMapResponse.containsKey('external_group_id')) {
-      _externalGroupId = _apiMapResponse['external_group_id'] == null
-          ? null
-          : _apiMapResponse['external_group_id'].toString();
+      _externalGroupId = _apiMapResponse['external_group_id']?.toString();
       _externalGroupIdSet = true;
     }
     return _externalGroupId;
@@ -21722,9 +20857,7 @@ class GroupHierarchy {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -21755,11 +20888,9 @@ class GroupHierarchy {
   List<int> get parentGroupIds {
     if (!_parentGroupIdsSet &&
         _apiMapResponse.containsKey('parent_group_ids')) {
-      _parentGroupIds = _apiMapResponse['parent_group_ids'] == null
-          ? null
-          : _apiMapResponse['parent_group_ids']
-              .map<int>((i) => i as int)
-              .toList();
+      _parentGroupIds = _apiMapResponse['parent_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _parentGroupIdsSet = true;
     }
     return _parentGroupIds;
@@ -21774,9 +20905,8 @@ class GroupHierarchy {
 
   List<int> get roleIds {
     if (!_roleIdsSet && _apiMapResponse.containsKey('role_ids')) {
-      _roleIds = _apiMapResponse['role_ids'] == null
-          ? null
-          : _apiMapResponse['role_ids'].map<int>((i) => i as int).toList();
+      _roleIds =
+          _apiMapResponse['role_ids']?.map<int>((i) => i as int)?.toList();
       _roleIdsSet = true;
     }
     return _roleIds;
@@ -22062,9 +21192,7 @@ class GroupSearch {
   String get externalGroupId {
     if (!_externalGroupIdSet &&
         _apiMapResponse.containsKey('external_group_id')) {
-      _externalGroupId = _apiMapResponse['external_group_id'] == null
-          ? null
-          : _apiMapResponse['external_group_id'].toString();
+      _externalGroupId = _apiMapResponse['external_group_id']?.toString();
       _externalGroupIdSet = true;
     }
     return _externalGroupId;
@@ -22126,9 +21254,7 @@ class GroupSearch {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -22234,8 +21360,7 @@ class GroupSearch {
       json['user_count'] = userCount;
     }
     if (_rolesSet || _apiMapResponse.containsKey('roles')) {
-      json['roles'] =
-          roles == null ? null : roles.map((i) => i.toJson()).toList();
+      json['roles'] = roles?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -22350,9 +21475,7 @@ class HomepageItem {
   String get contentCreatedBy {
     if (!_contentCreatedBySet &&
         _apiMapResponse.containsKey('content_created_by')) {
-      _contentCreatedBy = _apiMapResponse['content_created_by'] == null
-          ? null
-          : _apiMapResponse['content_created_by'].toString();
+      _contentCreatedBy = _apiMapResponse['content_created_by']?.toString();
       _contentCreatedBySet = true;
     }
     return _contentCreatedBy;
@@ -22400,9 +21523,7 @@ class HomepageItem {
   String get contentUpdatedAt {
     if (!_contentUpdatedAtSet &&
         _apiMapResponse.containsKey('content_updated_at')) {
-      _contentUpdatedAt = _apiMapResponse['content_updated_at'] == null
-          ? null
-          : _apiMapResponse['content_updated_at'].toString();
+      _contentUpdatedAt = _apiMapResponse['content_updated_at']?.toString();
       _contentUpdatedAtSet = true;
     }
     return _contentUpdatedAt;
@@ -22418,9 +21539,7 @@ class HomepageItem {
   String get customDescription {
     if (!_customDescriptionSet &&
         _apiMapResponse.containsKey('custom_description')) {
-      _customDescription = _apiMapResponse['custom_description'] == null
-          ? null
-          : _apiMapResponse['custom_description'].toString();
+      _customDescription = _apiMapResponse['custom_description']?.toString();
       _customDescriptionSet = true;
     }
     return _customDescription;
@@ -22437,9 +21556,7 @@ class HomepageItem {
     if (!_customImageDataBase64Set &&
         _apiMapResponse.containsKey('custom_image_data_base64')) {
       _customImageDataBase64 =
-          _apiMapResponse['custom_image_data_base64'] == null
-              ? null
-              : _apiMapResponse['custom_image_data_base64'].toString();
+          _apiMapResponse['custom_image_data_base64']?.toString();
       _customImageDataBase64Set = true;
     }
     return _customImageDataBase64;
@@ -22455,9 +21572,7 @@ class HomepageItem {
   String get customImageUrl {
     if (!_customImageUrlSet &&
         _apiMapResponse.containsKey('custom_image_url')) {
-      _customImageUrl = _apiMapResponse['custom_image_url'] == null
-          ? null
-          : _apiMapResponse['custom_image_url'].toString();
+      _customImageUrl = _apiMapResponse['custom_image_url']?.toString();
       _customImageUrlSet = true;
     }
     return _customImageUrl;
@@ -22472,9 +21587,7 @@ class HomepageItem {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -22489,9 +21602,7 @@ class HomepageItem {
 
   String get customUrl {
     if (!_customUrlSet && _apiMapResponse.containsKey('custom_url')) {
-      _customUrl = _apiMapResponse['custom_url'] == null
-          ? null
-          : _apiMapResponse['custom_url'].toString();
+      _customUrl = _apiMapResponse['custom_url']?.toString();
       _customUrlSet = true;
     }
     return _customUrl;
@@ -22521,9 +21632,7 @@ class HomepageItem {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -22584,9 +21693,7 @@ class HomepageItem {
 
   String get imageUrl {
     if (!_imageUrlSet && _apiMapResponse.containsKey('image_url')) {
-      _imageUrl = _apiMapResponse['image_url'] == null
-          ? null
-          : _apiMapResponse['image_url'].toString();
+      _imageUrl = _apiMapResponse['image_url']?.toString();
       _imageUrlSet = true;
     }
     return _imageUrl;
@@ -22601,9 +21708,7 @@ class HomepageItem {
 
   String get location {
     if (!_locationSet && _apiMapResponse.containsKey('location')) {
-      _location = _apiMapResponse['location'] == null
-          ? null
-          : _apiMapResponse['location'].toString();
+      _location = _apiMapResponse['location']?.toString();
       _locationSet = true;
     }
     return _location;
@@ -22618,9 +21723,7 @@ class HomepageItem {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -22636,9 +21739,7 @@ class HomepageItem {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -22684,9 +21785,7 @@ class HomepageItem {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -22701,9 +21800,7 @@ class HomepageItem {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -23015,9 +22112,7 @@ class HomepageSection {
 
   String get detailUrl {
     if (!_detailUrlSet && _apiMapResponse.containsKey('detail_url')) {
-      _detailUrl = _apiMapResponse['detail_url'] == null
-          ? null
-          : _apiMapResponse['detail_url'].toString();
+      _detailUrl = _apiMapResponse['detail_url']?.toString();
       _detailUrlSet = true;
     }
     return _detailUrl;
@@ -23096,9 +22191,8 @@ class HomepageSection {
 
   List<int> get itemOrder {
     if (!_itemOrderSet && _apiMapResponse.containsKey('item_order')) {
-      _itemOrder = _apiMapResponse['item_order'] == null
-          ? null
-          : _apiMapResponse['item_order'].map<int>((i) => i as int).toList();
+      _itemOrder =
+          _apiMapResponse['item_order']?.map<int>((i) => i as int)?.toList();
       _itemOrderSet = true;
     }
     return _itemOrder;
@@ -23113,9 +22207,7 @@ class HomepageSection {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -23147,9 +22239,7 @@ class HomepageSection {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -23165,11 +22255,9 @@ class HomepageSection {
   List<int> get visibleItemOrder {
     if (!_visibleItemOrderSet &&
         _apiMapResponse.containsKey('visible_item_order')) {
-      _visibleItemOrder = _apiMapResponse['visible_item_order'] == null
-          ? null
-          : _apiMapResponse['visible_item_order']
-              .map<int>((i) => i as int)
-              .toList();
+      _visibleItemOrder = _apiMapResponse['visible_item_order']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _visibleItemOrderSet = true;
     }
     return _visibleItemOrder;
@@ -23212,12 +22300,10 @@ class HomepageSection {
       json['can'] = can;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_detailUrlSet || _apiMapResponse.containsKey('detail_url')) {
       json['detail_url'] = detailUrl;
@@ -23226,9 +22312,7 @@ class HomepageSection {
       json['homepage_id'] = homepageId;
     }
     if (_homepageItemsSet || _apiMapResponse.containsKey('homepage_items')) {
-      json['homepage_items'] = homepageItems == null
-          ? null
-          : homepageItems.map((i) => i.toJson()).toList();
+      json['homepage_items'] = homepageItems?.map((i) => i.toJson())?.toList();
     }
     if (_idSet || _apiMapResponse.containsKey('id')) {
       json['id'] = id;
@@ -23243,8 +22327,7 @@ class HomepageSection {
       json['title'] = title;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_descriptionSet || _apiMapResponse.containsKey('description')) {
       json['description'] = description;
@@ -23278,9 +22361,7 @@ class ImportedProject {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -23295,9 +22376,7 @@ class ImportedProject {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -23312,9 +22391,7 @@ class ImportedProject {
 
   String get ref {
     if (!_refSet && _apiMapResponse.containsKey('ref')) {
-      _ref = _apiMapResponse['ref'] == null
-          ? null
-          : _apiMapResponse['ref'].toString();
+      _ref = _apiMapResponse['ref']?.toString();
       _refSet = true;
     }
     return _ref;
@@ -23459,9 +22536,7 @@ class Integration {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -23492,9 +22567,7 @@ class Integration {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -23509,9 +22582,7 @@ class Integration {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -23562,11 +22633,9 @@ class Integration {
   List<SupportedFormats> get supportedFormats {
     if (!_supportedFormatsSet &&
         _apiMapResponse.containsKey('supported_formats')) {
-      _supportedFormats = _apiMapResponse['supported_formats'] == null
-          ? null
-          : _apiMapResponse['supported_formats']
-              .map<SupportedFormats>((i) => i as SupportedFormats)
-              .toList();
+      _supportedFormats = _apiMapResponse['supported_formats']
+          ?.map<SupportedFormats>((i) => i as SupportedFormats)
+          ?.toList();
       _supportedFormatsSet = true;
     }
     return _supportedFormats;
@@ -23582,11 +22651,9 @@ class Integration {
   List<SupportedActionTypes> get supportedActionTypes {
     if (!_supportedActionTypesSet &&
         _apiMapResponse.containsKey('supported_action_types')) {
-      _supportedActionTypes = _apiMapResponse['supported_action_types'] == null
-          ? null
-          : _apiMapResponse['supported_action_types']
-              .map<SupportedActionTypes>((i) => i as SupportedActionTypes)
-              .toList();
+      _supportedActionTypes = _apiMapResponse['supported_action_types']
+          ?.map<SupportedActionTypes>((i) => i as SupportedActionTypes)
+          ?.toList();
       _supportedActionTypesSet = true;
     }
     return _supportedActionTypes;
@@ -23602,11 +22669,9 @@ class Integration {
   List<SupportedFormattings> get supportedFormattings {
     if (!_supportedFormattingsSet &&
         _apiMapResponse.containsKey('supported_formattings')) {
-      _supportedFormattings = _apiMapResponse['supported_formattings'] == null
-          ? null
-          : _apiMapResponse['supported_formattings']
-              .map<SupportedFormattings>((i) => i as SupportedFormattings)
-              .toList();
+      _supportedFormattings = _apiMapResponse['supported_formattings']
+          ?.map<SupportedFormattings>((i) => i as SupportedFormattings)
+          ?.toList();
       _supportedFormattingsSet = true;
     }
     return _supportedFormattings;
@@ -23624,12 +22689,10 @@ class Integration {
     if (!_supportedVisualizationFormattingsSet &&
         _apiMapResponse.containsKey('supported_visualization_formattings')) {
       _supportedVisualizationFormattings =
-          _apiMapResponse['supported_visualization_formattings'] == null
-              ? null
-              : _apiMapResponse['supported_visualization_formattings']
-                  .map<SupportedVisualizationFormattings>(
-                      (i) => i as SupportedVisualizationFormattings)
-                  .toList();
+          _apiMapResponse['supported_visualization_formattings']
+              ?.map<SupportedVisualizationFormattings>(
+                  (i) => i as SupportedVisualizationFormattings)
+              ?.toList();
       _supportedVisualizationFormattingsSet = true;
     }
     return _supportedVisualizationFormattings;
@@ -23647,12 +22710,10 @@ class Integration {
     if (!_supportedDownloadSettingsSet &&
         _apiMapResponse.containsKey('supported_download_settings')) {
       _supportedDownloadSettings =
-          _apiMapResponse['supported_download_settings'] == null
-              ? null
-              : _apiMapResponse['supported_download_settings']
-                  .map<SupportedDownloadSettings>(
-                      (i) => i as SupportedDownloadSettings)
-                  .toList();
+          _apiMapResponse['supported_download_settings']
+              ?.map<SupportedDownloadSettings>(
+                  (i) => i as SupportedDownloadSettings)
+              ?.toList();
       _supportedDownloadSettingsSet = true;
     }
     return _supportedDownloadSettings;
@@ -23667,9 +22728,7 @@ class Integration {
 
   String get iconUrl {
     if (!_iconUrlSet && _apiMapResponse.containsKey('icon_url')) {
-      _iconUrl = _apiMapResponse['icon_url'] == null
-          ? null
-          : _apiMapResponse['icon_url'].toString();
+      _iconUrl = _apiMapResponse['icon_url']?.toString();
       _iconUrlSet = true;
     }
     return _iconUrl;
@@ -23736,11 +22795,9 @@ class Integration {
     if (!_installedDelegateOauthTargetsSet &&
         _apiMapResponse.containsKey('installed_delegate_oauth_targets')) {
       _installedDelegateOauthTargets =
-          _apiMapResponse['installed_delegate_oauth_targets'] == null
-              ? null
-              : _apiMapResponse['installed_delegate_oauth_targets']
-                  .map<int>((i) => i as int)
-                  .toList();
+          _apiMapResponse['installed_delegate_oauth_targets']
+              ?.map<int>((i) => i as int)
+              ?.toList();
       _installedDelegateOauthTargetsSet = true;
     }
     return _installedDelegateOauthTargets;
@@ -23799,8 +22856,7 @@ class Integration {
       json['enabled'] = enabled;
     }
     if (_paramsSet || _apiMapResponse.containsKey('params')) {
-      json['params'] =
-          params == null ? null : params.map((i) => i.toJson()).toList();
+      json['params'] = params?.map((i) => i.toJson())?.toList();
     }
     if (_supportedFormatsSet ||
         _apiMapResponse.containsKey('supported_formats')) {
@@ -23830,9 +22886,8 @@ class Integration {
       json['uses_oauth'] = usesOauth;
     }
     if (_requiredFieldsSet || _apiMapResponse.containsKey('required_fields')) {
-      json['required_fields'] = requiredFields == null
-          ? null
-          : requiredFields.map((i) => i.toJson()).toList();
+      json['required_fields'] =
+          requiredFields?.map((i) => i.toJson())?.toList();
     }
     if (_delegateOauthSet || _apiMapResponse.containsKey('delegate_oauth')) {
       json['delegate_oauth'] = delegateOauth;
@@ -23917,9 +22972,7 @@ class IntegrationHub {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -23934,9 +22987,7 @@ class IntegrationHub {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -23967,9 +23018,7 @@ class IntegrationHub {
   String get fetchErrorMessage {
     if (!_fetchErrorMessageSet &&
         _apiMapResponse.containsKey('fetch_error_message')) {
-      _fetchErrorMessage = _apiMapResponse['fetch_error_message'] == null
-          ? null
-          : _apiMapResponse['fetch_error_message'].toString();
+      _fetchErrorMessage = _apiMapResponse['fetch_error_message']?.toString();
       _fetchErrorMessageSet = true;
     }
     return _fetchErrorMessage;
@@ -23985,9 +23034,7 @@ class IntegrationHub {
   String get authorizationToken {
     if (!_authorizationTokenSet &&
         _apiMapResponse.containsKey('authorization_token')) {
-      _authorizationToken = _apiMapResponse['authorization_token'] == null
-          ? null
-          : _apiMapResponse['authorization_token'].toString();
+      _authorizationToken = _apiMapResponse['authorization_token']?.toString();
       _authorizationTokenSet = true;
     }
     return _authorizationToken;
@@ -24051,9 +23098,7 @@ class IntegrationHub {
   String get legalAgreementText {
     if (!_legalAgreementTextSet &&
         _apiMapResponse.containsKey('legal_agreement_text')) {
-      _legalAgreementText = _apiMapResponse['legal_agreement_text'] == null
-          ? null
-          : _apiMapResponse['legal_agreement_text'].toString();
+      _legalAgreementText = _apiMapResponse['legal_agreement_text']?.toString();
       _legalAgreementTextSet = true;
     }
     return _legalAgreementText;
@@ -24174,9 +23219,7 @@ class IntegrationParam {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -24191,9 +23234,7 @@ class IntegrationParam {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -24208,9 +23249,7 @@ class IntegrationParam {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -24255,9 +23294,7 @@ class IntegrationParam {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -24273,9 +23310,7 @@ class IntegrationParam {
   String get userAttributeName {
     if (!_userAttributeNameSet &&
         _apiMapResponse.containsKey('user_attribute_name')) {
-      _userAttributeName = _apiMapResponse['user_attribute_name'] == null
-          ? null
-          : _apiMapResponse['user_attribute_name'].toString();
+      _userAttributeName = _apiMapResponse['user_attribute_name']?.toString();
       _userAttributeNameSet = true;
     }
     return _userAttributeName;
@@ -24321,9 +23356,7 @@ class IntegrationParam {
   String get delegateOauthUrl {
     if (!_delegateOauthUrlSet &&
         _apiMapResponse.containsKey('delegate_oauth_url')) {
-      _delegateOauthUrl = _apiMapResponse['delegate_oauth_url'] == null
-          ? null
-          : _apiMapResponse['delegate_oauth_url'].toString();
+      _delegateOauthUrl = _apiMapResponse['delegate_oauth_url']?.toString();
       _delegateOauthUrlSet = true;
     }
     return _delegateOauthUrl;
@@ -24416,9 +23449,7 @@ class IntegrationRequiredField {
 
   String get tag {
     if (!_tagSet && _apiMapResponse.containsKey('tag')) {
-      _tag = _apiMapResponse['tag'] == null
-          ? null
-          : _apiMapResponse['tag'].toString();
+      _tag = _apiMapResponse['tag']?.toString();
       _tagSet = true;
     }
     return _tag;
@@ -24433,9 +23464,8 @@ class IntegrationRequiredField {
 
   List<String> get anyTag {
     if (!_anyTagSet && _apiMapResponse.containsKey('any_tag')) {
-      _anyTag = _apiMapResponse['any_tag'] == null
-          ? null
-          : _apiMapResponse['any_tag'].map<String>((i) => i as String).toList();
+      _anyTag =
+          _apiMapResponse['any_tag']?.map<String>((i) => i as String)?.toList();
       _anyTagSet = true;
     }
     return _anyTag;
@@ -24450,11 +23480,9 @@ class IntegrationRequiredField {
 
   List<String> get allTags {
     if (!_allTagsSet && _apiMapResponse.containsKey('all_tags')) {
-      _allTags = _apiMapResponse['all_tags'] == null
-          ? null
-          : _apiMapResponse['all_tags']
-              .map<String>((i) => i as String)
-              .toList();
+      _allTags = _apiMapResponse['all_tags']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _allTagsSet = true;
     }
     return _allTags;
@@ -24539,9 +23567,7 @@ class IntegrationTestResult {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -24609,9 +23635,8 @@ class IntegrationTestResult {
     }
     if (_delegateOauthResultSet ||
         _apiMapResponse.containsKey('delegate_oauth_result')) {
-      json['delegate_oauth_result'] = delegateOauthResult == null
-          ? null
-          : delegateOauthResult.map((i) => i.toJson()).toList();
+      json['delegate_oauth_result'] =
+          delegateOauthResult?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -24730,9 +23755,7 @@ class InternalHelpResourcesContent {
   String get organizationName {
     if (!_organizationNameSet &&
         _apiMapResponse.containsKey('organization_name')) {
-      _organizationName = _apiMapResponse['organization_name'] == null
-          ? null
-          : _apiMapResponse['organization_name'].toString();
+      _organizationName = _apiMapResponse['organization_name']?.toString();
       _organizationNameSet = true;
     }
     return _organizationName;
@@ -24748,9 +23771,7 @@ class InternalHelpResourcesContent {
   String get markdownContent {
     if (!_markdownContentSet &&
         _apiMapResponse.containsKey('markdown_content')) {
-      _markdownContent = _apiMapResponse['markdown_content'] == null
-          ? null
-          : _apiMapResponse['markdown_content'].toString();
+      _markdownContent = _apiMapResponse['markdown_content']?.toString();
       _markdownContentSet = true;
     }
     return _markdownContent;
@@ -24996,9 +24017,7 @@ class LDAPConfig {
 
   String get authPassword {
     if (!_authPasswordSet && _apiMapResponse.containsKey('auth_password')) {
-      _authPassword = _apiMapResponse['auth_password'] == null
-          ? null
-          : _apiMapResponse['auth_password'].toString();
+      _authPassword = _apiMapResponse['auth_password']?.toString();
       _authPasswordSet = true;
     }
     return _authPassword;
@@ -25029,9 +24048,7 @@ class LDAPConfig {
 
   String get authUsername {
     if (!_authUsernameSet && _apiMapResponse.containsKey('auth_username')) {
-      _authUsername = _apiMapResponse['auth_username'] == null
-          ? null
-          : _apiMapResponse['auth_username'].toString();
+      _authUsername = _apiMapResponse['auth_username']?.toString();
       _authUsernameSet = true;
     }
     return _authUsername;
@@ -25046,9 +24063,7 @@ class LDAPConfig {
 
   String get connectionHost {
     if (!_connectionHostSet && _apiMapResponse.containsKey('connection_host')) {
-      _connectionHost = _apiMapResponse['connection_host'] == null
-          ? null
-          : _apiMapResponse['connection_host'].toString();
+      _connectionHost = _apiMapResponse['connection_host']?.toString();
       _connectionHostSet = true;
     }
     return _connectionHost;
@@ -25063,9 +24078,7 @@ class LDAPConfig {
 
   String get connectionPort {
     if (!_connectionPortSet && _apiMapResponse.containsKey('connection_port')) {
-      _connectionPort = _apiMapResponse['connection_port'] == null
-          ? null
-          : _apiMapResponse['connection_port'].toString();
+      _connectionPort = _apiMapResponse['connection_port']?.toString();
       _connectionPortSet = true;
     }
     return _connectionPort;
@@ -25112,12 +24125,9 @@ class LDAPConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -25153,12 +24163,9 @@ class LDAPConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -25242,9 +24249,7 @@ class LDAPConfig {
 
   String get groupsBaseDn {
     if (!_groupsBaseDnSet && _apiMapResponse.containsKey('groups_base_dn')) {
-      _groupsBaseDn = _apiMapResponse['groups_base_dn'] == null
-          ? null
-          : _apiMapResponse['groups_base_dn'].toString();
+      _groupsBaseDn = _apiMapResponse['groups_base_dn']?.toString();
       _groupsBaseDnSet = true;
     }
     return _groupsBaseDn;
@@ -25260,9 +24265,7 @@ class LDAPConfig {
   String get groupsFinderType {
     if (!_groupsFinderTypeSet &&
         _apiMapResponse.containsKey('groups_finder_type')) {
-      _groupsFinderType = _apiMapResponse['groups_finder_type'] == null
-          ? null
-          : _apiMapResponse['groups_finder_type'].toString();
+      _groupsFinderType = _apiMapResponse['groups_finder_type']?.toString();
       _groupsFinderTypeSet = true;
     }
     return _groupsFinderType;
@@ -25279,9 +24282,7 @@ class LDAPConfig {
     if (!_groupsMemberAttributeSet &&
         _apiMapResponse.containsKey('groups_member_attribute')) {
       _groupsMemberAttribute =
-          _apiMapResponse['groups_member_attribute'] == null
-              ? null
-              : _apiMapResponse['groups_member_attribute'].toString();
+          _apiMapResponse['groups_member_attribute']?.toString();
       _groupsMemberAttributeSet = true;
     }
     return _groupsMemberAttribute;
@@ -25297,9 +24298,8 @@ class LDAPConfig {
   String get groupsObjectclasses {
     if (!_groupsObjectclassesSet &&
         _apiMapResponse.containsKey('groups_objectclasses')) {
-      _groupsObjectclasses = _apiMapResponse['groups_objectclasses'] == null
-          ? null
-          : _apiMapResponse['groups_objectclasses'].toString();
+      _groupsObjectclasses =
+          _apiMapResponse['groups_objectclasses']?.toString();
       _groupsObjectclassesSet = true;
     }
     return _groupsObjectclasses;
@@ -25315,9 +24315,8 @@ class LDAPConfig {
   String get groupsUserAttribute {
     if (!_groupsUserAttributeSet &&
         _apiMapResponse.containsKey('groups_user_attribute')) {
-      _groupsUserAttribute = _apiMapResponse['groups_user_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_user_attribute'].toString();
+      _groupsUserAttribute =
+          _apiMapResponse['groups_user_attribute']?.toString();
       _groupsUserAttributeSet = true;
     }
     return _groupsUserAttribute;
@@ -25385,9 +24384,7 @@ class LDAPConfig {
 
   String get modifiedAt {
     if (!_modifiedAtSet && _apiMapResponse.containsKey('modified_at')) {
-      _modifiedAt = _apiMapResponse['modified_at'] == null
-          ? null
-          : _apiMapResponse['modified_at'].toString();
+      _modifiedAt = _apiMapResponse['modified_at']?.toString();
       _modifiedAtSet = true;
     }
     return _modifiedAt;
@@ -25402,9 +24399,7 @@ class LDAPConfig {
 
   String get modifiedBy {
     if (!_modifiedBySet && _apiMapResponse.containsKey('modified_by')) {
-      _modifiedBy = _apiMapResponse['modified_by'] == null
-          ? null
-          : _apiMapResponse['modified_by'].toString();
+      _modifiedBy = _apiMapResponse['modified_by']?.toString();
       _modifiedBySet = true;
     }
     return _modifiedBy;
@@ -25436,9 +24431,7 @@ class LDAPConfig {
   String get testLdapPassword {
     if (!_testLdapPasswordSet &&
         _apiMapResponse.containsKey('test_ldap_password')) {
-      _testLdapPassword = _apiMapResponse['test_ldap_password'] == null
-          ? null
-          : _apiMapResponse['test_ldap_password'].toString();
+      _testLdapPassword = _apiMapResponse['test_ldap_password']?.toString();
       _testLdapPasswordSet = true;
     }
     return _testLdapPassword;
@@ -25453,9 +24446,7 @@ class LDAPConfig {
 
   String get testLdapUser {
     if (!_testLdapUserSet && _apiMapResponse.containsKey('test_ldap_user')) {
-      _testLdapUser = _apiMapResponse['test_ldap_user'] == null
-          ? null
-          : _apiMapResponse['test_ldap_user'].toString();
+      _testLdapUser = _apiMapResponse['test_ldap_user']?.toString();
       _testLdapUserSet = true;
     }
     return _testLdapUser;
@@ -25472,9 +24463,7 @@ class LDAPConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -25491,9 +24480,7 @@ class LDAPConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -25510,9 +24497,7 @@ class LDAPConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -25529,9 +24514,7 @@ class LDAPConfig {
     if (!_userAttributeMapLdapIdSet &&
         _apiMapResponse.containsKey('user_attribute_map_ldap_id')) {
       _userAttributeMapLdapId =
-          _apiMapResponse['user_attribute_map_ldap_id'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_ldap_id'].toString();
+          _apiMapResponse['user_attribute_map_ldap_id']?.toString();
       _userAttributeMapLdapIdSet = true;
     }
     return _userAttributeMapLdapId;
@@ -25589,9 +24572,7 @@ class LDAPConfig {
   String get userBindBaseDn {
     if (!_userBindBaseDnSet &&
         _apiMapResponse.containsKey('user_bind_base_dn')) {
-      _userBindBaseDn = _apiMapResponse['user_bind_base_dn'] == null
-          ? null
-          : _apiMapResponse['user_bind_base_dn'].toString();
+      _userBindBaseDn = _apiMapResponse['user_bind_base_dn']?.toString();
       _userBindBaseDnSet = true;
     }
     return _userBindBaseDn;
@@ -25607,9 +24588,7 @@ class LDAPConfig {
   String get userCustomFilter {
     if (!_userCustomFilterSet &&
         _apiMapResponse.containsKey('user_custom_filter')) {
-      _userCustomFilter = _apiMapResponse['user_custom_filter'] == null
-          ? null
-          : _apiMapResponse['user_custom_filter'].toString();
+      _userCustomFilter = _apiMapResponse['user_custom_filter']?.toString();
       _userCustomFilterSet = true;
     }
     return _userCustomFilter;
@@ -25625,9 +24604,8 @@ class LDAPConfig {
   String get userIdAttributeNames {
     if (!_userIdAttributeNamesSet &&
         _apiMapResponse.containsKey('user_id_attribute_names')) {
-      _userIdAttributeNames = _apiMapResponse['user_id_attribute_names'] == null
-          ? null
-          : _apiMapResponse['user_id_attribute_names'].toString();
+      _userIdAttributeNames =
+          _apiMapResponse['user_id_attribute_names']?.toString();
       _userIdAttributeNamesSet = true;
     }
     return _userIdAttributeNames;
@@ -25643,9 +24621,7 @@ class LDAPConfig {
   String get userObjectclass {
     if (!_userObjectclassSet &&
         _apiMapResponse.containsKey('user_objectclass')) {
-      _userObjectclass = _apiMapResponse['user_objectclass'] == null
-          ? null
-          : _apiMapResponse['user_objectclass'].toString();
+      _userObjectclass = _apiMapResponse['user_objectclass']?.toString();
       _userObjectclassSet = true;
     }
     return _userObjectclass;
@@ -25710,9 +24686,7 @@ class LDAPConfig {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -25787,9 +24761,8 @@ class LDAPConfig {
     }
     if (_defaultNewUserGroupsSet ||
         _apiMapResponse.containsKey('default_new_user_groups')) {
-      json['default_new_user_groups'] = defaultNewUserGroups == null
-          ? null
-          : defaultNewUserGroups.map((i) => i.toJson()).toList();
+      json['default_new_user_groups'] =
+          defaultNewUserGroups?.map((i) => i.toJson())?.toList();
     }
     if (_defaultNewUserRoleIdsSet ||
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
@@ -25797,9 +24770,8 @@ class LDAPConfig {
     }
     if (_defaultNewUserRolesSet ||
         _apiMapResponse.containsKey('default_new_user_roles')) {
-      json['default_new_user_roles'] = defaultNewUserRoles == null
-          ? null
-          : defaultNewUserRoles.map((i) => i.toJson()).toList();
+      json['default_new_user_roles'] =
+          defaultNewUserRoles?.map((i) => i.toJson())?.toList();
     }
     if (_enabledSet || _apiMapResponse.containsKey('enabled')) {
       json['enabled'] = enabled;
@@ -25808,8 +24780,7 @@ class LDAPConfig {
       json['force_no_page'] = forceNoPage;
     }
     if (_groupsSet || _apiMapResponse.containsKey('groups')) {
-      json['groups'] =
-          groups == null ? null : groups.map((i) => i.toJson()).toList();
+      json['groups'] = groups?.map((i) => i.toJson())?.toList();
     }
     if (_groupsBaseDnSet || _apiMapResponse.containsKey('groups_base_dn')) {
       json['groups_base_dn'] = groupsBaseDn;
@@ -25832,9 +24803,8 @@ class LDAPConfig {
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_hasAuthPasswordSet ||
         _apiMapResponse.containsKey('has_auth_password')) {
@@ -25878,15 +24848,13 @@ class LDAPConfig {
       json['user_attribute_map_ldap_id'] = userAttributeMapLdapId;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_userBindBaseDnSet ||
         _apiMapResponse.containsKey('user_bind_base_dn')) {
@@ -25938,9 +24906,7 @@ class LDAPConfigTestIssue {
 
   String get severity {
     if (!_severitySet && _apiMapResponse.containsKey('severity')) {
-      _severity = _apiMapResponse['severity'] == null
-          ? null
-          : _apiMapResponse['severity'].toString();
+      _severity = _apiMapResponse['severity']?.toString();
       _severitySet = true;
     }
     return _severity;
@@ -25955,9 +24921,7 @@ class LDAPConfigTestIssue {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -26036,9 +25000,7 @@ class LDAPConfigTestResult {
 
   String get details {
     if (!_detailsSet && _apiMapResponse.containsKey('details')) {
-      _details = _apiMapResponse['details'] == null
-          ? null
-          : _apiMapResponse['details'].toString();
+      _details = _apiMapResponse['details']?.toString();
       _detailsSet = true;
     }
     return _details;
@@ -26073,9 +25035,7 @@ class LDAPConfigTestResult {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -26090,9 +25050,7 @@ class LDAPConfigTestResult {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -26107,9 +25065,7 @@ class LDAPConfigTestResult {
 
   String get trace {
     if (!_traceSet && _apiMapResponse.containsKey('trace')) {
-      _trace = _apiMapResponse['trace'] == null
-          ? null
-          : _apiMapResponse['trace'].toString();
+      _trace = _apiMapResponse['trace']?.toString();
       _traceSet = true;
     }
     return _trace;
@@ -26140,9 +25096,7 @@ class LDAPConfigTestResult {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -26185,8 +25139,7 @@ class LDAPConfigTestResult {
       json['details'] = details;
     }
     if (_issuesSet || _apiMapResponse.containsKey('issues')) {
-      json['issues'] =
-          issues == null ? null : issues.map((i) => i.toJson()).toList();
+      json['issues'] = issues?.map((i) => i.toJson())?.toList();
     }
     if (_messageSet || _apiMapResponse.containsKey('message')) {
       json['message'] = message;
@@ -26198,7 +25151,7 @@ class LDAPConfigTestResult {
       json['trace'] = trace;
     }
     if (_userSet || _apiMapResponse.containsKey('user')) {
-      json['user'] = user == null ? null : user.toJson();
+      json['user'] = user?.toJson();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -26265,9 +25218,7 @@ class LDAPGroupRead {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -26282,9 +25233,7 @@ class LDAPGroupRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -26318,9 +25267,7 @@ class LDAPGroupRead {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -26373,8 +25320,7 @@ class LDAPGroupRead {
       json['name'] = name;
     }
     if (_rolesSet || _apiMapResponse.containsKey('roles')) {
-      json['roles'] =
-          roles == null ? null : roles.map((i) => i.toJson()).toList();
+      json['roles'] = roles?.map((i) => i.toJson())?.toList();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -26441,9 +25387,7 @@ class LDAPGroupWrite {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -26458,9 +25402,7 @@ class LDAPGroupWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -26475,9 +25417,8 @@ class LDAPGroupWrite {
 
   List<int> get roleIds {
     if (!_roleIdsSet && _apiMapResponse.containsKey('role_ids')) {
-      _roleIds = _apiMapResponse['role_ids'] == null
-          ? null
-          : _apiMapResponse['role_ids'].map<int>((i) => i as int).toList();
+      _roleIds =
+          _apiMapResponse['role_ids']?.map<int>((i) => i as int)?.toList();
       _roleIdsSet = true;
     }
     return _roleIds;
@@ -26492,9 +25433,7 @@ class LDAPGroupWrite {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -26595,11 +25534,9 @@ class LDAPUser {
 
   List<String> get allEmails {
     if (!_allEmailsSet && _apiMapResponse.containsKey('all_emails')) {
-      _allEmails = _apiMapResponse['all_emails'] == null
-          ? null
-          : _apiMapResponse['all_emails']
-              .map<String>((i) => i as String)
-              .toList();
+      _allEmails = _apiMapResponse['all_emails']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _allEmailsSet = true;
     }
     return _allEmails;
@@ -26629,9 +25566,7 @@ class LDAPUser {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -26646,9 +25581,7 @@ class LDAPUser {
 
   String get firstName {
     if (!_firstNameSet && _apiMapResponse.containsKey('first_name')) {
-      _firstName = _apiMapResponse['first_name'] == null
-          ? null
-          : _apiMapResponse['first_name'].toString();
+      _firstName = _apiMapResponse['first_name']?.toString();
       _firstNameSet = true;
     }
     return _firstName;
@@ -26663,9 +25596,8 @@ class LDAPUser {
 
   List<String> get groups {
     if (!_groupsSet && _apiMapResponse.containsKey('groups')) {
-      _groups = _apiMapResponse['groups'] == null
-          ? null
-          : _apiMapResponse['groups'].map<String>((i) => i as String).toList();
+      _groups =
+          _apiMapResponse['groups']?.map<String>((i) => i as String)?.toList();
       _groupsSet = true;
     }
     return _groups;
@@ -26680,9 +25612,7 @@ class LDAPUser {
 
   String get lastName {
     if (!_lastNameSet && _apiMapResponse.containsKey('last_name')) {
-      _lastName = _apiMapResponse['last_name'] == null
-          ? null
-          : _apiMapResponse['last_name'].toString();
+      _lastName = _apiMapResponse['last_name']?.toString();
       _lastNameSet = true;
     }
     return _lastName;
@@ -26697,9 +25627,7 @@ class LDAPUser {
 
   String get ldapDn {
     if (!_ldapDnSet && _apiMapResponse.containsKey('ldap_dn')) {
-      _ldapDn = _apiMapResponse['ldap_dn'] == null
-          ? null
-          : _apiMapResponse['ldap_dn'].toString();
+      _ldapDn = _apiMapResponse['ldap_dn']?.toString();
       _ldapDnSet = true;
     }
     return _ldapDn;
@@ -26714,9 +25642,7 @@ class LDAPUser {
 
   String get ldapId {
     if (!_ldapIdSet && _apiMapResponse.containsKey('ldap_id')) {
-      _ldapId = _apiMapResponse['ldap_id'] == null
-          ? null
-          : _apiMapResponse['ldap_id'].toString();
+      _ldapId = _apiMapResponse['ldap_id']?.toString();
       _ldapIdSet = true;
     }
     return _ldapId;
@@ -26731,9 +25657,8 @@ class LDAPUser {
 
   List<String> get roles {
     if (!_rolesSet && _apiMapResponse.containsKey('roles')) {
-      _roles = _apiMapResponse['roles'] == null
-          ? null
-          : _apiMapResponse['roles'].map<String>((i) => i as String).toList();
+      _roles =
+          _apiMapResponse['roles']?.map<String>((i) => i as String)?.toList();
       _rolesSet = true;
     }
     return _roles;
@@ -26748,9 +25673,7 @@ class LDAPUser {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -26843,9 +25766,7 @@ class LDAPUserAttributeRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -26894,9 +25815,7 @@ class LDAPUserAttributeRead {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -26942,9 +25861,8 @@ class LDAPUserAttributeRead {
       json['required'] = required;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -26974,9 +25892,7 @@ class LDAPUserAttributeWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -27007,11 +25923,9 @@ class LDAPUserAttributeWrite {
   List<int> get userAttributeIds {
     if (!_userAttributeIdsSet &&
         _apiMapResponse.containsKey('user_attribute_ids')) {
-      _userAttributeIds = _apiMapResponse['user_attribute_ids'] == null
-          ? null
-          : _apiMapResponse['user_attribute_ids']
-              .map<int>((i) => i as int)
-              .toList();
+      _userAttributeIds = _apiMapResponse['user_attribute_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _userAttributeIdsSet = true;
     }
     return _userAttributeIds;
@@ -27026,9 +25940,7 @@ class LDAPUserAttributeWrite {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -27147,9 +26059,7 @@ class LegacyFeature {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -27164,9 +26074,7 @@ class LegacyFeature {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -27181,9 +26089,7 @@ class LegacyFeature {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -27230,9 +26136,7 @@ class LegacyFeature {
     if (!_disallowedAsOfVersionSet &&
         _apiMapResponse.containsKey('disallowed_as_of_version')) {
       _disallowedAsOfVersion =
-          _apiMapResponse['disallowed_as_of_version'] == null
-              ? null
-              : _apiMapResponse['disallowed_as_of_version'].toString();
+          _apiMapResponse['disallowed_as_of_version']?.toString();
       _disallowedAsOfVersionSet = true;
     }
     return _disallowedAsOfVersion;
@@ -27249,9 +26153,7 @@ class LegacyFeature {
     if (!_disableOnUpgradeToVersionSet &&
         _apiMapResponse.containsKey('disable_on_upgrade_to_version')) {
       _disableOnUpgradeToVersion =
-          _apiMapResponse['disable_on_upgrade_to_version'] == null
-              ? null
-              : _apiMapResponse['disable_on_upgrade_to_version'].toString();
+          _apiMapResponse['disable_on_upgrade_to_version']?.toString();
       _disableOnUpgradeToVersionSet = true;
     }
     return _disableOnUpgradeToVersion;
@@ -27267,9 +26169,7 @@ class LegacyFeature {
   String get endOfLifeVersion {
     if (!_endOfLifeVersionSet &&
         _apiMapResponse.containsKey('end_of_life_version')) {
-      _endOfLifeVersion = _apiMapResponse['end_of_life_version'] == null
-          ? null
-          : _apiMapResponse['end_of_life_version'].toString();
+      _endOfLifeVersion = _apiMapResponse['end_of_life_version']?.toString();
       _endOfLifeVersionSet = true;
     }
     return _endOfLifeVersion;
@@ -27285,9 +26185,7 @@ class LegacyFeature {
   String get documentationUrl {
     if (!_documentationUrlSet &&
         _apiMapResponse.containsKey('documentation_url')) {
-      _documentationUrl = _apiMapResponse['documentation_url'] == null
-          ? null
-          : _apiMapResponse['documentation_url'].toString();
+      _documentationUrl = _apiMapResponse['documentation_url']?.toString();
       _documentationUrlSet = true;
     }
     return _documentationUrl;
@@ -27416,15 +26314,13 @@ class LegacyFeature {
     }
     if (_approximateDisableDateSet ||
         _apiMapResponse.containsKey('approximate_disable_date')) {
-      json['approximate_disable_date'] = approximateDisableDate == null
-          ? null
-          : approximateDisableDate.toIso8601String();
+      json['approximate_disable_date'] =
+          approximateDisableDate?.toIso8601String();
     }
     if (_approximateEndOfLifeDateSet ||
         _apiMapResponse.containsKey('approximate_end_of_life_date')) {
-      json['approximate_end_of_life_date'] = approximateEndOfLifeDate == null
-          ? null
-          : approximateEndOfLifeDate.toIso8601String();
+      json['approximate_end_of_life_date'] =
+          approximateEndOfLifeDate?.toIso8601String();
     }
     if (_hasDisabledOnUpgradeSet ||
         _apiMapResponse.containsKey('has_disabled_on_upgrade')) {
@@ -27479,9 +26375,7 @@ class Locale {
 
   String get code {
     if (!_codeSet && _apiMapResponse.containsKey('code')) {
-      _code = _apiMapResponse['code'] == null
-          ? null
-          : _apiMapResponse['code'].toString();
+      _code = _apiMapResponse['code']?.toString();
       _codeSet = true;
     }
     return _code;
@@ -27496,9 +26390,7 @@ class Locale {
 
   String get nativeName {
     if (!_nativeNameSet && _apiMapResponse.containsKey('native_name')) {
-      _nativeName = _apiMapResponse['native_name'] == null
-          ? null
-          : _apiMapResponse['native_name'].toString();
+      _nativeName = _apiMapResponse['native_name']?.toString();
       _nativeNameSet = true;
     }
     return _nativeName;
@@ -27513,9 +26405,7 @@ class Locale {
 
   String get englishName {
     if (!_englishNameSet && _apiMapResponse.containsKey('english_name')) {
-      _englishName = _apiMapResponse['english_name'] == null
-          ? null
-          : _apiMapResponse['english_name'].toString();
+      _englishName = _apiMapResponse['english_name']?.toString();
       _englishNameSet = true;
     }
     return _englishName;
@@ -27581,9 +26471,7 @@ class LocalizationSettings {
 
   String get defaultLocale {
     if (!_defaultLocaleSet && _apiMapResponse.containsKey('default_locale')) {
-      _defaultLocale = _apiMapResponse['default_locale'] == null
-          ? null
-          : _apiMapResponse['default_locale'].toString();
+      _defaultLocale = _apiMapResponse['default_locale']?.toString();
       _defaultLocaleSet = true;
     }
     return _defaultLocale;
@@ -27599,9 +26487,7 @@ class LocalizationSettings {
   String get localizationLevel {
     if (!_localizationLevelSet &&
         _apiMapResponse.containsKey('localization_level')) {
-      _localizationLevel = _apiMapResponse['localization_level'] == null
-          ? null
-          : _apiMapResponse['localization_level'].toString();
+      _localizationLevel = _apiMapResponse['localization_level']?.toString();
       _localizationLevelSet = true;
     }
     return _localizationLevel;
@@ -27781,9 +26667,7 @@ class Look {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -27798,9 +26682,7 @@ class Look {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -27910,9 +26792,7 @@ class Look {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -27927,9 +26807,7 @@ class Look {
 
   String get embedUrl {
     if (!_embedUrlSet && _apiMapResponse.containsKey('embed_url')) {
-      _embedUrl = _apiMapResponse['embed_url'] == null
-          ? null
-          : _apiMapResponse['embed_url'].toString();
+      _embedUrl = _apiMapResponse['embed_url']?.toString();
       _embedUrlSet = true;
     }
     return _embedUrl;
@@ -27944,9 +26822,7 @@ class Look {
 
   String get excelFileUrl {
     if (!_excelFileUrlSet && _apiMapResponse.containsKey('excel_file_url')) {
-      _excelFileUrl = _apiMapResponse['excel_file_url'] == null
-          ? null
-          : _apiMapResponse['excel_file_url'].toString();
+      _excelFileUrl = _apiMapResponse['excel_file_url']?.toString();
       _excelFileUrlSet = true;
     }
     return _excelFileUrl;
@@ -27978,9 +26854,7 @@ class Look {
     if (!_googleSpreadsheetFormulaSet &&
         _apiMapResponse.containsKey('google_spreadsheet_formula')) {
       _googleSpreadsheetFormula =
-          _apiMapResponse['google_spreadsheet_formula'] == null
-              ? null
-              : _apiMapResponse['google_spreadsheet_formula'].toString();
+          _apiMapResponse['google_spreadsheet_formula']?.toString();
       _googleSpreadsheetFormulaSet = true;
     }
     return _googleSpreadsheetFormula;
@@ -27995,9 +26869,7 @@ class Look {
 
   String get imageEmbedUrl {
     if (!_imageEmbedUrlSet && _apiMapResponse.containsKey('image_embed_url')) {
-      _imageEmbedUrl = _apiMapResponse['image_embed_url'] == null
-          ? null
-          : _apiMapResponse['image_embed_url'].toString();
+      _imageEmbedUrl = _apiMapResponse['image_embed_url']?.toString();
       _imageEmbedUrlSet = true;
     }
     return _imageEmbedUrl;
@@ -28108,9 +26980,7 @@ class Look {
 
   String get publicSlug {
     if (!_publicSlugSet && _apiMapResponse.containsKey('public_slug')) {
-      _publicSlug = _apiMapResponse['public_slug'] == null
-          ? null
-          : _apiMapResponse['public_slug'].toString();
+      _publicSlug = _apiMapResponse['public_slug']?.toString();
       _publicSlugSet = true;
     }
     return _publicSlug;
@@ -28125,9 +26995,7 @@ class Look {
 
   String get publicUrl {
     if (!_publicUrlSet && _apiMapResponse.containsKey('public_url')) {
-      _publicUrl = _apiMapResponse['public_url'] == null
-          ? null
-          : _apiMapResponse['public_url'].toString();
+      _publicUrl = _apiMapResponse['public_url']?.toString();
       _publicUrlSet = true;
     }
     return _publicUrl;
@@ -28157,9 +27025,7 @@ class Look {
 
   String get shortUrl {
     if (!_shortUrlSet && _apiMapResponse.containsKey('short_url')) {
-      _shortUrl = _apiMapResponse['short_url'] == null
-          ? null
-          : _apiMapResponse['short_url'].toString();
+      _shortUrl = _apiMapResponse['short_url']?.toString();
       _shortUrlSet = true;
     }
     return _shortUrl;
@@ -28190,9 +27056,7 @@ class Look {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -28283,15 +27147,13 @@ class Look {
       json['content_favorite_id'] = contentFavoriteId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedSet || _apiMapResponse.containsKey('deleted')) {
       json['deleted'] = deleted;
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_deleterIdSet || _apiMapResponse.containsKey('deleter_id')) {
       json['deleter_id'] = deleterId;
@@ -28319,18 +27181,16 @@ class Look {
       json['is_run_on_load'] = isRunOnLoad;
     }
     if (_lastAccessedAtSet || _apiMapResponse.containsKey('last_accessed_at')) {
-      json['last_accessed_at'] =
-          lastAccessedAt == null ? null : lastAccessedAt.toIso8601String();
+      json['last_accessed_at'] = lastAccessedAt?.toIso8601String();
     }
     if (_lastUpdaterIdSet || _apiMapResponse.containsKey('last_updater_id')) {
       json['last_updater_id'] = lastUpdaterId;
     }
     if (_lastViewedAtSet || _apiMapResponse.containsKey('last_viewed_at')) {
-      json['last_viewed_at'] =
-          lastViewedAt == null ? null : lastViewedAt.toIso8601String();
+      json['last_viewed_at'] = lastViewedAt?.toIso8601String();
     }
     if (_modelSet || _apiMapResponse.containsKey('model')) {
-      json['model'] = model == null ? null : model.toJson();
+      json['model'] = model?.toJson();
     }
     if (_publicSet || _apiMapResponse.containsKey('public')) {
       json['public'] = public;
@@ -28348,14 +27208,13 @@ class Look {
       json['short_url'] = shortUrl;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_folderIdSet || _apiMapResponse.containsKey('folder_id')) {
       json['folder_id'] = folderId;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_viewCountSet || _apiMapResponse.containsKey('view_count')) {
       json['view_count'] = viewCount;
@@ -28434,9 +27293,7 @@ class LookBasic {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -28558,12 +27415,9 @@ class LookmlModel {
   List<String> get allowedDbConnectionNames {
     if (!_allowedDbConnectionNamesSet &&
         _apiMapResponse.containsKey('allowed_db_connection_names')) {
-      _allowedDbConnectionNames =
-          _apiMapResponse['allowed_db_connection_names'] == null
-              ? null
-              : _apiMapResponse['allowed_db_connection_names']
-                  .map<String>((i) => i as String)
-                  .toList();
+      _allowedDbConnectionNames = _apiMapResponse['allowed_db_connection_names']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _allowedDbConnectionNamesSet = true;
     }
     return _allowedDbConnectionNames;
@@ -28613,9 +27467,7 @@ class LookmlModel {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -28630,9 +27482,7 @@ class LookmlModel {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -28647,9 +27497,7 @@ class LookmlModel {
 
   String get projectName {
     if (!_projectNameSet && _apiMapResponse.containsKey('project_name')) {
-      _projectName = _apiMapResponse['project_name'] == null
-          ? null
-          : _apiMapResponse['project_name'].toString();
+      _projectName = _apiMapResponse['project_name']?.toString();
       _projectNameSet = true;
     }
     return _projectName;
@@ -28712,8 +27560,7 @@ class LookmlModel {
       json['allowed_db_connection_names'] = allowedDbConnectionNames;
     }
     if (_exploresSet || _apiMapResponse.containsKey('explores')) {
-      json['explores'] =
-          explores == null ? null : explores.map((i) => i.toJson()).toList();
+      json['explores'] = explores?.map((i) => i.toJson())?.toList();
     }
     if (_hasContentSet || _apiMapResponse.containsKey('has_content')) {
       json['has_content'] = hasContent;
@@ -28861,9 +27708,7 @@ class LookmlModelExplore {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -28878,9 +27723,7 @@ class LookmlModelExplore {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -28895,9 +27738,7 @@ class LookmlModelExplore {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -28912,9 +27753,7 @@ class LookmlModelExplore {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -28929,9 +27768,7 @@ class LookmlModelExplore {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -28946,9 +27783,8 @@ class LookmlModelExplore {
 
   List<String> get scopes {
     if (!_scopesSet && _apiMapResponse.containsKey('scopes')) {
-      _scopes = _apiMapResponse['scopes'] == null
-          ? null
-          : _apiMapResponse['scopes'].map<String>((i) => i as String).toList();
+      _scopes =
+          _apiMapResponse['scopes']?.map<String>((i) => i as String)?.toList();
       _scopesSet = true;
     }
     return _scopes;
@@ -29008,9 +27844,7 @@ class LookmlModelExplore {
 
   String get lookmlLink {
     if (!_lookmlLinkSet && _apiMapResponse.containsKey('lookml_link')) {
-      _lookmlLink = _apiMapResponse['lookml_link'] == null
-          ? null
-          : _apiMapResponse['lookml_link'].toString();
+      _lookmlLink = _apiMapResponse['lookml_link']?.toString();
       _lookmlLinkSet = true;
     }
     return _lookmlLink;
@@ -29117,9 +27951,7 @@ class LookmlModelExplore {
 
   String get connectionName {
     if (!_connectionNameSet && _apiMapResponse.containsKey('connection_name')) {
-      _connectionName = _apiMapResponse['connection_name'] == null
-          ? null
-          : _apiMapResponse['connection_name'].toString();
+      _connectionName = _apiMapResponse['connection_name']?.toString();
       _connectionNameSet = true;
     }
     return _connectionName;
@@ -29135,9 +27967,7 @@ class LookmlModelExplore {
   String get nullSortTreatment {
     if (!_nullSortTreatmentSet &&
         _apiMapResponse.containsKey('null_sort_treatment')) {
-      _nullSortTreatment = _apiMapResponse['null_sort_treatment'] == null
-          ? null
-          : _apiMapResponse['null_sort_treatment'].toString();
+      _nullSortTreatment = _apiMapResponse['null_sort_treatment']?.toString();
       _nullSortTreatmentSet = true;
     }
     return _nullSortTreatment;
@@ -29152,9 +27982,8 @@ class LookmlModelExplore {
 
   List<String> get files {
     if (!_filesSet && _apiMapResponse.containsKey('files')) {
-      _files = _apiMapResponse['files'] == null
-          ? null
-          : _apiMapResponse['files'].map<String>((i) => i as String).toList();
+      _files =
+          _apiMapResponse['files']?.map<String>((i) => i as String)?.toList();
       _filesSet = true;
     }
     return _files;
@@ -29169,9 +27998,7 @@ class LookmlModelExplore {
 
   String get sourceFile {
     if (!_sourceFileSet && _apiMapResponse.containsKey('source_file')) {
-      _sourceFile = _apiMapResponse['source_file'] == null
-          ? null
-          : _apiMapResponse['source_file'].toString();
+      _sourceFile = _apiMapResponse['source_file']?.toString();
       _sourceFileSet = true;
     }
     return _sourceFile;
@@ -29186,9 +28013,7 @@ class LookmlModelExplore {
 
   String get projectName {
     if (!_projectNameSet && _apiMapResponse.containsKey('project_name')) {
-      _projectName = _apiMapResponse['project_name'] == null
-          ? null
-          : _apiMapResponse['project_name'].toString();
+      _projectName = _apiMapResponse['project_name']?.toString();
       _projectNameSet = true;
     }
     return _projectName;
@@ -29203,9 +28028,7 @@ class LookmlModelExplore {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -29220,9 +28043,7 @@ class LookmlModelExplore {
 
   String get viewName {
     if (!_viewNameSet && _apiMapResponse.containsKey('view_name')) {
-      _viewName = _apiMapResponse['view_name'] == null
-          ? null
-          : _apiMapResponse['view_name'].toString();
+      _viewName = _apiMapResponse['view_name']?.toString();
       _viewNameSet = true;
     }
     return _viewName;
@@ -29252,9 +28073,7 @@ class LookmlModelExplore {
 
   String get sqlTableName {
     if (!_sqlTableNameSet && _apiMapResponse.containsKey('sql_table_name')) {
-      _sqlTableName = _apiMapResponse['sql_table_name'] == null
-          ? null
-          : _apiMapResponse['sql_table_name'].toString();
+      _sqlTableName = _apiMapResponse['sql_table_name']?.toString();
       _sqlTableNameSet = true;
     }
     return _sqlTableName;
@@ -29270,11 +28089,9 @@ class LookmlModelExplore {
   List<String> get accessFilterFields {
     if (!_accessFilterFieldsSet &&
         _apiMapResponse.containsKey('access_filter_fields')) {
-      _accessFilterFields = _apiMapResponse['access_filter_fields'] == null
-          ? null
-          : _apiMapResponse['access_filter_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _accessFilterFields = _apiMapResponse['access_filter_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _accessFilterFieldsSet = true;
     }
     return _accessFilterFields;
@@ -29370,11 +28187,9 @@ class LookmlModelExplore {
 
   List<String> get indexFields {
     if (!_indexFieldsSet && _apiMapResponse.containsKey('index_fields')) {
-      _indexFields = _apiMapResponse['index_fields'] == null
-          ? null
-          : _apiMapResponse['index_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _indexFields = _apiMapResponse['index_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _indexFieldsSet = true;
     }
     return _indexFields;
@@ -29409,9 +28224,8 @@ class LookmlModelExplore {
 
   List<String> get tags {
     if (!_tagsSet && _apiMapResponse.containsKey('tags')) {
-      _tags = _apiMapResponse['tags'] == null
-          ? null
-          : _apiMapResponse['tags'].map<String>((i) => i as String).toList();
+      _tags =
+          _apiMapResponse['tags']?.map<String>((i) => i as String)?.toList();
       _tagsSet = true;
     }
     return _tags;
@@ -29482,9 +28296,7 @@ class LookmlModelExplore {
 
   String get groupLabel {
     if (!_groupLabelSet && _apiMapResponse.containsKey('group_label')) {
-      _groupLabel = _apiMapResponse['group_label'] == null
-          ? null
-          : _apiMapResponse['group_label'].toString();
+      _groupLabel = _apiMapResponse['group_label']?.toString();
       _groupLabelSet = true;
     }
     return _groupLabel;
@@ -29521,11 +28333,9 @@ class LookmlModelExplore {
 
   List<String> get alwaysJoin {
     if (!_alwaysJoinSet && _apiMapResponse.containsKey('always_join')) {
-      _alwaysJoin = _apiMapResponse['always_join'] == null
-          ? null
-          : _apiMapResponse['always_join']
-              .map<String>((i) => i as String)
-              .toList();
+      _alwaysJoin = _apiMapResponse['always_join']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _alwaysJoinSet = true;
     }
     return _alwaysJoin;
@@ -29647,53 +28457,44 @@ class LookmlModelExplore {
       json['access_filter_fields'] = accessFilterFields;
     }
     if (_accessFiltersSet || _apiMapResponse.containsKey('access_filters')) {
-      json['access_filters'] = accessFilters == null
-          ? null
-          : accessFilters.map((i) => i.toJson()).toList();
+      json['access_filters'] = accessFilters?.map((i) => i.toJson())?.toList();
     }
     if (_aliasesSet || _apiMapResponse.containsKey('aliases')) {
-      json['aliases'] =
-          aliases == null ? null : aliases.map((i) => i.toJson()).toList();
+      json['aliases'] = aliases?.map((i) => i.toJson())?.toList();
     }
     if (_alwaysFilterSet || _apiMapResponse.containsKey('always_filter')) {
-      json['always_filter'] = alwaysFilter == null
-          ? null
-          : alwaysFilter.map((i) => i.toJson()).toList();
+      json['always_filter'] = alwaysFilter?.map((i) => i.toJson())?.toList();
     }
     if (_conditionallyFilterSet ||
         _apiMapResponse.containsKey('conditionally_filter')) {
-      json['conditionally_filter'] = conditionallyFilter == null
-          ? null
-          : conditionallyFilter.map((i) => i.toJson()).toList();
+      json['conditionally_filter'] =
+          conditionallyFilter?.map((i) => i.toJson())?.toList();
     }
     if (_indexFieldsSet || _apiMapResponse.containsKey('index_fields')) {
       json['index_fields'] = indexFields;
     }
     if (_setsSet || _apiMapResponse.containsKey('sets')) {
-      json['sets'] = sets == null ? null : sets.map((i) => i.toJson()).toList();
+      json['sets'] = sets?.map((i) => i.toJson())?.toList();
     }
     if (_tagsSet || _apiMapResponse.containsKey('tags')) {
       json['tags'] = tags;
     }
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_fieldsSet || _apiMapResponse.containsKey('fields')) {
-      json['fields'] = fields == null ? null : fields.toJson();
+      json['fields'] = fields?.toJson();
     }
     if (_joinsSet || _apiMapResponse.containsKey('joins')) {
-      json['joins'] =
-          joins == null ? null : joins.map((i) => i.toJson()).toList();
+      json['joins'] = joins?.map((i) => i.toJson())?.toList();
     }
     if (_groupLabelSet || _apiMapResponse.containsKey('group_label')) {
       json['group_label'] = groupLabel;
     }
     if (_supportedMeasureTypesSet ||
         _apiMapResponse.containsKey('supported_measure_types')) {
-      json['supported_measure_types'] = supportedMeasureTypes == null
-          ? null
-          : supportedMeasureTypes.map((i) => i.toJson()).toList();
+      json['supported_measure_types'] =
+          supportedMeasureTypes?.map((i) => i.toJson())?.toList();
     }
     if (_alwaysJoinSet || _apiMapResponse.containsKey('always_join')) {
       json['always_join'] = alwaysJoin;
@@ -29717,9 +28518,7 @@ class LookmlModelExploreAccessFilter {
 
   String get field {
     if (!_fieldSet && _apiMapResponse.containsKey('field')) {
-      _field = _apiMapResponse['field'] == null
-          ? null
-          : _apiMapResponse['field'].toString();
+      _field = _apiMapResponse['field']?.toString();
       _fieldSet = true;
     }
     return _field;
@@ -29734,9 +28533,7 @@ class LookmlModelExploreAccessFilter {
 
   String get userAttribute {
     if (!_userAttributeSet && _apiMapResponse.containsKey('user_attribute')) {
-      _userAttribute = _apiMapResponse['user_attribute'] == null
-          ? null
-          : _apiMapResponse['user_attribute'].toString();
+      _userAttribute = _apiMapResponse['user_attribute']?.toString();
       _userAttributeSet = true;
     }
     return _userAttribute;
@@ -29800,9 +28597,7 @@ class LookmlModelExploreAlias {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -29817,9 +28612,7 @@ class LookmlModelExploreAlias {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -29883,9 +28676,7 @@ class LookmlModelExploreAlwaysFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -29900,9 +28691,7 @@ class LookmlModelExploreAlwaysFilter {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -29966,9 +28755,7 @@ class LookmlModelExploreConditionallyFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -29983,9 +28770,7 @@ class LookmlModelExploreConditionallyFilter {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -30055,9 +28840,7 @@ class LookmlModelExploreError {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -30087,9 +28870,7 @@ class LookmlModelExploreError {
 
   String get errorPos {
     if (!_errorPosSet && _apiMapResponse.containsKey('error_pos')) {
-      _errorPos = _apiMapResponse['error_pos'] == null
-          ? null
-          : _apiMapResponse['error_pos'].toString();
+      _errorPos = _apiMapResponse['error_pos']?.toString();
       _errorPosSet = true;
     }
     return _errorPos;
@@ -30376,9 +29157,7 @@ class LookmlModelExploreField {
   String get defaultFilterValue {
     if (!_defaultFilterValueSet &&
         _apiMapResponse.containsKey('default_filter_value')) {
-      _defaultFilterValue = _apiMapResponse['default_filter_value'] == null
-          ? null
-          : _apiMapResponse['default_filter_value'].toString();
+      _defaultFilterValue = _apiMapResponse['default_filter_value']?.toString();
       _defaultFilterValueSet = true;
     }
     return _defaultFilterValue;
@@ -30393,9 +29172,7 @@ class LookmlModelExploreField {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -30410,9 +29187,7 @@ class LookmlModelExploreField {
 
   String get dimensionGroup {
     if (!_dimensionGroupSet && _apiMapResponse.containsKey('dimension_group')) {
-      _dimensionGroup = _apiMapResponse['dimension_group'] == null
-          ? null
-          : _apiMapResponse['dimension_group'].toString();
+      _dimensionGroup = _apiMapResponse['dimension_group']?.toString();
       _dimensionGroupSet = true;
     }
     return _dimensionGroup;
@@ -30447,9 +29222,7 @@ class LookmlModelExploreField {
 
   String get error {
     if (!_errorSet && _apiMapResponse.containsKey('error')) {
-      _error = _apiMapResponse['error'] == null
-          ? null
-          : _apiMapResponse['error'].toString();
+      _error = _apiMapResponse['error']?.toString();
       _errorSet = true;
     }
     return _error;
@@ -30465,9 +29238,7 @@ class LookmlModelExploreField {
   String get fieldGroupLabel {
     if (!_fieldGroupLabelSet &&
         _apiMapResponse.containsKey('field_group_label')) {
-      _fieldGroupLabel = _apiMapResponse['field_group_label'] == null
-          ? null
-          : _apiMapResponse['field_group_label'].toString();
+      _fieldGroupLabel = _apiMapResponse['field_group_label']?.toString();
       _fieldGroupLabelSet = true;
     }
     return _fieldGroupLabel;
@@ -30483,9 +29254,7 @@ class LookmlModelExploreField {
   String get fieldGroupVariant {
     if (!_fieldGroupVariantSet &&
         _apiMapResponse.containsKey('field_group_variant')) {
-      _fieldGroupVariant = _apiMapResponse['field_group_variant'] == null
-          ? null
-          : _apiMapResponse['field_group_variant'].toString();
+      _fieldGroupVariant = _apiMapResponse['field_group_variant']?.toString();
       _fieldGroupVariantSet = true;
     }
     return _fieldGroupVariant;
@@ -30654,9 +29423,7 @@ class LookmlModelExploreField {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -30672,9 +29439,7 @@ class LookmlModelExploreField {
   String get labelFromParameter {
     if (!_labelFromParameterSet &&
         _apiMapResponse.containsKey('label_from_parameter')) {
-      _labelFromParameter = _apiMapResponse['label_from_parameter'] == null
-          ? null
-          : _apiMapResponse['label_from_parameter'].toString();
+      _labelFromParameter = _apiMapResponse['label_from_parameter']?.toString();
       _labelFromParameterSet = true;
     }
     return _labelFromParameter;
@@ -30689,9 +29454,7 @@ class LookmlModelExploreField {
 
   String get labelShort {
     if (!_labelShortSet && _apiMapResponse.containsKey('label_short')) {
-      _labelShort = _apiMapResponse['label_short'] == null
-          ? null
-          : _apiMapResponse['label_short'].toString();
+      _labelShort = _apiMapResponse['label_short']?.toString();
       _labelShortSet = true;
     }
     return _labelShort;
@@ -30706,9 +29469,7 @@ class LookmlModelExploreField {
 
   String get lookmlLink {
     if (!_lookmlLinkSet && _apiMapResponse.containsKey('lookml_link')) {
-      _lookmlLink = _apiMapResponse['lookml_link'] == null
-          ? null
-          : _apiMapResponse['lookml_link'].toString();
+      _lookmlLink = _apiMapResponse['lookml_link']?.toString();
       _lookmlLinkSet = true;
     }
     return _lookmlLink;
@@ -30754,9 +29515,7 @@ class LookmlModelExploreField {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -30832,9 +29591,7 @@ class LookmlModelExploreField {
 
   String get projectName {
     if (!_projectNameSet && _apiMapResponse.containsKey('project_name')) {
-      _projectName = _apiMapResponse['project_name'] == null
-          ? null
-          : _apiMapResponse['project_name'].toString();
+      _projectName = _apiMapResponse['project_name']?.toString();
       _projectNameSet = true;
     }
     return _projectName;
@@ -30865,9 +29622,7 @@ class LookmlModelExploreField {
 
   String get scope {
     if (!_scopeSet && _apiMapResponse.containsKey('scope')) {
-      _scope = _apiMapResponse['scope'] == null
-          ? null
-          : _apiMapResponse['scope'].toString();
+      _scope = _apiMapResponse['scope']?.toString();
       _scopeSet = true;
     }
     return _scope;
@@ -30897,9 +29652,7 @@ class LookmlModelExploreField {
 
   String get sourceFile {
     if (!_sourceFileSet && _apiMapResponse.containsKey('source_file')) {
-      _sourceFile = _apiMapResponse['source_file'] == null
-          ? null
-          : _apiMapResponse['source_file'].toString();
+      _sourceFile = _apiMapResponse['source_file']?.toString();
       _sourceFileSet = true;
     }
     return _sourceFile;
@@ -30915,9 +29668,7 @@ class LookmlModelExploreField {
   String get sourceFilePath {
     if (!_sourceFilePathSet &&
         _apiMapResponse.containsKey('source_file_path')) {
-      _sourceFilePath = _apiMapResponse['source_file_path'] == null
-          ? null
-          : _apiMapResponse['source_file_path'].toString();
+      _sourceFilePath = _apiMapResponse['source_file_path']?.toString();
       _sourceFilePathSet = true;
     }
     return _sourceFilePath;
@@ -30932,9 +29683,7 @@ class LookmlModelExploreField {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -30990,9 +29739,7 @@ class LookmlModelExploreField {
   String get suggestDimension {
     if (!_suggestDimensionSet &&
         _apiMapResponse.containsKey('suggest_dimension')) {
-      _suggestDimension = _apiMapResponse['suggest_dimension'] == null
-          ? null
-          : _apiMapResponse['suggest_dimension'].toString();
+      _suggestDimension = _apiMapResponse['suggest_dimension']?.toString();
       _suggestDimensionSet = true;
     }
     return _suggestDimension;
@@ -31007,9 +29754,7 @@ class LookmlModelExploreField {
 
   String get suggestExplore {
     if (!_suggestExploreSet && _apiMapResponse.containsKey('suggest_explore')) {
-      _suggestExplore = _apiMapResponse['suggest_explore'] == null
-          ? null
-          : _apiMapResponse['suggest_explore'].toString();
+      _suggestExplore = _apiMapResponse['suggest_explore']?.toString();
       _suggestExploreSet = true;
     }
     return _suggestExplore;
@@ -31039,11 +29784,9 @@ class LookmlModelExploreField {
 
   List<String> get suggestions {
     if (!_suggestionsSet && _apiMapResponse.containsKey('suggestions')) {
-      _suggestions = _apiMapResponse['suggestions'] == null
-          ? null
-          : _apiMapResponse['suggestions']
-              .map<String>((i) => i as String)
-              .toList();
+      _suggestions = _apiMapResponse['suggestions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _suggestionsSet = true;
     }
     return _suggestions;
@@ -31058,9 +29801,8 @@ class LookmlModelExploreField {
 
   List<String> get tags {
     if (!_tagsSet && _apiMapResponse.containsKey('tags')) {
-      _tags = _apiMapResponse['tags'] == null
-          ? null
-          : _apiMapResponse['tags'].map<String>((i) => i as String).toList();
+      _tags =
+          _apiMapResponse['tags']?.map<String>((i) => i as String)?.toList();
       _tagsSet = true;
     }
     return _tags;
@@ -31075,9 +29817,7 @@ class LookmlModelExploreField {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -31093,13 +29833,9 @@ class LookmlModelExploreField {
   List<UserAttributeFilterTypes> get userAttributeFilterTypes {
     if (!_userAttributeFilterTypesSet &&
         _apiMapResponse.containsKey('user_attribute_filter_types')) {
-      _userAttributeFilterTypes =
-          _apiMapResponse['user_attribute_filter_types'] == null
-              ? null
-              : _apiMapResponse['user_attribute_filter_types']
-                  .map<UserAttributeFilterTypes>(
-                      (i) => i as UserAttributeFilterTypes)
-                  .toList();
+      _userAttributeFilterTypes = _apiMapResponse['user_attribute_filter_types']
+          ?.map<UserAttributeFilterTypes>((i) => i as UserAttributeFilterTypes)
+          ?.toList();
       _userAttributeFilterTypesSet = true;
     }
     return _userAttributeFilterTypes;
@@ -31114,9 +29850,7 @@ class LookmlModelExploreField {
 
   String get valueFormat {
     if (!_valueFormatSet && _apiMapResponse.containsKey('value_format')) {
-      _valueFormat = _apiMapResponse['value_format'] == null
-          ? null
-          : _apiMapResponse['value_format'].toString();
+      _valueFormat = _apiMapResponse['value_format']?.toString();
       _valueFormatSet = true;
     }
     return _valueFormat;
@@ -31131,9 +29865,7 @@ class LookmlModelExploreField {
 
   String get view {
     if (!_viewSet && _apiMapResponse.containsKey('view')) {
-      _view = _apiMapResponse['view'] == null
-          ? null
-          : _apiMapResponse['view'].toString();
+      _view = _apiMapResponse['view']?.toString();
       _viewSet = true;
     }
     return _view;
@@ -31148,9 +29880,7 @@ class LookmlModelExploreField {
 
   String get viewLabel {
     if (!_viewLabelSet && _apiMapResponse.containsKey('view_label')) {
-      _viewLabel = _apiMapResponse['view_label'] == null
-          ? null
-          : _apiMapResponse['view_label'].toString();
+      _viewLabel = _apiMapResponse['view_label']?.toString();
       _viewLabelSet = true;
     }
     return _viewLabel;
@@ -31211,9 +29941,7 @@ class LookmlModelExploreField {
 
   String get originalView {
     if (!_originalViewSet && _apiMapResponse.containsKey('original_view')) {
-      _originalView = _apiMapResponse['original_view'] == null
-          ? null
-          : _apiMapResponse['original_view'].toString();
+      _originalView = _apiMapResponse['original_view']?.toString();
       _originalViewSet = true;
     }
     return _originalView;
@@ -31272,9 +30000,7 @@ class LookmlModelExploreField {
       json['dimension_group'] = dimensionGroup;
     }
     if (_enumerationsSet || _apiMapResponse.containsKey('enumerations')) {
-      json['enumerations'] = enumerations == null
-          ? null
-          : enumerations.map((i) => i.toJson()).toList();
+      json['enumerations'] = enumerations?.map((i) => i.toJson())?.toList();
     }
     if (_errorSet || _apiMapResponse.containsKey('error')) {
       json['error'] = error;
@@ -31317,8 +30043,7 @@ class LookmlModelExploreField {
       json['can_time_filter'] = canTimeFilter;
     }
     if (_timeIntervalSet || _apiMapResponse.containsKey('time_interval')) {
-      json['time_interval'] =
-          timeInterval == null ? null : timeInterval.toJson();
+      json['time_interval'] = timeInterval?.toJson();
     }
     if (_labelSet || _apiMapResponse.containsKey('label')) {
       json['label'] = label;
@@ -31334,7 +30059,7 @@ class LookmlModelExploreField {
       json['lookml_link'] = lookmlLink;
     }
     if (_mapLayerSet || _apiMapResponse.containsKey('map_layer')) {
-      json['map_layer'] = mapLayer == null ? null : mapLayer.toJson();
+      json['map_layer'] = mapLayer?.toJson();
     }
     if (_measureSet || _apiMapResponse.containsKey('measure')) {
       json['measure'] = measure;
@@ -31378,12 +30103,10 @@ class LookmlModelExploreField {
       json['sql'] = sql;
     }
     if (_sqlCaseSet || _apiMapResponse.containsKey('sql_case')) {
-      json['sql_case'] =
-          sqlCase == null ? null : sqlCase.map((i) => i.toJson()).toList();
+      json['sql_case'] = sqlCase?.map((i) => i.toJson())?.toList();
     }
     if (_filtersSet || _apiMapResponse.containsKey('filters')) {
-      json['filters'] =
-          filters == null ? null : filters.map((i) => i.toJson()).toList();
+      json['filters'] = filters?.map((i) => i.toJson())?.toList();
     }
     if (_suggestDimensionSet ||
         _apiMapResponse.containsKey('suggest_dimension')) {
@@ -31448,9 +30171,7 @@ class LookmlModelExploreFieldEnumeration {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -31553,9 +30274,7 @@ class LookmlModelExploreFieldMapLayer {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -31570,9 +30289,7 @@ class LookmlModelExploreFieldMapLayer {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -31587,9 +30304,7 @@ class LookmlModelExploreFieldMapLayer {
 
   String get featureKey {
     if (!_featureKeySet && _apiMapResponse.containsKey('feature_key')) {
-      _featureKey = _apiMapResponse['feature_key'] == null
-          ? null
-          : _apiMapResponse['feature_key'].toString();
+      _featureKey = _apiMapResponse['feature_key']?.toString();
       _featureKeySet = true;
     }
     return _featureKey;
@@ -31604,9 +30319,7 @@ class LookmlModelExploreFieldMapLayer {
 
   String get propertyKey {
     if (!_propertyKeySet && _apiMapResponse.containsKey('property_key')) {
-      _propertyKey = _apiMapResponse['property_key'] == null
-          ? null
-          : _apiMapResponse['property_key'].toString();
+      _propertyKey = _apiMapResponse['property_key']?.toString();
       _propertyKeySet = true;
     }
     return _propertyKey;
@@ -31622,9 +30335,7 @@ class LookmlModelExploreFieldMapLayer {
   String get propertyLabelKey {
     if (!_propertyLabelKeySet &&
         _apiMapResponse.containsKey('property_label_key')) {
-      _propertyLabelKey = _apiMapResponse['property_label_key'] == null
-          ? null
-          : _apiMapResponse['property_label_key'].toString();
+      _propertyLabelKey = _apiMapResponse['property_label_key']?.toString();
       _propertyLabelKeySet = true;
     }
     return _propertyLabelKey;
@@ -31639,9 +30350,7 @@ class LookmlModelExploreFieldMapLayer {
 
   String get projection {
     if (!_projectionSet && _apiMapResponse.containsKey('projection')) {
-      _projection = _apiMapResponse['projection'] == null
-          ? null
-          : _apiMapResponse['projection'].toString();
+      _projection = _apiMapResponse['projection']?.toString();
       _projectionSet = true;
     }
     return _projection;
@@ -31672,9 +30381,7 @@ class LookmlModelExploreFieldMapLayer {
   String get extentsJsonUrl {
     if (!_extentsJsonUrlSet &&
         _apiMapResponse.containsKey('extents_json_url')) {
-      _extentsJsonUrl = _apiMapResponse['extents_json_url'] == null
-          ? null
-          : _apiMapResponse['extents_json_url'].toString();
+      _extentsJsonUrl = _apiMapResponse['extents_json_url']?.toString();
       _extentsJsonUrlSet = true;
     }
     return _extentsJsonUrl;
@@ -31793,9 +30500,7 @@ class LookmlModelExploreFieldMeasureFilters {
 
   String get field {
     if (!_fieldSet && _apiMapResponse.containsKey('field')) {
-      _field = _apiMapResponse['field'] == null
-          ? null
-          : _apiMapResponse['field'].toString();
+      _field = _apiMapResponse['field']?.toString();
       _fieldSet = true;
     }
     return _field;
@@ -31810,9 +30515,7 @@ class LookmlModelExploreFieldMeasureFilters {
 
   String get condition {
     if (!_conditionSet && _apiMapResponse.containsKey('condition')) {
-      _condition = _apiMapResponse['condition'] == null
-          ? null
-          : _apiMapResponse['condition'].toString();
+      _condition = _apiMapResponse['condition']?.toString();
       _conditionSet = true;
     }
     return _condition;
@@ -31987,22 +30690,16 @@ class LookmlModelExploreFieldset {
   Map toJson() {
     var json = {};
     if (_dimensionsSet || _apiMapResponse.containsKey('dimensions')) {
-      json['dimensions'] = dimensions == null
-          ? null
-          : dimensions.map((i) => i.toJson()).toList();
+      json['dimensions'] = dimensions?.map((i) => i.toJson())?.toList();
     }
     if (_measuresSet || _apiMapResponse.containsKey('measures')) {
-      json['measures'] =
-          measures == null ? null : measures.map((i) => i.toJson()).toList();
+      json['measures'] = measures?.map((i) => i.toJson())?.toList();
     }
     if (_filtersSet || _apiMapResponse.containsKey('filters')) {
-      json['filters'] =
-          filters == null ? null : filters.map((i) => i.toJson()).toList();
+      json['filters'] = filters?.map((i) => i.toJson())?.toList();
     }
     if (_parametersSet || _apiMapResponse.containsKey('parameters')) {
-      json['parameters'] = parameters == null
-          ? null
-          : parameters.map((i) => i.toJson()).toList();
+      json['parameters'] = parameters?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -32023,9 +30720,7 @@ class LookmlModelExploreFieldSqlCase {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -32040,9 +30735,7 @@ class LookmlModelExploreFieldSqlCase {
 
   String get condition {
     if (!_conditionSet && _apiMapResponse.containsKey('condition')) {
-      _condition = _apiMapResponse['condition'] == null
-          ? null
-          : _apiMapResponse['condition'].toString();
+      _condition = _apiMapResponse['condition']?.toString();
       _conditionSet = true;
     }
     return _condition;
@@ -32218,9 +30911,7 @@ class LookmlModelExploreJoins {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -32236,11 +30927,9 @@ class LookmlModelExploreJoins {
   List<String> get dependentFields {
     if (!_dependentFieldsSet &&
         _apiMapResponse.containsKey('dependent_fields')) {
-      _dependentFields = _apiMapResponse['dependent_fields'] == null
-          ? null
-          : _apiMapResponse['dependent_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _dependentFields = _apiMapResponse['dependent_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _dependentFieldsSet = true;
     }
     return _dependentFields;
@@ -32255,9 +30944,8 @@ class LookmlModelExploreJoins {
 
   List<String> get fields {
     if (!_fieldsSet && _apiMapResponse.containsKey('fields')) {
-      _fields = _apiMapResponse['fields'] == null
-          ? null
-          : _apiMapResponse['fields'].map<String>((i) => i as String).toList();
+      _fields =
+          _apiMapResponse['fields']?.map<String>((i) => i as String)?.toList();
       _fieldsSet = true;
     }
     return _fields;
@@ -32272,9 +30960,7 @@ class LookmlModelExploreJoins {
 
   String get foreignKey {
     if (!_foreignKeySet && _apiMapResponse.containsKey('foreign_key')) {
-      _foreignKey = _apiMapResponse['foreign_key'] == null
-          ? null
-          : _apiMapResponse['foreign_key'].toString();
+      _foreignKey = _apiMapResponse['foreign_key']?.toString();
       _foreignKeySet = true;
     }
     return _foreignKey;
@@ -32289,9 +30975,7 @@ class LookmlModelExploreJoins {
 
   String get from {
     if (!_fromSet && _apiMapResponse.containsKey('from')) {
-      _from = _apiMapResponse['from'] == null
-          ? null
-          : _apiMapResponse['from'].toString();
+      _from = _apiMapResponse['from']?.toString();
       _fromSet = true;
     }
     return _from;
@@ -32321,9 +31005,7 @@ class LookmlModelExploreJoins {
 
   String get relationship {
     if (!_relationshipSet && _apiMapResponse.containsKey('relationship')) {
-      _relationship = _apiMapResponse['relationship'] == null
-          ? null
-          : _apiMapResponse['relationship'].toString();
+      _relationship = _apiMapResponse['relationship']?.toString();
       _relationshipSet = true;
     }
     return _relationship;
@@ -32338,11 +31020,9 @@ class LookmlModelExploreJoins {
 
   List<String> get requiredJoins {
     if (!_requiredJoinsSet && _apiMapResponse.containsKey('required_joins')) {
-      _requiredJoins = _apiMapResponse['required_joins'] == null
-          ? null
-          : _apiMapResponse['required_joins']
-              .map<String>((i) => i as String)
-              .toList();
+      _requiredJoins = _apiMapResponse['required_joins']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _requiredJoinsSet = true;
     }
     return _requiredJoins;
@@ -32357,9 +31037,7 @@ class LookmlModelExploreJoins {
 
   String get sqlForeignKey {
     if (!_sqlForeignKeySet && _apiMapResponse.containsKey('sql_foreign_key')) {
-      _sqlForeignKey = _apiMapResponse['sql_foreign_key'] == null
-          ? null
-          : _apiMapResponse['sql_foreign_key'].toString();
+      _sqlForeignKey = _apiMapResponse['sql_foreign_key']?.toString();
       _sqlForeignKeySet = true;
     }
     return _sqlForeignKey;
@@ -32374,9 +31052,7 @@ class LookmlModelExploreJoins {
 
   String get sqlOn {
     if (!_sqlOnSet && _apiMapResponse.containsKey('sql_on')) {
-      _sqlOn = _apiMapResponse['sql_on'] == null
-          ? null
-          : _apiMapResponse['sql_on'].toString();
+      _sqlOn = _apiMapResponse['sql_on']?.toString();
       _sqlOnSet = true;
     }
     return _sqlOn;
@@ -32391,9 +31067,7 @@ class LookmlModelExploreJoins {
 
   String get sqlTableName {
     if (!_sqlTableNameSet && _apiMapResponse.containsKey('sql_table_name')) {
-      _sqlTableName = _apiMapResponse['sql_table_name'] == null
-          ? null
-          : _apiMapResponse['sql_table_name'].toString();
+      _sqlTableName = _apiMapResponse['sql_table_name']?.toString();
       _sqlTableNameSet = true;
     }
     return _sqlTableName;
@@ -32408,9 +31082,7 @@ class LookmlModelExploreJoins {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -32425,9 +31097,7 @@ class LookmlModelExploreJoins {
 
   String get viewLabel {
     if (!_viewLabelSet && _apiMapResponse.containsKey('view_label')) {
-      _viewLabel = _apiMapResponse['view_label'] == null
-          ? null
-          : _apiMapResponse['view_label'].toString();
+      _viewLabel = _apiMapResponse['view_label']?.toString();
       _viewLabelSet = true;
     }
     return _viewLabel;
@@ -32525,9 +31195,7 @@ class LookmlModelExploreSet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -32542,9 +31210,8 @@ class LookmlModelExploreSet {
 
   List<String> get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].map<String>((i) => i as String).toList();
+      _value =
+          _apiMapResponse['value']?.map<String>((i) => i as String)?.toList();
       _valueSet = true;
     }
     return _value;
@@ -32608,9 +31275,7 @@ class LookmlModelExploreSupportedMeasureType {
 
   String get dimensionType {
     if (!_dimensionTypeSet && _apiMapResponse.containsKey('dimension_type')) {
-      _dimensionType = _apiMapResponse['dimension_type'] == null
-          ? null
-          : _apiMapResponse['dimension_type'].toString();
+      _dimensionType = _apiMapResponse['dimension_type']?.toString();
       _dimensionTypeSet = true;
     }
     return _dimensionType;
@@ -32625,11 +31290,9 @@ class LookmlModelExploreSupportedMeasureType {
 
   List<String> get measureTypes {
     if (!_measureTypesSet && _apiMapResponse.containsKey('measure_types')) {
-      _measureTypes = _apiMapResponse['measure_types'] == null
-          ? null
-          : _apiMapResponse['measure_types']
-              .map<String>((i) => i as String)
-              .toList();
+      _measureTypes = _apiMapResponse['measure_types']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _measureTypesSet = true;
     }
     return _measureTypes;
@@ -32702,9 +31365,7 @@ class LookmlModelNavExplore {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -32719,9 +31380,7 @@ class LookmlModelNavExplore {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -32736,9 +31395,7 @@ class LookmlModelNavExplore {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -32768,9 +31425,7 @@ class LookmlModelNavExplore {
 
   String get groupLabel {
     if (!_groupLabelSet && _apiMapResponse.containsKey('group_label')) {
-      _groupLabel = _apiMapResponse['group_label'] == null
-          ? null
-          : _apiMapResponse['group_label'].toString();
+      _groupLabel = _apiMapResponse['group_label']?.toString();
       _groupLabelSet = true;
     }
     return _groupLabel;
@@ -32873,9 +31528,7 @@ class LookmlTest {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -32890,9 +31543,7 @@ class LookmlTest {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -32907,9 +31558,7 @@ class LookmlTest {
 
   String get exploreName {
     if (!_exploreNameSet && _apiMapResponse.containsKey('explore_name')) {
-      _exploreName = _apiMapResponse['explore_name'] == null
-          ? null
-          : _apiMapResponse['explore_name'].toString();
+      _exploreName = _apiMapResponse['explore_name']?.toString();
       _exploreNameSet = true;
     }
     return _exploreName;
@@ -32925,9 +31574,7 @@ class LookmlTest {
   String get queryUrlParams {
     if (!_queryUrlParamsSet &&
         _apiMapResponse.containsKey('query_url_params')) {
-      _queryUrlParams = _apiMapResponse['query_url_params'] == null
-          ? null
-          : _apiMapResponse['query_url_params'].toString();
+      _queryUrlParams = _apiMapResponse['query_url_params']?.toString();
       _queryUrlParamsSet = true;
     }
     return _queryUrlParams;
@@ -32942,9 +31589,7 @@ class LookmlTest {
 
   String get file {
     if (!_fileSet && _apiMapResponse.containsKey('file')) {
-      _file = _apiMapResponse['file'] == null
-          ? null
-          : _apiMapResponse['file'].toString();
+      _file = _apiMapResponse['file']?.toString();
       _fileSet = true;
     }
     return _file;
@@ -33071,9 +31716,7 @@ class LookmlTestResult {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -33088,9 +31731,7 @@ class LookmlTestResult {
 
   String get testName {
     if (!_testNameSet && _apiMapResponse.containsKey('test_name')) {
-      _testName = _apiMapResponse['test_name'] == null
-          ? null
-          : _apiMapResponse['test_name'].toString();
+      _testName = _apiMapResponse['test_name']?.toString();
       _testNameSet = true;
     }
     return _testName;
@@ -33232,12 +31873,10 @@ class LookmlTestResult {
       json['assertions_failed'] = assertionsFailed;
     }
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_warningsSet || _apiMapResponse.containsKey('warnings')) {
-      json['warnings'] =
-          warnings == null ? null : warnings.map((i) => i.toJson()).toList();
+      json['warnings'] = warnings?.map((i) => i.toJson())?.toList();
     }
     if (_successSet || _apiMapResponse.containsKey('success')) {
       json['success'] = success;
@@ -33261,9 +31900,7 @@ class LookModel {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -33278,9 +31915,7 @@ class LookModel {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -33461,9 +32096,7 @@ class LookWithDashboards {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -33478,9 +32111,7 @@ class LookWithDashboards {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -33590,9 +32221,7 @@ class LookWithDashboards {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -33607,9 +32236,7 @@ class LookWithDashboards {
 
   String get embedUrl {
     if (!_embedUrlSet && _apiMapResponse.containsKey('embed_url')) {
-      _embedUrl = _apiMapResponse['embed_url'] == null
-          ? null
-          : _apiMapResponse['embed_url'].toString();
+      _embedUrl = _apiMapResponse['embed_url']?.toString();
       _embedUrlSet = true;
     }
     return _embedUrl;
@@ -33624,9 +32251,7 @@ class LookWithDashboards {
 
   String get excelFileUrl {
     if (!_excelFileUrlSet && _apiMapResponse.containsKey('excel_file_url')) {
-      _excelFileUrl = _apiMapResponse['excel_file_url'] == null
-          ? null
-          : _apiMapResponse['excel_file_url'].toString();
+      _excelFileUrl = _apiMapResponse['excel_file_url']?.toString();
       _excelFileUrlSet = true;
     }
     return _excelFileUrl;
@@ -33658,9 +32283,7 @@ class LookWithDashboards {
     if (!_googleSpreadsheetFormulaSet &&
         _apiMapResponse.containsKey('google_spreadsheet_formula')) {
       _googleSpreadsheetFormula =
-          _apiMapResponse['google_spreadsheet_formula'] == null
-              ? null
-              : _apiMapResponse['google_spreadsheet_formula'].toString();
+          _apiMapResponse['google_spreadsheet_formula']?.toString();
       _googleSpreadsheetFormulaSet = true;
     }
     return _googleSpreadsheetFormula;
@@ -33675,9 +32298,7 @@ class LookWithDashboards {
 
   String get imageEmbedUrl {
     if (!_imageEmbedUrlSet && _apiMapResponse.containsKey('image_embed_url')) {
-      _imageEmbedUrl = _apiMapResponse['image_embed_url'] == null
-          ? null
-          : _apiMapResponse['image_embed_url'].toString();
+      _imageEmbedUrl = _apiMapResponse['image_embed_url']?.toString();
       _imageEmbedUrlSet = true;
     }
     return _imageEmbedUrl;
@@ -33788,9 +32409,7 @@ class LookWithDashboards {
 
   String get publicSlug {
     if (!_publicSlugSet && _apiMapResponse.containsKey('public_slug')) {
-      _publicSlug = _apiMapResponse['public_slug'] == null
-          ? null
-          : _apiMapResponse['public_slug'].toString();
+      _publicSlug = _apiMapResponse['public_slug']?.toString();
       _publicSlugSet = true;
     }
     return _publicSlug;
@@ -33805,9 +32424,7 @@ class LookWithDashboards {
 
   String get publicUrl {
     if (!_publicUrlSet && _apiMapResponse.containsKey('public_url')) {
-      _publicUrl = _apiMapResponse['public_url'] == null
-          ? null
-          : _apiMapResponse['public_url'].toString();
+      _publicUrl = _apiMapResponse['public_url']?.toString();
       _publicUrlSet = true;
     }
     return _publicUrl;
@@ -33837,9 +32454,7 @@ class LookWithDashboards {
 
   String get shortUrl {
     if (!_shortUrlSet && _apiMapResponse.containsKey('short_url')) {
-      _shortUrl = _apiMapResponse['short_url'] == null
-          ? null
-          : _apiMapResponse['short_url'].toString();
+      _shortUrl = _apiMapResponse['short_url']?.toString();
       _shortUrlSet = true;
     }
     return _shortUrl;
@@ -33870,9 +32485,7 @@ class LookWithDashboards {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -33983,15 +32596,13 @@ class LookWithDashboards {
       json['content_favorite_id'] = contentFavoriteId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedSet || _apiMapResponse.containsKey('deleted')) {
       json['deleted'] = deleted;
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_deleterIdSet || _apiMapResponse.containsKey('deleter_id')) {
       json['deleter_id'] = deleterId;
@@ -34019,18 +32630,16 @@ class LookWithDashboards {
       json['is_run_on_load'] = isRunOnLoad;
     }
     if (_lastAccessedAtSet || _apiMapResponse.containsKey('last_accessed_at')) {
-      json['last_accessed_at'] =
-          lastAccessedAt == null ? null : lastAccessedAt.toIso8601String();
+      json['last_accessed_at'] = lastAccessedAt?.toIso8601String();
     }
     if (_lastUpdaterIdSet || _apiMapResponse.containsKey('last_updater_id')) {
       json['last_updater_id'] = lastUpdaterId;
     }
     if (_lastViewedAtSet || _apiMapResponse.containsKey('last_viewed_at')) {
-      json['last_viewed_at'] =
-          lastViewedAt == null ? null : lastViewedAt.toIso8601String();
+      json['last_viewed_at'] = lastViewedAt?.toIso8601String();
     }
     if (_modelSet || _apiMapResponse.containsKey('model')) {
-      json['model'] = model == null ? null : model.toJson();
+      json['model'] = model?.toJson();
     }
     if (_publicSet || _apiMapResponse.containsKey('public')) {
       json['public'] = public;
@@ -34048,22 +32657,19 @@ class LookWithDashboards {
       json['short_url'] = shortUrl;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_folderIdSet || _apiMapResponse.containsKey('folder_id')) {
       json['folder_id'] = folderId;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_viewCountSet || _apiMapResponse.containsKey('view_count')) {
       json['view_count'] = viewCount;
     }
     if (_dashboardsSet || _apiMapResponse.containsKey('dashboards')) {
-      json['dashboards'] = dashboards == null
-          ? null
-          : dashboards.map((i) => i.toJson()).toList();
+      json['dashboards'] = dashboards?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -34205,9 +32811,7 @@ class LookWithQuery {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -34222,9 +32826,7 @@ class LookWithQuery {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -34334,9 +32936,7 @@ class LookWithQuery {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -34351,9 +32951,7 @@ class LookWithQuery {
 
   String get embedUrl {
     if (!_embedUrlSet && _apiMapResponse.containsKey('embed_url')) {
-      _embedUrl = _apiMapResponse['embed_url'] == null
-          ? null
-          : _apiMapResponse['embed_url'].toString();
+      _embedUrl = _apiMapResponse['embed_url']?.toString();
       _embedUrlSet = true;
     }
     return _embedUrl;
@@ -34368,9 +32966,7 @@ class LookWithQuery {
 
   String get excelFileUrl {
     if (!_excelFileUrlSet && _apiMapResponse.containsKey('excel_file_url')) {
-      _excelFileUrl = _apiMapResponse['excel_file_url'] == null
-          ? null
-          : _apiMapResponse['excel_file_url'].toString();
+      _excelFileUrl = _apiMapResponse['excel_file_url']?.toString();
       _excelFileUrlSet = true;
     }
     return _excelFileUrl;
@@ -34402,9 +32998,7 @@ class LookWithQuery {
     if (!_googleSpreadsheetFormulaSet &&
         _apiMapResponse.containsKey('google_spreadsheet_formula')) {
       _googleSpreadsheetFormula =
-          _apiMapResponse['google_spreadsheet_formula'] == null
-              ? null
-              : _apiMapResponse['google_spreadsheet_formula'].toString();
+          _apiMapResponse['google_spreadsheet_formula']?.toString();
       _googleSpreadsheetFormulaSet = true;
     }
     return _googleSpreadsheetFormula;
@@ -34419,9 +33013,7 @@ class LookWithQuery {
 
   String get imageEmbedUrl {
     if (!_imageEmbedUrlSet && _apiMapResponse.containsKey('image_embed_url')) {
-      _imageEmbedUrl = _apiMapResponse['image_embed_url'] == null
-          ? null
-          : _apiMapResponse['image_embed_url'].toString();
+      _imageEmbedUrl = _apiMapResponse['image_embed_url']?.toString();
       _imageEmbedUrlSet = true;
     }
     return _imageEmbedUrl;
@@ -34532,9 +33124,7 @@ class LookWithQuery {
 
   String get publicSlug {
     if (!_publicSlugSet && _apiMapResponse.containsKey('public_slug')) {
-      _publicSlug = _apiMapResponse['public_slug'] == null
-          ? null
-          : _apiMapResponse['public_slug'].toString();
+      _publicSlug = _apiMapResponse['public_slug']?.toString();
       _publicSlugSet = true;
     }
     return _publicSlug;
@@ -34549,9 +33139,7 @@ class LookWithQuery {
 
   String get publicUrl {
     if (!_publicUrlSet && _apiMapResponse.containsKey('public_url')) {
-      _publicUrl = _apiMapResponse['public_url'] == null
-          ? null
-          : _apiMapResponse['public_url'].toString();
+      _publicUrl = _apiMapResponse['public_url']?.toString();
       _publicUrlSet = true;
     }
     return _publicUrl;
@@ -34581,9 +33169,7 @@ class LookWithQuery {
 
   String get shortUrl {
     if (!_shortUrlSet && _apiMapResponse.containsKey('short_url')) {
-      _shortUrl = _apiMapResponse['short_url'] == null
-          ? null
-          : _apiMapResponse['short_url'].toString();
+      _shortUrl = _apiMapResponse['short_url']?.toString();
       _shortUrlSet = true;
     }
     return _shortUrl;
@@ -34614,9 +33200,7 @@ class LookWithQuery {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -34679,9 +33263,7 @@ class LookWithQuery {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -34741,15 +33323,13 @@ class LookWithQuery {
       json['content_favorite_id'] = contentFavoriteId;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_deletedSet || _apiMapResponse.containsKey('deleted')) {
       json['deleted'] = deleted;
     }
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_deleterIdSet || _apiMapResponse.containsKey('deleter_id')) {
       json['deleter_id'] = deleterId;
@@ -34777,18 +33357,16 @@ class LookWithQuery {
       json['is_run_on_load'] = isRunOnLoad;
     }
     if (_lastAccessedAtSet || _apiMapResponse.containsKey('last_accessed_at')) {
-      json['last_accessed_at'] =
-          lastAccessedAt == null ? null : lastAccessedAt.toIso8601String();
+      json['last_accessed_at'] = lastAccessedAt?.toIso8601String();
     }
     if (_lastUpdaterIdSet || _apiMapResponse.containsKey('last_updater_id')) {
       json['last_updater_id'] = lastUpdaterId;
     }
     if (_lastViewedAtSet || _apiMapResponse.containsKey('last_viewed_at')) {
-      json['last_viewed_at'] =
-          lastViewedAt == null ? null : lastViewedAt.toIso8601String();
+      json['last_viewed_at'] = lastViewedAt?.toIso8601String();
     }
     if (_modelSet || _apiMapResponse.containsKey('model')) {
-      json['model'] = model == null ? null : model.toJson();
+      json['model'] = model?.toJson();
     }
     if (_publicSet || _apiMapResponse.containsKey('public')) {
       json['public'] = public;
@@ -34806,20 +33384,19 @@ class LookWithQuery {
       json['short_url'] = shortUrl;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_folderIdSet || _apiMapResponse.containsKey('folder_id')) {
       json['folder_id'] = folderId;
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_viewCountSet || _apiMapResponse.containsKey('view_count')) {
       json['view_count'] = viewCount;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -34864,9 +33441,7 @@ class Manifest {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -34948,13 +33523,11 @@ class Manifest {
       json['name'] = name;
     }
     if (_importsSet || _apiMapResponse.containsKey('imports')) {
-      json['imports'] =
-          imports == null ? null : imports.map((i) => i.toJson()).toList();
+      json['imports'] = imports?.map((i) => i.toJson())?.toList();
     }
     if (_localizationSettingsSet ||
         _apiMapResponse.containsKey('localization_settings')) {
-      json['localization_settings'] =
-          localizationSettings == null ? null : localizationSettings.toJson();
+      json['localization_settings'] = localizationSettings?.toJson();
     }
     return json;
   }
@@ -34975,9 +33548,7 @@ class MergeFields {
 
   String get fieldName {
     if (!_fieldNameSet && _apiMapResponse.containsKey('field_name')) {
-      _fieldName = _apiMapResponse['field_name'] == null
-          ? null
-          : _apiMapResponse['field_name'].toString();
+      _fieldName = _apiMapResponse['field_name']?.toString();
       _fieldNameSet = true;
     }
     return _fieldName;
@@ -34993,9 +33564,7 @@ class MergeFields {
   String get sourceFieldName {
     if (!_sourceFieldNameSet &&
         _apiMapResponse.containsKey('source_field_name')) {
-      _sourceFieldName = _apiMapResponse['source_field_name'] == null
-          ? null
-          : _apiMapResponse['source_field_name'].toString();
+      _sourceFieldName = _apiMapResponse['source_field_name']?.toString();
       _sourceFieldNameSet = true;
     }
     return _sourceFieldName;
@@ -35099,9 +33668,7 @@ class MergeQuery {
 
   String get columnLimit {
     if (!_columnLimitSet && _apiMapResponse.containsKey('column_limit')) {
-      _columnLimit = _apiMapResponse['column_limit'] == null
-          ? null
-          : _apiMapResponse['column_limit'].toString();
+      _columnLimit = _apiMapResponse['column_limit']?.toString();
       _columnLimitSet = true;
     }
     return _columnLimit;
@@ -35116,9 +33683,7 @@ class MergeQuery {
 
   String get dynamicFields {
     if (!_dynamicFieldsSet && _apiMapResponse.containsKey('dynamic_fields')) {
-      _dynamicFields = _apiMapResponse['dynamic_fields'] == null
-          ? null
-          : _apiMapResponse['dynamic_fields'].toString();
+      _dynamicFields = _apiMapResponse['dynamic_fields']?.toString();
       _dynamicFieldsSet = true;
     }
     return _dynamicFields;
@@ -35133,9 +33698,7 @@ class MergeQuery {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -35150,9 +33713,8 @@ class MergeQuery {
 
   List<String> get pivots {
     if (!_pivotsSet && _apiMapResponse.containsKey('pivots')) {
-      _pivots = _apiMapResponse['pivots'] == null
-          ? null
-          : _apiMapResponse['pivots'].map<String>((i) => i as String).toList();
+      _pivots =
+          _apiMapResponse['pivots']?.map<String>((i) => i as String)?.toList();
       _pivotsSet = true;
     }
     return _pivots;
@@ -35182,9 +33744,8 @@ class MergeQuery {
 
   List<String> get sorts {
     if (!_sortsSet && _apiMapResponse.containsKey('sorts')) {
-      _sorts = _apiMapResponse['sorts'] == null
-          ? null
-          : _apiMapResponse['sorts'].map<String>((i) => i as String).toList();
+      _sorts =
+          _apiMapResponse['sorts']?.map<String>((i) => i as String)?.toList();
       _sortsSet = true;
     }
     return _sorts;
@@ -35295,9 +33856,7 @@ class MergeQuery {
       json['sorts'] = sorts;
     }
     if (_sourceQueriesSet || _apiMapResponse.containsKey('source_queries')) {
-      json['source_queries'] = sourceQueries == null
-          ? null
-          : sourceQueries.map((i) => i.toJson()).toList();
+      json['source_queries'] = sourceQueries?.map((i) => i.toJson())?.toList();
     }
     if (_totalSet || _apiMapResponse.containsKey('total')) {
       json['total'] = total;
@@ -35346,9 +33905,7 @@ class MergeQuerySourceQuery {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -35403,9 +33960,7 @@ class MergeQuerySourceQuery {
   Map toJson() {
     var json = {};
     if (_mergeFieldsSet || _apiMapResponse.containsKey('merge_fields')) {
-      json['merge_fields'] = mergeFields == null
-          ? null
-          : mergeFields.map((i) => i.toJson()).toList();
+      json['merge_fields'] = mergeFields?.map((i) => i.toJson())?.toList();
     }
     if (_nameSet || _apiMapResponse.containsKey('name')) {
       json['name'] = name;
@@ -35519,9 +34074,7 @@ class Model {
 
   String get connection {
     if (!_connectionSet && _apiMapResponse.containsKey('connection')) {
-      _connection = _apiMapResponse['connection'] == null
-          ? null
-          : _apiMapResponse['connection'].toString();
+      _connection = _apiMapResponse['connection']?.toString();
       _connectionSet = true;
     }
     return _connection;
@@ -35536,9 +34089,7 @@ class Model {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -35603,9 +34154,7 @@ class Model {
       json['name'] = name;
     }
     if (_valueFormatsSet || _apiMapResponse.containsKey('value_formats')) {
-      json['value_formats'] = valueFormats == null
-          ? null
-          : valueFormats.map((i) => i.toJson()).toList();
+      json['value_formats'] = valueFormats?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -35635,11 +34184,9 @@ class ModelFieldSuggestions {
 
   List<String> get suggestions {
     if (!_suggestionsSet && _apiMapResponse.containsKey('suggestions')) {
-      _suggestions = _apiMapResponse['suggestions'] == null
-          ? null
-          : _apiMapResponse['suggestions']
-              .map<String>((i) => i as String)
-              .toList();
+      _suggestions = _apiMapResponse['suggestions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _suggestionsSet = true;
     }
     return _suggestions;
@@ -35654,9 +34201,7 @@ class ModelFieldSuggestions {
 
   String get error {
     if (!_errorSet && _apiMapResponse.containsKey('error')) {
-      _error = _apiMapResponse['error'] == null
-          ? null
-          : _apiMapResponse['error'].toString();
+      _error = _apiMapResponse['error']?.toString();
       _errorSet = true;
     }
     return _error;
@@ -35783,9 +34328,7 @@ class ModelNamedValueFormats {
 
   String get formatString {
     if (!_formatStringSet && _apiMapResponse.containsKey('format_string')) {
-      _formatString = _apiMapResponse['format_string'] == null
-          ? null
-          : _apiMapResponse['format_string'].toString();
+      _formatString = _apiMapResponse['format_string']?.toString();
       _formatStringSet = true;
     }
     return _formatString;
@@ -35800,9 +34343,7 @@ class ModelNamedValueFormats {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -35817,9 +34358,7 @@ class ModelNamedValueFormats {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -35979,9 +34518,8 @@ class ModelSet {
 
   List<String> get models {
     if (!_modelsSet && _apiMapResponse.containsKey('models')) {
-      _models = _apiMapResponse['models'] == null
-          ? null
-          : _apiMapResponse['models'].map<String>((i) => i as String).toList();
+      _models =
+          _apiMapResponse['models']?.map<String>((i) => i as String)?.toList();
       _modelsSet = true;
     }
     return _models;
@@ -35996,9 +34534,7 @@ class ModelSet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -36013,9 +34549,7 @@ class ModelSet {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -36093,9 +34627,7 @@ class ModelsNotValidated {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -36110,9 +34642,7 @@ class ModelsNotValidated {
 
   String get projectFileId {
     if (!_projectFileIdSet && _apiMapResponse.containsKey('project_file_id')) {
-      _projectFileId = _apiMapResponse['project_file_id'] == null
-          ? null
-          : _apiMapResponse['project_file_id'].toString();
+      _projectFileId = _apiMapResponse['project_file_id']?.toString();
       _projectFileIdSet = true;
     }
     return _projectFileId;
@@ -36290,9 +34820,7 @@ class OauthClientApp {
 
   String get clientGuid {
     if (!_clientGuidSet && _apiMapResponse.containsKey('client_guid')) {
-      _clientGuid = _apiMapResponse['client_guid'] == null
-          ? null
-          : _apiMapResponse['client_guid'].toString();
+      _clientGuid = _apiMapResponse['client_guid']?.toString();
       _clientGuidSet = true;
     }
     return _clientGuid;
@@ -36307,9 +34835,7 @@ class OauthClientApp {
 
   String get redirectUri {
     if (!_redirectUriSet && _apiMapResponse.containsKey('redirect_uri')) {
-      _redirectUri = _apiMapResponse['redirect_uri'] == null
-          ? null
-          : _apiMapResponse['redirect_uri'].toString();
+      _redirectUri = _apiMapResponse['redirect_uri']?.toString();
       _redirectUriSet = true;
     }
     return _redirectUri;
@@ -36324,9 +34850,7 @@ class OauthClientApp {
 
   String get displayName {
     if (!_displayNameSet && _apiMapResponse.containsKey('display_name')) {
-      _displayName = _apiMapResponse['display_name'] == null
-          ? null
-          : _apiMapResponse['display_name'].toString();
+      _displayName = _apiMapResponse['display_name']?.toString();
       _displayNameSet = true;
     }
     return _displayName;
@@ -36341,9 +34865,7 @@ class OauthClientApp {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -36472,14 +34994,11 @@ class OauthClientApp {
     }
     if (_tokensInvalidBeforeSet ||
         _apiMapResponse.containsKey('tokens_invalid_before')) {
-      json['tokens_invalid_before'] = tokensInvalidBefore == null
-          ? null
-          : tokensInvalidBefore.toIso8601String();
+      json['tokens_invalid_before'] = tokensInvalidBefore?.toIso8601String();
     }
     if (_activatedUsersSet || _apiMapResponse.containsKey('activated_users')) {
-      json['activated_users'] = activatedUsers == null
-          ? null
-          : activatedUsers.map((i) => i.toJson()).toList();
+      json['activated_users'] =
+          activatedUsers?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -36625,9 +35144,7 @@ class OIDCConfig {
 
   String get audience {
     if (!_audienceSet && _apiMapResponse.containsKey('audience')) {
-      _audience = _apiMapResponse['audience'] == null
-          ? null
-          : _apiMapResponse['audience'].toString();
+      _audience = _apiMapResponse['audience']?.toString();
       _audienceSet = true;
     }
     return _audience;
@@ -36659,9 +35176,8 @@ class OIDCConfig {
   String get authorizationEndpoint {
     if (!_authorizationEndpointSet &&
         _apiMapResponse.containsKey('authorization_endpoint')) {
-      _authorizationEndpoint = _apiMapResponse['authorization_endpoint'] == null
-          ? null
-          : _apiMapResponse['authorization_endpoint'].toString();
+      _authorizationEndpoint =
+          _apiMapResponse['authorization_endpoint']?.toString();
       _authorizationEndpointSet = true;
     }
     return _authorizationEndpoint;
@@ -36677,12 +35193,9 @@ class OIDCConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -36718,12 +35231,9 @@ class OIDCConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -36793,9 +35303,7 @@ class OIDCConfig {
   String get groupsAttribute {
     if (!_groupsAttributeSet &&
         _apiMapResponse.containsKey('groups_attribute')) {
-      _groupsAttribute = _apiMapResponse['groups_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_attribute'].toString();
+      _groupsAttribute = _apiMapResponse['groups_attribute']?.toString();
       _groupsAttributeSet = true;
     }
     return _groupsAttribute;
@@ -36831,9 +35339,7 @@ class OIDCConfig {
 
   String get identifier {
     if (!_identifierSet && _apiMapResponse.containsKey('identifier')) {
-      _identifier = _apiMapResponse['identifier'] == null
-          ? null
-          : _apiMapResponse['identifier'].toString();
+      _identifier = _apiMapResponse['identifier']?.toString();
       _identifierSet = true;
     }
     return _identifier;
@@ -36848,9 +35354,7 @@ class OIDCConfig {
 
   String get issuer {
     if (!_issuerSet && _apiMapResponse.containsKey('issuer')) {
-      _issuer = _apiMapResponse['issuer'] == null
-          ? null
-          : _apiMapResponse['issuer'].toString();
+      _issuer = _apiMapResponse['issuer']?.toString();
       _issuerSet = true;
     }
     return _issuer;
@@ -36899,9 +35403,7 @@ class OIDCConfig {
     if (!_newUserMigrationTypesSet &&
         _apiMapResponse.containsKey('new_user_migration_types')) {
       _newUserMigrationTypes =
-          _apiMapResponse['new_user_migration_types'] == null
-              ? null
-              : _apiMapResponse['new_user_migration_types'].toString();
+          _apiMapResponse['new_user_migration_types']?.toString();
       _newUserMigrationTypesSet = true;
     }
     return _newUserMigrationTypes;
@@ -36916,9 +35418,8 @@ class OIDCConfig {
 
   List<String> get scopes {
     if (!_scopesSet && _apiMapResponse.containsKey('scopes')) {
-      _scopes = _apiMapResponse['scopes'] == null
-          ? null
-          : _apiMapResponse['scopes'].map<String>((i) => i as String).toList();
+      _scopes =
+          _apiMapResponse['scopes']?.map<String>((i) => i as String)?.toList();
       _scopesSet = true;
     }
     return _scopes;
@@ -36933,9 +35434,7 @@ class OIDCConfig {
 
   String get secret {
     if (!_secretSet && _apiMapResponse.containsKey('secret')) {
-      _secret = _apiMapResponse['secret'] == null
-          ? null
-          : _apiMapResponse['secret'].toString();
+      _secret = _apiMapResponse['secret']?.toString();
       _secretSet = true;
     }
     return _secret;
@@ -36966,9 +35465,7 @@ class OIDCConfig {
 
   String get testSlug {
     if (!_testSlugSet && _apiMapResponse.containsKey('test_slug')) {
-      _testSlug = _apiMapResponse['test_slug'] == null
-          ? null
-          : _apiMapResponse['test_slug'].toString();
+      _testSlug = _apiMapResponse['test_slug']?.toString();
       _testSlugSet = true;
     }
     return _testSlug;
@@ -36983,9 +35480,7 @@ class OIDCConfig {
 
   String get tokenEndpoint {
     if (!_tokenEndpointSet && _apiMapResponse.containsKey('token_endpoint')) {
-      _tokenEndpoint = _apiMapResponse['token_endpoint'] == null
-          ? null
-          : _apiMapResponse['token_endpoint'].toString();
+      _tokenEndpoint = _apiMapResponse['token_endpoint']?.toString();
       _tokenEndpointSet = true;
     }
     return _tokenEndpoint;
@@ -37002,9 +35497,7 @@ class OIDCConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -37021,9 +35514,7 @@ class OIDCConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -37040,9 +35531,7 @@ class OIDCConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -37100,9 +35589,7 @@ class OIDCConfig {
   String get userinfoEndpoint {
     if (!_userinfoEndpointSet &&
         _apiMapResponse.containsKey('userinfo_endpoint')) {
-      _userinfoEndpoint = _apiMapResponse['userinfo_endpoint'] == null
-          ? null
-          : _apiMapResponse['userinfo_endpoint'].toString();
+      _userinfoEndpoint = _apiMapResponse['userinfo_endpoint']?.toString();
       _userinfoEndpointSet = true;
     }
     return _userinfoEndpoint;
@@ -37167,9 +35654,7 @@ class OIDCConfig {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -37232,9 +35717,8 @@ class OIDCConfig {
     }
     if (_defaultNewUserGroupsSet ||
         _apiMapResponse.containsKey('default_new_user_groups')) {
-      json['default_new_user_groups'] = defaultNewUserGroups == null
-          ? null
-          : defaultNewUserGroups.map((i) => i.toJson()).toList();
+      json['default_new_user_groups'] =
+          defaultNewUserGroups?.map((i) => i.toJson())?.toList();
     }
     if (_defaultNewUserRoleIdsSet ||
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
@@ -37242,16 +35726,14 @@ class OIDCConfig {
     }
     if (_defaultNewUserRolesSet ||
         _apiMapResponse.containsKey('default_new_user_roles')) {
-      json['default_new_user_roles'] = defaultNewUserRoles == null
-          ? null
-          : defaultNewUserRoles.map((i) => i.toJson()).toList();
+      json['default_new_user_roles'] =
+          defaultNewUserRoles?.map((i) => i.toJson())?.toList();
     }
     if (_enabledSet || _apiMapResponse.containsKey('enabled')) {
       json['enabled'] = enabled;
     }
     if (_groupsSet || _apiMapResponse.containsKey('groups')) {
-      json['groups'] =
-          groups == null ? null : groups.map((i) => i.toJson()).toList();
+      json['groups'] = groups?.map((i) => i.toJson())?.toList();
     }
     if (_groupsAttributeSet ||
         _apiMapResponse.containsKey('groups_attribute')) {
@@ -37259,9 +35741,8 @@ class OIDCConfig {
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_identifierSet || _apiMapResponse.containsKey('identifier')) {
       json['identifier'] = identifier;
@@ -37270,8 +35751,7 @@ class OIDCConfig {
       json['issuer'] = issuer;
     }
     if (_modifiedAtSet || _apiMapResponse.containsKey('modified_at')) {
-      json['modified_at'] =
-          modifiedAt == null ? null : modifiedAt.toIso8601String();
+      json['modified_at'] = modifiedAt?.toIso8601String();
     }
     if (_modifiedBySet || _apiMapResponse.containsKey('modified_by')) {
       json['modified_by'] = modifiedBy;
@@ -37309,15 +35789,13 @@ class OIDCConfig {
       json['user_attribute_map_last_name'] = userAttributeMapLastName;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_userinfoEndpointSet ||
         _apiMapResponse.containsKey('userinfo_endpoint')) {
@@ -37397,9 +35875,7 @@ class OIDCGroupRead {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -37414,9 +35890,7 @@ class OIDCGroupRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -37488,8 +35962,7 @@ class OIDCGroupRead {
       json['name'] = name;
     }
     if (_rolesSet || _apiMapResponse.containsKey('roles')) {
-      json['roles'] =
-          roles == null ? null : roles.map((i) => i.toJson()).toList();
+      json['roles'] = roles?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -37550,9 +36023,7 @@ class OIDCGroupWrite {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -37567,9 +36038,7 @@ class OIDCGroupWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -37584,9 +36053,8 @@ class OIDCGroupWrite {
 
   List<int> get roleIds {
     if (!_roleIdsSet && _apiMapResponse.containsKey('role_ids')) {
-      _roleIds = _apiMapResponse['role_ids'] == null
-          ? null
-          : _apiMapResponse['role_ids'].map<int>((i) => i as int).toList();
+      _roleIds =
+          _apiMapResponse['role_ids']?.map<int>((i) => i as int)?.toList();
       _roleIdsSet = true;
     }
     return _roleIds;
@@ -37663,9 +36131,7 @@ class OIDCUserAttributeRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -37745,9 +36211,8 @@ class OIDCUserAttributeRead {
       json['required'] = required;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -37771,9 +36236,7 @@ class OIDCUserAttributeWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -37804,11 +36267,9 @@ class OIDCUserAttributeWrite {
   List<int> get userAttributeIds {
     if (!_userAttributeIdsSet &&
         _apiMapResponse.containsKey('user_attribute_ids')) {
-      _userAttributeIds = _apiMapResponse['user_attribute_ids'] == null
-          ? null
-          : _apiMapResponse['user_attribute_ids']
-              .map<int>((i) => i as int)
-              .toList();
+      _userAttributeIds = _apiMapResponse['user_attribute_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _userAttributeIdsSet = true;
     }
     return _userAttributeIds;
@@ -38041,9 +36502,7 @@ class Permission {
 
   String get permission {
     if (!_permissionSet && _apiMapResponse.containsKey('permission')) {
-      _permission = _apiMapResponse['permission'] == null
-          ? null
-          : _apiMapResponse['permission'].toString();
+      _permission = _apiMapResponse['permission']?.toString();
       _permissionSet = true;
     }
     return _permission;
@@ -38058,9 +36517,7 @@ class Permission {
 
   String get parent {
     if (!_parentSet && _apiMapResponse.containsKey('parent')) {
-      _parent = _apiMapResponse['parent'] == null
-          ? null
-          : _apiMapResponse['parent'].toString();
+      _parent = _apiMapResponse['parent']?.toString();
       _parentSet = true;
     }
     return _parent;
@@ -38075,9 +36532,7 @@ class Permission {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -38222,9 +36677,7 @@ class PermissionSet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -38237,11 +36690,9 @@ class PermissionSet {
 
   List<String> get permissions {
     if (!_permissionsSet && _apiMapResponse.containsKey('permissions')) {
-      _permissions = _apiMapResponse['permissions'] == null
-          ? null
-          : _apiMapResponse['permissions']
-              .map<String>((i) => i as String)
-              .toList();
+      _permissions = _apiMapResponse['permissions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _permissionsSet = true;
     }
     return _permissions;
@@ -38256,9 +36707,7 @@ class PermissionSet {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -38439,9 +36888,7 @@ class Project {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -38456,9 +36903,7 @@ class Project {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -38488,9 +36933,7 @@ class Project {
 
   String get gitRemoteUrl {
     if (!_gitRemoteUrlSet && _apiMapResponse.containsKey('git_remote_url')) {
-      _gitRemoteUrl = _apiMapResponse['git_remote_url'] == null
-          ? null
-          : _apiMapResponse['git_remote_url'].toString();
+      _gitRemoteUrl = _apiMapResponse['git_remote_url']?.toString();
       _gitRemoteUrlSet = true;
     }
     return _gitRemoteUrl;
@@ -38505,9 +36948,7 @@ class Project {
 
   String get gitUsername {
     if (!_gitUsernameSet && _apiMapResponse.containsKey('git_username')) {
-      _gitUsername = _apiMapResponse['git_username'] == null
-          ? null
-          : _apiMapResponse['git_username'].toString();
+      _gitUsername = _apiMapResponse['git_username']?.toString();
       _gitUsernameSet = true;
     }
     return _gitUsername;
@@ -38522,9 +36963,7 @@ class Project {
 
   String get gitPassword {
     if (!_gitPasswordSet && _apiMapResponse.containsKey('git_password')) {
-      _gitPassword = _apiMapResponse['git_password'] == null
-          ? null
-          : _apiMapResponse['git_password'].toString();
+      _gitPassword = _apiMapResponse['git_password']?.toString();
       _gitPasswordSet = true;
     }
     return _gitPassword;
@@ -38541,9 +36980,7 @@ class Project {
     if (!_gitProductionBranchNameSet &&
         _apiMapResponse.containsKey('git_production_branch_name')) {
       _gitProductionBranchName =
-          _apiMapResponse['git_production_branch_name'] == null
-              ? null
-              : _apiMapResponse['git_production_branch_name'].toString();
+          _apiMapResponse['git_production_branch_name']?.toString();
       _gitProductionBranchNameSet = true;
     }
     return _gitProductionBranchName;
@@ -38576,9 +37013,7 @@ class Project {
     if (!_gitUsernameUserAttributeSet &&
         _apiMapResponse.containsKey('git_username_user_attribute')) {
       _gitUsernameUserAttribute =
-          _apiMapResponse['git_username_user_attribute'] == null
-              ? null
-              : _apiMapResponse['git_username_user_attribute'].toString();
+          _apiMapResponse['git_username_user_attribute']?.toString();
       _gitUsernameUserAttributeSet = true;
     }
     return _gitUsernameUserAttribute;
@@ -38595,9 +37030,7 @@ class Project {
     if (!_gitPasswordUserAttributeSet &&
         _apiMapResponse.containsKey('git_password_user_attribute')) {
       _gitPasswordUserAttribute =
-          _apiMapResponse['git_password_user_attribute'] == null
-              ? null
-              : _apiMapResponse['git_password_user_attribute'].toString();
+          _apiMapResponse['git_password_user_attribute']?.toString();
       _gitPasswordUserAttributeSet = true;
     }
     return _gitPasswordUserAttribute;
@@ -38613,9 +37046,7 @@ class Project {
   String get gitServiceName {
     if (!_gitServiceNameSet &&
         _apiMapResponse.containsKey('git_service_name')) {
-      _gitServiceName = _apiMapResponse['git_service_name'] == null
-          ? null
-          : _apiMapResponse['git_service_name'].toString();
+      _gitServiceName = _apiMapResponse['git_service_name']?.toString();
       _gitServiceNameSet = true;
     }
     return _gitServiceName;
@@ -38649,10 +37080,7 @@ class Project {
     if (!_gitApplicationServerHttpSchemeSet &&
         _apiMapResponse.containsKey('git_application_server_http_scheme')) {
       _gitApplicationServerHttpScheme =
-          _apiMapResponse['git_application_server_http_scheme'] == null
-              ? null
-              : _apiMapResponse['git_application_server_http_scheme']
-                  .toString();
+          _apiMapResponse['git_application_server_http_scheme']?.toString();
       _gitApplicationServerHttpSchemeSet = true;
     }
     return _gitApplicationServerHttpScheme;
@@ -38667,9 +37095,7 @@ class Project {
 
   String get deploySecret {
     if (!_deploySecretSet && _apiMapResponse.containsKey('deploy_secret')) {
-      _deploySecret = _apiMapResponse['deploy_secret'] == null
-          ? null
-          : _apiMapResponse['deploy_secret'].toString();
+      _deploySecret = _apiMapResponse['deploy_secret']?.toString();
       _deploySecretSet = true;
     }
     return _deploySecret;
@@ -38780,9 +37206,7 @@ class Project {
   String get dependencyStatus {
     if (!_dependencyStatusSet &&
         _apiMapResponse.containsKey('dependency_status')) {
-      _dependencyStatus = _apiMapResponse['dependency_status'] == null
-          ? null
-          : _apiMapResponse['dependency_status'].toString();
+      _dependencyStatus = _apiMapResponse['dependency_status']?.toString();
       _dependencyStatusSet = true;
     }
     return _dependencyStatus;
@@ -38948,9 +37372,7 @@ class ProjectError {
 
   String get code {
     if (!_codeSet && _apiMapResponse.containsKey('code')) {
-      _code = _apiMapResponse['code'] == null
-          ? null
-          : _apiMapResponse['code'].toString();
+      _code = _apiMapResponse['code']?.toString();
       _codeSet = true;
     }
     return _code;
@@ -38965,9 +37387,7 @@ class ProjectError {
 
   String get severity {
     if (!_severitySet && _apiMapResponse.containsKey('severity')) {
-      _severity = _apiMapResponse['severity'] == null
-          ? null
-          : _apiMapResponse['severity'].toString();
+      _severity = _apiMapResponse['severity']?.toString();
       _severitySet = true;
     }
     return _severity;
@@ -38982,9 +37402,7 @@ class ProjectError {
 
   String get kind {
     if (!_kindSet && _apiMapResponse.containsKey('kind')) {
-      _kind = _apiMapResponse['kind'] == null
-          ? null
-          : _apiMapResponse['kind'].toString();
+      _kind = _apiMapResponse['kind']?.toString();
       _kindSet = true;
     }
     return _kind;
@@ -38999,9 +37417,7 @@ class ProjectError {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -39016,9 +37432,7 @@ class ProjectError {
 
   String get fieldName {
     if (!_fieldNameSet && _apiMapResponse.containsKey('field_name')) {
-      _fieldName = _apiMapResponse['field_name'] == null
-          ? null
-          : _apiMapResponse['field_name'].toString();
+      _fieldName = _apiMapResponse['field_name']?.toString();
       _fieldNameSet = true;
     }
     return _fieldName;
@@ -39033,9 +37447,7 @@ class ProjectError {
 
   String get filePath {
     if (!_filePathSet && _apiMapResponse.containsKey('file_path')) {
-      _filePath = _apiMapResponse['file_path'] == null
-          ? null
-          : _apiMapResponse['file_path'].toString();
+      _filePath = _apiMapResponse['file_path']?.toString();
       _filePathSet = true;
     }
     return _filePath;
@@ -39065,9 +37477,7 @@ class ProjectError {
 
   String get modelId {
     if (!_modelIdSet && _apiMapResponse.containsKey('model_id')) {
-      _modelId = _apiMapResponse['model_id'] == null
-          ? null
-          : _apiMapResponse['model_id'].toString();
+      _modelId = _apiMapResponse['model_id']?.toString();
       _modelIdSet = true;
     }
     return _modelId;
@@ -39082,9 +37492,7 @@ class ProjectError {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -39099,9 +37507,7 @@ class ProjectError {
 
   String get helpUrl {
     if (!_helpUrlSet && _apiMapResponse.containsKey('help_url')) {
-      _helpUrl = _apiMapResponse['help_url'] == null
-          ? null
-          : _apiMapResponse['help_url'].toString();
+      _helpUrl = _apiMapResponse['help_url']?.toString();
       _helpUrlSet = true;
     }
     return _helpUrl;
@@ -39132,9 +37538,7 @@ class ProjectError {
   String get sanitizedMessage {
     if (!_sanitizedMessageSet &&
         _apiMapResponse.containsKey('sanitized_message')) {
-      _sanitizedMessage = _apiMapResponse['sanitized_message'] == null
-          ? null
-          : _apiMapResponse['sanitized_message'].toString();
+      _sanitizedMessage = _apiMapResponse['sanitized_message']?.toString();
       _sanitizedMessageSet = true;
     }
     return _sanitizedMessage;
@@ -39265,9 +37669,7 @@ class ProjectFile {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -39282,9 +37684,7 @@ class ProjectFile {
 
   String get path {
     if (!_pathSet && _apiMapResponse.containsKey('path')) {
-      _path = _apiMapResponse['path'] == null
-          ? null
-          : _apiMapResponse['path'].toString();
+      _path = _apiMapResponse['path']?.toString();
       _pathSet = true;
     }
     return _path;
@@ -39299,9 +37699,7 @@ class ProjectFile {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -39316,9 +37714,7 @@ class ProjectFile {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -39333,9 +37729,7 @@ class ProjectFile {
 
   String get extension {
     if (!_extensionSet && _apiMapResponse.containsKey('extension')) {
-      _extension = _apiMapResponse['extension'] == null
-          ? null
-          : _apiMapResponse['extension'].toString();
+      _extension = _apiMapResponse['extension']?.toString();
       _extensionSet = true;
     }
     return _extension;
@@ -39350,9 +37744,7 @@ class ProjectFile {
 
   String get mimeType {
     if (!_mimeTypeSet && _apiMapResponse.containsKey('mime_type')) {
-      _mimeType = _apiMapResponse['mime_type'] == null
-          ? null
-          : _apiMapResponse['mime_type'].toString();
+      _mimeType = _apiMapResponse['mime_type']?.toString();
       _mimeTypeSet = true;
     }
     return _mimeType;
@@ -39447,7 +37839,7 @@ class ProjectFile {
       json['editable'] = editable;
     }
     if (_gitStatusSet || _apiMapResponse.containsKey('git_status')) {
-      json['git_status'] = gitStatus == null ? null : gitStatus.toJson();
+      json['git_status'] = gitStatus?.toJson();
     }
     return json;
   }
@@ -39493,9 +37885,7 @@ class ProjectValidation {
 
   String get projectDigest {
     if (!_projectDigestSet && _apiMapResponse.containsKey('project_digest')) {
-      _projectDigest = _apiMapResponse['project_digest'] == null
-          ? null
-          : _apiMapResponse['project_digest'].toString();
+      _projectDigest = _apiMapResponse['project_digest']?.toString();
       _projectDigestSet = true;
     }
     return _projectDigest;
@@ -39572,17 +37962,15 @@ class ProjectValidation {
   Map toJson() {
     var json = {};
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_projectDigestSet || _apiMapResponse.containsKey('project_digest')) {
       json['project_digest'] = projectDigest;
     }
     if (_modelsNotValidatedSet ||
         _apiMapResponse.containsKey('models_not_validated')) {
-      json['models_not_validated'] = modelsNotValidated == null
-          ? null
-          : modelsNotValidated.map((i) => i.toJson()).toList();
+      json['models_not_validated'] =
+          modelsNotValidated?.map((i) => i.toJson())?.toList();
     }
     if (_computationTimeSet ||
         _apiMapResponse.containsKey('computation_time')) {
@@ -39635,9 +38023,7 @@ class ProjectValidationCache {
 
   String get projectDigest {
     if (!_projectDigestSet && _apiMapResponse.containsKey('project_digest')) {
-      _projectDigest = _apiMapResponse['project_digest'] == null
-          ? null
-          : _apiMapResponse['project_digest'].toString();
+      _projectDigest = _apiMapResponse['project_digest']?.toString();
       _projectDigestSet = true;
     }
     return _projectDigest;
@@ -39729,17 +38115,15 @@ class ProjectValidationCache {
   Map toJson() {
     var json = {};
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_projectDigestSet || _apiMapResponse.containsKey('project_digest')) {
       json['project_digest'] = projectDigest;
     }
     if (_modelsNotValidatedSet ||
         _apiMapResponse.containsKey('models_not_validated')) {
-      json['models_not_validated'] = modelsNotValidated == null
-          ? null
-          : modelsNotValidated.map((i) => i.toJson()).toList();
+      json['models_not_validated'] =
+          modelsNotValidated?.map((i) => i.toJson())?.toList();
     }
     if (_computationTimeSet ||
         _apiMapResponse.containsKey('computation_time')) {
@@ -39800,9 +38184,7 @@ class ProjectWorkspace {
 
   String get projectId {
     if (!_projectIdSet && _apiMapResponse.containsKey('project_id')) {
-      _projectId = _apiMapResponse['project_id'] == null
-          ? null
-          : _apiMapResponse['project_id'].toString();
+      _projectId = _apiMapResponse['project_id']?.toString();
       _projectIdSet = true;
     }
     return _projectId;
@@ -39817,9 +38199,7 @@ class ProjectWorkspace {
 
   String get workspaceId {
     if (!_workspaceIdSet && _apiMapResponse.containsKey('workspace_id')) {
-      _workspaceId = _apiMapResponse['workspace_id'] == null
-          ? null
-          : _apiMapResponse['workspace_id'].toString();
+      _workspaceId = _apiMapResponse['workspace_id']?.toString();
       _workspaceIdSet = true;
     }
     return _workspaceId;
@@ -39834,9 +38214,7 @@ class ProjectWorkspace {
 
   String get gitStatus {
     if (!_gitStatusSet && _apiMapResponse.containsKey('git_status')) {
-      _gitStatus = _apiMapResponse['git_status'] == null
-          ? null
-          : _apiMapResponse['git_status'].toString();
+      _gitStatus = _apiMapResponse['git_status']?.toString();
       _gitStatusSet = true;
     }
     return _gitStatus;
@@ -39851,9 +38229,7 @@ class ProjectWorkspace {
 
   String get gitHead {
     if (!_gitHeadSet && _apiMapResponse.containsKey('git_head')) {
-      _gitHead = _apiMapResponse['git_head'] == null
-          ? null
-          : _apiMapResponse['git_head'].toString();
+      _gitHead = _apiMapResponse['git_head']?.toString();
       _gitHeadSet = true;
     }
     return _gitHead;
@@ -39901,9 +38277,7 @@ class ProjectWorkspace {
 
   String get lookmlType {
     if (!_lookmlTypeSet && _apiMapResponse.containsKey('lookml_type')) {
-      _lookmlType = _apiMapResponse['lookml_type'] == null
-          ? null
-          : _apiMapResponse['lookml_type'].toString();
+      _lookmlType = _apiMapResponse['lookml_type']?.toString();
       _lookmlTypeSet = true;
     }
     return _lookmlType;
@@ -39963,7 +38337,7 @@ class ProjectWorkspace {
           DependencyStatusMapper.toStringValue(dependencyStatus);
     }
     if (_gitBranchSet || _apiMapResponse.containsKey('git_branch')) {
-      json['git_branch'] = gitBranch == null ? null : gitBranch.toJson();
+      json['git_branch'] = gitBranch?.toJson();
     }
     if (_lookmlTypeSet || _apiMapResponse.containsKey('lookml_type')) {
       json['lookml_type'] = lookmlType;
@@ -40126,9 +38500,7 @@ class Query {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -40143,9 +38515,7 @@ class Query {
 
   String get view {
     if (!_viewSet && _apiMapResponse.containsKey('view')) {
-      _view = _apiMapResponse['view'] == null
-          ? null
-          : _apiMapResponse['view'].toString();
+      _view = _apiMapResponse['view']?.toString();
       _viewSet = true;
     }
     return _view;
@@ -40160,9 +38530,8 @@ class Query {
 
   List<String> get fields {
     if (!_fieldsSet && _apiMapResponse.containsKey('fields')) {
-      _fields = _apiMapResponse['fields'] == null
-          ? null
-          : _apiMapResponse['fields'].map<String>((i) => i as String).toList();
+      _fields =
+          _apiMapResponse['fields']?.map<String>((i) => i as String)?.toList();
       _fieldsSet = true;
     }
     return _fields;
@@ -40177,9 +38546,8 @@ class Query {
 
   List<String> get pivots {
     if (!_pivotsSet && _apiMapResponse.containsKey('pivots')) {
-      _pivots = _apiMapResponse['pivots'] == null
-          ? null
-          : _apiMapResponse['pivots'].map<String>((i) => i as String).toList();
+      _pivots =
+          _apiMapResponse['pivots']?.map<String>((i) => i as String)?.toList();
       _pivotsSet = true;
     }
     return _pivots;
@@ -40194,11 +38562,9 @@ class Query {
 
   List<String> get fillFields {
     if (!_fillFieldsSet && _apiMapResponse.containsKey('fill_fields')) {
-      _fillFields = _apiMapResponse['fill_fields'] == null
-          ? null
-          : _apiMapResponse['fill_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _fillFields = _apiMapResponse['fill_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _fillFieldsSet = true;
     }
     return _fillFields;
@@ -40229,9 +38595,7 @@ class Query {
   String get filterExpression {
     if (!_filterExpressionSet &&
         _apiMapResponse.containsKey('filter_expression')) {
-      _filterExpression = _apiMapResponse['filter_expression'] == null
-          ? null
-          : _apiMapResponse['filter_expression'].toString();
+      _filterExpression = _apiMapResponse['filter_expression']?.toString();
       _filterExpressionSet = true;
     }
     return _filterExpression;
@@ -40246,9 +38610,8 @@ class Query {
 
   List<String> get sorts {
     if (!_sortsSet && _apiMapResponse.containsKey('sorts')) {
-      _sorts = _apiMapResponse['sorts'] == null
-          ? null
-          : _apiMapResponse['sorts'].map<String>((i) => i as String).toList();
+      _sorts =
+          _apiMapResponse['sorts']?.map<String>((i) => i as String)?.toList();
       _sortsSet = true;
     }
     return _sorts;
@@ -40263,9 +38626,7 @@ class Query {
 
   String get limit {
     if (!_limitSet && _apiMapResponse.containsKey('limit')) {
-      _limit = _apiMapResponse['limit'] == null
-          ? null
-          : _apiMapResponse['limit'].toString();
+      _limit = _apiMapResponse['limit']?.toString();
       _limitSet = true;
     }
     return _limit;
@@ -40280,9 +38641,7 @@ class Query {
 
   String get columnLimit {
     if (!_columnLimitSet && _apiMapResponse.containsKey('column_limit')) {
-      _columnLimit = _apiMapResponse['column_limit'] == null
-          ? null
-          : _apiMapResponse['column_limit'].toString();
+      _columnLimit = _apiMapResponse['column_limit']?.toString();
       _columnLimitSet = true;
     }
     return _columnLimit;
@@ -40312,9 +38671,7 @@ class Query {
 
   String get rowTotal {
     if (!_rowTotalSet && _apiMapResponse.containsKey('row_total')) {
-      _rowTotal = _apiMapResponse['row_total'] == null
-          ? null
-          : _apiMapResponse['row_total'].toString();
+      _rowTotal = _apiMapResponse['row_total']?.toString();
       _rowTotalSet = true;
     }
     return _rowTotal;
@@ -40329,11 +38686,9 @@ class Query {
 
   List<String> get subtotals {
     if (!_subtotalsSet && _apiMapResponse.containsKey('subtotals')) {
-      _subtotals = _apiMapResponse['subtotals'] == null
-          ? null
-          : _apiMapResponse['subtotals']
-              .map<String>((i) => i as String)
-              .toList();
+      _subtotals = _apiMapResponse['subtotals']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _subtotalsSet = true;
     }
     return _subtotals;
@@ -40379,9 +38734,7 @@ class Query {
   String get visibleUiSections {
     if (!_visibleUiSectionsSet &&
         _apiMapResponse.containsKey('visible_ui_sections')) {
-      _visibleUiSections = _apiMapResponse['visible_ui_sections'] == null
-          ? null
-          : _apiMapResponse['visible_ui_sections'].toString();
+      _visibleUiSections = _apiMapResponse['visible_ui_sections']?.toString();
       _visibleUiSectionsSet = true;
     }
     return _visibleUiSections;
@@ -40396,9 +38749,7 @@ class Query {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -40413,9 +38764,7 @@ class Query {
 
   String get dynamicFields {
     if (!_dynamicFieldsSet && _apiMapResponse.containsKey('dynamic_fields')) {
-      _dynamicFields = _apiMapResponse['dynamic_fields'] == null
-          ? null
-          : _apiMapResponse['dynamic_fields'].toString();
+      _dynamicFields = _apiMapResponse['dynamic_fields']?.toString();
       _dynamicFieldsSet = true;
     }
     return _dynamicFields;
@@ -40430,9 +38779,7 @@ class Query {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -40447,9 +38794,7 @@ class Query {
 
   String get shareUrl {
     if (!_shareUrlSet && _apiMapResponse.containsKey('share_url')) {
-      _shareUrl = _apiMapResponse['share_url'] == null
-          ? null
-          : _apiMapResponse['share_url'].toString();
+      _shareUrl = _apiMapResponse['share_url']?.toString();
       _shareUrlSet = true;
     }
     return _shareUrl;
@@ -40465,9 +38810,7 @@ class Query {
   String get expandedShareUrl {
     if (!_expandedShareUrlSet &&
         _apiMapResponse.containsKey('expanded_share_url')) {
-      _expandedShareUrl = _apiMapResponse['expanded_share_url'] == null
-          ? null
-          : _apiMapResponse['expanded_share_url'].toString();
+      _expandedShareUrl = _apiMapResponse['expanded_share_url']?.toString();
       _expandedShareUrlSet = true;
     }
     return _expandedShareUrl;
@@ -40482,9 +38825,7 @@ class Query {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -40499,9 +38840,7 @@ class Query {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -40722,9 +39061,7 @@ class QueryTask {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -40801,9 +39138,7 @@ class QueryTask {
 
   String get pathPrefix {
     if (!_pathPrefixSet && _apiMapResponse.containsKey('path_prefix')) {
-      _pathPrefix = _apiMapResponse['path_prefix'] == null
-          ? null
-          : _apiMapResponse['path_prefix'].toString();
+      _pathPrefix = _apiMapResponse['path_prefix']?.toString();
       _pathPrefixSet = true;
     }
     return _pathPrefix;
@@ -40864,9 +39199,7 @@ class QueryTask {
 
   String get cacheKey {
     if (!_cacheKeySet && _apiMapResponse.containsKey('cache_key')) {
-      _cacheKey = _apiMapResponse['cache_key'] == null
-          ? null
-          : _apiMapResponse['cache_key'].toString();
+      _cacheKey = _apiMapResponse['cache_key']?.toString();
       _cacheKeySet = true;
     }
     return _cacheKey;
@@ -40881,9 +39214,7 @@ class QueryTask {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -40898,9 +39229,7 @@ class QueryTask {
 
   String get source {
     if (!_sourceSet && _apiMapResponse.containsKey('source')) {
-      _source = _apiMapResponse['source'] == null
-          ? null
-          : _apiMapResponse['source'].toString();
+      _source = _apiMapResponse['source']?.toString();
       _sourceSet = true;
     }
     return _source;
@@ -40945,9 +39274,7 @@ class QueryTask {
 
   String get resultSource {
     if (!_resultSourceSet && _apiMapResponse.containsKey('result_source')) {
-      _resultSource = _apiMapResponse['result_source'] == null
-          ? null
-          : _apiMapResponse['result_source'].toString();
+      _resultSource = _apiMapResponse['result_source']?.toString();
       _resultSourceSet = true;
     }
     return _resultSource;
@@ -40962,9 +39289,7 @@ class QueryTask {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -40979,9 +39304,7 @@ class QueryTask {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -40996,9 +39319,7 @@ class QueryTask {
 
   String get resultFormat {
     if (!_resultFormatSet && _apiMapResponse.containsKey('result_format')) {
-      _resultFormat = _apiMapResponse['result_format'] == null
-          ? null
-          : _apiMapResponse['result_format'].toString();
+      _resultFormat = _apiMapResponse['result_format']?.toString();
       _resultFormatSet = true;
     }
     return _resultFormat;
@@ -41046,7 +39367,7 @@ class QueryTask {
       json['query_id'] = queryId;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_generateLinksSet || _apiMapResponse.containsKey('generate_links')) {
       json['generate_links'] = generateLinks;
@@ -41183,9 +39504,7 @@ class RenderTask {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -41201,9 +39520,7 @@ class RenderTask {
   String get dashboardFilters {
     if (!_dashboardFiltersSet &&
         _apiMapResponse.containsKey('dashboard_filters')) {
-      _dashboardFilters = _apiMapResponse['dashboard_filters'] == null
-          ? null
-          : _apiMapResponse['dashboard_filters'].toString();
+      _dashboardFilters = _apiMapResponse['dashboard_filters']?.toString();
       _dashboardFiltersSet = true;
     }
     return _dashboardFilters;
@@ -41233,9 +39550,7 @@ class RenderTask {
 
   String get dashboardStyle {
     if (!_dashboardStyleSet && _apiMapResponse.containsKey('dashboard_style')) {
-      _dashboardStyle = _apiMapResponse['dashboard_style'] == null
-          ? null
-          : _apiMapResponse['dashboard_style'].toString();
+      _dashboardStyle = _apiMapResponse['dashboard_style']?.toString();
       _dashboardStyleSet = true;
     }
     return _dashboardStyle;
@@ -41250,9 +39565,7 @@ class RenderTask {
 
   String get finalizedAt {
     if (!_finalizedAtSet && _apiMapResponse.containsKey('finalized_at')) {
-      _finalizedAt = _apiMapResponse['finalized_at'] == null
-          ? null
-          : _apiMapResponse['finalized_at'].toString();
+      _finalizedAt = _apiMapResponse['finalized_at']?.toString();
       _finalizedAtSet = true;
     }
     return _finalizedAt;
@@ -41282,9 +39595,7 @@ class RenderTask {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -41299,9 +39610,7 @@ class RenderTask {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -41317,9 +39626,7 @@ class RenderTask {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -41350,9 +39657,7 @@ class RenderTask {
   String get dashboardElementId {
     if (!_dashboardElementIdSet &&
         _apiMapResponse.containsKey('dashboard_element_id')) {
-      _dashboardElementId = _apiMapResponse['dashboard_element_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_element_id'].toString();
+      _dashboardElementId = _apiMapResponse['dashboard_element_id']?.toString();
       _dashboardElementIdSet = true;
     }
     return _dashboardElementId;
@@ -41397,9 +39702,7 @@ class RenderTask {
 
   String get resultFormat {
     if (!_resultFormatSet && _apiMapResponse.containsKey('result_format')) {
-      _resultFormat = _apiMapResponse['result_format'] == null
-          ? null
-          : _apiMapResponse['result_format'].toString();
+      _resultFormat = _apiMapResponse['result_format']?.toString();
       _resultFormatSet = true;
     }
     return _resultFormat;
@@ -41429,9 +39732,7 @@ class RenderTask {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -41446,9 +39747,7 @@ class RenderTask {
 
   String get statusDetail {
     if (!_statusDetailSet && _apiMapResponse.containsKey('status_detail')) {
-      _statusDetail = _apiMapResponse['status_detail'] == null
-          ? null
-          : _apiMapResponse['status_detail'].toString();
+      _statusDetail = _apiMapResponse['status_detail']?.toString();
       _statusDetailSet = true;
     }
     return _statusDetail;
@@ -41632,9 +39931,7 @@ class RepositoryCredential {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -41649,9 +39946,7 @@ class RepositoryCredential {
 
   String get rootProjectId {
     if (!_rootProjectIdSet && _apiMapResponse.containsKey('root_project_id')) {
-      _rootProjectId = _apiMapResponse['root_project_id'] == null
-          ? null
-          : _apiMapResponse['root_project_id'].toString();
+      _rootProjectId = _apiMapResponse['root_project_id']?.toString();
       _rootProjectIdSet = true;
     }
     return _rootProjectId;
@@ -41666,9 +39961,7 @@ class RepositoryCredential {
 
   String get remoteUrl {
     if (!_remoteUrlSet && _apiMapResponse.containsKey('remote_url')) {
-      _remoteUrl = _apiMapResponse['remote_url'] == null
-          ? null
-          : _apiMapResponse['remote_url'].toString();
+      _remoteUrl = _apiMapResponse['remote_url']?.toString();
       _remoteUrlSet = true;
     }
     return _remoteUrl;
@@ -41683,9 +39976,7 @@ class RepositoryCredential {
 
   String get gitUsername {
     if (!_gitUsernameSet && _apiMapResponse.containsKey('git_username')) {
-      _gitUsername = _apiMapResponse['git_username'] == null
-          ? null
-          : _apiMapResponse['git_username'].toString();
+      _gitUsername = _apiMapResponse['git_username']?.toString();
       _gitUsernameSet = true;
     }
     return _gitUsername;
@@ -41700,9 +39991,7 @@ class RepositoryCredential {
 
   String get gitPassword {
     if (!_gitPasswordSet && _apiMapResponse.containsKey('git_password')) {
-      _gitPassword = _apiMapResponse['git_password'] == null
-          ? null
-          : _apiMapResponse['git_password'].toString();
+      _gitPassword = _apiMapResponse['git_password']?.toString();
       _gitPasswordSet = true;
     }
     return _gitPassword;
@@ -41717,9 +40006,7 @@ class RepositoryCredential {
 
   String get sshPublicKey {
     if (!_sshPublicKeySet && _apiMapResponse.containsKey('ssh_public_key')) {
-      _sshPublicKey = _apiMapResponse['ssh_public_key'] == null
-          ? null
-          : _apiMapResponse['ssh_public_key'].toString();
+      _sshPublicKey = _apiMapResponse['ssh_public_key']?.toString();
       _sshPublicKeySet = true;
     }
     return _sshPublicKey;
@@ -41900,9 +40187,7 @@ class ResultMakerFilterables {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -41917,9 +40202,7 @@ class ResultMakerFilterables {
 
   String get view {
     if (!_viewSet && _apiMapResponse.containsKey('view')) {
-      _view = _apiMapResponse['view'] == null
-          ? null
-          : _apiMapResponse['view'].toString();
+      _view = _apiMapResponse['view']?.toString();
       _viewSet = true;
     }
     return _view;
@@ -41934,9 +40217,7 @@ class ResultMakerFilterables {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -42005,8 +40286,7 @@ class ResultMakerFilterables {
       json['name'] = name;
     }
     if (_listenSet || _apiMapResponse.containsKey('listen')) {
-      json['listen'] =
-          listen == null ? null : listen.map((i) => i.toJson()).toList();
+      json['listen'] = listen?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -42028,9 +40308,8 @@ class ResultMakerFilterablesListen {
   String get dashboardFilterName {
     if (!_dashboardFilterNameSet &&
         _apiMapResponse.containsKey('dashboard_filter_name')) {
-      _dashboardFilterName = _apiMapResponse['dashboard_filter_name'] == null
-          ? null
-          : _apiMapResponse['dashboard_filter_name'].toString();
+      _dashboardFilterName =
+          _apiMapResponse['dashboard_filter_name']?.toString();
       _dashboardFilterNameSet = true;
     }
     return _dashboardFilterName;
@@ -42045,9 +40324,7 @@ class ResultMakerFilterablesListen {
 
   String get field {
     if (!_fieldSet && _apiMapResponse.containsKey('field')) {
-      _field = _apiMapResponse['field'] == null
-          ? null
-          : _apiMapResponse['field'].toString();
+      _field = _apiMapResponse['field']?.toString();
       _fieldSet = true;
     }
     return _field;
@@ -42151,9 +40428,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
 
   String get dynamicFields {
     if (!_dynamicFieldsSet && _apiMapResponse.containsKey('dynamic_fields')) {
-      _dynamicFields = _apiMapResponse['dynamic_fields'] == null
-          ? null
-          : _apiMapResponse['dynamic_fields'].toString();
+      _dynamicFields = _apiMapResponse['dynamic_fields']?.toString();
       _dynamicFieldsSet = true;
     }
     return _dynamicFields;
@@ -42188,9 +40463,8 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
 
   List<String> get sorts {
     if (!_sortsSet && _apiMapResponse.containsKey('sorts')) {
-      _sorts = _apiMapResponse['sorts'] == null
-          ? null
-          : _apiMapResponse['sorts'].map<String>((i) => i as String).toList();
+      _sorts =
+          _apiMapResponse['sorts']?.map<String>((i) => i as String)?.toList();
       _sortsSet = true;
     }
     return _sorts;
@@ -42205,9 +40479,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
 
   String get mergeResultId {
     if (!_mergeResultIdSet && _apiMapResponse.containsKey('merge_result_id')) {
-      _mergeResultId = _apiMapResponse['merge_result_id'] == null
-          ? null
-          : _apiMapResponse['merge_result_id'].toString();
+      _mergeResultId = _apiMapResponse['merge_result_id']?.toString();
       _mergeResultIdSet = true;
     }
     return _mergeResultId;
@@ -42252,9 +40524,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
 
   String get sqlQueryId {
     if (!_sqlQueryIdSet && _apiMapResponse.containsKey('sql_query_id')) {
-      _sqlQueryId = _apiMapResponse['sql_query_id'] == null
-          ? null
-          : _apiMapResponse['sql_query_id'].toString();
+      _sqlQueryId = _apiMapResponse['sql_query_id']?.toString();
       _sqlQueryIdSet = true;
     }
     return _sqlQueryId;
@@ -42331,9 +40601,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
       json['dynamic_fields'] = dynamicFields;
     }
     if (_filterablesSet || _apiMapResponse.containsKey('filterables')) {
-      json['filterables'] = filterables == null
-          ? null
-          : filterables.map((i) => i.toJson()).toList();
+      json['filterables'] = filterables?.map((i) => i.toJson())?.toList();
     }
     if (_sortsSet || _apiMapResponse.containsKey('sorts')) {
       json['sorts'] = sorts;
@@ -42351,7 +40619,7 @@ class ResultMakerWithIdVisConfigAndDynamicFields {
       json['sql_query_id'] = sqlQueryId;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_visConfigSet || _apiMapResponse.containsKey('vis_config')) {
       json['vis_config'] = visConfig;
@@ -42426,9 +40694,7 @@ class Role {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -42506,9 +40772,7 @@ class Role {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -42523,9 +40787,7 @@ class Role {
 
   String get usersUrl {
     if (!_usersUrlSet && _apiMapResponse.containsKey('users_url')) {
-      _usersUrl = _apiMapResponse['users_url'] == null
-          ? null
-          : _apiMapResponse['users_url'].toString();
+      _usersUrl = _apiMapResponse['users_url']?.toString();
       _usersUrlSet = true;
     }
     return _usersUrl;
@@ -42573,15 +40835,14 @@ class Role {
       json['name'] = name;
     }
     if (_permissionSetSet || _apiMapResponse.containsKey('permission_set')) {
-      json['permission_set'] =
-          permissionSet == null ? null : permissionSet.toJson();
+      json['permission_set'] = permissionSet?.toJson();
     }
     if (_permissionSetIdSet ||
         _apiMapResponse.containsKey('permission_set_id')) {
       json['permission_set_id'] = permissionSetId;
     }
     if (_modelSetSet || _apiMapResponse.containsKey('model_set')) {
-      json['model_set'] = modelSet == null ? null : modelSet.toJson();
+      json['model_set'] = modelSet?.toJson();
     }
     if (_modelSetIdSet || _apiMapResponse.containsKey('model_set_id')) {
       json['model_set_id'] = modelSetId;
@@ -42665,9 +40926,7 @@ class RoleSearch {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -42760,9 +41019,7 @@ class RoleSearch {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -42777,9 +41034,7 @@ class RoleSearch {
 
   String get usersUrl {
     if (!_usersUrlSet && _apiMapResponse.containsKey('users_url')) {
-      _usersUrl = _apiMapResponse['users_url'] == null
-          ? null
-          : _apiMapResponse['users_url'].toString();
+      _usersUrl = _apiMapResponse['users_url']?.toString();
       _usersUrlSet = true;
     }
     return _usersUrl;
@@ -42828,15 +41083,14 @@ class RoleSearch {
       json['name'] = name;
     }
     if (_permissionSetSet || _apiMapResponse.containsKey('permission_set')) {
-      json['permission_set'] =
-          permissionSet == null ? null : permissionSet.toJson();
+      json['permission_set'] = permissionSet?.toJson();
     }
     if (_permissionSetIdSet ||
         _apiMapResponse.containsKey('permission_set_id')) {
       json['permission_set_id'] = permissionSetId;
     }
     if (_modelSetSet || _apiMapResponse.containsKey('model_set')) {
-      json['model_set'] = modelSet == null ? null : modelSet.toJson();
+      json['model_set'] = modelSet?.toJson();
     }
     if (_modelSetIdSet || _apiMapResponse.containsKey('model_set_id')) {
       json['model_set_id'] = modelSetId;
@@ -43020,9 +41274,7 @@ class RunningQueries {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -43037,9 +41289,7 @@ class RunningQueries {
 
   String get completedAt {
     if (!_completedAtSet && _apiMapResponse.containsKey('completed_at')) {
-      _completedAt = _apiMapResponse['completed_at'] == null
-          ? null
-          : _apiMapResponse['completed_at'].toString();
+      _completedAt = _apiMapResponse['completed_at']?.toString();
       _completedAtSet = true;
     }
     return _completedAt;
@@ -43054,9 +41304,7 @@ class RunningQueries {
 
   String get queryId {
     if (!_queryIdSet && _apiMapResponse.containsKey('query_id')) {
-      _queryId = _apiMapResponse['query_id'] == null
-          ? null
-          : _apiMapResponse['query_id'].toString();
+      _queryId = _apiMapResponse['query_id']?.toString();
       _queryIdSet = true;
     }
     return _queryId;
@@ -43071,9 +41319,7 @@ class RunningQueries {
 
   String get source {
     if (!_sourceSet && _apiMapResponse.containsKey('source')) {
-      _source = _apiMapResponse['source'] == null
-          ? null
-          : _apiMapResponse['source'].toString();
+      _source = _apiMapResponse['source']?.toString();
       _sourceSet = true;
     }
     return _source;
@@ -43088,9 +41334,7 @@ class RunningQueries {
 
   String get nodeId {
     if (!_nodeIdSet && _apiMapResponse.containsKey('node_id')) {
-      _nodeId = _apiMapResponse['node_id'] == null
-          ? null
-          : _apiMapResponse['node_id'].toString();
+      _nodeId = _apiMapResponse['node_id']?.toString();
       _nodeIdSet = true;
     }
     return _nodeId;
@@ -43105,9 +41349,7 @@ class RunningQueries {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -43122,9 +41364,7 @@ class RunningQueries {
 
   String get queryTaskId {
     if (!_queryTaskIdSet && _apiMapResponse.containsKey('query_task_id')) {
-      _queryTaskId = _apiMapResponse['query_task_id'] == null
-          ? null
-          : _apiMapResponse['query_task_id'].toString();
+      _queryTaskId = _apiMapResponse['query_task_id']?.toString();
       _queryTaskIdSet = true;
     }
     return _queryTaskId;
@@ -43139,9 +41379,7 @@ class RunningQueries {
 
   String get cacheKey {
     if (!_cacheKeySet && _apiMapResponse.containsKey('cache_key')) {
-      _cacheKey = _apiMapResponse['cache_key'] == null
-          ? null
-          : _apiMapResponse['cache_key'].toString();
+      _cacheKey = _apiMapResponse['cache_key']?.toString();
       _cacheKeySet = true;
     }
     return _cacheKey;
@@ -43156,9 +41394,7 @@ class RunningQueries {
 
   String get connectionName {
     if (!_connectionNameSet && _apiMapResponse.containsKey('connection_name')) {
-      _connectionName = _apiMapResponse['connection_name'] == null
-          ? null
-          : _apiMapResponse['connection_name'].toString();
+      _connectionName = _apiMapResponse['connection_name']?.toString();
       _connectionNameSet = true;
     }
     return _connectionName;
@@ -43173,9 +41409,7 @@ class RunningQueries {
 
   String get dialect {
     if (!_dialectSet && _apiMapResponse.containsKey('dialect')) {
-      _dialect = _apiMapResponse['dialect'] == null
-          ? null
-          : _apiMapResponse['dialect'].toString();
+      _dialect = _apiMapResponse['dialect']?.toString();
       _dialectSet = true;
     }
     return _dialect;
@@ -43190,9 +41424,7 @@ class RunningQueries {
 
   String get connectionId {
     if (!_connectionIdSet && _apiMapResponse.containsKey('connection_id')) {
-      _connectionId = _apiMapResponse['connection_id'] == null
-          ? null
-          : _apiMapResponse['connection_id'].toString();
+      _connectionId = _apiMapResponse['connection_id']?.toString();
       _connectionIdSet = true;
     }
     return _connectionId;
@@ -43207,9 +41439,7 @@ class RunningQueries {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -43224,9 +41454,7 @@ class RunningQueries {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -43256,9 +41484,7 @@ class RunningQueries {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -43304,16 +41530,16 @@ class RunningQueries {
       json['id'] = id;
     }
     if (_userSet || _apiMapResponse.containsKey('user')) {
-      json['user'] = user == null ? null : user.toJson();
+      json['user'] = user?.toJson();
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_sqlQuerySet || _apiMapResponse.containsKey('sql_query')) {
-      json['sql_query'] = sqlQuery == null ? null : sqlQuery.toJson();
+      json['sql_query'] = sqlQuery?.toJson();
     }
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
       json['created_at'] = createdAt;
@@ -43502,9 +41728,7 @@ class SamlConfig {
 
   String get idpCert {
     if (!_idpCertSet && _apiMapResponse.containsKey('idp_cert')) {
-      _idpCert = _apiMapResponse['idp_cert'] == null
-          ? null
-          : _apiMapResponse['idp_cert'].toString();
+      _idpCert = _apiMapResponse['idp_cert']?.toString();
       _idpCertSet = true;
     }
     return _idpCert;
@@ -43519,9 +41743,7 @@ class SamlConfig {
 
   String get idpUrl {
     if (!_idpUrlSet && _apiMapResponse.containsKey('idp_url')) {
-      _idpUrl = _apiMapResponse['idp_url'] == null
-          ? null
-          : _apiMapResponse['idp_url'].toString();
+      _idpUrl = _apiMapResponse['idp_url']?.toString();
       _idpUrlSet = true;
     }
     return _idpUrl;
@@ -43536,9 +41758,7 @@ class SamlConfig {
 
   String get idpIssuer {
     if (!_idpIssuerSet && _apiMapResponse.containsKey('idp_issuer')) {
-      _idpIssuer = _apiMapResponse['idp_issuer'] == null
-          ? null
-          : _apiMapResponse['idp_issuer'].toString();
+      _idpIssuer = _apiMapResponse['idp_issuer']?.toString();
       _idpIssuerSet = true;
     }
     return _idpIssuer;
@@ -43553,9 +41773,7 @@ class SamlConfig {
 
   String get idpAudience {
     if (!_idpAudienceSet && _apiMapResponse.containsKey('idp_audience')) {
-      _idpAudience = _apiMapResponse['idp_audience'] == null
-          ? null
-          : _apiMapResponse['idp_audience'].toString();
+      _idpAudience = _apiMapResponse['idp_audience']?.toString();
       _idpAudienceSet = true;
     }
     return _idpAudience;
@@ -43588,9 +41806,7 @@ class SamlConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -43607,9 +41823,7 @@ class SamlConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -43626,9 +41840,7 @@ class SamlConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -43645,9 +41857,7 @@ class SamlConfig {
     if (!_newUserMigrationTypesSet &&
         _apiMapResponse.containsKey('new_user_migration_types')) {
       _newUserMigrationTypes =
-          _apiMapResponse['new_user_migration_types'] == null
-              ? null
-              : _apiMapResponse['new_user_migration_types'].toString();
+          _apiMapResponse['new_user_migration_types']?.toString();
       _newUserMigrationTypesSet = true;
     }
     return _newUserMigrationTypes;
@@ -43679,9 +41889,7 @@ class SamlConfig {
 
   String get testSlug {
     if (!_testSlugSet && _apiMapResponse.containsKey('test_slug')) {
-      _testSlug = _apiMapResponse['test_slug'] == null
-          ? null
-          : _apiMapResponse['test_slug'].toString();
+      _testSlug = _apiMapResponse['test_slug']?.toString();
       _testSlugSet = true;
     }
     return _testSlug;
@@ -43696,9 +41904,7 @@ class SamlConfig {
 
   String get modifiedAt {
     if (!_modifiedAtSet && _apiMapResponse.containsKey('modified_at')) {
-      _modifiedAt = _apiMapResponse['modified_at'] == null
-          ? null
-          : _apiMapResponse['modified_at'].toString();
+      _modifiedAt = _apiMapResponse['modified_at']?.toString();
       _modifiedAtSet = true;
     }
     return _modifiedAt;
@@ -43713,9 +41919,7 @@ class SamlConfig {
 
   String get modifiedBy {
     if (!_modifiedBySet && _apiMapResponse.containsKey('modified_by')) {
-      _modifiedBy = _apiMapResponse['modified_by'] == null
-          ? null
-          : _apiMapResponse['modified_by'].toString();
+      _modifiedBy = _apiMapResponse['modified_by']?.toString();
       _modifiedBySet = true;
     }
     return _modifiedBy;
@@ -43771,12 +41975,9 @@ class SamlConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -43792,12 +41993,9 @@ class SamlConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -43829,9 +42027,7 @@ class SamlConfig {
   String get groupsAttribute {
     if (!_groupsAttributeSet &&
         _apiMapResponse.containsKey('groups_attribute')) {
-      _groupsAttribute = _apiMapResponse['groups_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_attribute'].toString();
+      _groupsAttribute = _apiMapResponse['groups_attribute']?.toString();
       _groupsAttributeSet = true;
     }
     return _groupsAttribute;
@@ -43945,9 +42141,7 @@ class SamlConfig {
   String get groupsFinderType {
     if (!_groupsFinderTypeSet &&
         _apiMapResponse.containsKey('groups_finder_type')) {
-      _groupsFinderType = _apiMapResponse['groups_finder_type'] == null
-          ? null
-          : _apiMapResponse['groups_finder_type'].toString();
+      _groupsFinderType = _apiMapResponse['groups_finder_type']?.toString();
       _groupsFinderTypeSet = true;
     }
     return _groupsFinderType;
@@ -43963,9 +42157,7 @@ class SamlConfig {
   String get groupsMemberValue {
     if (!_groupsMemberValueSet &&
         _apiMapResponse.containsKey('groups_member_value')) {
-      _groupsMemberValue = _apiMapResponse['groups_member_value'] == null
-          ? null
-          : _apiMapResponse['groups_member_value'].toString();
+      _groupsMemberValue = _apiMapResponse['groups_member_value']?.toString();
       _groupsMemberValueSet = true;
     }
     return _groupsMemberValue;
@@ -44046,9 +42238,7 @@ class SamlConfig {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -44140,15 +42330,13 @@ class SamlConfig {
     }
     if (_defaultNewUserRolesSet ||
         _apiMapResponse.containsKey('default_new_user_roles')) {
-      json['default_new_user_roles'] = defaultNewUserRoles == null
-          ? null
-          : defaultNewUserRoles.map((i) => i.toJson()).toList();
+      json['default_new_user_roles'] =
+          defaultNewUserRoles?.map((i) => i.toJson())?.toList();
     }
     if (_defaultNewUserGroupsSet ||
         _apiMapResponse.containsKey('default_new_user_groups')) {
-      json['default_new_user_groups'] = defaultNewUserGroups == null
-          ? null
-          : defaultNewUserGroups.map((i) => i.toJson()).toList();
+      json['default_new_user_groups'] =
+          defaultNewUserGroups?.map((i) => i.toJson())?.toList();
     }
     if (_defaultNewUserRoleIdsSet ||
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
@@ -44167,29 +42355,25 @@ class SamlConfig {
       json['groups_attribute'] = groupsAttribute;
     }
     if (_groupsSet || _apiMapResponse.containsKey('groups')) {
-      json['groups'] =
-          groups == null ? null : groups.map((i) => i.toJson()).toList();
+      json['groups'] = groups?.map((i) => i.toJson())?.toList();
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_authRequiresRoleSet ||
         _apiMapResponse.containsKey('auth_requires_role')) {
       json['auth_requires_role'] = authRequiresRole;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_groupsFinderTypeSet ||
         _apiMapResponse.containsKey('groups_finder_type')) {
@@ -44280,9 +42464,7 @@ class SamlGroupRead {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -44297,9 +42479,7 @@ class SamlGroupRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -44333,9 +42513,7 @@ class SamlGroupRead {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -44388,8 +42566,7 @@ class SamlGroupRead {
       json['name'] = name;
     }
     if (_rolesSet || _apiMapResponse.containsKey('roles')) {
-      json['roles'] =
-          roles == null ? null : roles.map((i) => i.toJson()).toList();
+      json['roles'] = roles?.map((i) => i.toJson())?.toList();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -44456,9 +42633,7 @@ class SamlGroupWrite {
   String get lookerGroupName {
     if (!_lookerGroupNameSet &&
         _apiMapResponse.containsKey('looker_group_name')) {
-      _lookerGroupName = _apiMapResponse['looker_group_name'] == null
-          ? null
-          : _apiMapResponse['looker_group_name'].toString();
+      _lookerGroupName = _apiMapResponse['looker_group_name']?.toString();
       _lookerGroupNameSet = true;
     }
     return _lookerGroupName;
@@ -44473,9 +42648,7 @@ class SamlGroupWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -44490,9 +42663,8 @@ class SamlGroupWrite {
 
   List<int> get roleIds {
     if (!_roleIdsSet && _apiMapResponse.containsKey('role_ids')) {
-      _roleIds = _apiMapResponse['role_ids'] == null
-          ? null
-          : _apiMapResponse['role_ids'].map<int>((i) => i as int).toList();
+      _roleIds =
+          _apiMapResponse['role_ids']?.map<int>((i) => i as int)?.toList();
       _roleIdsSet = true;
     }
     return _roleIds;
@@ -44507,9 +42679,7 @@ class SamlGroupWrite {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -44607,9 +42777,7 @@ class SamlMetadataParseResult {
 
   String get idpIssuer {
     if (!_idpIssuerSet && _apiMapResponse.containsKey('idp_issuer')) {
-      _idpIssuer = _apiMapResponse['idp_issuer'] == null
-          ? null
-          : _apiMapResponse['idp_issuer'].toString();
+      _idpIssuer = _apiMapResponse['idp_issuer']?.toString();
       _idpIssuerSet = true;
     }
     return _idpIssuer;
@@ -44624,9 +42792,7 @@ class SamlMetadataParseResult {
 
   String get idpUrl {
     if (!_idpUrlSet && _apiMapResponse.containsKey('idp_url')) {
-      _idpUrl = _apiMapResponse['idp_url'] == null
-          ? null
-          : _apiMapResponse['idp_url'].toString();
+      _idpUrl = _apiMapResponse['idp_url']?.toString();
       _idpUrlSet = true;
     }
     return _idpUrl;
@@ -44641,9 +42807,7 @@ class SamlMetadataParseResult {
 
   String get idpCert {
     if (!_idpCertSet && _apiMapResponse.containsKey('idp_cert')) {
-      _idpCert = _apiMapResponse['idp_cert'] == null
-          ? null
-          : _apiMapResponse['idp_cert'].toString();
+      _idpCert = _apiMapResponse['idp_cert']?.toString();
       _idpCertSet = true;
     }
     return _idpCert;
@@ -44719,9 +42883,7 @@ class SamlUserAttributeRead {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -44770,9 +42932,7 @@ class SamlUserAttributeRead {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -44818,9 +42978,8 @@ class SamlUserAttributeRead {
       json['required'] = required;
     }
     if (_userAttributesSet || _apiMapResponse.containsKey('user_attributes')) {
-      json['user_attributes'] = userAttributes == null
-          ? null
-          : userAttributes.map((i) => i.toJson()).toList();
+      json['user_attributes'] =
+          userAttributes?.map((i) => i.toJson())?.toList();
     }
     if (_urlSet || _apiMapResponse.containsKey('url')) {
       json['url'] = url;
@@ -44850,9 +43009,7 @@ class SamlUserAttributeWrite {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -44883,11 +43040,9 @@ class SamlUserAttributeWrite {
   List<int> get userAttributeIds {
     if (!_userAttributeIdsSet &&
         _apiMapResponse.containsKey('user_attribute_ids')) {
-      _userAttributeIds = _apiMapResponse['user_attribute_ids'] == null
-          ? null
-          : _apiMapResponse['user_attribute_ids']
-              .map<int>((i) => i as int)
-              .toList();
+      _userAttributeIds = _apiMapResponse['user_attribute_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _userAttributeIdsSet = true;
     }
     return _userAttributeIds;
@@ -44902,9 +43057,7 @@ class SamlUserAttributeWrite {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -45071,9 +43224,7 @@ class ScheduledPlan {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -45134,9 +43285,7 @@ class ScheduledPlan {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -45167,9 +43316,7 @@ class ScheduledPlan {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -45184,9 +43331,7 @@ class ScheduledPlan {
 
   String get filtersString {
     if (!_filtersStringSet && _apiMapResponse.containsKey('filters_string')) {
-      _filtersString = _apiMapResponse['filters_string'] == null
-          ? null
-          : _apiMapResponse['filters_string'].toString();
+      _filtersString = _apiMapResponse['filters_string']?.toString();
       _filtersStringSet = true;
     }
     return _filtersString;
@@ -45202,9 +43347,7 @@ class ScheduledPlan {
   String get dashboardFilters {
     if (!_dashboardFiltersSet &&
         _apiMapResponse.containsKey('dashboard_filters')) {
-      _dashboardFilters = _apiMapResponse['dashboard_filters'] == null
-          ? null
-          : _apiMapResponse['dashboard_filters'].toString();
+      _dashboardFilters = _apiMapResponse['dashboard_filters']?.toString();
       _dashboardFiltersSet = true;
     }
     return _dashboardFilters;
@@ -45281,9 +43424,7 @@ class ScheduledPlan {
 
   String get crontab {
     if (!_crontabSet && _apiMapResponse.containsKey('crontab')) {
-      _crontab = _apiMapResponse['crontab'] == null
-          ? null
-          : _apiMapResponse['crontab'].toString();
+      _crontab = _apiMapResponse['crontab']?.toString();
       _crontabSet = true;
     }
     return _crontab;
@@ -45298,9 +43439,7 @@ class ScheduledPlan {
 
   String get datagroup {
     if (!_datagroupSet && _apiMapResponse.containsKey('datagroup')) {
-      _datagroup = _apiMapResponse['datagroup'] == null
-          ? null
-          : _apiMapResponse['datagroup'].toString();
+      _datagroup = _apiMapResponse['datagroup']?.toString();
       _datagroupSet = true;
     }
     return _datagroup;
@@ -45315,9 +43454,7 @@ class ScheduledPlan {
 
   String get timezone {
     if (!_timezoneSet && _apiMapResponse.containsKey('timezone')) {
-      _timezone = _apiMapResponse['timezone'] == null
-          ? null
-          : _apiMapResponse['timezone'].toString();
+      _timezone = _apiMapResponse['timezone']?.toString();
       _timezoneSet = true;
     }
     return _timezone;
@@ -45332,9 +43469,7 @@ class ScheduledPlan {
 
   String get queryId {
     if (!_queryIdSet && _apiMapResponse.containsKey('query_id')) {
-      _queryId = _apiMapResponse['query_id'] == null
-          ? null
-          : _apiMapResponse['query_id'].toString();
+      _queryId = _apiMapResponse['query_id']?.toString();
       _queryIdSet = true;
     }
     return _queryId;
@@ -45401,9 +43536,7 @@ class ScheduledPlan {
 
   String get pdfPaperSize {
     if (!_pdfPaperSizeSet && _apiMapResponse.containsKey('pdf_paper_size')) {
-      _pdfPaperSize = _apiMapResponse['pdf_paper_size'] == null
-          ? null
-          : _apiMapResponse['pdf_paper_size'].toString();
+      _pdfPaperSize = _apiMapResponse['pdf_paper_size']?.toString();
       _pdfPaperSizeSet = true;
     }
     return _pdfPaperSize;
@@ -45448,9 +43581,7 @@ class ScheduledPlan {
 
   String get colorTheme {
     if (!_colorThemeSet && _apiMapResponse.containsKey('color_theme')) {
-      _colorTheme = _apiMapResponse['color_theme'] == null
-          ? null
-          : _apiMapResponse['color_theme'].toString();
+      _colorTheme = _apiMapResponse['color_theme']?.toString();
       _colorThemeSet = true;
     }
     return _colorTheme;
@@ -45545,9 +43676,7 @@ class ScheduledPlan {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -45707,9 +43836,8 @@ class ScheduledPlan {
     }
     if (_scheduledPlanDestinationSet ||
         _apiMapResponse.containsKey('scheduled_plan_destination')) {
-      json['scheduled_plan_destination'] = scheduledPlanDestination == null
-          ? null
-          : scheduledPlanDestination.map((i) => i.toJson()).toList();
+      json['scheduled_plan_destination'] =
+          scheduledPlanDestination?.map((i) => i.toJson())?.toList();
     }
     if (_runOnceSet || _apiMapResponse.containsKey('run_once')) {
       json['run_once'] = runOnce;
@@ -45740,26 +43868,22 @@ class ScheduledPlan {
       json['id'] = id;
     }
     if (_createdAtSet || _apiMapResponse.containsKey('created_at')) {
-      json['created_at'] =
-          createdAt == null ? null : createdAt.toIso8601String();
+      json['created_at'] = createdAt?.toIso8601String();
     }
     if (_updatedAtSet || _apiMapResponse.containsKey('updated_at')) {
-      json['updated_at'] =
-          updatedAt == null ? null : updatedAt.toIso8601String();
+      json['updated_at'] = updatedAt?.toIso8601String();
     }
     if (_titleSet || _apiMapResponse.containsKey('title')) {
       json['title'] = title;
     }
     if (_userSet || _apiMapResponse.containsKey('user')) {
-      json['user'] = user == null ? null : user.toJson();
+      json['user'] = user?.toJson();
     }
     if (_nextRunAtSet || _apiMapResponse.containsKey('next_run_at')) {
-      json['next_run_at'] =
-          nextRunAt == null ? null : nextRunAt.toIso8601String();
+      json['next_run_at'] = nextRunAt?.toIso8601String();
     }
     if (_lastRunAtSet || _apiMapResponse.containsKey('last_run_at')) {
-      json['last_run_at'] =
-          lastRunAt == null ? null : lastRunAt.toIso8601String();
+      json['last_run_at'] = lastRunAt?.toIso8601String();
     }
     if (_canSet || _apiMapResponse.containsKey('can')) {
       json['can'] = can;
@@ -45841,9 +43965,7 @@ class ScheduledPlanDestination {
 
   String get format {
     if (!_formatSet && _apiMapResponse.containsKey('format')) {
-      _format = _apiMapResponse['format'] == null
-          ? null
-          : _apiMapResponse['format'].toString();
+      _format = _apiMapResponse['format']?.toString();
       _formatSet = true;
     }
     return _format;
@@ -45889,9 +44011,7 @@ class ScheduledPlanDestination {
 
   String get address {
     if (!_addressSet && _apiMapResponse.containsKey('address')) {
-      _address = _apiMapResponse['address'] == null
-          ? null
-          : _apiMapResponse['address'].toString();
+      _address = _apiMapResponse['address']?.toString();
       _addressSet = true;
     }
     return _address;
@@ -45922,9 +44042,7 @@ class ScheduledPlanDestination {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -45939,9 +44057,7 @@ class ScheduledPlanDestination {
 
   String get parameters {
     if (!_parametersSet && _apiMapResponse.containsKey('parameters')) {
-      _parameters = _apiMapResponse['parameters'] == null
-          ? null
-          : _apiMapResponse['parameters'].toString();
+      _parameters = _apiMapResponse['parameters']?.toString();
       _parametersSet = true;
     }
     return _parameters;
@@ -45957,9 +44073,7 @@ class ScheduledPlanDestination {
   String get secretParameters {
     if (!_secretParametersSet &&
         _apiMapResponse.containsKey('secret_parameters')) {
-      _secretParameters = _apiMapResponse['secret_parameters'] == null
-          ? null
-          : _apiMapResponse['secret_parameters'].toString();
+      _secretParameters = _apiMapResponse['secret_parameters']?.toString();
       _secretParametersSet = true;
     }
     return _secretParameters;
@@ -45974,9 +44088,7 @@ class ScheduledPlanDestination {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -46071,9 +44183,7 @@ class Schema {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -46172,9 +44282,7 @@ class SchemaColumn {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -46190,9 +44298,7 @@ class SchemaColumn {
   String get sqlEscapedName {
     if (!_sqlEscapedNameSet &&
         _apiMapResponse.containsKey('sql_escaped_name')) {
-      _sqlEscapedName = _apiMapResponse['sql_escaped_name'] == null
-          ? null
-          : _apiMapResponse['sql_escaped_name'].toString();
+      _sqlEscapedName = _apiMapResponse['sql_escaped_name']?.toString();
       _sqlEscapedNameSet = true;
     }
     return _sqlEscapedName;
@@ -46207,9 +44313,7 @@ class SchemaColumn {
 
   String get schemaName {
     if (!_schemaNameSet && _apiMapResponse.containsKey('schema_name')) {
-      _schemaName = _apiMapResponse['schema_name'] == null
-          ? null
-          : _apiMapResponse['schema_name'].toString();
+      _schemaName = _apiMapResponse['schema_name']?.toString();
       _schemaNameSet = true;
     }
     return _schemaName;
@@ -46225,9 +44329,7 @@ class SchemaColumn {
   String get dataTypeDatabase {
     if (!_dataTypeDatabaseSet &&
         _apiMapResponse.containsKey('data_type_database')) {
-      _dataTypeDatabase = _apiMapResponse['data_type_database'] == null
-          ? null
-          : _apiMapResponse['data_type_database'].toString();
+      _dataTypeDatabase = _apiMapResponse['data_type_database']?.toString();
       _dataTypeDatabaseSet = true;
     }
     return _dataTypeDatabase;
@@ -46242,9 +44344,7 @@ class SchemaColumn {
 
   String get dataType {
     if (!_dataTypeSet && _apiMapResponse.containsKey('data_type')) {
-      _dataType = _apiMapResponse['data_type'] == null
-          ? null
-          : _apiMapResponse['data_type'].toString();
+      _dataType = _apiMapResponse['data_type']?.toString();
       _dataTypeSet = true;
     }
     return _dataType;
@@ -46260,9 +44360,7 @@ class SchemaColumn {
   String get dataTypeLooker {
     if (!_dataTypeLookerSet &&
         _apiMapResponse.containsKey('data_type_looker')) {
-      _dataTypeLooker = _apiMapResponse['data_type_looker'] == null
-          ? null
-          : _apiMapResponse['data_type_looker'].toString();
+      _dataTypeLooker = _apiMapResponse['data_type_looker']?.toString();
       _dataTypeLookerSet = true;
     }
     return _dataTypeLooker;
@@ -46277,9 +44375,7 @@ class SchemaColumn {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -46378,8 +44474,7 @@ class SchemaColumn {
       json['column_size'] = columnSize;
     }
     if (_snippetsSet || _apiMapResponse.containsKey('snippets')) {
-      json['snippets'] =
-          snippets == null ? null : snippets.map((i) => i.toJson()).toList();
+      json['snippets'] = snippets?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -46406,9 +44501,7 @@ class SchemaColumns {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -46424,9 +44517,7 @@ class SchemaColumns {
   String get sqlEscapedName {
     if (!_sqlEscapedNameSet &&
         _apiMapResponse.containsKey('sql_escaped_name')) {
-      _sqlEscapedName = _apiMapResponse['sql_escaped_name'] == null
-          ? null
-          : _apiMapResponse['sql_escaped_name'].toString();
+      _sqlEscapedName = _apiMapResponse['sql_escaped_name']?.toString();
       _sqlEscapedNameSet = true;
     }
     return _sqlEscapedName;
@@ -46441,9 +44532,7 @@ class SchemaColumns {
 
   String get schemaName {
     if (!_schemaNameSet && _apiMapResponse.containsKey('schema_name')) {
-      _schemaName = _apiMapResponse['schema_name'] == null
-          ? null
-          : _apiMapResponse['schema_name'].toString();
+      _schemaName = _apiMapResponse['schema_name']?.toString();
       _schemaNameSet = true;
     }
     return _schemaName;
@@ -46511,8 +44600,7 @@ class SchemaColumns {
       json['schema_name'] = schemaName;
     }
     if (_columnsSet || _apiMapResponse.containsKey('columns')) {
-      json['columns'] =
-          columns == null ? null : columns.map((i) => i.toJson()).toList();
+      json['columns'] = columns?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -46545,9 +44633,7 @@ class SchemaTable {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -46563,9 +44649,7 @@ class SchemaTable {
   String get sqlEscapedName {
     if (!_sqlEscapedNameSet &&
         _apiMapResponse.containsKey('sql_escaped_name')) {
-      _sqlEscapedName = _apiMapResponse['sql_escaped_name'] == null
-          ? null
-          : _apiMapResponse['sql_escaped_name'].toString();
+      _sqlEscapedName = _apiMapResponse['sql_escaped_name']?.toString();
       _sqlEscapedNameSet = true;
     }
     return _sqlEscapedName;
@@ -46580,9 +44664,7 @@ class SchemaTable {
 
   String get schemaName {
     if (!_schemaNameSet && _apiMapResponse.containsKey('schema_name')) {
-      _schemaName = _apiMapResponse['schema_name'] == null
-          ? null
-          : _apiMapResponse['schema_name'].toString();
+      _schemaName = _apiMapResponse['schema_name']?.toString();
       _schemaNameSet = true;
     }
     return _schemaName;
@@ -46612,9 +44694,7 @@ class SchemaTable {
 
   String get external {
     if (!_externalSet && _apiMapResponse.containsKey('external')) {
-      _external = _apiMapResponse['external'] == null
-          ? null
-          : _apiMapResponse['external'].toString();
+      _external = _apiMapResponse['external']?.toString();
       _externalSet = true;
     }
     return _external;
@@ -46688,8 +44768,7 @@ class SchemaTable {
       json['external'] = external;
     }
     if (_snippetsSet || _apiMapResponse.containsKey('snippets')) {
-      json['snippets'] =
-          snippets == null ? null : snippets.map((i) => i.toJson()).toList();
+      json['snippets'] = snippets?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -46716,9 +44795,7 @@ class SchemaTables {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -46813,8 +44890,7 @@ class SchemaTables {
       json['is_default'] = isDefault;
     }
     if (_tablesSet || _apiMapResponse.containsKey('tables')) {
-      json['tables'] =
-          tables == null ? null : tables.map((i) => i.toJson()).toList();
+      json['tables'] = tables?.map((i) => i.toJson())?.toList();
     }
     if (_tableLimitHitSet || _apiMapResponse.containsKey('table_limit_hit')) {
       json['table_limit_hit'] = tableLimitHit;
@@ -46907,9 +44983,7 @@ class Session {
 
   String get ipAddress {
     if (!_ipAddressSet && _apiMapResponse.containsKey('ip_address')) {
-      _ipAddress = _apiMapResponse['ip_address'] == null
-          ? null
-          : _apiMapResponse['ip_address'].toString();
+      _ipAddress = _apiMapResponse['ip_address']?.toString();
       _ipAddressSet = true;
     }
     return _ipAddress;
@@ -46924,9 +44998,7 @@ class Session {
 
   String get browser {
     if (!_browserSet && _apiMapResponse.containsKey('browser')) {
-      _browser = _apiMapResponse['browser'] == null
-          ? null
-          : _apiMapResponse['browser'].toString();
+      _browser = _apiMapResponse['browser']?.toString();
       _browserSet = true;
     }
     return _browser;
@@ -46942,9 +45014,7 @@ class Session {
   String get operatingSystem {
     if (!_operatingSystemSet &&
         _apiMapResponse.containsKey('operating_system')) {
-      _operatingSystem = _apiMapResponse['operating_system'] == null
-          ? null
-          : _apiMapResponse['operating_system'].toString();
+      _operatingSystem = _apiMapResponse['operating_system']?.toString();
       _operatingSystemSet = true;
     }
     return _operatingSystem;
@@ -46959,9 +45029,7 @@ class Session {
 
   String get city {
     if (!_citySet && _apiMapResponse.containsKey('city')) {
-      _city = _apiMapResponse['city'] == null
-          ? null
-          : _apiMapResponse['city'].toString();
+      _city = _apiMapResponse['city']?.toString();
       _citySet = true;
     }
     return _city;
@@ -46976,9 +45044,7 @@ class Session {
 
   String get state {
     if (!_stateSet && _apiMapResponse.containsKey('state')) {
-      _state = _apiMapResponse['state'] == null
-          ? null
-          : _apiMapResponse['state'].toString();
+      _state = _apiMapResponse['state']?.toString();
       _stateSet = true;
     }
     return _state;
@@ -46993,9 +45059,7 @@ class Session {
 
   String get country {
     if (!_countrySet && _apiMapResponse.containsKey('country')) {
-      _country = _apiMapResponse['country'] == null
-          ? null
-          : _apiMapResponse['country'].toString();
+      _country = _apiMapResponse['country']?.toString();
       _countrySet = true;
     }
     return _country;
@@ -47011,9 +45075,7 @@ class Session {
   String get credentialsType {
     if (!_credentialsTypeSet &&
         _apiMapResponse.containsKey('credentials_type')) {
-      _credentialsType = _apiMapResponse['credentials_type'] == null
-          ? null
-          : _apiMapResponse['credentials_type'].toString();
+      _credentialsType = _apiMapResponse['credentials_type']?.toString();
       _credentialsTypeSet = true;
     }
     return _credentialsType;
@@ -47028,9 +45090,7 @@ class Session {
 
   String get extendedAt {
     if (!_extendedAtSet && _apiMapResponse.containsKey('extended_at')) {
-      _extendedAt = _apiMapResponse['extended_at'] == null
-          ? null
-          : _apiMapResponse['extended_at'].toString();
+      _extendedAt = _apiMapResponse['extended_at']?.toString();
       _extendedAtSet = true;
     }
     return _extendedAt;
@@ -47075,9 +45135,7 @@ class Session {
 
   String get createdAt {
     if (!_createdAtSet && _apiMapResponse.containsKey('created_at')) {
-      _createdAt = _apiMapResponse['created_at'] == null
-          ? null
-          : _apiMapResponse['created_at'].toString();
+      _createdAt = _apiMapResponse['created_at']?.toString();
       _createdAtSet = true;
     }
     return _createdAt;
@@ -47092,9 +45150,7 @@ class Session {
 
   String get expiresAt {
     if (!_expiresAtSet && _apiMapResponse.containsKey('expires_at')) {
-      _expiresAt = _apiMapResponse['expires_at'] == null
-          ? null
-          : _apiMapResponse['expires_at'].toString();
+      _expiresAt = _apiMapResponse['expires_at']?.toString();
       _expiresAtSet = true;
     }
     return _expiresAt;
@@ -47109,9 +45165,7 @@ class Session {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -47520,14 +45574,11 @@ class Setting {
     }
     if (_whitelabelConfigurationSet ||
         _apiMapResponse.containsKey('whitelabel_configuration')) {
-      json['whitelabel_configuration'] = whitelabelConfiguration == null
-          ? null
-          : whitelabelConfiguration.toJson();
+      json['whitelabel_configuration'] = whitelabelConfiguration?.toJson();
     }
     if (_customWelcomeEmailSet ||
         _apiMapResponse.containsKey('custom_welcome_email')) {
-      json['custom_welcome_email'] =
-          customWelcomeEmail == null ? null : customWelcomeEmail.toJson();
+      json['custom_welcome_email'] = customWelcomeEmail?.toJson();
     }
     return json;
   }
@@ -47566,9 +45617,7 @@ class SmtpNodeStatus {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -47583,9 +45632,7 @@ class SmtpNodeStatus {
 
   String get hostname {
     if (!_hostnameSet && _apiMapResponse.containsKey('hostname')) {
-      _hostname = _apiMapResponse['hostname'] == null
-          ? null
-          : _apiMapResponse['hostname'].toString();
+      _hostname = _apiMapResponse['hostname']?.toString();
       _hostnameSet = true;
     }
     return _hostname;
@@ -47736,9 +45783,7 @@ class SmtpStatus {
       json['node_count'] = nodeCount;
     }
     if (_nodeStatusSet || _apiMapResponse.containsKey('node_status')) {
-      json['node_status'] = nodeStatus == null
-          ? null
-          : nodeStatus.map((i) => i.toJson()).toList();
+      json['node_status'] = nodeStatus?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -47762,9 +45807,7 @@ class Snippet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -47779,9 +45822,7 @@ class Snippet {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -47796,9 +45837,7 @@ class Snippet {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -47915,9 +45954,7 @@ class SqlQuery {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -47977,9 +46014,7 @@ class SqlQuery {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -47994,9 +46029,7 @@ class SqlQuery {
 
   String get lastRunAt {
     if (!_lastRunAtSet && _apiMapResponse.containsKey('last_run_at')) {
-      _lastRunAt = _apiMapResponse['last_run_at'] == null
-          ? null
-          : _apiMapResponse['last_run_at'].toString();
+      _lastRunAt = _apiMapResponse['last_run_at']?.toString();
       _lastRunAtSet = true;
     }
     return _lastRunAt;
@@ -48027,9 +46060,7 @@ class SqlQuery {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -48060,9 +46091,7 @@ class SqlQuery {
 
   String get exploreUrl {
     if (!_exploreUrlSet && _apiMapResponse.containsKey('explore_url')) {
-      _exploreUrl = _apiMapResponse['explore_url'] == null
-          ? null
-          : _apiMapResponse['explore_url'].toString();
+      _exploreUrl = _apiMapResponse['explore_url']?.toString();
       _exploreUrlSet = true;
     }
     return _exploreUrl;
@@ -48167,13 +46196,13 @@ class SqlQuery {
       json['last_run_at'] = lastRunAt;
     }
     if (_connectionSet || _apiMapResponse.containsKey('connection')) {
-      json['connection'] = connection == null ? null : connection.toJson();
+      json['connection'] = connection?.toJson();
     }
     if (_modelNameSet || _apiMapResponse.containsKey('model_name')) {
       json['model_name'] = modelName;
     }
     if (_creatorSet || _apiMapResponse.containsKey('creator')) {
-      json['creator'] = creator == null ? null : creator.toJson();
+      json['creator'] = creator?.toJson();
     }
     if (_exploreUrlSet || _apiMapResponse.containsKey('explore_url')) {
       json['explore_url'] = exploreUrl;
@@ -48215,9 +46244,7 @@ class SqlQueryCreate {
 
   String get connectionName {
     if (!_connectionNameSet && _apiMapResponse.containsKey('connection_name')) {
-      _connectionName = _apiMapResponse['connection_name'] == null
-          ? null
-          : _apiMapResponse['connection_name'].toString();
+      _connectionName = _apiMapResponse['connection_name']?.toString();
       _connectionNameSet = true;
     }
     return _connectionName;
@@ -48232,9 +46259,7 @@ class SqlQueryCreate {
 
   String get connectionId {
     if (!_connectionIdSet && _apiMapResponse.containsKey('connection_id')) {
-      _connectionId = _apiMapResponse['connection_id'] == null
-          ? null
-          : _apiMapResponse['connection_id'].toString();
+      _connectionId = _apiMapResponse['connection_id']?.toString();
       _connectionIdSet = true;
     }
     return _connectionId;
@@ -48249,9 +46274,7 @@ class SqlQueryCreate {
 
   String get modelName {
     if (!_modelNameSet && _apiMapResponse.containsKey('model_name')) {
-      _modelName = _apiMapResponse['model_name'] == null
-          ? null
-          : _apiMapResponse['model_name'].toString();
+      _modelName = _apiMapResponse['model_name']?.toString();
       _modelNameSet = true;
     }
     return _modelName;
@@ -48266,9 +46289,7 @@ class SqlQueryCreate {
 
   String get sql {
     if (!_sqlSet && _apiMapResponse.containsKey('sql')) {
-      _sql = _apiMapResponse['sql'] == null
-          ? null
-          : _apiMapResponse['sql'].toString();
+      _sql = _apiMapResponse['sql']?.toString();
       _sqlSet = true;
     }
     return _sql;
@@ -48353,9 +46374,7 @@ class SshPublicKey {
 
   String get publicKey {
     if (!_publicKeySet && _apiMapResponse.containsKey('public_key')) {
-      _publicKey = _apiMapResponse['public_key'] == null
-          ? null
-          : _apiMapResponse['public_key'].toString();
+      _publicKey = _apiMapResponse['public_key']?.toString();
       _publicKeySet = true;
     }
     return _publicKey;
@@ -48437,9 +46456,7 @@ class SshServer {
 
   String get sshServerId {
     if (!_sshServerIdSet && _apiMapResponse.containsKey('ssh_server_id')) {
-      _sshServerId = _apiMapResponse['ssh_server_id'] == null
-          ? null
-          : _apiMapResponse['ssh_server_id'].toString();
+      _sshServerId = _apiMapResponse['ssh_server_id']?.toString();
       _sshServerIdSet = true;
     }
     return _sshServerId;
@@ -48454,9 +46471,7 @@ class SshServer {
 
   String get sshServerName {
     if (!_sshServerNameSet && _apiMapResponse.containsKey('ssh_server_name')) {
-      _sshServerName = _apiMapResponse['ssh_server_name'] == null
-          ? null
-          : _apiMapResponse['ssh_server_name'].toString();
+      _sshServerName = _apiMapResponse['ssh_server_name']?.toString();
       _sshServerNameSet = true;
     }
     return _sshServerName;
@@ -48471,9 +46486,7 @@ class SshServer {
 
   String get sshServerHost {
     if (!_sshServerHostSet && _apiMapResponse.containsKey('ssh_server_host')) {
-      _sshServerHost = _apiMapResponse['ssh_server_host'] == null
-          ? null
-          : _apiMapResponse['ssh_server_host'].toString();
+      _sshServerHost = _apiMapResponse['ssh_server_host']?.toString();
       _sshServerHostSet = true;
     }
     return _sshServerHost;
@@ -48503,9 +46516,7 @@ class SshServer {
 
   String get sshServerUser {
     if (!_sshServerUserSet && _apiMapResponse.containsKey('ssh_server_user')) {
-      _sshServerUser = _apiMapResponse['ssh_server_user'] == null
-          ? null
-          : _apiMapResponse['ssh_server_user'].toString();
+      _sshServerUser = _apiMapResponse['ssh_server_user']?.toString();
       _sshServerUserSet = true;
     }
     return _sshServerUser;
@@ -48520,9 +46531,7 @@ class SshServer {
 
   String get fingerPrint {
     if (!_fingerPrintSet && _apiMapResponse.containsKey('finger_print')) {
-      _fingerPrint = _apiMapResponse['finger_print'] == null
-          ? null
-          : _apiMapResponse['finger_print'].toString();
+      _fingerPrint = _apiMapResponse['finger_print']?.toString();
       _fingerPrintSet = true;
     }
     return _fingerPrint;
@@ -48538,9 +46547,7 @@ class SshServer {
   String get shaFingerPrint {
     if (!_shaFingerPrintSet &&
         _apiMapResponse.containsKey('sha_finger_print')) {
-      _shaFingerPrint = _apiMapResponse['sha_finger_print'] == null
-          ? null
-          : _apiMapResponse['sha_finger_print'].toString();
+      _shaFingerPrint = _apiMapResponse['sha_finger_print']?.toString();
       _shaFingerPrintSet = true;
     }
     return _shaFingerPrint;
@@ -48555,9 +46562,7 @@ class SshServer {
 
   String get publicKey {
     if (!_publicKeySet && _apiMapResponse.containsKey('public_key')) {
-      _publicKey = _apiMapResponse['public_key'] == null
-          ? null
-          : _apiMapResponse['public_key'].toString();
+      _publicKey = _apiMapResponse['public_key']?.toString();
       _publicKeySet = true;
     }
     return _publicKey;
@@ -48572,9 +46577,7 @@ class SshServer {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -48685,9 +46688,7 @@ class SshTunnel {
 
   String get tunnelId {
     if (!_tunnelIdSet && _apiMapResponse.containsKey('tunnel_id')) {
-      _tunnelId = _apiMapResponse['tunnel_id'] == null
-          ? null
-          : _apiMapResponse['tunnel_id'].toString();
+      _tunnelId = _apiMapResponse['tunnel_id']?.toString();
       _tunnelIdSet = true;
     }
     return _tunnelId;
@@ -48702,9 +46703,7 @@ class SshTunnel {
 
   String get sshServerId {
     if (!_sshServerIdSet && _apiMapResponse.containsKey('ssh_server_id')) {
-      _sshServerId = _apiMapResponse['ssh_server_id'] == null
-          ? null
-          : _apiMapResponse['ssh_server_id'].toString();
+      _sshServerId = _apiMapResponse['ssh_server_id']?.toString();
       _sshServerIdSet = true;
     }
     return _sshServerId;
@@ -48719,9 +46718,7 @@ class SshTunnel {
 
   String get sshServerName {
     if (!_sshServerNameSet && _apiMapResponse.containsKey('ssh_server_name')) {
-      _sshServerName = _apiMapResponse['ssh_server_name'] == null
-          ? null
-          : _apiMapResponse['ssh_server_name'].toString();
+      _sshServerName = _apiMapResponse['ssh_server_name']?.toString();
       _sshServerNameSet = true;
     }
     return _sshServerName;
@@ -48736,9 +46733,7 @@ class SshTunnel {
 
   String get sshServerHost {
     if (!_sshServerHostSet && _apiMapResponse.containsKey('ssh_server_host')) {
-      _sshServerHost = _apiMapResponse['ssh_server_host'] == null
-          ? null
-          : _apiMapResponse['ssh_server_host'].toString();
+      _sshServerHost = _apiMapResponse['ssh_server_host']?.toString();
       _sshServerHostSet = true;
     }
     return _sshServerHost;
@@ -48768,9 +46763,7 @@ class SshTunnel {
 
   String get sshServerUser {
     if (!_sshServerUserSet && _apiMapResponse.containsKey('ssh_server_user')) {
-      _sshServerUser = _apiMapResponse['ssh_server_user'] == null
-          ? null
-          : _apiMapResponse['ssh_server_user'].toString();
+      _sshServerUser = _apiMapResponse['ssh_server_user']?.toString();
       _sshServerUserSet = true;
     }
     return _sshServerUser;
@@ -48785,9 +46778,7 @@ class SshTunnel {
 
   String get lastAttempt {
     if (!_lastAttemptSet && _apiMapResponse.containsKey('last_attempt')) {
-      _lastAttempt = _apiMapResponse['last_attempt'] == null
-          ? null
-          : _apiMapResponse['last_attempt'].toString();
+      _lastAttempt = _apiMapResponse['last_attempt']?.toString();
       _lastAttemptSet = true;
     }
     return _lastAttempt;
@@ -48817,9 +46808,7 @@ class SshTunnel {
 
   String get databaseHost {
     if (!_databaseHostSet && _apiMapResponse.containsKey('database_host')) {
-      _databaseHost = _apiMapResponse['database_host'] == null
-          ? null
-          : _apiMapResponse['database_host'].toString();
+      _databaseHost = _apiMapResponse['database_host']?.toString();
       _databaseHostSet = true;
     }
     return _databaseHost;
@@ -48849,9 +46838,7 @@ class SshTunnel {
 
   String get status {
     if (!_statusSet && _apiMapResponse.containsKey('status')) {
-      _status = _apiMapResponse['status'] == null
-          ? null
-          : _apiMapResponse['status'].toString();
+      _status = _apiMapResponse['status']?.toString();
       _statusSet = true;
     }
     return _status;
@@ -48941,9 +46928,8 @@ class SupportAccessAddEntries {
 
   List<String> get emails {
     if (!_emailsSet && _apiMapResponse.containsKey('emails')) {
-      _emails = _apiMapResponse['emails'] == null
-          ? null
-          : _apiMapResponse['emails'].map<String>((i) => i as String).toList();
+      _emails =
+          _apiMapResponse['emails']?.map<String>((i) => i as String)?.toList();
       _emailsSet = true;
     }
     return _emails;
@@ -48958,9 +46944,7 @@ class SupportAccessAddEntries {
 
   String get reason {
     if (!_reasonSet && _apiMapResponse.containsKey('reason')) {
-      _reason = _apiMapResponse['reason'] == null
-          ? null
-          : _apiMapResponse['reason'].toString();
+      _reason = _apiMapResponse['reason']?.toString();
       _reasonSet = true;
     }
     return _reason;
@@ -49033,9 +47017,7 @@ class SupportAccessAllowlistEntry {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -49050,9 +47032,7 @@ class SupportAccessAllowlistEntry {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -49067,9 +47047,7 @@ class SupportAccessAllowlistEntry {
 
   String get fullName {
     if (!_fullNameSet && _apiMapResponse.containsKey('full_name')) {
-      _fullName = _apiMapResponse['full_name'] == null
-          ? null
-          : _apiMapResponse['full_name'].toString();
+      _fullName = _apiMapResponse['full_name']?.toString();
       _fullNameSet = true;
     }
     return _fullName;
@@ -49084,9 +47062,7 @@ class SupportAccessAllowlistEntry {
 
   String get reason {
     if (!_reasonSet && _apiMapResponse.containsKey('reason')) {
-      _reason = _apiMapResponse['reason'] == null
-          ? null
-          : _apiMapResponse['reason'].toString();
+      _reason = _apiMapResponse['reason']?.toString();
       _reasonSet = true;
     }
     return _reason;
@@ -49155,8 +47131,7 @@ class SupportAccessAllowlistEntry {
       json['reason'] = reason;
     }
     if (_createdDateSet || _apiMapResponse.containsKey('created_date')) {
-      json['created_date'] =
-          createdDate == null ? null : createdDate.toIso8601String();
+      json['created_date'] = createdDate?.toIso8601String();
     }
     return json;
   }
@@ -49297,8 +47272,7 @@ class SupportAccessStatus {
       json['open'] = open;
     }
     if (_openUntilSet || _apiMapResponse.containsKey('open_until')) {
-      json['open_until'] =
-          openUntil == null ? null : openUntil.toIso8601String();
+      json['open_until'] = openUntil?.toIso8601String();
     }
     return json;
   }
@@ -49604,9 +47578,7 @@ class Theme {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -49664,10 +47636,10 @@ class Theme {
       json['can'] = can;
     }
     if (_beginAtSet || _apiMapResponse.containsKey('begin_at')) {
-      json['begin_at'] = beginAt == null ? null : beginAt.toIso8601String();
+      json['begin_at'] = beginAt?.toIso8601String();
     }
     if (_endAtSet || _apiMapResponse.containsKey('end_at')) {
-      json['end_at'] = endAt == null ? null : endAt.toIso8601String();
+      json['end_at'] = endAt?.toIso8601String();
     }
     if (_idSet || _apiMapResponse.containsKey('id')) {
       json['id'] = id;
@@ -49676,7 +47648,7 @@ class Theme {
       json['name'] = name;
     }
     if (_settingsSet || _apiMapResponse.containsKey('settings')) {
-      json['settings'] = settings == null ? null : settings.toJson();
+      json['settings'] = settings?.toJson();
     }
     return json;
   }
@@ -49743,9 +47715,7 @@ class ThemeSettings {
   String get backgroundColor {
     if (!_backgroundColorSet &&
         _apiMapResponse.containsKey('background_color')) {
-      _backgroundColor = _apiMapResponse['background_color'] == null
-          ? null
-          : _apiMapResponse['background_color'].toString();
+      _backgroundColor = _apiMapResponse['background_color']?.toString();
       _backgroundColorSet = true;
     }
     return _backgroundColor;
@@ -49760,9 +47730,7 @@ class ThemeSettings {
 
   String get baseFontSize {
     if (!_baseFontSizeSet && _apiMapResponse.containsKey('base_font_size')) {
-      _baseFontSize = _apiMapResponse['base_font_size'] == null
-          ? null
-          : _apiMapResponse['base_font_size'].toString();
+      _baseFontSize = _apiMapResponse['base_font_size']?.toString();
       _baseFontSizeSet = true;
     }
     return _baseFontSize;
@@ -49778,9 +47746,7 @@ class ThemeSettings {
   String get colorCollectionId {
     if (!_colorCollectionIdSet &&
         _apiMapResponse.containsKey('color_collection_id')) {
-      _colorCollectionId = _apiMapResponse['color_collection_id'] == null
-          ? null
-          : _apiMapResponse['color_collection_id'].toString();
+      _colorCollectionId = _apiMapResponse['color_collection_id']?.toString();
       _colorCollectionIdSet = true;
     }
     return _colorCollectionId;
@@ -49795,9 +47761,7 @@ class ThemeSettings {
 
   String get fontColor {
     if (!_fontColorSet && _apiMapResponse.containsKey('font_color')) {
-      _fontColor = _apiMapResponse['font_color'] == null
-          ? null
-          : _apiMapResponse['font_color'].toString();
+      _fontColor = _apiMapResponse['font_color']?.toString();
       _fontColorSet = true;
     }
     return _fontColor;
@@ -49812,9 +47776,7 @@ class ThemeSettings {
 
   String get fontFamily {
     if (!_fontFamilySet && _apiMapResponse.containsKey('font_family')) {
-      _fontFamily = _apiMapResponse['font_family'] == null
-          ? null
-          : _apiMapResponse['font_family'].toString();
+      _fontFamily = _apiMapResponse['font_family']?.toString();
       _fontFamilySet = true;
     }
     return _fontFamily;
@@ -49829,9 +47791,7 @@ class ThemeSettings {
 
   String get fontSource {
     if (!_fontSourceSet && _apiMapResponse.containsKey('font_source')) {
-      _fontSource = _apiMapResponse['font_source'] == null
-          ? null
-          : _apiMapResponse['font_source'].toString();
+      _fontSource = _apiMapResponse['font_source']?.toString();
       _fontSourceSet = true;
     }
     return _fontSource;
@@ -49847,9 +47807,7 @@ class ThemeSettings {
   String get infoButtonColor {
     if (!_infoButtonColorSet &&
         _apiMapResponse.containsKey('info_button_color')) {
-      _infoButtonColor = _apiMapResponse['info_button_color'] == null
-          ? null
-          : _apiMapResponse['info_button_color'].toString();
+      _infoButtonColor = _apiMapResponse['info_button_color']?.toString();
       _infoButtonColorSet = true;
     }
     return _infoButtonColor;
@@ -49865,9 +47823,7 @@ class ThemeSettings {
   String get primaryButtonColor {
     if (!_primaryButtonColorSet &&
         _apiMapResponse.containsKey('primary_button_color')) {
-      _primaryButtonColor = _apiMapResponse['primary_button_color'] == null
-          ? null
-          : _apiMapResponse['primary_button_color'].toString();
+      _primaryButtonColor = _apiMapResponse['primary_button_color']?.toString();
       _primaryButtonColorSet = true;
     }
     return _primaryButtonColor;
@@ -49914,9 +47870,7 @@ class ThemeSettings {
   String get textTileTextColor {
     if (!_textTileTextColorSet &&
         _apiMapResponse.containsKey('text_tile_text_color')) {
-      _textTileTextColor = _apiMapResponse['text_tile_text_color'] == null
-          ? null
-          : _apiMapResponse['text_tile_text_color'].toString();
+      _textTileTextColor = _apiMapResponse['text_tile_text_color']?.toString();
       _textTileTextColorSet = true;
     }
     return _textTileTextColor;
@@ -49932,9 +47886,8 @@ class ThemeSettings {
   String get tileBackgroundColor {
     if (!_tileBackgroundColorSet &&
         _apiMapResponse.containsKey('tile_background_color')) {
-      _tileBackgroundColor = _apiMapResponse['tile_background_color'] == null
-          ? null
-          : _apiMapResponse['tile_background_color'].toString();
+      _tileBackgroundColor =
+          _apiMapResponse['tile_background_color']?.toString();
       _tileBackgroundColorSet = true;
     }
     return _tileBackgroundColor;
@@ -49949,9 +47902,7 @@ class ThemeSettings {
 
   String get tileTextColor {
     if (!_tileTextColorSet && _apiMapResponse.containsKey('tile_text_color')) {
-      _tileTextColor = _apiMapResponse['tile_text_color'] == null
-          ? null
-          : _apiMapResponse['tile_text_color'].toString();
+      _tileTextColor = _apiMapResponse['tile_text_color']?.toString();
       _tileTextColorSet = true;
     }
     return _tileTextColor;
@@ -49966,9 +47917,7 @@ class ThemeSettings {
 
   String get titleColor {
     if (!_titleColorSet && _apiMapResponse.containsKey('title_color')) {
-      _titleColor = _apiMapResponse['title_color'] == null
-          ? null
-          : _apiMapResponse['title_color'].toString();
+      _titleColor = _apiMapResponse['title_color']?.toString();
       _titleColorSet = true;
     }
     return _titleColor;
@@ -49984,9 +47933,7 @@ class ThemeSettings {
   String get warnButtonColor {
     if (!_warnButtonColorSet &&
         _apiMapResponse.containsKey('warn_button_color')) {
-      _warnButtonColor = _apiMapResponse['warn_button_color'] == null
-          ? null
-          : _apiMapResponse['warn_button_color'].toString();
+      _warnButtonColor = _apiMapResponse['warn_button_color']?.toString();
       _warnButtonColorSet = true;
     }
     return _warnButtonColor;
@@ -50002,9 +47949,7 @@ class ThemeSettings {
   String get tileTitleAlignment {
     if (!_tileTitleAlignmentSet &&
         _apiMapResponse.containsKey('tile_title_alignment')) {
-      _tileTitleAlignment = _apiMapResponse['tile_title_alignment'] == null
-          ? null
-          : _apiMapResponse['tile_title_alignment'].toString();
+      _tileTitleAlignment = _apiMapResponse['tile_title_alignment']?.toString();
       _tileTitleAlignmentSet = true;
     }
     return _tileTitleAlignment;
@@ -50139,9 +48084,7 @@ class Timezone {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -50156,9 +48099,7 @@ class Timezone {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -50173,9 +48114,7 @@ class Timezone {
 
   String get group {
     if (!_groupSet && _apiMapResponse.containsKey('group')) {
-      _group = _apiMapResponse['group'] == null
-          ? null
-          : _apiMapResponse['group'].toString();
+      _group = _apiMapResponse['group']?.toString();
       _groupSet = true;
     }
     return _group;
@@ -50241,9 +48180,7 @@ class UpdateCommand {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -50258,9 +48195,7 @@ class UpdateCommand {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -50324,9 +48259,7 @@ class UpdateFolder {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -50341,9 +48274,7 @@ class UpdateFolder {
 
   String get parentId {
     if (!_parentIdSet && _apiMapResponse.containsKey('parent_id')) {
-      _parentId = _apiMapResponse['parent_id'] == null
-          ? null
-          : _apiMapResponse['parent_id'].toString();
+      _parentId = _apiMapResponse['parent_id']?.toString();
       _parentIdSet = true;
     }
     return _parentId;
@@ -50521,9 +48452,7 @@ class User {
 
   String get avatarUrl {
     if (!_avatarUrlSet && _apiMapResponse.containsKey('avatar_url')) {
-      _avatarUrl = _apiMapResponse['avatar_url'] == null
-          ? null
-          : _apiMapResponse['avatar_url'].toString();
+      _avatarUrl = _apiMapResponse['avatar_url']?.toString();
       _avatarUrlSet = true;
     }
     return _avatarUrl;
@@ -50540,9 +48469,7 @@ class User {
     if (!_avatarUrlWithoutSizingSet &&
         _apiMapResponse.containsKey('avatar_url_without_sizing')) {
       _avatarUrlWithoutSizing =
-          _apiMapResponse['avatar_url_without_sizing'] == null
-              ? null
-              : _apiMapResponse['avatar_url_without_sizing'].toString();
+          _apiMapResponse['avatar_url_without_sizing']?.toString();
       _avatarUrlWithoutSizingSet = true;
     }
     return _avatarUrlWithoutSizing;
@@ -50720,9 +48647,7 @@ class User {
 
   String get displayName {
     if (!_displayNameSet && _apiMapResponse.containsKey('display_name')) {
-      _displayName = _apiMapResponse['display_name'] == null
-          ? null
-          : _apiMapResponse['display_name'].toString();
+      _displayName = _apiMapResponse['display_name']?.toString();
       _displayNameSet = true;
     }
     return _displayName;
@@ -50737,9 +48662,7 @@ class User {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -50770,9 +48693,7 @@ class User {
 
   String get firstName {
     if (!_firstNameSet && _apiMapResponse.containsKey('first_name')) {
-      _firstName = _apiMapResponse['first_name'] == null
-          ? null
-          : _apiMapResponse['first_name'].toString();
+      _firstName = _apiMapResponse['first_name']?.toString();
       _firstNameSet = true;
     }
     return _firstName;
@@ -50787,9 +48708,8 @@ class User {
 
   List<int> get groupIds {
     if (!_groupIdsSet && _apiMapResponse.containsKey('group_ids')) {
-      _groupIds = _apiMapResponse['group_ids'] == null
-          ? null
-          : _apiMapResponse['group_ids'].map<int>((i) => i as int).toList();
+      _groupIds =
+          _apiMapResponse['group_ids']?.map<int>((i) => i as int)?.toList();
       _groupIdsSet = true;
     }
     return _groupIds;
@@ -50804,9 +48724,7 @@ class User {
 
   String get homeFolderId {
     if (!_homeFolderIdSet && _apiMapResponse.containsKey('home_folder_id')) {
-      _homeFolderId = _apiMapResponse['home_folder_id'] == null
-          ? null
-          : _apiMapResponse['home_folder_id'].toString();
+      _homeFolderId = _apiMapResponse['home_folder_id']?.toString();
       _homeFolderIdSet = true;
     }
     return _homeFolderId;
@@ -50851,9 +48769,7 @@ class User {
 
   String get lastName {
     if (!_lastNameSet && _apiMapResponse.containsKey('last_name')) {
-      _lastName = _apiMapResponse['last_name'] == null
-          ? null
-          : _apiMapResponse['last_name'].toString();
+      _lastName = _apiMapResponse['last_name']?.toString();
       _lastNameSet = true;
     }
     return _lastName;
@@ -50868,9 +48784,7 @@ class User {
 
   String get locale {
     if (!_localeSet && _apiMapResponse.containsKey('locale')) {
-      _locale = _apiMapResponse['locale'] == null
-          ? null
-          : _apiMapResponse['locale'].toString();
+      _locale = _apiMapResponse['locale']?.toString();
       _localeSet = true;
     }
     return _locale;
@@ -50885,11 +48799,9 @@ class User {
 
   List<String> get lookerVersions {
     if (!_lookerVersionsSet && _apiMapResponse.containsKey('looker_versions')) {
-      _lookerVersions = _apiMapResponse['looker_versions'] == null
-          ? null
-          : _apiMapResponse['looker_versions']
-              .map<String>((i) => i as String)
-              .toList();
+      _lookerVersions = _apiMapResponse['looker_versions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _lookerVersionsSet = true;
     }
     return _lookerVersions;
@@ -50952,9 +48864,8 @@ class User {
 
   List<int> get roleIds {
     if (!_roleIdsSet && _apiMapResponse.containsKey('role_ids')) {
-      _roleIds = _apiMapResponse['role_ids'] == null
-          ? null
-          : _apiMapResponse['role_ids'].map<int>((i) => i as int).toList();
+      _roleIds =
+          _apiMapResponse['role_ids']?.map<int>((i) => i as int)?.toList();
       _roleIdsSet = true;
     }
     return _roleIds;
@@ -51085,9 +48996,7 @@ class User {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -51137,51 +49046,41 @@ class User {
     }
     if (_credentialsApi3Set ||
         _apiMapResponse.containsKey('credentials_api3')) {
-      json['credentials_api3'] = credentialsApi3 == null
-          ? null
-          : credentialsApi3.map((i) => i.toJson()).toList();
+      json['credentials_api3'] =
+          credentialsApi3?.map((i) => i.toJson())?.toList();
     }
     if (_credentialsEmailSet ||
         _apiMapResponse.containsKey('credentials_email')) {
-      json['credentials_email'] =
-          credentialsEmail == null ? null : credentialsEmail.toJson();
+      json['credentials_email'] = credentialsEmail?.toJson();
     }
     if (_credentialsEmbedSet ||
         _apiMapResponse.containsKey('credentials_embed')) {
-      json['credentials_embed'] = credentialsEmbed == null
-          ? null
-          : credentialsEmbed.map((i) => i.toJson()).toList();
+      json['credentials_embed'] =
+          credentialsEmbed?.map((i) => i.toJson())?.toList();
     }
     if (_credentialsGoogleSet ||
         _apiMapResponse.containsKey('credentials_google')) {
-      json['credentials_google'] =
-          credentialsGoogle == null ? null : credentialsGoogle.toJson();
+      json['credentials_google'] = credentialsGoogle?.toJson();
     }
     if (_credentialsLdapSet ||
         _apiMapResponse.containsKey('credentials_ldap')) {
-      json['credentials_ldap'] =
-          credentialsLdap == null ? null : credentialsLdap.toJson();
+      json['credentials_ldap'] = credentialsLdap?.toJson();
     }
     if (_credentialsLookerOpenidSet ||
         _apiMapResponse.containsKey('credentials_looker_openid')) {
-      json['credentials_looker_openid'] = credentialsLookerOpenid == null
-          ? null
-          : credentialsLookerOpenid.toJson();
+      json['credentials_looker_openid'] = credentialsLookerOpenid?.toJson();
     }
     if (_credentialsOidcSet ||
         _apiMapResponse.containsKey('credentials_oidc')) {
-      json['credentials_oidc'] =
-          credentialsOidc == null ? null : credentialsOidc.toJson();
+      json['credentials_oidc'] = credentialsOidc?.toJson();
     }
     if (_credentialsSamlSet ||
         _apiMapResponse.containsKey('credentials_saml')) {
-      json['credentials_saml'] =
-          credentialsSaml == null ? null : credentialsSaml.toJson();
+      json['credentials_saml'] = credentialsSaml?.toJson();
     }
     if (_credentialsTotpSet ||
         _apiMapResponse.containsKey('credentials_totp')) {
-      json['credentials_totp'] =
-          credentialsTotp == null ? null : credentialsTotp.toJson();
+      json['credentials_totp'] = credentialsTotp?.toJson();
     }
     if (_displayNameSet || _apiMapResponse.containsKey('display_name')) {
       json['display_name'] = displayName;
@@ -51233,8 +49132,7 @@ class User {
       json['role_ids'] = roleIds;
     }
     if (_sessionsSet || _apiMapResponse.containsKey('sessions')) {
-      json['sessions'] =
-          sessions == null ? null : sessions.map((i) => i.toJson()).toList();
+      json['sessions'] = sessions?.map((i) => i.toJson())?.toList();
     }
     if (_uiStateSet || _apiMapResponse.containsKey('ui_state')) {
       json['ui_state'] = uiState;
@@ -51341,9 +49239,7 @@ class UserAttribute {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -51358,9 +49254,7 @@ class UserAttribute {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -51375,9 +49269,7 @@ class UserAttribute {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -51392,9 +49284,7 @@ class UserAttribute {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -51486,9 +49376,7 @@ class UserAttribute {
     if (!_hiddenValueDomainWhitelistSet &&
         _apiMapResponse.containsKey('hidden_value_domain_whitelist')) {
       _hiddenValueDomainWhitelist =
-          _apiMapResponse['hidden_value_domain_whitelist'] == null
-              ? null
-              : _apiMapResponse['hidden_value_domain_whitelist'].toString();
+          _apiMapResponse['hidden_value_domain_whitelist']?.toString();
       _hiddenValueDomainWhitelistSet = true;
     }
     return _hiddenValueDomainWhitelist;
@@ -51762,9 +49650,7 @@ class UserAttributeGroupValue {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -51886,9 +49772,7 @@ class UserAttributeWithValue {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -51903,9 +49787,7 @@ class UserAttributeWithValue {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -51935,9 +49817,7 @@ class UserAttributeWithValue {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -52013,9 +49893,7 @@ class UserAttributeWithValue {
 
   String get source {
     if (!_sourceSet && _apiMapResponse.containsKey('source')) {
-      _source = _apiMapResponse['source'] == null
-          ? null
-          : _apiMapResponse['source'].toString();
+      _source = _apiMapResponse['source']?.toString();
       _sourceSet = true;
     }
     return _source;
@@ -52032,9 +49910,7 @@ class UserAttributeWithValue {
     if (!_hiddenValueDomainWhitelistSet &&
         _apiMapResponse.containsKey('hidden_value_domain_whitelist')) {
       _hiddenValueDomainWhitelist =
-          _apiMapResponse['hidden_value_domain_whitelist'] == null
-              ? null
-              : _apiMapResponse['hidden_value_domain_whitelist'].toString();
+          _apiMapResponse['hidden_value_domain_whitelist']?.toString();
       _hiddenValueDomainWhitelistSet = true;
     }
     return _hiddenValueDomainWhitelist;
@@ -52124,9 +50000,7 @@ class UserEmailOnly {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -52226,9 +50100,7 @@ class UserLoginLockout {
 
   String get key {
     if (!_keySet && _apiMapResponse.containsKey('key')) {
-      _key = _apiMapResponse['key'] == null
-          ? null
-          : _apiMapResponse['key'].toString();
+      _key = _apiMapResponse['key']?.toString();
       _keySet = true;
     }
     return _key;
@@ -52243,9 +50115,7 @@ class UserLoginLockout {
 
   String get authType {
     if (!_authTypeSet && _apiMapResponse.containsKey('auth_type')) {
-      _authType = _apiMapResponse['auth_type'] == null
-          ? null
-          : _apiMapResponse['auth_type'].toString();
+      _authType = _apiMapResponse['auth_type']?.toString();
       _authTypeSet = true;
     }
     return _authType;
@@ -52260,9 +50130,7 @@ class UserLoginLockout {
 
   String get ip {
     if (!_ipSet && _apiMapResponse.containsKey('ip')) {
-      _ip = _apiMapResponse['ip'] == null
-          ? null
-          : _apiMapResponse['ip'].toString();
+      _ip = _apiMapResponse['ip']?.toString();
       _ipSet = true;
     }
     return _ip;
@@ -52292,9 +50160,7 @@ class UserLoginLockout {
 
   String get remoteId {
     if (!_remoteIdSet && _apiMapResponse.containsKey('remote_id')) {
-      _remoteId = _apiMapResponse['remote_id'] == null
-          ? null
-          : _apiMapResponse['remote_id'].toString();
+      _remoteId = _apiMapResponse['remote_id']?.toString();
       _remoteIdSet = true;
     }
     return _remoteId;
@@ -52309,9 +50175,7 @@ class UserLoginLockout {
 
   String get fullName {
     if (!_fullNameSet && _apiMapResponse.containsKey('full_name')) {
-      _fullName = _apiMapResponse['full_name'] == null
-          ? null
-          : _apiMapResponse['full_name'].toString();
+      _fullName = _apiMapResponse['full_name']?.toString();
       _fullNameSet = true;
     }
     return _fullName;
@@ -52326,9 +50190,7 @@ class UserLoginLockout {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -52427,8 +50289,7 @@ class UserLoginLockout {
       json['fail_count'] = failCount;
     }
     if (_lockoutAtSet || _apiMapResponse.containsKey('lockout_at')) {
-      json['lockout_at'] =
-          lockoutAt == null ? null : lockoutAt.toIso8601String();
+      json['lockout_at'] = lockoutAt?.toIso8601String();
     }
     return json;
   }
@@ -52494,9 +50355,7 @@ class UserPublic {
 
   String get firstName {
     if (!_firstNameSet && _apiMapResponse.containsKey('first_name')) {
-      _firstName = _apiMapResponse['first_name'] == null
-          ? null
-          : _apiMapResponse['first_name'].toString();
+      _firstName = _apiMapResponse['first_name']?.toString();
       _firstNameSet = true;
     }
     return _firstName;
@@ -52511,9 +50370,7 @@ class UserPublic {
 
   String get lastName {
     if (!_lastNameSet && _apiMapResponse.containsKey('last_name')) {
-      _lastName = _apiMapResponse['last_name'] == null
-          ? null
-          : _apiMapResponse['last_name'].toString();
+      _lastName = _apiMapResponse['last_name']?.toString();
       _lastNameSet = true;
     }
     return _lastName;
@@ -52528,9 +50385,7 @@ class UserPublic {
 
   String get displayName {
     if (!_displayNameSet && _apiMapResponse.containsKey('display_name')) {
-      _displayName = _apiMapResponse['display_name'] == null
-          ? null
-          : _apiMapResponse['display_name'].toString();
+      _displayName = _apiMapResponse['display_name']?.toString();
       _displayNameSet = true;
     }
     return _displayName;
@@ -52545,9 +50400,7 @@ class UserPublic {
 
   String get avatarUrl {
     if (!_avatarUrlSet && _apiMapResponse.containsKey('avatar_url')) {
-      _avatarUrl = _apiMapResponse['avatar_url'] == null
-          ? null
-          : _apiMapResponse['avatar_url'].toString();
+      _avatarUrl = _apiMapResponse['avatar_url']?.toString();
       _avatarUrlSet = true;
     }
     return _avatarUrl;
@@ -52562,9 +50415,7 @@ class UserPublic {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -52646,9 +50497,7 @@ class ValidationError {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -52684,9 +50533,7 @@ class ValidationError {
   String get documentationUrl {
     if (!_documentationUrlSet &&
         _apiMapResponse.containsKey('documentation_url')) {
-      _documentationUrl = _apiMapResponse['documentation_url'] == null
-          ? null
-          : _apiMapResponse['documentation_url'].toString();
+      _documentationUrl = _apiMapResponse['documentation_url']?.toString();
       _documentationUrlSet = true;
     }
     return _documentationUrl;
@@ -52729,8 +50576,7 @@ class ValidationError {
       json['message'] = message;
     }
     if (_errorsSet || _apiMapResponse.containsKey('errors')) {
-      json['errors'] =
-          errors == null ? null : errors.map((i) => i.toJson()).toList();
+      json['errors'] = errors?.map((i) => i.toJson())?.toList();
     }
     if (_documentationUrlSet ||
         _apiMapResponse.containsKey('documentation_url')) {
@@ -52761,9 +50607,7 @@ class ValidationErrorDetail {
 
   String get field {
     if (!_fieldSet && _apiMapResponse.containsKey('field')) {
-      _field = _apiMapResponse['field'] == null
-          ? null
-          : _apiMapResponse['field'].toString();
+      _field = _apiMapResponse['field']?.toString();
       _fieldSet = true;
     }
     return _field;
@@ -52778,9 +50622,7 @@ class ValidationErrorDetail {
 
   String get code {
     if (!_codeSet && _apiMapResponse.containsKey('code')) {
-      _code = _apiMapResponse['code'] == null
-          ? null
-          : _apiMapResponse['code'].toString();
+      _code = _apiMapResponse['code']?.toString();
       _codeSet = true;
     }
     return _code;
@@ -52795,9 +50637,7 @@ class ValidationErrorDetail {
 
   String get message {
     if (!_messageSet && _apiMapResponse.containsKey('message')) {
-      _message = _apiMapResponse['message'] == null
-          ? null
-          : _apiMapResponse['message'].toString();
+      _message = _apiMapResponse['message']?.toString();
       _messageSet = true;
     }
     return _message;
@@ -52813,9 +50653,7 @@ class ValidationErrorDetail {
   String get documentationUrl {
     if (!_documentationUrlSet &&
         _apiMapResponse.containsKey('documentation_url')) {
-      _documentationUrl = _apiMapResponse['documentation_url'] == null
-          ? null
-          : _apiMapResponse['documentation_url'].toString();
+      _documentationUrl = _apiMapResponse['documentation_url']?.toString();
       _documentationUrlSet = true;
     }
     return _documentationUrl;
@@ -52949,9 +50787,7 @@ class WelcomeEmailTest {
 
   String get content {
     if (!_contentSet && _apiMapResponse.containsKey('content')) {
-      _content = _apiMapResponse['content'] == null
-          ? null
-          : _apiMapResponse['content'].toString();
+      _content = _apiMapResponse['content']?.toString();
       _contentSet = true;
     }
     return _content;
@@ -52966,9 +50802,7 @@ class WelcomeEmailTest {
 
   String get subject {
     if (!_subjectSet && _apiMapResponse.containsKey('subject')) {
-      _subject = _apiMapResponse['subject'] == null
-          ? null
-          : _apiMapResponse['subject'].toString();
+      _subject = _apiMapResponse['subject']?.toString();
       _subjectSet = true;
     }
     return _subject;
@@ -52983,9 +50817,7 @@ class WelcomeEmailTest {
 
   String get header {
     if (!_headerSet && _apiMapResponse.containsKey('header')) {
-      _header = _apiMapResponse['header'] == null
-          ? null
-          : _apiMapResponse['header'].toString();
+      _header = _apiMapResponse['header']?.toString();
       _headerSet = true;
     }
     return _header;
@@ -53109,9 +50941,7 @@ class WhitelabelConfiguration {
 
   String get logoFile {
     if (!_logoFileSet && _apiMapResponse.containsKey('logo_file')) {
-      _logoFile = _apiMapResponse['logo_file'] == null
-          ? null
-          : _apiMapResponse['logo_file'].toString();
+      _logoFile = _apiMapResponse['logo_file']?.toString();
       _logoFileSet = true;
     }
     return _logoFile;
@@ -53126,9 +50956,7 @@ class WhitelabelConfiguration {
 
   String get logoUrl {
     if (!_logoUrlSet && _apiMapResponse.containsKey('logo_url')) {
-      _logoUrl = _apiMapResponse['logo_url'] == null
-          ? null
-          : _apiMapResponse['logo_url'].toString();
+      _logoUrl = _apiMapResponse['logo_url']?.toString();
       _logoUrlSet = true;
     }
     return _logoUrl;
@@ -53143,9 +50971,7 @@ class WhitelabelConfiguration {
 
   String get faviconFile {
     if (!_faviconFileSet && _apiMapResponse.containsKey('favicon_file')) {
-      _faviconFile = _apiMapResponse['favicon_file'] == null
-          ? null
-          : _apiMapResponse['favicon_file'].toString();
+      _faviconFile = _apiMapResponse['favicon_file']?.toString();
       _faviconFileSet = true;
     }
     return _faviconFile;
@@ -53160,9 +50986,7 @@ class WhitelabelConfiguration {
 
   String get faviconUrl {
     if (!_faviconUrlSet && _apiMapResponse.containsKey('favicon_url')) {
-      _faviconUrl = _apiMapResponse['favicon_url'] == null
-          ? null
-          : _apiMapResponse['favicon_url'].toString();
+      _faviconUrl = _apiMapResponse['favicon_url']?.toString();
       _faviconUrlSet = true;
     }
     return _faviconUrl;
@@ -53177,9 +51001,7 @@ class WhitelabelConfiguration {
 
   String get defaultTitle {
     if (!_defaultTitleSet && _apiMapResponse.containsKey('default_title')) {
-      _defaultTitle = _apiMapResponse['default_title'] == null
-          ? null
-          : _apiMapResponse['default_title'].toString();
+      _defaultTitle = _apiMapResponse['default_title']?.toString();
       _defaultTitleSet = true;
     }
     return _defaultTitle;
@@ -53464,9 +51286,7 @@ class Workspace {
 
   String get id {
     if (!_idSet && _apiMapResponse.containsKey('id')) {
-      _id = _apiMapResponse['id'] == null
-          ? null
-          : _apiMapResponse['id'].toString();
+      _id = _apiMapResponse['id']?.toString();
       _idSet = true;
     }
     return _id;
@@ -53530,8 +51350,7 @@ class Workspace {
       json['id'] = id;
     }
     if (_projectsSet || _apiMapResponse.containsKey('projects')) {
-      json['projects'] =
-          projects == null ? null : projects.map((i) => i.toJson()).toList();
+      json['projects'] = projects?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -53640,9 +51459,7 @@ class WriteAlert {
 
   String get cron {
     if (!_cronSet && _apiMapResponse.containsKey('cron')) {
-      _cron = _apiMapResponse['cron'] == null
-          ? null
-          : _apiMapResponse['cron'].toString();
+      _cron = _apiMapResponse['cron']?.toString();
       _cronSet = true;
     }
     return _cron;
@@ -53657,9 +51474,7 @@ class WriteAlert {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -53690,9 +51505,7 @@ class WriteAlert {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -53758,9 +51571,7 @@ class WriteAlert {
 
   String get disabledReason {
     if (!_disabledReasonSet && _apiMapResponse.containsKey('disabled_reason')) {
-      _disabledReason = _apiMapResponse['disabled_reason'] == null
-          ? null
-          : _apiMapResponse['disabled_reason'].toString();
+      _disabledReason = _apiMapResponse['disabled_reason']?.toString();
       _disabledReasonSet = true;
     }
     return _disabledReason;
@@ -53810,9 +51621,7 @@ class WriteAlert {
     if (!_investigativeContentIdSet &&
         _apiMapResponse.containsKey('investigative_content_id')) {
       _investigativeContentId =
-          _apiMapResponse['investigative_content_id'] == null
-              ? null
-              : _apiMapResponse['investigative_content_id'].toString();
+          _apiMapResponse['investigative_content_id']?.toString();
       _investigativeContentIdSet = true;
     }
     return _investigativeContentId;
@@ -53828,9 +51637,7 @@ class WriteAlert {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -53845,9 +51652,7 @@ class WriteAlert {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -53937,9 +51742,8 @@ class WriteAlert {
     var json = {};
     if (_appliedDashboardFiltersSet ||
         _apiMapResponse.containsKey('applied_dashboard_filters')) {
-      json['applied_dashboard_filters'] = appliedDashboardFilters == null
-          ? null
-          : appliedDashboardFilters.map((i) => i.toJson()).toList();
+      json['applied_dashboard_filters'] =
+          appliedDashboardFilters?.map((i) => i.toJson())?.toList();
     }
     if (_comparisonTypeSet || _apiMapResponse.containsKey('comparison_type')) {
       json['comparison_type'] =
@@ -53959,12 +51763,10 @@ class WriteAlert {
       json['description'] = description;
     }
     if (_destinationsSet || _apiMapResponse.containsKey('destinations')) {
-      json['destinations'] = destinations == null
-          ? null
-          : destinations.map((i) => i.toJson()).toList();
+      json['destinations'] = destinations?.map((i) => i.toJson())?.toList();
     }
     if (_fieldSet || _apiMapResponse.containsKey('field')) {
-      json['field'] = field == null ? null : field.toJson();
+      json['field'] = field?.toJson();
     }
     if (_isDisabledSet || _apiMapResponse.containsKey('is_disabled')) {
       json['is_disabled'] = isDisabled;
@@ -54000,9 +51802,7 @@ class WriteAlert {
     }
     if (_timeSeriesConditionStateSet ||
         _apiMapResponse.containsKey('time_series_condition_state')) {
-      json['time_series_condition_state'] = timeSeriesConditionState == null
-          ? null
-          : timeSeriesConditionState.toJson();
+      json['time_series_condition_state'] = timeSeriesConditionState?.toJson();
     }
     return json;
   }
@@ -54022,9 +51822,7 @@ class WriteApiSession {
 
   String get workspaceId {
     if (!_workspaceIdSet && _apiMapResponse.containsKey('workspace_id')) {
-      _workspaceId = _apiMapResponse['workspace_id'] == null
-          ? null
-          : _apiMapResponse['workspace_id'].toString();
+      _workspaceId = _apiMapResponse['workspace_id']?.toString();
       _workspaceIdSet = true;
     }
     return _workspaceId;
@@ -54096,9 +51894,7 @@ class WriteBackupConfiguration {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -54114,9 +51910,7 @@ class WriteBackupConfiguration {
   String get customS3Bucket {
     if (!_customS3BucketSet &&
         _apiMapResponse.containsKey('custom_s3_bucket')) {
-      _customS3Bucket = _apiMapResponse['custom_s3_bucket'] == null
-          ? null
-          : _apiMapResponse['custom_s3_bucket'].toString();
+      _customS3Bucket = _apiMapResponse['custom_s3_bucket']?.toString();
       _customS3BucketSet = true;
     }
     return _customS3Bucket;
@@ -54132,9 +51926,8 @@ class WriteBackupConfiguration {
   String get customS3BucketRegion {
     if (!_customS3BucketRegionSet &&
         _apiMapResponse.containsKey('custom_s3_bucket_region')) {
-      _customS3BucketRegion = _apiMapResponse['custom_s3_bucket_region'] == null
-          ? null
-          : _apiMapResponse['custom_s3_bucket_region'].toString();
+      _customS3BucketRegion =
+          _apiMapResponse['custom_s3_bucket_region']?.toString();
       _customS3BucketRegionSet = true;
     }
     return _customS3BucketRegion;
@@ -54149,9 +51942,7 @@ class WriteBackupConfiguration {
 
   String get customS3Key {
     if (!_customS3KeySet && _apiMapResponse.containsKey('custom_s3_key')) {
-      _customS3Key = _apiMapResponse['custom_s3_key'] == null
-          ? null
-          : _apiMapResponse['custom_s3_key'].toString();
+      _customS3Key = _apiMapResponse['custom_s3_key']?.toString();
       _customS3KeySet = true;
     }
     return _customS3Key;
@@ -54167,9 +51958,7 @@ class WriteBackupConfiguration {
   String get customS3Secret {
     if (!_customS3SecretSet &&
         _apiMapResponse.containsKey('custom_s3_secret')) {
-      _customS3Secret = _apiMapResponse['custom_s3_secret'] == null
-          ? null
-          : _apiMapResponse['custom_s3_secret'].toString();
+      _customS3Secret = _apiMapResponse['custom_s3_secret']?.toString();
       _customS3SecretSet = true;
     }
     return _customS3Secret;
@@ -54268,9 +52057,7 @@ class WriteBoard {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -54285,9 +52072,8 @@ class WriteBoard {
 
   List<int> get sectionOrder {
     if (!_sectionOrderSet && _apiMapResponse.containsKey('section_order')) {
-      _sectionOrder = _apiMapResponse['section_order'] == null
-          ? null
-          : _apiMapResponse['section_order'].map<int>((i) => i as int).toList();
+      _sectionOrder =
+          _apiMapResponse['section_order']?.map<int>((i) => i as int)?.toList();
       _sectionOrderSet = true;
     }
     return _sectionOrder;
@@ -54302,9 +52088,7 @@ class WriteBoard {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -54344,8 +52128,7 @@ class WriteBoard {
   Map toJson() {
     var json = {};
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_descriptionSet || _apiMapResponse.containsKey('description')) {
       json['description'] = description;
@@ -54396,9 +52179,7 @@ class WriteBoardItem {
   String get customDescription {
     if (!_customDescriptionSet &&
         _apiMapResponse.containsKey('custom_description')) {
-      _customDescription = _apiMapResponse['custom_description'] == null
-          ? null
-          : _apiMapResponse['custom_description'].toString();
+      _customDescription = _apiMapResponse['custom_description']?.toString();
       _customDescriptionSet = true;
     }
     return _customDescription;
@@ -54413,9 +52194,7 @@ class WriteBoardItem {
 
   String get customTitle {
     if (!_customTitleSet && _apiMapResponse.containsKey('custom_title')) {
-      _customTitle = _apiMapResponse['custom_title'] == null
-          ? null
-          : _apiMapResponse['custom_title'].toString();
+      _customTitle = _apiMapResponse['custom_title']?.toString();
       _customTitleSet = true;
     }
     return _customTitle;
@@ -54430,9 +52209,7 @@ class WriteBoardItem {
 
   String get customUrl {
     if (!_customUrlSet && _apiMapResponse.containsKey('custom_url')) {
-      _customUrl = _apiMapResponse['custom_url'] == null
-          ? null
-          : _apiMapResponse['custom_url'].toString();
+      _customUrl = _apiMapResponse['custom_url']?.toString();
       _customUrlSet = true;
     }
     return _customUrl;
@@ -54478,9 +52255,7 @@ class WriteBoardItem {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -54496,9 +52271,7 @@ class WriteBoardItem {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -54625,9 +52398,7 @@ class WriteBoardSection {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -54657,9 +52428,8 @@ class WriteBoardSection {
 
   List<int> get itemOrder {
     if (!_itemOrderSet && _apiMapResponse.containsKey('item_order')) {
-      _itemOrder = _apiMapResponse['item_order'] == null
-          ? null
-          : _apiMapResponse['item_order'].map<int>((i) => i as int).toList();
+      _itemOrder =
+          _apiMapResponse['item_order']?.map<int>((i) => i as int)?.toList();
       _itemOrderSet = true;
     }
     return _itemOrder;
@@ -54674,9 +52444,7 @@ class WriteBoardSection {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -54716,8 +52484,7 @@ class WriteBoardSection {
   Map toJson() {
     var json = {};
     if (_deletedAtSet || _apiMapResponse.containsKey('deleted_at')) {
-      json['deleted_at'] =
-          deletedAt == null ? null : deletedAt.toIso8601String();
+      json['deleted_at'] = deletedAt?.toIso8601String();
     }
     if (_descriptionSet || _apiMapResponse.containsKey('description')) {
       json['description'] = description;
@@ -54758,9 +52525,7 @@ class WriteColorCollection {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -54867,21 +52632,18 @@ class WriteColorCollection {
     }
     if (_categoricalPalettesSet ||
         _apiMapResponse.containsKey('categoricalPalettes')) {
-      json['categoricalPalettes'] = categoricalPalettes == null
-          ? null
-          : categoricalPalettes.map((i) => i.toJson()).toList();
+      json['categoricalPalettes'] =
+          categoricalPalettes?.map((i) => i.toJson())?.toList();
     }
     if (_sequentialPalettesSet ||
         _apiMapResponse.containsKey('sequentialPalettes')) {
-      json['sequentialPalettes'] = sequentialPalettes == null
-          ? null
-          : sequentialPalettes.map((i) => i.toJson()).toList();
+      json['sequentialPalettes'] =
+          sequentialPalettes?.map((i) => i.toJson())?.toList();
     }
     if (_divergingPalettesSet ||
         _apiMapResponse.containsKey('divergingPalettes')) {
-      json['divergingPalettes'] = divergingPalettes == null
-          ? null
-          : divergingPalettes.map((i) => i.toJson()).toList();
+      json['divergingPalettes'] =
+          divergingPalettes?.map((i) => i.toJson())?.toList();
     }
     return json;
   }
@@ -54910,9 +52672,7 @@ class WriteCommand {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -54927,9 +52687,7 @@ class WriteCommand {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -54945,9 +52703,7 @@ class WriteCommand {
   String get linkedContentId {
     if (!_linkedContentIdSet &&
         _apiMapResponse.containsKey('linked_content_id')) {
-      _linkedContentId = _apiMapResponse['linked_content_id'] == null
-          ? null
-          : _apiMapResponse['linked_content_id'].toString();
+      _linkedContentId = _apiMapResponse['linked_content_id']?.toString();
       _linkedContentIdSet = true;
     }
     return _linkedContentId;
@@ -55146,10 +52902,10 @@ class WriteContentFavorite {
       json['content_metadata_id'] = contentMetadataId;
     }
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_dashboardSet || _apiMapResponse.containsKey('dashboard')) {
-      json['dashboard'] = dashboard == null ? null : dashboard.toJson();
+      json['dashboard'] = dashboard?.toJson();
     }
     return json;
   }
@@ -55265,9 +53021,7 @@ class WriteCreateDashboardFilter {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -55282,9 +53036,7 @@ class WriteCreateDashboardFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -55299,9 +53051,7 @@ class WriteCreateDashboardFilter {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -55316,9 +53066,7 @@ class WriteCreateDashboardFilter {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -55333,9 +53081,7 @@ class WriteCreateDashboardFilter {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -55350,9 +53096,7 @@ class WriteCreateDashboardFilter {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -55367,9 +53111,7 @@ class WriteCreateDashboardFilter {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -55384,9 +53126,7 @@ class WriteCreateDashboardFilter {
 
   String get dimension {
     if (!_dimensionSet && _apiMapResponse.containsKey('dimension')) {
-      _dimension = _apiMapResponse['dimension'] == null
-          ? null
-          : _apiMapResponse['dimension'].toString();
+      _dimension = _apiMapResponse['dimension']?.toString();
       _dimensionSet = true;
     }
     return _dimension;
@@ -55417,11 +53157,9 @@ class WriteCreateDashboardFilter {
   List<String> get listensToFilters {
     if (!_listensToFiltersSet &&
         _apiMapResponse.containsKey('listens_to_filters')) {
-      _listensToFilters = _apiMapResponse['listens_to_filters'] == null
-          ? null
-          : _apiMapResponse['listens_to_filters']
-              .map<String>((i) => i as String)
-              .toList();
+      _listensToFilters = _apiMapResponse['listens_to_filters']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _listensToFiltersSet = true;
     }
     return _listensToFilters;
@@ -55611,9 +53349,7 @@ class WriteCreateQueryTask {
 
   String get source {
     if (!_sourceSet && _apiMapResponse.containsKey('source')) {
-      _source = _apiMapResponse['source'] == null
-          ? null
-          : _apiMapResponse['source'].toString();
+      _source = _apiMapResponse['source']?.toString();
       _sourceSet = true;
     }
     return _source;
@@ -55643,9 +53379,7 @@ class WriteCreateQueryTask {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -55660,9 +53394,7 @@ class WriteCreateQueryTask {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -55740,9 +53472,7 @@ class WriteCredentialsEmail {
 
   String get email {
     if (!_emailSet && _apiMapResponse.containsKey('email')) {
-      _email = _apiMapResponse['email'] == null
-          ? null
-          : _apiMapResponse['email'].toString();
+      _email = _apiMapResponse['email']?.toString();
       _emailSet = true;
     }
     return _email;
@@ -55890,9 +53620,7 @@ class WriteDashboard {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -55922,9 +53650,7 @@ class WriteDashboard {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -55940,9 +53666,7 @@ class WriteDashboard {
   String get refreshInterval {
     if (!_refreshIntervalSet &&
         _apiMapResponse.containsKey('refresh_interval')) {
-      _refreshInterval = _apiMapResponse['refresh_interval'] == null
-          ? null
-          : _apiMapResponse['refresh_interval'].toString();
+      _refreshInterval = _apiMapResponse['refresh_interval']?.toString();
       _refreshIntervalSet = true;
     }
     return _refreshInterval;
@@ -55976,9 +53700,7 @@ class WriteDashboard {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -55993,9 +53715,7 @@ class WriteDashboard {
 
   String get slug {
     if (!_slugSet && _apiMapResponse.containsKey('slug')) {
-      _slug = _apiMapResponse['slug'] == null
-          ? null
-          : _apiMapResponse['slug'].toString();
+      _slug = _apiMapResponse['slug']?.toString();
       _slugSet = true;
     }
     return _slug;
@@ -56011,9 +53731,7 @@ class WriteDashboard {
   String get preferredViewer {
     if (!_preferredViewerSet &&
         _apiMapResponse.containsKey('preferred_viewer')) {
-      _preferredViewer = _apiMapResponse['preferred_viewer'] == null
-          ? null
-          : _apiMapResponse['preferred_viewer'].toString();
+      _preferredViewer = _apiMapResponse['preferred_viewer']?.toString();
       _preferredViewerSet = true;
     }
     return _preferredViewer;
@@ -56047,9 +53765,7 @@ class WriteDashboard {
   String get backgroundColor {
     if (!_backgroundColorSet &&
         _apiMapResponse.containsKey('background_color')) {
-      _backgroundColor = _apiMapResponse['background_color'] == null
-          ? null
-          : _apiMapResponse['background_color'].toString();
+      _backgroundColor = _apiMapResponse['background_color']?.toString();
       _backgroundColorSet = true;
     }
     return _backgroundColor;
@@ -56112,9 +53828,7 @@ class WriteDashboard {
   String get loadConfiguration {
     if (!_loadConfigurationSet &&
         _apiMapResponse.containsKey('load_configuration')) {
-      _loadConfiguration = _apiMapResponse['load_configuration'] == null
-          ? null
-          : _apiMapResponse['load_configuration'].toString();
+      _loadConfiguration = _apiMapResponse['load_configuration']?.toString();
       _loadConfigurationSet = true;
     }
     return _loadConfiguration;
@@ -56129,9 +53843,7 @@ class WriteDashboard {
 
   String get lookmlLinkId {
     if (!_lookmlLinkIdSet && _apiMapResponse.containsKey('lookml_link_id')) {
-      _lookmlLinkId = _apiMapResponse['lookml_link_id'] == null
-          ? null
-          : _apiMapResponse['lookml_link_id'].toString();
+      _lookmlLinkId = _apiMapResponse['lookml_link_id']?.toString();
       _lookmlLinkIdSet = true;
     }
     return _lookmlLinkId;
@@ -56177,9 +53889,7 @@ class WriteDashboard {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -56195,9 +53905,7 @@ class WriteDashboard {
   String get textTileTextColor {
     if (!_textTileTextColorSet &&
         _apiMapResponse.containsKey('text_tile_text_color')) {
-      _textTileTextColor = _apiMapResponse['text_tile_text_color'] == null
-          ? null
-          : _apiMapResponse['text_tile_text_color'].toString();
+      _textTileTextColor = _apiMapResponse['text_tile_text_color']?.toString();
       _textTileTextColorSet = true;
     }
     return _textTileTextColor;
@@ -56213,9 +53921,8 @@ class WriteDashboard {
   String get tileBackgroundColor {
     if (!_tileBackgroundColorSet &&
         _apiMapResponse.containsKey('tile_background_color')) {
-      _tileBackgroundColor = _apiMapResponse['tile_background_color'] == null
-          ? null
-          : _apiMapResponse['tile_background_color'].toString();
+      _tileBackgroundColor =
+          _apiMapResponse['tile_background_color']?.toString();
       _tileBackgroundColorSet = true;
     }
     return _tileBackgroundColor;
@@ -56230,9 +53937,7 @@ class WriteDashboard {
 
   String get tileTextColor {
     if (!_tileTextColorSet && _apiMapResponse.containsKey('tile_text_color')) {
-      _tileTextColor = _apiMapResponse['tile_text_color'] == null
-          ? null
-          : _apiMapResponse['tile_text_color'].toString();
+      _tileTextColor = _apiMapResponse['tile_text_color']?.toString();
       _tileTextColorSet = true;
     }
     return _tileTextColor;
@@ -56247,9 +53952,7 @@ class WriteDashboard {
 
   String get titleColor {
     if (!_titleColorSet && _apiMapResponse.containsKey('title_color')) {
-      _titleColor = _apiMapResponse['title_color'] == null
-          ? null
-          : _apiMapResponse['title_color'].toString();
+      _titleColor = _apiMapResponse['title_color']?.toString();
       _titleColorSet = true;
     }
     return _titleColor;
@@ -56318,7 +54021,7 @@ class WriteDashboard {
       json['refresh_interval'] = refreshInterval;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_titleSet || _apiMapResponse.containsKey('title')) {
       json['title'] = title;
@@ -56382,7 +54085,7 @@ class WriteDashboard {
       json['title_color'] = titleColor;
     }
     if (_appearanceSet || _apiMapResponse.containsKey('appearance')) {
-      json['appearance'] = appearance == null ? null : appearance.toJson();
+      json['appearance'] = appearance?.toJson();
     }
     return json;
   }
@@ -56446,7 +54149,7 @@ class WriteDashboardBase {
   Map toJson() {
     var json = {};
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     return json;
   }
@@ -56517,9 +54220,7 @@ class WriteDashboardElement {
 
   String get bodyText {
     if (!_bodyTextSet && _apiMapResponse.containsKey('body_text')) {
-      _bodyText = _apiMapResponse['body_text'] == null
-          ? null
-          : _apiMapResponse['body_text'].toString();
+      _bodyText = _apiMapResponse['body_text']?.toString();
       _bodyTextSet = true;
     }
     return _bodyText;
@@ -56534,9 +54235,7 @@ class WriteDashboardElement {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -56570,9 +54269,7 @@ class WriteDashboardElement {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -56587,9 +54284,7 @@ class WriteDashboardElement {
 
   String get mergeResultId {
     if (!_mergeResultIdSet && _apiMapResponse.containsKey('merge_result_id')) {
-      _mergeResultId = _apiMapResponse['merge_result_id'] == null
-          ? null
-          : _apiMapResponse['merge_result_id'].toString();
+      _mergeResultId = _apiMapResponse['merge_result_id']?.toString();
       _mergeResultIdSet = true;
     }
     return _mergeResultId;
@@ -56604,9 +54299,7 @@ class WriteDashboardElement {
 
   String get noteDisplay {
     if (!_noteDisplaySet && _apiMapResponse.containsKey('note_display')) {
-      _noteDisplay = _apiMapResponse['note_display'] == null
-          ? null
-          : _apiMapResponse['note_display'].toString();
+      _noteDisplay = _apiMapResponse['note_display']?.toString();
       _noteDisplaySet = true;
     }
     return _noteDisplay;
@@ -56621,9 +54314,7 @@ class WriteDashboardElement {
 
   String get noteState {
     if (!_noteStateSet && _apiMapResponse.containsKey('note_state')) {
-      _noteState = _apiMapResponse['note_state'] == null
-          ? null
-          : _apiMapResponse['note_state'].toString();
+      _noteState = _apiMapResponse['note_state']?.toString();
       _noteStateSet = true;
     }
     return _noteState;
@@ -56638,9 +54329,7 @@ class WriteDashboardElement {
 
   String get noteText {
     if (!_noteTextSet && _apiMapResponse.containsKey('note_text')) {
-      _noteText = _apiMapResponse['note_text'] == null
-          ? null
-          : _apiMapResponse['note_text'].toString();
+      _noteText = _apiMapResponse['note_text']?.toString();
       _noteTextSet = true;
     }
     return _noteText;
@@ -56690,9 +54379,7 @@ class WriteDashboardElement {
   String get refreshInterval {
     if (!_refreshIntervalSet &&
         _apiMapResponse.containsKey('refresh_interval')) {
-      _refreshInterval = _apiMapResponse['refresh_interval'] == null
-          ? null
-          : _apiMapResponse['refresh_interval'].toString();
+      _refreshInterval = _apiMapResponse['refresh_interval']?.toString();
       _refreshIntervalSet = true;
     }
     return _refreshInterval;
@@ -56741,9 +54428,7 @@ class WriteDashboardElement {
 
   String get subtitleText {
     if (!_subtitleTextSet && _apiMapResponse.containsKey('subtitle_text')) {
-      _subtitleText = _apiMapResponse['subtitle_text'] == null
-          ? null
-          : _apiMapResponse['subtitle_text'].toString();
+      _subtitleText = _apiMapResponse['subtitle_text']?.toString();
       _subtitleTextSet = true;
     }
     return _subtitleText;
@@ -56758,9 +54443,7 @@ class WriteDashboardElement {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -56790,9 +54473,7 @@ class WriteDashboardElement {
 
   String get titleText {
     if (!_titleTextSet && _apiMapResponse.containsKey('title_text')) {
-      _titleText = _apiMapResponse['title_text'] == null
-          ? null
-          : _apiMapResponse['title_text'].toString();
+      _titleText = _apiMapResponse['title_text']?.toString();
       _titleTextSet = true;
     }
     return _titleText;
@@ -56807,9 +54488,7 @@ class WriteDashboardElement {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -56855,7 +54534,7 @@ class WriteDashboardElement {
       json['dashboard_id'] = dashboardId;
     }
     if (_lookSet || _apiMapResponse.containsKey('look')) {
-      json['look'] = look == null ? null : look.toJson();
+      json['look'] = look?.toJson();
     }
     if (_lookIdSet || _apiMapResponse.containsKey('look_id')) {
       json['look_id'] = lookId;
@@ -56873,7 +54552,7 @@ class WriteDashboardElement {
       json['note_text'] = noteText;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     if (_queryIdSet || _apiMapResponse.containsKey('query_id')) {
       json['query_id'] = queryId;
@@ -56883,7 +54562,7 @@ class WriteDashboardElement {
       json['refresh_interval'] = refreshInterval;
     }
     if (_resultMakerSet || _apiMapResponse.containsKey('result_maker')) {
-      json['result_maker'] = resultMaker == null ? null : resultMaker.toJson();
+      json['result_maker'] = resultMaker?.toJson();
     }
     if (_resultMakerIdSet || _apiMapResponse.containsKey('result_maker_id')) {
       json['result_maker_id'] = resultMakerId;
@@ -56954,9 +54633,7 @@ class WriteDashboardFilter {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -56971,9 +54648,7 @@ class WriteDashboardFilter {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -56988,9 +54663,7 @@ class WriteDashboardFilter {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -57005,9 +54678,7 @@ class WriteDashboardFilter {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -57022,9 +54693,7 @@ class WriteDashboardFilter {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -57039,9 +54708,7 @@ class WriteDashboardFilter {
 
   String get explore {
     if (!_exploreSet && _apiMapResponse.containsKey('explore')) {
-      _explore = _apiMapResponse['explore'] == null
-          ? null
-          : _apiMapResponse['explore'].toString();
+      _explore = _apiMapResponse['explore']?.toString();
       _exploreSet = true;
     }
     return _explore;
@@ -57056,9 +54723,7 @@ class WriteDashboardFilter {
 
   String get dimension {
     if (!_dimensionSet && _apiMapResponse.containsKey('dimension')) {
-      _dimension = _apiMapResponse['dimension'] == null
-          ? null
-          : _apiMapResponse['dimension'].toString();
+      _dimension = _apiMapResponse['dimension']?.toString();
       _dimensionSet = true;
     }
     return _dimension;
@@ -57089,11 +54754,9 @@ class WriteDashboardFilter {
   List<String> get listensToFilters {
     if (!_listensToFiltersSet &&
         _apiMapResponse.containsKey('listens_to_filters')) {
-      _listensToFilters = _apiMapResponse['listens_to_filters'] == null
-          ? null
-          : _apiMapResponse['listens_to_filters']
-              .map<String>((i) => i as String)
-              .toList();
+      _listensToFilters = _apiMapResponse['listens_to_filters']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _listensToFiltersSet = true;
     }
     return _listensToFilters;
@@ -57246,9 +54909,7 @@ class WriteDashboardLayout {
 
   String get dashboardId {
     if (!_dashboardIdSet && _apiMapResponse.containsKey('dashboard_id')) {
-      _dashboardId = _apiMapResponse['dashboard_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_id'].toString();
+      _dashboardId = _apiMapResponse['dashboard_id']?.toString();
       _dashboardIdSet = true;
     }
     return _dashboardId;
@@ -57263,9 +54924,7 @@ class WriteDashboardLayout {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -57398,9 +55057,7 @@ class WriteDashboardLayoutComponent {
   String get dashboardLayoutId {
     if (!_dashboardLayoutIdSet &&
         _apiMapResponse.containsKey('dashboard_layout_id')) {
-      _dashboardLayoutId = _apiMapResponse['dashboard_layout_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_layout_id'].toString();
+      _dashboardLayoutId = _apiMapResponse['dashboard_layout_id']?.toString();
       _dashboardLayoutIdSet = true;
     }
     return _dashboardLayoutId;
@@ -57416,9 +55073,7 @@ class WriteDashboardLayoutComponent {
   String get dashboardElementId {
     if (!_dashboardElementIdSet &&
         _apiMapResponse.containsKey('dashboard_element_id')) {
-      _dashboardElementId = _apiMapResponse['dashboard_element_id'] == null
-          ? null
-          : _apiMapResponse['dashboard_element_id'].toString();
+      _dashboardElementId = _apiMapResponse['dashboard_element_id']?.toString();
       _dashboardElementIdSet = true;
     }
     return _dashboardElementId;
@@ -57726,9 +55381,7 @@ class WriteDBConnection {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -57743,9 +55396,7 @@ class WriteDBConnection {
 
   String get host {
     if (!_hostSet && _apiMapResponse.containsKey('host')) {
-      _host = _apiMapResponse['host'] == null
-          ? null
-          : _apiMapResponse['host'].toString();
+      _host = _apiMapResponse['host']?.toString();
       _hostSet = true;
     }
     return _host;
@@ -57760,9 +55411,7 @@ class WriteDBConnection {
 
   String get port {
     if (!_portSet && _apiMapResponse.containsKey('port')) {
-      _port = _apiMapResponse['port'] == null
-          ? null
-          : _apiMapResponse['port'].toString();
+      _port = _apiMapResponse['port']?.toString();
       _portSet = true;
     }
     return _port;
@@ -57777,9 +55426,7 @@ class WriteDBConnection {
 
   String get username {
     if (!_usernameSet && _apiMapResponse.containsKey('username')) {
-      _username = _apiMapResponse['username'] == null
-          ? null
-          : _apiMapResponse['username'].toString();
+      _username = _apiMapResponse['username']?.toString();
       _usernameSet = true;
     }
     return _username;
@@ -57794,9 +55441,7 @@ class WriteDBConnection {
 
   String get password {
     if (!_passwordSet && _apiMapResponse.containsKey('password')) {
-      _password = _apiMapResponse['password'] == null
-          ? null
-          : _apiMapResponse['password'].toString();
+      _password = _apiMapResponse['password']?.toString();
       _passwordSet = true;
     }
     return _password;
@@ -57811,9 +55456,7 @@ class WriteDBConnection {
 
   String get certificate {
     if (!_certificateSet && _apiMapResponse.containsKey('certificate')) {
-      _certificate = _apiMapResponse['certificate'] == null
-          ? null
-          : _apiMapResponse['certificate'].toString();
+      _certificate = _apiMapResponse['certificate']?.toString();
       _certificateSet = true;
     }
     return _certificate;
@@ -57828,9 +55471,7 @@ class WriteDBConnection {
 
   String get fileType {
     if (!_fileTypeSet && _apiMapResponse.containsKey('file_type')) {
-      _fileType = _apiMapResponse['file_type'] == null
-          ? null
-          : _apiMapResponse['file_type'].toString();
+      _fileType = _apiMapResponse['file_type']?.toString();
       _fileTypeSet = true;
     }
     return _fileType;
@@ -57845,9 +55486,7 @@ class WriteDBConnection {
 
   String get database {
     if (!_databaseSet && _apiMapResponse.containsKey('database')) {
-      _database = _apiMapResponse['database'] == null
-          ? null
-          : _apiMapResponse['database'].toString();
+      _database = _apiMapResponse['database']?.toString();
       _databaseSet = true;
     }
     return _database;
@@ -57862,9 +55501,7 @@ class WriteDBConnection {
 
   String get dbTimezone {
     if (!_dbTimezoneSet && _apiMapResponse.containsKey('db_timezone')) {
-      _dbTimezone = _apiMapResponse['db_timezone'] == null
-          ? null
-          : _apiMapResponse['db_timezone'].toString();
+      _dbTimezone = _apiMapResponse['db_timezone']?.toString();
       _dbTimezoneSet = true;
     }
     return _dbTimezone;
@@ -57879,9 +55516,7 @@ class WriteDBConnection {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -57896,9 +55531,7 @@ class WriteDBConnection {
 
   String get schema {
     if (!_schemaSet && _apiMapResponse.containsKey('schema')) {
-      _schema = _apiMapResponse['schema'] == null
-          ? null
-          : _apiMapResponse['schema'].toString();
+      _schema = _apiMapResponse['schema']?.toString();
       _schemaSet = true;
     }
     return _schema;
@@ -57929,9 +55562,8 @@ class WriteDBConnection {
   String get maxBillingGigabytes {
     if (!_maxBillingGigabytesSet &&
         _apiMapResponse.containsKey('max_billing_gigabytes')) {
-      _maxBillingGigabytes = _apiMapResponse['max_billing_gigabytes'] == null
-          ? null
-          : _apiMapResponse['max_billing_gigabytes'].toString();
+      _maxBillingGigabytes =
+          _apiMapResponse['max_billing_gigabytes']?.toString();
       _maxBillingGigabytesSet = true;
     }
     return _maxBillingGigabytes;
@@ -57976,9 +55608,7 @@ class WriteDBConnection {
 
   String get tmpDbName {
     if (!_tmpDbNameSet && _apiMapResponse.containsKey('tmp_db_name')) {
-      _tmpDbName = _apiMapResponse['tmp_db_name'] == null
-          ? null
-          : _apiMapResponse['tmp_db_name'].toString();
+      _tmpDbName = _apiMapResponse['tmp_db_name']?.toString();
       _tmpDbNameSet = true;
     }
     return _tmpDbName;
@@ -57994,9 +55624,8 @@ class WriteDBConnection {
   String get jdbcAdditionalParams {
     if (!_jdbcAdditionalParamsSet &&
         _apiMapResponse.containsKey('jdbc_additional_params')) {
-      _jdbcAdditionalParams = _apiMapResponse['jdbc_additional_params'] == null
-          ? null
-          : _apiMapResponse['jdbc_additional_params'].toString();
+      _jdbcAdditionalParams =
+          _apiMapResponse['jdbc_additional_params']?.toString();
       _jdbcAdditionalParamsSet = true;
     }
     return _jdbcAdditionalParams;
@@ -58026,9 +55655,7 @@ class WriteDBConnection {
 
   String get dialectName {
     if (!_dialectNameSet && _apiMapResponse.containsKey('dialect_name')) {
-      _dialectName = _apiMapResponse['dialect_name'] == null
-          ? null
-          : _apiMapResponse['dialect_name'].toString();
+      _dialectName = _apiMapResponse['dialect_name']?.toString();
       _dialectNameSet = true;
     }
     return _dialectName;
@@ -58060,11 +55687,9 @@ class WriteDBConnection {
   List<String> get userAttributeFields {
     if (!_userAttributeFieldsSet &&
         _apiMapResponse.containsKey('user_attribute_fields')) {
-      _userAttributeFields = _apiMapResponse['user_attribute_fields'] == null
-          ? null
-          : _apiMapResponse['user_attribute_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _userAttributeFields = _apiMapResponse['user_attribute_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _userAttributeFieldsSet = true;
     }
     return _userAttributeFields;
@@ -58080,9 +55705,7 @@ class WriteDBConnection {
   String get maintenanceCron {
     if (!_maintenanceCronSet &&
         _apiMapResponse.containsKey('maintenance_cron')) {
-      _maintenanceCron = _apiMapResponse['maintenance_cron'] == null
-          ? null
-          : _apiMapResponse['maintenance_cron'].toString();
+      _maintenanceCron = _apiMapResponse['maintenance_cron']?.toString();
       _maintenanceCronSet = true;
     }
     return _maintenanceCron;
@@ -58132,9 +55755,7 @@ class WriteDBConnection {
     if (!_afterConnectStatementsSet &&
         _apiMapResponse.containsKey('after_connect_statements')) {
       _afterConnectStatements =
-          _apiMapResponse['after_connect_statements'] == null
-              ? null
-              : _apiMapResponse['after_connect_statements'].toString();
+          _apiMapResponse['after_connect_statements']?.toString();
       _afterConnectStatementsSet = true;
     }
     return _afterConnectStatements;
@@ -58169,9 +55790,7 @@ class WriteDBConnection {
 
   String get tunnelId {
     if (!_tunnelIdSet && _apiMapResponse.containsKey('tunnel_id')) {
-      _tunnelId = _apiMapResponse['tunnel_id'] == null
-          ? null
-          : _apiMapResponse['tunnel_id'].toString();
+      _tunnelId = _apiMapResponse['tunnel_id']?.toString();
       _tunnelIdSet = true;
     }
     return _tunnelId;
@@ -58358,8 +55977,7 @@ class WriteDBConnection {
     }
     if (_pdtContextOverrideSet ||
         _apiMapResponse.containsKey('pdt_context_override')) {
-      json['pdt_context_override'] =
-          pdtContextOverride == null ? null : pdtContextOverride.toJson();
+      json['pdt_context_override'] = pdtContextOverride?.toJson();
     }
     if (_tunnelIdSet || _apiMapResponse.containsKey('tunnel_id')) {
       json['tunnel_id'] = tunnelId;
@@ -58427,9 +56045,7 @@ class WriteDBConnectionOverride {
 
   String get context {
     if (!_contextSet && _apiMapResponse.containsKey('context')) {
-      _context = _apiMapResponse['context'] == null
-          ? null
-          : _apiMapResponse['context'].toString();
+      _context = _apiMapResponse['context']?.toString();
       _contextSet = true;
     }
     return _context;
@@ -58444,9 +56060,7 @@ class WriteDBConnectionOverride {
 
   String get host {
     if (!_hostSet && _apiMapResponse.containsKey('host')) {
-      _host = _apiMapResponse['host'] == null
-          ? null
-          : _apiMapResponse['host'].toString();
+      _host = _apiMapResponse['host']?.toString();
       _hostSet = true;
     }
     return _host;
@@ -58461,9 +56075,7 @@ class WriteDBConnectionOverride {
 
   String get port {
     if (!_portSet && _apiMapResponse.containsKey('port')) {
-      _port = _apiMapResponse['port'] == null
-          ? null
-          : _apiMapResponse['port'].toString();
+      _port = _apiMapResponse['port']?.toString();
       _portSet = true;
     }
     return _port;
@@ -58478,9 +56090,7 @@ class WriteDBConnectionOverride {
 
   String get username {
     if (!_usernameSet && _apiMapResponse.containsKey('username')) {
-      _username = _apiMapResponse['username'] == null
-          ? null
-          : _apiMapResponse['username'].toString();
+      _username = _apiMapResponse['username']?.toString();
       _usernameSet = true;
     }
     return _username;
@@ -58495,9 +56105,7 @@ class WriteDBConnectionOverride {
 
   String get password {
     if (!_passwordSet && _apiMapResponse.containsKey('password')) {
-      _password = _apiMapResponse['password'] == null
-          ? null
-          : _apiMapResponse['password'].toString();
+      _password = _apiMapResponse['password']?.toString();
       _passwordSet = true;
     }
     return _password;
@@ -58512,9 +56120,7 @@ class WriteDBConnectionOverride {
 
   String get certificate {
     if (!_certificateSet && _apiMapResponse.containsKey('certificate')) {
-      _certificate = _apiMapResponse['certificate'] == null
-          ? null
-          : _apiMapResponse['certificate'].toString();
+      _certificate = _apiMapResponse['certificate']?.toString();
       _certificateSet = true;
     }
     return _certificate;
@@ -58529,9 +56135,7 @@ class WriteDBConnectionOverride {
 
   String get fileType {
     if (!_fileTypeSet && _apiMapResponse.containsKey('file_type')) {
-      _fileType = _apiMapResponse['file_type'] == null
-          ? null
-          : _apiMapResponse['file_type'].toString();
+      _fileType = _apiMapResponse['file_type']?.toString();
       _fileTypeSet = true;
     }
     return _fileType;
@@ -58546,9 +56150,7 @@ class WriteDBConnectionOverride {
 
   String get database {
     if (!_databaseSet && _apiMapResponse.containsKey('database')) {
-      _database = _apiMapResponse['database'] == null
-          ? null
-          : _apiMapResponse['database'].toString();
+      _database = _apiMapResponse['database']?.toString();
       _databaseSet = true;
     }
     return _database;
@@ -58563,9 +56165,7 @@ class WriteDBConnectionOverride {
 
   String get schema {
     if (!_schemaSet && _apiMapResponse.containsKey('schema')) {
-      _schema = _apiMapResponse['schema'] == null
-          ? null
-          : _apiMapResponse['schema'].toString();
+      _schema = _apiMapResponse['schema']?.toString();
       _schemaSet = true;
     }
     return _schema;
@@ -58581,9 +56181,8 @@ class WriteDBConnectionOverride {
   String get jdbcAdditionalParams {
     if (!_jdbcAdditionalParamsSet &&
         _apiMapResponse.containsKey('jdbc_additional_params')) {
-      _jdbcAdditionalParams = _apiMapResponse['jdbc_additional_params'] == null
-          ? null
-          : _apiMapResponse['jdbc_additional_params'].toString();
+      _jdbcAdditionalParams =
+          _apiMapResponse['jdbc_additional_params']?.toString();
       _jdbcAdditionalParamsSet = true;
     }
     return _jdbcAdditionalParams;
@@ -58600,9 +56199,7 @@ class WriteDBConnectionOverride {
     if (!_afterConnectStatementsSet &&
         _apiMapResponse.containsKey('after_connect_statements')) {
       _afterConnectStatements =
-          _apiMapResponse['after_connect_statements'] == null
-              ? null
-              : _apiMapResponse['after_connect_statements'].toString();
+          _apiMapResponse['after_connect_statements']?.toString();
       _afterConnectStatementsSet = true;
     }
     return _afterConnectStatements;
@@ -58697,9 +56294,7 @@ class WriteEmbedSecret {
 
   String get algorithm {
     if (!_algorithmSet && _apiMapResponse.containsKey('algorithm')) {
-      _algorithm = _apiMapResponse['algorithm'] == null
-          ? null
-          : _apiMapResponse['algorithm'].toString();
+      _algorithm = _apiMapResponse['algorithm']?.toString();
       _algorithmSet = true;
     }
     return _algorithm;
@@ -58786,9 +56381,7 @@ class WriteExternalOauthApplication {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -58803,9 +56396,7 @@ class WriteExternalOauthApplication {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -58820,9 +56411,7 @@ class WriteExternalOauthApplication {
 
   String get clientSecret {
     if (!_clientSecretSet && _apiMapResponse.containsKey('client_secret')) {
-      _clientSecret = _apiMapResponse['client_secret'] == null
-          ? null
-          : _apiMapResponse['client_secret'].toString();
+      _clientSecret = _apiMapResponse['client_secret']?.toString();
       _clientSecretSet = true;
     }
     return _clientSecret;
@@ -58837,9 +56426,7 @@ class WriteExternalOauthApplication {
 
   String get dialectName {
     if (!_dialectNameSet && _apiMapResponse.containsKey('dialect_name')) {
-      _dialectName = _apiMapResponse['dialect_name'] == null
-          ? null
-          : _apiMapResponse['dialect_name'].toString();
+      _dialectName = _apiMapResponse['dialect_name']?.toString();
       _dialectNameSet = true;
     }
     return _dialectName;
@@ -58911,9 +56498,7 @@ class WriteFolderBase {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -58928,9 +56513,7 @@ class WriteFolderBase {
 
   String get parentId {
     if (!_parentIdSet && _apiMapResponse.containsKey('parent_id')) {
-      _parentId = _apiMapResponse['parent_id'] == null
-          ? null
-          : _apiMapResponse['parent_id'].toString();
+      _parentId = _apiMapResponse['parent_id']?.toString();
       _parentIdSet = true;
     }
     return _parentId;
@@ -58996,9 +56579,7 @@ class WriteGitBranch {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -59013,9 +56594,7 @@ class WriteGitBranch {
 
   String get ref {
     if (!_refSet && _apiMapResponse.containsKey('ref')) {
-      _ref = _apiMapResponse['ref'] == null
-          ? null
-          : _apiMapResponse['ref'].toString();
+      _ref = _apiMapResponse['ref']?.toString();
       _refSet = true;
     }
     return _ref;
@@ -59097,9 +56676,7 @@ class WriteGroup {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -59206,11 +56783,9 @@ class WriteIntegration {
     if (!_installedDelegateOauthTargetsSet &&
         _apiMapResponse.containsKey('installed_delegate_oauth_targets')) {
       _installedDelegateOauthTargets =
-          _apiMapResponse['installed_delegate_oauth_targets'] == null
-              ? null
-              : _apiMapResponse['installed_delegate_oauth_targets']
-                  .map<int>((i) => i as int)
-                  .toList();
+          _apiMapResponse['installed_delegate_oauth_targets']
+              ?.map<int>((i) => i as int)
+              ?.toList();
       _installedDelegateOauthTargetsSet = true;
     }
     return _installedDelegateOauthTargets;
@@ -59253,8 +56828,7 @@ class WriteIntegration {
       json['enabled'] = enabled;
     }
     if (_paramsSet || _apiMapResponse.containsKey('params')) {
-      json['params'] =
-          params == null ? null : params.map((i) => i.toJson()).toList();
+      json['params'] = params?.map((i) => i.toJson())?.toList();
     }
     if (_installedDelegateOauthTargetsSet ||
         _apiMapResponse.containsKey('installed_delegate_oauth_targets')) {
@@ -59281,9 +56855,7 @@ class WriteIntegrationHub {
 
   String get url {
     if (!_urlSet && _apiMapResponse.containsKey('url')) {
-      _url = _apiMapResponse['url'] == null
-          ? null
-          : _apiMapResponse['url'].toString();
+      _url = _apiMapResponse['url']?.toString();
       _urlSet = true;
     }
     return _url;
@@ -59299,9 +56871,7 @@ class WriteIntegrationHub {
   String get authorizationToken {
     if (!_authorizationTokenSet &&
         _apiMapResponse.containsKey('authorization_token')) {
-      _authorizationToken = _apiMapResponse['authorization_token'] == null
-          ? null
-          : _apiMapResponse['authorization_token'].toString();
+      _authorizationToken = _apiMapResponse['authorization_token']?.toString();
       _authorizationTokenSet = true;
     }
     return _authorizationToken;
@@ -59429,9 +56999,7 @@ class WriteInternalHelpResourcesContent {
   String get organizationName {
     if (!_organizationNameSet &&
         _apiMapResponse.containsKey('organization_name')) {
-      _organizationName = _apiMapResponse['organization_name'] == null
-          ? null
-          : _apiMapResponse['organization_name'].toString();
+      _organizationName = _apiMapResponse['organization_name']?.toString();
       _organizationNameSet = true;
     }
     return _organizationName;
@@ -59447,9 +57015,7 @@ class WriteInternalHelpResourcesContent {
   String get markdownContent {
     if (!_markdownContentSet &&
         _apiMapResponse.containsKey('markdown_content')) {
-      _markdownContent = _apiMapResponse['markdown_content'] == null
-          ? null
-          : _apiMapResponse['markdown_content'].toString();
+      _markdownContent = _apiMapResponse['markdown_content']?.toString();
       _markdownContentSet = true;
     }
     return _markdownContent;
@@ -59630,9 +57196,7 @@ class WriteLDAPConfig {
 
   String get authPassword {
     if (!_authPasswordSet && _apiMapResponse.containsKey('auth_password')) {
-      _authPassword = _apiMapResponse['auth_password'] == null
-          ? null
-          : _apiMapResponse['auth_password'].toString();
+      _authPassword = _apiMapResponse['auth_password']?.toString();
       _authPasswordSet = true;
     }
     return _authPassword;
@@ -59663,9 +57227,7 @@ class WriteLDAPConfig {
 
   String get authUsername {
     if (!_authUsernameSet && _apiMapResponse.containsKey('auth_username')) {
-      _authUsername = _apiMapResponse['auth_username'] == null
-          ? null
-          : _apiMapResponse['auth_username'].toString();
+      _authUsername = _apiMapResponse['auth_username']?.toString();
       _authUsernameSet = true;
     }
     return _authUsername;
@@ -59680,9 +57242,7 @@ class WriteLDAPConfig {
 
   String get connectionHost {
     if (!_connectionHostSet && _apiMapResponse.containsKey('connection_host')) {
-      _connectionHost = _apiMapResponse['connection_host'] == null
-          ? null
-          : _apiMapResponse['connection_host'].toString();
+      _connectionHost = _apiMapResponse['connection_host']?.toString();
       _connectionHostSet = true;
     }
     return _connectionHost;
@@ -59697,9 +57257,7 @@ class WriteLDAPConfig {
 
   String get connectionPort {
     if (!_connectionPortSet && _apiMapResponse.containsKey('connection_port')) {
-      _connectionPort = _apiMapResponse['connection_port'] == null
-          ? null
-          : _apiMapResponse['connection_port'].toString();
+      _connectionPort = _apiMapResponse['connection_port']?.toString();
       _connectionPortSet = true;
     }
     return _connectionPort;
@@ -59746,12 +57304,9 @@ class WriteLDAPConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -59767,12 +57322,9 @@ class WriteLDAPConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -59817,9 +57369,7 @@ class WriteLDAPConfig {
 
   String get groupsBaseDn {
     if (!_groupsBaseDnSet && _apiMapResponse.containsKey('groups_base_dn')) {
-      _groupsBaseDn = _apiMapResponse['groups_base_dn'] == null
-          ? null
-          : _apiMapResponse['groups_base_dn'].toString();
+      _groupsBaseDn = _apiMapResponse['groups_base_dn']?.toString();
       _groupsBaseDnSet = true;
     }
     return _groupsBaseDn;
@@ -59835,9 +57385,7 @@ class WriteLDAPConfig {
   String get groupsFinderType {
     if (!_groupsFinderTypeSet &&
         _apiMapResponse.containsKey('groups_finder_type')) {
-      _groupsFinderType = _apiMapResponse['groups_finder_type'] == null
-          ? null
-          : _apiMapResponse['groups_finder_type'].toString();
+      _groupsFinderType = _apiMapResponse['groups_finder_type']?.toString();
       _groupsFinderTypeSet = true;
     }
     return _groupsFinderType;
@@ -59854,9 +57402,7 @@ class WriteLDAPConfig {
     if (!_groupsMemberAttributeSet &&
         _apiMapResponse.containsKey('groups_member_attribute')) {
       _groupsMemberAttribute =
-          _apiMapResponse['groups_member_attribute'] == null
-              ? null
-              : _apiMapResponse['groups_member_attribute'].toString();
+          _apiMapResponse['groups_member_attribute']?.toString();
       _groupsMemberAttributeSet = true;
     }
     return _groupsMemberAttribute;
@@ -59872,9 +57418,8 @@ class WriteLDAPConfig {
   String get groupsObjectclasses {
     if (!_groupsObjectclassesSet &&
         _apiMapResponse.containsKey('groups_objectclasses')) {
-      _groupsObjectclasses = _apiMapResponse['groups_objectclasses'] == null
-          ? null
-          : _apiMapResponse['groups_objectclasses'].toString();
+      _groupsObjectclasses =
+          _apiMapResponse['groups_objectclasses']?.toString();
       _groupsObjectclassesSet = true;
     }
     return _groupsObjectclasses;
@@ -59890,9 +57435,8 @@ class WriteLDAPConfig {
   String get groupsUserAttribute {
     if (!_groupsUserAttributeSet &&
         _apiMapResponse.containsKey('groups_user_attribute')) {
-      _groupsUserAttribute = _apiMapResponse['groups_user_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_user_attribute'].toString();
+      _groupsUserAttribute =
+          _apiMapResponse['groups_user_attribute']?.toString();
       _groupsUserAttributeSet = true;
     }
     return _groupsUserAttribute;
@@ -59961,9 +57505,7 @@ class WriteLDAPConfig {
   String get testLdapPassword {
     if (!_testLdapPasswordSet &&
         _apiMapResponse.containsKey('test_ldap_password')) {
-      _testLdapPassword = _apiMapResponse['test_ldap_password'] == null
-          ? null
-          : _apiMapResponse['test_ldap_password'].toString();
+      _testLdapPassword = _apiMapResponse['test_ldap_password']?.toString();
       _testLdapPasswordSet = true;
     }
     return _testLdapPassword;
@@ -59978,9 +57520,7 @@ class WriteLDAPConfig {
 
   String get testLdapUser {
     if (!_testLdapUserSet && _apiMapResponse.containsKey('test_ldap_user')) {
-      _testLdapUser = _apiMapResponse['test_ldap_user'] == null
-          ? null
-          : _apiMapResponse['test_ldap_user'].toString();
+      _testLdapUser = _apiMapResponse['test_ldap_user']?.toString();
       _testLdapUserSet = true;
     }
     return _testLdapUser;
@@ -59997,9 +57537,7 @@ class WriteLDAPConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -60016,9 +57554,7 @@ class WriteLDAPConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -60035,9 +57571,7 @@ class WriteLDAPConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -60054,9 +57588,7 @@ class WriteLDAPConfig {
     if (!_userAttributeMapLdapIdSet &&
         _apiMapResponse.containsKey('user_attribute_map_ldap_id')) {
       _userAttributeMapLdapId =
-          _apiMapResponse['user_attribute_map_ldap_id'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_ldap_id'].toString();
+          _apiMapResponse['user_attribute_map_ldap_id']?.toString();
       _userAttributeMapLdapIdSet = true;
     }
     return _userAttributeMapLdapId;
@@ -60094,9 +57626,7 @@ class WriteLDAPConfig {
   String get userBindBaseDn {
     if (!_userBindBaseDnSet &&
         _apiMapResponse.containsKey('user_bind_base_dn')) {
-      _userBindBaseDn = _apiMapResponse['user_bind_base_dn'] == null
-          ? null
-          : _apiMapResponse['user_bind_base_dn'].toString();
+      _userBindBaseDn = _apiMapResponse['user_bind_base_dn']?.toString();
       _userBindBaseDnSet = true;
     }
     return _userBindBaseDn;
@@ -60112,9 +57642,7 @@ class WriteLDAPConfig {
   String get userCustomFilter {
     if (!_userCustomFilterSet &&
         _apiMapResponse.containsKey('user_custom_filter')) {
-      _userCustomFilter = _apiMapResponse['user_custom_filter'] == null
-          ? null
-          : _apiMapResponse['user_custom_filter'].toString();
+      _userCustomFilter = _apiMapResponse['user_custom_filter']?.toString();
       _userCustomFilterSet = true;
     }
     return _userCustomFilter;
@@ -60130,9 +57658,8 @@ class WriteLDAPConfig {
   String get userIdAttributeNames {
     if (!_userIdAttributeNamesSet &&
         _apiMapResponse.containsKey('user_id_attribute_names')) {
-      _userIdAttributeNames = _apiMapResponse['user_id_attribute_names'] == null
-          ? null
-          : _apiMapResponse['user_id_attribute_names'].toString();
+      _userIdAttributeNames =
+          _apiMapResponse['user_id_attribute_names']?.toString();
       _userIdAttributeNamesSet = true;
     }
     return _userIdAttributeNames;
@@ -60148,9 +57675,7 @@ class WriteLDAPConfig {
   String get userObjectclass {
     if (!_userObjectclassSet &&
         _apiMapResponse.containsKey('user_objectclass')) {
-      _userObjectclass = _apiMapResponse['user_objectclass'] == null
-          ? null
-          : _apiMapResponse['user_objectclass'].toString();
+      _userObjectclass = _apiMapResponse['user_objectclass']?.toString();
       _userObjectclassSet = true;
     }
     return _userObjectclass;
@@ -60301,9 +57826,8 @@ class WriteLDAPConfig {
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_mergeNewUsersByEmailSet ||
         _apiMapResponse.containsKey('merge_new_users_by_email')) {
@@ -60338,9 +57862,8 @@ class WriteLDAPConfig {
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_userBindBaseDnSet ||
         _apiMapResponse.containsKey('user_bind_base_dn')) {
@@ -60518,12 +58041,9 @@ class WriteLookmlModel {
   List<String> get allowedDbConnectionNames {
     if (!_allowedDbConnectionNamesSet &&
         _apiMapResponse.containsKey('allowed_db_connection_names')) {
-      _allowedDbConnectionNames =
-          _apiMapResponse['allowed_db_connection_names'] == null
-              ? null
-              : _apiMapResponse['allowed_db_connection_names']
-                  .map<String>((i) => i as String)
-                  .toList();
+      _allowedDbConnectionNames = _apiMapResponse['allowed_db_connection_names']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _allowedDbConnectionNamesSet = true;
     }
     return _allowedDbConnectionNames;
@@ -60538,9 +58058,7 @@ class WriteLookmlModel {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -60555,9 +58073,7 @@ class WriteLookmlModel {
 
   String get projectName {
     if (!_projectNameSet && _apiMapResponse.containsKey('project_name')) {
-      _projectName = _apiMapResponse['project_name'] == null
-          ? null
-          : _apiMapResponse['project_name'].toString();
+      _projectName = _apiMapResponse['project_name']?.toString();
       _projectNameSet = true;
     }
     return _projectName;
@@ -60671,9 +58187,7 @@ class WriteLookWithQuery {
 
   String get title {
     if (!_titleSet && _apiMapResponse.containsKey('title')) {
-      _title = _apiMapResponse['title'] == null
-          ? null
-          : _apiMapResponse['title'].toString();
+      _title = _apiMapResponse['title']?.toString();
       _titleSet = true;
     }
     return _title;
@@ -60718,9 +58232,7 @@ class WriteLookWithQuery {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -60799,9 +58311,7 @@ class WriteLookWithQuery {
 
   String get folderId {
     if (!_folderIdSet && _apiMapResponse.containsKey('folder_id')) {
-      _folderId = _apiMapResponse['folder_id'] == null
-          ? null
-          : _apiMapResponse['folder_id'].toString();
+      _folderId = _apiMapResponse['folder_id']?.toString();
       _folderIdSet = true;
     }
     return _folderId;
@@ -60881,13 +58391,13 @@ class WriteLookWithQuery {
       json['query_id'] = queryId;
     }
     if (_folderSet || _apiMapResponse.containsKey('folder')) {
-      json['folder'] = folder == null ? null : folder.toJson();
+      json['folder'] = folder?.toJson();
     }
     if (_folderIdSet || _apiMapResponse.containsKey('folder_id')) {
       json['folder_id'] = folderId;
     }
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     return json;
   }
@@ -60925,9 +58435,7 @@ class WriteMergeQuery {
 
   String get columnLimit {
     if (!_columnLimitSet && _apiMapResponse.containsKey('column_limit')) {
-      _columnLimit = _apiMapResponse['column_limit'] == null
-          ? null
-          : _apiMapResponse['column_limit'].toString();
+      _columnLimit = _apiMapResponse['column_limit']?.toString();
       _columnLimitSet = true;
     }
     return _columnLimit;
@@ -60942,9 +58450,7 @@ class WriteMergeQuery {
 
   String get dynamicFields {
     if (!_dynamicFieldsSet && _apiMapResponse.containsKey('dynamic_fields')) {
-      _dynamicFields = _apiMapResponse['dynamic_fields'] == null
-          ? null
-          : _apiMapResponse['dynamic_fields'].toString();
+      _dynamicFields = _apiMapResponse['dynamic_fields']?.toString();
       _dynamicFieldsSet = true;
     }
     return _dynamicFields;
@@ -60959,9 +58465,8 @@ class WriteMergeQuery {
 
   List<String> get pivots {
     if (!_pivotsSet && _apiMapResponse.containsKey('pivots')) {
-      _pivots = _apiMapResponse['pivots'] == null
-          ? null
-          : _apiMapResponse['pivots'].map<String>((i) => i as String).toList();
+      _pivots =
+          _apiMapResponse['pivots']?.map<String>((i) => i as String)?.toList();
       _pivotsSet = true;
     }
     return _pivots;
@@ -60976,9 +58481,8 @@ class WriteMergeQuery {
 
   List<String> get sorts {
     if (!_sortsSet && _apiMapResponse.containsKey('sorts')) {
-      _sorts = _apiMapResponse['sorts'] == null
-          ? null
-          : _apiMapResponse['sorts'].map<String>((i) => i as String).toList();
+      _sorts =
+          _apiMapResponse['sorts']?.map<String>((i) => i as String)?.toList();
       _sortsSet = true;
     }
     return _sorts;
@@ -61080,9 +58584,7 @@ class WriteMergeQuery {
       json['sorts'] = sorts;
     }
     if (_sourceQueriesSet || _apiMapResponse.containsKey('source_queries')) {
-      json['source_queries'] = sourceQueries == null
-          ? null
-          : sourceQueries.map((i) => i.toJson()).toList();
+      json['source_queries'] = sourceQueries?.map((i) => i.toJson())?.toList();
     }
     if (_totalSet || _apiMapResponse.containsKey('total')) {
       json['total'] = total;
@@ -61109,9 +58611,8 @@ class WriteModelSet {
 
   List<String> get models {
     if (!_modelsSet && _apiMapResponse.containsKey('models')) {
-      _models = _apiMapResponse['models'] == null
-          ? null
-          : _apiMapResponse['models'].map<String>((i) => i as String).toList();
+      _models =
+          _apiMapResponse['models']?.map<String>((i) => i as String)?.toList();
       _modelsSet = true;
     }
     return _models;
@@ -61126,9 +58627,7 @@ class WriteModelSet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -61203,9 +58702,7 @@ class WriteOauthClientApp {
 
   String get redirectUri {
     if (!_redirectUriSet && _apiMapResponse.containsKey('redirect_uri')) {
-      _redirectUri = _apiMapResponse['redirect_uri'] == null
-          ? null
-          : _apiMapResponse['redirect_uri'].toString();
+      _redirectUri = _apiMapResponse['redirect_uri']?.toString();
       _redirectUriSet = true;
     }
     return _redirectUri;
@@ -61220,9 +58717,7 @@ class WriteOauthClientApp {
 
   String get displayName {
     if (!_displayNameSet && _apiMapResponse.containsKey('display_name')) {
-      _displayName = _apiMapResponse['display_name'] == null
-          ? null
-          : _apiMapResponse['display_name'].toString();
+      _displayName = _apiMapResponse['display_name']?.toString();
       _displayNameSet = true;
     }
     return _displayName;
@@ -61237,9 +58732,7 @@ class WriteOauthClientApp {
 
   String get description {
     if (!_descriptionSet && _apiMapResponse.containsKey('description')) {
-      _description = _apiMapResponse['description'] == null
-          ? null
-          : _apiMapResponse['description'].toString();
+      _description = _apiMapResponse['description']?.toString();
       _descriptionSet = true;
     }
     return _description;
@@ -61427,9 +58920,7 @@ class WriteOIDCConfig {
 
   String get audience {
     if (!_audienceSet && _apiMapResponse.containsKey('audience')) {
-      _audience = _apiMapResponse['audience'] == null
-          ? null
-          : _apiMapResponse['audience'].toString();
+      _audience = _apiMapResponse['audience']?.toString();
       _audienceSet = true;
     }
     return _audience;
@@ -61461,9 +58952,8 @@ class WriteOIDCConfig {
   String get authorizationEndpoint {
     if (!_authorizationEndpointSet &&
         _apiMapResponse.containsKey('authorization_endpoint')) {
-      _authorizationEndpoint = _apiMapResponse['authorization_endpoint'] == null
-          ? null
-          : _apiMapResponse['authorization_endpoint'].toString();
+      _authorizationEndpoint =
+          _apiMapResponse['authorization_endpoint']?.toString();
       _authorizationEndpointSet = true;
     }
     return _authorizationEndpoint;
@@ -61479,12 +58969,9 @@ class WriteOIDCConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -61500,12 +58987,9 @@ class WriteOIDCConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -61536,9 +59020,7 @@ class WriteOIDCConfig {
   String get groupsAttribute {
     if (!_groupsAttributeSet &&
         _apiMapResponse.containsKey('groups_attribute')) {
-      _groupsAttribute = _apiMapResponse['groups_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_attribute'].toString();
+      _groupsAttribute = _apiMapResponse['groups_attribute']?.toString();
       _groupsAttributeSet = true;
     }
     return _groupsAttribute;
@@ -61574,9 +59056,7 @@ class WriteOIDCConfig {
 
   String get identifier {
     if (!_identifierSet && _apiMapResponse.containsKey('identifier')) {
-      _identifier = _apiMapResponse['identifier'] == null
-          ? null
-          : _apiMapResponse['identifier'].toString();
+      _identifier = _apiMapResponse['identifier']?.toString();
       _identifierSet = true;
     }
     return _identifier;
@@ -61591,9 +59071,7 @@ class WriteOIDCConfig {
 
   String get issuer {
     if (!_issuerSet && _apiMapResponse.containsKey('issuer')) {
-      _issuer = _apiMapResponse['issuer'] == null
-          ? null
-          : _apiMapResponse['issuer'].toString();
+      _issuer = _apiMapResponse['issuer']?.toString();
       _issuerSet = true;
     }
     return _issuer;
@@ -61610,9 +59088,7 @@ class WriteOIDCConfig {
     if (!_newUserMigrationTypesSet &&
         _apiMapResponse.containsKey('new_user_migration_types')) {
       _newUserMigrationTypes =
-          _apiMapResponse['new_user_migration_types'] == null
-              ? null
-              : _apiMapResponse['new_user_migration_types'].toString();
+          _apiMapResponse['new_user_migration_types']?.toString();
       _newUserMigrationTypesSet = true;
     }
     return _newUserMigrationTypes;
@@ -61627,9 +59103,8 @@ class WriteOIDCConfig {
 
   List<String> get scopes {
     if (!_scopesSet && _apiMapResponse.containsKey('scopes')) {
-      _scopes = _apiMapResponse['scopes'] == null
-          ? null
-          : _apiMapResponse['scopes'].map<String>((i) => i as String).toList();
+      _scopes =
+          _apiMapResponse['scopes']?.map<String>((i) => i as String)?.toList();
       _scopesSet = true;
     }
     return _scopes;
@@ -61644,9 +59119,7 @@ class WriteOIDCConfig {
 
   String get secret {
     if (!_secretSet && _apiMapResponse.containsKey('secret')) {
-      _secret = _apiMapResponse['secret'] == null
-          ? null
-          : _apiMapResponse['secret'].toString();
+      _secret = _apiMapResponse['secret']?.toString();
       _secretSet = true;
     }
     return _secret;
@@ -61677,9 +59150,7 @@ class WriteOIDCConfig {
 
   String get tokenEndpoint {
     if (!_tokenEndpointSet && _apiMapResponse.containsKey('token_endpoint')) {
-      _tokenEndpoint = _apiMapResponse['token_endpoint'] == null
-          ? null
-          : _apiMapResponse['token_endpoint'].toString();
+      _tokenEndpoint = _apiMapResponse['token_endpoint']?.toString();
       _tokenEndpointSet = true;
     }
     return _tokenEndpoint;
@@ -61696,9 +59167,7 @@ class WriteOIDCConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -61715,9 +59184,7 @@ class WriteOIDCConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -61734,9 +59201,7 @@ class WriteOIDCConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -61774,9 +59239,7 @@ class WriteOIDCConfig {
   String get userinfoEndpoint {
     if (!_userinfoEndpointSet &&
         _apiMapResponse.containsKey('userinfo_endpoint')) {
-      _userinfoEndpoint = _apiMapResponse['userinfo_endpoint'] == null
-          ? null
-          : _apiMapResponse['userinfo_endpoint'].toString();
+      _userinfoEndpoint = _apiMapResponse['userinfo_endpoint']?.toString();
       _userinfoEndpointSet = true;
     }
     return _userinfoEndpoint;
@@ -61897,9 +59360,8 @@ class WriteOIDCConfig {
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_identifierSet || _apiMapResponse.containsKey('identifier')) {
       json['identifier'] = identifier;
@@ -61938,9 +59400,8 @@ class WriteOIDCConfig {
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_userinfoEndpointSet ||
         _apiMapResponse.containsKey('userinfo_endpoint')) {
@@ -62104,9 +59565,7 @@ class WritePermissionSet {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -62119,11 +59578,9 @@ class WritePermissionSet {
 
   List<String> get permissions {
     if (!_permissionsSet && _apiMapResponse.containsKey('permissions')) {
-      _permissions = _apiMapResponse['permissions'] == null
-          ? null
-          : _apiMapResponse['permissions']
-              .map<String>((i) => i as String)
-              .toList();
+      _permissions = _apiMapResponse['permissions']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _permissionsSet = true;
     }
     return _permissions;
@@ -62237,9 +59694,7 @@ class WriteProject {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -62254,9 +59709,7 @@ class WriteProject {
 
   String get gitRemoteUrl {
     if (!_gitRemoteUrlSet && _apiMapResponse.containsKey('git_remote_url')) {
-      _gitRemoteUrl = _apiMapResponse['git_remote_url'] == null
-          ? null
-          : _apiMapResponse['git_remote_url'].toString();
+      _gitRemoteUrl = _apiMapResponse['git_remote_url']?.toString();
       _gitRemoteUrlSet = true;
     }
     return _gitRemoteUrl;
@@ -62271,9 +59724,7 @@ class WriteProject {
 
   String get gitUsername {
     if (!_gitUsernameSet && _apiMapResponse.containsKey('git_username')) {
-      _gitUsername = _apiMapResponse['git_username'] == null
-          ? null
-          : _apiMapResponse['git_username'].toString();
+      _gitUsername = _apiMapResponse['git_username']?.toString();
       _gitUsernameSet = true;
     }
     return _gitUsername;
@@ -62288,9 +59739,7 @@ class WriteProject {
 
   String get gitPassword {
     if (!_gitPasswordSet && _apiMapResponse.containsKey('git_password')) {
-      _gitPassword = _apiMapResponse['git_password'] == null
-          ? null
-          : _apiMapResponse['git_password'].toString();
+      _gitPassword = _apiMapResponse['git_password']?.toString();
       _gitPasswordSet = true;
     }
     return _gitPassword;
@@ -62307,9 +59756,7 @@ class WriteProject {
     if (!_gitProductionBranchNameSet &&
         _apiMapResponse.containsKey('git_production_branch_name')) {
       _gitProductionBranchName =
-          _apiMapResponse['git_production_branch_name'] == null
-              ? null
-              : _apiMapResponse['git_production_branch_name'].toString();
+          _apiMapResponse['git_production_branch_name']?.toString();
       _gitProductionBranchNameSet = true;
     }
     return _gitProductionBranchName;
@@ -62342,9 +59789,7 @@ class WriteProject {
     if (!_gitUsernameUserAttributeSet &&
         _apiMapResponse.containsKey('git_username_user_attribute')) {
       _gitUsernameUserAttribute =
-          _apiMapResponse['git_username_user_attribute'] == null
-              ? null
-              : _apiMapResponse['git_username_user_attribute'].toString();
+          _apiMapResponse['git_username_user_attribute']?.toString();
       _gitUsernameUserAttributeSet = true;
     }
     return _gitUsernameUserAttribute;
@@ -62361,9 +59806,7 @@ class WriteProject {
     if (!_gitPasswordUserAttributeSet &&
         _apiMapResponse.containsKey('git_password_user_attribute')) {
       _gitPasswordUserAttribute =
-          _apiMapResponse['git_password_user_attribute'] == null
-              ? null
-              : _apiMapResponse['git_password_user_attribute'].toString();
+          _apiMapResponse['git_password_user_attribute']?.toString();
       _gitPasswordUserAttributeSet = true;
     }
     return _gitPasswordUserAttribute;
@@ -62379,9 +59822,7 @@ class WriteProject {
   String get gitServiceName {
     if (!_gitServiceNameSet &&
         _apiMapResponse.containsKey('git_service_name')) {
-      _gitServiceName = _apiMapResponse['git_service_name'] == null
-          ? null
-          : _apiMapResponse['git_service_name'].toString();
+      _gitServiceName = _apiMapResponse['git_service_name']?.toString();
       _gitServiceNameSet = true;
     }
     return _gitServiceName;
@@ -62415,10 +59856,7 @@ class WriteProject {
     if (!_gitApplicationServerHttpSchemeSet &&
         _apiMapResponse.containsKey('git_application_server_http_scheme')) {
       _gitApplicationServerHttpScheme =
-          _apiMapResponse['git_application_server_http_scheme'] == null
-              ? null
-              : _apiMapResponse['git_application_server_http_scheme']
-                  .toString();
+          _apiMapResponse['git_application_server_http_scheme']?.toString();
       _gitApplicationServerHttpSchemeSet = true;
     }
     return _gitApplicationServerHttpScheme;
@@ -62433,9 +59871,7 @@ class WriteProject {
 
   String get deploySecret {
     if (!_deploySecretSet && _apiMapResponse.containsKey('deploy_secret')) {
-      _deploySecret = _apiMapResponse['deploy_secret'] == null
-          ? null
-          : _apiMapResponse['deploy_secret'].toString();
+      _deploySecret = _apiMapResponse['deploy_secret']?.toString();
       _deploySecretSet = true;
     }
     return _deploySecret;
@@ -62531,9 +59967,7 @@ class WriteProject {
   String get dependencyStatus {
     if (!_dependencyStatusSet &&
         _apiMapResponse.containsKey('dependency_status')) {
-      _dependencyStatus = _apiMapResponse['dependency_status'] == null
-          ? null
-          : _apiMapResponse['dependency_status'].toString();
+      _dependencyStatus = _apiMapResponse['dependency_status']?.toString();
       _dependencyStatusSet = true;
     }
     return _dependencyStatus;
@@ -62711,9 +60145,7 @@ class WriteQuery {
 
   String get model {
     if (!_modelSet && _apiMapResponse.containsKey('model')) {
-      _model = _apiMapResponse['model'] == null
-          ? null
-          : _apiMapResponse['model'].toString();
+      _model = _apiMapResponse['model']?.toString();
       _modelSet = true;
     }
     return _model;
@@ -62728,9 +60160,7 @@ class WriteQuery {
 
   String get view {
     if (!_viewSet && _apiMapResponse.containsKey('view')) {
-      _view = _apiMapResponse['view'] == null
-          ? null
-          : _apiMapResponse['view'].toString();
+      _view = _apiMapResponse['view']?.toString();
       _viewSet = true;
     }
     return _view;
@@ -62745,9 +60175,8 @@ class WriteQuery {
 
   List<String> get fields {
     if (!_fieldsSet && _apiMapResponse.containsKey('fields')) {
-      _fields = _apiMapResponse['fields'] == null
-          ? null
-          : _apiMapResponse['fields'].map<String>((i) => i as String).toList();
+      _fields =
+          _apiMapResponse['fields']?.map<String>((i) => i as String)?.toList();
       _fieldsSet = true;
     }
     return _fields;
@@ -62762,9 +60191,8 @@ class WriteQuery {
 
   List<String> get pivots {
     if (!_pivotsSet && _apiMapResponse.containsKey('pivots')) {
-      _pivots = _apiMapResponse['pivots'] == null
-          ? null
-          : _apiMapResponse['pivots'].map<String>((i) => i as String).toList();
+      _pivots =
+          _apiMapResponse['pivots']?.map<String>((i) => i as String)?.toList();
       _pivotsSet = true;
     }
     return _pivots;
@@ -62779,11 +60207,9 @@ class WriteQuery {
 
   List<String> get fillFields {
     if (!_fillFieldsSet && _apiMapResponse.containsKey('fill_fields')) {
-      _fillFields = _apiMapResponse['fill_fields'] == null
-          ? null
-          : _apiMapResponse['fill_fields']
-              .map<String>((i) => i as String)
-              .toList();
+      _fillFields = _apiMapResponse['fill_fields']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _fillFieldsSet = true;
     }
     return _fillFields;
@@ -62814,9 +60240,7 @@ class WriteQuery {
   String get filterExpression {
     if (!_filterExpressionSet &&
         _apiMapResponse.containsKey('filter_expression')) {
-      _filterExpression = _apiMapResponse['filter_expression'] == null
-          ? null
-          : _apiMapResponse['filter_expression'].toString();
+      _filterExpression = _apiMapResponse['filter_expression']?.toString();
       _filterExpressionSet = true;
     }
     return _filterExpression;
@@ -62831,9 +60255,8 @@ class WriteQuery {
 
   List<String> get sorts {
     if (!_sortsSet && _apiMapResponse.containsKey('sorts')) {
-      _sorts = _apiMapResponse['sorts'] == null
-          ? null
-          : _apiMapResponse['sorts'].map<String>((i) => i as String).toList();
+      _sorts =
+          _apiMapResponse['sorts']?.map<String>((i) => i as String)?.toList();
       _sortsSet = true;
     }
     return _sorts;
@@ -62848,9 +60271,7 @@ class WriteQuery {
 
   String get limit {
     if (!_limitSet && _apiMapResponse.containsKey('limit')) {
-      _limit = _apiMapResponse['limit'] == null
-          ? null
-          : _apiMapResponse['limit'].toString();
+      _limit = _apiMapResponse['limit']?.toString();
       _limitSet = true;
     }
     return _limit;
@@ -62865,9 +60286,7 @@ class WriteQuery {
 
   String get columnLimit {
     if (!_columnLimitSet && _apiMapResponse.containsKey('column_limit')) {
-      _columnLimit = _apiMapResponse['column_limit'] == null
-          ? null
-          : _apiMapResponse['column_limit'].toString();
+      _columnLimit = _apiMapResponse['column_limit']?.toString();
       _columnLimitSet = true;
     }
     return _columnLimit;
@@ -62897,9 +60316,7 @@ class WriteQuery {
 
   String get rowTotal {
     if (!_rowTotalSet && _apiMapResponse.containsKey('row_total')) {
-      _rowTotal = _apiMapResponse['row_total'] == null
-          ? null
-          : _apiMapResponse['row_total'].toString();
+      _rowTotal = _apiMapResponse['row_total']?.toString();
       _rowTotalSet = true;
     }
     return _rowTotal;
@@ -62914,11 +60331,9 @@ class WriteQuery {
 
   List<String> get subtotals {
     if (!_subtotalsSet && _apiMapResponse.containsKey('subtotals')) {
-      _subtotals = _apiMapResponse['subtotals'] == null
-          ? null
-          : _apiMapResponse['subtotals']
-              .map<String>((i) => i as String)
-              .toList();
+      _subtotals = _apiMapResponse['subtotals']
+          ?.map<String>((i) => i as String)
+          ?.toList();
       _subtotalsSet = true;
     }
     return _subtotals;
@@ -62964,9 +60379,7 @@ class WriteQuery {
   String get visibleUiSections {
     if (!_visibleUiSectionsSet &&
         _apiMapResponse.containsKey('visible_ui_sections')) {
-      _visibleUiSections = _apiMapResponse['visible_ui_sections'] == null
-          ? null
-          : _apiMapResponse['visible_ui_sections'].toString();
+      _visibleUiSections = _apiMapResponse['visible_ui_sections']?.toString();
       _visibleUiSectionsSet = true;
     }
     return _visibleUiSections;
@@ -62981,9 +60394,7 @@ class WriteQuery {
 
   String get dynamicFields {
     if (!_dynamicFieldsSet && _apiMapResponse.containsKey('dynamic_fields')) {
-      _dynamicFields = _apiMapResponse['dynamic_fields'] == null
-          ? null
-          : _apiMapResponse['dynamic_fields'].toString();
+      _dynamicFields = _apiMapResponse['dynamic_fields']?.toString();
       _dynamicFieldsSet = true;
     }
     return _dynamicFields;
@@ -62998,9 +60409,7 @@ class WriteQuery {
 
   String get clientId {
     if (!_clientIdSet && _apiMapResponse.containsKey('client_id')) {
-      _clientId = _apiMapResponse['client_id'] == null
-          ? null
-          : _apiMapResponse['client_id'].toString();
+      _clientId = _apiMapResponse['client_id']?.toString();
       _clientIdSet = true;
     }
     return _clientId;
@@ -63015,9 +60424,7 @@ class WriteQuery {
 
   String get queryTimezone {
     if (!_queryTimezoneSet && _apiMapResponse.containsKey('query_timezone')) {
-      _queryTimezone = _apiMapResponse['query_timezone'] == null
-          ? null
-          : _apiMapResponse['query_timezone'].toString();
+      _queryTimezone = _apiMapResponse['query_timezone']?.toString();
       _queryTimezoneSet = true;
     }
     return _queryTimezone;
@@ -63139,9 +60546,7 @@ class WriteRepositoryCredential {
 
   String get gitUsername {
     if (!_gitUsernameSet && _apiMapResponse.containsKey('git_username')) {
-      _gitUsername = _apiMapResponse['git_username'] == null
-          ? null
-          : _apiMapResponse['git_username'].toString();
+      _gitUsername = _apiMapResponse['git_username']?.toString();
       _gitUsernameSet = true;
     }
     return _gitUsername;
@@ -63156,9 +60561,7 @@ class WriteRepositoryCredential {
 
   String get gitPassword {
     if (!_gitPasswordSet && _apiMapResponse.containsKey('git_password')) {
-      _gitPassword = _apiMapResponse['git_password'] == null
-          ? null
-          : _apiMapResponse['git_password'].toString();
+      _gitPassword = _apiMapResponse['git_password']?.toString();
       _gitPasswordSet = true;
     }
     return _gitPassword;
@@ -63173,9 +60576,7 @@ class WriteRepositoryCredential {
 
   String get sshPublicKey {
     if (!_sshPublicKeySet && _apiMapResponse.containsKey('ssh_public_key')) {
-      _sshPublicKey = _apiMapResponse['ssh_public_key'] == null
-          ? null
-          : _apiMapResponse['ssh_public_key'].toString();
+      _sshPublicKey = _apiMapResponse['ssh_public_key']?.toString();
       _sshPublicKeySet = true;
     }
     return _sshPublicKey;
@@ -63285,7 +60686,7 @@ class WriteResultMakerWithIdVisConfigAndDynamicFields {
   Map toJson() {
     var json = {};
     if (_querySet || _apiMapResponse.containsKey('query')) {
-      json['query'] = query == null ? null : query.toJson();
+      json['query'] = query?.toJson();
     }
     return json;
   }
@@ -63317,9 +60718,7 @@ class WriteRole {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -63430,15 +60829,14 @@ class WriteRole {
       json['name'] = name;
     }
     if (_permissionSetSet || _apiMapResponse.containsKey('permission_set')) {
-      json['permission_set'] =
-          permissionSet == null ? null : permissionSet.toJson();
+      json['permission_set'] = permissionSet?.toJson();
     }
     if (_permissionSetIdSet ||
         _apiMapResponse.containsKey('permission_set_id')) {
       json['permission_set_id'] = permissionSetId;
     }
     if (_modelSetSet || _apiMapResponse.containsKey('model_set')) {
-      json['model_set'] = modelSet == null ? null : modelSet.toJson();
+      json['model_set'] = modelSet?.toJson();
     }
     if (_modelSetIdSet || _apiMapResponse.containsKey('model_set_id')) {
       json['model_set_id'] = modelSetId;
@@ -63545,9 +60943,7 @@ class WriteSamlConfig {
 
   String get idpCert {
     if (!_idpCertSet && _apiMapResponse.containsKey('idp_cert')) {
-      _idpCert = _apiMapResponse['idp_cert'] == null
-          ? null
-          : _apiMapResponse['idp_cert'].toString();
+      _idpCert = _apiMapResponse['idp_cert']?.toString();
       _idpCertSet = true;
     }
     return _idpCert;
@@ -63562,9 +60958,7 @@ class WriteSamlConfig {
 
   String get idpUrl {
     if (!_idpUrlSet && _apiMapResponse.containsKey('idp_url')) {
-      _idpUrl = _apiMapResponse['idp_url'] == null
-          ? null
-          : _apiMapResponse['idp_url'].toString();
+      _idpUrl = _apiMapResponse['idp_url']?.toString();
       _idpUrlSet = true;
     }
     return _idpUrl;
@@ -63579,9 +60973,7 @@ class WriteSamlConfig {
 
   String get idpIssuer {
     if (!_idpIssuerSet && _apiMapResponse.containsKey('idp_issuer')) {
-      _idpIssuer = _apiMapResponse['idp_issuer'] == null
-          ? null
-          : _apiMapResponse['idp_issuer'].toString();
+      _idpIssuer = _apiMapResponse['idp_issuer']?.toString();
       _idpIssuerSet = true;
     }
     return _idpIssuer;
@@ -63596,9 +60988,7 @@ class WriteSamlConfig {
 
   String get idpAudience {
     if (!_idpAudienceSet && _apiMapResponse.containsKey('idp_audience')) {
-      _idpAudience = _apiMapResponse['idp_audience'] == null
-          ? null
-          : _apiMapResponse['idp_audience'].toString();
+      _idpAudience = _apiMapResponse['idp_audience']?.toString();
       _idpAudienceSet = true;
     }
     return _idpAudience;
@@ -63631,9 +61021,7 @@ class WriteSamlConfig {
     if (!_userAttributeMapEmailSet &&
         _apiMapResponse.containsKey('user_attribute_map_email')) {
       _userAttributeMapEmail =
-          _apiMapResponse['user_attribute_map_email'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_email'].toString();
+          _apiMapResponse['user_attribute_map_email']?.toString();
       _userAttributeMapEmailSet = true;
     }
     return _userAttributeMapEmail;
@@ -63650,9 +61038,7 @@ class WriteSamlConfig {
     if (!_userAttributeMapFirstNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_first_name')) {
       _userAttributeMapFirstName =
-          _apiMapResponse['user_attribute_map_first_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_first_name'].toString();
+          _apiMapResponse['user_attribute_map_first_name']?.toString();
       _userAttributeMapFirstNameSet = true;
     }
     return _userAttributeMapFirstName;
@@ -63669,9 +61055,7 @@ class WriteSamlConfig {
     if (!_userAttributeMapLastNameSet &&
         _apiMapResponse.containsKey('user_attribute_map_last_name')) {
       _userAttributeMapLastName =
-          _apiMapResponse['user_attribute_map_last_name'] == null
-              ? null
-              : _apiMapResponse['user_attribute_map_last_name'].toString();
+          _apiMapResponse['user_attribute_map_last_name']?.toString();
       _userAttributeMapLastNameSet = true;
     }
     return _userAttributeMapLastName;
@@ -63688,9 +61072,7 @@ class WriteSamlConfig {
     if (!_newUserMigrationTypesSet &&
         _apiMapResponse.containsKey('new_user_migration_types')) {
       _newUserMigrationTypes =
-          _apiMapResponse['new_user_migration_types'] == null
-              ? null
-              : _apiMapResponse['new_user_migration_types'].toString();
+          _apiMapResponse['new_user_migration_types']?.toString();
       _newUserMigrationTypesSet = true;
     }
     return _newUserMigrationTypes;
@@ -63723,12 +61105,9 @@ class WriteSamlConfig {
   List<int> get defaultNewUserRoleIds {
     if (!_defaultNewUserRoleIdsSet &&
         _apiMapResponse.containsKey('default_new_user_role_ids')) {
-      _defaultNewUserRoleIds =
-          _apiMapResponse['default_new_user_role_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_role_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserRoleIds = _apiMapResponse['default_new_user_role_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserRoleIdsSet = true;
     }
     return _defaultNewUserRoleIds;
@@ -63744,12 +61123,9 @@ class WriteSamlConfig {
   List<int> get defaultNewUserGroupIds {
     if (!_defaultNewUserGroupIdsSet &&
         _apiMapResponse.containsKey('default_new_user_group_ids')) {
-      _defaultNewUserGroupIds =
-          _apiMapResponse['default_new_user_group_ids'] == null
-              ? null
-              : _apiMapResponse['default_new_user_group_ids']
-                  .map<int>((i) => i as int)
-                  .toList();
+      _defaultNewUserGroupIds = _apiMapResponse['default_new_user_group_ids']
+          ?.map<int>((i) => i as int)
+          ?.toList();
       _defaultNewUserGroupIdsSet = true;
     }
     return _defaultNewUserGroupIds;
@@ -63781,9 +61157,7 @@ class WriteSamlConfig {
   String get groupsAttribute {
     if (!_groupsAttributeSet &&
         _apiMapResponse.containsKey('groups_attribute')) {
-      _groupsAttribute = _apiMapResponse['groups_attribute'] == null
-          ? null
-          : _apiMapResponse['groups_attribute'].toString();
+      _groupsAttribute = _apiMapResponse['groups_attribute']?.toString();
       _groupsAttributeSet = true;
     }
     return _groupsAttribute;
@@ -63858,9 +61232,7 @@ class WriteSamlConfig {
   String get groupsFinderType {
     if (!_groupsFinderTypeSet &&
         _apiMapResponse.containsKey('groups_finder_type')) {
-      _groupsFinderType = _apiMapResponse['groups_finder_type'] == null
-          ? null
-          : _apiMapResponse['groups_finder_type'].toString();
+      _groupsFinderType = _apiMapResponse['groups_finder_type']?.toString();
       _groupsFinderTypeSet = true;
     }
     return _groupsFinderType;
@@ -63876,9 +61248,7 @@ class WriteSamlConfig {
   String get groupsMemberValue {
     if (!_groupsMemberValueSet &&
         _apiMapResponse.containsKey('groups_member_value')) {
-      _groupsMemberValue = _apiMapResponse['groups_member_value'] == null
-          ? null
-          : _apiMapResponse['groups_member_value'].toString();
+      _groupsMemberValue = _apiMapResponse['groups_member_value']?.toString();
       _groupsMemberValueSet = true;
     }
     return _groupsMemberValue;
@@ -64040,9 +61410,8 @@ class WriteSamlConfig {
     }
     if (_groupsWithRoleIdsSet ||
         _apiMapResponse.containsKey('groups_with_role_ids')) {
-      json['groups_with_role_ids'] = groupsWithRoleIds == null
-          ? null
-          : groupsWithRoleIds.map((i) => i.toJson()).toList();
+      json['groups_with_role_ids'] =
+          groupsWithRoleIds?.map((i) => i.toJson())?.toList();
     }
     if (_authRequiresRoleSet ||
         _apiMapResponse.containsKey('auth_requires_role')) {
@@ -64050,9 +61419,8 @@ class WriteSamlConfig {
     }
     if (_userAttributesWithIdsSet ||
         _apiMapResponse.containsKey('user_attributes_with_ids')) {
-      json['user_attributes_with_ids'] = userAttributesWithIds == null
-          ? null
-          : userAttributesWithIds.map((i) => i.toJson()).toList();
+      json['user_attributes_with_ids'] =
+          userAttributesWithIds?.map((i) => i.toJson())?.toList();
     }
     if (_groupsFinderTypeSet ||
         _apiMapResponse.containsKey('groups_finder_type')) {
@@ -64171,9 +61539,7 @@ class WriteScheduledPlan {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -64234,9 +61600,7 @@ class WriteScheduledPlan {
 
   String get lookId {
     if (!_lookIdSet && _apiMapResponse.containsKey('look_id')) {
-      _lookId = _apiMapResponse['look_id'] == null
-          ? null
-          : _apiMapResponse['look_id'].toString();
+      _lookId = _apiMapResponse['look_id']?.toString();
       _lookIdSet = true;
     }
     return _lookId;
@@ -64267,9 +61631,7 @@ class WriteScheduledPlan {
   String get lookmlDashboardId {
     if (!_lookmlDashboardIdSet &&
         _apiMapResponse.containsKey('lookml_dashboard_id')) {
-      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id'] == null
-          ? null
-          : _apiMapResponse['lookml_dashboard_id'].toString();
+      _lookmlDashboardId = _apiMapResponse['lookml_dashboard_id']?.toString();
       _lookmlDashboardIdSet = true;
     }
     return _lookmlDashboardId;
@@ -64284,9 +61646,7 @@ class WriteScheduledPlan {
 
   String get filtersString {
     if (!_filtersStringSet && _apiMapResponse.containsKey('filters_string')) {
-      _filtersString = _apiMapResponse['filters_string'] == null
-          ? null
-          : _apiMapResponse['filters_string'].toString();
+      _filtersString = _apiMapResponse['filters_string']?.toString();
       _filtersStringSet = true;
     }
     return _filtersString;
@@ -64302,9 +61662,7 @@ class WriteScheduledPlan {
   String get dashboardFilters {
     if (!_dashboardFiltersSet &&
         _apiMapResponse.containsKey('dashboard_filters')) {
-      _dashboardFilters = _apiMapResponse['dashboard_filters'] == null
-          ? null
-          : _apiMapResponse['dashboard_filters'].toString();
+      _dashboardFilters = _apiMapResponse['dashboard_filters']?.toString();
       _dashboardFiltersSet = true;
     }
     return _dashboardFilters;
@@ -64381,9 +61739,7 @@ class WriteScheduledPlan {
 
   String get crontab {
     if (!_crontabSet && _apiMapResponse.containsKey('crontab')) {
-      _crontab = _apiMapResponse['crontab'] == null
-          ? null
-          : _apiMapResponse['crontab'].toString();
+      _crontab = _apiMapResponse['crontab']?.toString();
       _crontabSet = true;
     }
     return _crontab;
@@ -64398,9 +61754,7 @@ class WriteScheduledPlan {
 
   String get datagroup {
     if (!_datagroupSet && _apiMapResponse.containsKey('datagroup')) {
-      _datagroup = _apiMapResponse['datagroup'] == null
-          ? null
-          : _apiMapResponse['datagroup'].toString();
+      _datagroup = _apiMapResponse['datagroup']?.toString();
       _datagroupSet = true;
     }
     return _datagroup;
@@ -64415,9 +61769,7 @@ class WriteScheduledPlan {
 
   String get timezone {
     if (!_timezoneSet && _apiMapResponse.containsKey('timezone')) {
-      _timezone = _apiMapResponse['timezone'] == null
-          ? null
-          : _apiMapResponse['timezone'].toString();
+      _timezone = _apiMapResponse['timezone']?.toString();
       _timezoneSet = true;
     }
     return _timezone;
@@ -64432,9 +61784,7 @@ class WriteScheduledPlan {
 
   String get queryId {
     if (!_queryIdSet && _apiMapResponse.containsKey('query_id')) {
-      _queryId = _apiMapResponse['query_id'] == null
-          ? null
-          : _apiMapResponse['query_id'].toString();
+      _queryId = _apiMapResponse['query_id']?.toString();
       _queryIdSet = true;
     }
     return _queryId;
@@ -64501,9 +61851,7 @@ class WriteScheduledPlan {
 
   String get pdfPaperSize {
     if (!_pdfPaperSizeSet && _apiMapResponse.containsKey('pdf_paper_size')) {
-      _pdfPaperSize = _apiMapResponse['pdf_paper_size'] == null
-          ? null
-          : _apiMapResponse['pdf_paper_size'].toString();
+      _pdfPaperSize = _apiMapResponse['pdf_paper_size']?.toString();
       _pdfPaperSizeSet = true;
     }
     return _pdfPaperSize;
@@ -64548,9 +61896,7 @@ class WriteScheduledPlan {
 
   String get colorTheme {
     if (!_colorThemeSet && _apiMapResponse.containsKey('color_theme')) {
-      _colorTheme = _apiMapResponse['color_theme'] == null
-          ? null
-          : _apiMapResponse['color_theme'].toString();
+      _colorTheme = _apiMapResponse['color_theme']?.toString();
       _colorThemeSet = true;
     }
     return _colorTheme;
@@ -64676,9 +62022,8 @@ class WriteScheduledPlan {
     }
     if (_scheduledPlanDestinationSet ||
         _apiMapResponse.containsKey('scheduled_plan_destination')) {
-      json['scheduled_plan_destination'] = scheduledPlanDestination == null
-          ? null
-          : scheduledPlanDestination.map((i) => i.toJson()).toList();
+      json['scheduled_plan_destination'] =
+          scheduledPlanDestination?.map((i) => i.toJson())?.toList();
     }
     if (_runOnceSet || _apiMapResponse.containsKey('run_once')) {
       json['run_once'] = runOnce;
@@ -65015,14 +62360,11 @@ class WriteSetting {
     }
     if (_whitelabelConfigurationSet ||
         _apiMapResponse.containsKey('whitelabel_configuration')) {
-      json['whitelabel_configuration'] = whitelabelConfiguration == null
-          ? null
-          : whitelabelConfiguration.toJson();
+      json['whitelabel_configuration'] = whitelabelConfiguration?.toJson();
     }
     if (_customWelcomeEmailSet ||
         _apiMapResponse.containsKey('custom_welcome_email')) {
-      json['custom_welcome_email'] =
-          customWelcomeEmail == null ? null : customWelcomeEmail.toJson();
+      json['custom_welcome_email'] = customWelcomeEmail?.toJson();
     }
     return json;
   }
@@ -65051,9 +62393,7 @@ class WriteSshServer {
 
   String get sshServerName {
     if (!_sshServerNameSet && _apiMapResponse.containsKey('ssh_server_name')) {
-      _sshServerName = _apiMapResponse['ssh_server_name'] == null
-          ? null
-          : _apiMapResponse['ssh_server_name'].toString();
+      _sshServerName = _apiMapResponse['ssh_server_name']?.toString();
       _sshServerNameSet = true;
     }
     return _sshServerName;
@@ -65068,9 +62408,7 @@ class WriteSshServer {
 
   String get sshServerHost {
     if (!_sshServerHostSet && _apiMapResponse.containsKey('ssh_server_host')) {
-      _sshServerHost = _apiMapResponse['ssh_server_host'] == null
-          ? null
-          : _apiMapResponse['ssh_server_host'].toString();
+      _sshServerHost = _apiMapResponse['ssh_server_host']?.toString();
       _sshServerHostSet = true;
     }
     return _sshServerHost;
@@ -65100,9 +62438,7 @@ class WriteSshServer {
 
   String get sshServerUser {
     if (!_sshServerUserSet && _apiMapResponse.containsKey('ssh_server_user')) {
-      _sshServerUser = _apiMapResponse['ssh_server_user'] == null
-          ? null
-          : _apiMapResponse['ssh_server_user'].toString();
+      _sshServerUser = _apiMapResponse['ssh_server_user']?.toString();
       _sshServerUserSet = true;
     }
     return _sshServerUser;
@@ -65177,9 +62513,7 @@ class WriteSshTunnel {
 
   String get sshServerId {
     if (!_sshServerIdSet && _apiMapResponse.containsKey('ssh_server_id')) {
-      _sshServerId = _apiMapResponse['ssh_server_id'] == null
-          ? null
-          : _apiMapResponse['ssh_server_id'].toString();
+      _sshServerId = _apiMapResponse['ssh_server_id']?.toString();
       _sshServerIdSet = true;
     }
     return _sshServerId;
@@ -65194,9 +62528,7 @@ class WriteSshTunnel {
 
   String get databaseHost {
     if (!_databaseHostSet && _apiMapResponse.containsKey('database_host')) {
-      _databaseHost = _apiMapResponse['database_host'] == null
-          ? null
-          : _apiMapResponse['database_host'].toString();
+      _databaseHost = _apiMapResponse['database_host']?.toString();
       _databaseHostSet = true;
     }
     return _databaseHost;
@@ -65320,9 +62652,7 @@ class WriteTheme {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -65378,16 +62708,16 @@ class WriteTheme {
   Map toJson() {
     var json = {};
     if (_beginAtSet || _apiMapResponse.containsKey('begin_at')) {
-      json['begin_at'] = beginAt == null ? null : beginAt.toIso8601String();
+      json['begin_at'] = beginAt?.toIso8601String();
     }
     if (_endAtSet || _apiMapResponse.containsKey('end_at')) {
-      json['end_at'] = endAt == null ? null : endAt.toIso8601String();
+      json['end_at'] = endAt?.toIso8601String();
     }
     if (_nameSet || _apiMapResponse.containsKey('name')) {
       json['name'] = name;
     }
     if (_settingsSet || _apiMapResponse.containsKey('settings')) {
-      json['settings'] = settings == null ? null : settings.toJson();
+      json['settings'] = settings?.toJson();
     }
     return json;
   }
@@ -65448,9 +62778,7 @@ class WriteUser {
 
   String get firstName {
     if (!_firstNameSet && _apiMapResponse.containsKey('first_name')) {
-      _firstName = _apiMapResponse['first_name'] == null
-          ? null
-          : _apiMapResponse['first_name'].toString();
+      _firstName = _apiMapResponse['first_name']?.toString();
       _firstNameSet = true;
     }
     return _firstName;
@@ -65465,9 +62793,7 @@ class WriteUser {
 
   String get homeFolderId {
     if (!_homeFolderIdSet && _apiMapResponse.containsKey('home_folder_id')) {
-      _homeFolderId = _apiMapResponse['home_folder_id'] == null
-          ? null
-          : _apiMapResponse['home_folder_id'].toString();
+      _homeFolderId = _apiMapResponse['home_folder_id']?.toString();
       _homeFolderIdSet = true;
     }
     return _homeFolderId;
@@ -65497,9 +62823,7 @@ class WriteUser {
 
   String get lastName {
     if (!_lastNameSet && _apiMapResponse.containsKey('last_name')) {
-      _lastName = _apiMapResponse['last_name'] == null
-          ? null
-          : _apiMapResponse['last_name'].toString();
+      _lastName = _apiMapResponse['last_name']?.toString();
       _lastNameSet = true;
     }
     return _lastName;
@@ -65514,9 +62838,7 @@ class WriteUser {
 
   String get locale {
     if (!_localeSet && _apiMapResponse.containsKey('locale')) {
-      _locale = _apiMapResponse['locale'] == null
-          ? null
-          : _apiMapResponse['locale'].toString();
+      _locale = _apiMapResponse['locale']?.toString();
       _localeSet = true;
     }
     return _locale;
@@ -65587,8 +62909,7 @@ class WriteUser {
     var json = {};
     if (_credentialsEmailSet ||
         _apiMapResponse.containsKey('credentials_email')) {
-      json['credentials_email'] =
-          credentialsEmail == null ? null : credentialsEmail.toJson();
+      json['credentials_email'] = credentialsEmail?.toJson();
     }
     if (_firstNameSet || _apiMapResponse.containsKey('first_name')) {
       json['first_name'] = firstName;
@@ -65651,9 +62972,7 @@ class WriteUserAttribute {
 
   String get name {
     if (!_nameSet && _apiMapResponse.containsKey('name')) {
-      _name = _apiMapResponse['name'] == null
-          ? null
-          : _apiMapResponse['name'].toString();
+      _name = _apiMapResponse['name']?.toString();
       _nameSet = true;
     }
     return _name;
@@ -65668,9 +62987,7 @@ class WriteUserAttribute {
 
   String get label {
     if (!_labelSet && _apiMapResponse.containsKey('label')) {
-      _label = _apiMapResponse['label'] == null
-          ? null
-          : _apiMapResponse['label'].toString();
+      _label = _apiMapResponse['label']?.toString();
       _labelSet = true;
     }
     return _label;
@@ -65685,9 +63002,7 @@ class WriteUserAttribute {
 
   String get type {
     if (!_typeSet && _apiMapResponse.containsKey('type')) {
-      _type = _apiMapResponse['type'] == null
-          ? null
-          : _apiMapResponse['type'].toString();
+      _type = _apiMapResponse['type']?.toString();
       _typeSet = true;
     }
     return _type;
@@ -65702,9 +63017,7 @@ class WriteUserAttribute {
 
   String get defaultValue {
     if (!_defaultValueSet && _apiMapResponse.containsKey('default_value')) {
-      _defaultValue = _apiMapResponse['default_value'] == null
-          ? null
-          : _apiMapResponse['default_value'].toString();
+      _defaultValue = _apiMapResponse['default_value']?.toString();
       _defaultValueSet = true;
     }
     return _defaultValue;
@@ -65766,9 +63079,7 @@ class WriteUserAttribute {
     if (!_hiddenValueDomainWhitelistSet &&
         _apiMapResponse.containsKey('hidden_value_domain_whitelist')) {
       _hiddenValueDomainWhitelist =
-          _apiMapResponse['hidden_value_domain_whitelist'] == null
-              ? null
-              : _apiMapResponse['hidden_value_domain_whitelist'].toString();
+          _apiMapResponse['hidden_value_domain_whitelist']?.toString();
       _hiddenValueDomainWhitelistSet = true;
     }
     return _hiddenValueDomainWhitelist;
@@ -65850,9 +63161,7 @@ class WriteUserAttributeWithValue {
 
   String get value {
     if (!_valueSet && _apiMapResponse.containsKey('value')) {
-      _value = _apiMapResponse['value'] == null
-          ? null
-          : _apiMapResponse['value'].toString();
+      _value = _apiMapResponse['value']?.toString();
       _valueSet = true;
     }
     return _value;
@@ -65948,9 +63257,7 @@ class WriteWhitelabelConfiguration {
 
   String get logoFile {
     if (!_logoFileSet && _apiMapResponse.containsKey('logo_file')) {
-      _logoFile = _apiMapResponse['logo_file'] == null
-          ? null
-          : _apiMapResponse['logo_file'].toString();
+      _logoFile = _apiMapResponse['logo_file']?.toString();
       _logoFileSet = true;
     }
     return _logoFile;
@@ -65965,9 +63272,7 @@ class WriteWhitelabelConfiguration {
 
   String get faviconFile {
     if (!_faviconFileSet && _apiMapResponse.containsKey('favicon_file')) {
-      _faviconFile = _apiMapResponse['favicon_file'] == null
-          ? null
-          : _apiMapResponse['favicon_file'].toString();
+      _faviconFile = _apiMapResponse['favicon_file']?.toString();
       _faviconFileSet = true;
     }
     return _faviconFile;
@@ -65982,9 +63287,7 @@ class WriteWhitelabelConfiguration {
 
   String get defaultTitle {
     if (!_defaultTitleSet && _apiMapResponse.containsKey('default_title')) {
-      _defaultTitle = _apiMapResponse['default_title'] == null
-          ? null
-          : _apiMapResponse['default_title'].toString();
+      _defaultTitle = _apiMapResponse['default_title']?.toString();
       _defaultTitleSet = true;
     }
     return _defaultTitle;
