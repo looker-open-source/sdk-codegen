@@ -74,24 +74,36 @@ struct TestModel : SDKModel {
         get { _string1?.value }
         set { _string1 = newValue.map(AnyString.init) }
     }
-    var num1: Int64?
+    private var _num1: AnyInt?
+    var num1: Int64? {
+        get { _num1?.value }
+        set { _num1 = newValue.map(AnyInt.init) }
+    }
     private var _string2: AnyString?
     var string2: String? {
         get { _string2?.value }
         set { _string2 = newValue.map(AnyString.init) }
     }
-    var num2: Int64?
+    private var _num2: AnyInt?
+    var num2: Int64? {
+        get { _num2?.value }
+        set { _num2 = newValue.map(AnyInt.init) }
+    }
     private var _string3: AnyString?
     var string3: String? {
         get { _string3?.value }
         set { _string3 = newValue.map(AnyString.init) }
     }
-    var num3: Int64?
+    private var _num3: AnyInt?
+    var num3: Int64? {
+        get { _num3?.value }
+        set { _num3 = newValue.map(AnyInt.init) }
+    }
 
     private enum CodingKeys: String, CodingKey {
-        case num1 // = "_num1"
-        case num2 // = "_num2"
-        case num3 // = "_num3"
+        case _num1 = "num1"
+        case _num2 = "num2"
+        case _num3 = "num3"
         case _string1 = "string1"
         case _string2 = "string2"
         case _string3 = "string3"
@@ -99,11 +111,11 @@ struct TestModel : SDKModel {
     
     init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil) {
         self._string1 = string1.map(AnyString.init)
-        self.num1 = num1
+        self._num1 = num1.map(AnyInt.init)
         self._string2 = string2.map(AnyString.init)
-        self.num2 = num2
+        self._num2 = num2.map(AnyInt.init)
         self._string3 = string3.map(AnyString.init)
-        self.num3 = num3
+        self._num3 = num3.map(AnyInt.init)
     }
 
 }
@@ -129,26 +141,7 @@ class transportTests: XCTestCase {
     }
 
     func testJsonTypes() {
-        let forwardCompatible = """
-        {
-            "string1": 1,
-            "num1": 1,
-            "string2": "2",
-            "num2": 2,
-            "string3": "3",
-            "num3": 3,
-            "string4": "4",
-            "num4": 4
-        }
-        """
-        var actual: TestModel = try! deserialize(forwardCompatible)
-        XCTAssertEqual(actual.string1, "1")
-        XCTAssertEqual(actual.num1, 1)
-        XCTAssertEqual(actual.string2, "2")
-        XCTAssertEqual(actual.num2, 2)
-        XCTAssertEqual(actual.string3, "3")
-        XCTAssertEqual(actual.num3, 3)
-        let backwardCompatible = """
+        let payload = """
         {
             "string1": 1,
             "num1": 1,
@@ -160,25 +153,13 @@ class transportTests: XCTestCase {
             "num4": 4
         }
         """
-        // 'try!' expression unexpectedly raised an error: Swift.DecodingError.typeMismatch(Swift.Int64, Swift.DecodingError.Context(codingPath: [CodingKeys(stringValue: "num2", intValue: nil)], debugDescription: "Expected to decode Int64 but found a string/data instead.", underlyingError: nil))
-        do {
-            try actual = deserialize(backwardCompatible)
-        } catch let DecodingError.dataCorrupted(context) {
-            XCTFail("Data corrupted: \(context.debugDescription)")
-        } catch let DecodingError.keyNotFound(key, context) {
-            let message = "Key '\(key)' not found: \(context.debugDescription), codingPath: \(context.codingPath)"
-            XCTFail(message)
-        } catch let DecodingError.valueNotFound(value, context) {
-            let message = "Value '\(value)' not found: \(context.debugDescription), codingPath: \(context.codingPath)"
-            XCTFail(message)
-        } catch let DecodingError.typeMismatch(type, context) {
-            let message = "\(type)"
-            XCTAssertEqual(message, "Int64")
-            XCTAssertEqual(context.debugDescription, "Expected to decode Int64 but found a string/data instead.")
-            XCTAssertEqual(context.codingPath[0].stringValue, "num2")
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
+        let actual: TestModel = try! deserialize(payload)
+        XCTAssertEqual(actual.string1, "1")
+        XCTAssertEqual(actual.num1, 1)
+        XCTAssertEqual(actual.string2, "2")
+        XCTAssertEqual(actual.num2, 2)
+        XCTAssertEqual(actual.string3, "3")
+        XCTAssertEqual(actual.num3, 3)
     }
     
     func testAnyString() {

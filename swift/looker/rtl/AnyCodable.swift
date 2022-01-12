@@ -114,12 +114,61 @@ public struct AnyString: Codable {
             value = str
         } else if let int = try? container.decode(Int.self) {
             value = int.description
+        } else if let int = try? container.decode(UInt.self) {
+            value = int.description
+        } else if let int = try? container.decode(UInt32.self) {
+            value = int.description
+        } else if let int = try? container.decode(UInt64.self) {
+            value = int.description
+        } else if let int = try? container.decode(Int32.self) {
+            value = int.description
+        } else if let int = try? container.decode(Int64.self) {
+            value = int.description
         } else if let double = try? container.decode(Double.self) {
             value = double.description
         } else if let bool = try? container.decode(Bool.self) {
             value = bool.description
         } else {
-            throw DecodingError.typeMismatch(String.self, .init(codingPath: decoder.codingPath, debugDescription: ""))
+            throw DecodingError.typeMismatch(String.self, .init(codingPath: decoder.codingPath, debugDescription: "Input not convertable to String"))
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(value)
+    }
+}
+
+public struct AnyInt: Codable {
+    let value: Int64
+    
+    init(_ value: Int64) {
+        self.value = value
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        // attempt to decode from all JSON primitives
+        if let str = try? container.decode(String.self) {
+            value = Int64(str)!
+        } else if let int = try? container.decode(UInt.self) {
+            value = Int64(int)
+        } else if let int = try? container.decode(UInt32.self) {
+            value = Int64(int)
+        } else if let int = try? container.decode(UInt64.self) {
+            value = Int64(int)
+        } else if let int = try? container.decode(Int.self) {
+            value = Int64(int)
+        } else if let int = try? container.decode(Int32.self) {
+            value = Int64(int)
+        } else if let int = try? container.decode(Int64.self) {
+            value = int
+        } else if let double = try? container.decode(Double.self) {
+            value = Int64(double)
+        } else if let bool = try? container.decode(Bool.self) {
+            value = Int64(bool ? 1 : 0)
+        } else {
+            throw DecodingError.typeMismatch(String.self, .init(codingPath: decoder.codingPath, debugDescription: "Input not convertable to Int64"))
         }
     }
     
