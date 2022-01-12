@@ -75,4 +75,4 @@ Run `yarn format-analyze` from `{reporoot}/dart/looker_sdk` to lint the `dart` f
 
 ## Notes
 
-1. Region folding: Dart does not currently support region folding. visual studio code has a generic extension that supports region folding for dart. [Install](https://marketplace.visualstudio.com/items?itemName=maptz.regionfolder) if you wish the generated regions to be honored.
+1. Region folding: Dart does not currently support region folding. Visual Studio Code has a generic extension that supports region folding for dart. [Install](https://marketplace.visualstudio.com/items?itemName=maptz.regionfolder) if you wish the generated regions to be honored.
