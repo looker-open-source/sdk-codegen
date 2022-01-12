@@ -516,9 +516,10 @@ def test_deserialize_single() -> None:
     Should handle python reserved keywords as well as attempting to
     convert field values to proper type.
     """
-    # check that type conversion happens, str -> int in this case
+    # check that type conversion happens, str -> int and str -> int in this case
     data = copy.deepcopy(MODEL_DATA)
     data["id"] = "1"
+    data["name"] = 25
 
     d = json.dumps(data)
     model = sr.deserialize(data=d, structure=Model, converter=converter)
@@ -532,7 +533,7 @@ def test_deserialize_single() -> None:
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
-        name="my-name",
+        name="25",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],
