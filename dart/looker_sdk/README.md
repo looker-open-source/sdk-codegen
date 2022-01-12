@@ -1,6 +1,6 @@
 # Looker API for Dart SDK
 
-A dart implementation of the Looker API. Note that only the Looker 4.0 API is generated.
+A dart implementation of the Looker API. Note that only the SDK for Looker 4.0 API is generated.
 
 ## Usage
 
