@@ -16,7 +16,7 @@ CLIENT_SECRET=client_secret_from_looker_instance
 
 ## Add to project
 
-Add following to project `pubspec.yaml` dependencies. Replace `{SHA}` with the sha of the version of the SDK you want to use (a more permanent solution may be added in the future).
+Add the following to project `pubspec.yaml` dependencies. Replace `{SHA}` with the sha of the version of the SDK you want to use (a more permanent solution may be added in the future).
 
 ```
   looker_sdk:
