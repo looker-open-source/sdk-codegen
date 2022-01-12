@@ -516,7 +516,7 @@ def test_deserialize_single() -> None:
     Should handle python reserved keywords as well as attempting to
     convert field values to proper type.
     """
-    # check that type conversion happens, str -> int and str -> int in this case
+    # check that type conversion happens, str -> int and int -> str in this case
     data = copy.deepcopy(MODEL_DATA)
     data["id"] = "1"
     data["name"] = 25
