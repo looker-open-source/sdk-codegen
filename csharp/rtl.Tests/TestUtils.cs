@@ -11,20 +11,20 @@ namespace sdkrtl.Tests
         /// Name of the root looker.ini file
         /// </summary>
         string IniFileName { get; set; }
-        
+
         /// <summary>
         /// Name of the test data file
         /// </summary>
         string TestFileName { get; set; }
-        
+
         string HtmlTestUrl { get; set; }
-        
+
         string HtmlTestContent { get; set; }
         /// <summary>
         /// Test data parsed from <c>/test/data.yml.json</c>
         /// </summary>
         dynamic TestData { get; set; }
-        
+
         /// <summary>
         /// API settings read from <c>IniFileName</c>
         /// </summary>
@@ -49,7 +49,7 @@ namespace sdkrtl.Tests
             HtmlTestUrl = "https://github.com/looker-open-source/sdk-codegen";
             HtmlTestContent = "One SDK to rule them all";
 
-            var rootPath = Path.GetFullPath("../../../../");
+            var rootPath = Path.GetFullPath("../../../../../");
             IniFileName = iniFile ?? Environment.GetEnvironmentVariable("LOOKERSDK_INI") ??
                 Path.Combine(rootPath, "looker.ini");
             TestFileName = Path.Combine(rootPath, "test/data.yml.json");
