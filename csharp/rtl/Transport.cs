@@ -27,7 +27,7 @@ namespace Looker.RTL
         /// request timeout in seconds. Default to 30
         int Timeout { get; set; }
 
-        /// agent tag to use for the SDK requests 
+        /// agent tag to use for the SDK requests
         string AgentTag { get; set; }
     }
 
@@ -84,11 +84,11 @@ namespace Looker.RTL
     /// </summary>
     /// <remarks>
     /// The <c>Ok</c> property is read-only, determining its value by checking <c>StatusCode</c>.
-    /// </remarks> 
+    /// </remarks>
     public struct RawResponse : IRawResponse
     {
         public bool Ok => (StatusCode >= HttpStatusCode.OK && StatusCode < HttpStatusCode.Ambiguous);
-
+        public HttpMethod Method { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public string StatusMessage { get; set; }
         public string ContentType { get; set; }
@@ -166,7 +166,7 @@ namespace Looker.RTL
             // {
             //     DateFormatHandling = DateFormatHandling.IsoDateFormat,
             //     DateTimeZoneHandling = DateTimeZoneHandling.Utc
-            // };            
+            // };
         }
 
         public Transport(ITransportSettings settings, HttpClient client = null)
@@ -196,6 +196,7 @@ namespace Looker.RTL
             var raw = new RawResponse();
             if (response != null)
             {
+                raw.Method = response.RequestMessage.Method;
                 raw.StatusCode = response.StatusCode;
                 raw.StatusMessage = response.ReasonPhrase;
                 response.Content.Headers.TryGetValues("Content-Type", out var values);
@@ -288,7 +289,7 @@ namespace Looker.RTL
             {
                 return new SdkResponse<TSuccess, TError> { Error = response.Body as TError};
             }
-            
+
             switch (SdkUtils.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
