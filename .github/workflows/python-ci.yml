@@ -175,10 +175,20 @@ jobs:
           pip install tox
 
       - name: Determine credentials version
+        # Prior to 21_18, each version had different credentials and a 
+        # different secret. 21_20 and later all use the same credentials
+        # as 21_18. The parse_version.bash script parses the version and
+        # yields 21_12, 21_14, 21_16 etc for those versions but 21_18 for
+        # anything 21_18, 21_20, 22_0, etc.
+        #
+        # This can be factored out entirely once 21_18 is the earliest
+        # supported looker version.
         run: |
           echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.bash <<< ${{ matrix.looker }})" >> $GITHUB_ENV
 
       - name: Set up Looker credentials
+        # Load the correct credentials based on the version from
+        # the prior step.
         run: |
           echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
           echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
