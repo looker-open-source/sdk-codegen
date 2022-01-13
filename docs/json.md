@@ -179,7 +179,7 @@ Special-case code generation was required for backward and forward compatibility
 Compatibility is provided via:
 
 - an [`AnyString`](https://github.com/looker-open-source/sdk-codegen/blob/1487d8a38432cef2e994d14001df18659522ca90/swift/looker/rtl/AnyCodable.swift#L103-L140) custom type for string ID properties (either `id` or ending with `_id`) for forward compatibility
-- an [`AnyInt`](https://github.com/looker-open-source/sdk-codegen/blob/1487d8a38432cef2e994d14001df18659522ca90/swift/looker/rtl/AnyCodable.swift#L142-L179) custom type for integer ID properties (either `id` or ending with `_id`) for forward compatibility
+- an [`AnyInt`](https://github.com/looker-open-source/sdk-codegen/blob/1487d8a38432cef2e994d14001df18659522ca90/swift/looker/rtl/AnyCodable.swift#L142-L179) custom type for integer ID properties (either `id` or ending with `_id`) for backward compatibility
 - Special JSON handling in **every** SDK model that requires it
 
 This results in a verbose declaration as shown with this manually-coded prototype below:
