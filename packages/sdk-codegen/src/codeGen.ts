@@ -151,6 +151,10 @@ export interface ICodeGen {
 
   /** use special handling for a JSON value that can be a string or a number. Introduced for Swift. */
   anyString: boolean
+  /**
+   * omit the version number from the path
+   */
+  omitVersionFromPath?: boolean
 
   /** current version of the Api being generated */
   apiVersion: string

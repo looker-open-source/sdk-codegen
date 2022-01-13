@@ -1,0 +1,12 @@
+# the dart lib needs to be included in source control
+!lib/**
+
+# the following are excluded from source control.
+.env*
+temp/
+.dart_tool/
+.packages
+build/
+# recommendation is NOT to commit for library packages.
+pubspec.lock
+

@@ -1,0 +1,13 @@
+{
+  "name": "looker_dart_sdk",
+  "license": "MIT",
+  "scripts": {
+    "test": "dart test test",
+    "test:unit": "dart test test/unit",
+    "test:e2e": "dart test test/e2e",
+    "example": "dart run example/main.dart",
+    "analyze": "dart analyze",
+    "format-check": "dart format -o none --set-exit-if-changed .",
+    "format": "dart format ."
+  }
+}
