@@ -135,12 +135,12 @@ class AuthSession:
         if not (client_id and client_secret):
             raise error.SDKError("Required auth credentials not found.")
 
-        serialized = urllib.parse.urlencode(
-            {
-                "client_id": cast(str, client_id),
-                "client_secret": cast(str, client_secret),
-            }
-        ).encode("utf-8")
+        login = {
+            "client_id": cast(str, client_id),
+            "client_secret": cast(str, client_secret),
+        }
+
+        serialized = urllib.parse.urlencode(login).encode("utf-8")
 
         transport_options.setdefault("headers", {}).update(
             {"Content-Type": "application/x-www-form-urlencoded"}
