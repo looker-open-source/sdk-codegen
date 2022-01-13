@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  */
 
+import com.google.gson.Gson
 import com.looker.rtl.*
 import com.looker.sdk.AGENT_TAG
 import com.looker.sdk.ENVIRONMENT_PREFIX
@@ -29,6 +30,7 @@ import com.looker.sdk.LOOKER_APPID
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.junit.Test
+import java.io.File
 
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
@@ -80,5 +82,39 @@ class TestTransport {
         assertEquals("foo%2Fbar", encodeParam("foo/bar"))
         assertEquals("true", encodeParam(true))
         assertEquals("2.3", encodeParam(2.3))
+    }
+
+    data class TestModel(
+        val string1: String,
+        val num1: Int,
+        val string2: String,
+        val num2: Int,
+        val string3: String,
+        val num3: Int,
+    )
+
+    @Test
+    fun testJsonTyping() {
+        val payload = """
+{
+  "string1": 1,
+  "num1": 1,
+  "string2": "2",
+  "num2": "2",
+  "string3": "3",
+  "num3": 3,
+  "string4": "4",
+  "num4": 4
+}
+        """.trimIndent()
+        /// we use GSon so verify GSon handles ... flexible ... json
+        val gson = Gson()
+        var testModel = gson.fromJson(payload, TestModel::class.java)
+        assertEquals(testModel.string1, "1")
+        assertEquals(testModel.num1, 1)
+        assertEquals(testModel.string2, "2")
+        assertEquals(testModel.num2, 2)
+        assertEquals(testModel.string3, "3")
+        assertEquals(testModel.num3, 3)
     }
 }
