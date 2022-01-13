@@ -174,12 +174,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
-        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
+      - name: Determine credentials version
         run: |
-          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
-          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+          echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.bash <<< ${{ matrix.looker }})" >> $GITHUB_ENV
 
+      - name: Set up Looker credentials
+        run: |
+          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
 
       - name: Check that Looker is ready
         run: |
