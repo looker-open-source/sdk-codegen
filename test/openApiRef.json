@@ -35196,6 +35196,24 @@
         },
         "x-looker-status": "beta"
       },
+      "AnyIntIds": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "The unique id of this item",
+            "nullable": false
+          },
+          "user_id": {
+            "type": "integer",
+            "readOnly": true,
+            "description": "Test user id",
+            "nullable": false
+          }
+        },
+        "x-looker-status": "beta",
+        "required": ["id"]
+      },
       "ComplexHash": {
         "properties": {
           "complex_prop": {

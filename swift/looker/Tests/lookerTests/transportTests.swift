@@ -68,6 +68,57 @@ struct FreshLook : SDKModel {
     }
 }
 
+struct TestModel : SDKModel {
+    private var _string1: AnyString?
+    var string1: String? {
+        get { _string1?.value }
+        set { _string1 = newValue.map(AnyString.init) }
+    }
+    private var _num1: AnyInt?
+    var num1: Int64? {
+        get { _num1?.value }
+        set { _num1 = newValue.map(AnyInt.init) }
+    }
+    private var _string2: AnyString?
+    var string2: String? {
+        get { _string2?.value }
+        set { _string2 = newValue.map(AnyString.init) }
+    }
+    private var _num2: AnyInt?
+    var num2: Int64? {
+        get { _num2?.value }
+        set { _num2 = newValue.map(AnyInt.init) }
+    }
+    private var _string3: AnyString?
+    var string3: String? {
+        get { _string3?.value }
+        set { _string3 = newValue.map(AnyString.init) }
+    }
+    private var _num3: AnyInt?
+    var num3: Int64? {
+        get { _num3?.value }
+        set { _num3 = newValue.map(AnyInt.init) }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case _num1 = "num1"
+        case _num2 = "num2"
+        case _num3 = "num3"
+        case _string1 = "string1"
+        case _string2 = "string2"
+        case _string3 = "string3"
+    }
+    
+    init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil) {
+        self._string1 = string1.map(AnyString.init)
+        self._num1 = num1.map(AnyInt.init)
+        self._string2 = string2.map(AnyString.init)
+        self._num2 = num2.map(AnyInt.init)
+        self._string3 = string3.map(AnyString.init)
+        self._num3 = num3.map(AnyInt.init)
+    }
+
+}
 
 @available(OSX 10.15, *)
 class transportTests: XCTestCase {
@@ -89,6 +140,28 @@ class transportTests: XCTestCase {
         }
     }
 
+    func testJsonTypes() {
+        let payload = """
+        {
+            "string1": 1,
+            "num1": 1,
+            "string2": "2",
+            "num2": "2",
+            "string3": "3",
+            "num3": 3,
+            "string4": "4",
+            "num4": 4
+        }
+        """
+        let actual: TestModel = try! deserialize(payload)
+        XCTAssertEqual(actual.string1, "1")
+        XCTAssertEqual(actual.num1, 1)
+        XCTAssertEqual(actual.string2, "2")
+        XCTAssertEqual(actual.num2, 2)
+        XCTAssertEqual(actual.string3, "3")
+        XCTAssertEqual(actual.num3, 3)
+    }
+    
     func testAnyString() {
         let jsonString = """
         {

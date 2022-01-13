@@ -1051,7 +1051,7 @@ describe('sdkModels', () => {
           const actual = apiTestModel.search('beta', statusCriteria)
           expect(Object.entries(allMethods(actual.tags))).toHaveLength(238)
           const types = Object.entries(actual.types)
-          expect(types).toHaveLength(128)
+          expect(types).toHaveLength(129)
         })
 
         it('stable items', () => {

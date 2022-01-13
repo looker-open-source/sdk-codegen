@@ -248,11 +248,33 @@ import Foundation
   }
 
   /**
+   * true if this property should use AnyInt
+   * @param property to check
+   */
+  useAnyInt(property: IProperty) {
+    const nameCheck = property.name.toLowerCase()
+    const typeCheck = property.type.name.toLowerCase()
+    return (
+      this.anyString &&
+      (typeCheck === 'integer' || typeCheck === 'int64') &&
+      (nameCheck === 'id' || nameCheck.endsWith('_id'))
+    )
+  }
+
+  /**
    * Private version of the name (_ prefix)
    * @param name to privatize
    */
   privy(name: string) {
     return this.reserve('_' + name)
+  }
+
+  getSpecialHandling(property: IProperty) {
+    return this.useAnyString(property)
+      ? 'AnyString'
+      : this.useAnyInt(property)
+      ? 'AnyInt'
+      : ''
   }
 
   declareProperty(indent: string, property: IProperty) {
@@ -273,7 +295,7 @@ import Foundation
       )
     }
     const type = this.typeMap(property.type)
-    const specialHandling = this.useAnyString(property)
+    const specialHandling = this.getSpecialHandling(property)
     let munge = ''
     let declaration = `${indent}public var ${this.reserve(property.name)}: ${
       type.name
@@ -282,9 +304,9 @@ import Foundation
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
       const setter = property.required
-        ? 'AnyString.init(newValue)'
-        : 'newValue.map(AnyString.init)'
-      munge = `${indent}private var ${privy}: AnyString${optional}\n`
+        ? `${specialHandling}.init(newValue)`
+        : `newValue.map(${specialHandling}.init)`
+      munge = `${indent}private var ${privy}: ${specialHandling}${optional}\n`
       declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
       }${optional} {
@@ -339,13 +361,18 @@ ${indent}}\n`
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
-      if (this.useAnyString(prop)) {
+      const specialHandling = this.getSpecialHandling(prop)
+      if (specialHandling) {
         const varName = this.privy(propName)
         if (prop.required) {
-          inits.push(`${bump}${this.it(varName)} = AnyString.init(${propName})`)
+          inits.push(
+            `${bump}${this.it(varName)} = ${specialHandling}.init(${propName})`
+          )
         } else {
           inits.push(
-            `${bump}${this.it(varName)} = ${propName}.map(AnyString.init)`
+            `${bump}${this.it(
+              varName
+            )} = ${propName}.map(${specialHandling}.init)`
           )
         }
       } else {
@@ -482,7 +509,7 @@ ${indent}}\n`
     const keys = Object.values(type.properties).map((p) => {
       let name = this.reserve(p.name)
       let alias = ''
-      const useIt = this.useAnyString(p)
+      const useIt = this.useAnyString(p) || this.useAnyInt(p)
       if (useIt) {
         name = this.privy(name)
         special = true

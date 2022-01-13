@@ -196,6 +196,46 @@ public enum PermissionType: String, Codable {
 }`
       expect(actual).toEqual(expected)
     })
+
+    it('numeric ID properties use map to AnyInt', () => {
+      const type = apiTestModel.types.AnyIntIds
+      const actual = gen.declareType(indent, type)
+      const expected = `public struct AnyIntIds: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _user_id = "user_id"
+    }
+    private var _id: AnyInt
+    /**
+     * The unique id of this item (read-only)
+     */
+    public var id: Int {
+        get { _id.value }
+        set { _id = AnyInt.init(newValue) }
+    }
+
+    private var _user_id: AnyInt?
+    /**
+     * Test user id (read-only)
+     */
+    public var user_id: Int? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyInt.init) }
+    }
+
+    public init(id: Int, user_id: Int? = nil) {
+        self._id = AnyInt.init(id)
+        self._user_id = user_id.map(AnyInt.init)
+    }
+
+    public init(_ id: Int, user_id: Int? = nil) {
+        self.init(id: id, user_id: user_id)
+    }
+
+}`
+      expect(actual).toEqual(expected)
+    })
   })
 
   describe('constructor', () => {
