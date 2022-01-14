@@ -4,7 +4,7 @@ This document describes JSON payload handling for the Looker language SDKs.
 
 ## Lookering backward
 
-In Looker API 3.1, some REST response payloads delivered JSON types that conflicted with the types described in the same API 3.1 specification. Flexibly typed languages like Python, Ruby, and JavScript successfully parsed these responses without issue.
+In Looker API 3.1, some REST response payloads delivered JSON types that conflicted with the types described in the same API 3.1 specification. Flexibly typed languages like Python, Ruby, and JavaScript successfully parsed these responses without issue.
 Statically typed languages like Kotlin, Swift, C#, and Go were not so happy about the fuzzy JSON typing in the responses.
 
 We introduced API 4.0 when we needed to develop Kotlin and Swift SDKs for the Android and iOS mobile applications respectively, which guaranteed the JSON payload response matched the type described in the API 4.0 specification.
