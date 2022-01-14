@@ -25,7 +25,7 @@ Other names for this process are **marshalling** and **unmarshalling** or **enco
 
 Serialization is the conversion of a JSON payload into a structure, record, or object of a given language. Deserialization is rendering an instantiated data type to its JSON representation.
 
-Almost all languages include JSON serialization and deserialization support. Many include more than one, with an offering from a third party as the de facto standard, rather than the first-party solution provided by the language vendor.
+Almost all languages include JSON serialization and deserialization support. Many include more than one, with an offering from a third-party as the de facto standard, rather than the first-party solution provided by the language vendor.
 
 The parsing requirements of concern for the Looker language SDKs are:
 
