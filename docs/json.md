@@ -329,13 +329,7 @@ This gives the Go SDK the same level of compatibility as C# and Kotlin.
 
 The Ruby SDK is dynamically typed, so it is backward and forward compatible, accepting either integer or string without issue.
 
-```ruby
-# TODO put a unit test here?
-```
 ### LookR (R SDK)
 
-The R language is dynamically typed, so it is also backward and forward compatible.
+The R language is dynamically typed, so it is backward and forward compatible, accepting either integer or string without issue.
 
-```r
-# TODO put a unit test here?
-```
