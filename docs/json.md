@@ -331,5 +331,9 @@ The Ruby SDK is dynamically typed, so it is backward and forward compatible, acc
 
 ### LookR (R SDK)
 
-The R language is dynamically typed, so it is backward and forward compatible, accepting either integer or string without issue.
+The R language is [strongly but dynamically typed](https://mlconference.ai/blog/introduction-to-the-r-programming-language/), so it is backward and forward compatible, accepting either integer or string without issue.
+
+```r
+# TODO put R unit test here
+```
 
