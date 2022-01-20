@@ -24,8 +24,8 @@ func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
 	}
 
 	s := ApiSettings{
-		VerifySsl:   true,
-		ApiVersion:  DefaultApiVersion,
+		VerifySsl:  true,
+		ApiVersion: DefaultApiVersion,
 	}
 
 	cfg, err := ini.Load(file)
