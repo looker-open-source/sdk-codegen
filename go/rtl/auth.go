@@ -3,7 +3,6 @@ package rtl
 import (
 	"bytes"
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,6 +10,9 @@ import (
 	"os"
 	"reflect"
 	"time"
+
+	json "github.com/json-iterator/go"
+	extra "github.com/json-iterator/go/extra"
 )
 
 type AccessToken struct {
@@ -137,6 +139,7 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return fmt.Errorf("response error: %s", res.Status)
 	}
 
+	extra.RegisterFuzzyDecoders()
 	err = json.NewDecoder(res.Body).Decode(&result)
 
 	return nil
