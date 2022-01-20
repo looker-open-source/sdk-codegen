@@ -1,9 +1,9 @@
 package rtl
 
 import (
+	"net/url"
 	"testing"
 	"time"
-	"net/url"
 )
 
 func TestNewAccessToken(t *testing.T) {
@@ -97,26 +97,26 @@ func TestAuthSession_login(t *testing.T) {
 
 func TestSetQuery(t *testing.T) {
 	somestring := "somestring"
-	testcases := []struct{
-			url      string
-			params   map[string]interface{}
-			expected string
-		}{
-			// ignores empty/nil
-			{
-				url: "https://foo",
-				params: map[string]interface{}{"integer": "", "str": nil},
-				expected: "https://foo",
-			},
-			// strings and integers work as expected no quotes
-			{
-				url: "https://foo",
-				params: map[string]interface{}{"integer": 5, "str": "string", "pstr": &somestring},
-				expected: "https://foo?integer=5&pstr=somestring&str=string",
-			},
-		}
-	for i,testcase := range testcases {
-		url,_ := url.Parse(testcase.url)
+	testcases := []struct {
+		url      string
+		params   map[string]interface{}
+		expected string
+	}{
+		// ignores empty/nil
+		{
+			url:      "https://foo",
+			params:   map[string]interface{}{"integer": "", "str": nil},
+			expected: "https://foo",
+		},
+		// strings and integers work as expected no quotes
+		{
+			url:      "https://foo",
+			params:   map[string]interface{}{"integer": 5, "str": "string", "pstr": &somestring},
+			expected: "https://foo?integer=5&pstr=somestring&str=string",
+		},
+	}
+	for i, testcase := range testcases {
+		url, _ := url.Parse(testcase.url)
 		setQuery(url, testcase.params)
 		strURLWithQuery := url.String()
 		if strURLWithQuery != testcase.expected {
