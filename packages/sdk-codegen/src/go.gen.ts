@@ -125,6 +125,10 @@ export class GoGen extends CodeGen {
     this.apiVersion = this.packageName
   }
 
+  supportsMultiApi(): boolean {
+    return false
+  }
+
   reserve(name: string) {
     if (this.keywords.has(name)) {
       return `${name}0`
@@ -375,21 +379,12 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
   }
 
   modelsPrologue(_indent: string) {
-    let goImport = `
+    const goImport = `
 import (
   "github.com/looker-open-source/sdk-codegen/go/rtl"
   "time"
 )`
 
-    // v3 still uses url.URL
-    if (this.packageName === 'v3') {
-      goImport = `
-import (
-  "github.com/looker-open-source/sdk-codegen/go/rtl"
-  "net/url"
-  "time"
-)`
-    }
     return `
 // ${this.warnEditing()}
 
