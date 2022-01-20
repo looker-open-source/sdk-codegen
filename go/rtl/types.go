@@ -1,10 +1,11 @@
 package rtl
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
+
+	json "github.com/json-iterator/go"
 )
 
 // type alias to string slice, this is needed for custom serialization
