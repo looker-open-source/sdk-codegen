@@ -2,6 +2,7 @@ package rtl
 
 import (
 	"encoding/json"
+	"reflect"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -196,7 +197,7 @@ func TestAuthSession_Do(t *testing.T) {
 		}
 	})
 
-	t.Run("Do() unmarshals string type field to num type field",func(t *testing.T) {
+	t.Run("Do() unmarshals string type field to num type field", func(t *testing.T) {
 		mux := http.NewServeMux()
 		server := httptest.NewServer(mux)
 		defer server.Close()
@@ -230,6 +231,94 @@ func TestAuthSession_Do(t *testing.T) {
 
 		if *result.Field != numField {
 			t.Error("string type field was not unmarshaled correctly into num type field")
+		}
+	})
+
+	t.Run("Do{} unmarshals struct with mixed string and num types correctly", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api" + apiVersion + "/login", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			s, _ := json.Marshal(AccessToken{
+				ExpiresIn: maxTime,
+			})
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			var string1 int64 = 1
+			var num1 int64 = 1
+			string2 := "2"
+			num2:= "2"
+			string3 := "3"
+			var num3 int64 = 3
+			string4 := "4"
+			var num4 int64 = 4
+			originalStruct := struct {
+				String1 *int64 `json:"string1"`
+				Num1 *int64 `json:"num1"`
+				String2 *string `json:"string2"`
+				Num2 *string `json:"num2"`
+				String3 *string `json:"string3"`
+				Num3 *int64 `json:"num3"`
+				String4 *string `json:"string4"`
+				Num4 *int64 `json:"num4"`
+			}{
+				String1: &string1,
+				Num1: &num1,
+				String2: &string2,
+				Num2: &num2,
+				String3: &string3,
+				Num3: &num3,
+				String4: &string4,
+				Num4: &num4,
+			}
+			s, _ := json.Marshal(originalStruct)
+			fmt.Fprint(w, string(s))
+		})
+
+		s := &AuthSession{
+			Config: ApiSettings{
+				BaseUrl: server.URL,
+				ApiVersion:  apiVersion,
+			},
+		}
+
+		type expectedStructType struct {
+			String1 *string `json:"string1"`
+			Num1 *int64 `json:"num1"`
+			String2 *string `json:"string2"`
+			Num2 *int64 `json:"num2"`
+			String3 *string `json:"string3"`
+			Num3 *int64 `json:"num3"`
+		}
+
+		string1 := "1"
+		var num1 int64 = 1
+		string2 := "2"
+		var num2 int64 = 2
+		string3 := "3"
+		var num3 int64 = 3
+
+		expectedStruct := expectedStructType{
+			String1: &string1,
+			Num1: &num1,
+			String2: &string2,
+			Num2: &num2,
+			String3: &string3,
+			Num3: &num3,
+		}
+
+		var result expectedStructType
+
+		s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+
+		if !reflect.DeepEqual(result, expectedStruct) {
+			t.Error("fields of mixed types were not unmarshaled correctly into the right types")
 		}
 	})
 }
