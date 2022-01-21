@@ -1,24 +1,10 @@
 name: TypeScript SDK CI
 on:
   pull_request:
-    paths:
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
 
   push:
     branches:
       - main
-    paths:
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
 
   workflow_dispatch:
 
@@ -50,12 +36,32 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
+      - uses: tony84727/changed-file-filter@v0.2.0
+        id: filter
+        with:
+        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
+        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
+
+        # filter rules in YAML format
+        # <rule-name>:
+        #  - <glob expression>
+          filters: |
+            tssdk:
+              - packages/sdk/**
+              - packages/sdk-rtl/**
+              - packages/sdk-node/**
+              - packages/extension-sdk/**
+              - packages/extension-sdk-react/**
+              - packages/extension-utils/**
+
       - name: Install Node ${{ matrix.node-version }}
+        if: steps.filter.outputs.tssdk == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           yarn
           yarn lint:es --quiet
@@ -63,6 +69,7 @@ jobs:
           yarn dedupe:ci
 
       - name: Mock looker.ini
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           echo "[Looker]" > looker.ini
           echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
@@ -76,9 +83,11 @@ jobs:
           echo "timeout=30" >> looker.ini
 
       - name: Run unit tests
+        if: steps.filter.outputs.tssdk == 'true'
         run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
+        if: steps.filter.outputs.tssdk == 'true'
         run: rm looker.ini
 
       - name: Upload ts unit test results
@@ -110,7 +119,26 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
+      - uses: tony84727/changed-file-filter@v0.2.0
+        id: filter
+        with:
+        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
+        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
+
+        # filter rules in YAML format
+        # <rule-name>:
+        #  - <glob expression>
+          filters: |
+            tssdk:
+              - packages/sdk/**
+              - packages/sdk-rtl/**
+              - packages/sdk-node/**
+              - packages/extension-sdk/**
+              - packages/extension-sdk-react/**
+              - packages/extension-utils/**
+
       - name: Set up Cloud SDK
+        if: steps.filter.outputs.tssdk == 'true'
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -118,11 +146,13 @@ jobs:
           export_default_credentials: true
 
       - name: Authenticate Artifact Repository
+        if: steps.filter.outputs.tssdk == 'true'
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
@@ -130,11 +160,13 @@ jobs:
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - name: Install Node ${{ matrix.node-version }}
+        if: steps.filter.outputs.tssdk == 'true'
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           yarn
           yarn build
@@ -148,21 +180,25 @@ jobs:
         #
         # This can be factored out entirely once 21_18 is the earliest
         # supported looker version.
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.sh <<< ${{ matrix.looker }})" >> $GITHUB_ENV
 
       - name: Set up Looker credentials
         # Load the correct credentials based on the version from
         # the prior step.
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
           echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
 
       - name: Check that Looker is ready
+        if: steps.filter.outputs.tssdk == 'true'
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run Integration Tests
+        if: steps.filter.outputs.tssdk == 'true'
         run: yarn jest packages/sdk-node/test --reporters=default --reporters=jest-junit
 
       - name: Upload integration test results

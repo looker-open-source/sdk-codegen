@@ -1,22 +1,10 @@
 name: API Explorer CI
 on:
   pull_request:
-    paths:
-      - packages/code-editor/**
-      - packages/run-it/**
-      - packages/api-explorer/**
-      - packages/extension-api-explorer/**
-      - packages/extension-utils/**
 
   push:
     branches:
       - main
-    paths:
-      - packages/code-editor/**
-      - packages/run-it/**
-      - packages/api-explorer/**
-      - packages/extension-api-explorer/**
-      - packages/extension-utils/**
 
   workflow_dispatch:
 
@@ -46,12 +34,31 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
+      - uses: tony84727/changed-file-filter@v0.2.0
+        id: filter
+        with:
+        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
+        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
+
+        # filter rules in YAML format
+        # <rule-name>:
+        #  - <glob expression>
+          filters: |
+            apix:
+              - packages/code-editor/**
+              - packages/run-it/**
+              - packages/api-explorer/**
+              - packages/extension-api-explorer/**
+              - packages/extension-utils/**
+
       - name: Install Node ${{ matrix.node-version }}
+        if: steps.filter.outputs.apix == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
+        if: steps.filter.outputs.apix == 'true'
         run: |
           yarn
           yarn lint:es --quiet
@@ -60,6 +67,7 @@ jobs:
           yarn dedupe:ci
 
       - name: Run unit tests
+        if: steps.filter.outputs.apix == 'true'
         run: yarn test:apix --reporters=default --reporters=jest-junit
 
       - name: Upload ts unit test results
