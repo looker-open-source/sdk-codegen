@@ -11,16 +11,17 @@ We introduced API 4.0 when we needed to develop Kotlin and Swift SDKs for the An
 
 ## Lookering forward
 
-Current users of API 4.0 SDKs may have noticed that `id` references in current API 4.0 types can be either `integer` or `string`. For the stable (aka GA, generally available) release of API 4.0, all `id` references will be `string`.
-Using strings for all ID references will allow Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value. API users don't need to be concerned with the fact that internally an ID is a numeric value.
+Current users of Looker SDKs may have noticed an `id` type may be either `integer` or `string`. For the stable (aka GA, generally available) release of API 4.0, all `id` references will be typed as `string`.
+Using strings for all ID references will allow Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value.
+Also, API users don't need to be concerned with the fact that an ID is a numeric value internally.
 
-Theoretically, this type change could be extremely disruptive when API 4.0 becomes stable.
+Theoretically, changing the type of entity IDs could be extremely disruptive when API 4.0 is released.
 
-We have worked on minimizing this disruption for all Looker-provided language SDKs. This document describes some JSON processing requirements and how our SDKs support them.
+We have worked on minimizing this disruption for all Looker-provided language SDKs. This document describes some JSON parsing requirements and how our SDKs support them.
 
 ## JSON parsing requirements
 
-There are many requirements for parsing and producing JSON, but most of the issues are identical for any language that supports JSON **serialization** and **deserialization**.
+There are many requirements for parsing and producing JSON, but most of the issues are identical among languages that support JSON **serialization** and **deserialization**.
 Other names for this process are **marshalling** and **unmarshalling** or **encoding** and **decoding**, but they all mean basically the same thing.
 
 Serialization is the conversion of a JSON payload into a structure, record, or object of a given language. Deserialization is rendering an instantiated data type to its JSON representation.
@@ -321,8 +322,95 @@ For full compatibility, the Go SDK runtime is now using a third-party JSON packa
 
 This gives the Go SDK the same level of compatibility as C# and Kotlin.
 
+This is one of the unit tests verifying "fuzzy" JSON values. More tests can be found in [auth_test.go](../go/rtl/auth_test.go)
 ```go
-// TODO put GO unit test here
+	t.Run("Do{} unmarshals struct with mixed string and num types correctly", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api" + apiVersion + "/login", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			s, _ := json.Marshal(AccessToken{
+				ExpiresIn: maxTime,
+			})
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			var string1 int64 = 1
+			var num1 int64 = 1
+			string2 := "2"
+			num2:= "2"
+			string3 := "3"
+			var num3 int64 = 3
+			string4 := "4"
+			var num4 int64 = 4
+			originalStruct := struct {
+				String1 *int64 `json:"string1"`
+				Num1 *int64 `json:"num1"`
+				String2 *string `json:"string2"`
+				Num2 *string `json:"num2"`
+				String3 *string `json:"string3"`
+				Num3 *int64 `json:"num3"`
+				String4 *string `json:"string4"`
+				Num4 *int64 `json:"num4"`
+			}{
+				String1: &string1,
+				Num1: &num1,
+				String2: &string2,
+				Num2: &num2,
+				String3: &string3,
+				Num3: &num3,
+				String4: &string4,
+				Num4: &num4,
+			}
+			s, _ := json.Marshal(originalStruct)
+			fmt.Fprint(w, string(s))
+		})
+
+		s := &AuthSession{
+			Config: ApiSettings{
+				BaseUrl: server.URL,
+				ApiVersion:  apiVersion,
+			},
+		}
+
+		type expectedStructType struct {
+			String1 *string `json:"string1"`
+			Num1 *int64 `json:"num1"`
+			String2 *string `json:"string2"`
+			Num2 *int64 `json:"num2"`
+			String3 *string `json:"string3"`
+			Num3 *int64 `json:"num3"`
+		}
+
+		string1 := "1"
+		var num1 int64 = 1
+		string2 := "2"
+		var num2 int64 = 2
+		string3 := "3"
+		var num3 int64 = 3
+
+		expectedStruct := expectedStructType{
+			String1: &string1,
+			Num1: &num1,
+			String2: &string2,
+			Num2: &num2,
+			String3: &string3,
+			Num3: &num3,
+		}
+
+		var result expectedStructType
+
+		s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+
+		if !reflect.DeepEqual(result, expectedStruct) {
+			t.Error("fields of mixed types were not unmarshaled correctly into the right types")
+		}
+	})
 ```
 
 ### Ruby SDK
@@ -331,9 +419,4 @@ The Ruby SDK is dynamically typed, so it is backward and forward compatible, acc
 
 ### LookR (R SDK)
 
-The R language is [strongly but dynamically typed](https://mlconference.ai/blog/introduction-to-the-r-programming-language/), so it is backward and forward compatible, accepting either integer or string without issue.
-
-```r
-# TODO put R unit test here
-```
-
+The R language is ["strongly but dynamically typed"](https://mlconference.ai/blog/introduction-to-the-r-programming-language/), so it is backward and forward compatible, accepting either integer or string without issue.
