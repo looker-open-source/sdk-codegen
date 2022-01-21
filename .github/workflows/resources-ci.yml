@@ -12,8 +12,12 @@ defaults:
     working-directory: bin/looker-resources-index
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   analyzebuild:
     name: Analyze and Build
+    needs: checkfiles
+    if: needs.checkfiles.outputs.resources == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -25,42 +29,23 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            resources:
-              - bin/looker-resources-index/**
-              - docs/resources/**
-
       - name: Install Node
-        if: steps.filter.outputs.resources == 'true'
         uses: actions/setup-node@v1
         with:
           node-version: 12
 
       - name: Install Dependencies
-        if: steps.filter.outputs.resources == 'true'
         run: |
           yarn install
 
       - name: Test and Analyze
-        if: steps.filter.outputs.resources == 'true'
         run: |
           yarn run analyze
 
       - name: Build
-        if: steps.filter.outputs.resources == 'true'
         run: |
           yarn run build
 
       - name: Check if missing changes to resources.json/resources-lock.json
-        if: steps.filter.outputs.resources == 'true'
         run: |
           git diff --exit-code ../../docs/resources

@@ -16,7 +16,11 @@ env:
   LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_18 }}
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   unit:
+    needs: checkfiles
+    if: needs.checkfiles.outputs.codegen == 'true'
     env:
       JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
       JEST_JUNIT_OUTPUT_NAME: ubuntu-latest.sdk-codegen15x.xml
@@ -32,23 +36,7 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            codegen:
-              - packages/sdk-codegen/**
-              - packages/sdk-codegen-utils/**
-              - packages/sdk-codegen-scripts/**
-
       - name: Set up Cloud SDK
-        if: steps.filter.outputs.codegen == 'true'
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -56,11 +44,9 @@ jobs:
           export_default_credentials: true
 
       - name: Authenticate Artifact Repository
-        if: steps.filter.outputs.codegen == 'true'
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Pull and run Looker docker image
-        if: steps.filter.outputs.codegen == 'true'
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
         run: |
@@ -70,12 +56,10 @@ jobs:
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - uses: actions/setup-node@v1
-        if: steps.filter.outputs.codegen == 'true'
         with:
           node-version: 15.x
 
       - name: Install dependencies
-        if: steps.filter.outputs.codegen == 'true'
         run: |
           yarn
           yarn build
@@ -83,7 +67,6 @@ jobs:
           yarn dedupe:ci
 
       - name: Mock looker.ini
-        if: steps.filter.outputs.codegen == 'true'
         run: |
           echo "[Looker]" > looker.ini
           echo "base_url=https://localhost:20000" >> looker.ini
@@ -93,16 +76,13 @@ jobs:
           echo "base_url=." >> looker.ini
 
       - name: Check that Looker is ready
-        if: steps.filter.outputs.codegen == 'true'
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run unit tests
-        if: steps.filter.outputs.codegen == 'true'
         run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
-        if: steps.filter.outputs.codegen == 'true'
         run: rm looker.ini
 
       - name: Upload ts unit test results
