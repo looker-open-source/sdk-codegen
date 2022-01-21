@@ -1,16 +1,10 @@
 name: Resources Index CI
 on:
   pull_request:
-    paths:
-      - bin/looker-resources-index/**
-      - docs/resources/**
 
   push:
     branches:
       - main
-    paths:
-      - bin/looker-resources-index/**
-      - docs/resources/**
 
 defaults:
   run:
@@ -18,8 +12,12 @@ defaults:
     working-directory: bin/looker-resources-index
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   analyzebuild:
     name: Analyze and Build
+    needs: checkfiles
+    if: needs.checkfiles.outputs.resources == 'true'
     runs-on: ubuntu-latest
 
     steps:

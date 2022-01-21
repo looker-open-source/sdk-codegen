@@ -1,24 +1,10 @@
 name: TypeScript SDK CI
 on:
   pull_request:
-    paths:
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
 
   push:
     branches:
       - main
-    paths:
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
 
   workflow_dispatch:
 
@@ -28,8 +14,12 @@ env:
   TS_JUNIT_OUTPUT_DIR: results/tssdk
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   unit:
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    needs: checkfiles
+    if: needs.checkfiles.outputs.tssdk == 'true'
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.tssdkrtl${{ matrix.node-version }}.xml
@@ -89,7 +79,8 @@ jobs:
           path: results/tssdk
 
   integration:
-    needs: unit
+    needs: [checkfiles, unit]
+    if: needs.checkfiles.outputs.tssdk == 'true'
     name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
@@ -182,6 +173,28 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Typescript Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
+          files: 'artifacts/tssdk-test-results/*.xml'
+
+  publish-test-results-on-skip:
+    needs: checkfiles
+    if: needs.checkfiles.outputs.tssdk == 'false'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make Dummy Artifacts
+        run: |
+          mkdir -p 'artifacts/tssdk-test-results'
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
