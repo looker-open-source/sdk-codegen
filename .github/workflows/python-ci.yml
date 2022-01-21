@@ -19,8 +19,12 @@ defaults:
     working-directory: python/
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   typecheck:
     name: Mypy
+    needs: checkfiles
+    if: needs.checkfiles.outputs.python == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -29,32 +33,17 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            python:
-              - python/**
-
       - uses: actions/setup-python@v2
-        if: steps.filter.outputs.python == 'true'
         with:
           python-version: 3.9
       - run: pip install -e .
-        if: steps.filter.outputs.python == 'true'
       - run: pip install mypy types-requests
-        if: steps.filter.outputs.python == 'true'
       - run: mypy looker_sdk/
-        if: steps.filter.outputs.python == 'true'
 
   unit:
-    needs: typecheck
+    needs: [checkfiles, typecheck]
+    if: needs.checkfiles.outputs.python == 'true'
+
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
@@ -81,33 +70,17 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            python:
-              - python/**
-
       - name: Set up Python ${{ matrix.python-version }}
-        if: steps.filter.outputs.python == 'true'
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Tox and any other packages
-        if: steps.filter.outputs.python == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install tox
 
       - name: Run Unit Tests
-        if: steps.filter.outputs.python == 'true'
         run: tox -e unit
 
       - name: Upload pytest test results
@@ -118,7 +91,8 @@ jobs:
           path: python/results/
 
   integration:
-    needs: unit
+    needs: [checkfiles, unit]
+    if: needs.checkfiles.outputs.python == 'true'
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -156,21 +130,7 @@ jobs:
       - name: Repo Checkout
         uses: actions/checkout@v2
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            python:
-              - python/**
-
       - name: Set up Cloud SDK
-        if: steps.filter.outputs.python == 'true'
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -178,11 +138,10 @@ jobs:
           export_default_credentials: true
 
       - name: Authenticate Artifact Repository
-        if: steps.filter.outputs.python == 'true'
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Install docker on macos
-        if: steps.filter.outputs.python == 'true' && matrix.os == 'macos'
+        if: matrix.os == 'macos'
         uses: docker-practice/actions-setup-docker@v1
         with:
           docker_channel: stable
@@ -190,7 +149,7 @@ jobs:
           docker_cli_experimental: disabled
 
       - name: Bump docker for mac memory
-        if: steps.filter.outputs.python == 'true' && matrix.os == 'macos'
+        if: matrix.os == 'macos'
         run: |
           osascript -e 'quit app "Docker"'
           sed -i'.original' -e's/  "memoryMiB" : 2048/  "memoryMiB" : 8192/' ~/Library/Group\ Containers/group.com.docker/settings.json
@@ -206,7 +165,6 @@ jobs:
           echo "-- Docker is ready."
 
       - name: Pull and run Looker docker image
-        if: steps.filter.outputs.python == 'true'
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
         run: |
@@ -216,13 +174,11 @@ jobs:
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - name: Install Tox and any other packages
-        if: steps.filter.outputs.python == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install tox
 
       - name: Determine credentials version
-        if: steps.filter.outputs.python == 'true'
         # Prior to 21_18, each version had different credentials and a 
         # different secret. 21_20 and later all use the same credentials
         # as 21_18. The parse_version.sh script parses the version and
@@ -235,7 +191,6 @@ jobs:
           echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.sh <<< ${{ matrix.looker }})" >> $GITHUB_ENV
 
       - name: Set up Looker credentials
-        if: steps.filter.outputs.python == 'true'
         # Load the correct credentials based on the version from
         # the prior step.
         run: |
@@ -243,12 +198,10 @@ jobs:
           echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
 
       - name: Check that Looker is ready
-        if: steps.filter.outputs.python == 'true'
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run Integration Tests
-        if: steps.filter.outputs.python == 'true'
         run: tox -e integration
 
       - name: Upload pytest test results
@@ -259,30 +212,16 @@ jobs:
           path: python/results/
 
   twine:
-    needs: integration
+    needs: [checkfiles, integration]
+    if: needs.checkfiles.outputs.python == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: tony84727/changed-file-filter@v0.2.0
-        id: filter
-        with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }} or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
-          filters: |
-            python:
-              - python/**
-
       - uses: actions/setup-python@v2
-        if: steps.filter.outputs.python == 'true'
         with:
           python-version: 3.9
       - name: Twine upload check
-        if: steps.filter.outputs.python == 'true'
         run: |
           pip install wheel twine
           python setup.py sdist bdist_wheel
@@ -298,6 +237,32 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Python Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
+          files: 'artifacts/python-test-results/*.xml'
+
+  publish-test-results-on-skip:
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    needs: checkfiles
+    if: needs.checkfiles.outputs.python == 'false'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make Dummy Artifacts
+        run: |
+          mkdir -p 'artifacts/python-test-results'
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12

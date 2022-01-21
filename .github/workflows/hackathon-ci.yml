@@ -1,16 +1,10 @@
 name: Hackathon CI
 on:
   pull_request:
-    paths:
-      - packages/wholly-sheet/**
-      - packages/hackathon/**
 
   push:
     branches:
       - main
-    paths:
-      - packages/wholly-sheet/**
-      - packages/hackathon/**
 
   workflow_dispatch:
 
@@ -18,8 +12,12 @@ env:
   TS_JUNIT_OUTPUT_DIR: results/hackathon
 
 jobs:
+  checkfiles:
+    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   unit:
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    needs: checkfiles
+    if: needs.checkfiles.outputs.hackathon == 'true'
     env:
       JEST_JUNIT_OUTPUT_DIR: results/hackathon
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.apix${{ matrix.node-version }}.xml
