@@ -38,6 +38,7 @@ REQUIRES = [
     "python-dateutil;python_version<'3.7'",
     # Python 3.7+
     "attrs >= 20.1.0;python_version>='3.7'",
+    "cattrs >= 1.3;python_version>='3.7'",
     "typing-extensions;python_version<'3.8'",
 ]
 
