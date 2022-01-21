@@ -138,6 +138,13 @@ def unstructure_hook(api_model):
             del data[key]
         elif value == model.EXPLICIT_NULL:
             data[key] = None
+        # bug here: in the unittests cattrs unstructures this correctly
+        # as an enum calling .value but in the integration tests we see
+        # it doesn't for WriteCreateQueryTask.result_format for some reason
+        # Haven't been able to debug it fully, so catching and processing
+        # it here.
+        elif isinstance(value, enum.Enum):
+            data[key] = value.value
     for reserved in keyword.kwlist:
         if f"{reserved}_" in data:
             data[reserved] = data.pop(f"{reserved}_")
