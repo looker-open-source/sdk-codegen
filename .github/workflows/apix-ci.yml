@@ -84,3 +84,25 @@ jobs:
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
           files: 'artifacts/apix-test-results/*.xml'
+
+  publish-test-results-on-skip:
+    needs: checkfiles
+    if: needs.checkfiles.outputs.apix == 'false'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Make Dummy Artifacts
+        run: |
+          mkdir -p 'artifacts/apix-test-results'
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: APIX Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
+          files: 'artifacts/apix-test-results/*.xml'
