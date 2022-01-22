@@ -72,8 +72,7 @@ export const ExtensionApiExplorer: FC = () => {
               specs={specs}
               adaptor={extensionAdaptor}
               setVersionsUrl={runItNoSet}
-              // TODO We need expand/collapse side nav for the headless extension before we enabled this
-              headless={false}
+              headless={true}
             />
           ) : (
             <Loader themeOverrides={extensionAdaptor.themeOverrides()} />
