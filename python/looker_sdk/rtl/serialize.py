@@ -138,6 +138,13 @@ def unstructure_hook(api_model):
             del data[key]
         elif value == model.EXPLICIT_NULL:
             data[key] = None
+        # bug here: in the unittests cattrs unstructures this correctly
+        # as an enum calling .value but in the integration tests we see
+        # it doesn't for WriteCreateQueryTask.result_format for some reason
+        # Haven't been able to debug it fully, so catching and processing
+        # it here.
+        elif isinstance(value, enum.Enum):
+            data[key] = value.value
     for reserved in keyword.kwlist:
         if f"{reserved}_" in data:
             data[reserved] = data.pop(f"{reserved}_")
@@ -153,7 +160,6 @@ if sys.version_info < (3, 7):
     ) -> datetime.datetime:
         return parser.isoparse(d)
 
-
 else:
 
     def datetime_structure_hook(
@@ -165,4 +171,4 @@ else:
 converter31.register_structure_hook(datetime.datetime, datetime_structure_hook)
 converter40.register_structure_hook(datetime.datetime, datetime_structure_hook)
 cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
-cattr.register_unstructure_hook(datetime.datetime, lambda dt: dt.strftime(DATETIME_FMT))
+cattr.register_unstructure_hook(datetime.datetime, lambda dt: dt.strftime(DATETIME_FMT))  # type: ignore
