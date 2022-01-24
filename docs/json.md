@@ -34,7 +34,7 @@ The parsing requirements of concern for the Looker language SDKs are:
    2. a string value for an integer property (backward compatibility issue)
 2. New properties in a JSON payload. These are ignored by the SDKs. (See [TypeScript caveats](#typescript-caveats) for additional comments.)
 3. Removed properties in a JSON payload. Typically, the property will end up unassigned. Some SDKs may throw errors with missing required properties, but that client code should be changed anyway if the property no longer exists.
-4. Name changes, like spaces to folders and homepages to boards. There is no reasonable automatic solution for this, so type or property renames will require changing SDK existing code.
+4. Name changes, like `space` to `folder` and `homepage` to `board`. There is no reasonable automatic solution for this, so type or property renames will require changing SDK existing code.
 
 ### forward and backward compatibility
 
