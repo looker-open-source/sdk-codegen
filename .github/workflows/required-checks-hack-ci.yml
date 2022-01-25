@@ -22,18 +22,15 @@ name: Required Checks Hack
 on:
   pull_request:
 
-jobs:
-  checkfiles:
-    runs-on: ubuntu-latest
-    outputs:
-      filters: ${{ toJSON(steps.filter.outputs) }}
-      apix: ${{ steps.filter.outputs.apix }}
-      codegen: ${{ steps.filter.outputs.codegen }}
-      hackathon: ${{ steps.filter.outputs.hackathon }}
-      python: ${{ steps.filter.outputs.python }}
-      resources: ${{ steps.filter.outputs.resources }}
-      tssdk: ${{ steps.filter.outputs.tssdk }}
+  push:
+    branches:
+      - main
 
+jobs:
+  satisfy-required-checks:
+    name: Satisfy Required Checks
+
+    runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
@@ -67,7 +64,8 @@ jobs:
               - packages/extension-sdk/**
               - packages/extension-sdk-react/**
               - packages/extension-utils/**
-      - run: |
+      - name: Debug info
+        run: |
           echo "${{ toJSON(steps.filter.outputs) }}"
           echo "apix: ${{ steps.filter.outputs.apix }}"
           echo "codegen: ${{ steps.filter.outputs.codegen }}"
@@ -76,160 +74,62 @@ jobs:
           echo "resources: ${{ steps.filter.outputs.resources }}"
           echo "tssdk: ${{ steps.filter.outputs.tssdk }}"
 
-  noop-codegen-results:
-    name: Codegen Tests
-    needs: checkfiles
+      - name: Create Codegen check
+        if: steps.filter.outputs.codegen == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Codegen Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
 
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Codegen Tests not required"
-        if: needs.checkfiles.outputs.codegen == 'false'
+      - name: Create Typescript check
+        if: steps.filter.outputs.tssdk == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Typescript Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
 
-      - name: Wait for codegen-ci to succeed
-        if: needs.checkfiles.outputs.codegen == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Codegen Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Create Python check
+        if: steps.filter.outputs.python == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
 
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
-
-  noop-typescript-results:
-    name: Typescript Tests
-    needs: checkfiles
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Typescript Tests not required"
-        if: needs.checkfiles.outputs.tssdk == 'false'
-
-      - name: Wait for codegen-ci to succeed
-        if: needs.checkfiles.outputs.tssdk == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Typescript Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
-
-  noop-python-results:
-    name: Python Tests
-    needs: checkfiles
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Python Tests not required"
-        if: needs.checkfiles.outputs.python == 'false'
-
-      - name: Wait for python-ci to succeed
-        if: needs.checkfiles.outputs.python == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Python Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
-
-  noop-apix-results:
-    name: APIX Tests
-    needs: checkfiles
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "APIX Tests not required"
-        if: needs.checkfiles.outputs.apix == 'false'
-
-      - name: Wait for apix-ci to succeed
-        if: needs.checkfiles.outputs.apix == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: APIX Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
-
-  noop-hackathon-results:
-    name: Hackathon Tests
-    needs: checkfiles
-    if: needs.checkfiles.outputs.hackathon == 'false'
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Codegen Tests not required"
-        if: needs.checkfiles.outputs.hackathon == 'false'
-
-      - name: Wait for hackathon-ci to succeed
-        if: needs.checkfiles.outputs.hackathon == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Hackathon Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
-
-  noop-resources-results:
-    name: Resources Tests
-    needs: checkfiles
-    if: needs.checkfiles.outputs.resources == 'false'
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Resources Tests not required"
-        if: needs.checkfiles.outputs.resources == 'false'
-
-      - name: Wait for resources-ci to succeed
-        if: needs.checkfiles.outputs.resources == 'true'
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-check
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          checkName: Resources Tests
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Do something with a passing build
-        if: steps.wait-for-check.outputs.conclusion == 'success'
-        run: exit 0
-
-      - name: Do something with a failing build
-        if: steps.wait-for-check.outputs.conclusion == 'failure'
-        run: exit 1
+      - name: Create APIX check
+        if: steps.filter.outputs.apix == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "APIX Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
