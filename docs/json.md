@@ -1,6 +1,9 @@
 # Flexible JSON parsing in SDKs
 
-This document describes how Looker language SDKs parse JSON responses.
+This document helps you answer these questions:
+- What's the problem caused by API 4.0 type changes?
+- Is the Looker SDK I'm using compatible?
+- If I'm not using a Looker SDK, how do I solve the problem for my own implementation?
 
 ## Lookering backward
 
