@@ -23,8 +23,7 @@ We have worked on minimizing this disruption for all Looker-provided language SD
 
 ## JSON parsing requirements
 
-There are many requirements for parsing and producing JSON, but most of the issues are identical among languages that support JSON **serialization** and **deserialization**.
-Other names for this process are **marshalling** and **unmarshalling** or **encoding** and **decoding**, but they all mean basically the same thing.
+There are many requirements for parsing and producing JSON. Most requirements are identical among languages that support JSON **serialization** and **deserialization**.  **Marshalling** and **unmarshalling** or **encoding** and **decoding** also refer to the same process. 
 
 Serialization is the conversion of a JSON payload into a structure, record, or object of a given language. Deserialization is rendering an instantiated data type to its JSON representation.
 
