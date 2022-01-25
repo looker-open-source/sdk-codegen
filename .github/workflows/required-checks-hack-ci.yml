@@ -41,13 +41,6 @@ jobs:
       - uses: tony84727/changed-file-filter@v0.2.0
         id: filter
         with:
-        # head: optional head commit SHA, default to ${{ github.event.pull_request.head.sha || github.sha }}
-        # base: optional base commit SHA, default to ${{ github.event.pull_request.base.sha }}
-        # or HEAD^ if not triggered by pull_request
-
-        # filter rules in YAML format
-        # <rule-name>:
-        #  - <glob expression>
           filters: |
             apix:
               - packages/code-editor/**
@@ -86,38 +79,106 @@ jobs:
   noop-codegen-results:
     name: Codegen Tests
     needs: checkfiles
-    if: needs.checkfiles.outputs.codegen == 'false'
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "Codegen Tests not required"
+        if: needs.checkfiles.outputs.codegen == 'false'
+
+      - name: Wait for codegen-ci to succeed
+        if: needs.checkfiles.outputs.codegen == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Codegen Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
 
   noop-typescript-results:
     name: Typescript Tests
     needs: checkfiles
-    if: needs.checkfiles.outputs.tssdk == 'false'
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "Typescript Tests not required"
+        if: needs.checkfiles.outputs.tssdk == 'false'
+
+      - name: Wait for codegen-ci to succeed
+        if: needs.checkfiles.outputs.tssdk == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Typescript Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
 
   noop-python-results:
     name: Python Tests
     needs: checkfiles
-    if: needs.checkfiles.outputs.python == 'false'
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "Python Tests not required"
+        if: needs.checkfiles.outputs.python == 'false'
+
+      - name: Wait for python-ci to succeed
+        if: needs.checkfiles.outputs.python == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Python Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
 
   noop-apix-results:
     name: APIX Tests
     needs: checkfiles
-    if: needs.checkfiles.outputs.apix == 'false'
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "APIX Tests not required"
+        if: needs.checkfiles.outputs.apix == 'false'
+
+      - name: Wait for apix-ci to succeed
+        if: needs.checkfiles.outputs.apix == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: APIX Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
 
   noop-hackathon-results:
     name: Hackathon Tests
@@ -126,7 +187,25 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "Codegen Tests not required"
+        if: needs.checkfiles.outputs.hackathon == 'false'
+
+      - name: Wait for hackathon-ci to succeed
+        if: needs.checkfiles.outputs.hackathon == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Hackathon Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
 
   noop-resources-results:
     name: Resources Tests
@@ -135,4 +214,22 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - run: exit 0
+      - run: echo "Resources Tests not required"
+        if: needs.checkfiles.outputs.resources == 'false'
+
+      - name: Wait for resources-ci to succeed
+        if: needs.checkfiles.outputs.resources == 'true'
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Resources Tests
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Do something with a passing build
+        if: steps.wait-for-check.outputs.conclusion == 'success'
+        run: exit 0
+
+      - name: Do something with a failing build
+        if: steps.wait-for-check.outputs.conclusion == 'failure'
+        run: exit 1
