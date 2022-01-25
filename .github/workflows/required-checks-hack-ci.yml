@@ -118,3 +118,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 0
+
+  noop-hackathon-results:
+    name: Hackathon Tests
+    needs: checkfiles
+    if: needs.checkfiles.outputs.hackathon == 'false'
+
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  noop-resources-results:
+    name: Resources Tests
+    needs: checkfiles
+    if: needs.checkfiles.outputs.resources == 'false'
+
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
