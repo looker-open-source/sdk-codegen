@@ -38,7 +38,7 @@ The parsing requirements of concern for the Looker language SDKs are:
 3. Removed properties in a JSON payload. Typically, the property will end up unassigned. Some SDKs may throw errors with missing required properties, but that client code should be changed anyway if the property no longer exists.
 4. Name changes, like `space` to `folder` and `homepage` to `board`. There is no reasonable automatic solution for this, so type or property renames will require changing SDK existing code.
 
-### forward and backward compatibility
+### What is forward and backward compatibility?
 
 In this document, **forward compatible** means an older SDK can process payloads from a newer Looker API server.
 
