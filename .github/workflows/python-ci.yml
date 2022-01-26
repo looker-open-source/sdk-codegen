@@ -39,6 +39,23 @@ jobs:
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
   unit:
     needs: typecheck
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
@@ -76,6 +93,23 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox
+
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
 
       - name: Run Unit Tests
         run: tox -e unit
@@ -196,6 +230,23 @@ jobs:
       - name: Check that Looker is ready
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
 
       - name: Run Integration Tests
         run: tox -e integration

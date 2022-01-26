@@ -75,6 +75,23 @@ jobs:
           echo "verify_ssl=False" >> looker.ini
           echo "timeout=30" >> looker.ini
 
+      # if this job fails before this point the required state check "Typescript Tests"
+      #  is never set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Typescript Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
       - name: Run unit tests
         run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
 
