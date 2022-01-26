@@ -56,8 +56,8 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
         <Flex alignItems="center" justifyContent="space-between">
           <Text>
             API 4.0 is generally available in Looker 22.4 and transitions from
-            Beta to Stable with additive and breaking changes. Checkout the
-            announcement for more information!
+            Beta to Stable with additive and breaking changes. Read the
+            announcement to see how this affects you!
           </Text>
           <Flex>
             <Link
@@ -86,7 +86,6 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
     async function innerOnLoad() {
       // 4.0 is stable in Looker 22.4+. 4.0 is default or `current` in 22.4+.
       // Still check for `stable` just in case new version comes along.
-      console.log(specs)
       const is40Stable =
         specs['4.0'].status === 'stable' || specs['4.0'].status === 'current'
       const wasDismissed =

@@ -84,8 +84,8 @@ describe('Banner', () => {
         screen.getByText('API 4.0 is generally available', { exact: false })
       ).toBeInTheDocument()
 
-      const closeButton = screen.getByLabelText('Close')
-      fireEvent.click(closeButton)
+      const closeButton = screen.getByText('Close').closest('button')
+      fireEvent.click(closeButton as HTMLButtonElement)
 
       expect(
         screen.getByText('API 4.0 is generally available', { exact: false })
