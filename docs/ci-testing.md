@@ -87,46 +87,37 @@ as the `paths:` clause under the `push:` and `pull_requests:` for your new ci wo
               - packages/sdk-codegen-scripts/**
 ```
 
-Add a new output under the checkfiles job, referencing the filter name in the filter step.
-The job output can be the same name as the step output. 
-```yaml
-  checkfiles:
-    runs-on: ubuntu-latest
-    outputs:
-      filters: ${{ toJSON(steps.filter.outputs) }}
-      apix: ${{ steps.filter.outputs.apix }}
-      codegen: ${{ steps.filter.outputs.codegen }}
-      hackathon: ${{ steps.filter.outputs.hackathon }}
-      python: ${{ steps.filter.outputs.python }}
-      resources: ${{ steps.filter.outputs.resources }}
-      tssdk: ${{ steps.filter.outputs.tssdk }}
-```
 The full set of outputs is also available in the JSON structure under the name `filters`. In
 addition to the true/false flags the list of matching files is available as an array
 like `apix_files`. The job output could be read in a workflow like
-`fromJSON(${{ needs.checkfiles.outputs.filters }}).apix`. I recommend adding the individual
+`fromJSON(${{ steps.filter.outputs.filters }}).apix`. I recommend adding the individual
 flags to the outputs for convenience and readability.
 
-The checkfiles job has a final step where the state of these flags is echoed to the logs
+The step after the filter step where the state of these flags is echoed to the logs
 for debugging. You might want to add that as well.
 
-Finally create a job `noop-subject-area-results:` with the same `name:` as the `check_name:`
-above. It should have an `if:` for the job so it only runs if the filter is 'false'.
+Finally create a step with the name `Create Subject Area check` It should have an `if:` for the
+job so it only runs if the filter is 'false'. The `name` element in the curl data body is the
+same as the `check_name:` we found earlier.
 ```yaml
-  noop-apix-results:
-    name: APIX Tests
-    needs: checkfiles
-    if: needs.checkfiles.outputs.apix == 'false'
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
+      - name: Create Codegen check
+        if: steps.filter.outputs.codegen == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Codegen Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
 ```
 
-`exit 0` means success.
-
 ## Example
-To illustrate this, imagine you were adding a ci workflow for `go`. Your workflow
+To illustrate this, imagine you are adding a ci workflow for `go`. Your workflow
 might be named `.github/workflows/go-ci.yml` and start with this:
 ```yaml
 name: Go CI
@@ -193,32 +184,23 @@ list of defined filters with the same filter.
 ```
 I add them alphabetically because it makes me happier.
 
-In `.github/workflows/required-checks-hack-ci.yml` add a `go` filter to the
-list of outputs.
-```yaml
-  checkfiles:
-    runs-on: ubuntu-latest
-    outputs:
-      filters: ${{ toJSON(steps.filter.outputs) }}
-      apix: ${{ steps.filter.outputs.apix }}
-      codegen: ${{ steps.filter.outputs.codegen }}
-      go: ${{ steps.filter.outputs.go }}
-      hackathon: ${{ steps.filter.outputs.hackathon }}
-      python: ${{ steps.filter.outputs.python }}
-      resources: ${{ steps.filter.outputs.resources }}
-      tssdk: ${{ steps.filter.outputs.tssdk }}
-```
-
-Finally in `.github/workflows/required-checks-hack-ci.yml` add the noop result,
-making sure that the job name here matches the `check-name:` defined in 
+Finally in `.github/workflows/required-checks-hack-ci.yml` add a step to
+report a result if the `go-ci.yml` file is never run, making sure that
+the name in the json bidy here matches the `check-name:` defined in 
 the `.github/workflows/go-ci.yml` `publish-test-results:` job.
 ```yaml
-  noop-go-results:
-    name: Go Tests
-    needs: checkfiles
-    if: needs.checkfiles.outputs.go == 'false'
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit 0
+      - name: Create Go check
+        if: steps.filter.outputs.codegen == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Go Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "success"
+          }' \
+          --fail
 ```
