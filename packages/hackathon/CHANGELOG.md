@@ -1,5 +1,29 @@
 # Changelog
 
+### [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.20.0...hackathon-v21.20.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Bug Fixes
+
+* make sheetCell always return a Span ([#907](https://www.github.com/looker-open-source/sdk-codegen/issues/907)) ([f1fe4f5](https://www.github.com/looker-open-source/sdk-codegen/commit/f1fe4f5a5265008507ee29ff7e92149fc2869a82))
+* Remove hackathon project invite only UI ([#905](https://www.github.com/looker-open-source/sdk-codegen/issues/905)) ([2f10dd3](https://www.github.com/looker-open-source/sdk-codegen/commit/2f10dd3c07e6ddb076893932f4eccb2ac6dc3565))
+* restore join/leave project functionality ([#904](https://www.github.com/looker-open-source/sdk-codegen/issues/904)) ([42b2c0f](https://www.github.com/looker-open-source/sdk-codegen/commit/42b2c0f80a99685e02acc1a7b466b39029f15cad))
+* Updated hackathon agenda links ([#901](https://www.github.com/looker-open-source/sdk-codegen/issues/901)) ([7f58b6c](https://www.github.com/looker-open-source/sdk-codegen/commit/7f58b6c096ab8a6b983ea515b38be9877d9faa20))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.20.0 to ^21.20.1
+    * @looker/extension-sdk-react bumped from ^21.20.0 to ^21.20.1
+    * @looker/sdk bumped from ^21.20.0 to ^21.20.1
+
 ## [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v21.20.0...hackathon-v21.20.1) (2021-12-20)
 
 
