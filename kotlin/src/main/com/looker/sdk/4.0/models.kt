@@ -25,7 +25,7 @@
  */
 
 /**
- * 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
+ * 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
  */
 
 
@@ -2866,6 +2866,7 @@ data class LookmlModel (
  * @property joins Views joined into this explore (read-only)
  * @property group_label Label used to group explores in the navigation menus (read-only)
  * @property supported_measure_types An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
+ * @property always_join An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)
  */
 data class LookmlModelExplore (
     var id: String? = null,
@@ -2905,7 +2906,8 @@ data class LookmlModelExplore (
     var fields: LookmlModelExploreFieldset? = null,
     var joins: Array<LookmlModelExploreJoins>? = null,
     var group_label: String? = null,
-    var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null
+    var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null,
+    var always_join: Array<String>? = null
 ) : Serializable
 
 /**
@@ -4538,11 +4540,13 @@ data class SchemaTable (
  * @property name Schema name (read-only)
  * @property is_default True if this is the default schema (read-only)
  * @property tables Tables for this schema (read-only)
+ * @property table_limit_hit True if the table limit was hit while retrieving tables in this schema (read-only)
  */
 data class SchemaTables (
     var name: String? = null,
     var is_default: Boolean? = null,
-    var tables: Array<SchemaTable>? = null
+    var tables: Array<SchemaTable>? = null,
+    var table_limit_hit: Boolean? = null
 ) : Serializable
 
 /**
@@ -4603,13 +4607,37 @@ data class SessionConfig (
  * @property marketplace_enabled Toggle marketplace on or off
  * @property whitelabel_configuration
  * @property custom_welcome_email
+ * @property onboarding_enabled Toggle onboarding on or off
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var whitelabel_configuration: WhitelabelConfiguration? = null,
-    var custom_welcome_email: CustomWelcomeEmail? = null
+    var custom_welcome_email: CustomWelcomeEmail? = null,
+    var onboarding_enabled: Boolean? = null
+) : Serializable
+
+/**
+ * @property is_valid SMTP status of node (read-only)
+ * @property message Error message for node (read-only)
+ * @property hostname Host name of node (read-only)
+ */
+data class SmtpNodeStatus (
+    var is_valid: Boolean? = null,
+    var message: String? = null,
+    var hostname: String? = null
+) : Serializable
+
+/**
+ * @property is_valid Overall SMTP status of cluster (read-only)
+ * @property node_count Total number of nodes in cluster (read-only)
+ * @property node_status array of each node's status containing is_valid, message, hostname (read-only)
+ */
+data class SmtpStatus (
+    var is_valid: Boolean? = null,
+    var node_count: Long? = null,
+    var node_status: Array<SmtpNodeStatus>? = null
 ) : Serializable
 
 /**
@@ -4726,6 +4754,46 @@ data class SshTunnel (
     var database_host: String? = null,
     var database_port: Long? = null,
     var status: String? = null
+) : Serializable
+
+/**
+ * @property emails An array of emails to add to the Allowlist
+ * @property reason Reason for adding emails to the Allowlist
+ */
+data class SupportAccessAddEntries (
+    var emails: Array<String>? = null,
+    var reason: String? = null
+) : Serializable
+
+/**
+ * @property id Unique ID (read-only)
+ * @property email Email address
+ * @property full_name Full name of allowlisted user (read-only)
+ * @property reason Reason the Email is included in the Allowlist
+ * @property created_date Date the Email was added to the Allowlist (read-only)
+ */
+data class SupportAccessAllowlistEntry (
+    var id: String? = null,
+    var email: String? = null,
+    var full_name: String? = null,
+    var reason: String? = null,
+    var created_date: Date? = null
+) : Serializable
+
+/**
+ * @property duration_in_seconds Duration Support Access will remain enabled
+ */
+data class SupportAccessEnable (
+    var duration_in_seconds: Long
+) : Serializable
+
+/**
+ * @property open Whether or not Support Access is open (read-only)
+ * @property open_until Time that Support Access will expire (read-only)
+ */
+data class SupportAccessStatus (
+    var open: Boolean? = null,
+    var open_until: Date? = null
 ) : Serializable
 
 /**
@@ -6399,13 +6467,15 @@ data class WriteSessionConfig (
  * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
  * id, logo_url, favicon_url
  * @property custom_welcome_email
+ * @property onboarding_enabled Toggle onboarding on or off
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var whitelabel_configuration: WriteWhitelabelConfiguration? = null,
-    var custom_welcome_email: CustomWelcomeEmail? = null
+    var custom_welcome_email: CustomWelcomeEmail? = null,
+    var onboarding_enabled: Boolean? = null
 ) : Serializable
 
 /**

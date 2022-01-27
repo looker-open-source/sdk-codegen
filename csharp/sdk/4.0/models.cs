@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
+/// 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -2759,6 +2759,8 @@ public class LookmlModelExplore : SdkModel
   public string? group_label { get; set; } = null;
   /// <summary>An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)</summary>
   public LookmlModelExploreSupportedMeasureType[]? supported_measure_types { get; set; } = null;
+  /// <summary>An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)</summary>
+  public string[]? always_join { get; set; } = null;
 }
 
 public class LookmlModelExploreAccessFilter : SdkModel
@@ -4334,6 +4336,8 @@ public class SchemaTables : SdkModel
   public bool? is_default { get; set; } = null;
   /// <summary>Tables for this schema (read-only)</summary>
   public SchemaTable[]? tables { get; set; } = null;
+  /// <summary>True if the table limit was hit while retrieving tables in this schema (read-only)</summary>
+  public bool? table_limit_hit { get; set; } = null;
 }
 
 public class Session : SdkModel
@@ -4396,6 +4400,28 @@ public class Setting : SdkModel
   public bool? marketplace_enabled { get; set; } = null;
   public WhitelabelConfiguration? whitelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
+  /// <summary>Toggle onboarding on or off</summary>
+  public bool? onboarding_enabled { get; set; } = null;
+}
+
+public class SmtpNodeStatus : SdkModel
+{
+  /// <summary>SMTP status of node (read-only)</summary>
+  public bool? is_valid { get; set; } = null;
+  /// <summary>Error message for node (read-only)</summary>
+  public string? message { get; set; } = null;
+  /// <summary>Host name of node (read-only)</summary>
+  public string? hostname { get; set; } = null;
+}
+
+public class SmtpStatus : SdkModel
+{
+  /// <summary>Overall SMTP status of cluster (read-only)</summary>
+  public bool? is_valid { get; set; } = null;
+  /// <summary>Total number of nodes in cluster (read-only)</summary>
+  public long? node_count { get; set; } = null;
+  /// <summary>array of each node's status containing is_valid, message, hostname (read-only)</summary>
+  public SmtpNodeStatus[]? node_status { get; set; } = null;
 }
 
 public class Snippet : SdkModel
@@ -4504,6 +4530,42 @@ public class SshTunnel : SdkModel
   public long? database_port { get; set; } = null;
   /// <summary>Current connection status for this Tunnel (read-only)</summary>
   public string? status { get; set; } = null;
+}
+
+public class SupportAccessAddEntries : SdkModel
+{
+  /// <summary>An array of emails to add to the Allowlist</summary>
+  public string[]? emails { get; set; } = null;
+  /// <summary>Reason for adding emails to the Allowlist</summary>
+  public string? reason { get; set; } = null;
+}
+
+public class SupportAccessAllowlistEntry : SdkModel
+{
+  /// <summary>Unique ID (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Email address</summary>
+  public string? email { get; set; } = null;
+  /// <summary>Full name of allowlisted user (read-only)</summary>
+  public string? full_name { get; set; } = null;
+  /// <summary>Reason the Email is included in the Allowlist</summary>
+  public string? reason { get; set; } = null;
+  /// <summary>Date the Email was added to the Allowlist (read-only)</summary>
+  public DateTime? created_date { get; set; } = null;
+}
+
+public class SupportAccessEnable : SdkModel
+{
+  /// <summary>Duration Support Access will remain enabled</summary>
+  public long duration_in_seconds { get; set; }
+}
+
+public class SupportAccessStatus : SdkModel
+{
+  /// <summary>Whether or not Support Access is open (read-only)</summary>
+  public bool? open { get; set; } = null;
+  /// <summary>Time that Support Access will expire (read-only)</summary>
+  public DateTime? open_until { get; set; } = null;
 }
 
 /// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
@@ -6114,6 +6176,8 @@ public class WriteSetting : SdkModel
   /// </summary>
   public WriteWhitelabelConfiguration? whitelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
+  /// <summary>Toggle onboarding on or off</summary>
+  public bool? onboarding_enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:

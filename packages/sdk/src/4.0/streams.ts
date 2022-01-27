@@ -25,7 +25,7 @@
  */
 
 /**
- * 429 API methods
+ * 437 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -214,11 +214,16 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
   ISshServer,
   ISshTunnel,
+  ISupportAccessAddEntries,
+  ISupportAccessAllowlistEntry,
+  ISupportAccessEnable,
+  ISupportAccessStatus,
   ITheme,
   ITimezone,
   IUpdateCommand,
@@ -1763,6 +1768,165 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Get Support Access Allowlist Users
+   *
+   * Returns the users that have been added to the Support Access Allowlist
+   *
+   * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param callback streaming output function
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async get_support_access_allowlist_entries(
+    callback: (readable: Readable) => Promise<ISupportAccessAllowlistEntry[]>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISupportAccessAllowlistEntry[]>(
+      callback,
+      'GET',
+      '/support_access/allowlist',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Add Support Access Allowlist Users
+   *
+   * Adds a list of emails to the Allowlist, using the provided reason
+   *
+   * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param callback streaming output function
+   * @param body Partial<ISupportAccessAddEntries>
+   * @param options one-time API call overrides
+   *
+   */
+  async add_support_access_allowlist_entries(
+    callback: (readable: Readable) => Promise<ISupportAccessAllowlistEntry[]>,
+    body: Partial<ISupportAccessAddEntries>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISupportAccessAllowlistEntry[]>(
+      callback,
+      'POST',
+      '/support_access/allowlist',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete Support Access Allowlist User
+   *
+   * Deletes the specified Allowlist Entry Id
+   *
+   * DELETE /support_access/allowlist/{entry_id} -> string
+   *
+   * @param callback streaming output function
+   * @param entry_id Id of Allowlist Entry
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_support_access_allowlist_entry(
+    callback: (readable: Readable) => Promise<string>,
+    entry_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    entry_id = encodeParam(entry_id)
+    return this.authStream<string>(
+      callback,
+      'DELETE',
+      `/support_access/allowlist/${entry_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Enable Support Access
+   *
+   * Enables Support Access for the provided duration
+   *
+   * PUT /support_access/enable -> ISupportAccessStatus
+   *
+   * @param callback streaming output function
+   * @param body Partial<ISupportAccessEnable>
+   * @param options one-time API call overrides
+   *
+   */
+  async enable_support_access(
+    callback: (readable: Readable) => Promise<ISupportAccessStatus>,
+    body: Partial<ISupportAccessEnable>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISupportAccessStatus>(
+      callback,
+      'PUT',
+      '/support_access/enable',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Disable Support Access
+   *
+   * Disables Support Access immediately
+   *
+   * PUT /support_access/disable -> ISupportAccessStatus
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async disable_support_access(
+    callback: (readable: Readable) => Promise<ISupportAccessStatus>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISupportAccessStatus>(
+      callback,
+      'PUT',
+      '/support_access/disable',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Support Access Status
+   *
+   * Returns the current Support Access Status
+   *
+   * GET /support_access/status -> ISupportAccessStatus
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async support_access_status(
+    callback: (readable: Readable) => Promise<ISupportAccessStatus>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISupportAccessStatus>(
+      callback,
+      'GET',
+      '/support_access/status',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get currently locked-out users.
    *
    * GET /user_login_lockouts -> IUserLoginLockout[]
@@ -3145,6 +3309,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - marketplace_enabled
    *  - whitelabel_configuration
    *  - custom_welcome_email
+   *  - onboarding_enabled
    *
    * GET /setting -> ISetting
    *
@@ -3177,6 +3342,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - marketplace_enabled
    *  - whitelabel_configuration
    *  - custom_welcome_email
+   *  - onboarding_enabled
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -3200,6 +3366,31 @@ export class Looker40SDKStream extends APIMethods {
       '/setting',
       { fields },
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Get current SMTP status.
+   *
+   * GET /smtp_status -> ISmtpStatus
+   *
+   * @param callback streaming output function
+   * @param fields Include only these fields in the response
+   * @param options one-time API call overrides
+   *
+   */
+  async smtp_status(
+    callback: (readable: Readable) => Promise<ISmtpStatus>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<ISmtpStatus>(
+      callback,
+      'GET',
+      '/smtp_status',
+      { fields },
+      null,
       options
     )
   }
@@ -5838,7 +6029,9 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -7493,6 +7686,24 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Field name suggestions for a model and view
    *
+   * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+   *
+   * ```ruby
+   * {'users.age': '>=60'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '<30'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '=50'}
+   * ```
+   *
    * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> IModelFieldSuggestions
    *
    * @param callback streaming output function
@@ -7668,6 +7879,8 @@ export class Looker40SDKStream extends APIMethods {
         schema_name: request.schema_name,
         cache: request.cache,
         fields: request.fields,
+        table_filter: request.table_filter,
+        table_limit: request.table_limit,
       },
       null,
       options
@@ -9703,6 +9916,45 @@ export class Looker40SDKStream extends APIMethods {
       'GET',
       `/render_tasks/${render_task_id}/results`,
       null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create a new task to render a dashboard element to an image.
+   *
+   * Returns a render task object.
+   * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+   * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+   *
+   * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> IRenderTask
+   *
+   * @param callback streaming output function
+   * @param dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+   * @param result_format Output type: png or jpg
+   * @param width Output width in pixels
+   * @param height Output height in pixels
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async create_dashboard_element_render_task(
+    callback: (readable: Readable) => Promise<IRenderTask>,
+    dashboard_element_id: string,
+    result_format: string,
+    width: number,
+    height: number,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    dashboard_element_id = encodeParam(dashboard_element_id)
+    result_format = encodeParam(result_format)
+    return this.authStream<IRenderTask>(
+      callback,
+      'POST',
+      `/render_tasks/dashboard_elements/${dashboard_element_id}/${result_format}`,
+      { width, height, fields },
       null,
       options
     )

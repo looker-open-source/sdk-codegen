@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 429 API methods
+/// 437 API methods
 
 #nullable enable
 using System;
@@ -1018,6 +1018,98 @@ namespace Looker.SDK.API40
     return await AuthRequest<SessionConfig, Exception>(HttpMethod.Patch, "/session_config", null,body,options);
   }
 
+  /// ### Get Support Access Allowlist Users
+  ///
+  /// Returns the users that have been added to the Support Access Allowlist
+  ///
+  /// GET /support_access/allowlist -> SupportAccessAllowlistEntry[]
+  ///
+  /// <returns><c>SupportAccessAllowlistEntry[]</c> Support Access Allowlist Entries (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<SupportAccessAllowlistEntry[], Exception>> get_support_access_allowlist_entries(
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SupportAccessAllowlistEntry[], Exception>(HttpMethod.Get, "/support_access/allowlist", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Add Support Access Allowlist Users
+  ///
+  /// Adds a list of emails to the Allowlist, using the provided reason
+  ///
+  /// POST /support_access/allowlist -> SupportAccessAllowlistEntry[]
+  ///
+  /// <returns><c>SupportAccessAllowlistEntry[]</c> Support Access Allowlist Entries (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SupportAccessAllowlistEntry[], Exception>> add_support_access_allowlist_entries(
+    SupportAccessAddEntries body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SupportAccessAllowlistEntry[], Exception>(HttpMethod.Post, "/support_access/allowlist", null,body,options);
+  }
+
+  /// ### Delete Support Access Allowlist User
+  ///
+  /// Deletes the specified Allowlist Entry Id
+  ///
+  /// DELETE /support_access/allowlist/{entry_id} -> string
+  ///
+  /// <returns><c>string</c> Entry successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="entry_id">Id of Allowlist Entry</param>
+  public async Task<SdkResponse<string, Exception>> delete_support_access_allowlist_entry(
+    string entry_id,
+    ITransportSettings? options = null)
+{  
+      entry_id = SdkUtils.EncodeParam(entry_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/support_access/allowlist/{entry_id}", null,null,options);
+  }
+
+  /// ### Enable Support Access
+  ///
+  /// Enables Support Access for the provided duration
+  ///
+  /// PUT /support_access/enable -> SupportAccessStatus
+  ///
+  /// <returns><c>SupportAccessStatus</c> Support Access Status (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SupportAccessStatus, Exception>> enable_support_access(
+    SupportAccessEnable body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SupportAccessStatus, Exception>(HttpMethod.Put, "/support_access/enable", null,body,options);
+  }
+
+  /// ### Disable Support Access
+  ///
+  /// Disables Support Access immediately
+  ///
+  /// PUT /support_access/disable -> SupportAccessStatus
+  ///
+  /// <returns><c>SupportAccessStatus</c> Support Access Status (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SupportAccessStatus, Exception>> disable_support_access(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SupportAccessStatus, Exception>(HttpMethod.Put, "/support_access/disable", null,null,options);
+  }
+
+  /// ### Support Access Status
+  ///
+  /// Returns the current Support Access Status
+  ///
+  /// GET /support_access/status -> SupportAccessStatus
+  ///
+  /// <returns><c>SupportAccessStatus</c> Support Access Status (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SupportAccessStatus, Exception>> support_access_status(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SupportAccessStatus, Exception>(HttpMethod.Get, "/support_access/status", null,null,options);
+  }
+
   /// ### Get currently locked-out users.
   ///
   /// GET /user_login_lockouts -> UserLoginLockout[]
@@ -1905,6 +1997,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_enabled
   ///  - whitelabel_configuration
   ///  - custom_welcome_email
+  ///  - onboarding_enabled
   ///
   /// GET /setting -> Setting
   ///
@@ -1927,6 +2020,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_enabled
   ///  - whitelabel_configuration
   ///  - custom_welcome_email
+  ///  - onboarding_enabled
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
@@ -1942,6 +2036,21 @@ namespace Looker.SDK.API40
 {  
     return await AuthRequest<Setting, Exception>(HttpMethod.Patch, "/setting", new Values {
       { "fields", fields }},body,options);
+  }
+
+  /// ### Get current SMTP status.
+  ///
+  /// GET /smtp_status -> SmtpStatus
+  ///
+  /// <returns><c>SmtpStatus</c> SMTP Status (application/json)</returns>
+  ///
+  /// <param name="fields">Include only these fields in the response</param>
+  public async Task<SdkResponse<SmtpStatus, Exception>> smtp_status(
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SmtpStatus, Exception>(HttpMethod.Get, "/smtp_status", new Values {
+      { "fields", fields }},null,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -3759,7 +3868,9 @@ namespace Looker.SDK.API40
 
   /// ### Get information about all folders.
   ///
-  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+  /// or if they contain soft-deleted content.
+  ///
   /// In API 4.0+, all personal folders will be returned.
   ///
   /// GET /folders -> Folder[]
@@ -5018,6 +5129,24 @@ namespace Looker.SDK.API40
 
   /// ### Field name suggestions for a model and view
   ///
+  /// `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+  ///
+  /// ```ruby
+  /// {'users.age': '>=60'}
+  /// ```
+  ///
+  /// or
+  ///
+  /// ```ruby
+  /// {'users.age': '<30'}
+  /// ```
+  ///
+  /// or
+  ///
+  /// ```ruby
+  /// {'users.age': '=50'}
+  /// ```
+  ///
   /// GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
   ///
   /// <returns><c>ModelFieldSuggestions</c> Model view field suggestions (application/json)</returns>
@@ -5025,14 +5154,14 @@ namespace Looker.SDK.API40
   /// <param name="model_name">Name of model</param>
   /// <param name="view_name">Name of view</param>
   /// <param name="field_name">Name of field to use for suggestions</param>
-  /// <param name="term">Search term</param>
-  /// <param name="filters">Suggestion filters</param>
+  /// <param name="term">Search term pattern (evaluated as as `%term%`)</param>
+  /// <param name="filters">Suggestion filters with field name keys and comparison expressions</param>
   public async Task<SdkResponse<ModelFieldSuggestions, Exception>> model_fieldname_suggestions(
     string model_name,
     string view_name,
     string field_name,
     string? term = null,
-    string? filters = null,
+    object? filters = null,
     ITransportSettings? options = null)
 {  
       model_name = SdkUtils.EncodeParam(model_name);
@@ -5141,12 +5270,16 @@ namespace Looker.SDK.API40
   /// <param name="schema_name">Optional. Return only tables for this schema</param>
   /// <param name="cache">True to fetch from cache, false to load fresh</param>
   /// <param name="fields">Requested fields.</param>
+  /// <param name="table_filter">Optional. Return tables with names that contain this value</param>
+  /// <param name="table_limit">Optional. Return tables up to the table_limit</param>
   public async Task<SdkResponse<SchemaTables[], Exception>> connection_tables(
     string connection_name,
     string? database = null,
     string? schema_name = null,
     bool? cache = null,
     string? fields = null,
+    string? table_filter = null,
+    long? table_limit = null,
     ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
@@ -5154,7 +5287,9 @@ namespace Looker.SDK.API40
       { "database", database },
       { "schema_name", schema_name },
       { "cache", cache },
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "table_filter", table_filter },
+      { "table_limit", table_limit }},null,options);
   }
 
   /// ### Get the columns (and therefore also the tables) in a specific schema
@@ -6769,6 +6904,37 @@ namespace Looker.SDK.API40
 {  
       render_task_id = SdkUtils.EncodeParam(render_task_id);
     return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/render_tasks/{render_task_id}/results", null,null,options);
+  }
+
+  /// ### Create a new task to render a dashboard element to an image.
+  ///
+  /// Returns a render task object.
+  /// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+  /// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+  ///
+  /// POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+  ///
+  /// <returns><c>RenderTask</c> Render Task (application/json)</returns>
+  ///
+  /// <param name="dashboard_element_id">Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id</param>
+  /// <param name="result_format">Output type: png or jpg</param>
+  /// <param name="width">Output width in pixels</param>
+  /// <param name="height">Output height in pixels</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<RenderTask, Exception>> create_dashboard_element_render_task(
+    string dashboard_element_id,
+    string result_format,
+    long width,
+    long height,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
+      result_format = SdkUtils.EncodeParam(result_format);
+    return await AuthRequest<RenderTask, Exception>(HttpMethod.Post, $"/render_tasks/dashboard_elements/{dashboard_element_id}/{result_format}", new Values {
+      { "width", width },
+      { "height", height },
+      { "fields", fields }},null,options);
   }
 
   #endregion RenderTask: Manage Render Tasks
