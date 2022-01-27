@@ -83,19 +83,17 @@ describe('Banner', () => {
       expect(
         screen.getByText('API 4.0 is generally available', { exact: false })
       ).toBeInTheDocument()
-
-      const closeButton = screen.getByText('Close').closest('button')
-      fireEvent.click(closeButton as HTMLButtonElement)
-
-      expect(
-        screen.getByText('API 4.0 is generally available', { exact: false })
-      ).not.toBeInTheDocument()
-      expect(
-        adaptor.localStorageSetItem.mock.toHaveBeenCalledWith(
-          'api-40-ga-banner',
-          'dismissed'
-        )
-      )
     })
+
+    const closeButton = screen.getByText('Dismiss Inform').closest('button')
+    fireEvent.click(closeButton as HTMLButtonElement)
+
+    expect(
+      screen.queryByText('API 4.0 is generally available', { exact: false })
+    ).not.toBeInTheDocument()
+    expect(adaptor.localStorageSetItem).toHaveBeenCalledWith(
+      'api-40-ga-apix-banner',
+      'dismissed'
+    )
   })
 })

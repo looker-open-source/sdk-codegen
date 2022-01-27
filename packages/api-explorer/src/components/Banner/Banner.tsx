@@ -23,22 +23,13 @@
  SOFTWARE.
 
  */
-import {
-  Box,
-  Flex,
-  Text,
-  ButtonOutline,
-  IconButton,
-  Link,
-} from '@looker/components'
-import styled from 'styled-components'
-import { Close } from '@styled-icons/material/Close'
+import { ButtonOutline, Link, MessageBar } from '@looker/components'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 import type { SpecList } from '@looker/sdk-codegen'
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 
-const LOCAL_STORAGE_KEY = 'api-40-ga-banner'
+const LOCAL_STORAGE_KEY = 'api-40-ga-apix-banner'
 const LOCAL_STORAGE_VALUE = 'dismissed'
 
 export interface BannerProps {
@@ -50,31 +41,24 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
   const [isOpen, setOpen] = useState(false)
   useEffect(onLoad, [])
 
-  if (adaptor.isExtension() && isOpen) {
+  if (isOpen) {
     return (
-      <BannerStyled className="banner-body">
-        <Flex alignItems="center" justifyContent="space-between">
-          <Text>
-            API 4.0 is generally available in Looker 22.4 and transitions from
-            Beta to Stable with additive and breaking changes. Read the
-            announcement to see how this affects you!
-          </Text>
-          <Flex>
-            <Link
-              href="https://developers.looker.com/api/advanced-usage/version-4-ga"
-              target="_blank"
-            >
-              <ButtonOutline size="small">Announcement</ButtonOutline>
-            </Link>
-            <IconButton
-              icon={<Close />}
-              label="Close"
-              tooltipDisabled
-              onClick={onClose}
-            />
-          </Flex>
-        </Flex>
-      </BannerStyled>
+      <MessageBar
+        intent="inform"
+        onPrimaryClick={onClose}
+        secondaryAction={
+          <Link
+            href="https://developers.looker.com/api/advanced-usage/version-4-ga"
+            target="_blank"
+          >
+            <ButtonOutline size="small">Announcement</ButtonOutline>
+          </Link>
+        }
+      >
+        API 4.0 is generally available in Looker 22.4 and transitions from Beta
+        to Stable with additive and breaking changes. Read the announcement to
+        see how this affects you!
+      </MessageBar>
     )
   } else {
     return null
@@ -91,7 +75,7 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
       const wasDismissed =
         (await adaptor.localStorageGetItem(LOCAL_STORAGE_KEY)) ===
         LOCAL_STORAGE_VALUE
-      setOpen(!is40Stable && !wasDismissed)
+      setOpen(!is40Stable && !wasDismissed && adaptor.isExtension())
     }
     innerOnLoad()
   }
@@ -101,42 +85,3 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
     setOpen(false)
   }
 }
-
-export const BannerStyled = styled(Box)`
-  background-color: #34a853;
-  color: #fff;
-  padding: ${(props) => props.theme.space.u3} ${(props) => props.theme.space.u3}
-    ${(props) => props.theme.space.u3} ${(props) => props.theme.space.u6};
-  overflow: visible;
-  position: relative;
-  top: 20px;
-  margin-bottom: 20px;
-  border-radius: 4px;
-
-  ${Text} {
-    font-size: ${(props) => props.theme.fontSizes.small};
-    padding-right: ${(props) => props.theme.space.u4};
-    line-height: 1.3;
-
-    span {
-      display: none;
-      @media (min-width: ${(props) => props.theme.breakpoints[1]}) {
-        display: inline;
-      }
-    }
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  ${ButtonOutline} {
-    color: #34a853;
-    border: none;
-  }
-
-  ${IconButton} {
-    color: #fff;
-    margin-left: 12px;
-  }
-`
