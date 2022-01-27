@@ -1,10 +1,22 @@
 name: API Explorer CI
 on:
   pull_request:
+    paths:
+      - packages/code-editor/**
+      - packages/run-it/**
+      - packages/api-explorer/**
+      - packages/extension-api-explorer/**
+      - packages/extension-utils/**
 
   push:
     branches:
       - main
+    paths:
+      - packages/code-editor/**
+      - packages/run-it/**
+      - packages/api-explorer/**
+      - packages/extension-api-explorer/**
+      - packages/extension-utils/**
 
   workflow_dispatch:
 
@@ -12,13 +24,8 @@ env:
   TS_JUNIT_OUTPUT_DIR: results/apix
 
 jobs:
-  checkfiles:
-    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
-
   unit:
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
-    needs: checkfiles
-    if: needs.checkfiles.outputs.apix == 'true'
     env:
       JEST_JUNIT_OUTPUT_DIR: results/apix
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.apix${{ matrix.node-version }}.xml
@@ -52,6 +59,23 @@ jobs:
           yarn build
           yarn dedupe:ci
 
+      # if this job fails before this point the required state check "APIX Tests"
+      #  is never set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "APIX Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
       - name: Run unit tests
         run: yarn test:apix --reporters=default --reporters=jest-junit
 
@@ -72,28 +96,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
-
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
-        with:
-          # Cosmetic issue with `check_name` being associated to the wrong
-          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
-          check_name: APIX Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_individual_runs: true
-          hide_comments: orphaned commits
-          check_run_annotations_branch: '*'
-          files: 'artifacts/apix-test-results/*.xml'
-
-  publish-test-results-on-skip:
-    needs: checkfiles
-    if: needs.checkfiles.outputs.apix == 'false'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Make Dummy Artifacts
-        run: |
-          mkdir -p 'artifacts/apix-test-results'
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12

@@ -1,10 +1,18 @@
 name: Codegen CI
 on:
   pull_request:
+    paths:
+      - packages/sdk-codegen/**
+      - packages/sdk-codegen-utils/**
+      - packages/sdk-codegen-scripts/**
 
   push:
     branches:
       - main
+    paths:
+      - packages/sdk-codegen/**
+      - packages/sdk-codegen-utils/**
+      - packages/sdk-codegen-scripts/**
 
   workflow_dispatch:
 
@@ -16,11 +24,7 @@ env:
   LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_18 }}
 
 jobs:
-  checkfiles:
-    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   unit:
-    needs: checkfiles
-    if: needs.checkfiles.outputs.codegen == 'true'
     env:
       JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
       JEST_JUNIT_OUTPUT_NAME: ubuntu-latest.sdk-codegen15x.xml
@@ -79,6 +83,23 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
+      # if this job fails before this point the required state check "Codegen Tests"
+      #  is never set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Codegen Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
       - name: Run unit tests
         run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
@@ -102,28 +123,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
-
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
-        with:
-          # Cosmetic issue with `check_name` being associated to the wrong
-          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
-          check_name: Codegen Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_individual_runs: true
-          hide_comments: orphaned commits
-          check_run_annotations_branch: '*'
-          files: 'artifacts/sdk-codegen-test-results/*.xml'
-
-  publish-test-results-on-skip:
-    needs: [checkfiles]
-    if: needs.checkfiles.outputs.codegen == 'false'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Make Dummy Artifacts
-        run: |
-          mkdir -p 'artifacts/sdk-codegen-test-results'
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
