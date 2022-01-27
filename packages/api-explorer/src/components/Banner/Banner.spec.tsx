@@ -54,7 +54,7 @@ describe('Banner', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('API 4.0 is generally available', { exact: false })
+        screen.getByText('API 4.0 moves from Beta', { exact: false })
       ).toBeInTheDocument()
       const link = screen.getByText('Announcement').closest('a')
       expect(link).toHaveAttribute(
@@ -81,7 +81,7 @@ describe('Banner', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('API 4.0 is generally available', { exact: false })
+        screen.getByText('API 4.0 moves from Beta', { exact: false })
       ).toBeInTheDocument()
     })
 
@@ -89,7 +89,7 @@ describe('Banner', () => {
     fireEvent.click(closeButton as HTMLButtonElement)
 
     expect(
-      screen.queryByText('API 4.0 is generally available', { exact: false })
+      screen.queryByText('API 4.0 moves from Beta', { exact: false })
     ).not.toBeInTheDocument()
     expect(adaptor.localStorageSetItem).toHaveBeenCalledWith(
       'api-40-ga-apix-banner',
