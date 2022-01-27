@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.9.9
       - run: pip install -e .
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
@@ -71,7 +71,7 @@ jobs:
           - macos
           - windows
         python-version:
-          - '3.9'
+          - '3.9.9'
         include:
           - python-version: '3.6'
             os: ubuntu
@@ -265,7 +265,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.9.9
       - name: Twine upload check
         run: |
           pip install wheel twine
