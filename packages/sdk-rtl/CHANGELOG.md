@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.2.0...sdk-rtl-v21.3.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Bug Fixes
+
+* rtl IError type ([#928](https://www.github.com/looker-open-source/sdk-codegen/issues/928)) ([7d8f906](https://www.github.com/looker-open-source/sdk-codegen/commit/7d8f906f4b10b5e915df292fcf30d1eb456c3463))
+* **sdk-rtl/src/delimArray:** Fixed issue with single element number array ([#927](https://www.github.com/looker-open-source/sdk-codegen/issues/927)) ([6e94d73](https://www.github.com/looker-open-source/sdk-codegen/commit/6e94d73f88fb6c2f3138818967f4e8cb49ff89e6))
+
 ### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.3.0...sdk-rtl-v21.3.1) (2021-12-20)
 
 

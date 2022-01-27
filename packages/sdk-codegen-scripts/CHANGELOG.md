@@ -1,5 +1,20 @@
 # Changelog
 
+### [21.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.1.3...sdk-codegen-scripts-v21.2.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.20.0 to ^21.20.1
+    * @looker/sdk-node bumped from ^21.20.0 to ^21.20.1
+
 ### [21.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.2.0...sdk-codegen-scripts-v21.2.1) (2021-12-20)
 
 

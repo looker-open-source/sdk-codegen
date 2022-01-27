@@ -1,5 +1,26 @@
 # Changelog
 
+### [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.20.0...extension-api-explorer-v21.20.1) (2022-01-27)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* use headless navigation mode for API Explorer extension ([#950](https://www.github.com/looker-open-source/sdk-codegen/issues/950)) ([fa44a8a](https://www.github.com/looker-open-source/sdk-codegen/commit/fa44a8a2383d48a524371401455fc825d3608fc7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^21.20.0 to ^21.20.1
+    * @looker/extension-sdk-react bumped from ^21.20.0 to ^21.20.1
+    * @looker/sdk bumped from ^21.20.0 to ^21.20.1
+
 ## [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v21.20.0...extension-api-explorer-v21.20.1) (2021-12-20)
 
 

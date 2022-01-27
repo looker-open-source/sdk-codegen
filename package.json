@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "1.20.1",
+  "version": "1.21.1",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -246,7 +246,9 @@
       }
     ]
   },
-  "eslintignore": ["bin/looker-resources-index/tmp/compiled-typescript/**/*.js"],
+  "eslintignore": [
+    "bin/looker-resources-index/tmp/compiled-typescript/**/*.js"
+  ],
   "keywords": [],
   "resolutions": {
     "set-value": "^2.0.1",
