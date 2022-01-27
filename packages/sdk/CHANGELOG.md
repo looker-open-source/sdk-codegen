@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
 
+### [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.20.0...sdk-v21.20.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
 ## [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v21.20.0...sdk-v21.20.1) (2021-12-20)
 
 

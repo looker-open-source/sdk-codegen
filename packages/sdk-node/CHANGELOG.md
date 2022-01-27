@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
 
+### [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.20.0...sdk-node-v21.20.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
 
 ### Dependencies
 

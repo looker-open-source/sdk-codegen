@@ -17,6 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
 
+### [0.9.26](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.23...api-explorer-v0.9.26) (2022-01-27)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
 
 ### Dependencies
 
