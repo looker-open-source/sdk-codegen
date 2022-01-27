@@ -1,5 +1,5 @@
 {
-  "last-release-sha": "3ff2616b0b44240fe1c2df52d2c70843fd18a070",
+  "last-release-sha": "2a4d556e89743cfa4d93d398408b7252a163e610",
   "plugins": ["node-workspace"],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
