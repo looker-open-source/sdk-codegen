@@ -55,9 +55,9 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
           </Link>
         }
       >
-        API 4.0 is generally available in Looker 22.4 and transitions from Beta
-        to Stable with additive and breaking changes. Read the announcement to
-        see how this affects you!
+        API 4.0 moves from Beta to General Availability in Looker 22.4 with
+        additions and possible breaking changes. Read the announcement to see
+        how this affects you.
       </MessageBar>
     )
   } else {
