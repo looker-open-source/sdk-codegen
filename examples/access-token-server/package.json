@@ -11,7 +11,7 @@
     "create-status-json": "ts-node script/create_status_json.ts"
   },
   "dependencies": {
-    "@looker/sdk": "^21.14.0",
+    "@looker/sdk": "21.14.0 - 2.0",
     "@looker/sdk-rtl": "^21.0.20",
     "@looker/sdk-node": "^21.14.0",
     "body-parser": "^1.19.0",
