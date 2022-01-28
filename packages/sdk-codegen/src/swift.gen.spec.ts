@@ -86,19 +86,27 @@ public enum PermissionType: String, Codable {
       const expected = `public struct HyphenType: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case project_name
-        case project_digest = "project-digest"
+        case _project_name = "project_name"
+        case _project_digest = "project-digest"
         case computation_time = "computation time"
     }
+    private var _project_name: AnyString?
     /**
      * A normal variable name (read-only)
      */
-    public var project_name: String?
+    public var project_name: String? {
+        get { _project_name?.value }
+        set { _project_name = newValue.map(AnyString.init) }
+    }
 
+    private var _project_digest: AnyString?
     /**
      * A hyphenated property name (read-only)
      */
-    public var project_digest: String?
+    public var project_digest: String? {
+        get { _project_digest?.value }
+        set { _project_digest = newValue.map(AnyString.init) }
+    }
 
     /**
      * A spaced out property name (read-only)
@@ -106,8 +114,8 @@ public enum PermissionType: String, Codable {
     public var computation_time: Float?
 
     public init(project_name: String? = nil, project_digest: String? = nil, computation_time: Float? = nil) {
-        self.project_name = project_name
-        self.project_digest = project_digest
+        self._project_name = project_name.map(AnyString.init)
+        self._project_digest = project_digest.map(AnyString.init)
         self.computation_time = computation_time
     }
 
@@ -123,8 +131,8 @@ public enum PermissionType: String, Codable {
     private enum CodingKeys : String, CodingKey {
         case can
         case _id = "id"
-        case message
-        case status
+        case _message = "message"
+        case _status = "status"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -140,21 +148,29 @@ public enum PermissionType: String, Codable {
         set { _id = newValue.map(AnyString.init) }
     }
 
+    private var _message: AnyString?
     /**
      * Additional data from the test (read-only)
      */
-    public var message: String?
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
 
+    private var _status: AnyString?
     /**
      * Either 'pass' or 'fail' (read-only)
      */
-    public var status: String?
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: String? = nil, status: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
-        self.message = message
-        self.status = status
+        self._message = message.map(AnyString.init)
+        self._status = status.map(AnyString.init)
     }
 
 }`
@@ -167,13 +183,17 @@ public enum PermissionType: String, Codable {
       const expected = `public struct CreateFolder: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case name
+        case _name = "name"
         case _parent_id = "parent_id"
     }
+    private var _name: AnyString
     /**
      * Unique Name
      */
-    public var name: String
+    public var name: String {
+        get { _name.value }
+        set { _name = AnyString.init(newValue) }
+    }
 
     private var _parent_id: AnyString
     /**
@@ -185,7 +205,7 @@ public enum PermissionType: String, Codable {
     }
 
     public init(name: String, parent_id: String) {
-        self.name = name
+        self._name = AnyString.init(name)
         self._parent_id = AnyString.init(parent_id)
     }
 
@@ -243,15 +263,25 @@ public enum PermissionType: String, Codable {
       const type = apiTestModel.types.EmbedParams
       const actual = gen.declareType(indent, type)
       const expected = `public struct EmbedParams: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case target_url
+        case _session_length = "session_length"
+        case force_logout_login
+    }
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, \`target_url\` would look like: \`https://mycompany.looker.com:9999/dashboards/34\`. \`target_uri\` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, \`target_uri\` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
     public var target_url: URI
 
+    private var _session_length: AnyInt?
     /**
      * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
-    public var session_length: Int64?
+    public var session_length: Int64? {
+        get { _session_length?.value }
+        set { _session_length = newValue.map(AnyInt.init) }
+    }
 
     /**
      * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
@@ -260,7 +290,7 @@ public enum PermissionType: String, Codable {
 
     public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.target_url = target_url
-        self.session_length = session_length
+        self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
     }
 
@@ -275,19 +305,32 @@ public enum PermissionType: String, Codable {
       const type = apiTestModel.types.ColorStop
       const actual = gen.declareType(indent, type)
       const expected = `public struct ColorStop: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _color = "color"
+        case _offset = "offset"
+    }
+    private var _color: AnyString?
     /**
      * CSS color string
      */
-    public var color: String?
+    public var color: String? {
+        get { _color?.value }
+        set { _color = newValue.map(AnyString.init) }
+    }
 
+    private var _offset: AnyInt?
     /**
      * Offset in continuous palette (0 to 100)
      */
-    public var offset: Int64?
+    public var offset: Int64? {
+        get { _offset?.value }
+        set { _offset = newValue.map(AnyInt.init) }
+    }
 
     public init(color: String? = nil, offset: Int64? = nil) {
-        self.color = color
-        self.offset = offset
+        self._color = color.map(AnyString.init)
+        self._offset = offset.map(AnyInt.init)
     }
 
 }`
