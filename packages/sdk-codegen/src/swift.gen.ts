@@ -234,13 +234,16 @@ import Foundation
     return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
   }
 
-  isIdProp(property: IProperty) {
-    const nameCheck = property.name.toLowerCase()
-    return (
-      nameCheck === 'id' ||
-      nameCheck.endsWith('_id') ||
-      nameCheck.endsWith('_ids')
-    )
+  isIdProp(_property: IProperty) {
+    // sadly we can't scope fuzzy decoding to only id fields because some "id" refs are not named correctly
+    // TODO just return true until we figure out a generic solution for fuzzy JSON decoding
+    return true
+    // const nameCheck = property.name.toLowerCase()
+    // return (
+    //   nameCheck === 'id' ||
+    //   nameCheck.endsWith('_id') ||
+    //   nameCheck.endsWith('_ids')
+    // )
   }
 
   /**
