@@ -86,6 +86,10 @@ jobs:
           --data '{
             "name": "Codegen Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Codegen Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -101,6 +105,10 @@ jobs:
           --data '{
             "name": "Typescript Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Typescript Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -116,6 +124,10 @@ jobs:
           --data '{
             "name": "Python Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Python Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -131,6 +143,10 @@ jobs:
           --data '{
             "name": "APIX Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / APIX Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
