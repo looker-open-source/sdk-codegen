@@ -39,23 +39,6 @@ jobs:
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
-      # if this job fails the required state check "Python Tests" is never
-      # set, so we will set it manually.
-      - name: Report Failure
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          --header "content-type: application/json" \
-          --header "Accept: application/vnd.github.v3+json" \
-          --data '{
-            "name": "Python Tests",
-            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
-            "conclusion": "failure"
-          }' \
-          --fail
-        if: failure()
-
   unit:
     needs: typecheck
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
@@ -93,23 +76,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox
-
-      # if this job fails the required state check "Python Tests" is never
-      # set, so we will set it manually.
-      - name: Report Failure
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          --header "content-type: application/json" \
-          --header "Accept: application/vnd.github.v3+json" \
-          --data '{
-            "name": "Python Tests",
-            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
-            "conclusion": "failure"
-          }' \
-          --fail
-        if: failure()
 
       - name: Run Unit Tests
         run: tox -e unit
@@ -230,23 +196,6 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
-      # if this job fails the required state check "Python Tests" is never
-      # set, so we will set it manually.
-      - name: Report Failure
-        run: |
-          curl --request POST \
-          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          --header "content-type: application/json" \
-          --header "Accept: application/vnd.github.v3+json" \
-          --data '{
-            "name": "Python Tests",
-            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
-            "conclusion": "failure"
-          }' \
-          --fail
-        if: failure()
-
       - name: Run Integration Tests
         run: tox -e integration
 
@@ -282,7 +231,31 @@ jobs:
         with:
           path: artifacts
 
+      # If there are no test result files the test is reported as passing!
+      # That allows for some weird failure modes, where an early failure
+      # is not distinguished from a pass.
+      - name: Check Results Files Exist
+        id: check-results-exist
+        run: |
+          if [[ $(ls -l artifacts/python-test-results/*.xml | wc -l) -ge "1" ]]; then
+            exit 0
+          else
+            curl --request POST \
+            --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+            --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --header "content-type: application/json" \
+            --header "Accept: application/vnd.github.v3+json" \
+            --data '{
+              "name": "Python Tests",
+              "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+              "conclusion": "failure"
+            }' \
+            --fail
+            exit 1
+          fi
+
       - name: Publish Unit Test Results
+        if: steps.check-results-exist.outcome == 'success'
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
           # Cosmetic issue with `check_name` being associated to the wrong
