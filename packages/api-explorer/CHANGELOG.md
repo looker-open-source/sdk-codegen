@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.26](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.23...api-explorer-v0.9.26) (2022-01-27)
+
+
+### Features
+
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.20.0 to ^21.20.1
+  * devDependencies
+    * @looker/sdk-node bumped from ^21.20.0 to ^21.20.1
+
 ### [0.9.26](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.25...api-explorer-v0.9.26) (2021-12-20)
 
 

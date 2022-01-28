@@ -1,10 +1,14 @@
 name: Python CI
 on:
   pull_request:
+    paths:
+      - python/**
 
   push:
     branches:
       - main
+    paths:
+      - python/**
 
   workflow_dispatch:
 
@@ -19,12 +23,8 @@ defaults:
     working-directory: python/
 
 jobs:
-  checkfiles:
-    uses: looker-open-source/.github/.github/workflows/check-files.yml@main
   typecheck:
     name: Mypy
-    needs: checkfiles
-    if: needs.checkfiles.outputs.python == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -32,7 +32,6 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
-
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
@@ -40,10 +39,25 @@ jobs:
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
-  unit:
-    needs: [checkfiles, typecheck]
-    if: needs.checkfiles.outputs.python == 'true'
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
 
+  unit:
+    needs: typecheck
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
@@ -80,6 +94,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
       - name: Run Unit Tests
         run: tox -e unit
 
@@ -91,8 +122,7 @@ jobs:
           path: python/results/
 
   integration:
-    needs: [checkfiles, unit]
-    if: needs.checkfiles.outputs.python == 'true'
+    needs: unit
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -141,7 +171,7 @@ jobs:
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
       - name: Install docker on macos
-        if: matrix.os == 'macos'
+        if: ${{ matrix.os == 'macos' }}
         uses: docker-practice/actions-setup-docker@v1
         with:
           docker_channel: stable
@@ -149,7 +179,7 @@ jobs:
           docker_cli_experimental: disabled
 
       - name: Bump docker for mac memory
-        if: matrix.os == 'macos'
+        if: ${{ matrix.os == 'macos' }}
         run: |
           osascript -e 'quit app "Docker"'
           sed -i'.original' -e's/  "memoryMiB" : 2048/  "memoryMiB" : 8192/' ~/Library/Group\ Containers/group.com.docker/settings.json
@@ -179,7 +209,7 @@ jobs:
           pip install tox
 
       - name: Determine credentials version
-        # Prior to 21_18, each version had different credentials and a
+        # Prior to 21_18, each version had different credentials and a 
         # different secret. 21_20 and later all use the same credentials
         # as 21_18. The parse_version.sh script parses the version and
         # yields 21_12, 21_14, 21_16 etc for those versions but 21_18 for
@@ -201,6 +231,23 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
+      # if this job fails the required state check "Python Tests" is never
+      # set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
+
       - name: Run Integration Tests
         run: tox -e integration
 
@@ -212,12 +259,10 @@ jobs:
           path: python/results/
 
   twine:
-    needs: [checkfiles, integration]
-    if: needs.checkfiles.outputs.python == 'true'
+    needs: integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: actions/setup-python@v2
         with:
           python-version: 3.9.9
@@ -237,32 +282,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
-
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
-        with:
-          # Cosmetic issue with `check_name` being associated to the wrong
-          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
-          check_name: Python Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_individual_runs: true
-          hide_comments: orphaned commits
-          check_run_annotations_branch: '*'
-          files: 'artifacts/python-test-results/*.xml'
-
-  publish-test-results-on-skip:
-    defaults:
-      run:
-        shell: bash
-        working-directory: .
-    needs: checkfiles
-    if: needs.checkfiles.outputs.python == 'false'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Make Dummy Artifacts
-        run: |
-          mkdir -p 'artifacts/python-test-results'
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1.12
