@@ -234,16 +234,24 @@ import Foundation
     return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
   }
 
+  isIdProp(property: IProperty) {
+    const nameCheck = property.name.toLowerCase()
+    return (
+      nameCheck === 'id' ||
+      nameCheck.endsWith('_id') ||
+      nameCheck.endsWith('_ids')
+    )
+  }
+
   /**
    * true if this property should use AnyString
    * @param property to check
    */
   useAnyString(property: IProperty) {
-    const nameCheck = property.name.toLowerCase()
     return (
       this.anyString &&
       property.type.name.toLowerCase() === 'string' &&
-      (nameCheck === 'id' || nameCheck.endsWith('_id'))
+      this.isIdProp(property)
     )
   }
 
@@ -252,12 +260,11 @@ import Foundation
    * @param property to check
    */
   useAnyInt(property: IProperty) {
-    const nameCheck = property.name.toLowerCase()
     const typeCheck = property.type.name.toLowerCase()
     return (
       this.anyString &&
       (typeCheck === 'integer' || typeCheck === 'int64') &&
-      (nameCheck === 'id' || nameCheck.endsWith('_id'))
+      this.isIdProp(property)
     )
   }
 

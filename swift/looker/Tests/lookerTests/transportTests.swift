@@ -27,6 +27,71 @@
 import XCTest
 @testable import looker
 
+/// teaser from https://gist.github.com/hamishknight/e5bd36a1d5868b896f09dedad51b9ee9
+//enum JSON {
+//    case object([String:JSON])
+//    case array([JSON])
+//    case string(String)
+//    case bool(Bool)
+//    case number(Float)
+//    case null
+//}
+//
+//extension JSON : Codable {
+//
+//    init(from decoder: Decoder) throws {
+//
+//        let container = try decoder.singleValueContainer()
+//
+//        if let object = try? container.decode([String: JSON].self) {
+//            self = .object(object)
+//        } else if let array = try? container.decode([JSON].self) {
+//            self = .array(array)
+//        } else if let string = try? container.decode(String.self) {
+//            self = .string(string)
+//        } else if let bool = try? container.decode(Bool.self) {
+//            self = .bool(bool)
+//        } else if let number = try? container.decode(Float.self) {
+//            self = .number(number)
+//        } else if container.decodeNil() {
+//            self = .null
+//        } else {
+//            throw DecodingError.dataCorruptedError(
+//                in: container, debugDescription: "Invalid JSON value."
+//            )
+//        }
+//    }
+//
+//    func encode(to encoder: Encoder) throws {
+//
+//        var container = encoder.singleValueContainer()
+//
+//        switch self {
+//        case let .object(object):
+//            try container.encode(object)
+//        case let .array(array):
+//            try container.encode(array)
+//        case let .string(string):
+//            try container.encode(string)
+//        case let .bool(bool):
+//            try container.encode(bool)
+//        case let .number(number):
+//            try container.encode(number)
+//        case .null:
+//            try container.encodeNil()
+//        }
+//    }
+//}
+//
+//struct TestJsonModel : Codable, JSON {
+//    var string1: String = ""
+//    var num1: Int64 = 0
+//    var string2: String = ""
+//    var num2: Int64 = 0
+//    var string3: String = ""
+//    var num3: Int64 = 0
+//}
+
 struct SimpleUser : SDKModel {
     var first: String
     var last: String
@@ -139,6 +204,7 @@ class transportTests: XCTestCase {
             print(error)
         }
     }
+
 
     func testJsonTypes() {
         let payload = """
