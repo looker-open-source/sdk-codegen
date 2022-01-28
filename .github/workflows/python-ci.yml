@@ -17,15 +17,15 @@ env:
   LOOKERSDK_VERIFY_SSL: false
   TOX_JUNIT_OUTPUT_DIR: results
 
-defaults:
-  run:
-    shell: bash
-    working-directory: python/
-
 jobs:
   typecheck:
     name: Mypy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -45,6 +45,11 @@ jobs:
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     strategy:
       # run all supported python versions on ubuntu
       # run only latest supported python version on windows/mac
@@ -93,6 +98,11 @@ jobs:
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     strategy:
       matrix:
         os:
@@ -209,6 +219,11 @@ jobs:
   twine:
     needs: integration
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -237,7 +252,7 @@ jobs:
       - name: Check Results Files Exist
         id: check-results-exist
         run: |
-          if [[ $(ls -l artifacts/python-test-results/*.xml | wc -l) -ge "1" ]]; then
+          if [[ $(ls -l artifacts/python-test-results/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
             exit 0
           else
             curl --request POST \
@@ -250,7 +265,9 @@ jobs:
               "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
               "conclusion": "failure"
             }' \
-            --fail
+            --fail \
+            -o /dev/null \
+            --silent
             exit 1
           fi
 
