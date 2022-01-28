@@ -16,7 +16,7 @@
   "dependencies": {
     "@looker/extension-sdk": "^21.4.1",
     "@looker/extension-sdk-react": "^21.4.1",
-    "@looker/sdk": "21.4.1 - 2.0",
+    "@looker/sdk": "^21.4.1",
     "@looker/sdk-codegen": "^21.0.12",
     "@looker/components": "^2.8.1",
     "@looker/icons": "^1.5.3",
