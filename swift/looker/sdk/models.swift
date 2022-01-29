@@ -5862,7 +5862,7 @@ public struct DataActionFormField: SDKModel {
         case _label = "label"
         case _description = "description"
         case _type = "type"
-        case _`default` = "default"
+        case _default = "default"
         case _oauth_url = "oauth_url"
         case interactive
         case required
@@ -5942,7 +5942,7 @@ public struct DataActionFormField: SDKModel {
         self._label = label.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._type = type.map(AnyString.init)
-        self._`default` = `default`.map(AnyString.init)
+        self._default = `default`.map(AnyString.init)
         self._oauth_url = oauth_url.map(AnyString.init)
         self.interactive = interactive
         self.required = required
@@ -14911,7 +14911,7 @@ public struct ProjectFile: SDKModel {
         case _path = "path"
         case _title = "title"
         case _type = "type"
-        case _`extension` = "extension"
+        case _extension = "extension"
         case _mime_type = "mime_type"
         case editable
         case git_status
@@ -14988,7 +14988,7 @@ public struct ProjectFile: SDKModel {
         self._path = path.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self._type = type.map(AnyString.init)
-        self._`extension` = `extension`.map(AnyString.init)
+        self._extension = `extension`.map(AnyString.init)
         self._mime_type = mime_type.map(AnyString.init)
         self.editable = editable
         self.git_status = git_status

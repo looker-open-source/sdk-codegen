@@ -273,10 +273,13 @@ import Foundation
 
   /**
    * Private version of the name (_ prefix)
+   *
+   * Strips reserved character markings from the name if present
+   *
    * @param name to privatize
    */
   privy(name: string) {
-    return this.reserve('_' + name)
+    return this.reserve('_' + name.replace(/`/g, ''))
   }
 
   getSpecialHandling(property: IProperty) {

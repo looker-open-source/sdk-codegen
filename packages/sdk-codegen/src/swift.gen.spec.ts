@@ -123,7 +123,7 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
 
-    it('optional string ID properties use map to AnyString', () => {
+    it('optional string properties use map to AnyString', () => {
       const type = apiTestModel.types.GitConnectionTestResult
       const actual = gen.declareType(indent, type)
       const expected = `public struct GitConnectionTestResult: SDKModel {
@@ -177,7 +177,105 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
 
-    it('required string ID properties use map to AnyString', () => {
+    it('reserved word string properties use map to AnyString', () => {
+      const type = apiTestModel.types.ProjectFile
+      const actual = gen.declareType(indent, type)
+      const expected = `public struct ProjectFile: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _path = "path"
+        case _title = "title"
+        case _type = "type"
+        case _extension = "extension"
+        case _mime_type = "mime_type"
+        case editable
+        case git_status
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * An opaque token uniquely identifying a file within a project. Avoid parsing or decomposing the text of this token. This token is stable within a Looker release but may change between Looker releases (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _path: AnyString?
+    /**
+     * Path, file name, and extension of the file relative to the project root directory (read-only)
+     */
+    public var path: String? {
+        get { _path?.value }
+        set { _path = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Display name (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _type: AnyString?
+    /**
+     * File type: model, view, etc (read-only)
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _extension: AnyString?
+    /**
+     * The extension of the file: .view.lkml, .model.lkml, etc (read-only)
+     */
+    public var \`extension\`: String? {
+        get { _extension?.value }
+        set { _extension = newValue.map(AnyString.init) }
+    }
+
+    private var _mime_type: AnyString?
+    /**
+     * File mime type (read-only)
+     */
+    public var mime_type: String? {
+        get { _mime_type?.value }
+        set { _mime_type = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * State of editability for the file. (read-only)
+     */
+    public var editable: Bool?
+
+    public var git_status: GitStatus?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, path: String? = nil, title: String? = nil, type: String? = nil, \`extension\`: String? = nil, mime_type: String? = nil, editable: Bool? = nil, git_status: GitStatus? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._path = path.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._type = type.map(AnyString.init)
+        self._extension = \`extension\`.map(AnyString.init)
+        self._mime_type = mime_type.map(AnyString.init)
+        self.editable = editable
+        self.git_status = git_status
+    }
+
+}`
+      expect(actual).toEqual(expected)
+    })
+
+    it('required string properties use map to AnyString', () => {
       const type = apiTestModel.types.CreateFolder
       const actual = gen.declareType(indent, type)
       const expected = `public struct CreateFolder: SDKModel {
@@ -217,7 +315,7 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
 
-    it('numeric ID properties use map to AnyInt', () => {
+    it('numeric properties use map to AnyInt', () => {
       const type = apiTestModel.types.AnyIntIds
       const actual = gen.declareType(indent, type)
       const expected = `public struct AnyIntIds: SDKModel {
