@@ -823,7 +823,7 @@ public struct Board: SDKModel {
         case _description = "description"
         case board_sections
         case _id = "id"
-        case section_order
+        case _section_order = "section_order"
         case _title = "title"
         case updated_at
         case _user_id = "user_id"
@@ -876,10 +876,14 @@ public struct Board: SDKModel {
         set { _id = newValue.map(AnyInt.init) }
     }
 
+    private var _section_order: AnyInt?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    public var section_order: [Int64]?
+    public var section_order: [Int64]? {
+        get { if let v = _section_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } else { _section_order = nil } }
+    }
 
     private var _title: AnyString?
     /**
@@ -917,7 +921,7 @@ public struct Board: SDKModel {
         self._description = description.map(AnyString.init)
         self.board_sections = board_sections
         self._id = id.map(AnyInt.init)
-        self.section_order = section_order
+        self._section_order = section_order == nil ? nil : { section_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
         self._user_id = user_id.map(AnyInt.init)
@@ -1172,8 +1176,8 @@ public struct BoardSection: SDKModel {
         case _board_id = "board_id"
         case board_items
         case _id = "id"
-        case item_order
-        case visible_item_order
+        case _item_order = "item_order"
+        case _visible_item_order = "visible_item_order"
         case _title = "title"
         case updated_at
     }
@@ -1224,15 +1228,23 @@ public struct BoardSection: SDKModel {
         set { _id = newValue.map(AnyInt.init) }
     }
 
+    private var _item_order: AnyInt?
     /**
      * ids of the board items in the order they should be displayed
      */
-    public var item_order: [Int64]?
+    public var item_order: [Int64]? {
+        get { if let v = _item_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+    }
 
+    private var _visible_item_order: AnyInt?
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
-    public var visible_item_order: [Int64]?
+    public var visible_item_order: [Int64]? {
+        get { if let v = _visible_item_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } else { _visible_item_order = nil } }
+    }
 
     private var _title: AnyString?
     /**
@@ -1256,8 +1268,8 @@ public struct BoardSection: SDKModel {
         self._board_id = board_id.map(AnyInt.init)
         self.board_items = board_items
         self._id = id.map(AnyInt.init)
-        self.item_order = item_order
-        self.visible_item_order = visible_item_order
+        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
+        self._visible_item_order = visible_item_order == nil ? nil : { visible_item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
     }
@@ -3037,7 +3049,7 @@ public struct CreateDashboardFilter: SDKModel {
         case _dimension = "dimension"
         case field
         case _row = "row"
-        case listens_to_filters
+        case _listens_to_filters = "listens_to_filters"
         case allow_multiple_values
         case required
         case ui_config
@@ -3137,10 +3149,14 @@ public struct CreateDashboardFilter: SDKModel {
         set { _row = newValue.map(AnyInt.init) }
     }
 
+    private var _listens_to_filters: AnyString?
     /**
      * Array of listeners for faceted filters
      */
-    public var listens_to_filters: [String]?
+    public var listens_to_filters: [String]? {
+        get { if let v = _listens_to_filters { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+    }
 
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
@@ -3169,7 +3185,7 @@ public struct CreateDashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        self.listens_to_filters = listens_to_filters
+        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -5431,7 +5447,7 @@ public struct DashboardFilter: SDKModel {
         case _dimension = "dimension"
         case field
         case _row = "row"
-        case listens_to_filters
+        case _listens_to_filters = "listens_to_filters"
         case allow_multiple_values
         case required
         case ui_config
@@ -5536,10 +5552,14 @@ public struct DashboardFilter: SDKModel {
         set { _row = newValue.map(AnyInt.init) }
     }
 
+    private var _listens_to_filters: AnyString?
     /**
      * Array of listeners for faceted filters
      */
-    public var listens_to_filters: [String]?
+    public var listens_to_filters: [String]? {
+        get { if let v = _listens_to_filters { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+    }
 
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
@@ -5569,7 +5589,7 @@ public struct DashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        self.listens_to_filters = listens_to_filters
+        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -6226,7 +6246,7 @@ public struct DBConnection: SDKModel {
         case _user_id = "user_id"
         case example
         case user_db_credentials
-        case user_attribute_fields
+        case _user_attribute_fields = "user_attribute_fields"
         case _maintenance_cron = "maintenance_cron"
         case _last_regen_at = "last_regen_at"
         case _last_reap_at = "last_reap_at"
@@ -6454,10 +6474,14 @@ public struct DBConnection: SDKModel {
      */
     public var user_db_credentials: Bool?
 
+    private var _user_attribute_fields: AnyString?
     /**
      * Fields whose values map to user attribute names
      */
-    public var user_attribute_fields: [String]?
+    public var user_attribute_fields: [String]? {
+        get { if let v = _user_attribute_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } else { _user_attribute_fields = nil } }
+    }
 
     private var _maintenance_cron: AnyString?
     /**
@@ -6578,7 +6602,7 @@ public struct DBConnection: SDKModel {
         self._user_id = user_id.map(AnyString.init)
         self.example = example
         self.user_db_credentials = user_db_credentials
-        self.user_attribute_fields = user_attribute_fields
+        self._user_attribute_fields = user_attribute_fields == nil ? nil : { user_attribute_fields!.map { AnyString.init($0) }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self._last_regen_at = last_regen_at.map(AnyString.init)
         self._last_reap_at = last_reap_at.map(AnyString.init)
@@ -6936,7 +6960,7 @@ public struct Dialect: SDKModel {
         case _persistent_table_distkey = "persistent_table_distkey"
         case supports_streaming
         case automatically_run_sql_runner_snippets
-        case connection_tests
+        case _connection_tests = "connection_tests"
         case supports_inducer
         case supports_multiple_databases
         case supports_persistent_derived_tables
@@ -7002,10 +7026,14 @@ public struct Dialect: SDKModel {
      */
     public var automatically_run_sql_runner_snippets: Bool?
 
+    private var _connection_tests: AnyString?
     /**
      * Array of names of the tests that can be run on a connection using this dialect (read-only)
      */
-    public var connection_tests: [String]?
+    public var connection_tests: [String]? {
+        get { if let v = _connection_tests { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _connection_tests = v.map { AnyString.init($0) } else { _connection_tests = nil } }
+    }
 
     /**
      * Is supported with the inducer (i.e. generate from sql) (read-only)
@@ -7036,7 +7064,7 @@ public struct Dialect: SDKModel {
         self._persistent_table_distkey = persistent_table_distkey.map(AnyString.init)
         self.supports_streaming = supports_streaming
         self.automatically_run_sql_runner_snippets = automatically_run_sql_runner_snippets
-        self.connection_tests = connection_tests
+        self._connection_tests = connection_tests == nil ? nil : { connection_tests!.map { AnyString.init($0) }
         self.supports_inducer = supports_inducer
         self.supports_multiple_databases = supports_multiple_databases
         self.supports_persistent_derived_tables = supports_persistent_derived_tables
@@ -7223,7 +7251,7 @@ public struct DiscretePalette: SDKModel {
         case _id = "id"
         case _label = "label"
         case _type = "type"
-        case colors
+        case _colors = "colors"
     }
     private var _id: AnyString?
     /**
@@ -7252,16 +7280,20 @@ public struct DiscretePalette: SDKModel {
         set { _type = newValue.map(AnyString.init) }
     }
 
+    private var _colors: AnyString?
     /**
      * Array of colors in the palette
      */
-    public var colors: [String]?
+    public var colors: [String]? {
+        get { if let v = _colors { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _colors = v.map { AnyString.init($0) } else { _colors = nil } }
+    }
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, colors: [String]? = nil) {
         self._id = id.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._type = type.map(AnyString.init)
-        self.colors = colors
+        self._colors = colors == nil ? nil : { colors!.map { AnyString.init($0) }
     }
 
 }
@@ -7389,9 +7421,9 @@ public struct EmbedSsoParams: SDKModel {
         case _first_name = "first_name"
         case _last_name = "last_name"
         case _user_timezone = "user_timezone"
-        case permissions
-        case models
-        case group_ids
+        case _permissions = "permissions"
+        case _models = "models"
+        case _group_ids = "group_ids"
         case _external_group_id = "external_group_id"
         case user_attributes
         case _secret_id = "secret_id"
@@ -7455,20 +7487,32 @@ public struct EmbedSsoParams: SDKModel {
         set { _user_timezone = newValue.map(AnyString.init) }
     }
 
+    private var _permissions: AnyString?
     /**
      * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
      */
-    public var permissions: [String]?
+    public var permissions: [String]? {
+        get { if let v = _permissions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+    }
 
+    private var _models: AnyString?
     /**
      * List of model names that the embed user may access
      */
-    public var models: [String]?
+    public var models: [String]? {
+        get { if let v = _models { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+    }
 
+    private var _group_ids: AnyInt?
     /**
      * List of Looker group ids in which to enroll the embed user
      */
-    public var group_ids: [Int64]?
+    public var group_ids: [Int64]? {
+        get { if let v = _group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } else { _group_ids = nil } }
+    }
 
     private var _external_group_id: AnyString?
     /**
@@ -7501,9 +7545,9 @@ public struct EmbedSsoParams: SDKModel {
         self._first_name = first_name.map(AnyString.init)
         self._last_name = last_name.map(AnyString.init)
         self._user_timezone = user_timezone.map(AnyString.init)
-        self.permissions = permissions
-        self.models = models
-        self.group_ids = group_ids
+        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
+        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
+        self._group_ids = group_ids == nil ? nil : { group_ids!.map { AnyInt.init($0) }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._secret_id = secret_id.map(AnyInt.init)
@@ -8388,8 +8432,8 @@ public struct GroupHierarchy: SDKModel {
         case include_by_default
         case _name = "name"
         case _user_count = "user_count"
-        case parent_group_ids
-        case role_ids
+        case _parent_group_ids = "parent_group_ids"
+        case _role_ids = "role_ids"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -8452,15 +8496,23 @@ public struct GroupHierarchy: SDKModel {
         set { _user_count = newValue.map(AnyInt.init) }
     }
 
+    private var _parent_group_ids: AnyInt?
     /**
      * IDs of parents of this group (read-only)
      */
-    public var parent_group_ids: [Int64]?
+    public var parent_group_ids: [Int64]? {
+        get { if let v = _parent_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _parent_group_ids = v.map { AnyInt.init($0) } else { _parent_group_ids = nil } }
+    }
 
+    private var _role_ids: AnyInt?
     /**
      * Role IDs assigned to group (read-only)
      */
-    public var role_ids: [Int64]?
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: Int64? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, parent_group_ids: [Int64]? = nil, role_ids: [Int64]? = nil) {
         self.can = can
@@ -8472,8 +8524,8 @@ public struct GroupHierarchy: SDKModel {
         self.include_by_default = include_by_default
         self._name = name.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
-        self.parent_group_ids = parent_group_ids
-        self.role_ids = role_ids
+        self._parent_group_ids = parent_group_ids == nil ? nil : { parent_group_ids!.map { AnyInt.init($0) }
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -8923,11 +8975,11 @@ public struct HomepageSection: SDKModel {
         case homepage_items
         case _id = "id"
         case is_header
-        case item_order
+        case _item_order = "item_order"
         case _title = "title"
         case updated_at
         case _description = "description"
-        case visible_item_order
+        case _visible_item_order = "visible_item_order"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -8981,10 +9033,14 @@ public struct HomepageSection: SDKModel {
      */
     public var is_header: Bool?
 
+    private var _item_order: AnyInt?
     /**
      * ids of the homepage items in the order they should be displayed
      */
-    public var item_order: [Int64]?
+    public var item_order: [Int64]? {
+        get { if let v = _item_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+    }
 
     private var _title: AnyString?
     /**
@@ -9009,10 +9065,14 @@ public struct HomepageSection: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
+    private var _visible_item_order: AnyInt?
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
-    public var visible_item_order: [Int64]?
+    public var visible_item_order: [Int64]? {
+        get { if let v = _visible_item_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } else { _visible_item_order = nil } }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, detail_url: String? = nil, homepage_id: Int64? = nil, homepage_items: [HomepageItem]? = nil, id: Int64? = nil, is_header: Bool? = nil, item_order: [Int64]? = nil, title: String? = nil, updated_at: Date? = nil, description: String? = nil, visible_item_order: [Int64]? = nil) {
         self.can = can
@@ -9023,11 +9083,11 @@ public struct HomepageSection: SDKModel {
         self.homepage_items = homepage_items
         self._id = id.map(AnyInt.init)
         self.is_header = is_header
-        self.item_order = item_order
+        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
         self._description = description.map(AnyString.init)
-        self.visible_item_order = visible_item_order
+        self._visible_item_order = visible_item_order == nil ? nil : { visible_item_order!.map { AnyInt.init($0) }
     }
 
 }
@@ -9100,7 +9160,7 @@ public struct Integration: SDKModel {
         case uses_oauth
         case required_fields
         case delegate_oauth
-        case installed_delegate_oauth_targets
+        case _installed_delegate_oauth_targets = "installed_delegate_oauth_targets"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -9202,10 +9262,14 @@ public struct Integration: SDKModel {
      */
     public var delegate_oauth: Bool?
 
+    private var _installed_delegate_oauth_targets: AnyInt?
     /**
      * Whether the integration is available to users.
      */
-    public var installed_delegate_oauth_targets: [Int64]?
+    public var installed_delegate_oauth_targets: [Int64]? {
+        get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } else { _installed_delegate_oauth_targets = nil } }
+    }
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: Int64? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
         self.can = can
@@ -9224,7 +9288,7 @@ public struct Integration: SDKModel {
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
         self.delegate_oauth = delegate_oauth
-        self.installed_delegate_oauth_targets = installed_delegate_oauth_targets
+        self._installed_delegate_oauth_targets = installed_delegate_oauth_targets == nil ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
     }
 
 }
@@ -9446,8 +9510,8 @@ public struct IntegrationRequiredField: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _tag = "tag"
-        case any_tag
-        case all_tags
+        case _any_tag = "any_tag"
+        case _all_tags = "all_tags"
     }
     private var _tag: AnyString?
     /**
@@ -9458,20 +9522,28 @@ public struct IntegrationRequiredField: SDKModel {
         set { _tag = newValue.map(AnyString.init) }
     }
 
+    private var _any_tag: AnyString?
     /**
      * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
      */
-    public var any_tag: [String]?
+    public var any_tag: [String]? {
+        get { if let v = _any_tag { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _any_tag = v.map { AnyString.init($0) } else { _any_tag = nil } }
+    }
 
+    private var _all_tags: AnyString?
     /**
      * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
      */
-    public var all_tags: [String]?
+    public var all_tags: [String]? {
+        get { if let v = _all_tags { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _all_tags = v.map { AnyString.init($0) } else { _all_tags = nil } }
+    }
 
     public init(tag: String? = nil, any_tag: [String]? = nil, all_tags: [String]? = nil) {
         self._tag = tag.map(AnyString.init)
-        self.any_tag = any_tag
-        self.all_tags = all_tags
+        self._any_tag = any_tag == nil ? nil : { any_tag!.map { AnyString.init($0) }
+        self._all_tags = all_tags == nil ? nil : { all_tags!.map { AnyString.init($0) }
     }
 
 }
@@ -9585,9 +9657,9 @@ public struct LDAPConfig: SDKModel {
         case _connection_port = "connection_port"
         case connection_tls
         case connection_tls_no_verify
-        case default_new_user_group_ids
+        case _default_new_user_group_ids = "default_new_user_group_ids"
         case default_new_user_groups
-        case default_new_user_role_ids
+        case _default_new_user_role_ids = "default_new_user_role_ids"
         case default_new_user_roles
         case enabled
         case force_no_page
@@ -9681,20 +9753,28 @@ public struct LDAPConfig: SDKModel {
      */
     public var connection_tls_no_verify: Bool?
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)
      */
     public var default_new_user_groups: [LkGroup]?
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)
@@ -9933,9 +10013,9 @@ public struct LDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        self.default_new_user_group_ids = default_new_user_group_ids
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.default_new_user_groups = default_new_user_groups
-        self.default_new_user_role_ids = default_new_user_role_ids
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.force_no_page = force_no_page
@@ -10155,7 +10235,7 @@ public struct LDAPGroupWrite: SDKModel {
         case _looker_group_id = "looker_group_id"
         case _looker_group_name = "looker_group_name"
         case _name = "name"
-        case role_ids
+        case _role_ids = "role_ids"
         case _url = "url"
     }
     private var _id: AnyInt?
@@ -10194,10 +10274,14 @@ public struct LDAPGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _role_ids: AnyInt?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]?
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -10213,7 +10297,7 @@ public struct LDAPGroupWrite: SDKModel {
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self.role_ids = role_ids
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -10222,21 +10306,25 @@ public struct LDAPGroupWrite: SDKModel {
 public struct LDAPUser: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case all_emails
+        case _all_emails = "all_emails"
         case attributes
         case _email = "email"
         case _first_name = "first_name"
-        case groups
+        case _groups = "groups"
         case _last_name = "last_name"
         case _ldap_dn = "ldap_dn"
         case _ldap_id = "ldap_id"
-        case roles
+        case _roles = "roles"
         case _url = "url"
     }
+    private var _all_emails: AnyString?
     /**
      * Array of user's email addresses and aliases for use in migration (read-only)
      */
-    public var all_emails: [String]?
+    public var all_emails: [String]? {
+        get { if let v = _all_emails { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _all_emails = v.map { AnyString.init($0) } else { _all_emails = nil } }
+    }
 
     /**
      * Dictionary of user's attributes (name/value) (read-only)
@@ -10261,10 +10349,14 @@ public struct LDAPUser: SDKModel {
         set { _first_name = newValue.map(AnyString.init) }
     }
 
+    private var _groups: AnyString?
     /**
      * Array of user's groups (group names only) (read-only)
      */
-    public var groups: [String]?
+    public var groups: [String]? {
+        get { if let v = _groups { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _groups = v.map { AnyString.init($0) } else { _groups = nil } }
+    }
 
     private var _last_name: AnyString?
     /**
@@ -10293,10 +10385,14 @@ public struct LDAPUser: SDKModel {
         set { _ldap_id = newValue.map(AnyString.init) }
     }
 
+    private var _roles: AnyString?
     /**
      * Array of user's roles (role names only) (read-only)
      */
-    public var roles: [String]?
+    public var roles: [String]? {
+        get { if let v = _roles { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _roles = v.map { AnyString.init($0) } else { _roles = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -10308,15 +10404,15 @@ public struct LDAPUser: SDKModel {
     }
 
     public init(all_emails: [String]? = nil, attributes: StringDictionary<AnyCodable>? = nil, email: String? = nil, first_name: String? = nil, groups: [String]? = nil, last_name: String? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, roles: [String]? = nil, url: String? = nil) {
-        self.all_emails = all_emails
+        self._all_emails = all_emails == nil ? nil : { all_emails!.map { AnyString.init($0) }
         self.attributes = attributes
         self._email = email.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
-        self.groups = groups
+        self._groups = groups == nil ? nil : { groups!.map { AnyString.init($0) }
         self._last_name = last_name.map(AnyString.init)
         self._ldap_dn = ldap_dn.map(AnyString.init)
         self._ldap_id = ldap_id.map(AnyString.init)
-        self.roles = roles
+        self._roles = roles == nil ? nil : { roles!.map { AnyString.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -10372,7 +10468,7 @@ public struct LDAPUserAttributeWrite: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
         case required
-        case user_attribute_ids
+        case _user_attribute_ids = "user_attribute_ids"
         case _url = "url"
     }
     private var _name: AnyString?
@@ -10389,10 +10485,14 @@ public struct LDAPUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
+    private var _user_attribute_ids: AnyInt?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]? {
+        get { if let v = _user_attribute_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -10406,7 +10506,7 @@ public struct LDAPUserAttributeWrite: SDKModel {
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self.user_attribute_ids = user_attribute_ids
+        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -10974,7 +11074,7 @@ public struct LookmlModel: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case can
-        case allowed_db_connection_names
+        case _allowed_db_connection_names = "allowed_db_connection_names"
         case explores
         case has_content
         case _label = "label"
@@ -10987,10 +11087,14 @@ public struct LookmlModel: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
+    private var _allowed_db_connection_names: AnyString?
     /**
      * Array of names of connections this model is allowed to use
      */
-    public var allowed_db_connection_names: [String]?
+    public var allowed_db_connection_names: [String]? {
+        get { if let v = _allowed_db_connection_names { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } else { _allowed_db_connection_names = nil } }
+    }
 
     /**
      * Array of explores (if has_content) (read-only)
@@ -11036,7 +11140,7 @@ public struct LookmlModel: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, allowed_db_connection_names: [String]? = nil, explores: [LookmlModelNavExplore]? = nil, has_content: Bool? = nil, label: String? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
         self.can = can
-        self.allowed_db_connection_names = allowed_db_connection_names
+        self._allowed_db_connection_names = allowed_db_connection_names == nil ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
         self.explores = explores
         self.has_content = has_content
         self._label = label.map(AnyString.init)
@@ -11055,7 +11159,7 @@ public struct LookmlModelExplore: SDKModel {
         case _description = "description"
         case _label = "label"
         case _title = "title"
-        case scopes
+        case _scopes = "scopes"
         case can_total
         case can_develop
         case can_see_lookml
@@ -11068,21 +11172,21 @@ public struct LookmlModelExplore: SDKModel {
         case supports_cost_estimate
         case _connection_name = "connection_name"
         case _null_sort_treatment = "null_sort_treatment"
-        case files
+        case _files = "files"
         case _source_file = "source_file"
         case _project_name = "project_name"
         case _model_name = "model_name"
         case _view_name = "view_name"
         case hidden
         case _sql_table_name = "sql_table_name"
-        case access_filter_fields
+        case _access_filter_fields = "access_filter_fields"
         case access_filters
         case aliases
         case always_filter
         case conditionally_filter
-        case index_fields
+        case _index_fields = "index_fields"
         case sets
-        case tags
+        case _tags = "tags"
         case errors
         case fields
         case joins
@@ -11134,10 +11238,14 @@ public struct LookmlModelExplore: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
+    private var _scopes: AnyString?
     /**
      * Scopes (read-only)
      */
-    public var scopes: [String]?
+    public var scopes: [String]? {
+        get { if let v = _scopes { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+    }
 
     /**
      * Can Total (read-only)
@@ -11211,10 +11319,14 @@ public struct LookmlModelExplore: SDKModel {
         set { _null_sort_treatment = newValue.map(AnyString.init) }
     }
 
+    private var _files: AnyString?
     /**
      * List of model source files (read-only)
      */
-    public var files: [String]?
+    public var files: [String]? {
+        get { if let v = _files { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _files = v.map { AnyString.init($0) } else { _files = nil } }
+    }
 
     private var _source_file: AnyString?
     /**
@@ -11266,10 +11378,14 @@ public struct LookmlModelExplore: SDKModel {
         set { _sql_table_name = newValue.map(AnyString.init) }
     }
 
+    private var _access_filter_fields: AnyString?
     /**
      * (DEPRECATED) Array of access filter field names (read-only)
      */
-    public var access_filter_fields: [String]?
+    public var access_filter_fields: [String]? {
+        get { if let v = _access_filter_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _access_filter_fields = v.map { AnyString.init($0) } else { _access_filter_fields = nil } }
+    }
 
     /**
      * Access filters (read-only)
@@ -11291,20 +11407,28 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var conditionally_filter: [LookmlModelExploreConditionallyFilter]?
 
+    private var _index_fields: AnyString?
     /**
      * Array of index fields (read-only)
      */
-    public var index_fields: [String]?
+    public var index_fields: [String]? {
+        get { if let v = _index_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _index_fields = v.map { AnyString.init($0) } else { _index_fields = nil } }
+    }
 
     /**
      * Sets (read-only)
      */
     public var sets: [LookmlModelExploreSet]?
 
+    private var _tags: AnyString?
     /**
      * An array of arbitrary string tags provided in the model for this explore. (read-only)
      */
-    public var tags: [String]?
+    public var tags: [String]? {
+        get { if let v = _tags { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } else { _tags = nil } }
+    }
 
     /**
      * Errors (read-only)
@@ -11338,7 +11462,7 @@ public struct LookmlModelExplore: SDKModel {
         self._description = description.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self.scopes = scopes
+        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
         self.can_total = can_total
         self.can_develop = can_develop
         self.can_see_lookml = can_see_lookml
@@ -11351,21 +11475,21 @@ public struct LookmlModelExplore: SDKModel {
         self.supports_cost_estimate = supports_cost_estimate
         self._connection_name = connection_name.map(AnyString.init)
         self._null_sort_treatment = null_sort_treatment.map(AnyString.init)
-        self.files = files
+        self._files = files == nil ? nil : { files!.map { AnyString.init($0) }
         self._source_file = source_file.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self._model_name = model_name.map(AnyString.init)
         self._view_name = view_name.map(AnyString.init)
         self.hidden = hidden
         self._sql_table_name = sql_table_name.map(AnyString.init)
-        self.access_filter_fields = access_filter_fields
+        self._access_filter_fields = access_filter_fields == nil ? nil : { access_filter_fields!.map { AnyString.init($0) }
         self.access_filters = access_filters
         self.aliases = aliases
         self.always_filter = always_filter
         self.conditionally_filter = conditionally_filter
-        self.index_fields = index_fields
+        self._index_fields = index_fields == nil ? nil : { index_fields!.map { AnyString.init($0) }
         self.sets = sets
-        self.tags = tags
+        self._tags = tags == nil ? nil : { tags!.map { AnyString.init($0) }
         self.errors = errors
         self.fields = fields
         self.joins = joins
@@ -11590,8 +11714,8 @@ public struct LookmlModelExploreField: SDKModel {
         case _suggest_dimension = "suggest_dimension"
         case _suggest_explore = "suggest_explore"
         case suggestable
-        case suggestions
-        case tags
+        case _suggestions = "suggestions"
+        case _tags = "tags"
         case _type = "type"
         case user_attribute_filter_types
         case _value_format = "value_format"
@@ -11887,15 +12011,23 @@ public struct LookmlModelExploreField: SDKModel {
      */
     public var suggestable: Bool?
 
+    private var _suggestions: AnyString?
     /**
      * If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
      */
-    public var suggestions: [String]?
+    public var suggestions: [String]? {
+        get { if let v = _suggestions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } else { _suggestions = nil } }
+    }
 
+    private var _tags: AnyString?
     /**
      * An array of arbitrary string tags provided in the model for this field. (read-only)
      */
-    public var tags: [String]?
+    public var tags: [String]? {
+        get { if let v = _tags { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } else { _tags = nil } }
+    }
 
     private var _type: AnyString?
     /**
@@ -12010,8 +12142,8 @@ public struct LookmlModelExploreField: SDKModel {
         self._suggest_dimension = suggest_dimension.map(AnyString.init)
         self._suggest_explore = suggest_explore.map(AnyString.init)
         self.suggestable = suggestable
-        self.suggestions = suggestions
-        self.tags = tags
+        self._suggestions = suggestions == nil ? nil : { suggestions!.map { AnyString.init($0) }
+        self._tags = tags == nil ? nil : { tags!.map { AnyString.init($0) }
         self._type = type.map(AnyString.init)
         self.user_attribute_filter_types = user_attribute_filter_types
         self._value_format = value_format.map(AnyString.init)
@@ -12290,13 +12422,13 @@ public struct LookmlModelExploreJoins: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
-        case dependent_fields
-        case fields
+        case _dependent_fields = "dependent_fields"
+        case _fields = "fields"
         case _foreign_key = "foreign_key"
         case _from = "from"
         case outer_only
         case _relationship = "relationship"
-        case required_joins
+        case _required_joins = "required_joins"
         case _sql_foreign_key = "sql_foreign_key"
         case _sql_on = "sql_on"
         case _sql_table_name = "sql_table_name"
@@ -12312,15 +12444,23 @@ public struct LookmlModelExploreJoins: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _dependent_fields: AnyString?
     /**
      * Fields referenced by the join (read-only)
      */
-    public var dependent_fields: [String]?
+    public var dependent_fields: [String]? {
+        get { if let v = _dependent_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _dependent_fields = v.map { AnyString.init($0) } else { _dependent_fields = nil } }
+    }
 
+    private var _fields: AnyString?
     /**
      * Fields of the joined view to pull into this explore (read-only)
      */
-    public var fields: [String]?
+    public var fields: [String]? {
+        get { if let v = _fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+    }
 
     private var _foreign_key: AnyString?
     /**
@@ -12354,10 +12494,14 @@ public struct LookmlModelExploreJoins: SDKModel {
         set { _relationship = newValue.map(AnyString.init) }
     }
 
+    private var _required_joins: AnyString?
     /**
      * Names of joins that must always be included in SQL queries (read-only)
      */
-    public var required_joins: [String]?
+    public var required_joins: [String]? {
+        get { if let v = _required_joins { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _required_joins = v.map { AnyString.init($0) } else { _required_joins = nil } }
+    }
 
     private var _sql_foreign_key: AnyString?
     /**
@@ -12406,13 +12550,13 @@ public struct LookmlModelExploreJoins: SDKModel {
 
     public init(name: String? = nil, dependent_fields: [String]? = nil, fields: [String]? = nil, foreign_key: String? = nil, from: String? = nil, outer_only: Bool? = nil, relationship: String? = nil, required_joins: [String]? = nil, sql_foreign_key: String? = nil, sql_on: String? = nil, sql_table_name: String? = nil, type: String? = nil, view_label: String? = nil) {
         self._name = name.map(AnyString.init)
-        self.dependent_fields = dependent_fields
-        self.fields = fields
+        self._dependent_fields = dependent_fields == nil ? nil : { dependent_fields!.map { AnyString.init($0) }
+        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
         self._foreign_key = foreign_key.map(AnyString.init)
         self._from = from.map(AnyString.init)
         self.outer_only = outer_only
         self._relationship = relationship.map(AnyString.init)
-        self.required_joins = required_joins
+        self._required_joins = required_joins == nil ? nil : { required_joins!.map { AnyString.init($0) }
         self._sql_foreign_key = sql_foreign_key.map(AnyString.init)
         self._sql_on = sql_on.map(AnyString.init)
         self._sql_table_name = sql_table_name.map(AnyString.init)
@@ -12426,7 +12570,7 @@ public struct LookmlModelExploreSet: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
-        case value
+        case _value = "value"
     }
     private var _name: AnyString?
     /**
@@ -12437,14 +12581,18 @@ public struct LookmlModelExploreSet: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _value: AnyString?
     /**
      * Value set (read-only)
      */
-    public var value: [String]?
+    public var value: [String]? {
+        get { if let v = _value { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _value = v.map { AnyString.init($0) } else { _value = nil } }
+    }
 
     public init(name: String? = nil, value: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        self.value = value
+        self._value = value == nil ? nil : { value!.map { AnyString.init($0) }
     }
 
 }
@@ -12453,7 +12601,7 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _dimension_type = "dimension_type"
-        case measure_types
+        case _measure_types = "measure_types"
     }
     private var _dimension_type: AnyString?
     /**
@@ -12464,14 +12612,18 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
         set { _dimension_type = newValue.map(AnyString.init) }
     }
 
+    private var _measure_types: AnyString?
     /**
      *  (read-only)
      */
-    public var measure_types: [String]?
+    public var measure_types: [String]? {
+        get { if let v = _measure_types { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _measure_types = v.map { AnyString.init($0) } else { _measure_types = nil } }
+    }
 
     public init(dimension_type: String? = nil, measure_types: [String]? = nil) {
         self._dimension_type = dimension_type.map(AnyString.init)
-        self.measure_types = measure_types
+        self._measure_types = measure_types == nil ? nil : { measure_types!.map { AnyString.init($0) }
     }
 
 }
@@ -13406,9 +13558,9 @@ public struct MergeQuery: SDKModel {
         case _column_limit = "column_limit"
         case _dynamic_fields = "dynamic_fields"
         case _id = "id"
-        case pivots
+        case _pivots = "pivots"
         case _result_maker_id = "result_maker_id"
-        case sorts
+        case _sorts = "sorts"
         case source_queries
         case total
         case vis_config
@@ -13445,10 +13597,14 @@ public struct MergeQuery: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
+    private var _pivots: AnyString?
     /**
      * Pivots
      */
-    public var pivots: [String]?
+    public var pivots: [String]? {
+        get { if let v = _pivots { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+    }
 
     private var _result_maker_id: AnyInt?
     /**
@@ -13459,10 +13615,14 @@ public struct MergeQuery: SDKModel {
         set { _result_maker_id = newValue.map(AnyInt.init) }
     }
 
+    private var _sorts: AnyString?
     /**
      * Sorts
      */
-    public var sorts: [String]?
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+    }
 
     /**
      * Source Queries defining the results to be merged.
@@ -13484,9 +13644,9 @@ public struct MergeQuery: SDKModel {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self._id = id.map(AnyString.init)
-        self.pivots = pivots
+        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
         self._result_maker_id = result_maker_id.map(AnyInt.init)
-        self.sorts = sorts
+        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -13591,16 +13751,20 @@ public struct Model: SDKModel {
 public struct ModelFieldSuggestions: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case suggestions
+        case _suggestions = "suggestions"
         case _error = "error"
         case from_cache
         case hit_limit
         case used_calcite_materialization
     }
+    private var _suggestions: AnyString?
     /**
      * List of suggestions (read-only)
      */
-    public var suggestions: [String]?
+    public var suggestions: [String]? {
+        get { if let v = _suggestions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } else { _suggestions = nil } }
+    }
 
     private var _error: AnyString?
     /**
@@ -13627,7 +13791,7 @@ public struct ModelFieldSuggestions: SDKModel {
     public var used_calcite_materialization: Bool?
 
     public init(suggestions: [String]? = nil, error: String? = nil, from_cache: Bool? = nil, hit_limit: Bool? = nil, used_calcite_materialization: Bool? = nil) {
-        self.suggestions = suggestions
+        self._suggestions = suggestions == nil ? nil : { suggestions!.map { AnyString.init($0) }
         self._error = error.map(AnyString.init)
         self.from_cache = from_cache
         self.hit_limit = hit_limit
@@ -13692,7 +13856,7 @@ public struct ModelSet: SDKModel {
         case all_access
         case built_in
         case _id = "id"
-        case models
+        case _models = "models"
         case _name = "name"
         case _url = "url"
     }
@@ -13720,7 +13884,11 @@ public struct ModelSet: SDKModel {
         set { _id = newValue.map(AnyInt.init) }
     }
 
-    public var models: [String]?
+    private var _models: AnyString?
+    public var models: [String]? {
+        get { if let v = _models { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+    }
 
     private var _name: AnyString?
     /**
@@ -13745,7 +13913,7 @@ public struct ModelSet: SDKModel {
         self.all_access = all_access
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
-        self.models = models
+        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
@@ -13899,9 +14067,9 @@ public struct OIDCConfig: SDKModel {
         case _audience = "audience"
         case auth_requires_role
         case _authorization_endpoint = "authorization_endpoint"
-        case default_new_user_group_ids
+        case _default_new_user_group_ids = "default_new_user_group_ids"
         case default_new_user_groups
-        case default_new_user_role_ids
+        case _default_new_user_role_ids = "default_new_user_role_ids"
         case default_new_user_roles
         case enabled
         case groups
@@ -13912,7 +14080,7 @@ public struct OIDCConfig: SDKModel {
         case modified_at
         case _modified_by = "modified_by"
         case _new_user_migration_types = "new_user_migration_types"
-        case scopes
+        case _scopes = "scopes"
         case _secret = "secret"
         case set_roles_from_groups
         case _test_slug = "test_slug"
@@ -13961,20 +14129,28 @@ public struct OIDCConfig: SDKModel {
         set { _authorization_endpoint = newValue.map(AnyString.init) }
     }
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
     /**
      * (Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)
      */
     public var default_new_user_groups: [LkGroup]?
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
     /**
      * (Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)
@@ -14046,10 +14222,14 @@ public struct OIDCConfig: SDKModel {
         set { _new_user_migration_types = newValue.map(AnyString.init) }
     }
 
+    private var _scopes: AnyString?
     /**
      * Array of scopes to request.
      */
-    public var scopes: [String]?
+    public var scopes: [String]? {
+        get { if let v = _scopes { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+    }
 
     private var _secret: AnyString?
     /**
@@ -14159,9 +14339,9 @@ public struct OIDCConfig: SDKModel {
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        self.default_new_user_group_ids = default_new_user_group_ids
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.default_new_user_groups = default_new_user_groups
-        self.default_new_user_role_ids = default_new_user_role_ids
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.groups = groups
@@ -14172,7 +14352,7 @@ public struct OIDCConfig: SDKModel {
         self.modified_at = modified_at
         self._modified_by = modified_by.map(AnyInt.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        self.scopes = scopes
+        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._test_slug = test_slug.map(AnyString.init)
@@ -14258,7 +14438,7 @@ public struct OIDCGroupWrite: SDKModel {
         case _looker_group_id = "looker_group_id"
         case _looker_group_name = "looker_group_name"
         case _name = "name"
-        case role_ids
+        case _role_ids = "role_ids"
     }
     private var _id: AnyInt?
     /**
@@ -14296,17 +14476,21 @@ public struct OIDCGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _role_ids: AnyInt?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]?
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+    }
 
     public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil) {
         self._id = id.map(AnyInt.init)
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self.role_ids = role_ids
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -14350,7 +14534,7 @@ public struct OIDCUserAttributeWrite: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
         case required
-        case user_attribute_ids
+        case _user_attribute_ids = "user_attribute_ids"
     }
     private var _name: AnyString?
     /**
@@ -14366,15 +14550,19 @@ public struct OIDCUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
+    private var _user_attribute_ids: AnyInt?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]? {
+        get { if let v = _user_attribute_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+    }
 
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self.user_attribute_ids = user_attribute_ids
+        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -14484,7 +14672,7 @@ public struct PermissionSet: SDKModel {
         case built_in
         case _id = "id"
         case _name = "name"
-        case permissions
+        case _permissions = "permissions"
         case _url = "url"
     }
     /**
@@ -14520,7 +14708,11 @@ public struct PermissionSet: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    public var permissions: [String]?
+    private var _permissions: AnyString?
+    public var permissions: [String]? {
+        get { if let v = _permissions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -14537,7 +14729,7 @@ public struct PermissionSet: SDKModel {
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
         self._name = name.map(AnyString.init)
-        self.permissions = permissions
+        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -15184,17 +15376,17 @@ public struct Query: SDKModel {
         case _id = "id"
         case _model = "model"
         case _view = "view"
-        case fields
-        case pivots
-        case fill_fields
+        case _fields = "fields"
+        case _pivots = "pivots"
+        case _fill_fields = "fill_fields"
         case filters
         case _filter_expression = "filter_expression"
-        case sorts
+        case _sorts = "sorts"
         case _limit = "limit"
         case _column_limit = "column_limit"
         case total
         case _row_total = "row_total"
-        case subtotals
+        case _subtotals = "subtotals"
         case vis_config
         case filter_config
         case _visible_ui_sections = "visible_ui_sections"
@@ -15239,20 +15431,32 @@ public struct Query: SDKModel {
         set { _view = AnyString.init(newValue) }
     }
 
+    private var _fields: AnyString?
     /**
      * Fields
      */
-    public var fields: [String]?
+    public var fields: [String]? {
+        get { if let v = _fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+    }
 
+    private var _pivots: AnyString?
     /**
      * Pivots
      */
-    public var pivots: [String]?
+    public var pivots: [String]? {
+        get { if let v = _pivots { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+    }
 
+    private var _fill_fields: AnyString?
     /**
      * Fill Fields
      */
-    public var fill_fields: [String]?
+    public var fill_fields: [String]? {
+        get { if let v = _fill_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } else { _fill_fields = nil } }
+    }
 
     /**
      * Filters
@@ -15268,10 +15472,14 @@ public struct Query: SDKModel {
         set { _filter_expression = newValue.map(AnyString.init) }
     }
 
+    private var _sorts: AnyString?
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
-    public var sorts: [String]?
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+    }
 
     private var _limit: AnyString?
     /**
@@ -15305,10 +15513,14 @@ public struct Query: SDKModel {
         set { _row_total = newValue.map(AnyString.init) }
     }
 
+    private var _subtotals: AnyString?
     /**
      * Fields on which to run subtotals
      */
-    public var subtotals: [String]?
+    public var subtotals: [String]? {
+        get { if let v = _subtotals { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } else { _subtotals = nil } }
+    }
 
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
@@ -15402,17 +15614,17 @@ public struct Query: SDKModel {
         self._id = id.map(AnyInt.init)
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        self.fields = fields
-        self.pivots = pivots
-        self.fill_fields = fill_fields
+        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
+        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
+        self._fill_fields = fill_fields == nil ? nil : { fill_fields!.map { AnyString.init($0) }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        self.sorts = sorts
+        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        self.subtotals = subtotals
+        self._subtotals = subtotals == nil ? nil : { subtotals!.map { AnyString.init($0) }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
@@ -16015,7 +16227,7 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         case _id = "id"
         case _dynamic_fields = "dynamic_fields"
         case filterables
-        case sorts
+        case _sorts = "sorts"
         case _merge_result_id = "merge_result_id"
         case total
         case _query_id = "query_id"
@@ -16046,10 +16258,14 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      */
     public var filterables: [ResultMakerFilterables]?
 
+    private var _sorts: AnyString?
     /**
      * Sorts of the constituent Look, Query, or Merge Query (read-only)
      */
-    public var sorts: [String]?
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+    }
 
     private var _merge_result_id: AnyString?
     /**
@@ -16094,7 +16310,7 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         self._id = id.map(AnyInt.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self.filterables = filterables
-        self.sorts = sorts
+        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
         self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
         self._query_id = query_id.map(AnyInt.init)
@@ -16520,8 +16736,8 @@ public struct SamlConfig: SDKModel {
         case _modified_by = "modified_by"
         case default_new_user_roles
         case default_new_user_groups
-        case default_new_user_role_ids
-        case default_new_user_group_ids
+        case _default_new_user_role_ids = "default_new_user_role_ids"
+        case _default_new_user_group_ids = "default_new_user_group_ids"
         case set_roles_from_groups
         case _groups_attribute = "groups_attribute"
         case groups
@@ -16670,15 +16886,23 @@ public struct SamlConfig: SDKModel {
      */
     public var default_new_user_groups: [LkGroup]?
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
     /**
      * Set user roles in Looker based on groups from Saml
@@ -16784,8 +17008,8 @@ public struct SamlConfig: SDKModel {
         self._modified_by = modified_by.map(AnyString.init)
         self.default_new_user_roles = default_new_user_roles
         self.default_new_user_groups = default_new_user_groups
-        self.default_new_user_role_ids = default_new_user_role_ids
-        self.default_new_user_group_ids = default_new_user_group_ids
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups = groups
@@ -16882,7 +17106,7 @@ public struct SamlGroupWrite: SDKModel {
         case _looker_group_id = "looker_group_id"
         case _looker_group_name = "looker_group_name"
         case _name = "name"
-        case role_ids
+        case _role_ids = "role_ids"
         case _url = "url"
     }
     private var _id: AnyInt?
@@ -16921,10 +17145,14 @@ public struct SamlGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _role_ids: AnyInt?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]?
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -16940,7 +17168,7 @@ public struct SamlGroupWrite: SDKModel {
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self.role_ids = role_ids
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -17045,7 +17273,7 @@ public struct SamlUserAttributeWrite: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
         case required
-        case user_attribute_ids
+        case _user_attribute_ids = "user_attribute_ids"
         case _url = "url"
     }
     private var _name: AnyString?
@@ -17062,10 +17290,14 @@ public struct SamlUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
+    private var _user_attribute_ids: AnyInt?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]?
+    public var user_attribute_ids: [Int64]? {
+        get { if let v = _user_attribute_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+    }
 
     private var _url: AnyString?
     /**
@@ -17079,7 +17311,7 @@ public struct SamlUserAttributeWrite: SDKModel {
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self.user_attribute_ids = user_attribute_ids
+        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -18959,17 +19191,17 @@ public struct User: SDKModel {
         case _email = "email"
         case _embed_group_space_id = "embed_group_space_id"
         case _first_name = "first_name"
-        case group_ids
+        case _group_ids = "group_ids"
         case _home_folder_id = "home_folder_id"
         case _id = "id"
         case is_disabled
         case _last_name = "last_name"
         case _locale = "locale"
-        case looker_versions
+        case _looker_versions = "looker_versions"
         case models_dir_validated
         case _personal_folder_id = "personal_folder_id"
         case presumed_looker_employee
-        case role_ids
+        case _role_ids = "role_ids"
         case sessions
         case ui_state
         case verified_looker_employee
@@ -19062,10 +19294,14 @@ public struct User: SDKModel {
         set { _first_name = newValue.map(AnyString.init) }
     }
 
+    private var _group_ids: AnyInt?
     /**
      * Array of ids of the groups for this user (read-only)
      */
-    public var group_ids: [Int64]?
+    public var group_ids: [Int64]? {
+        get { if let v = _group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } else { _group_ids = nil } }
+    }
 
     private var _home_folder_id: AnyString?
     /**
@@ -19108,10 +19344,14 @@ public struct User: SDKModel {
         set { _locale = newValue.map(AnyString.init) }
     }
 
+    private var _looker_versions: AnyString?
     /**
      * Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
      */
-    public var looker_versions: [String]?
+    public var looker_versions: [String]? {
+        get { if let v = _looker_versions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _looker_versions = v.map { AnyString.init($0) } else { _looker_versions = nil } }
+    }
 
     /**
      * User's dev workspace has been checked for presence of applicable production projects
@@ -19132,10 +19372,14 @@ public struct User: SDKModel {
      */
     public var presumed_looker_employee: Bool?
 
+    private var _role_ids: AnyInt?
     /**
      * Array of ids of the roles for this user (read-only)
      */
-    public var role_ids: [Int64]?
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+    }
 
     /**
      * Active sessions (read-only)
@@ -19198,17 +19442,17 @@ public struct User: SDKModel {
         self._email = email.map(AnyString.init)
         self._embed_group_space_id = embed_group_space_id.map(AnyInt.init)
         self._first_name = first_name.map(AnyString.init)
-        self.group_ids = group_ids
+        self._group_ids = group_ids == nil ? nil : { group_ids!.map { AnyInt.init($0) }
         self._home_folder_id = home_folder_id.map(AnyString.init)
         self._id = id.map(AnyInt.init)
         self.is_disabled = is_disabled
         self._last_name = last_name.map(AnyString.init)
         self._locale = locale.map(AnyString.init)
-        self.looker_versions = looker_versions
+        self._looker_versions = looker_versions == nil ? nil : { looker_versions!.map { AnyString.init($0) }
         self.models_dir_validated = models_dir_validated
         self._personal_folder_id = personal_folder_id.map(AnyInt.init)
         self.presumed_looker_employee = presumed_looker_employee
-        self.role_ids = role_ids
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
         self.sessions = sessions
         self.ui_state = ui_state
         self.verified_looker_employee = verified_looker_employee
@@ -20380,7 +20624,7 @@ public struct WriteBoard: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case deleted_at
         case _description = "description"
-        case section_order
+        case _section_order = "section_order"
         case _title = "title"
     }
     /**
@@ -20397,10 +20641,14 @@ public struct WriteBoard: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
+    private var _section_order: AnyInt?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    public var section_order: [Int64]?
+    public var section_order: [Int64]? {
+        get { if let v = _section_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } else { _section_order = nil } }
+    }
 
     private var _title: AnyString?
     /**
@@ -20414,7 +20662,7 @@ public struct WriteBoard: SDKModel {
     public init(deleted_at: Date? = nil, description: String? = nil, section_order: [Int64]? = nil, title: String? = nil) {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
-        self.section_order = section_order
+        self._section_order = section_order == nil ? nil : { section_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
     }
 
@@ -20531,7 +20779,7 @@ public struct WriteBoardSection: SDKModel {
         case deleted_at
         case _description = "description"
         case _board_id = "board_id"
-        case item_order
+        case _item_order = "item_order"
         case _title = "title"
     }
     /**
@@ -20557,10 +20805,14 @@ public struct WriteBoardSection: SDKModel {
         set { _board_id = newValue.map(AnyInt.init) }
     }
 
+    private var _item_order: AnyInt?
     /**
      * ids of the board items in the order they should be displayed
      */
-    public var item_order: [Int64]?
+    public var item_order: [Int64]? {
+        get { if let v = _item_order { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+    }
 
     private var _title: AnyString?
     /**
@@ -20575,7 +20827,7 @@ public struct WriteBoardSection: SDKModel {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
         self._board_id = board_id.map(AnyInt.init)
-        self.item_order = item_order
+        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
     }
 
@@ -20762,7 +21014,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
         case _explore = "explore"
         case _dimension = "dimension"
         case _row = "row"
-        case listens_to_filters
+        case _listens_to_filters = "listens_to_filters"
         case allow_multiple_values
         case required
         case ui_config
@@ -20848,10 +21100,14 @@ public struct WriteCreateDashboardFilter: SDKModel {
         set { _row = newValue.map(AnyInt.init) }
     }
 
+    private var _listens_to_filters: AnyString?
     /**
      * Array of listeners for faceted filters
      */
-    public var listens_to_filters: [String]?
+    public var listens_to_filters: [String]? {
+        get { if let v = _listens_to_filters { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+    }
 
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
@@ -20878,7 +21134,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        self.listens_to_filters = listens_to_filters
+        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -21454,7 +21710,7 @@ public struct WriteDashboardFilter: SDKModel {
         case _explore = "explore"
         case _dimension = "dimension"
         case _row = "row"
-        case listens_to_filters
+        case _listens_to_filters = "listens_to_filters"
         case allow_multiple_values
         case required
         case ui_config
@@ -21531,10 +21787,14 @@ public struct WriteDashboardFilter: SDKModel {
         set { _row = newValue.map(AnyInt.init) }
     }
 
+    private var _listens_to_filters: AnyString?
     /**
      * Array of listeners for faceted filters
      */
-    public var listens_to_filters: [String]?
+    public var listens_to_filters: [String]? {
+        get { if let v = _listens_to_filters { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+    }
 
     /**
      * Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
@@ -21560,7 +21820,7 @@ public struct WriteDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        self.listens_to_filters = listens_to_filters
+        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -21773,7 +22033,7 @@ public struct WriteDBConnection: SDKModel {
         case _pool_timeout = "pool_timeout"
         case _dialect_name = "dialect_name"
         case user_db_credentials
-        case user_attribute_fields
+        case _user_attribute_fields = "user_attribute_fields"
         case _maintenance_cron = "maintenance_cron"
         case sql_runner_precache_tables
         case sql_writing_with_info_schema
@@ -21953,10 +22213,14 @@ public struct WriteDBConnection: SDKModel {
      */
     public var user_db_credentials: Bool?
 
+    private var _user_attribute_fields: AnyString?
     /**
      * Fields whose values map to user attribute names
      */
-    public var user_attribute_fields: [String]?
+    public var user_attribute_fields: [String]? {
+        get { if let v = _user_attribute_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } else { _user_attribute_fields = nil } }
+    }
 
     private var _maintenance_cron: AnyString?
     /**
@@ -22050,7 +22314,7 @@ public struct WriteDBConnection: SDKModel {
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
         self.user_db_credentials = user_db_credentials
-        self.user_attribute_fields = user_attribute_fields
+        self._user_attribute_fields = user_attribute_fields == nil ? nil : { user_attribute_fields!.map { AnyString.init($0) }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self.sql_runner_precache_tables = sql_runner_precache_tables
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
@@ -22397,6 +22661,12 @@ public struct WriteGroup: SDKModel {
  * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
  */
 public struct WriteIntegration: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case enabled
+        case params
+        case _installed_delegate_oauth_targets = "installed_delegate_oauth_targets"
+    }
     /**
      * Whether the integration is available to users.
      */
@@ -22407,15 +22677,19 @@ public struct WriteIntegration: SDKModel {
      */
     public var params: [IntegrationParam]?
 
+    private var _installed_delegate_oauth_targets: AnyInt?
     /**
      * Whether the integration is available to users.
      */
-    public var installed_delegate_oauth_targets: [Int64]?
+    public var installed_delegate_oauth_targets: [Int64]? {
+        get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } else { _installed_delegate_oauth_targets = nil } }
+    }
 
     public init(enabled: Bool? = nil, params: [IntegrationParam]? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
         self.enabled = enabled
         self.params = params
-        self.installed_delegate_oauth_targets = installed_delegate_oauth_targets
+        self._installed_delegate_oauth_targets = installed_delegate_oauth_targets == nil ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
     }
 
 }
@@ -22521,8 +22795,8 @@ public struct WriteLDAPConfig: SDKModel {
         case _connection_port = "connection_port"
         case connection_tls
         case connection_tls_no_verify
-        case default_new_user_group_ids
-        case default_new_user_role_ids
+        case _default_new_user_group_ids = "default_new_user_group_ids"
+        case _default_new_user_role_ids = "default_new_user_role_ids"
         case enabled
         case force_no_page
         case _groups_base_dn = "groups_base_dn"
@@ -22604,15 +22878,23 @@ public struct WriteLDAPConfig: SDKModel {
      */
     public var connection_tls_no_verify: Bool?
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
     /**
      * Enable/Disable LDAP authentication for the server
@@ -22803,8 +23085,8 @@ public struct WriteLDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        self.default_new_user_group_ids = default_new_user_group_ids
-        self.default_new_user_role_ids = default_new_user_role_ids
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.enabled = enabled
         self.force_no_page = force_no_page
         self._groups_base_dn = groups_base_dn.map(AnyString.init)
@@ -22880,15 +23162,19 @@ public struct WriteLookBasic: SDKModel {
 public struct WriteLookmlModel: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case allowed_db_connection_names
+        case _allowed_db_connection_names = "allowed_db_connection_names"
         case _name = "name"
         case _project_name = "project_name"
         case unlimited_db_connections
     }
+    private var _allowed_db_connection_names: AnyString?
     /**
      * Array of names of connections this model is allowed to use
      */
-    public var allowed_db_connection_names: [String]?
+    public var allowed_db_connection_names: [String]? {
+        get { if let v = _allowed_db_connection_names { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } else { _allowed_db_connection_names = nil } }
+    }
 
     private var _name: AnyString?
     /**
@@ -22914,7 +23200,7 @@ public struct WriteLookmlModel: SDKModel {
     public var unlimited_db_connections: Bool?
 
     public init(allowed_db_connection_names: [String]? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
-        self.allowed_db_connection_names = allowed_db_connection_names
+        self._allowed_db_connection_names = allowed_db_connection_names == nil ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self.unlimited_db_connections = unlimited_db_connections
@@ -23036,8 +23322,8 @@ public struct WriteMergeQuery: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _column_limit = "column_limit"
         case _dynamic_fields = "dynamic_fields"
-        case pivots
-        case sorts
+        case _pivots = "pivots"
+        case _sorts = "sorts"
         case source_queries
         case total
         case vis_config
@@ -23060,15 +23346,23 @@ public struct WriteMergeQuery: SDKModel {
         set { _dynamic_fields = newValue.map(AnyString.init) }
     }
 
+    private var _pivots: AnyString?
     /**
      * Pivots
      */
-    public var pivots: [String]?
+    public var pivots: [String]? {
+        get { if let v = _pivots { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+    }
 
+    private var _sorts: AnyString?
     /**
      * Sorts
      */
-    public var sorts: [String]?
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+    }
 
     /**
      * Source Queries defining the results to be merged.
@@ -23088,8 +23382,8 @@ public struct WriteMergeQuery: SDKModel {
     public init(column_limit: String? = nil, dynamic_fields: String? = nil, pivots: [String]? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
-        self.pivots = pivots
-        self.sorts = sorts
+        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
+        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -23104,10 +23398,14 @@ public struct WriteMergeQuery: SDKModel {
 public struct WriteModelSet: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case models
+        case _models = "models"
         case _name = "name"
     }
-    public var models: [String]?
+    private var _models: AnyString?
+    public var models: [String]? {
+        get { if let v = _models { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+    }
 
     private var _name: AnyString?
     /**
@@ -23119,7 +23417,7 @@ public struct WriteModelSet: SDKModel {
     }
 
     public init(models: [String]? = nil, name: String? = nil) {
-        self.models = models
+        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
     }
 
@@ -23200,15 +23498,15 @@ public struct WriteOIDCConfig: SDKModel {
         case _audience = "audience"
         case auth_requires_role
         case _authorization_endpoint = "authorization_endpoint"
-        case default_new_user_group_ids
-        case default_new_user_role_ids
+        case _default_new_user_group_ids = "default_new_user_group_ids"
+        case _default_new_user_role_ids = "default_new_user_role_ids"
         case enabled
         case _groups_attribute = "groups_attribute"
         case groups_with_role_ids
         case _identifier = "identifier"
         case _issuer = "issuer"
         case _new_user_migration_types = "new_user_migration_types"
-        case scopes
+        case _scopes = "scopes"
         case _secret = "secret"
         case set_roles_from_groups
         case _token_endpoint = "token_endpoint"
@@ -23249,15 +23547,23 @@ public struct WriteOIDCConfig: SDKModel {
         set { _authorization_endpoint = newValue.map(AnyString.init) }
     }
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
     /**
      * Enable/Disable OIDC authentication for the server
@@ -23305,10 +23611,14 @@ public struct WriteOIDCConfig: SDKModel {
         set { _new_user_migration_types = newValue.map(AnyString.init) }
     }
 
+    private var _scopes: AnyString?
     /**
      * Array of scopes to request.
      */
-    public var scopes: [String]?
+    public var scopes: [String]? {
+        get { if let v = _scopes { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+    }
 
     private var _secret: AnyString?
     /**
@@ -23394,15 +23704,15 @@ public struct WriteOIDCConfig: SDKModel {
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        self.default_new_user_group_ids = default_new_user_group_ids
-        self.default_new_user_role_ids = default_new_user_role_ids
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.enabled = enabled
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids
         self._identifier = identifier.map(AnyString.init)
         self._issuer = issuer.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        self.scopes = scopes
+        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._token_endpoint = token_endpoint.map(AnyString.init)
@@ -23471,7 +23781,7 @@ public struct WritePermissionSet: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
-        case permissions
+        case _permissions = "permissions"
     }
     private var _name: AnyString?
     /**
@@ -23482,11 +23792,15 @@ public struct WritePermissionSet: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    public var permissions: [String]?
+    private var _permissions: AnyString?
+    public var permissions: [String]? {
+        get { if let v = _permissions { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+    }
 
     public init(name: String? = nil, permissions: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        self.permissions = permissions
+        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
     }
 
 }
@@ -23687,17 +24001,17 @@ public struct WriteQuery: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _model = "model"
         case _view = "view"
-        case fields
-        case pivots
-        case fill_fields
+        case _fields = "fields"
+        case _pivots = "pivots"
+        case _fill_fields = "fill_fields"
         case filters
         case _filter_expression = "filter_expression"
-        case sorts
+        case _sorts = "sorts"
         case _limit = "limit"
         case _column_limit = "column_limit"
         case total
         case _row_total = "row_total"
-        case subtotals
+        case _subtotals = "subtotals"
         case vis_config
         case filter_config
         case _visible_ui_sections = "visible_ui_sections"
@@ -23723,20 +24037,32 @@ public struct WriteQuery: SDKModel {
         set { _view = AnyString.init(newValue) }
     }
 
+    private var _fields: AnyString?
     /**
      * Fields
      */
-    public var fields: [String]?
+    public var fields: [String]? {
+        get { if let v = _fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+    }
 
+    private var _pivots: AnyString?
     /**
      * Pivots
      */
-    public var pivots: [String]?
+    public var pivots: [String]? {
+        get { if let v = _pivots { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+    }
 
+    private var _fill_fields: AnyString?
     /**
      * Fill Fields
      */
-    public var fill_fields: [String]?
+    public var fill_fields: [String]? {
+        get { if let v = _fill_fields { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } else { _fill_fields = nil } }
+    }
 
     /**
      * Filters
@@ -23752,10 +24078,14 @@ public struct WriteQuery: SDKModel {
         set { _filter_expression = newValue.map(AnyString.init) }
     }
 
+    private var _sorts: AnyString?
     /**
      * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
      */
-    public var sorts: [String]?
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+    }
 
     private var _limit: AnyString?
     /**
@@ -23789,10 +24119,14 @@ public struct WriteQuery: SDKModel {
         set { _row_total = newValue.map(AnyString.init) }
     }
 
+    private var _subtotals: AnyString?
     /**
      * Fields on which to run subtotals
      */
-    public var subtotals: [String]?
+    public var subtotals: [String]? {
+        get { if let v = _subtotals { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } else { _subtotals = nil } }
+    }
 
     /**
      * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
@@ -23843,17 +24177,17 @@ public struct WriteQuery: SDKModel {
     public init(model: String, view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, query_timezone: String? = nil) {
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        self.fields = fields
-        self.pivots = pivots
-        self.fill_fields = fill_fields
+        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
+        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
+        self._fill_fields = fill_fields == nil ? nil : { fill_fields!.map { AnyString.init($0) }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        self.sorts = sorts
+        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        self.subtotals = subtotals
+        self._subtotals = subtotals == nil ? nil : { subtotals!.map { AnyString.init($0) }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
@@ -24011,8 +24345,8 @@ public struct WriteSamlConfig: SDKModel {
         case _user_attribute_map_last_name = "user_attribute_map_last_name"
         case _new_user_migration_types = "new_user_migration_types"
         case alternate_email_login_allowed
-        case default_new_user_role_ids
-        case default_new_user_group_ids
+        case _default_new_user_role_ids = "default_new_user_role_ids"
+        case _default_new_user_group_ids = "default_new_user_group_ids"
         case set_roles_from_groups
         case _groups_attribute = "groups_attribute"
         case groups_with_role_ids
@@ -24116,15 +24450,23 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var alternate_email_login_allowed: Bool?
 
+    private var _default_new_user_role_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_role_ids: [Int64]?
+    public var default_new_user_role_ids: [Int64]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+    }
 
+    private var _default_new_user_group_ids: AnyInt?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_group_ids: [Int64]?
+    public var default_new_user_group_ids: [Int64]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+    }
 
     /**
      * Set user roles in Looker based on groups from Saml
@@ -24205,8 +24547,8 @@ public struct WriteSamlConfig: SDKModel {
         self._user_attribute_map_last_name = user_attribute_map_last_name.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
         self.alternate_email_login_allowed = alternate_email_login_allowed
-        self.default_new_user_role_ids = default_new_user_role_ids
-        self.default_new_user_group_ids = default_new_user_group_ids
+        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids

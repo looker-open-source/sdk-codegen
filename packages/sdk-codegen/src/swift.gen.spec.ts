@@ -315,14 +315,16 @@ public enum PermissionType: String, Codable {
       expect(actual).toEqual(expected)
     })
 
-    it('numeric properties use map to AnyInt', () => {
-      const type = apiTestModel.types.AnyIntIds
+    it('numeric and array properties are marshalled with AnyInt and AnyString', () => {
+      const type = apiTestModel.types.AnyIds
       const actual = gen.declareType(indent, type)
-      const expected = `public struct AnyIntIds: SDKModel {
+      const expected = `public struct AnyIds: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _id = "id"
         case _user_id = "user_id"
+        case _role_ids = "role_ids"
+        case _req_ids = "req_ids"
     }
     private var _id: AnyInt
     /**
@@ -342,13 +344,33 @@ public enum PermissionType: String, Codable {
         set { _user_id = newValue.map(AnyInt.init) }
     }
 
-    public init(id: Int, user_id: Int? = nil) {
-        self._id = AnyInt.init(id)
-        self._user_id = user_id.map(AnyInt.init)
+    private var _role_ids: AnyInt?
+    /**
+     * Array of ids of the roles for this user (read-only)
+     */
+    public var role_ids: [Int64]? {
+        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
     }
 
-    public init(_ id: Int, user_id: Int? = nil) {
-        self.init(id: id, user_id: user_id)
+    private var _req_ids: AnyString
+    /**
+     * Array of ids of the roles for this user (read-only)
+     */
+    public var req_ids: [String] {
+        get { _req_ids.map { $0.value } }
+        set { _req_ids = newValue.map { AnyString.init($0) } }
+    }
+
+    public init(id: Int, user_id: Int? = nil, role_ids: [Int64]? = nil, req_ids: [String]) {
+        self._id = AnyInt.init(id)
+        self._user_id = user_id.map(AnyInt.init)
+        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._req_ids = req_ids.map = { AnyString.init($0) }
+    }
+
+    public init(_ id: Int, user_id: Int? = nil, role_ids: [Int64]? = nil, _ req_ids: [String]) {
+        self.init(id: id, user_id: user_id, role_ids: role_ids, req_ids: req_ids)
     }
 
 }`

@@ -32,7 +32,13 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { EnumType, mayQuote, strBody } from './sdkModels'
+import {
+  EnumType,
+  mayQuote,
+  strBody,
+  TypeOfType,
+  typeOfType,
+} from './sdkModels'
 import type { IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
 
@@ -246,16 +252,23 @@ import Foundation
     // )
   }
 
+  itemType(property: IProperty) {
+    if (
+      typeOfType(property.type) === TypeOfType.Array &&
+      property.type.elementType
+    ) {
+      return property.type.elementType
+    }
+    return property.type
+  }
+
   /**
    * true if this property should use AnyString
    * @param property to check
    */
   useAnyString(property: IProperty) {
-    return (
-      this.anyString &&
-      property.type.name.toLowerCase() === 'string' &&
-      this.isIdProp(property)
-    )
+    const typeCheck = this.itemType(property).name.toLowerCase()
+    return this.anyString && typeCheck === 'string' && this.isIdProp(property)
   }
 
   /**
@@ -263,7 +276,7 @@ import Foundation
    * @param property to check
    */
   useAnyInt(property: IProperty) {
-    const typeCheck = property.type.name.toLowerCase()
+    const typeCheck = this.itemType(property).name.toLowerCase()
     return (
       this.anyString &&
       (typeCheck === 'integer' || typeCheck === 'int64') &&
@@ -314,17 +327,29 @@ import Foundation
       type.name
     }${optional}\n`
     if (specialHandling) {
+      const ra = typeOfType(property.type) === TypeOfType.Array
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
       const setter = property.required
-        ? `${specialHandling}.init(newValue)`
-        : `newValue.map(${specialHandling}.init)`
+        ? ra
+          ? `${privy} = newValue.map { ${specialHandling}.init($0) }`
+          : `${privy} = ${specialHandling}.init(newValue)`
+        : ra
+        ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } else { ${privy} = nil }`
+        : `${privy} = newValue.map(${specialHandling}.init)`
+      const getter = property.required
+        ? ra
+          ? `${privy}.map { $0.value }`
+          : `${privy}.value`
+        : ra
+        ? `if let v = ${privy} { return v.map { $0.value } else { return nil }`
+        : `${privy}${optional}.value`
       munge = `${indent}private var ${privy}: ${specialHandling}${optional}\n`
       declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
       }${optional} {
-${bump}get { ${privy}${optional}.value }
-${bump}set { ${privy} = ${setter} }
+${bump}get { ${getter} }
+${bump}set { ${setter} }
 ${indent}}\n`
     }
     return (
@@ -361,6 +386,31 @@ ${indent}}\n`
     )
   }
 
+  initProp(prop: IProperty) {
+    const propName = this.reserve(prop.name)
+    const specialHandling = this.getSpecialHandling(prop)
+    if (specialHandling) {
+      const ra = typeOfType(prop.type) === TypeOfType.Array
+      const varName = this.privy(propName)
+      if (prop.required) {
+        if (ra) {
+          return `${this.it(
+            varName
+          )} = ${propName}.map = { ${specialHandling}.init($0) }`
+        }
+        return `${this.it(varName)} = ${specialHandling}.init(${propName})`
+      } else {
+        if (ra) {
+          return `${this.it(
+            varName
+          )} = ${propName} == nil ? nil : { ${propName}!.map { ${specialHandling}.init($0) }`
+        }
+        return `${this.it(varName)} = ${propName}.map(${specialHandling}.init)`
+      }
+    }
+    return `${this.it(propName)} = ${propName}`
+  }
+
   construct(indent: string, type: IType) {
     if (type instanceof EnumType) return ''
     indent = this.bumper(indent)
@@ -374,23 +424,7 @@ ${indent}}\n`
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
-      const specialHandling = this.getSpecialHandling(prop)
-      if (specialHandling) {
-        const varName = this.privy(propName)
-        if (prop.required) {
-          inits.push(
-            `${bump}${this.it(varName)} = ${specialHandling}.init(${propName})`
-          )
-        } else {
-          inits.push(
-            `${bump}${this.it(
-              varName
-            )} = ${propName}.map(${specialHandling}.init)`
-          )
-        }
-      } else {
-        inits.push(`${bump}${this.it(propName)} = ${propName}`)
-      }
+      inits.push(`${bump}${this.initProp(prop)}`)
       posInits.push(`${propName}: ${propName}`)
     })
     const namedInit =
