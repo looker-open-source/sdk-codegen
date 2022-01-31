@@ -192,6 +192,18 @@ struct TestModel : SDKModel {
         }
     }
     
+    private var _rlist1: [AnyInt]
+    var rlist1: [Int64] {
+        get { return _rlist1.map { $0.value } }
+        set { _rlist1 = newValue.map { AnyInt.init($0) } }
+    }
+    
+    private var _rlist2: [AnyString]
+    var rlist2: [String] {
+        get { return _rlist2.map { $0.value } }
+        set { _rlist2 = newValue.map { AnyString.init($0) } }
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case _num1 = "num1"
         case _num2 = "num2"
@@ -201,17 +213,21 @@ struct TestModel : SDKModel {
         case _string3 = "string3"
         case _list1 = "list1"
         case _list2 = "list2"
+        case _rlist1 = "rlist1"
+        case _rlist2 = "rlist2"
     }
     
-    init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil, list1: [Int64]? = nil, list2: [String]? = nil) {
+    init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil, list1: [Int64]? = nil, list2: [String]? = nil, rlist1: [Int64], rlist2: [String]) {
         self._string1 = string1.map(AnyString.init)
         self._num1 = num1.map(AnyInt.init)
         self._string2 = string2.map(AnyString.init)
         self._num2 = num2.map(AnyInt.init)
         self._string3 = string3.map(AnyString.init)
         self._num3 = num3.map(AnyInt.init)
-        self.list1 = list1
-        self.list2 = list2
+        self._list1 = list1 == nil ? nil : list1!.map { AnyInt.init($0) }
+        self._list2 = list2 == nil ? nil : list2!.map { AnyString.init($0) }
+        self._rlist1 = rlist1.map { AnyInt.init($0) }
+        self._rlist2 = rlist2.map { AnyString.init($0) }
     }
 
 }
@@ -259,7 +275,9 @@ class transportTests: XCTestCase {
             "string4": "4",
             "num4": 4,
             "list1": ["1","2"],
-            "list2": [3,4]
+            "list2": [3,4],
+            "rlist1": ["1","2"],
+            "rlist2": [3,4]
         }
         """
         let actual: TestModel = try! deserialize(payload)
@@ -271,6 +289,8 @@ class transportTests: XCTestCase {
         XCTAssertEqual(actual.num3, 3)
         XCTAssertEqual(actual.list1, [1,2])
         XCTAssertEqual(actual.list2, ["3", "4"])
+        XCTAssertEqual(actual.rlist1, [1,2])
+        XCTAssertEqual(actual.rlist2, ["3", "4"])
     }
     
 //    func testPropWrapper() {
