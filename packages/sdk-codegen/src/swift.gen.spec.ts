@@ -344,16 +344,16 @@ public enum PermissionType: String, Codable {
         set { _user_id = newValue.map(AnyInt.init) }
     }
 
-    private var _role_ids: AnyInt?
+    private var _role_ids: [AnyInt]?
     /**
      * Array of ids of the roles for this user (read-only)
      */
     public var role_ids: [Int64]? {
-        get { if let v = _role_ids { return v.map { $0.value } else { return nil } }
+        get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
         set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
     }
 
-    private var _req_ids: AnyString
+    private var _req_ids: [AnyString]
     /**
      * Array of ids of the roles for this user (read-only)
      */
@@ -366,7 +366,7 @@ public enum PermissionType: String, Codable {
         self._id = AnyInt.init(id)
         self._user_id = user_id.map(AnyInt.init)
         self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
-        self._req_ids = req_ids.map = { AnyString.init($0) }
+        self._req_ids = req_ids.map { AnyString.init($0) }
     }
 
     public init(_ id: Int, user_id: Int? = nil, role_ids: [Int64]? = nil, _ req_ids: [String]) {

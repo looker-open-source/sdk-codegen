@@ -342,9 +342,11 @@ import Foundation
           ? `${privy}.map { $0.value }`
           : `${privy}.value`
         : ra
-        ? `if let v = ${privy} { return v.map { $0.value } else { return nil }`
+        ? `if let v = ${privy} { return v.map { $0.value } } else { return nil }`
         : `${privy}${optional}.value`
-      munge = `${indent}private var ${privy}: ${specialHandling}${optional}\n`
+      munge = ra
+        ? `${indent}private var ${privy}: [${specialHandling}]${optional}\n`
+        : `${indent}private var ${privy}: ${specialHandling}${optional}\n`
       declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
       }${optional} {
@@ -396,7 +398,7 @@ ${indent}}\n`
         if (ra) {
           return `${this.it(
             varName
-          )} = ${propName}.map = { ${specialHandling}.init($0) }`
+          )} = ${propName}.map { ${specialHandling}.init($0) }`
         }
         return `${this.it(varName)} = ${specialHandling}.init(${propName})`
       } else {
