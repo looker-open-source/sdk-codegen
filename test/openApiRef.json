@@ -35196,7 +35196,7 @@
         },
         "x-looker-status": "beta"
       },
-      "AnyIntIds": {
+      "AnyIds": {
         "properties": {
           "id": {
             "type": "integer",
@@ -35209,10 +35209,24 @@
             "readOnly": true,
             "description": "Test user id",
             "nullable": false
+          },
+          "role_ids": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" },
+            "readOnly": true,
+            "description": "Array of ids of the roles for this user",
+            "nullable": true
+          },
+          "req_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "readOnly": true,
+            "description": "Array of ids of the roles for this user",
+            "nullable": false
           }
         },
         "x-looker-status": "beta",
-        "required": ["id"]
+        "required": ["id", "req_ids"]
       },
       "ComplexHash": {
         "properties": {
