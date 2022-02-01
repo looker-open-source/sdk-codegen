@@ -44,8 +44,8 @@ In this document, **forward compatible** means an older SDK can process payloads
 
 Our goal with the Looker language SDKs is to provide both forward and backward compatibility.
 
-The current Looker API server is written in Ruby, which is one of the aforementioned "flexibly typed" languages. The Looker API server accepts ID value references as **either** `integer` or `string` and converts them internally to the required type.
-Thus, the LookerAPI server is fully compatible with any Looker SDK for identically named properties and parameters that are either integer or string.
+The Looker API server accepts ID value references as **either** `integer` or `string` and converts them internally to the required type.
+Therefore, the Looker API server is fully compatible for API requests with identically named properties and parameters that are either integer or string.
 
 ### Type ambiguity
 
