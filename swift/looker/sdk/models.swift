@@ -3185,7 +3185,7 @@ public struct CreateDashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        if let v = listens_to_filters { _listens_to_filters = v.map { AnyInt.init($0) } } else { _listens_to_filters = nil }
+        if let v = listens_to_filters { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -5589,7 +5589,7 @@ public struct DashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        if let v = listens_to_filters { _listens_to_filters = v.map { AnyInt.init($0) } } else { _listens_to_filters = nil }
+        if let v = listens_to_filters { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -6602,7 +6602,7 @@ public struct DBConnection: SDKModel {
         self._user_id = user_id.map(AnyString.init)
         self.example = example
         self.user_db_credentials = user_db_credentials
-        if let v = user_attribute_fields { _user_attribute_fields = v.map { AnyInt.init($0) } } else { _user_attribute_fields = nil }
+        if let v = user_attribute_fields { _user_attribute_fields = v.map { AnyString.init($0) } } else { _user_attribute_fields = nil }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self._last_regen_at = last_regen_at.map(AnyString.init)
         self._last_reap_at = last_reap_at.map(AnyString.init)
@@ -7064,7 +7064,7 @@ public struct Dialect: SDKModel {
         self._persistent_table_distkey = persistent_table_distkey.map(AnyString.init)
         self.supports_streaming = supports_streaming
         self.automatically_run_sql_runner_snippets = automatically_run_sql_runner_snippets
-        if let v = connection_tests { _connection_tests = v.map { AnyInt.init($0) } } else { _connection_tests = nil }
+        if let v = connection_tests { _connection_tests = v.map { AnyString.init($0) } } else { _connection_tests = nil }
         self.supports_inducer = supports_inducer
         self.supports_multiple_databases = supports_multiple_databases
         self.supports_persistent_derived_tables = supports_persistent_derived_tables
@@ -7293,7 +7293,7 @@ public struct DiscretePalette: SDKModel {
         self._id = id.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._type = type.map(AnyString.init)
-        if let v = colors { _colors = v.map { AnyInt.init($0) } } else { _colors = nil }
+        if let v = colors { _colors = v.map { AnyString.init($0) } } else { _colors = nil }
     }
 
 }
@@ -7545,8 +7545,8 @@ public struct EmbedSsoParams: SDKModel {
         self._first_name = first_name.map(AnyString.init)
         self._last_name = last_name.map(AnyString.init)
         self._user_timezone = user_timezone.map(AnyString.init)
-        if let v = permissions { _permissions = v.map { AnyInt.init($0) } } else { _permissions = nil }
-        if let v = models { _models = v.map { AnyInt.init($0) } } else { _models = nil }
+        if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
+        if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
         if let v = group_ids { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
@@ -9542,8 +9542,8 @@ public struct IntegrationRequiredField: SDKModel {
 
     public init(tag: String? = nil, any_tag: [String]? = nil, all_tags: [String]? = nil) {
         self._tag = tag.map(AnyString.init)
-        if let v = any_tag { _any_tag = v.map { AnyInt.init($0) } } else { _any_tag = nil }
-        if let v = all_tags { _all_tags = v.map { AnyInt.init($0) } } else { _all_tags = nil }
+        if let v = any_tag { _any_tag = v.map { AnyString.init($0) } } else { _any_tag = nil }
+        if let v = all_tags { _all_tags = v.map { AnyString.init($0) } } else { _all_tags = nil }
     }
 
 }
@@ -10404,15 +10404,15 @@ public struct LDAPUser: SDKModel {
     }
 
     public init(all_emails: [String]? = nil, attributes: StringDictionary<AnyCodable>? = nil, email: String? = nil, first_name: String? = nil, groups: [String]? = nil, last_name: String? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, roles: [String]? = nil, url: String? = nil) {
-        if let v = all_emails { _all_emails = v.map { AnyInt.init($0) } } else { _all_emails = nil }
+        if let v = all_emails { _all_emails = v.map { AnyString.init($0) } } else { _all_emails = nil }
         self.attributes = attributes
         self._email = email.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
-        if let v = groups { _groups = v.map { AnyInt.init($0) } } else { _groups = nil }
+        if let v = groups { _groups = v.map { AnyString.init($0) } } else { _groups = nil }
         self._last_name = last_name.map(AnyString.init)
         self._ldap_dn = ldap_dn.map(AnyString.init)
         self._ldap_id = ldap_id.map(AnyString.init)
-        if let v = roles { _roles = v.map { AnyInt.init($0) } } else { _roles = nil }
+        if let v = roles { _roles = v.map { AnyString.init($0) } } else { _roles = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -11140,7 +11140,7 @@ public struct LookmlModel: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, allowed_db_connection_names: [String]? = nil, explores: [LookmlModelNavExplore]? = nil, has_content: Bool? = nil, label: String? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
         self.can = can
-        if let v = allowed_db_connection_names { _allowed_db_connection_names = v.map { AnyInt.init($0) } } else { _allowed_db_connection_names = nil }
+        if let v = allowed_db_connection_names { _allowed_db_connection_names = v.map { AnyString.init($0) } } else { _allowed_db_connection_names = nil }
         self.explores = explores
         self.has_content = has_content
         self._label = label.map(AnyString.init)
@@ -11462,7 +11462,7 @@ public struct LookmlModelExplore: SDKModel {
         self._description = description.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        if let v = scopes { _scopes = v.map { AnyInt.init($0) } } else { _scopes = nil }
+        if let v = scopes { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil }
         self.can_total = can_total
         self.can_develop = can_develop
         self.can_see_lookml = can_see_lookml
@@ -11475,21 +11475,21 @@ public struct LookmlModelExplore: SDKModel {
         self.supports_cost_estimate = supports_cost_estimate
         self._connection_name = connection_name.map(AnyString.init)
         self._null_sort_treatment = null_sort_treatment.map(AnyString.init)
-        if let v = files { _files = v.map { AnyInt.init($0) } } else { _files = nil }
+        if let v = files { _files = v.map { AnyString.init($0) } } else { _files = nil }
         self._source_file = source_file.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self._model_name = model_name.map(AnyString.init)
         self._view_name = view_name.map(AnyString.init)
         self.hidden = hidden
         self._sql_table_name = sql_table_name.map(AnyString.init)
-        if let v = access_filter_fields { _access_filter_fields = v.map { AnyInt.init($0) } } else { _access_filter_fields = nil }
+        if let v = access_filter_fields { _access_filter_fields = v.map { AnyString.init($0) } } else { _access_filter_fields = nil }
         self.access_filters = access_filters
         self.aliases = aliases
         self.always_filter = always_filter
         self.conditionally_filter = conditionally_filter
-        if let v = index_fields { _index_fields = v.map { AnyInt.init($0) } } else { _index_fields = nil }
+        if let v = index_fields { _index_fields = v.map { AnyString.init($0) } } else { _index_fields = nil }
         self.sets = sets
-        if let v = tags { _tags = v.map { AnyInt.init($0) } } else { _tags = nil }
+        if let v = tags { _tags = v.map { AnyString.init($0) } } else { _tags = nil }
         self.errors = errors
         self.fields = fields
         self.joins = joins
@@ -12142,8 +12142,8 @@ public struct LookmlModelExploreField: SDKModel {
         self._suggest_dimension = suggest_dimension.map(AnyString.init)
         self._suggest_explore = suggest_explore.map(AnyString.init)
         self.suggestable = suggestable
-        if let v = suggestions { _suggestions = v.map { AnyInt.init($0) } } else { _suggestions = nil }
-        if let v = tags { _tags = v.map { AnyInt.init($0) } } else { _tags = nil }
+        if let v = suggestions { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil }
+        if let v = tags { _tags = v.map { AnyString.init($0) } } else { _tags = nil }
         self._type = type.map(AnyString.init)
         self.user_attribute_filter_types = user_attribute_filter_types
         self._value_format = value_format.map(AnyString.init)
@@ -12550,13 +12550,13 @@ public struct LookmlModelExploreJoins: SDKModel {
 
     public init(name: String? = nil, dependent_fields: [String]? = nil, fields: [String]? = nil, foreign_key: String? = nil, from: String? = nil, outer_only: Bool? = nil, relationship: String? = nil, required_joins: [String]? = nil, sql_foreign_key: String? = nil, sql_on: String? = nil, sql_table_name: String? = nil, type: String? = nil, view_label: String? = nil) {
         self._name = name.map(AnyString.init)
-        if let v = dependent_fields { _dependent_fields = v.map { AnyInt.init($0) } } else { _dependent_fields = nil }
-        if let v = fields { _fields = v.map { AnyInt.init($0) } } else { _fields = nil }
+        if let v = dependent_fields { _dependent_fields = v.map { AnyString.init($0) } } else { _dependent_fields = nil }
+        if let v = fields { _fields = v.map { AnyString.init($0) } } else { _fields = nil }
         self._foreign_key = foreign_key.map(AnyString.init)
         self._from = from.map(AnyString.init)
         self.outer_only = outer_only
         self._relationship = relationship.map(AnyString.init)
-        if let v = required_joins { _required_joins = v.map { AnyInt.init($0) } } else { _required_joins = nil }
+        if let v = required_joins { _required_joins = v.map { AnyString.init($0) } } else { _required_joins = nil }
         self._sql_foreign_key = sql_foreign_key.map(AnyString.init)
         self._sql_on = sql_on.map(AnyString.init)
         self._sql_table_name = sql_table_name.map(AnyString.init)
@@ -12592,7 +12592,7 @@ public struct LookmlModelExploreSet: SDKModel {
 
     public init(name: String? = nil, value: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        if let v = value { _value = v.map { AnyInt.init($0) } } else { _value = nil }
+        if let v = value { _value = v.map { AnyString.init($0) } } else { _value = nil }
     }
 
 }
@@ -12623,7 +12623,7 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
 
     public init(dimension_type: String? = nil, measure_types: [String]? = nil) {
         self._dimension_type = dimension_type.map(AnyString.init)
-        if let v = measure_types { _measure_types = v.map { AnyInt.init($0) } } else { _measure_types = nil }
+        if let v = measure_types { _measure_types = v.map { AnyString.init($0) } } else { _measure_types = nil }
     }
 
 }
@@ -13644,9 +13644,9 @@ public struct MergeQuery: SDKModel {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self._id = id.map(AnyString.init)
-        if let v = pivots { _pivots = v.map { AnyInt.init($0) } } else { _pivots = nil }
+        if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
         self._result_maker_id = result_maker_id.map(AnyInt.init)
-        if let v = sorts { _sorts = v.map { AnyInt.init($0) } } else { _sorts = nil }
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -13791,7 +13791,7 @@ public struct ModelFieldSuggestions: SDKModel {
     public var used_calcite_materialization: Bool?
 
     public init(suggestions: [String]? = nil, error: String? = nil, from_cache: Bool? = nil, hit_limit: Bool? = nil, used_calcite_materialization: Bool? = nil) {
-        if let v = suggestions { _suggestions = v.map { AnyInt.init($0) } } else { _suggestions = nil }
+        if let v = suggestions { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil }
         self._error = error.map(AnyString.init)
         self.from_cache = from_cache
         self.hit_limit = hit_limit
@@ -13913,7 +13913,7 @@ public struct ModelSet: SDKModel {
         self.all_access = all_access
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
-        if let v = models { _models = v.map { AnyInt.init($0) } } else { _models = nil }
+        if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
         self._name = name.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
@@ -14352,7 +14352,7 @@ public struct OIDCConfig: SDKModel {
         self.modified_at = modified_at
         self._modified_by = modified_by.map(AnyInt.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        if let v = scopes { _scopes = v.map { AnyInt.init($0) } } else { _scopes = nil }
+        if let v = scopes { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._test_slug = test_slug.map(AnyString.init)
@@ -14729,7 +14729,7 @@ public struct PermissionSet: SDKModel {
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
         self._name = name.map(AnyString.init)
-        if let v = permissions { _permissions = v.map { AnyInt.init($0) } } else { _permissions = nil }
+        if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -15614,17 +15614,17 @@ public struct Query: SDKModel {
         self._id = id.map(AnyInt.init)
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        if let v = fields { _fields = v.map { AnyInt.init($0) } } else { _fields = nil }
-        if let v = pivots { _pivots = v.map { AnyInt.init($0) } } else { _pivots = nil }
-        if let v = fill_fields { _fill_fields = v.map { AnyInt.init($0) } } else { _fill_fields = nil }
+        if let v = fields { _fields = v.map { AnyString.init($0) } } else { _fields = nil }
+        if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
+        if let v = fill_fields { _fill_fields = v.map { AnyString.init($0) } } else { _fill_fields = nil }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        if let v = sorts { _sorts = v.map { AnyInt.init($0) } } else { _sorts = nil }
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        if let v = subtotals { _subtotals = v.map { AnyInt.init($0) } } else { _subtotals = nil }
+        if let v = subtotals { _subtotals = v.map { AnyString.init($0) } } else { _subtotals = nil }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
@@ -16310,7 +16310,7 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         self._id = id.map(AnyInt.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self.filterables = filterables
-        if let v = sorts { _sorts = v.map { AnyInt.init($0) } } else { _sorts = nil }
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
         self._query_id = query_id.map(AnyInt.init)
@@ -19448,7 +19448,7 @@ public struct User: SDKModel {
         self.is_disabled = is_disabled
         self._last_name = last_name.map(AnyString.init)
         self._locale = locale.map(AnyString.init)
-        if let v = looker_versions { _looker_versions = v.map { AnyInt.init($0) } } else { _looker_versions = nil }
+        if let v = looker_versions { _looker_versions = v.map { AnyString.init($0) } } else { _looker_versions = nil }
         self.models_dir_validated = models_dir_validated
         self._personal_folder_id = personal_folder_id.map(AnyInt.init)
         self.presumed_looker_employee = presumed_looker_employee
@@ -21134,7 +21134,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        if let v = listens_to_filters { _listens_to_filters = v.map { AnyInt.init($0) } } else { _listens_to_filters = nil }
+        if let v = listens_to_filters { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -21820,7 +21820,7 @@ public struct WriteDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        if let v = listens_to_filters { _listens_to_filters = v.map { AnyInt.init($0) } } else { _listens_to_filters = nil }
+        if let v = listens_to_filters { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -22314,7 +22314,7 @@ public struct WriteDBConnection: SDKModel {
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
         self.user_db_credentials = user_db_credentials
-        if let v = user_attribute_fields { _user_attribute_fields = v.map { AnyInt.init($0) } } else { _user_attribute_fields = nil }
+        if let v = user_attribute_fields { _user_attribute_fields = v.map { AnyString.init($0) } } else { _user_attribute_fields = nil }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self.sql_runner_precache_tables = sql_runner_precache_tables
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
@@ -23200,7 +23200,7 @@ public struct WriteLookmlModel: SDKModel {
     public var unlimited_db_connections: Bool?
 
     public init(allowed_db_connection_names: [String]? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
-        if let v = allowed_db_connection_names { _allowed_db_connection_names = v.map { AnyInt.init($0) } } else { _allowed_db_connection_names = nil }
+        if let v = allowed_db_connection_names { _allowed_db_connection_names = v.map { AnyString.init($0) } } else { _allowed_db_connection_names = nil }
         self._name = name.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self.unlimited_db_connections = unlimited_db_connections
@@ -23382,8 +23382,8 @@ public struct WriteMergeQuery: SDKModel {
     public init(column_limit: String? = nil, dynamic_fields: String? = nil, pivots: [String]? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
-        if let v = pivots { _pivots = v.map { AnyInt.init($0) } } else { _pivots = nil }
-        if let v = sorts { _sorts = v.map { AnyInt.init($0) } } else { _sorts = nil }
+        if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -23417,7 +23417,7 @@ public struct WriteModelSet: SDKModel {
     }
 
     public init(models: [String]? = nil, name: String? = nil) {
-        if let v = models { _models = v.map { AnyInt.init($0) } } else { _models = nil }
+        if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
         self._name = name.map(AnyString.init)
     }
 
@@ -23712,7 +23712,7 @@ public struct WriteOIDCConfig: SDKModel {
         self._identifier = identifier.map(AnyString.init)
         self._issuer = issuer.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        if let v = scopes { _scopes = v.map { AnyInt.init($0) } } else { _scopes = nil }
+        if let v = scopes { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._token_endpoint = token_endpoint.map(AnyString.init)
@@ -23800,7 +23800,7 @@ public struct WritePermissionSet: SDKModel {
 
     public init(name: String? = nil, permissions: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        if let v = permissions { _permissions = v.map { AnyInt.init($0) } } else { _permissions = nil }
+        if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
     }
 
 }
@@ -24177,17 +24177,17 @@ public struct WriteQuery: SDKModel {
     public init(model: String, view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, query_timezone: String? = nil) {
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        if let v = fields { _fields = v.map { AnyInt.init($0) } } else { _fields = nil }
-        if let v = pivots { _pivots = v.map { AnyInt.init($0) } } else { _pivots = nil }
-        if let v = fill_fields { _fill_fields = v.map { AnyInt.init($0) } } else { _fill_fields = nil }
+        if let v = fields { _fields = v.map { AnyString.init($0) } } else { _fields = nil }
+        if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
+        if let v = fill_fields { _fill_fields = v.map { AnyString.init($0) } } else { _fill_fields = nil }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        if let v = sorts { _sorts = v.map { AnyInt.init($0) } } else { _sorts = nil }
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        if let v = subtotals { _subtotals = v.map { AnyInt.init($0) } } else { _subtotals = nil }
+        if let v = subtotals { _subtotals = v.map { AnyString.init($0) } } else { _subtotals = nil }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
