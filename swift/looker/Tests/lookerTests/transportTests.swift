@@ -194,13 +194,13 @@ struct TestModel : SDKModel {
     
     private var _rlist1: [AnyInt]
     var rlist1: [Int64] {
-        get { return _rlist1.map { $0.value } }
+        get { _rlist1.map { $0.value } }
         set { _rlist1 = newValue.map { AnyInt.init($0) } }
     }
     
     private var _rlist2: [AnyString]
     var rlist2: [String] {
-        get { return _rlist2.map { $0.value } }
+        get { _rlist2.map { $0.value } }
         set { _rlist2 = newValue.map { AnyString.init($0) } }
     }
     
