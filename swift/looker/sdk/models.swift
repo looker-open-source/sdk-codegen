@@ -921,7 +921,7 @@ public struct Board: SDKModel {
         self._description = description.map(AnyString.init)
         self.board_sections = board_sections
         self._id = id.map(AnyInt.init)
-        self._section_order = section_order == nil ? nil : { section_order!.map { AnyInt.init($0) }
+        self._section_order = (section_order == nil) ? nil : { section_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
         self._user_id = user_id.map(AnyInt.init)
@@ -1268,8 +1268,8 @@ public struct BoardSection: SDKModel {
         self._board_id = board_id.map(AnyInt.init)
         self.board_items = board_items
         self._id = id.map(AnyInt.init)
-        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
-        self._visible_item_order = visible_item_order == nil ? nil : { visible_item_order!.map { AnyInt.init($0) }
+        self._item_order = (item_order == nil) ? nil : { item_order!.map { AnyInt.init($0) }
+        self._visible_item_order = (visible_item_order == nil) ? nil : { visible_item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
     }
@@ -3185,7 +3185,7 @@ public struct CreateDashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
+        self._listens_to_filters = (listens_to_filters == nil) ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -5589,7 +5589,7 @@ public struct DashboardFilter: SDKModel {
         self._dimension = dimension.map(AnyString.init)
         self.field = field
         self._row = row.map(AnyInt.init)
-        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
+        self._listens_to_filters = (listens_to_filters == nil) ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -6602,7 +6602,7 @@ public struct DBConnection: SDKModel {
         self._user_id = user_id.map(AnyString.init)
         self.example = example
         self.user_db_credentials = user_db_credentials
-        self._user_attribute_fields = user_attribute_fields == nil ? nil : { user_attribute_fields!.map { AnyString.init($0) }
+        self._user_attribute_fields = (user_attribute_fields == nil) ? nil : { user_attribute_fields!.map { AnyString.init($0) }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self._last_regen_at = last_regen_at.map(AnyString.init)
         self._last_reap_at = last_reap_at.map(AnyString.init)
@@ -7064,7 +7064,7 @@ public struct Dialect: SDKModel {
         self._persistent_table_distkey = persistent_table_distkey.map(AnyString.init)
         self.supports_streaming = supports_streaming
         self.automatically_run_sql_runner_snippets = automatically_run_sql_runner_snippets
-        self._connection_tests = connection_tests == nil ? nil : { connection_tests!.map { AnyString.init($0) }
+        self._connection_tests = (connection_tests == nil) ? nil : { connection_tests!.map { AnyString.init($0) }
         self.supports_inducer = supports_inducer
         self.supports_multiple_databases = supports_multiple_databases
         self.supports_persistent_derived_tables = supports_persistent_derived_tables
@@ -7293,7 +7293,7 @@ public struct DiscretePalette: SDKModel {
         self._id = id.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._type = type.map(AnyString.init)
-        self._colors = colors == nil ? nil : { colors!.map { AnyString.init($0) }
+        self._colors = (colors == nil) ? nil : { colors!.map { AnyString.init($0) }
     }
 
 }
@@ -7545,9 +7545,9 @@ public struct EmbedSsoParams: SDKModel {
         self._first_name = first_name.map(AnyString.init)
         self._last_name = last_name.map(AnyString.init)
         self._user_timezone = user_timezone.map(AnyString.init)
-        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
-        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
-        self._group_ids = group_ids == nil ? nil : { group_ids!.map { AnyInt.init($0) }
+        self._permissions = (permissions == nil) ? nil : { permissions!.map { AnyString.init($0) }
+        self._models = (models == nil) ? nil : { models!.map { AnyString.init($0) }
+        self._group_ids = (group_ids == nil) ? nil : { group_ids!.map { AnyInt.init($0) }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._secret_id = secret_id.map(AnyInt.init)
@@ -8524,8 +8524,8 @@ public struct GroupHierarchy: SDKModel {
         self.include_by_default = include_by_default
         self._name = name.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
-        self._parent_group_ids = parent_group_ids == nil ? nil : { parent_group_ids!.map { AnyInt.init($0) }
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._parent_group_ids = (parent_group_ids == nil) ? nil : { parent_group_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -9083,11 +9083,11 @@ public struct HomepageSection: SDKModel {
         self.homepage_items = homepage_items
         self._id = id.map(AnyInt.init)
         self.is_header = is_header
-        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
+        self._item_order = (item_order == nil) ? nil : { item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
         self._description = description.map(AnyString.init)
-        self._visible_item_order = visible_item_order == nil ? nil : { visible_item_order!.map { AnyInt.init($0) }
+        self._visible_item_order = (visible_item_order == nil) ? nil : { visible_item_order!.map { AnyInt.init($0) }
     }
 
 }
@@ -9288,7 +9288,7 @@ public struct Integration: SDKModel {
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
         self.delegate_oauth = delegate_oauth
-        self._installed_delegate_oauth_targets = installed_delegate_oauth_targets == nil ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
+        self._installed_delegate_oauth_targets = (installed_delegate_oauth_targets == nil) ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
     }
 
 }
@@ -9542,8 +9542,8 @@ public struct IntegrationRequiredField: SDKModel {
 
     public init(tag: String? = nil, any_tag: [String]? = nil, all_tags: [String]? = nil) {
         self._tag = tag.map(AnyString.init)
-        self._any_tag = any_tag == nil ? nil : { any_tag!.map { AnyString.init($0) }
-        self._all_tags = all_tags == nil ? nil : { all_tags!.map { AnyString.init($0) }
+        self._any_tag = (any_tag == nil) ? nil : { any_tag!.map { AnyString.init($0) }
+        self._all_tags = (all_tags == nil) ? nil : { all_tags!.map { AnyString.init($0) }
     }
 
 }
@@ -10013,9 +10013,9 @@ public struct LDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.default_new_user_groups = default_new_user_groups
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.force_no_page = force_no_page
@@ -10297,7 +10297,7 @@ public struct LDAPGroupWrite: SDKModel {
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -10404,15 +10404,15 @@ public struct LDAPUser: SDKModel {
     }
 
     public init(all_emails: [String]? = nil, attributes: StringDictionary<AnyCodable>? = nil, email: String? = nil, first_name: String? = nil, groups: [String]? = nil, last_name: String? = nil, ldap_dn: String? = nil, ldap_id: String? = nil, roles: [String]? = nil, url: String? = nil) {
-        self._all_emails = all_emails == nil ? nil : { all_emails!.map { AnyString.init($0) }
+        self._all_emails = (all_emails == nil) ? nil : { all_emails!.map { AnyString.init($0) }
         self.attributes = attributes
         self._email = email.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
-        self._groups = groups == nil ? nil : { groups!.map { AnyString.init($0) }
+        self._groups = (groups == nil) ? nil : { groups!.map { AnyString.init($0) }
         self._last_name = last_name.map(AnyString.init)
         self._ldap_dn = ldap_dn.map(AnyString.init)
         self._ldap_id = ldap_id.map(AnyString.init)
-        self._roles = roles == nil ? nil : { roles!.map { AnyString.init($0) }
+        self._roles = (roles == nil) ? nil : { roles!.map { AnyString.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -10506,7 +10506,7 @@ public struct LDAPUserAttributeWrite: SDKModel {
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
+        self._user_attribute_ids = (user_attribute_ids == nil) ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -11140,7 +11140,7 @@ public struct LookmlModel: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, allowed_db_connection_names: [String]? = nil, explores: [LookmlModelNavExplore]? = nil, has_content: Bool? = nil, label: String? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
         self.can = can
-        self._allowed_db_connection_names = allowed_db_connection_names == nil ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
+        self._allowed_db_connection_names = (allowed_db_connection_names == nil) ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
         self.explores = explores
         self.has_content = has_content
         self._label = label.map(AnyString.init)
@@ -11462,7 +11462,7 @@ public struct LookmlModelExplore: SDKModel {
         self._description = description.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
+        self._scopes = (scopes == nil) ? nil : { scopes!.map { AnyString.init($0) }
         self.can_total = can_total
         self.can_develop = can_develop
         self.can_see_lookml = can_see_lookml
@@ -11475,21 +11475,21 @@ public struct LookmlModelExplore: SDKModel {
         self.supports_cost_estimate = supports_cost_estimate
         self._connection_name = connection_name.map(AnyString.init)
         self._null_sort_treatment = null_sort_treatment.map(AnyString.init)
-        self._files = files == nil ? nil : { files!.map { AnyString.init($0) }
+        self._files = (files == nil) ? nil : { files!.map { AnyString.init($0) }
         self._source_file = source_file.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self._model_name = model_name.map(AnyString.init)
         self._view_name = view_name.map(AnyString.init)
         self.hidden = hidden
         self._sql_table_name = sql_table_name.map(AnyString.init)
-        self._access_filter_fields = access_filter_fields == nil ? nil : { access_filter_fields!.map { AnyString.init($0) }
+        self._access_filter_fields = (access_filter_fields == nil) ? nil : { access_filter_fields!.map { AnyString.init($0) }
         self.access_filters = access_filters
         self.aliases = aliases
         self.always_filter = always_filter
         self.conditionally_filter = conditionally_filter
-        self._index_fields = index_fields == nil ? nil : { index_fields!.map { AnyString.init($0) }
+        self._index_fields = (index_fields == nil) ? nil : { index_fields!.map { AnyString.init($0) }
         self.sets = sets
-        self._tags = tags == nil ? nil : { tags!.map { AnyString.init($0) }
+        self._tags = (tags == nil) ? nil : { tags!.map { AnyString.init($0) }
         self.errors = errors
         self.fields = fields
         self.joins = joins
@@ -12142,8 +12142,8 @@ public struct LookmlModelExploreField: SDKModel {
         self._suggest_dimension = suggest_dimension.map(AnyString.init)
         self._suggest_explore = suggest_explore.map(AnyString.init)
         self.suggestable = suggestable
-        self._suggestions = suggestions == nil ? nil : { suggestions!.map { AnyString.init($0) }
-        self._tags = tags == nil ? nil : { tags!.map { AnyString.init($0) }
+        self._suggestions = (suggestions == nil) ? nil : { suggestions!.map { AnyString.init($0) }
+        self._tags = (tags == nil) ? nil : { tags!.map { AnyString.init($0) }
         self._type = type.map(AnyString.init)
         self.user_attribute_filter_types = user_attribute_filter_types
         self._value_format = value_format.map(AnyString.init)
@@ -12550,13 +12550,13 @@ public struct LookmlModelExploreJoins: SDKModel {
 
     public init(name: String? = nil, dependent_fields: [String]? = nil, fields: [String]? = nil, foreign_key: String? = nil, from: String? = nil, outer_only: Bool? = nil, relationship: String? = nil, required_joins: [String]? = nil, sql_foreign_key: String? = nil, sql_on: String? = nil, sql_table_name: String? = nil, type: String? = nil, view_label: String? = nil) {
         self._name = name.map(AnyString.init)
-        self._dependent_fields = dependent_fields == nil ? nil : { dependent_fields!.map { AnyString.init($0) }
-        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
+        self._dependent_fields = (dependent_fields == nil) ? nil : { dependent_fields!.map { AnyString.init($0) }
+        self._fields = (fields == nil) ? nil : { fields!.map { AnyString.init($0) }
         self._foreign_key = foreign_key.map(AnyString.init)
         self._from = from.map(AnyString.init)
         self.outer_only = outer_only
         self._relationship = relationship.map(AnyString.init)
-        self._required_joins = required_joins == nil ? nil : { required_joins!.map { AnyString.init($0) }
+        self._required_joins = (required_joins == nil) ? nil : { required_joins!.map { AnyString.init($0) }
         self._sql_foreign_key = sql_foreign_key.map(AnyString.init)
         self._sql_on = sql_on.map(AnyString.init)
         self._sql_table_name = sql_table_name.map(AnyString.init)
@@ -12592,7 +12592,7 @@ public struct LookmlModelExploreSet: SDKModel {
 
     public init(name: String? = nil, value: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        self._value = value == nil ? nil : { value!.map { AnyString.init($0) }
+        self._value = (value == nil) ? nil : { value!.map { AnyString.init($0) }
     }
 
 }
@@ -12623,7 +12623,7 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
 
     public init(dimension_type: String? = nil, measure_types: [String]? = nil) {
         self._dimension_type = dimension_type.map(AnyString.init)
-        self._measure_types = measure_types == nil ? nil : { measure_types!.map { AnyString.init($0) }
+        self._measure_types = (measure_types == nil) ? nil : { measure_types!.map { AnyString.init($0) }
     }
 
 }
@@ -13644,9 +13644,9 @@ public struct MergeQuery: SDKModel {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self._id = id.map(AnyString.init)
-        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
+        self._pivots = (pivots == nil) ? nil : { pivots!.map { AnyString.init($0) }
         self._result_maker_id = result_maker_id.map(AnyInt.init)
-        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
+        self._sorts = (sorts == nil) ? nil : { sorts!.map { AnyString.init($0) }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -13791,7 +13791,7 @@ public struct ModelFieldSuggestions: SDKModel {
     public var used_calcite_materialization: Bool?
 
     public init(suggestions: [String]? = nil, error: String? = nil, from_cache: Bool? = nil, hit_limit: Bool? = nil, used_calcite_materialization: Bool? = nil) {
-        self._suggestions = suggestions == nil ? nil : { suggestions!.map { AnyString.init($0) }
+        self._suggestions = (suggestions == nil) ? nil : { suggestions!.map { AnyString.init($0) }
         self._error = error.map(AnyString.init)
         self.from_cache = from_cache
         self.hit_limit = hit_limit
@@ -13913,7 +13913,7 @@ public struct ModelSet: SDKModel {
         self.all_access = all_access
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
-        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
+        self._models = (models == nil) ? nil : { models!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
@@ -14339,9 +14339,9 @@ public struct OIDCConfig: SDKModel {
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.default_new_user_groups = default_new_user_groups
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.groups = groups
@@ -14352,7 +14352,7 @@ public struct OIDCConfig: SDKModel {
         self.modified_at = modified_at
         self._modified_by = modified_by.map(AnyInt.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
+        self._scopes = (scopes == nil) ? nil : { scopes!.map { AnyString.init($0) }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._test_slug = test_slug.map(AnyString.init)
@@ -14490,7 +14490,7 @@ public struct OIDCGroupWrite: SDKModel {
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -14562,7 +14562,7 @@ public struct OIDCUserAttributeWrite: SDKModel {
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
+        self._user_attribute_ids = (user_attribute_ids == nil) ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
     }
 
 }
@@ -14729,7 +14729,7 @@ public struct PermissionSet: SDKModel {
         self.built_in = built_in
         self._id = id.map(AnyInt.init)
         self._name = name.map(AnyString.init)
-        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
+        self._permissions = (permissions == nil) ? nil : { permissions!.map { AnyString.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -15614,17 +15614,17 @@ public struct Query: SDKModel {
         self._id = id.map(AnyInt.init)
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
-        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
-        self._fill_fields = fill_fields == nil ? nil : { fill_fields!.map { AnyString.init($0) }
+        self._fields = (fields == nil) ? nil : { fields!.map { AnyString.init($0) }
+        self._pivots = (pivots == nil) ? nil : { pivots!.map { AnyString.init($0) }
+        self._fill_fields = (fill_fields == nil) ? nil : { fill_fields!.map { AnyString.init($0) }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
+        self._sorts = (sorts == nil) ? nil : { sorts!.map { AnyString.init($0) }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        self._subtotals = subtotals == nil ? nil : { subtotals!.map { AnyString.init($0) }
+        self._subtotals = (subtotals == nil) ? nil : { subtotals!.map { AnyString.init($0) }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
@@ -16310,7 +16310,7 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         self._id = id.map(AnyInt.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self.filterables = filterables
-        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
+        self._sorts = (sorts == nil) ? nil : { sorts!.map { AnyString.init($0) }
         self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
         self._query_id = query_id.map(AnyInt.init)
@@ -17008,8 +17008,8 @@ public struct SamlConfig: SDKModel {
         self._modified_by = modified_by.map(AnyString.init)
         self.default_new_user_roles = default_new_user_roles
         self.default_new_user_groups = default_new_user_groups
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups = groups
@@ -17168,7 +17168,7 @@ public struct SamlGroupWrite: SDKModel {
         self._looker_group_id = looker_group_id.map(AnyInt.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -17311,7 +17311,7 @@ public struct SamlUserAttributeWrite: SDKModel {
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        self._user_attribute_ids = user_attribute_ids == nil ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
+        self._user_attribute_ids = (user_attribute_ids == nil) ? nil : { user_attribute_ids!.map { AnyInt.init($0) }
         self._url = url.map(AnyString.init)
     }
 
@@ -19442,17 +19442,17 @@ public struct User: SDKModel {
         self._email = email.map(AnyString.init)
         self._embed_group_space_id = embed_group_space_id.map(AnyInt.init)
         self._first_name = first_name.map(AnyString.init)
-        self._group_ids = group_ids == nil ? nil : { group_ids!.map { AnyInt.init($0) }
+        self._group_ids = (group_ids == nil) ? nil : { group_ids!.map { AnyInt.init($0) }
         self._home_folder_id = home_folder_id.map(AnyString.init)
         self._id = id.map(AnyInt.init)
         self.is_disabled = is_disabled
         self._last_name = last_name.map(AnyString.init)
         self._locale = locale.map(AnyString.init)
-        self._looker_versions = looker_versions == nil ? nil : { looker_versions!.map { AnyString.init($0) }
+        self._looker_versions = (looker_versions == nil) ? nil : { looker_versions!.map { AnyString.init($0) }
         self.models_dir_validated = models_dir_validated
         self._personal_folder_id = personal_folder_id.map(AnyInt.init)
         self.presumed_looker_employee = presumed_looker_employee
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
         self.sessions = sessions
         self.ui_state = ui_state
         self.verified_looker_employee = verified_looker_employee
@@ -20662,7 +20662,7 @@ public struct WriteBoard: SDKModel {
     public init(deleted_at: Date? = nil, description: String? = nil, section_order: [Int64]? = nil, title: String? = nil) {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
-        self._section_order = section_order == nil ? nil : { section_order!.map { AnyInt.init($0) }
+        self._section_order = (section_order == nil) ? nil : { section_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
     }
 
@@ -20827,7 +20827,7 @@ public struct WriteBoardSection: SDKModel {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
         self._board_id = board_id.map(AnyInt.init)
-        self._item_order = item_order == nil ? nil : { item_order!.map { AnyInt.init($0) }
+        self._item_order = (item_order == nil) ? nil : { item_order!.map { AnyInt.init($0) }
         self._title = title.map(AnyString.init)
     }
 
@@ -21134,7 +21134,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
+        self._listens_to_filters = (listens_to_filters == nil) ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -21820,7 +21820,7 @@ public struct WriteDashboardFilter: SDKModel {
         self._explore = explore.map(AnyString.init)
         self._dimension = dimension.map(AnyString.init)
         self._row = row.map(AnyInt.init)
-        self._listens_to_filters = listens_to_filters == nil ? nil : { listens_to_filters!.map { AnyString.init($0) }
+        self._listens_to_filters = (listens_to_filters == nil) ? nil : { listens_to_filters!.map { AnyString.init($0) }
         self.allow_multiple_values = allow_multiple_values
         self.required = required
         self.ui_config = ui_config
@@ -22314,7 +22314,7 @@ public struct WriteDBConnection: SDKModel {
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
         self.user_db_credentials = user_db_credentials
-        self._user_attribute_fields = user_attribute_fields == nil ? nil : { user_attribute_fields!.map { AnyString.init($0) }
+        self._user_attribute_fields = (user_attribute_fields == nil) ? nil : { user_attribute_fields!.map { AnyString.init($0) }
         self._maintenance_cron = maintenance_cron.map(AnyString.init)
         self.sql_runner_precache_tables = sql_runner_precache_tables
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
@@ -22689,7 +22689,7 @@ public struct WriteIntegration: SDKModel {
     public init(enabled: Bool? = nil, params: [IntegrationParam]? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
         self.enabled = enabled
         self.params = params
-        self._installed_delegate_oauth_targets = installed_delegate_oauth_targets == nil ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
+        self._installed_delegate_oauth_targets = (installed_delegate_oauth_targets == nil) ? nil : { installed_delegate_oauth_targets!.map { AnyInt.init($0) }
     }
 
 }
@@ -23085,8 +23085,8 @@ public struct WriteLDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.enabled = enabled
         self.force_no_page = force_no_page
         self._groups_base_dn = groups_base_dn.map(AnyString.init)
@@ -23200,7 +23200,7 @@ public struct WriteLookmlModel: SDKModel {
     public var unlimited_db_connections: Bool?
 
     public init(allowed_db_connection_names: [String]? = nil, name: String? = nil, project_name: String? = nil, unlimited_db_connections: Bool? = nil) {
-        self._allowed_db_connection_names = allowed_db_connection_names == nil ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
+        self._allowed_db_connection_names = (allowed_db_connection_names == nil) ? nil : { allowed_db_connection_names!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
         self._project_name = project_name.map(AnyString.init)
         self.unlimited_db_connections = unlimited_db_connections
@@ -23382,8 +23382,8 @@ public struct WriteMergeQuery: SDKModel {
     public init(column_limit: String? = nil, dynamic_fields: String? = nil, pivots: [String]? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
-        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
-        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
+        self._pivots = (pivots == nil) ? nil : { pivots!.map { AnyString.init($0) }
+        self._sorts = (sorts == nil) ? nil : { sorts!.map { AnyString.init($0) }
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
@@ -23417,7 +23417,7 @@ public struct WriteModelSet: SDKModel {
     }
 
     public init(models: [String]? = nil, name: String? = nil) {
-        self._models = models == nil ? nil : { models!.map { AnyString.init($0) }
+        self._models = (models == nil) ? nil : { models!.map { AnyString.init($0) }
         self._name = name.map(AnyString.init)
     }
 
@@ -23704,15 +23704,15 @@ public struct WriteOIDCConfig: SDKModel {
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
         self.enabled = enabled
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids
         self._identifier = identifier.map(AnyString.init)
         self._issuer = issuer.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
-        self._scopes = scopes == nil ? nil : { scopes!.map { AnyString.init($0) }
+        self._scopes = (scopes == nil) ? nil : { scopes!.map { AnyString.init($0) }
         self._secret = secret.map(AnyString.init)
         self.set_roles_from_groups = set_roles_from_groups
         self._token_endpoint = token_endpoint.map(AnyString.init)
@@ -23800,7 +23800,7 @@ public struct WritePermissionSet: SDKModel {
 
     public init(name: String? = nil, permissions: [String]? = nil) {
         self._name = name.map(AnyString.init)
-        self._permissions = permissions == nil ? nil : { permissions!.map { AnyString.init($0) }
+        self._permissions = (permissions == nil) ? nil : { permissions!.map { AnyString.init($0) }
     }
 
 }
@@ -24177,17 +24177,17 @@ public struct WriteQuery: SDKModel {
     public init(model: String, view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, query_timezone: String? = nil) {
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
-        self._fields = fields == nil ? nil : { fields!.map { AnyString.init($0) }
-        self._pivots = pivots == nil ? nil : { pivots!.map { AnyString.init($0) }
-        self._fill_fields = fill_fields == nil ? nil : { fill_fields!.map { AnyString.init($0) }
+        self._fields = (fields == nil) ? nil : { fields!.map { AnyString.init($0) }
+        self._pivots = (pivots == nil) ? nil : { pivots!.map { AnyString.init($0) }
+        self._fill_fields = (fill_fields == nil) ? nil : { fill_fields!.map { AnyString.init($0) }
         self.filters = filters
         self._filter_expression = filter_expression.map(AnyString.init)
-        self._sorts = sorts == nil ? nil : { sorts!.map { AnyString.init($0) }
+        self._sorts = (sorts == nil) ? nil : { sorts!.map { AnyString.init($0) }
         self._limit = limit.map(AnyString.init)
         self._column_limit = column_limit.map(AnyString.init)
         self.total = total
         self._row_total = row_total.map(AnyString.init)
-        self._subtotals = subtotals == nil ? nil : { subtotals!.map { AnyString.init($0) }
+        self._subtotals = (subtotals == nil) ? nil : { subtotals!.map { AnyString.init($0) }
         self.vis_config = vis_config
         self.filter_config = filter_config
         self._visible_ui_sections = visible_ui_sections.map(AnyString.init)
@@ -24547,8 +24547,8 @@ public struct WriteSamlConfig: SDKModel {
         self._user_attribute_map_last_name = user_attribute_map_last_name.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
         self.alternate_email_login_allowed = alternate_email_login_allowed
-        self._default_new_user_role_ids = default_new_user_role_ids == nil ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
-        self._default_new_user_group_ids = default_new_user_group_ids == nil ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
+        self._default_new_user_role_ids = (default_new_user_role_ids == nil) ? nil : { default_new_user_role_ids!.map { AnyInt.init($0) }
+        self._default_new_user_group_ids = (default_new_user_group_ids == nil) ? nil : { default_new_user_group_ids!.map { AnyInt.init($0) }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids

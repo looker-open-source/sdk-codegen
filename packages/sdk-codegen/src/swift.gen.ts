@@ -405,7 +405,7 @@ ${indent}}\n`
         if (ra) {
           return `${this.it(
             varName
-          )} = ${propName} == nil ? nil : { ${propName}!.map { ${specialHandling}.init($0) }`
+          )} = (${propName} == nil) ? nil : { ${propName}!.map { ${specialHandling}.init($0) }`
         }
         return `${this.it(varName)} = ${propName}.map(${specialHandling}.init)`
       }

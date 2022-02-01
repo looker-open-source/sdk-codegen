@@ -365,7 +365,7 @@ public enum PermissionType: String, Codable {
     public init(id: Int, user_id: Int? = nil, role_ids: [Int64]? = nil, req_ids: [String]) {
         self._id = AnyInt.init(id)
         self._user_id = user_id.map(AnyInt.init)
-        self._role_ids = role_ids == nil ? nil : { role_ids!.map { AnyInt.init($0) }
+        self._role_ids = (role_ids == nil) ? nil : { role_ids!.map { AnyInt.init($0) }
         self._req_ids = req_ids.map { AnyString.init($0) }
     }
 
