@@ -32,7 +32,13 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { EnumType, mayQuote, strBody } from './sdkModels'
+import {
+  EnumType,
+  mayQuote,
+  strBody,
+  TypeOfType,
+  typeOfType,
+} from './sdkModels'
 import type { IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
 
@@ -234,17 +240,35 @@ import Foundation
     return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
   }
 
+  isIdProp(_property: IProperty) {
+    // sadly we can't scope fuzzy decoding to only id fields because some "id" refs are not named correctly
+    // TODO just return true until we figure out a generic solution for fuzzy JSON decoding
+    return true
+    // const nameCheck = property.name.toLowerCase()
+    // return (
+    //   nameCheck === 'id' ||
+    //   nameCheck.endsWith('_id') ||
+    //   nameCheck.endsWith('_ids')
+    // )
+  }
+
+  itemType(property: IProperty) {
+    if (
+      typeOfType(property.type) === TypeOfType.Array &&
+      property.type.elementType
+    ) {
+      return property.type.elementType
+    }
+    return property.type
+  }
+
   /**
    * true if this property should use AnyString
    * @param property to check
    */
   useAnyString(property: IProperty) {
-    const nameCheck = property.name.toLowerCase()
-    return (
-      this.anyString &&
-      property.type.name.toLowerCase() === 'string' &&
-      (nameCheck === 'id' || nameCheck.endsWith('_id'))
-    )
+    const typeCheck = this.itemType(property).name.toLowerCase()
+    return this.anyString && typeCheck === 'string' && this.isIdProp(property)
   }
 
   /**
@@ -252,21 +276,23 @@ import Foundation
    * @param property to check
    */
   useAnyInt(property: IProperty) {
-    const nameCheck = property.name.toLowerCase()
-    const typeCheck = property.type.name.toLowerCase()
+    const typeCheck = this.itemType(property).name.toLowerCase()
     return (
       this.anyString &&
       (typeCheck === 'integer' || typeCheck === 'int64') &&
-      (nameCheck === 'id' || nameCheck.endsWith('_id'))
+      this.isIdProp(property)
     )
   }
 
   /**
    * Private version of the name (_ prefix)
+   *
+   * Strips reserved character markings from the name if present
+   *
    * @param name to privatize
    */
   privy(name: string) {
-    return this.reserve('_' + name)
+    return this.reserve('_' + name.replace(/`/g, ''))
   }
 
   getSpecialHandling(property: IProperty) {
@@ -301,17 +327,31 @@ import Foundation
       type.name
     }${optional}\n`
     if (specialHandling) {
+      const ra = typeOfType(property.type) === TypeOfType.Array
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
       const setter = property.required
-        ? `${specialHandling}.init(newValue)`
-        : `newValue.map(${specialHandling}.init)`
-      munge = `${indent}private var ${privy}: ${specialHandling}${optional}\n`
+        ? ra
+          ? `${privy} = newValue.map { ${specialHandling}.init($0) }`
+          : `${privy} = ${specialHandling}.init(newValue)`
+        : ra
+        ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } } else { ${privy} = nil }`
+        : `${privy} = newValue.map(${specialHandling}.init)`
+      const getter = property.required
+        ? ra
+          ? `${privy}.map { $0.value }`
+          : `${privy}.value`
+        : ra
+        ? `if let v = ${privy} { return v.map { $0.value } } else { return nil }`
+        : `${privy}${optional}.value`
+      munge = ra
+        ? `${indent}private var ${privy}: [${specialHandling}]${optional}\n`
+        : `${indent}private var ${privy}: ${specialHandling}${optional}\n`
       declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
       }${optional} {
-${bump}get { ${privy}${optional}.value }
-${bump}set { ${privy} = ${setter} }
+${bump}get { ${getter} }
+${bump}set { ${setter} }
 ${indent}}\n`
     }
     return (
@@ -348,6 +388,29 @@ ${indent}}\n`
     )
   }
 
+  initProp(prop: IProperty) {
+    const propName = this.reserve(prop.name)
+    const specialHandling = this.getSpecialHandling(prop)
+    if (specialHandling) {
+      const ra = typeOfType(prop.type) === TypeOfType.Array
+      const varName = this.privy(propName)
+      if (prop.required) {
+        if (ra) {
+          return `${this.it(
+            varName
+          )} = ${propName}.map { ${specialHandling}.init($0) }`
+        }
+        return `${this.it(varName)} = ${specialHandling}.init(${propName})`
+      } else {
+        if (ra) {
+          return `if let v = ${propName} { ${varName} = v.map { ${specialHandling}.init($0) } } else { ${varName} = nil }`
+        }
+        return `${this.it(varName)} = ${propName}.map(${specialHandling}.init)`
+      }
+    }
+    return `${this.it(propName)} = ${propName}`
+  }
+
   construct(indent: string, type: IType) {
     if (type instanceof EnumType) return ''
     indent = this.bumper(indent)
@@ -361,23 +424,7 @@ ${indent}}\n`
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
-      const specialHandling = this.getSpecialHandling(prop)
-      if (specialHandling) {
-        const varName = this.privy(propName)
-        if (prop.required) {
-          inits.push(
-            `${bump}${this.it(varName)} = ${specialHandling}.init(${propName})`
-          )
-        } else {
-          inits.push(
-            `${bump}${this.it(
-              varName
-            )} = ${propName}.map(${specialHandling}.init)`
-          )
-        }
-      } else {
-        inits.push(`${bump}${this.it(propName)} = ${propName}`)
-      }
+      inits.push(`${bump}${this.initProp(prop)}`)
       posInits.push(`${propName}: ${propName}`)
     })
     const namedInit =
