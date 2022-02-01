@@ -224,8 +224,8 @@ struct TestModel : SDKModel {
         self._num2 = num2.map(AnyInt.init)
         self._string3 = string3.map(AnyString.init)
         self._num3 = num3.map(AnyInt.init)
-        self._list1 = list1 == nil ? nil : list1!.map { AnyInt.init($0) }
-        self._list2 = list2 == nil ? nil : list2!.map { AnyString.init($0) }
+        if let v = list1 { v.map { AnyInt.init($0) } } else { _list1 = nil }
+        if let v = list2 { v.map { AnyString.init($0) } } else { _list2 = nil }
         self._rlist1 = rlist1.map { AnyInt.init($0) }
         self._rlist2 = rlist2.map { AnyString.init($0) }
     }
