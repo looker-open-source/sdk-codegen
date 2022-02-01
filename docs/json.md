@@ -1,6 +1,7 @@
 # Flexible JSON parsing in SDKs
 
 This document helps you answer these questions:
+
 - What's the problem caused by API 4.0 type changes?
 - Is the Looker SDK I'm using compatible?
 - If I'm not using a Looker SDK, how do I solve the problem for my own implementation?
@@ -14,29 +15,26 @@ We introduced API 4.0 to guarantee the JSON payload response types match the API
 ## Lookering forward
 
 Current users of Looker SDKs may have noticed an `id` type may be either `integer` or `string`. For the stable (aka GA, generally available) release of API 4.0, all `id` references will be typed as `string`.
-Using strings for all ID references will allow Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value.
-Also, API users don't need to be concerned with the fact that an ID is a numeric value internally.
+Using strings for all ID references will allow Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value from a monolithic instance.
 
-Theoretically, changing the type of entity IDs could be extremely disruptive when API 4.0 is released.
-
-We have worked on minimizing this disruption for all Looker-provided language SDKs. This document describes some JSON parsing requirements and how our SDKs support them.
+We have worked to minimize the impact of this type change for all Looker-provided language SDKs. This document describes some JSON parsing requirements and how our SDKs support them.
 
 ## JSON parsing requirements
 
-There are many requirements for parsing and producing JSON. Most requirements are identical among languages that support JSON **serialization** and **deserialization**.  **Marshalling** and **unmarshalling** or **encoding** and **decoding** also refer to the same process. 
+There are many requirements for parsing and producing JSON. Most requirements are identical among languages that support JSON **serialization** and **deserialization**. **Marshalling** and **unmarshalling** or **encoding** and **decoding** also refer to the same process.
 
 Serialization is the conversion of a JSON payload into a structure, record, or object of a given language. Deserialization is rendering an instantiated data type to its JSON representation.
 
-Almost all languages include standard first-party JSON serialization and deserialization support, though many have third-party offerings as the de facto standard. 
+Almost all languages include standard first-party JSON serialization and deserialization support, though many have third-party offerings as the de facto standard.
 
 The parsing requirements of concern for the Looker language SDKs are:
 
-1. JSON value types conflicting with the API type specification. This is called **type ambiguity** below. For the Looker API, these conflicts should be automatically resolvable for our SDKs. The conflict is either:
+1. JSON value types conflicting with the API type specification. This is called [type ambiguity](#type-ambiguity) below. For the Looker API, these conflicts should be automatically resolvable for our SDKs. The conflict is either:
    1. a numeric value for a string property (forward compatibility issue)
    2. a string value for an integer property (backward compatibility issue)
 2. New properties in a JSON payload. These are ignored by the SDKs. (See [TypeScript caveats](#typescript-caveats) for additional comments.)
 3. Removed properties in a JSON payload. Typically, the property will end up unassigned. Some SDKs may throw errors with missing required properties, but that client code should be changed anyway if the property no longer exists.
-4. Name changes, like `space` to `folder` and `homepage` to `board`. There is no reasonable automatic solution for this, so type or property renames will require changing SDK existing code.
+4. Name changes, like `space` to `folder` and `homepage` to `board`. There is no reasonable automatic solution for this, so type or property renames will require changing existing SDK client code.
 
 ### What is forward and backward compatibility?
 
@@ -46,16 +44,16 @@ In this document, **forward compatible** means an older SDK can process payloads
 
 Our goal with the Looker language SDKs is to provide both forward and backward compatibility.
 
-The current Looker API server is written in Ruby, which is one of the aforementioned "flexibly typed" languages. The Looker API server accepts ID value references as **either** `integer` or `string` values and converts them internally to the required type.
-This means the LookerAPI server is fully compatible with any Looker SDK for identically named properties and parameters that are integer in an older version and string in a newer version.
+The current Looker API server is written in Ruby, which is one of the aforementioned "flexibly typed" languages. The Looker API server accepts ID value references as **either** `integer` or `string` and converts them internally to the required type.
+Thus, the LookerAPI server is fully compatible with any Looker SDK for identically named properties and parameters that are either integer or string.
 
-### type ambiguity
+### Type ambiguity
 
-With API 3.1, an internal numeric ID value is often returned with `integer` value syntax even though the API specification described the property type as `string`. For API 4.0, the API server always returns property types that comply with the API type specification.
+In API 3.1, an internal numeric ID value sometimes has JSON `integer` value syntax even though the API specification described the property type as `string`. For API 4.0, the API server always returns property types that comply with the API type specification.
 
 For full backward and forward compatibility between the SDK and the Looker API, the SDK should accept either a `string` or `integer` JSON value and convert it to the required target type of either `integer` or `string`.
 
-We've added unit tests for the language SDKs to verify this behavior. This is a sample JSON payload used in many of the tests:
+The Looker SDKs have unit tests to verify this behavior. This is a sample JSON payload used in many of the tests:
 
 ```json
 {
@@ -70,19 +68,22 @@ We've added unit tests for the language SDKs to verify this behavior. This is a 
 }
 ```
 
-#### TypeScript SDK
+The following sections discuss how we handle type ambiguity in each Looker language SDKS.
+
+## TypeScript SDK
+
 The TypeScript SDK fully backward and forward compatible with the string/integer type changes.
 
 Given the following TypeScript interface:
 
 ```ts
- interface ITestModel {
-   string1: string
-   num1: number
-   string2: string
-   num2: number
-   string3: string
-   num3: number
+interface ITestModel {
+  string1: string
+  num1: number
+  string2: string
+  num2: number
+  string3: string
+  num3: number
 }
 ```
 
@@ -91,24 +92,24 @@ We want the TypeScript SDK to successfully deserialize the payload into `ITestMo
 This test passes:
 
 ```ts
- const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp))
- expect(typed.string1).toBe(1)
- expect(typed.num1).toBe(1)
- expect(typed.string2).toBe('2')
- expect(typed.num2).toBe('2')
- expect(typed.string3).toBe('3')
- expect(typed.num3).toBe(3)
- expect((typed as any).string4).toBe('4')
- expect((typed as any).num4).toBe(4)
+const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp))
+expect(typed.string1).toBe(1)
+expect(typed.num1).toBe(1)
+expect(typed.string2).toBe('2')
+expect(typed.num2).toBe('2')
+expect(typed.string3).toBe('3')
+expect(typed.num3).toBe(3)
+expect((typed as any).string4).toBe('4')
+expect((typed as any).num4).toBe(4)
 ```
 
-#### TypeScript caveats
+### TypeScript caveats
 
 The above test reveals a few TypeScript/JavaScript interaction issues. TypeScript types do not exist at runtime, so `num2` is still a string (`'2'`), and the deserialized object does actually contain `string4` and `num4` because JavaScript doesn't know to cast or ignore the properties.
 
 Fortunately, the way JavaScript and the Looker API handles HTTP requests and responses, this doesn't matter at runtime.
 
-#### Python SDK
+## Python SDK
 
 The Python SDK deserializes JSON string or integer types without issue. If the value looks like an integer or string, it will be parsed and converted to the named property type, as shown in this Python SDK unit test:
 
@@ -143,7 +144,7 @@ def test_deserialize_single() -> None:
     )
 ```
 
-### Kotlin SDK
+## Kotlin SDK
 
 The Kotlin SDK uses Google's [GSon](https://github.com/google/gson) parser, which also supports fuzzy JSON types, as shown in this SDK unit test:
 
@@ -174,7 +175,7 @@ The Kotlin SDK uses Google's [GSon](https://github.com/google/gson) parser, whic
     }
 ```
 
-### Swift SDK
+## Swift SDK
 
 Special-case code generation was required for backward and forward compatibility for Swift. (If you have a more elegant way to solve this problem, please let us know!)
 
@@ -268,7 +269,7 @@ This test confirms the flexible deserialization works for integer and string:
  }
 ```
 
-### Look# (C# SDK)
+## Look# (C# SDK)
 
 Look# is fully backward and forward compatible for this type ambiguity, as this SDK unit test shows:
 
@@ -317,13 +318,12 @@ Look# is fully backward and forward compatible for this type ambiguity, as this 
     }
 ```
 
-### GoLook (Go SDK)
+## GoLook (Go SDK)
 
-For full compatibility, the Go SDK runtime is now using a third-party JSON package that has optional [fuzzy JSON type support](https://github.com/json-iterator/go/blob/master/extra/fuzzy_decoder.go).
+The Go SDK runtime uses a third-party JSON package with [fuzzy JSON type support](https://github.com/json-iterator/go/blob/master/extra/fuzzy_decoder.go) for backward and forward compatibility. This gives the Go SDK the same level of compatibility as C# and Kotlin.
 
-This gives the Go SDK the same level of compatibility as C# and Kotlin.
+Below is a unit test verifying "fuzzy" JSON values. More tests can be found in [auth_test.go](../go/rtl/auth_test.go)
 
-This is one of the unit tests verifying "fuzzy" JSON values. More tests can be found in [auth_test.go](../go/rtl/auth_test.go)
 ```go
 	t.Run("Do{} unmarshals struct with mixed string and num types correctly", func(t *testing.T) {
 		mux := http.NewServeMux()
@@ -414,10 +414,10 @@ This is one of the unit tests verifying "fuzzy" JSON values. More tests can be f
 	})
 ```
 
-### Ruby SDK
+## Ruby SDK
 
 The Ruby SDK is dynamically typed, so it is backward and forward compatible, accepting either integer or string without issue.
 
-### LookR (R SDK)
+## LookR (R SDK)
 
 The R language is ["strongly but dynamically typed"](https://mlconference.ai/blog/introduction-to-the-r-programming-language/), so it is backward and forward compatible, accepting either integer or string without issue.
