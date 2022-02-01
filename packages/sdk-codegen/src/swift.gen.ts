@@ -403,9 +403,7 @@ ${indent}}\n`
         return `${this.it(varName)} = ${specialHandling}.init(${propName})`
       } else {
         if (ra) {
-          return `${this.it(
-            varName
-          )} = (${propName} == nil) ? nil : { ${propName}!.map { ${specialHandling}.init($0) }`
+          return `if let v = ${propName} { ${varName} = v.map { AnyInt.init($0) } } else { ${varName} = nil }`
         }
         return `${this.it(varName)} = ${propName}.map(${specialHandling}.init)`
       }
