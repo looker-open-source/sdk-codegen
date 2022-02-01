@@ -335,7 +335,7 @@ import Foundation
           ? `${privy} = newValue.map { ${specialHandling}.init($0) }`
           : `${privy} = ${specialHandling}.init(newValue)`
         : ra
-        ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } else { ${privy} = nil }`
+        ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } } else { ${privy} = nil }`
         : `${privy} = newValue.map(${specialHandling}.init)`
       const getter = property.required
         ? ra

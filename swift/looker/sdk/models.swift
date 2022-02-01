@@ -882,7 +882,7 @@ public struct Board: SDKModel {
      */
     public var section_order: [Int64]? {
         get { if let v = _section_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } else { _section_order = nil } }
+        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil } }
     }
 
     private var _title: AnyString?
@@ -1234,7 +1234,7 @@ public struct BoardSection: SDKModel {
      */
     public var item_order: [Int64]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
     }
 
     private var _visible_item_order: [AnyInt]?
@@ -1243,7 +1243,7 @@ public struct BoardSection: SDKModel {
      */
     public var visible_item_order: [Int64]? {
         get { if let v = _visible_item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } else { _visible_item_order = nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -3155,7 +3155,7 @@ public struct CreateDashboardFilter: SDKModel {
      */
     public var listens_to_filters: [String]? {
         get { if let v = _listens_to_filters { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil } }
     }
 
     /**
@@ -5558,7 +5558,7 @@ public struct DashboardFilter: SDKModel {
      */
     public var listens_to_filters: [String]? {
         get { if let v = _listens_to_filters { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil } }
     }
 
     /**
@@ -6480,7 +6480,7 @@ public struct DBConnection: SDKModel {
      */
     public var user_attribute_fields: [String]? {
         get { if let v = _user_attribute_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } else { _user_attribute_fields = nil } }
+        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } } else { _user_attribute_fields = nil } }
     }
 
     private var _maintenance_cron: AnyString?
@@ -7032,7 +7032,7 @@ public struct Dialect: SDKModel {
      */
     public var connection_tests: [String]? {
         get { if let v = _connection_tests { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _connection_tests = v.map { AnyString.init($0) } else { _connection_tests = nil } }
+        set { if let v = newValue { _connection_tests = v.map { AnyString.init($0) } } else { _connection_tests = nil } }
     }
 
     /**
@@ -7286,7 +7286,7 @@ public struct DiscretePalette: SDKModel {
      */
     public var colors: [String]? {
         get { if let v = _colors { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _colors = v.map { AnyString.init($0) } else { _colors = nil } }
+        set { if let v = newValue { _colors = v.map { AnyString.init($0) } } else { _colors = nil } }
     }
 
     public init(id: String? = nil, label: String? = nil, type: String? = nil, colors: [String]? = nil) {
@@ -7493,7 +7493,7 @@ public struct EmbedSsoParams: SDKModel {
      */
     public var permissions: [String]? {
         get { if let v = _permissions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil } }
     }
 
     private var _models: [AnyString]?
@@ -7502,7 +7502,7 @@ public struct EmbedSsoParams: SDKModel {
      */
     public var models: [String]? {
         get { if let v = _models { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
     }
 
     private var _group_ids: [AnyInt]?
@@ -7511,7 +7511,7 @@ public struct EmbedSsoParams: SDKModel {
      */
     public var group_ids: [Int64]? {
         get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } else { _group_ids = nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil } }
     }
 
     private var _external_group_id: AnyString?
@@ -8502,7 +8502,7 @@ public struct GroupHierarchy: SDKModel {
      */
     public var parent_group_ids: [Int64]? {
         get { if let v = _parent_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _parent_group_ids = v.map { AnyInt.init($0) } else { _parent_group_ids = nil } }
+        set { if let v = newValue { _parent_group_ids = v.map { AnyInt.init($0) } } else { _parent_group_ids = nil } }
     }
 
     private var _role_ids: [AnyInt]?
@@ -8511,7 +8511,7 @@ public struct GroupHierarchy: SDKModel {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: Int64? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, parent_group_ids: [Int64]? = nil, role_ids: [Int64]? = nil) {
@@ -9039,7 +9039,7 @@ public struct HomepageSection: SDKModel {
      */
     public var item_order: [Int64]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -9071,7 +9071,7 @@ public struct HomepageSection: SDKModel {
      */
     public var visible_item_order: [Int64]? {
         get { if let v = _visible_item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } else { _visible_item_order = nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil } }
     }
 
     public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, detail_url: String? = nil, homepage_id: Int64? = nil, homepage_items: [HomepageItem]? = nil, id: Int64? = nil, is_header: Bool? = nil, item_order: [Int64]? = nil, title: String? = nil, updated_at: Date? = nil, description: String? = nil, visible_item_order: [Int64]? = nil) {
@@ -9268,7 +9268,7 @@ public struct Integration: SDKModel {
      */
     public var installed_delegate_oauth_targets: [Int64]? {
         get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } else { _installed_delegate_oauth_targets = nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: Int64? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
@@ -9528,7 +9528,7 @@ public struct IntegrationRequiredField: SDKModel {
      */
     public var any_tag: [String]? {
         get { if let v = _any_tag { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _any_tag = v.map { AnyString.init($0) } else { _any_tag = nil } }
+        set { if let v = newValue { _any_tag = v.map { AnyString.init($0) } } else { _any_tag = nil } }
     }
 
     private var _all_tags: [AnyString]?
@@ -9537,7 +9537,7 @@ public struct IntegrationRequiredField: SDKModel {
      */
     public var all_tags: [String]? {
         get { if let v = _all_tags { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _all_tags = v.map { AnyString.init($0) } else { _all_tags = nil } }
+        set { if let v = newValue { _all_tags = v.map { AnyString.init($0) } } else { _all_tags = nil } }
     }
 
     public init(tag: String? = nil, any_tag: [String]? = nil, all_tags: [String]? = nil) {
@@ -9759,7 +9759,7 @@ public struct LDAPConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -9773,7 +9773,7 @@ public struct LDAPConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -10280,7 +10280,7 @@ public struct LDAPGroupWrite: SDKModel {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -10323,7 +10323,7 @@ public struct LDAPUser: SDKModel {
      */
     public var all_emails: [String]? {
         get { if let v = _all_emails { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _all_emails = v.map { AnyString.init($0) } else { _all_emails = nil } }
+        set { if let v = newValue { _all_emails = v.map { AnyString.init($0) } } else { _all_emails = nil } }
     }
 
     /**
@@ -10355,7 +10355,7 @@ public struct LDAPUser: SDKModel {
      */
     public var groups: [String]? {
         get { if let v = _groups { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _groups = v.map { AnyString.init($0) } else { _groups = nil } }
+        set { if let v = newValue { _groups = v.map { AnyString.init($0) } } else { _groups = nil } }
     }
 
     private var _last_name: AnyString?
@@ -10391,7 +10391,7 @@ public struct LDAPUser: SDKModel {
      */
     public var roles: [String]? {
         get { if let v = _roles { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _roles = v.map { AnyString.init($0) } else { _roles = nil } }
+        set { if let v = newValue { _roles = v.map { AnyString.init($0) } } else { _roles = nil } }
     }
 
     private var _url: AnyString?
@@ -10491,7 +10491,7 @@ public struct LDAPUserAttributeWrite: SDKModel {
      */
     public var user_attribute_ids: [Int64]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -11093,7 +11093,7 @@ public struct LookmlModel: SDKModel {
      */
     public var allowed_db_connection_names: [String]? {
         get { if let v = _allowed_db_connection_names { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } else { _allowed_db_connection_names = nil } }
+        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } } else { _allowed_db_connection_names = nil } }
     }
 
     /**
@@ -11244,7 +11244,7 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var scopes: [String]? {
         get { if let v = _scopes { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil } }
     }
 
     /**
@@ -11325,7 +11325,7 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var files: [String]? {
         get { if let v = _files { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _files = v.map { AnyString.init($0) } else { _files = nil } }
+        set { if let v = newValue { _files = v.map { AnyString.init($0) } } else { _files = nil } }
     }
 
     private var _source_file: AnyString?
@@ -11384,7 +11384,7 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var access_filter_fields: [String]? {
         get { if let v = _access_filter_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _access_filter_fields = v.map { AnyString.init($0) } else { _access_filter_fields = nil } }
+        set { if let v = newValue { _access_filter_fields = v.map { AnyString.init($0) } } else { _access_filter_fields = nil } }
     }
 
     /**
@@ -11413,7 +11413,7 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var index_fields: [String]? {
         get { if let v = _index_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _index_fields = v.map { AnyString.init($0) } else { _index_fields = nil } }
+        set { if let v = newValue { _index_fields = v.map { AnyString.init($0) } } else { _index_fields = nil } }
     }
 
     /**
@@ -11427,7 +11427,7 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var tags: [String]? {
         get { if let v = _tags { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _tags = v.map { AnyString.init($0) } else { _tags = nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } } else { _tags = nil } }
     }
 
     /**
@@ -12017,7 +12017,7 @@ public struct LookmlModelExploreField: SDKModel {
      */
     public var suggestions: [String]? {
         get { if let v = _suggestions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } else { _suggestions = nil } }
+        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil } }
     }
 
     private var _tags: [AnyString]?
@@ -12026,7 +12026,7 @@ public struct LookmlModelExploreField: SDKModel {
      */
     public var tags: [String]? {
         get { if let v = _tags { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _tags = v.map { AnyString.init($0) } else { _tags = nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } } else { _tags = nil } }
     }
 
     private var _type: AnyString?
@@ -12450,7 +12450,7 @@ public struct LookmlModelExploreJoins: SDKModel {
      */
     public var dependent_fields: [String]? {
         get { if let v = _dependent_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _dependent_fields = v.map { AnyString.init($0) } else { _dependent_fields = nil } }
+        set { if let v = newValue { _dependent_fields = v.map { AnyString.init($0) } } else { _dependent_fields = nil } }
     }
 
     private var _fields: [AnyString]?
@@ -12459,7 +12459,7 @@ public struct LookmlModelExploreJoins: SDKModel {
      */
     public var fields: [String]? {
         get { if let v = _fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } } else { _fields = nil } }
     }
 
     private var _foreign_key: AnyString?
@@ -12500,7 +12500,7 @@ public struct LookmlModelExploreJoins: SDKModel {
      */
     public var required_joins: [String]? {
         get { if let v = _required_joins { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _required_joins = v.map { AnyString.init($0) } else { _required_joins = nil } }
+        set { if let v = newValue { _required_joins = v.map { AnyString.init($0) } } else { _required_joins = nil } }
     }
 
     private var _sql_foreign_key: AnyString?
@@ -12587,7 +12587,7 @@ public struct LookmlModelExploreSet: SDKModel {
      */
     public var value: [String]? {
         get { if let v = _value { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _value = v.map { AnyString.init($0) } else { _value = nil } }
+        set { if let v = newValue { _value = v.map { AnyString.init($0) } } else { _value = nil } }
     }
 
     public init(name: String? = nil, value: [String]? = nil) {
@@ -12618,7 +12618,7 @@ public struct LookmlModelExploreSupportedMeasureType: SDKModel {
      */
     public var measure_types: [String]? {
         get { if let v = _measure_types { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _measure_types = v.map { AnyString.init($0) } else { _measure_types = nil } }
+        set { if let v = newValue { _measure_types = v.map { AnyString.init($0) } } else { _measure_types = nil } }
     }
 
     public init(dimension_type: String? = nil, measure_types: [String]? = nil) {
@@ -13603,7 +13603,7 @@ public struct MergeQuery: SDKModel {
      */
     public var pivots: [String]? {
         get { if let v = _pivots { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
     }
 
     private var _result_maker_id: AnyInt?
@@ -13621,7 +13621,7 @@ public struct MergeQuery: SDKModel {
      */
     public var sorts: [String]? {
         get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
     }
 
     /**
@@ -13763,7 +13763,7 @@ public struct ModelFieldSuggestions: SDKModel {
      */
     public var suggestions: [String]? {
         get { if let v = _suggestions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } else { _suggestions = nil } }
+        set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil } }
     }
 
     private var _error: AnyString?
@@ -13887,7 +13887,7 @@ public struct ModelSet: SDKModel {
     private var _models: [AnyString]?
     public var models: [String]? {
         get { if let v = _models { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
     }
 
     private var _name: AnyString?
@@ -14135,7 +14135,7 @@ public struct OIDCConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -14149,7 +14149,7 @@ public struct OIDCConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -14228,7 +14228,7 @@ public struct OIDCConfig: SDKModel {
      */
     public var scopes: [String]? {
         get { if let v = _scopes { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil } }
     }
 
     private var _secret: AnyString?
@@ -14482,7 +14482,7 @@ public struct OIDCGroupWrite: SDKModel {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil) {
@@ -14556,7 +14556,7 @@ public struct OIDCUserAttributeWrite: SDKModel {
      */
     public var user_attribute_ids: [Int64]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
     }
 
     public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
@@ -14711,7 +14711,7 @@ public struct PermissionSet: SDKModel {
     private var _permissions: [AnyString]?
     public var permissions: [String]? {
         get { if let v = _permissions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil } }
     }
 
     private var _url: AnyString?
@@ -15437,7 +15437,7 @@ public struct Query: SDKModel {
      */
     public var fields: [String]? {
         get { if let v = _fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } } else { _fields = nil } }
     }
 
     private var _pivots: [AnyString]?
@@ -15446,7 +15446,7 @@ public struct Query: SDKModel {
      */
     public var pivots: [String]? {
         get { if let v = _pivots { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
     }
 
     private var _fill_fields: [AnyString]?
@@ -15455,7 +15455,7 @@ public struct Query: SDKModel {
      */
     public var fill_fields: [String]? {
         get { if let v = _fill_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } else { _fill_fields = nil } }
+        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } } else { _fill_fields = nil } }
     }
 
     /**
@@ -15478,7 +15478,7 @@ public struct Query: SDKModel {
      */
     public var sorts: [String]? {
         get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
     }
 
     private var _limit: AnyString?
@@ -15519,7 +15519,7 @@ public struct Query: SDKModel {
      */
     public var subtotals: [String]? {
         get { if let v = _subtotals { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } else { _subtotals = nil } }
+        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } } else { _subtotals = nil } }
     }
 
     /**
@@ -16264,7 +16264,7 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      */
     public var sorts: [String]? {
         get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
     }
 
     private var _merge_result_id: AnyString?
@@ -16892,7 +16892,7 @@ public struct SamlConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     private var _default_new_user_group_ids: [AnyInt]?
@@ -16901,7 +16901,7 @@ public struct SamlConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -17151,7 +17151,7 @@ public struct SamlGroupWrite: SDKModel {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -17296,7 +17296,7 @@ public struct SamlUserAttributeWrite: SDKModel {
      */
     public var user_attribute_ids: [Int64]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -19300,7 +19300,7 @@ public struct User: SDKModel {
      */
     public var group_ids: [Int64]? {
         get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } else { _group_ids = nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil } }
     }
 
     private var _home_folder_id: AnyString?
@@ -19350,7 +19350,7 @@ public struct User: SDKModel {
      */
     public var looker_versions: [String]? {
         get { if let v = _looker_versions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _looker_versions = v.map { AnyString.init($0) } else { _looker_versions = nil } }
+        set { if let v = newValue { _looker_versions = v.map { AnyString.init($0) } } else { _looker_versions = nil } }
     }
 
     /**
@@ -19378,7 +19378,7 @@ public struct User: SDKModel {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     /**
@@ -20647,7 +20647,7 @@ public struct WriteBoard: SDKModel {
      */
     public var section_order: [Int64]? {
         get { if let v = _section_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } else { _section_order = nil } }
+        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil } }
     }
 
     private var _title: AnyString?
@@ -20811,7 +20811,7 @@ public struct WriteBoardSection: SDKModel {
      */
     public var item_order: [Int64]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -21106,7 +21106,7 @@ public struct WriteCreateDashboardFilter: SDKModel {
      */
     public var listens_to_filters: [String]? {
         get { if let v = _listens_to_filters { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil } }
     }
 
     /**
@@ -21793,7 +21793,7 @@ public struct WriteDashboardFilter: SDKModel {
      */
     public var listens_to_filters: [String]? {
         get { if let v = _listens_to_filters { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } else { _listens_to_filters = nil } }
+        set { if let v = newValue { _listens_to_filters = v.map { AnyString.init($0) } } else { _listens_to_filters = nil } }
     }
 
     /**
@@ -22219,7 +22219,7 @@ public struct WriteDBConnection: SDKModel {
      */
     public var user_attribute_fields: [String]? {
         get { if let v = _user_attribute_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } else { _user_attribute_fields = nil } }
+        set { if let v = newValue { _user_attribute_fields = v.map { AnyString.init($0) } } else { _user_attribute_fields = nil } }
     }
 
     private var _maintenance_cron: AnyString?
@@ -22683,7 +22683,7 @@ public struct WriteIntegration: SDKModel {
      */
     public var installed_delegate_oauth_targets: [Int64]? {
         get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } else { _installed_delegate_oauth_targets = nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
     public init(enabled: Bool? = nil, params: [IntegrationParam]? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
@@ -22884,7 +22884,7 @@ public struct WriteLDAPConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     private var _default_new_user_role_ids: [AnyInt]?
@@ -22893,7 +22893,7 @@ public struct WriteLDAPConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -23173,7 +23173,7 @@ public struct WriteLookmlModel: SDKModel {
      */
     public var allowed_db_connection_names: [String]? {
         get { if let v = _allowed_db_connection_names { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } else { _allowed_db_connection_names = nil } }
+        set { if let v = newValue { _allowed_db_connection_names = v.map { AnyString.init($0) } } else { _allowed_db_connection_names = nil } }
     }
 
     private var _name: AnyString?
@@ -23352,7 +23352,7 @@ public struct WriteMergeQuery: SDKModel {
      */
     public var pivots: [String]? {
         get { if let v = _pivots { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
     }
 
     private var _sorts: [AnyString]?
@@ -23361,7 +23361,7 @@ public struct WriteMergeQuery: SDKModel {
      */
     public var sorts: [String]? {
         get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
     }
 
     /**
@@ -23404,7 +23404,7 @@ public struct WriteModelSet: SDKModel {
     private var _models: [AnyString]?
     public var models: [String]? {
         get { if let v = _models { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _models = v.map { AnyString.init($0) } else { _models = nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
     }
 
     private var _name: AnyString?
@@ -23553,7 +23553,7 @@ public struct WriteOIDCConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     private var _default_new_user_role_ids: [AnyInt]?
@@ -23562,7 +23562,7 @@ public struct WriteOIDCConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -23617,7 +23617,7 @@ public struct WriteOIDCConfig: SDKModel {
      */
     public var scopes: [String]? {
         get { if let v = _scopes { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } else { _scopes = nil } }
+        set { if let v = newValue { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil } }
     }
 
     private var _secret: AnyString?
@@ -23795,7 +23795,7 @@ public struct WritePermissionSet: SDKModel {
     private var _permissions: [AnyString]?
     public var permissions: [String]? {
         get { if let v = _permissions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } else { _permissions = nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil } }
     }
 
     public init(name: String? = nil, permissions: [String]? = nil) {
@@ -24043,7 +24043,7 @@ public struct WriteQuery: SDKModel {
      */
     public var fields: [String]? {
         get { if let v = _fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _fields = v.map { AnyString.init($0) } else { _fields = nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } } else { _fields = nil } }
     }
 
     private var _pivots: [AnyString]?
@@ -24052,7 +24052,7 @@ public struct WriteQuery: SDKModel {
      */
     public var pivots: [String]? {
         get { if let v = _pivots { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } else { _pivots = nil } }
+        set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
     }
 
     private var _fill_fields: [AnyString]?
@@ -24061,7 +24061,7 @@ public struct WriteQuery: SDKModel {
      */
     public var fill_fields: [String]? {
         get { if let v = _fill_fields { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } else { _fill_fields = nil } }
+        set { if let v = newValue { _fill_fields = v.map { AnyString.init($0) } } else { _fill_fields = nil } }
     }
 
     /**
@@ -24084,7 +24084,7 @@ public struct WriteQuery: SDKModel {
      */
     public var sorts: [String]? {
         get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } else { _sorts = nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
     }
 
     private var _limit: AnyString?
@@ -24125,7 +24125,7 @@ public struct WriteQuery: SDKModel {
      */
     public var subtotals: [String]? {
         get { if let v = _subtotals { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } else { _subtotals = nil } }
+        set { if let v = newValue { _subtotals = v.map { AnyString.init($0) } } else { _subtotals = nil } }
     }
 
     /**
@@ -24456,7 +24456,7 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var default_new_user_role_ids: [Int64]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     private var _default_new_user_group_ids: [AnyInt]?
@@ -24465,7 +24465,7 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var default_new_user_group_ids: [Int64]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**

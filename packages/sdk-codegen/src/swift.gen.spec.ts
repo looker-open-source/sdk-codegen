@@ -350,7 +350,7 @@ public enum PermissionType: String, Codable {
      */
     public var role_ids: [Int64]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
     }
 
     private var _req_ids: [AnyString]
