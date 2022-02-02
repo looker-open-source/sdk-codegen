@@ -67,6 +67,7 @@ jobs:
               - packages/extension-utils/**
             gosdk:
               - packages/go/**
+
       - name: Debug info
         run: |
           echo "${{ toJSON(steps.filter.outputs) }}"

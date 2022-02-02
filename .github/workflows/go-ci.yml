@@ -13,11 +13,11 @@ on:
   workflow_dispatch:
 
 env:
-  GO_JUNIT_OUTPUT_DIR: results/gosdk
+  JUNIT_OUTPUT_DIR: results
   JUNIT_ARTIFACT_DIR: gosdk-test-results
 
 jobs:
-  unit1:
+  unit:
     name: Unit - ${{ matrix.os }} / Go ${{ matrix.go-version }}
     env:
       GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.gosdkunitresult${{ matrix.go-version }}.xml
@@ -48,18 +48,19 @@ jobs:
 
       - name: Run unit tests
         run: |
+          mkdir ${{ env.JUNIT_OUTPUT_DIR }}
           cd go/rtl
-          go test -v 2>&1 | go-junit-report > ../${{ env.GO_JUNIT_OUTPUT_DIR }}/${{ env.GO_JUNIT_OUTPUT_NAME }}
+          go test -v 2>&1 | go-junit-report > ../../${{ env.JUNIT_OUTPUT_DIR }}/${{ env.GO_JUNIT_OUTPUT_NAME }}
 
       - name: Upload Go unit test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ GO_JUNIT_ARTIFACT_DIR }}
-          path: ${{ env.GO_JUNIT_OUTPUT_DIR }}
+          name: ${{ env.JUNIT_ARTIFACT_DIR }}
+          path: ${{ env.JUNIT_OUTPUT_DIR }}
 
   publish-test-results:
-    needs: [unit]
+    needs: unit
     if: success() || failure()
     runs-on: ubuntu-latest
 
