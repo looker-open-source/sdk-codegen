@@ -168,7 +168,7 @@ public class AlertPatch : SdkModel
   public double? threshold { get; set; } = null;
 }
 
-/// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+/// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
 public enum Align
 {
   [EnumMember(Value = "left")]
@@ -330,7 +330,7 @@ public class BoardSection : SdkModel
   public DateTime? updated_at { get; set; } = null;
 }
 
-/// Field category Valid values are: "parameter", "filter", "measure", "dimension".
+/// Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
 public enum Category
 {
   [EnumMember(Value = "parameter")]
@@ -394,7 +394,7 @@ public class Command : SdkModel
   public LinkedContentType? linked_content_type { get; set; }
 }
 
-/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
 public enum ComparisonType
 {
   [EnumMember(Value = "EQUAL_TO")]
@@ -1640,7 +1640,7 @@ public class DependencyGraph : SdkModel
   public string? graph_text { get; set; } = null;
 }
 
-/// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+/// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
 public enum DependencyStatus
 {
   [EnumMember(Value = "lock_optional")]
@@ -1653,7 +1653,7 @@ public enum DependencyStatus
   install_none
 }
 
-/// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+/// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
 public enum DestinationType
 {
   [EnumMember(Value = "EMAIL")]
@@ -1847,7 +1847,7 @@ public class ExternalOauthApplication : SdkModel
   public DateTime? created_at { get; set; } = null;
 }
 
-/// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+/// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
 public enum FillStyle
 {
   [EnumMember(Value = "enumeration")]
@@ -1932,7 +1932,7 @@ public class FolderBase : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
-/// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+/// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
 public enum Format
 {
   [EnumMember(Value = "topojson")]
@@ -2327,7 +2327,7 @@ public class InternalHelpResourcesContent : SdkModel
   public string? markdown_content { get; set; } = null;
 }
 
-/// The type of the investigative content Valid values are: "dashboard".
+/// The type of the investigative content Valid values are: "dashboard". (Enum defined in Alert)
 public enum InvestigativeContentType
 {
   [EnumMember(Value = "dashboard")]
@@ -2559,7 +2559,7 @@ public class LegacyFeature : SdkModel
   public bool? has_disabled_on_upgrade { get; set; } = null;
 }
 
-/// Name of the command Valid values are: "dashboard", "lookml_dashboard".
+/// Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
 public enum LinkedContentType
 {
   [EnumMember(Value = "dashboard")]
@@ -3348,7 +3348,7 @@ public class ModelsNotValidated : SdkModel
   public string? project_file_id { get; set; } = null;
 }
 
-/// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
+/// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
 public enum Name
 {
   [EnumMember(Value = "day")]
@@ -3556,7 +3556,7 @@ public class PermissionSet : SdkModel
   public string? url { get; set; } = null;
 }
 
-/// Type of permission: "view" or "edit" Valid values are: "view", "edit".
+/// Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 public enum PermissionType
 {
   [EnumMember(Value = "view")]
@@ -3709,7 +3709,7 @@ public class ProjectWorkspace : SdkModel
   public string? lookml_type { get; set; } = null;
 }
 
-/// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+/// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
 public enum PullRequestMode
 {
   [EnumMember(Value = "off")]
@@ -3883,7 +3883,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -4568,7 +4568,7 @@ public class SupportAccessStatus : SdkModel
   public DateTime? open_until { get; set; } = null;
 }
 
-/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
 public enum SupportedActionTypes
 {
   [EnumMember(Value = "cell")]
@@ -4579,7 +4579,7 @@ public enum SupportedActionTypes
   dashboard
 }
 
-/// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+/// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
 public enum SupportedDownloadSettings
 {
   [EnumMember(Value = "push")]
@@ -4588,7 +4588,7 @@ public enum SupportedDownloadSettings
   url
 }
 
-/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 public enum SupportedFormats
 {
   [EnumMember(Value = "txt")]
@@ -4619,7 +4619,7 @@ public enum SupportedFormats
   csv_zip
 }
 
-/// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+/// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
 public enum SupportedFormattings
 {
   [EnumMember(Value = "formatted")]
@@ -4628,7 +4628,7 @@ public enum SupportedFormattings
   unformatted
 }
 
-/// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+/// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
 public enum SupportedVisualizationFormattings
 {
   [EnumMember(Value = "apply")]
@@ -4811,7 +4811,7 @@ public class UserAttribute : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
-/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
 public enum UserAttributeFilterTypes
 {
   [EnumMember(Value = "advanced_filter_string")]
@@ -4949,7 +4949,7 @@ public class ValidationErrorDetail : SdkModel
   public string documentation_url { get; set; } = "";
 }
 
-/// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+/// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
 public enum WeekStartDay
 {
   [EnumMember(Value = "monday")]

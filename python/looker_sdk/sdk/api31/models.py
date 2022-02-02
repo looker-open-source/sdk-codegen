@@ -70,7 +70,7 @@ class AccessToken(model.Model):
 
 class Align(enum.Enum):
     """
-    The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+    The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
 
     """
 
@@ -213,7 +213,7 @@ class BackupConfiguration(model.Model):
 
 class Category(enum.Enum):
     """
-    Field category Valid values are: "parameter", "filter", "measure", "dimension".
+    Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
 
     """
 
@@ -2817,7 +2817,7 @@ class DependencyGraph(model.Model):
 
 class DependencyStatus(enum.Enum):
     """
-    Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+    Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
 
     """
 
@@ -3152,7 +3152,7 @@ class Error(model.Model):
 
 class FillStyle(enum.Enum):
     """
-    The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+    The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
 
     """
 
@@ -3329,7 +3329,7 @@ class FolderBase(model.Model):
 
 class Format(enum.Enum):
     """
-    Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+    Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
 
     """
 
@@ -6295,7 +6295,7 @@ class ModelsNotValidated(model.Model):
 
 class Name(enum.Enum):
     """
-    The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
+    The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
 
     """
 
@@ -6690,7 +6690,7 @@ class PermissionSet(model.Model):
 
 class PermissionType(enum.Enum):
     """
-    Type of permission: "view" or "edit" Valid values are: "view", "edit".
+    Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 
     """
 
@@ -7019,7 +7019,7 @@ class ProjectWorkspace(model.Model):
 
 class PullRequestMode(enum.Enum):
     """
-    The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+    The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
 
     """
 
@@ -7384,7 +7384,7 @@ class RepositoryCredential(model.Model):
 
 class ResultFormat(enum.Enum):
     """
-    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
 
     """
 
@@ -8573,7 +8573,7 @@ class SqlQueryCreate(model.Model):
 
 class SupportedActionTypes(enum.Enum):
     """
-    A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+    A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
 
     """
 
@@ -8589,7 +8589,7 @@ SupportedActionTypes.__new__ = model.safe_enum__new__  # type: ignore
 
 class SupportedDownloadSettings(enum.Enum):
     """
-    A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+    A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
 
     """
 
@@ -8604,7 +8604,7 @@ SupportedDownloadSettings.__new__ = model.safe_enum__new__  # type: ignore
 
 class SupportedFormats(enum.Enum):
     """
-    A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+    A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 
     """
 
@@ -8630,7 +8630,7 @@ SupportedFormats.__new__ = model.safe_enum__new__  # type: ignore
 
 class SupportedFormattings(enum.Enum):
     """
-    A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+    A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
 
     """
 
@@ -8645,7 +8645,7 @@ SupportedFormattings.__new__ = model.safe_enum__new__  # type: ignore
 
 class SupportedVisualizationFormattings(enum.Enum):
     """
-    A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+    A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
 
     """
 
@@ -9057,7 +9057,7 @@ class UserAttribute(model.Model):
 
 class UserAttributeFilterTypes(enum.Enum):
     """
-    An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+    An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
 
     """
 
@@ -9340,7 +9340,7 @@ class ValidationErrorDetail(model.Model):
 
 class WeekStartDay(enum.Enum):
     """
-    The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+    The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
 
     """
 

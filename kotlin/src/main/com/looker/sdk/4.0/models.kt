@@ -174,7 +174,7 @@ data class AlertPatch (
 ) : Serializable
 
 /**
- * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 enum class Align : Serializable {
     left,
@@ -343,7 +343,7 @@ data class BoardSection (
 ) : Serializable
 
 /**
- * Field category Valid values are: "parameter", "filter", "measure", "dimension".
+ * Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
  */
 enum class Category : Serializable {
     parameter,
@@ -407,7 +407,7 @@ data class Command (
 ) : Serializable
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 enum class ComparisonType : Serializable {
     EQUAL_TO,
@@ -1740,7 +1740,7 @@ data class DependencyGraph (
 ) : Serializable
 
 /**
- * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+ * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
  */
 enum class DependencyStatus : Serializable {
     lock_optional,
@@ -1750,7 +1750,7 @@ enum class DependencyStatus : Serializable {
 }
 
 /**
- * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
  */
 enum class DestinationType : Serializable {
     EMAIL,
@@ -1956,7 +1956,7 @@ data class ExternalOauthApplication (
 ) : Serializable
 
 /**
- * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+ * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
  */
 enum class FillStyle : Serializable {
     enumeration,
@@ -2042,7 +2042,7 @@ data class FolderBase (
 ) : Serializable
 
 /**
- * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+ * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
  */
 enum class Format : Serializable {
     topojson,
@@ -2457,7 +2457,7 @@ data class InternalHelpResourcesContent (
 ) : Serializable
 
 /**
- * The type of the investigative content Valid values are: "dashboard".
+ * The type of the investigative content Valid values are: "dashboard". (Enum defined in Alert)
  */
 enum class InvestigativeContentType : Serializable {
     dashboard
@@ -2699,7 +2699,7 @@ data class LegacyFeature (
 ) : Serializable
 
 /**
- * Name of the command Valid values are: "dashboard", "lookml_dashboard".
+ * Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
  */
 enum class LinkedContentType : Serializable {
     dashboard,
@@ -3530,7 +3530,7 @@ data class ModelsNotValidated (
 ) : Serializable
 
 /**
- * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
+ * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
  */
 enum class Name : Serializable {
     day,
@@ -3739,7 +3739,7 @@ data class PermissionSet (
 ) : Serializable
 
 /**
- * Type of permission: "view" or "edit" Valid values are: "view", "edit".
+ * Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
  */
 enum class PermissionType : Serializable {
     view,
@@ -3897,7 +3897,7 @@ data class ProjectWorkspace (
 ) : Serializable
 
 /**
- * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+ * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
  */
 enum class PullRequestMode : Serializable {
     off,
@@ -4073,7 +4073,7 @@ data class RepositoryCredential (
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
@@ -4797,7 +4797,7 @@ data class SupportAccessStatus (
 ) : Serializable
 
 /**
- * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
  */
 enum class SupportedActionTypes : Serializable {
     cell,
@@ -4806,7 +4806,7 @@ enum class SupportedActionTypes : Serializable {
 }
 
 /**
- * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+ * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
  */
 enum class SupportedDownloadSettings : Serializable {
     push,
@@ -4814,7 +4814,7 @@ enum class SupportedDownloadSettings : Serializable {
 }
 
 /**
- * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
  */
 enum class SupportedFormats : Serializable {
     txt,
@@ -4833,7 +4833,7 @@ enum class SupportedFormats : Serializable {
 }
 
 /**
- * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+ * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
  */
 enum class SupportedFormattings : Serializable {
     formatted,
@@ -4841,7 +4841,7 @@ enum class SupportedFormattings : Serializable {
 }
 
 /**
- * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+ * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
  */
 enum class SupportedVisualizationFormattings : Serializable {
     apply,
@@ -5038,7 +5038,7 @@ data class UserAttribute (
 ) : Serializable
 
 /**
- * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+ * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
  */
 enum class UserAttributeFilterTypes : Serializable {
     advanced_filter_string,
@@ -5176,7 +5176,7 @@ data class ValidationErrorDetail (
 ) : Serializable
 
 /**
- * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+ * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
  */
 enum class WeekStartDay : Serializable {
     monday,

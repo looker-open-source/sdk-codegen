@@ -6710,7 +6710,7 @@ class Looker40SDK(api_methods.APIMethods):
         # Search term pattern (evaluated as as `%term%`)
         term: Optional[str] = None,
         # Suggestion filters with field name keys and comparison expressions
-        filters: Optional[mdls.object] = None,
+        filters: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ModelFieldSuggestions:
         """Model field name suggestions"""
