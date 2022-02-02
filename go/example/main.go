@@ -60,6 +60,7 @@ func main() {
 		lookerIniPath = os.Args[1]
 	}
 
+
 	// Read settings from ini file
 	cfg, err := rtl.NewSettingsFromFile(lookerIniPath, nil)
 	check(err)
