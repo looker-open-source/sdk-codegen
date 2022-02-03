@@ -25,7 +25,7 @@
  */
 
 /**
- * 429 API methods
+ * 437 API methods
  */
 
 
@@ -1047,6 +1047,100 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Get Support Access Allowlist Users
+     *
+     * Returns the users that have been added to the Support Access Allowlist
+     *
+     * @param {String} fields Requested fields.
+     *
+     * GET /support_access/allowlist -> Array<SupportAccessAllowlistEntry>
+     */
+    @JvmOverloads fun get_support_access_allowlist_entries(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<Array<SupportAccessAllowlistEntry>>("/support_access/allowlist", 
+            mapOf("fields" to fields))
+    }
+
+
+    /**
+     * ### Add Support Access Allowlist Users
+     *
+     * Adds a list of emails to the Allowlist, using the provided reason
+     *
+     * @param {SupportAccessAddEntries} body
+     *
+     * POST /support_access/allowlist -> Array<SupportAccessAllowlistEntry>
+     */
+    fun add_support_access_allowlist_entries(
+        body: SupportAccessAddEntries
+    ) : SDKResponse {
+        return this.post<Array<SupportAccessAllowlistEntry>>("/support_access/allowlist", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete Support Access Allowlist User
+     *
+     * Deletes the specified Allowlist Entry Id
+     *
+     * @param {String} entry_id Id of Allowlist Entry
+     *
+     * DELETE /support_access/allowlist/{entry_id} -> String
+     */
+    fun delete_support_access_allowlist_entry(
+        entry_id: String
+    ) : SDKResponse {
+        val path_entry_id = encodeParam(entry_id)
+        return this.delete<String>("/support_access/allowlist/${path_entry_id}", mapOf())
+    }
+
+
+    /**
+     * ### Enable Support Access
+     *
+     * Enables Support Access for the provided duration
+     *
+     * @param {SupportAccessEnable} body
+     *
+     * PUT /support_access/enable -> SupportAccessStatus
+     */
+    fun enable_support_access(
+        body: SupportAccessEnable
+    ) : SDKResponse {
+        return this.put<SupportAccessStatus>("/support_access/enable", mapOf(), body)
+    }
+
+
+    /**
+     * ### Disable Support Access
+     *
+     * Disables Support Access immediately
+     *
+     * PUT /support_access/disable -> SupportAccessStatus
+     */
+    fun disable_support_access(
+
+    ) : SDKResponse {
+        return this.put<SupportAccessStatus>("/support_access/disable", mapOf())
+    }
+
+
+    /**
+     * ### Support Access Status
+     *
+     * Returns the current Support Access Status
+     *
+     * GET /support_access/status -> SupportAccessStatus
+     */
+    fun support_access_status(
+
+    ) : SDKResponse {
+        return this.get<SupportAccessStatus>("/support_access/status", mapOf())
+    }
+
+
+    /**
      * ### Get currently locked-out users.
      *
      * @param {String} fields Include only these fields in the response
@@ -1962,6 +2056,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - marketplace_enabled
      *  - whitelabel_configuration
      *  - custom_welcome_email
+     *  - onboarding_enabled
      *
      * @param {String} fields Requested fields
      *
@@ -1984,6 +2079,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - marketplace_enabled
      *  - whitelabel_configuration
      *  - custom_welcome_email
+     *  - onboarding_enabled
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -1998,6 +2094,21 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         return this.patch<Setting>("/setting", 
             mapOf("fields" to fields), body)
+    }
+
+
+    /**
+     * ### Get current SMTP status.
+     *
+     * @param {String} fields Include only these fields in the response
+     *
+     * GET /smtp_status -> SmtpStatus
+     */
+    @JvmOverloads fun smtp_status(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<SmtpStatus>("/smtp_status", 
+            mapOf("fields" to fields))
     }
 
 
@@ -3850,7 +3961,9 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+     * or if they contain soft-deleted content.
+     *
      * In API 4.0+, all personal folders will be returned.
      *
      * @param {String} fields Requested fields.
@@ -5137,11 +5250,29 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Field name suggestions for a model and view
      *
+     * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+     *
+     * ```ruby
+     * {'users.age': '>=60'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '<30'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '=50'}
+     * ```
+     *
      * @param {String} model_name Name of model
      * @param {String} view_name Name of view
      * @param {String} field_name Name of field to use for suggestions
-     * @param {String} term Search term
-     * @param {String} filters Suggestion filters
+     * @param {String} term Search term pattern (evaluated as as `%term%`)
+     * @param {Any} filters Suggestion filters with field name keys and comparison expressions
      *
      * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
      */
@@ -5150,7 +5281,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         view_name: String,
         field_name: String,
         term: String? = null,
-        filters: String? = null
+        filters: Any? = null
     ) : SDKResponse {
         val path_model_name = encodeParam(model_name)
         val path_view_name = encodeParam(view_name)
@@ -5256,6 +5387,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} schema_name Optional. Return only tables for this schema
      * @param {Boolean} cache True to fetch from cache, false to load fresh
      * @param {String} fields Requested fields.
+     * @param {String} table_filter Optional. Return tables with names that contain this value
+     * @param {Long} table_limit Optional. Return tables up to the table_limit
      *
      * GET /connections/{connection_name}/tables -> Array<SchemaTables>
      */
@@ -5264,14 +5397,18 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         database: String? = null,
         schema_name: String? = null,
         cache: Boolean? = null,
-        fields: String? = null
+        fields: String? = null,
+        table_filter: String? = null,
+        table_limit: Long? = null
     ) : SDKResponse {
         val path_connection_name = encodeParam(connection_name)
         return this.get<Array<SchemaTables>>("/connections/${path_connection_name}/tables", 
             mapOf("database" to database,
                  "schema_name" to schema_name,
                  "cache" to cache,
-                 "fields" to fields))
+                 "fields" to fields,
+                 "table_filter" to table_filter,
+                 "table_limit" to table_limit))
     }
 
 
@@ -6853,6 +6990,37 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_render_task_id = encodeParam(render_task_id)
         return this.get<String>("/render_tasks/${path_render_task_id}/results", mapOf())
+    }
+
+
+    /**
+     * ### Create a new task to render a dashboard element to an image.
+     *
+     * Returns a render task object.
+     * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+     * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+     *
+     * @param {String} dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+     * @param {String} result_format Output type: png or jpg
+     * @param {Long} width Output width in pixels
+     * @param {Long} height Output height in pixels
+     * @param {String} fields Requested fields.
+     *
+     * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+     */
+    @JvmOverloads fun create_dashboard_element_render_task(
+        dashboard_element_id: String,
+        result_format: String,
+        width: Long,
+        height: Long,
+        fields: String? = null
+    ) : SDKResponse {
+        val path_dashboard_element_id = encodeParam(dashboard_element_id)
+        val path_result_format = encodeParam(result_format)
+        return this.post<RenderTask>("/render_tasks/dashboard_elements/${path_dashboard_element_id}/${path_result_format}", 
+            mapOf("width" to width,
+                 "height" to height,
+                 "fields" to fields))
     }
 
     //endregion RenderTask: Manage Render Tasks

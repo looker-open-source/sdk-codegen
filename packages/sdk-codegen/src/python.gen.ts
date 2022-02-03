@@ -536,6 +536,7 @@ ${this.hooks.join('\n')}
       number: { default: this.nullStr, name: 'float' },
       password: { default: this.nullStr, name: 'str', asVal: asString },
       string: { default: this.nullStr, name: 'str', asVal: asString },
+      object: { default: this.nullStr, name: 'str', asVal: asString },
       uri: { default: this.nullStr, name: 'str', asVal: asString },
       void: { default: this.nullStr, name: 'None' },
     }

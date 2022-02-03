@@ -40,30 +40,31 @@ jobs:
         with:
           filters: |
             apix:
-              - packages/code-editor/**
-              - packages/run-it/**
-              - packages/api-explorer/**
-              - packages/extension-api-explorer/**
-              - packages/extension-utils/**
+              - packages/code-editor/**/*
+              - packages/run-it/**/*
+              - packages/api-explorer/**/*
+              - packages/extension-api-explorer/**/*
+              - packages/extension-utils/**/*
             codegen:
-              - packages/sdk-codegen/**
-              - packages/sdk-codegen-utils/**
-              - packages/sdk-codegen-scripts/**
+              - packages/sdk-codegen/**/*
+              - packages/sdk-codegen-utils/**/*
+              - packages/sdk-codegen-scripts/**/*
             hackathon:
-              - packages/wholly-sheet/**
-              - packages/hackathon/**
+              - packages/wholly-sheet/**/*
+              - packages/hackathon/**/*
             python:
-              - python/**
+              - python/**/*
             resources:
-              - bin/looker-resources-index/**
-              - docs/resources/**
+              - bin/looker-resources-index/**/*
+              - docs/resources/**/*
             tssdk:
-              - packages/sdk/**
-              - packages/sdk-rtl/**
-              - packages/sdk-node/**
-              - packages/extension-sdk/**
-              - packages/extension-sdk-react/**
-              - packages/extension-utils/**
+              - packages/sdk/**/*
+              - packages/sdk-rtl/**/*
+              - packages/sdk-node/**/*
+              - packages/extension-sdk/**/*
+              - packages/extension-sdk-react/**/*
+              - packages/extension-utils/**/*
+
       - name: Debug info
         run: |
           echo "${{ toJSON(steps.filter.outputs) }}"
@@ -85,6 +86,10 @@ jobs:
           --data '{
             "name": "Codegen Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Codegen Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -100,6 +105,10 @@ jobs:
           --data '{
             "name": "Typescript Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Typescript Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -115,6 +124,10 @@ jobs:
           --data '{
             "name": "Python Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Python Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail
@@ -130,6 +143,10 @@ jobs:
           --data '{
             "name": "APIX Tests",
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / APIX Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
             "conclusion": "success"
           }' \
           --fail

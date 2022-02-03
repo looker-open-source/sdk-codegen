@@ -2358,6 +2358,17 @@
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
 
+"@looker/sdk@21.20.0 - 2.0", "@looker/sdk@21.4.1 - 2.0":
+  version "21.20.0"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.0.tgz#81f00b6bddc3d47406c3dc74ad2480004622a567"
+  integrity sha512-h4cmD3zACcAQZ+3P9iSO1OzXUqdNq+1iaaVO4Py8IY9LPArkwZghlTIzKMG9XAqUM+xqXDTKXI88vFmBllCy5w==
+  dependencies:
+    "@looker/sdk-rtl" "^21.2.0"
+    ini "^1.3.8"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+
 "@mdx-js/util@1.6.22":
   version "1.6.22"
   resolved "https://registry.yarnpkg.com/@mdx-js/util/-/util-1.6.22.tgz#219dfd89ae5b97a8801f015323ffa4b62f45718b"

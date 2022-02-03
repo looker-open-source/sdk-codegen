@@ -25,7 +25,7 @@
  */
 
 /**
- * 301 API models: 223 Spec, 0 Request, 58 Write, 20 Enum
+ * 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
  */
 
 
@@ -11192,6 +11192,7 @@ public struct LookmlModelExplore: SDKModel {
         case joins
         case _group_label = "group_label"
         case supported_measure_types
+        case _always_join = "always_join"
     }
     private var _id: AnyString?
     /**
@@ -11456,7 +11457,16 @@ public struct LookmlModelExplore: SDKModel {
      */
     public var supported_measure_types: [LookmlModelExploreSupportedMeasureType]?
 
-    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil) {
+    private var _always_join: [AnyString]?
+    /**
+     * An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)
+     */
+    public var always_join: [String]? {
+        get { if let v = _always_join { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _always_join = v.map { AnyString.init($0) } } else { _always_join = nil } }
+    }
+
+    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil, always_join: [String]? = nil) {
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._description = description.map(AnyString.init)
@@ -11495,6 +11505,7 @@ public struct LookmlModelExplore: SDKModel {
         self.joins = joins
         self._group_label = group_label.map(AnyString.init)
         self.supported_measure_types = supported_measure_types
+        if let v = always_join { _always_join = v.map { AnyString.init($0) } } else { _always_join = nil }
     }
 
 }
@@ -18000,6 +18011,7 @@ public struct SchemaTables: SDKModel {
         case _name = "name"
         case is_default
         case tables
+        case table_limit_hit
     }
     private var _name: AnyString?
     /**
@@ -18020,10 +18032,16 @@ public struct SchemaTables: SDKModel {
      */
     public var tables: [SchemaTable]?
 
-    public init(name: String? = nil, is_default: Bool? = nil, tables: [SchemaTable]? = nil) {
+    /**
+     * True if the table limit was hit while retrieving tables in this schema (read-only)
+     */
+    public var table_limit_hit: Bool?
+
+    public init(name: String? = nil, is_default: Bool? = nil, tables: [SchemaTable]? = nil, table_limit_hit: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self.is_default = is_default
         self.tables = tables
+        self.table_limit_hit = table_limit_hit
     }
 
 }
@@ -18273,12 +18291,90 @@ public struct Setting: SDKModel {
 
     public var custom_welcome_email: CustomWelcomeEmail?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil) {
+    /**
+     * Toggle onboarding on or off
+     */
+    public var onboarding_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.whitelabel_configuration = whitelabel_configuration
         self.custom_welcome_email = custom_welcome_email
+        self.onboarding_enabled = onboarding_enabled
+    }
+
+}
+
+public struct SmtpNodeStatus: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case is_valid
+        case _message = "message"
+        case _hostname = "hostname"
+    }
+    /**
+     * SMTP status of node (read-only)
+     */
+    public var is_valid: Bool?
+
+    private var _message: AnyString?
+    /**
+     * Error message for node (read-only)
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    private var _hostname: AnyString?
+    /**
+     * Host name of node (read-only)
+     */
+    public var hostname: String? {
+        get { _hostname?.value }
+        set { _hostname = newValue.map(AnyString.init) }
+    }
+
+    public init(is_valid: Bool? = nil, message: String? = nil, hostname: String? = nil) {
+        self.is_valid = is_valid
+        self._message = message.map(AnyString.init)
+        self._hostname = hostname.map(AnyString.init)
+    }
+
+}
+
+public struct SmtpStatus: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case is_valid
+        case _node_count = "node_count"
+        case node_status
+    }
+    /**
+     * Overall SMTP status of cluster (read-only)
+     */
+    public var is_valid: Bool?
+
+    private var _node_count: AnyInt?
+    /**
+     * Total number of nodes in cluster (read-only)
+     */
+    public var node_count: Int64? {
+        get { _node_count?.value }
+        set { _node_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * array of each node's status containing is_valid, message, hostname (read-only)
+     */
+    public var node_status: [SmtpNodeStatus]?
+
+    public init(is_valid: Bool? = nil, node_count: Int64? = nil, node_status: [SmtpNodeStatus]? = nil) {
+        self.is_valid = is_valid
+        self._node_count = node_count.map(AnyInt.init)
+        self.node_status = node_status
     }
 
 }
@@ -18772,6 +18868,139 @@ public struct SshTunnel: SDKModel {
         self._database_host = database_host.map(AnyString.init)
         self._database_port = database_port.map(AnyInt.init)
         self._status = status.map(AnyString.init)
+    }
+
+}
+
+public struct SupportAccessAddEntries: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _emails = "emails"
+        case _reason = "reason"
+    }
+    private var _emails: [AnyString]?
+    /**
+     * An array of emails to add to the Allowlist
+     */
+    public var emails: [String]? {
+        get { if let v = _emails { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _emails = v.map { AnyString.init($0) } } else { _emails = nil } }
+    }
+
+    private var _reason: AnyString?
+    /**
+     * Reason for adding emails to the Allowlist
+     */
+    public var reason: String? {
+        get { _reason?.value }
+        set { _reason = newValue.map(AnyString.init) }
+    }
+
+    public init(emails: [String]? = nil, reason: String? = nil) {
+        if let v = emails { _emails = v.map { AnyString.init($0) } } else { _emails = nil }
+        self._reason = reason.map(AnyString.init)
+    }
+
+}
+
+public struct SupportAccessAllowlistEntry: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _email = "email"
+        case _full_name = "full_name"
+        case _reason = "reason"
+        case created_date
+    }
+    private var _id: AnyString?
+    /**
+     * Unique ID (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _email: AnyString?
+    /**
+     * Email address
+     */
+    public var email: String? {
+        get { _email?.value }
+        set { _email = newValue.map(AnyString.init) }
+    }
+
+    private var _full_name: AnyString?
+    /**
+     * Full name of allowlisted user (read-only)
+     */
+    public var full_name: String? {
+        get { _full_name?.value }
+        set { _full_name = newValue.map(AnyString.init) }
+    }
+
+    private var _reason: AnyString?
+    /**
+     * Reason the Email is included in the Allowlist
+     */
+    public var reason: String? {
+        get { _reason?.value }
+        set { _reason = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Date the Email was added to the Allowlist (read-only)
+     */
+    public var created_date: Date?
+
+    public init(id: String? = nil, email: String? = nil, full_name: String? = nil, reason: String? = nil, created_date: Date? = nil) {
+        self._id = id.map(AnyString.init)
+        self._email = email.map(AnyString.init)
+        self._full_name = full_name.map(AnyString.init)
+        self._reason = reason.map(AnyString.init)
+        self.created_date = created_date
+    }
+
+}
+
+public struct SupportAccessEnable: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _duration_in_seconds = "duration_in_seconds"
+    }
+    private var _duration_in_seconds: AnyInt
+    /**
+     * Duration Support Access will remain enabled
+     */
+    public var duration_in_seconds: Int64 {
+        get { _duration_in_seconds.value }
+        set { _duration_in_seconds = AnyInt.init(newValue) }
+    }
+
+    public init(duration_in_seconds: Int64) {
+        self._duration_in_seconds = AnyInt.init(duration_in_seconds)
+    }
+
+    public init(_ duration_in_seconds: Int64) {
+        self.init(duration_in_seconds: duration_in_seconds)
+    }
+
+}
+
+public struct SupportAccessStatus: SDKModel {
+    /**
+     * Whether or not Support Access is open (read-only)
+     */
+    public var `open`: Bool?
+
+    /**
+     * Time that Support Access will expire (read-only)
+     */
+    public var open_until: Date?
+
+    public init(`open`: Bool? = nil, open_until: Date? = nil) {
+        self.`open` = `open`
+        self.open_until = open_until
     }
 
 }
@@ -24894,12 +25123,18 @@ public struct WriteSetting: SDKModel {
 
     public var custom_welcome_email: CustomWelcomeEmail?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil) {
+    /**
+     * Toggle onboarding on or off
+     */
+    public var onboarding_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.whitelabel_configuration = whitelabel_configuration
         self.custom_welcome_email = custom_welcome_email
+        self.onboarding_enabled = onboarding_enabled
     }
 
 }
