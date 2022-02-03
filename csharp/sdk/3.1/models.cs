@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 255 API models: 188 Spec, 0 Request, 51 Write, 16 Enum
+/// 258 API models: 190 Spec, 0 Request, 51 Write, 17 Enum
 
 #nullable enable
 using System;
@@ -1018,7 +1018,9 @@ public class DashboardLookml : SdkModel
 {
   /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// <summary>lookml of UDD (read-only)</summary>
+  /// <summary>(Write-Only) Id of the folder</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>lookml of UDD</summary>
   public string? lookml { get; set; } = null;
 }
 
@@ -2777,6 +2779,14 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
+public class MaterializePDT : SdkModel
+{
+  /// <summary>The ID of the enqueued materialization task (read-only)</summary>
+  public string? materialization_id { get; set; } = null;
+  /// <summary>Detailed response in text format (read-only)</summary>
+  public string? resp_text { get; set; } = null;
+}
+
 public class MergeFields : SdkModel
 {
   /// <summary>Field name to map onto in the merged results</summary>
@@ -3776,6 +3786,25 @@ public class SessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
+public class SmtpSettings : SdkModel
+{
+  /// <summary>SMTP Server url</summary>
+  public string? address { get; set; } = null;
+  /// <summary>From e-mail address</summary>
+  public string? from { get; set; } = null;
+  /// <summary>User name</summary>
+  public string? user_name { get; set; } = null;
+  /// <summary>Password</summary>
+  public string? password { get; set; } = null;
+  /// <summary>SMTP Server's port</summary>
+  public long? port { get; set; } = null;
+  /// <summary>Is TLS encryption enabled?</summary>
+  public bool? enable_starttls_auto { get; set; } = null;
+  /// <summary>TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SslVersion? ssl_version { get; set; }
+}
+
 public class Snippet : SdkModel
 {
   /// <summary>Name of the snippet (read-only)</summary>
@@ -3906,6 +3935,17 @@ public class SqlQueryCreate : SdkModel
   public string? sql { get; set; } = null;
   /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
+}
+
+/// TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+public enum SslVersion
+{
+  [EnumMember(Value = "TLSv1_1")]
+  TLSv1_1,
+  [EnumMember(Value = "SSLv23")]
+  SSLv23,
+  [EnumMember(Value = "TLSv1_2")]
+  TLSv1_2
 }
 
 /// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)

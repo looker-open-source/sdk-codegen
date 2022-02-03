@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API methods
+ * 382 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -111,6 +111,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IModelSet,
   IOIDCConfig,
@@ -171,6 +172,7 @@ import type {
   IRequestSearchUsersNames,
   IRequestSpaceChildren,
   IRequestSpaceChildrenSearch,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -181,6 +183,7 @@ import type {
   IScheduledPlan,
   ISession,
   ISessionConfig,
+  ISmtpSettings,
   ISpace,
   ISpaceBase,
   ISqlQuery,
@@ -1932,6 +1935,33 @@ export class Looker31SDKStream extends APIMethods {
       '/locales',
       null,
       null,
+      options
+    )
+  }
+
+  /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *
+   * POST /smtp_settings -> void
+   *
+   * @param callback streaming output function
+   * @param body Partial<ISmtpSettings>
+   * @param options one-time API call overrides
+   *
+   */
+  async set_smtp_settings(
+    callback: (readable: Readable) => Promise<void>,
+    body: Partial<ISmtpSettings>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<void>(
+      callback,
+      'POST',
+      '/smtp_settings',
+      null,
+      body,
       options
     )
   }
@@ -3915,6 +3945,92 @@ export class Looker31SDKStream extends APIMethods {
       'GET',
       `/derived_table/graph/view/${request.view}`,
       { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   *
+   * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async start_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    request: IRequestStartPdtBuild,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.model_name = encodeParam(request.model_name)
+    request.view_name = encodeParam(request.view_name)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${request.model_name}/${request.view_name}/start`,
+      {
+        force_rebuild: request.force_rebuild,
+        force_full_incremental: request.force_full_incremental,
+        workspace: request.workspace,
+        source: request.source,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Check status of PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param materialization_id The materialization id to check status for.
+   * @param options one-time API call overrides
+   *
+   */
+  async check_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    materialization_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    materialization_id = encodeParam(materialization_id)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${materialization_id}/status`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * Stop a PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param materialization_id The materialization id to stop.
+   * @param source The source of this request.
+   * @param options one-time API call overrides
+   *
+   */
+  async stop_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    materialization_id: string,
+    source?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    materialization_id = encodeParam(materialization_id)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${materialization_id}/stop`,
+      { source },
       null,
       options
     )
