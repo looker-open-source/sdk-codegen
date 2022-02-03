@@ -121,6 +121,7 @@ jobs:
           - '21_18'
           - '21_20'
           - '22_0'
+          - '22_2'
 
     steps:
       - name: Repo Checkout

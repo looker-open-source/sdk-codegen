@@ -42,8 +42,8 @@ jobs:
 
       - name: Pull and run Looker docker image
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_0
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_0
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_2
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_2
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - uses: actions/setup-node@v2
