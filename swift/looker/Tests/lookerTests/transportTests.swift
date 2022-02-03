@@ -27,6 +27,62 @@
 import XCTest
 @testable import looker
 
+///propery wrappers look promising https://stackoverflow.com/a/70249110/74137
+
+//protocol NumOrStringDecodable: Numeric {
+//    init(numericOrStringContainer: SingleValueDecodingContainer) throws
+//}
+//
+//@propertyWrapper struct NumOrString<T: NumOrStringDecodable>: Codable {
+//    var wrappedValue: T
+//
+//    init(from decoder: Decoder) throws {
+//        wrappedValue = try T(numericOrStringContainer: decoder.singleValueContainer())
+//    }
+//
+//    func encode(to encoder: Encoder) throws {
+//        return encoder.singleValueContainer().encode(T(wrappedValue))
+//    }
+//}
+//
+//extension Int: NumOrStringDecodable {
+//    init(numericOrStringContainer container: SingleValueDecodingContainer) throws {
+//        if let int = try? container.decode(Int.self) {
+//            self = int
+//        } else if let string = try? container.decode(String.self), let int = Int(string) {
+//            self = int
+//        } else {
+//            throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Invalid int value"))
+//        }
+//    }
+//}
+//
+//extension Int64: NumOrStringDecodable {
+//    init(numericOrStringContainer container: SingleValueDecodingContainer) throws {
+//        if let int = try? container.decode(Int64.self) {
+//            self = int
+//        } else if let string = try? container.decode(String.self), let int = Int64(string) {
+//            self = int
+//        } else {
+//            throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Invalid int value"))
+//        }
+//    }
+//}
+
+//extension Double: NumOrStringDecodable {
+//    init(numericOrStringContainer container: SingleValueDecodingContainer) throws {
+//        if let double = try? container.decode(Double.self) {
+//            self = double
+//        } else if let string = try? container.decode(String.self), let double = Double(string) {
+//            self = double
+//        } else {
+//            throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Invalid double value"))
+//        }
+//    }
+//}
+
+/// teaser from https://gist.github.com/hamishknight/e5bd36a1d5868b896f09dedad51b9ee9
+
 struct SimpleUser : SDKModel {
     var first: String
     var last: String
@@ -100,6 +156,54 @@ struct TestModel : SDKModel {
         set { _num3 = newValue.map(AnyInt.init) }
     }
 
+    private var _list1: [AnyInt]?
+    var list1: [Int64]? {
+        get {
+            if let v = _list1 {
+                return v.map { $0.value }
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let v = newValue {
+                _list1 = v.map { AnyInt.init($0) }
+            } else {
+                _list1 = nil
+            }
+        }
+    }
+    
+    private var _list2: [AnyString]?
+    var list2: [String]? {
+        get {
+            if let v = _list2 {
+                return v.map { $0.value }
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let v = newValue {
+                _list2 = v.map { AnyString.init($0) }
+            } else {
+                _list2 = nil
+            }
+        }
+    }
+    
+    private var _rlist1: [AnyInt]
+    var rlist1: [Int64] {
+        get { _rlist1.map { $0.value } }
+        set { _rlist1 = newValue.map { AnyInt.init($0) } }
+    }
+    
+    private var _rlist2: [AnyString]
+    var rlist2: [String] {
+        get { _rlist2.map { $0.value } }
+        set { _rlist2 = newValue.map { AnyString.init($0) } }
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case _num1 = "num1"
         case _num2 = "num2"
@@ -107,18 +211,36 @@ struct TestModel : SDKModel {
         case _string1 = "string1"
         case _string2 = "string2"
         case _string3 = "string3"
+        case _list1 = "list1"
+        case _list2 = "list2"
+        case _rlist1 = "rlist1"
+        case _rlist2 = "rlist2"
     }
     
-    init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil) {
+    init(string1: String? = nil, num1: Int64? = nil, string2: String? = nil, num2: Int64? = nil, string3: String? = nil, num3: Int64? = nil, list1: [Int64]? = nil, list2: [String]? = nil, rlist1: [Int64], rlist2: [String]) {
         self._string1 = string1.map(AnyString.init)
         self._num1 = num1.map(AnyInt.init)
         self._string2 = string2.map(AnyString.init)
         self._num2 = num2.map(AnyInt.init)
         self._string3 = string3.map(AnyString.init)
         self._num3 = num3.map(AnyInt.init)
+        if let v = list1 { _list1 = v.map { AnyInt.init($0) } } else { _list1 = nil }
+        if let v = list2 { _list2 = v.map { AnyString.init($0) } } else { _list2 = nil }
+        self._rlist1 = rlist1.map { AnyInt.init($0) }
+        self._rlist2 = rlist2.map { AnyString.init($0) }
     }
 
 }
+
+
+//struct WrapModel: SDKModel {
+//    var string1: String
+//    @NumOrString var num1: Int
+//    var string2: String
+//    @NumOrString var num2: Int64
+//    var string3: String
+//    @NumOrString var num3: Double
+//}
 
 @available(OSX 10.15, *)
 class transportTests: XCTestCase {
@@ -140,6 +262,7 @@ class transportTests: XCTestCase {
         }
     }
 
+
     func testJsonTypes() {
         let payload = """
         {
@@ -150,7 +273,11 @@ class transportTests: XCTestCase {
             "string3": "3",
             "num3": 3,
             "string4": "4",
-            "num4": 4
+            "num4": 4,
+            "list1": ["1","2"],
+            "list2": [3,4],
+            "rlist1": ["1","2"],
+            "rlist2": [3,4]
         }
         """
         let actual: TestModel = try! deserialize(payload)
@@ -160,7 +287,33 @@ class transportTests: XCTestCase {
         XCTAssertEqual(actual.num2, 2)
         XCTAssertEqual(actual.string3, "3")
         XCTAssertEqual(actual.num3, 3)
+        XCTAssertEqual(actual.list1, [1,2])
+        XCTAssertEqual(actual.list2, ["3", "4"])
+        XCTAssertEqual(actual.rlist1, [1,2])
+        XCTAssertEqual(actual.rlist2, ["3", "4"])
     }
+    
+//    func testPropWrapper() {
+//        let payload = """
+//        {
+//            "string1": 1,
+//            "num1": 1,
+//            "string2": "2",
+//            "num2": "2",
+//            "string3": "3",
+//            "num3": 3,
+//            "string4": "4",
+//            "num4": 4
+//        }
+//        """
+//        let actual: WrapModel = try! deserialize(payload)
+//        XCTAssertEqual(actual.string1, "1")
+//        XCTAssertEqual(actual.num1, 1)
+//        XCTAssertEqual(actual.string2, "2")
+//        XCTAssertEqual(actual.num2, 2)
+//        XCTAssertEqual(actual.string3, "3")
+//        XCTAssertEqual(actual.num3, 3)
+//    }
     
     func testAnyString() {
         let jsonString = """

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.20.0...looker_sdk-v21.20.0) (2022-01-27)
+
+
+### Bug Fixes
+
+* restrict python version and update cattrs version restriction ([#949](https://www.github.com/looker-open-source/sdk-codegen/issues/949)) ([ba28ac6](https://www.github.com/looker-open-source/sdk-codegen/commit/ba28ac6a288b140b906ab8f164aa65b1389027a3))
+
 ## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.18.0...looker_sdk-v21.20.0) (2021-11-10)
 
 
