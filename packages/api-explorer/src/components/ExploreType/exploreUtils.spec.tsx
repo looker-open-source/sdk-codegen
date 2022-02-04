@@ -42,7 +42,7 @@ describe('exploreUtils', () => {
     const props = pickTypeProps(responseType)
     expect(props).toBeDefined()
     const names = Object.keys(props)
-    expect(names).toEqual(['name', 'is_default', 'tables'])
+    expect(names).toEqual(['name', 'is_default', 'tables', 'table_limit_hit'])
   })
 
   test('iconType', () => {
