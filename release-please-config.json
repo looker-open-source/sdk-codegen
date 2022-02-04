@@ -12,13 +12,13 @@
     "packages/extension-utils": { "release-as": "" },
     "packages/hackathon": { "release-as": ""},
     "packages/run-it": { "release-as": "" },
-    "packages/sdk": { "release-as": ""},
-    "packages/sdk-codegen": { "release-as": "" },
+    "packages/sdk": { "release-as": "22.0.0"},
+    "packages/sdk-codegen": { "release-as": "22.0.0" },
     "packages/sdk-codegen-scripts": { "release-as": "" },
     "packages/sdk-codegen-utils": { "release-as": ""},
     "packages/sdk-node": { "release-as": ""},
     "packages/sdk-rtl": { "release-as": "" },
     "packages/wholly-sheet": { "release-as": "" },
-    "python": { "release-type": "python", "package-name": "looker_sdk", "release-as": "" }
+    "python": { "release-type": "python", "package-name": "looker_sdk", "release-as": "22.0.0" }
   }
 }
