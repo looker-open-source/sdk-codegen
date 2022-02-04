@@ -1,6 +1,5 @@
 # Looker SDK
 
-
 The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. The SDK provides a convenient way to communicate with a Looker server's APIs.
 
 This package supports using the Looker SDK in the browser. The [@looker/sdk-node](https://www.npmjs.com/package/@looker/sdk-node) package depends on this package (@looker/sdk) and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
