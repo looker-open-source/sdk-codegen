@@ -57,6 +57,7 @@ import {
   Loader,
   SelectorContainer,
   HEADER_TOGGLE_LABEL,
+  Banner,
 } from './components'
 import { specReducer, initDefaultSpecState, updateSpecApi } from './reducers'
 import { AppRouter } from './routes'
@@ -160,6 +161,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
           <Loader message="Initializing" themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>
+            <Banner adaptor={adaptor} specs={specs} />
             <Page style={{ overflow: 'hidden' }}>
               {!headless && (
                 <Header
