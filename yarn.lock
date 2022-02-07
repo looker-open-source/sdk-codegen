@@ -2358,12 +2358,22 @@
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
 
-"@looker/sdk@21.20.0 - 2.0", "@looker/sdk@21.4.1 - 2.0":
-  version "21.20.0"
-  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.0.tgz#81f00b6bddc3d47406c3dc74ad2480004622a567"
-  integrity sha512-h4cmD3zACcAQZ+3P9iSO1OzXUqdNq+1iaaVO4Py8IY9LPArkwZghlTIzKMG9XAqUM+xqXDTKXI88vFmBllCy5w==
+"@looker/sdk-codegen@^21.0.12", "@looker/sdk-codegen@^21.3.1":
+  version "21.3.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-21.3.1.tgz#8af443062d6948600327c5e52615751951cc906c"
+  integrity sha512-kUHs6+8DrLpMWYrJ2ACrwnjczb7HyMrvESUZuk0RqrXc8si48CcuQq5/RI+Ver+7SnzVtct4hJZa+fpSF789TA==
   dependencies:
-    "@looker/sdk-rtl" "^21.2.0"
+    "@looker/sdk-codegen-utils" "^21.0.11"
+    "@looker/sdk-rtl" "^21.3.1"
+    blueimp-md5 "^2.13.0"
+    openapi3-ts "^1.3.0"
+
+"@looker/sdk@^21.20.1", "@looker/sdk@^21.4.1":
+  version "21.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.1.tgz#3d257309c2fe5ad1246e01837ea71aeeb7f4df22"
+  integrity sha512-t54yXAMeJAIeq7uUc1Oa3SdFsE3zvQaL9S28ebXy9TrljbnHG4FsVMacfq0XQGYPDzYUIoEySShWcBOsFZ+eyw==
+  dependencies:
+    "@looker/sdk-rtl" "^21.3.1"
     ini "^1.3.8"
     readable-stream "^3.4.0"
     request "^2.88.0"

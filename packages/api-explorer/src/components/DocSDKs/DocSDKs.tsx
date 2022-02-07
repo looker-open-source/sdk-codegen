@@ -34,11 +34,11 @@ import type {
   KeyedCollection,
   CodeGen,
 } from '@looker/sdk-codegen'
-import { Method } from '@looker/sdk-codegen'
 import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'
 import { selectSdkLanguage } from '../../state'
+import { isMethod } from '../../utils/path'
 import { noComment } from './utils'
 import { DocDeclarations } from './DocDeclarations'
 
@@ -59,10 +59,9 @@ const getDeclarations = (
   const declarations: KeyedCollection<string> = {}
   Object.entries(generators).forEach(([language, gen]) => {
     if (sdkLanguage === 'All' || language === sdkLanguage) {
-      const code =
-        item instanceof Method
-          ? gen.declareMethod('', item as IMethod)
-          : gen.declareType('', item as IType)
+      const code = isMethod(item)
+        ? gen.declareMethod('', item as IMethod)
+        : gen.declareType('', item as IType)
       declarations[language] = code
     }
   })

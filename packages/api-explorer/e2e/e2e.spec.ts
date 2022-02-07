@@ -173,7 +173,7 @@ describe('API Explorer', () => {
         'ul[aria-label="spec selector"] > li:last-child'
       )
       await expect(page).toMatchElement('h2', {
-        text: 'Looker API 4.0 (Experimental) Reference',
+        text: 'Looker API 4.0 (Beta) Reference',
       })
     })
   })
