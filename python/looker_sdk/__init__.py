@@ -38,13 +38,16 @@ API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer nee
 
 
 def _settings(
-    config_file: str, section: Optional[str] = None
+    config_file: str,
+    section: Optional[str] = None,
+    config_dict: Optional[api_settings.ConfigSettings] = None,
 ) -> api_settings.ApiSettings:
     return api_settings.ApiSettings(
         filename=config_file,
         section=section,
         sdk_version=constants.sdk_version,
         env_prefix=constants.environment_prefix,
+        config_settings=config_dict,
     )
 
 
@@ -65,10 +68,12 @@ def init31(
 
 
 def init40(
-    config_file: str = "looker.ini", section: Optional[str] = None
+    config_file: str = "looker.ini",
+    section: Optional[str] = None,
+    config_dict: Optional[api_settings.ConfigSettings] = None,
 ) -> methods40.Looker40SDK:
     """Default dependency configuration"""
-    settings = _settings(config_file, section)
+    settings = _settings(config_file, section, config_dict)
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods40.Looker40SDK(

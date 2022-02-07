@@ -32,9 +32,17 @@ import warnings
 from looker_sdk.rtl import transport
 
 if sys.version_info >= (3, 8):
-    from typing import Protocol
+    from typing import Protocol, TypedDict
 else:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol, TypedDict
+
+
+class ConfigSettings(TypedDict, total=False):
+    base_url: str
+    verify_ssl: str
+    timeout: str
+    client_id: str
+    client_secret: str
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
@@ -55,6 +63,7 @@ class ApiSettings(PApiSettings):
         section: Optional[str] = None,
         sdk_version: Optional[str] = "",
         env_prefix: Optional[str] = None,
+        config_settings: Optional[ConfigSettings] = None,
     ):
         """Configure using a config file and/or environment variables.
 
@@ -80,6 +89,7 @@ class ApiSettings(PApiSettings):
         self.filename = filename
         self.section = section
         self.env_prefix = env_prefix
+        self.config_settings = config_settings
         data = self.read_config()
         verify_ssl = data.get("verify_ssl")
         if verify_ssl is None:
@@ -110,6 +120,8 @@ class ApiSettings(PApiSettings):
 
         if self.env_prefix:
             data.update(self._override_from_env())
+        if self.config_settings:
+            data.update(self._override_from_dict(self.config_settings))
         return self._clean_input(data)
 
     @staticmethod
@@ -146,9 +158,32 @@ class ApiSettings(PApiSettings):
 
         return overrides
 
+    def _override_from_dict(self, config_settings: ConfigSettings) -> Dict[str, str]:
+        overrides = {}
+        base_url = config_settings.get("base_url")
+        if base_url:
+            overrides["base_url"] = base_url
+
+        verify_ssl = config_settings.get("verify_ssl")
+        if verify_ssl:
+            overrides["verify_ssl"] = verify_ssl
+
+        timeout = config_settings.get("timeout")
+        if timeout:
+            overrides["timeout"] = timeout
+
+        client_id = config_settings.get("client_id")
+        if client_id:
+            overrides["client_id"] = client_id
+
+        client_secret = config_settings.get("client_secret")
+        if client_secret:
+            overrides["client_secret"] = client_secret
+
+        return overrides
+
     def _clean_input(self, data: Dict[str, str]) -> Dict[str, str]:
-        """Remove surrounding quotes and discard empty strings.
-        """
+        """Remove surrounding quotes and discard empty strings."""
         cleaned = {}
         for setting, value in data.items():
             if setting in self.deprecated_settings:
