@@ -2358,7 +2358,7 @@
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
 
-"@looker/sdk-codegen@^21.0.12", "@looker/sdk-codegen@^21.3.1":
+"@looker/sdk-codegen@^21.3.1":
   version "21.3.1"
   resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-21.3.1.tgz#8af443062d6948600327c5e52615751951cc906c"
   integrity sha512-kUHs6+8DrLpMWYrJ2ACrwnjczb7HyMrvESUZuk0RqrXc8si48CcuQq5/RI+Ver+7SnzVtct4hJZa+fpSF789TA==
