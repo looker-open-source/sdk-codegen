@@ -25,7 +25,7 @@
  */
 
 /**
- * 356 API models: 223 Spec, 55 Request, 58 Write, 20 Enum
+ * 362 API models: 229 Spec, 55 Request, 58 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -4672,6 +4672,10 @@ export interface ILookmlModelExplore {
    * An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
    */
   supported_measure_types?: ILookmlModelExploreSupportedMeasureType[]
+  /**
+   * An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)
+   */
+  always_join?: string[] | null
 }
 
 export interface ILookmlModelExploreAccessFilter {
@@ -6895,6 +6899,14 @@ export interface IRequestConnectionTables {
    * Requested fields.
    */
   fields?: string | null
+  /**
+   * Optional. Return tables with names that contain this value
+   */
+  table_filter?: string | null
+  /**
+   * Optional. Return tables up to the table_limit
+   */
+  table_limit?: number | null
 }
 
 /**
@@ -7200,13 +7212,13 @@ export interface IRequestModelFieldnameSuggestions {
    */
   field_name: string
   /**
-   * Search term
+   * Search term pattern (evaluated as as `%term%`)
    */
   term?: string | null
   /**
-   * Suggestion filters
+   * Suggestion filters with field name keys and comparison expressions
    */
-  filters?: string | null
+  filters?: any | null
 }
 
 /**
@@ -9202,6 +9214,10 @@ export interface ISchemaTables {
    * Tables for this schema (read-only)
    */
   tables?: ISchemaTable[]
+  /**
+   * True if the table limit was hit while retrieving tables in this schema (read-only)
+   */
+  table_limit_hit?: boolean
 }
 
 export interface ISession {
@@ -9309,6 +9325,40 @@ export interface ISetting {
   marketplace_enabled?: boolean
   whitelabel_configuration?: IWhitelabelConfiguration
   custom_welcome_email?: ICustomWelcomeEmail
+  /**
+   * Toggle onboarding on or off
+   */
+  onboarding_enabled?: boolean
+}
+
+export interface ISmtpNodeStatus {
+  /**
+   * SMTP status of node (read-only)
+   */
+  is_valid?: boolean
+  /**
+   * Error message for node (read-only)
+   */
+  message?: string | null
+  /**
+   * Host name of node (read-only)
+   */
+  hostname?: string | null
+}
+
+export interface ISmtpStatus {
+  /**
+   * Overall SMTP status of cluster (read-only)
+   */
+  is_valid?: boolean
+  /**
+   * Total number of nodes in cluster (read-only)
+   */
+  node_count?: number | null
+  /**
+   * array of each node's status containing is_valid, message, hostname (read-only)
+   */
+  node_status?: ISmtpNodeStatus[] | null
 }
 
 export interface ISnippet {
@@ -9493,6 +9543,58 @@ export interface ISshTunnel {
    * Current connection status for this Tunnel (read-only)
    */
   status?: string
+}
+
+export interface ISupportAccessAddEntries {
+  /**
+   * An array of emails to add to the Allowlist
+   */
+  emails?: string[] | null
+  /**
+   * Reason for adding emails to the Allowlist
+   */
+  reason?: string | null
+}
+
+export interface ISupportAccessAllowlistEntry {
+  /**
+   * Unique ID (read-only)
+   */
+  id?: string
+  /**
+   * Email address
+   */
+  email?: string | null
+  /**
+   * Full name of allowlisted user (read-only)
+   */
+  full_name?: string | null
+  /**
+   * Reason the Email is included in the Allowlist
+   */
+  reason?: string | null
+  /**
+   * Date the Email was added to the Allowlist (read-only)
+   */
+  created_date?: Date | null
+}
+
+export interface ISupportAccessEnable {
+  /**
+   * Duration Support Access will remain enabled
+   */
+  duration_in_seconds: number | null
+}
+
+export interface ISupportAccessStatus {
+  /**
+   * Whether or not Support Access is open (read-only)
+   */
+  open?: boolean
+  /**
+   * Time that Support Access will expire (read-only)
+   */
+  open_until?: Date | null
 }
 
 /**
@@ -12139,6 +12241,10 @@ export interface IWriteSetting {
    */
   whitelabel_configuration?: IWriteWhitelabelConfiguration | null
   custom_welcome_email?: ICustomWelcomeEmail | null
+  /**
+   * Toggle onboarding on or off
+   */
+  onboarding_enabled?: boolean
 }
 
 /**

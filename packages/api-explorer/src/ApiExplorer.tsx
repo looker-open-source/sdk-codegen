@@ -54,6 +54,7 @@ import {
   SelectorContainer,
   HEADER_TOGGLE_LABEL,
   Loader,
+  Banner,
 } from './components'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
@@ -138,6 +139,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
           <Loader message={description} themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>
+            <Banner adaptor={adaptor} specs={specs} />
             <Page style={{ overflow: 'hidden' }}>
               {!headless && (
                 <Header spec={spec} toggleNavigation={toggleNavigation} />

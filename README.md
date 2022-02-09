@@ -54,9 +54,9 @@ Please review the following table for a breakdown of the options to initialize t
 | [Python](python)           | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                                                            |
 | [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown. **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
 | [Kotlin](kotlin)           | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it                                          |
-| [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                                                                     |  |
-| [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                                                          |  |
-| [GoLook](go)               | `v3.NewLookerSDK()`                                                       | `v4.NewLookerSDK()`                                                      | Community-supported GO SDK for Looker                                                                                                                                                                                                          |  |
+| [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                                                                     |
+| [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                                                          |
+| [GoLook](go)               | Not applicable                                                            | `v4.NewLookerSDK()`                                                      | Community-supported GO SDK for Looker                                                                                                                                                                                                          |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
 
@@ -193,12 +193,14 @@ to see the list of all scripts that can be run by the code generator.
 After generation, the generated code might not conform with the code standards.
 Changes cannot be commited until they pass the lint tests.
 This can be checked with the following:
+
 ```sh
 yarn lint
 ```
 
 For a faster run, only the modified files can be checked with any of these
 commands:
+
 ```sh
 yarn lint-changed
 yarn lint -q
@@ -206,6 +208,7 @@ yarn lint --quick
 ```
 
 Fixes can automagically be applied with one of the following:
+
 ```sh
 yarn lint-changed-fix
 yarn lint -q -f

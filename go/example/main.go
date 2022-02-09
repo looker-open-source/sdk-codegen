@@ -37,13 +37,13 @@ func printAllProjects(sdk *v4.LookerSDK) {
 
 func printAboutMe(sdk *v4.LookerSDK) {
 
-	me,err := sdk.Me("",nil)
+	me, err := sdk.Me("", nil)
 	check(err)
 
 	fmt.Printf("You are %s\n", *(me.Email))
 
 	// Search for this user by their e-mail
-	users,err := sdk.SearchUsers(v4.RequestSearchUsers{Email: me.Email}, nil)
+	users, err := sdk.SearchUsers(v4.RequestSearchUsers{Email: me.Email}, nil)
 	if err != nil {
 		fmt.Printf("Error getting myself %v\n", err)
 	}
@@ -57,7 +57,7 @@ func main() {
 	lookerIniPath := "../../looker.ini"
 	if len(os.Args) > 1 {
 		// If first argument exists then it is the config file
-		lookerIniPath = os.Args[1]	
+		lookerIniPath = os.Args[1]
 	}
 
 	// Read settings from ini file

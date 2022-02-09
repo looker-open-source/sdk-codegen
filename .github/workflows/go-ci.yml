@@ -1,0 +1,83 @@
+name: Go SDK CI
+on:
+  pull_request:
+    paths:
+      - go/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - go/**
+
+  workflow_dispatch:
+
+env:
+  JUNIT_OUTPUT_DIR: results
+  JUNIT_ARTIFACT_DIR: gosdk-test-results
+
+jobs:
+  unit:
+    name: Unit - ${{ matrix.os }} / Go ${{ matrix.go-version }}
+    env:
+      GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.gosdkunitresult${{ matrix.go-version }}.xml
+    runs-on: ${{ matrix.os }}-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        go-version: [1.17.6, 1.16.13]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install dependencies
+        run: go get -u github.com/jstemmer/go-junit-report
+
+      - name: Run unit tests
+        run: |
+          mkdir ${{ env.JUNIT_OUTPUT_DIR }}
+          cd go/rtl
+          go test -v 2>&1 | go-junit-report > ../../${{ env.JUNIT_OUTPUT_DIR }}/${{ env.GO_JUNIT_OUTPUT_NAME }}
+
+      - name: Upload Go unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.JUNIT_ARTIFACT_DIR }}
+          path: ${{ env.JUNIT_OUTPUT_DIR }}
+
+  publish-test-results:
+    needs: unit
+    if: success() || failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Publish All Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Go Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
+          files: 'artifacts/${{ env.JUNIT_ARTIFACT_DIR }}/*.xml'

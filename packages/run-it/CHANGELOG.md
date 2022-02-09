@@ -1,5 +1,25 @@
 # Changelog
 
+### [0.9.26](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.23...run-it-v0.9.26) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+
+
+### Bug Fixes
+
+* hackathon build ([#915](https://www.github.com/looker-open-source/sdk-codegen/issues/915)) ([67df146](https://www.github.com/looker-open-source/sdk-codegen/commit/67df1465d1ec04709c0c20d9a1b157f9199f795e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^21.20.0 to ^21.20.1
+
 ### [0.9.26](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.25...run-it-v0.9.26) (2021-12-20)
 
 

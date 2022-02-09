@@ -3515,7 +3515,9 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -8205,7 +8207,9 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Get information about all spaces.
    *
-   * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal spaces will be returned.
    *
    * GET /spaces -> ISpaceBase[]

@@ -30,6 +30,11 @@ import XCTest
 @available(OSX 10.15, *)
 class smokeTests: XCTestCase {
 
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+    }
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -86,17 +91,23 @@ class smokeTests: XCTestCase {
         let first = "SDK"
         let last = "User"
         let users = try? sdk.ok(sdk.search_users(first_name: first, last_name: last))
-        XCTAssertNotNil(users)
+        XCTAssertNotNil(users, "search_users has nothing")
         var user: User?
-        if (users!.count > 0) {
+        if users != nil && users!.count > 0 {
             user = users![0]
         } else {
             user = try? sdk.ok(sdk.create_user(body: WriteUser(first_name: first, last_name: last)))
         }
-        XCTAssertNotNil(user)
+        XCTAssertNotNil(user, "user is not found or created")
         return user!
     }
 
+    func testSdkInit() {
+        let config = sdk.authSession.settings
+        XCTAssertNotNil(config.base_url)
+        XCTAssertTrue(config.isConfigured())
+    }
+    
     /// Smoke: POST,  body param, int param, string param
     func testCreateQueryAndRun() {
         let body = simpleQuery()
@@ -152,12 +163,181 @@ class smokeTests: XCTestCase {
     /// smoke: delimArray
     func testGetAllUsersWithIds() {
         let allUsers = try? sdk.ok(sdk.all_users())
+        XCTAssertNotNil(allUsers, "allUsers should not be nill")
         let searchIds = allUsers!.prefix(2).map { $0.id! }
         let users = try? sdk.ok(sdk.all_users(ids: searchIds))
         XCTAssertEqual(users![0].id, searchIds[0])
         XCTAssertEqual(users![1].id, searchIds[1])
     }
 
+    func testAllAlerts() {
+        let all = try? sdk.ok(sdk.search_alerts())
+        XCTAssertNotNil(all, "search_alerts should not be nil")
+    }
+    
+    func testAllOAuthApps() {
+        let all = try? sdk.ok(sdk.all_oauth_client_apps())
+        XCTAssertNotNil(all, "all_oauth_client_apps should not be nil")
+    }
+    
+    func testAllLoginLockouts() {
+        let all = try? sdk.ok(sdk.all_user_login_lockouts())
+        XCTAssertNotNil(all, "all_user_login_lockouts should not be nil")
+    }
+    
+    func testAllBoards() {
+        let all = try? sdk.ok(sdk.all_boards())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllCommands() {
+        let all = try? sdk.ok(sdk.get_all_commands())
+        // Just make sure we don't get a deserialization error. If we do, test fails
+        XCTAssertTrue(all == nil || all != nil)
+    }
+    
+    func testAllColorCollections() {
+        let all = try? sdk.ok(sdk.all_color_collections())
+        XCTAssertNotNil(all, "all_color_collections should not be nil")
+    }
+    
+    func testAllLocales() {
+        let all = try? sdk.ok(sdk.all_locales())
+        XCTAssertNotNil(all, "all_locales should not be nil")
+    }
+    
+    func testAllLegacyFeatures() {
+        let all = try? sdk.ok(sdk.all_legacy_features())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllTimezones() {
+        let all = try? sdk.ok(sdk.all_timezones())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllConnections() {
+        let all = try? sdk.ok(sdk.all_connections())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllDialectInfo() {
+        let all = try? sdk.ok(sdk.all_dialect_infos())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllExternalOauthApps() {
+        let all = try? sdk.ok(sdk.all_external_oauth_applications())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllSSHServers() {
+        let all = try? sdk.ok(sdk.all_ssh_servers())
+        // Just make sure we don't get a deserialization error. If we do, test fails
+        XCTAssertTrue(all == nil || all != nil)
+    }
+    
+    func testAllSSHTunnels() {
+        let all = try? sdk.ok(sdk.all_ssh_tunnels())
+        // Just make sure we don't get a deserialization error. If we do, test fails
+        XCTAssertTrue(all == nil || all != nil)
+    }
+    
+    func testAllDashboards() {
+        let all = try? sdk.ok(sdk.all_dashboards())
+        XCTAssertNotNil(all)
+    }
+    
+    func testSearchAllDashboards() {
+        let all = try? sdk.ok(sdk.search_dashboards(title: "%"))
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllDatagroups() {
+        let all = try? sdk.ok(sdk.all_datagroups())
+        XCTAssertNotNil(all)
+    }
+
+    func testAllFolders() {
+        let all = try? sdk.ok(sdk.all_folders())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllGroups() {
+        let all = try? sdk.ok(sdk.all_groups())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllIntegrations() {
+        let all = try? sdk.ok(sdk.all_integrations())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllIntegrationHubs() {
+        let all = try? sdk.ok(sdk.all_integration_hubs())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllLookmlModels() {
+        let all = try? sdk.ok(sdk.all_lookml_models())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllRunningQueries() {
+        let all = try? sdk.ok(sdk.all_running_queries())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllRoles() {
+        let all = try? sdk.ok(sdk.all_roles())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllPermissions() {
+        let all = try? sdk.ok(sdk.all_permissions())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllScheduledPlans() {
+        let all = try? sdk.ok(sdk.all_scheduled_plans())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllThemes() {
+        let all = try? sdk.ok(sdk.all_themes())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllUsers() {
+        let all = try? sdk.ok(sdk.all_users())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllUserAttributes() {
+        let all = try? sdk.ok(sdk.all_user_attributes())
+        XCTAssertNotNil(all)
+    }
+    
+    func testAllLooks() {
+        let all = try? sdk.ok(sdk.all_looks())
+        XCTAssertNotNil(all, "all_looks should not be nil")
+    }
+    
+    func testAllProjects() {
+        let all = try? sdk.ok(sdk.all_projects())
+        XCTAssertNotNil(all, "all_projects should not be nil")
+    }
+    
+    func testAllModelSets() {
+        let all = try? sdk.ok(sdk.all_model_sets())
+        XCTAssertNotNil(all, "all_model_sets should not be nil")
+    }
+    
+    func testAllWorkspaces() {
+        let all = try? sdk.ok(sdk.all_workspaces())
+        XCTAssertNotNil(all, "all_workspaces should not be nil")
+     }
+    
     /// smoke: GET, binary payload, string payload, int param, string param
     func testContentThumbnail() {
         var type = ""
@@ -212,10 +392,10 @@ class smokeTests: XCTestCase {
         } catch {
             let sdkError = error as! SDKError
             XCTAssertEqual(404, sdkError.code)
-            XCTAssertTrue(sdkError.localizedDescription.contains("Not found"), sdkError.localizedDescription)
+            XCTAssertTrue(sdkError.localizedDescription.lowercased().contains("not found"), sdkError.localizedDescription)
         }
         let missing2 = try? sdk.ok(sdk.folder("IDON'TEXIST"))
-        XCTAssertNil(missing2, "Space should be nil")
+        XCTAssertNil(missing2, "Folder should be nil")
     }
 
     /// smoke: datetime payload

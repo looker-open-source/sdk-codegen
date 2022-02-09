@@ -25,7 +25,7 @@
  */
 
 /**
- * 429 API methods
+ * 437 API methods
  */
 
 
@@ -1157,6 +1157,108 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Get Support Access Allowlist Users
+     *
+     * Returns the users that have been added to the Support Access Allowlist
+     *
+     * GET /support_access/allowlist -> [SupportAccessAllowlistEntry]
+     */
+    public func get_support_access_allowlist_entries(
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[SupportAccessAllowlistEntry], SDKError> {
+        let result: SDKResponse<[SupportAccessAllowlistEntry], SDKError> = self.get("/support_access/allowlist", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Add Support Access Allowlist Users
+     *
+     * Adds a list of emails to the Allowlist, using the provided reason
+     *
+     * POST /support_access/allowlist -> [SupportAccessAllowlistEntry]
+     */
+    public func add_support_access_allowlist_entries(
+        /**
+         * @param {SupportAccessAddEntries} body
+         */
+        _ body: SupportAccessAddEntries,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[SupportAccessAllowlistEntry], SDKError> {
+        let result: SDKResponse<[SupportAccessAllowlistEntry], SDKError> = self.post("/support_access/allowlist", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Support Access Allowlist User
+     *
+     * Deletes the specified Allowlist Entry Id
+     *
+     * DELETE /support_access/allowlist/{entry_id} -> String
+     */
+    public func delete_support_access_allowlist_entry(
+        /**
+         * @param {String} entry_id Id of Allowlist Entry
+         */
+        _ entry_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_entry_id = encodeParam(entry_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/support_access/allowlist/\(path_entry_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Enable Support Access
+     *
+     * Enables Support Access for the provided duration
+     *
+     * PUT /support_access/enable -> SupportAccessStatus
+     */
+    public func enable_support_access(
+        /**
+         * @param {SupportAccessEnable} body
+         */
+        _ body: SupportAccessEnable,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.put("/support_access/enable", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Disable Support Access
+     *
+     * Disables Support Access immediately
+     *
+     * PUT /support_access/disable -> SupportAccessStatus
+     */
+    public func disable_support_access(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.put("/support_access/disable", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Support Access Status
+     *
+     * Returns the current Support Access Status
+     *
+     * GET /support_access/status -> SupportAccessStatus
+     */
+    public func support_access_status(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.get("/support_access/status", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Get currently locked-out users.
      *
      * GET /user_login_lockouts -> [UserLoginLockout]
@@ -2209,6 +2311,7 @@ open class LookerSDK: APIMethods {
      *  - marketplace_enabled
      *  - whitelabel_configuration
      *  - custom_welcome_email
+     *  - onboarding_enabled
      *
      * GET /setting -> Setting
      */
@@ -2233,6 +2336,7 @@ open class LookerSDK: APIMethods {
      *  - marketplace_enabled
      *  - whitelabel_configuration
      *  - custom_welcome_email
+     *  - onboarding_enabled
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -2251,6 +2355,23 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<Setting, SDKError> {
         let result: SDKResponse<Setting, SDKError> = self.patch("/setting", 
             ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Get current SMTP status.
+     *
+     * GET /smtp_status -> SmtpStatus
+     */
+    public func smtp_status(
+        /**
+         * @param {String} fields Include only these fields in the response
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SmtpStatus, SDKError> {
+        let result: SDKResponse<SmtpStatus, SDKError> = self.get("/smtp_status", 
+            ["fields": fields], nil, options)
         return result
     }
 
@@ -4436,7 +4557,9 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+     * or if they contain soft-deleted content.
+     *
      * In API 4.0+, all personal folders will be returned.
      *
      * GET /folders -> [Folder]
@@ -5975,6 +6098,24 @@ open class LookerSDK: APIMethods {
     /**
      * ### Field name suggestions for a model and view
      *
+     * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+     *
+     * ```ruby
+     * {'users.age': '>=60'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '<30'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '=50'}
+     * ```
+     *
      * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
      */
     public func model_fieldname_suggestions(
@@ -5991,13 +6132,13 @@ open class LookerSDK: APIMethods {
          */
         _ field_name: String,
         /**
-         * @param {String} term Search term
+         * @param {String} term Search term pattern (evaluated as as `%term%`)
          */
         term: String? = nil,
         /**
-         * @param {String} filters Suggestion filters
+         * @param {Any} filters Suggestion filters with field name keys and comparison expressions
          */
-        filters: String? = nil,
+        filters: Any? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<ModelFieldSuggestions, SDKError> {
         let path_model_name = encodeParam(model_name)
@@ -6135,11 +6276,19 @@ open class LookerSDK: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {String} table_filter Optional. Return tables with names that contain this value
+         */
+        table_filter: String? = nil,
+        /**
+         * @param {Int64} table_limit Optional. Return tables up to the table_limit
+         */
+        table_limit: Int64? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[SchemaTables], SDKError> {
         let path_connection_name = encodeParam(connection_name)
         let result: SDKResponse<[SchemaTables], SDKError> = self.get("/connections/\(path_connection_name)/tables", 
-            ["database": database, "schema_name": schema_name, "cache": cache as Any?, "fields": fields], nil, options)
+            ["database": database, "schema_name": schema_name, "cache": cache as Any?, "fields": fields, "table_filter": table_filter, "table_limit": table_limit], nil, options)
         return result
     }
 
@@ -7991,6 +8140,45 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<String, SDKError> {
         let path_render_task_id = encodeParam(render_task_id)
         let result: SDKResponse<String, SDKError> = self.get("/render_tasks/\(path_render_task_id)/results", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a new task to render a dashboard element to an image.
+     *
+     * Returns a render task object.
+     * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+     * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+     *
+     * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+     */
+    public func create_dashboard_element_render_task(
+        /**
+         * @param {String} dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+         */
+        _ dashboard_element_id: String,
+        /**
+         * @param {String} result_format Output type: png or jpg
+         */
+        _ result_format: String,
+        /**
+         * @param {Int64} width Output width in pixels
+         */
+        _ width: Int64,
+        /**
+         * @param {Int64} height Output height in pixels
+         */
+        _ height: Int64,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<RenderTask, SDKError> {
+        let path_dashboard_element_id = encodeParam(dashboard_element_id)
+        let path_result_format = encodeParam(result_format)
+        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/dashboard_elements/\(path_dashboard_element_id)/\(path_result_format)", 
+            ["width": width, "height": height, "fields": fields], nil, options)
         return result
     }
 

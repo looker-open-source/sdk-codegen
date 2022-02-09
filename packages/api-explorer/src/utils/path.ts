@@ -25,7 +25,7 @@
  */
 
 import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { firstMethodRef, Method } from '@looker/sdk-codegen'
+import { firstMethodRef } from '@looker/sdk-codegen'
 
 /**
  * Builds a path matching the route used by MethodScene
@@ -67,6 +67,12 @@ const getMethodTag = (api: ApiModel, methodName: string) => {
 }
 
 /**
+ * Is this item a method? Check without requiring `instanceof Method`
+ * @param item to check for method or type
+ */
+export const isMethod = (item: IMethod | IType) => 'params' in item
+
+/**
  * Return the tag for a give type
  * @param api Parsed api
  * @param type to tag
@@ -89,7 +95,7 @@ export const buildPath = (
   specKey: string
 ) => {
   let path
-  if (item instanceof Method) {
+  if (isMethod(item)) {
     const tag = getMethodTag(api, item.name)
     path = buildMethodPath(specKey, tag, item.name)
   } else {

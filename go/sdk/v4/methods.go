@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-429 API methods
+437 API methods
 */
 
 
@@ -908,6 +908,89 @@ func (l *LookerSDK) UpdateSessionConfig(
 
 }
 
+// ### Get Support Access Allowlist Users
+//
+// Returns the users that have been added to the Support Access Allowlist
+//
+// GET /support_access/allowlist -> []SupportAccessAllowlistEntry
+func (l *LookerSDK) GetSupportAccessAllowlistEntries(
+    fields string,
+    options *rtl.ApiSettings) ([]SupportAccessAllowlistEntry, error) {
+    var result []SupportAccessAllowlistEntry
+    err := l.session.Do(&result, "GET", "/4.0", "/support_access/allowlist", map[string]interface{}{"fields": fields}, nil, options)
+    return result, err
+
+}
+
+// ### Add Support Access Allowlist Users
+//
+// Adds a list of emails to the Allowlist, using the provided reason
+//
+// POST /support_access/allowlist -> []SupportAccessAllowlistEntry
+func (l *LookerSDK) AddSupportAccessAllowlistEntries(
+    body SupportAccessAddEntries,
+    options *rtl.ApiSettings) ([]SupportAccessAllowlistEntry, error) {
+    var result []SupportAccessAllowlistEntry
+    err := l.session.Do(&result, "POST", "/4.0", "/support_access/allowlist", nil, body, options)
+    return result, err
+
+}
+
+// ### Delete Support Access Allowlist User
+//
+// Deletes the specified Allowlist Entry Id
+//
+// DELETE /support_access/allowlist/{entry_id} -> string
+func (l *LookerSDK) DeleteSupportAccessAllowlistEntry(
+    entryId string,
+    options *rtl.ApiSettings) (string, error) {
+    entryId = url.PathEscape(entryId)
+    var result string
+    err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/support_access/allowlist/%v", entryId), nil, nil, options)
+    return result, err
+
+}
+
+// ### Enable Support Access
+//
+// Enables Support Access for the provided duration
+//
+// PUT /support_access/enable -> SupportAccessStatus
+func (l *LookerSDK) EnableSupportAccess(
+    body SupportAccessEnable,
+    options *rtl.ApiSettings) (SupportAccessStatus, error) {
+    var result SupportAccessStatus
+    err := l.session.Do(&result, "PUT", "/4.0", "/support_access/enable", nil, body, options)
+    return result, err
+
+}
+
+// ### Disable Support Access
+//
+// Disables Support Access immediately
+//
+// PUT /support_access/disable -> SupportAccessStatus
+func (l *LookerSDK) DisableSupportAccess(
+    options *rtl.ApiSettings) (SupportAccessStatus, error) {
+    var result SupportAccessStatus
+    err := l.session.Do(&result, "PUT", "/4.0", "/support_access/disable", nil, nil, options)
+    return result, err
+
+}
+
+// ### Support Access Status
+//
+// Returns the current Support Access Status
+//
+// GET /support_access/status -> SupportAccessStatus
+func (l *LookerSDK) SupportAccessStatus(
+    options *rtl.ApiSettings) (SupportAccessStatus, error) {
+    var result SupportAccessStatus
+    err := l.session.Do(&result, "GET", "/4.0", "/support_access/status", nil, nil, options)
+    return result, err
+
+}
+
 // ### Get currently locked-out users.
 //
 // GET /user_login_lockouts -> []UserLoginLockout
@@ -1604,6 +1687,7 @@ func (l *LookerSDK) MobileSettings(
 //  - marketplace_enabled
 //  - whitelabel_configuration
 //  - custom_welcome_email
+//  - onboarding_enabled
 //
 // GET /setting -> Setting
 func (l *LookerSDK) GetSetting(
@@ -1623,6 +1707,7 @@ func (l *LookerSDK) GetSetting(
 //  - marketplace_enabled
 //  - whitelabel_configuration
 //  - custom_welcome_email
+//  - onboarding_enabled
 //
 // See the `Setting` type for more information on the specific values that can be configured.
 //
@@ -1633,6 +1718,18 @@ func (l *LookerSDK) SetSetting(
     options *rtl.ApiSettings) (Setting, error) {
     var result Setting
     err := l.session.Do(&result, "PATCH", "/4.0", "/setting", map[string]interface{}{"fields": fields}, body, options)
+    return result, err
+
+}
+
+// ### Get current SMTP status.
+//
+// GET /smtp_status -> SmtpStatus
+func (l *LookerSDK) SmtpStatus(
+    fields string,
+    options *rtl.ApiSettings) (SmtpStatus, error) {
+    var result SmtpStatus
+    err := l.session.Do(&result, "GET", "/4.0", "/smtp_status", map[string]interface{}{"fields": fields}, nil, options)
     return result, err
 
 }
@@ -3004,7 +3101,9 @@ func (l *LookerSDK) DeleteFolder(
 
 // ### Get information about all folders.
 //
-// In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+// In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+// or if they contain soft-deleted content.
+//
 // In API 4.0+, all personal folders will be returned.
 //
 // GET /folders -> []Folder
@@ -3861,6 +3960,24 @@ func (l *LookerSDK) LookmlModelExplore(
 
 // ### Field name suggestions for a model and view
 //
+// `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+//
+// ```ruby
+// {'users.age': '>=60'}
+// ```
+//
+// or
+//
+// ```ruby
+// {'users.age': '<30'}
+// ```
+//
+// or
+//
+// ```ruby
+// {'users.age': '=50'}
+// ```
+//
 // GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
 func (l *LookerSDK) ModelFieldnameSuggestions(request RequestModelFieldnameSuggestions,
     options *rtl.ApiSettings) (ModelFieldSuggestions, error) {
@@ -3947,7 +4064,7 @@ func (l *LookerSDK) ConnectionTables(request RequestConnectionTables,
     options *rtl.ApiSettings) ([]SchemaTables, error) {
     request.ConnectionName = url.PathEscape(request.ConnectionName)
     var result []SchemaTables
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/tables", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "fields": request.Fields}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/tables", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "fields": request.Fields, "table_filter": request.TableFilter, "table_limit": request.TableLimit}, nil, options)
     return result, err
 
 }
@@ -5139,6 +5256,28 @@ func (l *LookerSDK) RenderTaskResults(
     renderTaskId = url.PathEscape(renderTaskId)
     var result string
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/render_tasks/%v/results", renderTaskId), nil, nil, options)
+    return result, err
+
+}
+
+// ### Create a new task to render a dashboard element to an image.
+//
+// Returns a render task object.
+// To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+// Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+//
+// POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+func (l *LookerSDK) CreateDashboardElementRenderTask(
+    dashboardElementId string,
+    resultFormat string,
+    width int64,
+    height int64,
+    fields string,
+    options *rtl.ApiSettings) (RenderTask, error) {
+    dashboardElementId = url.PathEscape(dashboardElementId)
+    resultFormat = url.PathEscape(resultFormat)
+    var result RenderTask
+    err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/dashboard_elements/%v/%v", dashboardElementId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
     return result, err
 
 }

@@ -25,7 +25,7 @@
  */
 
 /**
- * 429 API methods
+ * 437 API methods
  */
 
 import type {
@@ -215,11 +215,16 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
   ISshServer,
   ISshTunnel,
+  ISupportAccessAddEntries,
+  ISupportAccessAllowlistEntry,
+  ISupportAccessEnable,
+  ISupportAccessStatus,
   ITheme,
   ITimezone,
   IUpdateCommand,
@@ -1554,6 +1559,143 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Get Support Access Allowlist Users
+   *
+   * Returns the users that have been added to the Support Access Allowlist
+   *
+   * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async get_support_access_allowlist_entries(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessAllowlistEntry[], IError>> {
+    return this.get<ISupportAccessAllowlistEntry[], IError>(
+      '/support_access/allowlist',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Add Support Access Allowlist Users
+   *
+   * Adds a list of emails to the Allowlist, using the provided reason
+   *
+   * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param body Partial<ISupportAccessAddEntries>
+   * @param options one-time API call overrides
+   *
+   */
+  async add_support_access_allowlist_entries(
+    body: Partial<ISupportAccessAddEntries>,
+    options?: Partial<ITransportSettings>
+  ): Promise<
+    SDKResponse<ISupportAccessAllowlistEntry[], IError | IValidationError>
+  > {
+    return this.post<ISupportAccessAllowlistEntry[], IError | IValidationError>(
+      '/support_access/allowlist',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete Support Access Allowlist User
+   *
+   * Deletes the specified Allowlist Entry Id
+   *
+   * DELETE /support_access/allowlist/{entry_id} -> string
+   *
+   * @param entry_id Id of Allowlist Entry
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_support_access_allowlist_entry(
+    entry_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    entry_id = encodeParam(entry_id)
+    return this.delete<string, IError>(
+      `/support_access/allowlist/${entry_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Enable Support Access
+   *
+   * Enables Support Access for the provided duration
+   *
+   * PUT /support_access/enable -> ISupportAccessStatus
+   *
+   * @param body Partial<ISupportAccessEnable>
+   * @param options one-time API call overrides
+   *
+   */
+  async enable_support_access(
+    body: Partial<ISupportAccessEnable>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError | IValidationError>> {
+    return this.put<ISupportAccessStatus, IError | IValidationError>(
+      '/support_access/enable',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Disable Support Access
+   *
+   * Disables Support Access immediately
+   *
+   * PUT /support_access/disable -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async disable_support_access(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>> {
+    return this.put<ISupportAccessStatus, IError>(
+      '/support_access/disable',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Support Access Status
+   *
+   * Returns the current Support Access Status
+   *
+   * GET /support_access/status -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async support_access_status(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>> {
+    return this.get<ISupportAccessStatus, IError>(
+      '/support_access/status',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get currently locked-out users.
    *
    * GET /user_login_lockouts -> IUserLoginLockout[]
@@ -2732,6 +2874,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - marketplace_enabled
    *  - whitelabel_configuration
    *  - custom_welcome_email
+   *  - onboarding_enabled
    *
    * GET /setting -> ISetting
    *
@@ -2760,6 +2903,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - marketplace_enabled
    *  - whitelabel_configuration
    *  - custom_welcome_email
+   *  - onboarding_enabled
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -2779,6 +2923,27 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       '/setting',
       { fields },
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Get current SMTP status.
+   *
+   * GET /smtp_status -> ISmtpStatus
+   *
+   * @param fields Include only these fields in the response
+   * @param options one-time API call overrides
+   *
+   */
+  async smtp_status(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISmtpStatus, IError>> {
+    return this.get<ISmtpStatus, IError>(
+      '/smtp_status',
+      { fields },
+      null,
       options
     )
   }
@@ -5061,7 +5226,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -6497,6 +6664,24 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Field name suggestions for a model and view
    *
+   * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+   *
+   * ```ruby
+   * {'users.age': '>=60'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '<30'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '=50'}
+   * ```
+   *
    * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> IModelFieldSuggestions
    *
    * @param request composed interface "IRequestModelFieldnameSuggestions" for complex method parameters
@@ -6648,6 +6833,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         schema_name: request.schema_name,
         cache: request.cache,
         fields: request.fields,
+        table_filter: request.table_filter,
+        table_limit: request.table_limit,
       },
       null,
       options
@@ -8454,6 +8641,41 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.get<string, IError>(
       `/render_tasks/${render_task_id}/results`,
       null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create a new task to render a dashboard element to an image.
+   *
+   * Returns a render task object.
+   * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+   * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+   *
+   * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> IRenderTask
+   *
+   * @param dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+   * @param result_format Output type: png or jpg
+   * @param width Output width in pixels
+   * @param height Output height in pixels
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async create_dashboard_element_render_task(
+    dashboard_element_id: string,
+    result_format: string,
+    width: number,
+    height: number,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> {
+    dashboard_element_id = encodeParam(dashboard_element_id)
+    result_format = encodeParam(result_format)
+    return this.post<IRenderTask, IError | IValidationError>(
+      `/render_tasks/dashboard_elements/${dashboard_element_id}/${result_format}`,
+      { width, height, fields },
       null,
       options
     )

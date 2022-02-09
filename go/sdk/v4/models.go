@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-356 API models: 223 Spec, 55 Request, 58 Write, 20 Enum
+362 API models: 229 Spec, 55 Request, 58 Write, 20 Enum
 */
 
 
@@ -1673,6 +1673,7 @@ type LookmlModelExplore struct {
   Joins                 *[]LookmlModelExploreJoins                `json:"joins,omitempty"`                    // Views joined into this explore
   GroupLabel            *string                                   `json:"group_label,omitempty"`              // Label used to group explores in the navigation menus
   SupportedMeasureTypes *[]LookmlModelExploreSupportedMeasureType `json:"supported_measure_types,omitempty"`  // An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type.
+  AlwaysJoin            *[]string                                 `json:"always_join,omitempty"`              // An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view.
 }
 
 
@@ -2450,11 +2451,13 @@ type RequestConnectionSearchColumns struct {
 
 // Dynamically generated request type for connection_tables
 type RequestConnectionTables struct {
-  ConnectionName string  `json:"connection_name"`        // Name of connection
-  Database       *string `json:"database,omitempty"`     // Optional. Name of database to use for the query, only if applicable
-  SchemaName     *string `json:"schema_name,omitempty"`  // Optional. Return only tables for this schema
-  Cache          *bool   `json:"cache,omitempty"`        // True to fetch from cache, false to load fresh
-  Fields         *string `json:"fields,omitempty"`       // Requested fields.
+  ConnectionName string  `json:"connection_name"`         // Name of connection
+  Database       *string `json:"database,omitempty"`      // Optional. Name of database to use for the query, only if applicable
+  SchemaName     *string `json:"schema_name,omitempty"`   // Optional. Return only tables for this schema
+  Cache          *bool   `json:"cache,omitempty"`         // True to fetch from cache, false to load fresh
+  Fields         *string `json:"fields,omitempty"`        // Requested fields.
+  TableFilter    *string `json:"table_filter,omitempty"`  // Optional. Return tables with names that contain this value
+  TableLimit     *int64  `json:"table_limit,omitempty"`   // Optional. Return tables up to the table_limit
 }
 
 // Dynamically generated request type for content_thumbnail
@@ -2561,8 +2564,8 @@ type RequestModelFieldnameSuggestions struct {
   ModelName string  `json:"model_name"`         // Name of model
   ViewName  string  `json:"view_name"`          // Name of view
   FieldName string  `json:"field_name"`         // Name of field to use for suggestions
-  Term      *string `json:"term,omitempty"`     // Search term
-  Filters   *string `json:"filters,omitempty"`  // Suggestion filters
+  Term      *string `json:"term,omitempty"`     // Search term pattern (evaluated as as `%term%`)
+  Filters   *struct `json:"filters,omitempty"`  // Suggestion filters with field name keys and comparison expressions
 }
 
 // Dynamically generated request type for role_users
@@ -3207,9 +3210,10 @@ type SchemaTable struct {
 
 
 type SchemaTables struct {
-  Name      *string        `json:"name,omitempty"`        // Schema name
-  IsDefault *bool          `json:"is_default,omitempty"`  // True if this is the default schema
-  Tables    *[]SchemaTable `json:"tables,omitempty"`      // Tables for this schema
+  Name          *string        `json:"name,omitempty"`             // Schema name
+  IsDefault     *bool          `json:"is_default,omitempty"`       // True if this is the default schema
+  Tables        *[]SchemaTable `json:"tables,omitempty"`           // Tables for this schema
+  TableLimitHit *bool          `json:"table_limit_hit,omitempty"`  // True if the table limit was hit while retrieving tables in this schema
 }
 
 
@@ -3248,6 +3252,21 @@ type Setting struct {
   MarketplaceEnabled            *bool                    `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
   WhitelabelConfiguration       *WhitelabelConfiguration `json:"whitelabel_configuration,omitempty"`
   CustomWelcomeEmail            *CustomWelcomeEmail      `json:"custom_welcome_email,omitempty"`
+  OnboardingEnabled             *bool                    `json:"onboarding_enabled,omitempty"`                // Toggle onboarding on or off
+}
+
+
+type SmtpNodeStatus struct {
+  IsValid  *bool   `json:"is_valid,omitempty"`  // SMTP status of node
+  Message  *string `json:"message,omitempty"`   // Error message for node
+  Hostname *string `json:"hostname,omitempty"`  // Host name of node
+}
+
+
+type SmtpStatus struct {
+  IsValid    *bool             `json:"is_valid,omitempty"`     // Overall SMTP status of cluster
+  NodeCount  *int64            `json:"node_count,omitempty"`   // Total number of nodes in cluster
+  NodeStatus *[]SmtpNodeStatus `json:"node_status,omitempty"`  // array of each node's status containing is_valid, message, hostname
 }
 
 
@@ -3315,6 +3334,32 @@ type SshTunnel struct {
   DatabaseHost  *string `json:"database_host,omitempty"`    // Hostname or IP Address of the Database Server
   DatabasePort  *int64  `json:"database_port,omitempty"`    // Port that the Database Server is listening on
   Status        *string `json:"status,omitempty"`           // Current connection status for this Tunnel
+}
+
+
+type SupportAccessAddEntries struct {
+  Emails *[]string `json:"emails,omitempty"`  // An array of emails to add to the Allowlist
+  Reason *string   `json:"reason,omitempty"`  // Reason for adding emails to the Allowlist
+}
+
+
+type SupportAccessAllowlistEntry struct {
+  Id          *string    `json:"id,omitempty"`            // Unique ID
+  Email       *string    `json:"email,omitempty"`         // Email address
+  FullName    *string    `json:"full_name,omitempty"`     // Full name of allowlisted user
+  Reason      *string    `json:"reason,omitempty"`        // Reason the Email is included in the Allowlist
+  CreatedDate *time.Time `json:"created_date,omitempty"`  // Date the Email was added to the Allowlist
+}
+
+
+type SupportAccessEnable struct {
+  DurationInSeconds int64 `json:"duration_in_seconds"`  // Duration Support Access will remain enabled
+}
+
+
+type SupportAccessStatus struct {
+  Open      *bool      `json:"open,omitempty"`        // Whether or not Support Access is open
+  OpenUntil *time.Time `json:"open_until,omitempty"`  // Time that Support Access will expire
 }
 
 type SupportedActionTypes string
@@ -4256,6 +4301,7 @@ type WriteSetting struct {
   WhitelabelConfiguration       *WriteWhitelabelConfiguration `json:"whitelabel_configuration,omitempty"`          // Dynamic writeable type for WhitelabelConfiguration removes:
  // id, logo_url, favicon_url
   CustomWelcomeEmail            *CustomWelcomeEmail           `json:"custom_welcome_email,omitempty"`
+  OnboardingEnabled             *bool                         `json:"onboarding_enabled,omitempty"`                // Toggle onboarding on or off
 }
 
 // Dynamic writeable type for SshServer removes:

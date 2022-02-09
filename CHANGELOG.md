@@ -1,5 +1,31 @@
 # Changelog
 
+### [1.21.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.18.0...sdk-codegen-all-v1.21.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+* looker resources index ([#931](https://www.github.com/looker-open-source/sdk-codegen/issues/931)) ([82e965b](https://www.github.com/looker-open-source/sdk-codegen/commit/82e965b29f84c9996fea7de9c8fdfca600e1c0b3))
+* OAuthConfigProvider ([209f399](https://www.github.com/looker-open-source/sdk-codegen/commit/209f399a089beb28405a178d3dc8f769478ae97b))
+* Python SDK example: write query result to BigQuery using Cloud Functions  ([#908](https://www.github.com/looker-open-source/sdk-codegen/issues/908)) ([53ee684](https://www.github.com/looker-open-source/sdk-codegen/commit/53ee684c7a230865d40a464d2836f653fabaa386))
+* support string or numeric JSON format for numeric IDs in Swift ([#937](https://www.github.com/looker-open-source/sdk-codegen/issues/937)) ([1487d8a](https://www.github.com/looker-open-source/sdk-codegen/commit/1487d8a38432cef2e994d14001df18659522ca90))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+* hackathon build ([#915](https://www.github.com/looker-open-source/sdk-codegen/issues/915)) ([67df146](https://www.github.com/looker-open-source/sdk-codegen/commit/67df1465d1ec04709c0c20d9a1b157f9199f795e))
+* Made Go SDK json decoding fuzzy ([#943](https://www.github.com/looker-open-source/sdk-codegen/issues/943)) ([378df76](https://www.github.com/looker-open-source/sdk-codegen/commit/378df7694a7d9b02f1d4c67061dddda576883bfd))
+* make sheetCell always return a Span ([#907](https://www.github.com/looker-open-source/sdk-codegen/issues/907)) ([f1fe4f5](https://www.github.com/looker-open-source/sdk-codegen/commit/f1fe4f5a5265008507ee29ff7e92149fc2869a82))
+* Remove hackathon project invite only UI ([#905](https://www.github.com/looker-open-source/sdk-codegen/issues/905)) ([2f10dd3](https://www.github.com/looker-open-source/sdk-codegen/commit/2f10dd3c07e6ddb076893932f4eccb2ac6dc3565))
+* restore join/leave project functionality ([#904](https://www.github.com/looker-open-source/sdk-codegen/issues/904)) ([42b2c0f](https://www.github.com/looker-open-source/sdk-codegen/commit/42b2c0f80a99685e02acc1a7b466b39029f15cad))
+* restrict python version and update cattrs version restriction ([#949](https://www.github.com/looker-open-source/sdk-codegen/issues/949)) ([ba28ac6](https://www.github.com/looker-open-source/sdk-codegen/commit/ba28ac6a288b140b906ab8f164aa65b1389027a3))
+* rtl IError type ([#928](https://www.github.com/looker-open-source/sdk-codegen/issues/928)) ([7d8f906](https://www.github.com/looker-open-source/sdk-codegen/commit/7d8f906f4b10b5e915df292fcf30d1eb456c3463))
+* **sdk-rtl/src/delimArray:** Fixed issue with single element number array ([#927](https://www.github.com/looker-open-source/sdk-codegen/issues/927)) ([6e94d73](https://www.github.com/looker-open-source/sdk-codegen/commit/6e94d73f88fb6c2f3138818967f4e8cb49ff89e6))
+* Updated hackathon agenda links ([#901](https://www.github.com/looker-open-source/sdk-codegen/issues/901)) ([7f58b6c](https://www.github.com/looker-open-source/sdk-codegen/commit/7f58b6c096ab8a6b983ea515b38be9877d9faa20))
+* use headless navigation mode for API Explorer extension ([#950](https://www.github.com/looker-open-source/sdk-codegen/issues/950)) ([fa44a8a](https://www.github.com/looker-open-source/sdk-codegen/commit/fa44a8a2383d48a524371401455fc825d3608fc7))
+
 ### [1.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.20.0...sdk-codegen-all-v1.20.1) (2021-12-20)
 
 

@@ -25,7 +25,7 @@
  */
 
 /**
- * 429 API methods
+ * 437 API methods
  */
 
 import type {
@@ -217,11 +217,16 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
   ISshServer,
   ISshTunnel,
+  ISupportAccessAddEntries,
+  ISupportAccessAllowlistEntry,
+  ISupportAccessEnable,
+  ISupportAccessStatus,
   ITheme,
   ITimezone,
   IUpdateCommand,
@@ -1638,6 +1643,155 @@ export const update_session_config = async (
 }
 
 /**
+ * ### Get Support Access Allowlist Users
+ *
+ * Returns the users that have been added to the Support Access Allowlist
+ *
+ * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const get_support_access_allowlist_entries = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISupportAccessAllowlistEntry[], IError>> => {
+  return sdk.get<ISupportAccessAllowlistEntry[], IError>(
+    '/support_access/allowlist',
+    { fields },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Add Support Access Allowlist Users
+ *
+ * Adds a list of emails to the Allowlist, using the provided reason
+ *
+ * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISupportAccessAddEntries>
+ * @param options one-time API call overrides
+ *
+ */
+export const add_support_access_allowlist_entries = async (
+  sdk: IAPIMethods,
+  body: Partial<ISupportAccessAddEntries>,
+  options?: Partial<ITransportSettings>
+): Promise<
+  SDKResponse<ISupportAccessAllowlistEntry[], IError | IValidationError>
+> => {
+  return sdk.post<ISupportAccessAllowlistEntry[], IError | IValidationError>(
+    '/support_access/allowlist',
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Delete Support Access Allowlist User
+ *
+ * Deletes the specified Allowlist Entry Id
+ *
+ * DELETE /support_access/allowlist/{entry_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param entry_id Id of Allowlist Entry
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_support_access_allowlist_entry = async (
+  sdk: IAPIMethods,
+  entry_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  entry_id = encodeParam(entry_id)
+  return sdk.delete<string, IError>(
+    `/support_access/allowlist/${entry_id}`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Enable Support Access
+ *
+ * Enables Support Access for the provided duration
+ *
+ * PUT /support_access/enable -> ISupportAccessStatus
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISupportAccessEnable>
+ * @param options one-time API call overrides
+ *
+ */
+export const enable_support_access = async (
+  sdk: IAPIMethods,
+  body: Partial<ISupportAccessEnable>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISupportAccessStatus, IError | IValidationError>> => {
+  return sdk.put<ISupportAccessStatus, IError | IValidationError>(
+    '/support_access/enable',
+    null,
+    body,
+    options
+  )
+}
+
+/**
+ * ### Disable Support Access
+ *
+ * Disables Support Access immediately
+ *
+ * PUT /support_access/disable -> ISupportAccessStatus
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const disable_support_access = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISupportAccessStatus, IError>> => {
+  return sdk.put<ISupportAccessStatus, IError>(
+    '/support_access/disable',
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Support Access Status
+ *
+ * Returns the current Support Access Status
+ *
+ * GET /support_access/status -> ISupportAccessStatus
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const support_access_status = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISupportAccessStatus, IError>> => {
+  return sdk.get<ISupportAccessStatus, IError>(
+    '/support_access/status',
+    null,
+    null,
+    options
+  )
+}
+
+/**
  * ### Get currently locked-out users.
  *
  * GET /user_login_lockouts -> IUserLoginLockout[]
@@ -2909,6 +3063,7 @@ export const mobile_settings = async (
  *  - marketplace_enabled
  *  - whitelabel_configuration
  *  - custom_welcome_email
+ *  - onboarding_enabled
  *
  * GET /setting -> ISetting
  *
@@ -2939,6 +3094,7 @@ export const get_setting = async (
  *  - marketplace_enabled
  *  - whitelabel_configuration
  *  - custom_welcome_email
+ *  - onboarding_enabled
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -2962,6 +3118,24 @@ export const set_setting = async (
     body,
     options
   )
+}
+
+/**
+ * ### Get current SMTP status.
+ *
+ * GET /smtp_status -> ISmtpStatus
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Include only these fields in the response
+ * @param options one-time API call overrides
+ *
+ */
+export const smtp_status = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISmtpStatus, IError>> => {
+  return sdk.get<ISmtpStatus, IError>('/smtp_status', { fields }, null, options)
 }
 
 /**
@@ -5413,7 +5587,9 @@ export const delete_folder = async (
 /**
  * ### Get information about all folders.
  *
- * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+ * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+ * or if they contain soft-deleted content.
+ *
  * In API 4.0+, all personal folders will be returned.
  *
  * GET /folders -> IFolder[]
@@ -6945,6 +7121,24 @@ export const lookml_model_explore = async (
 /**
  * ### Field name suggestions for a model and view
  *
+ * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+ *
+ * ```ruby
+ * {'users.age': '>=60'}
+ * ```
+ *
+ * or
+ *
+ * ```ruby
+ * {'users.age': '<30'}
+ * ```
+ *
+ * or
+ *
+ * ```ruby
+ * {'users.age': '=50'}
+ * ```
+ *
  * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> IModelFieldSuggestions
  *
  * @param sdk IAPIMethods implementation
@@ -7103,6 +7297,8 @@ export const connection_tables = async (
       schema_name: request.schema_name,
       cache: request.cache,
       fields: request.fields,
+      table_filter: request.table_filter,
+      table_limit: request.table_limit,
     },
     null,
     options
@@ -9015,6 +9211,43 @@ export const render_task_results = async (
   return sdk.get<string, IError>(
     `/render_tasks/${render_task_id}/results`,
     null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Create a new task to render a dashboard element to an image.
+ *
+ * Returns a render task object.
+ * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+ * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+ *
+ * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> IRenderTask
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+ * @param result_format Output type: png or jpg
+ * @param width Output width in pixels
+ * @param height Output height in pixels
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const create_dashboard_element_render_task = async (
+  sdk: IAPIMethods,
+  dashboard_element_id: string,
+  result_format: string,
+  width: number,
+  height: number,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
+  dashboard_element_id = encodeParam(dashboard_element_id)
+  result_format = encodeParam(result_format)
+  return sdk.post<IRenderTask, IError | IValidationError>(
+    `/render_tasks/dashboard_elements/${dashboard_element_id}/${result_format}`,
+    { width, height, fields },
     null,
     options
   )
