@@ -52,9 +52,7 @@ function* initSaga(action: PayloadAction<InitSpecsAction>) {
   }
 }
 
-export function* setCurrentSpecSaga(
-  action: PayloadAction<SetCurrentSpecAction>
-) {
+function* setCurrentSpecSaga(action: PayloadAction<SetCurrentSpecAction>) {
   const { setCurrentSpecSuccessAction, setCurrentSpecFailureAction } =
     specActions
   const adaptor = getApixAdaptor()
