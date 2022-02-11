@@ -181,8 +181,7 @@ export class OAuthSession extends AuthSession {
         }
         await this.redeemAuthCode(code)
       }
-      const token = await this.getToken()
-      return token
+      return await this.getToken()
     }
     return this.activeToken
   }
@@ -258,9 +257,7 @@ export class OAuthSession extends AuthSession {
    * @returns {Promise<AuthToken>}
    */
   async redeemAuthCode(authCode: string, codeVerifier?: string) {
-    const body = this.redeemAuthCodeBody(authCode, codeVerifier)
-    const token = await this.requestToken(body)
-    return token
+    return this.requestToken(this.redeemAuthCodeBody(authCode, codeVerifier))
   }
 
   async getToken() {

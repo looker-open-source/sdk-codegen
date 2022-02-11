@@ -25,8 +25,8 @@
  */
 import type { SpecList } from '@looker/sdk-codegen'
 import { ApiModel } from '@looker/sdk-codegen'
-import type { SpecState } from '@looker/api-explorer'
-import { defaultSpecsState } from '@looker/api-explorer'
+import type { SpecState } from '../state'
+import { defaultSpecsState } from '../state'
 
 export const specs: SpecList = {
   '3.1': {

@@ -25,7 +25,8 @@
  */
 import type { ILookerVersions } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
-import type { RunItValues } from '@looker/run-it'
+
+import type { RunItValues } from '../..'
 
 export const RunItConfigKey = 'RunItConfig'
 export const RunItFormKey = 'RunItForm'
