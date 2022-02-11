@@ -28,7 +28,7 @@ import { Router } from 'react-router'
 import type { MemoryHistory } from 'history'
 import { createMemoryHistory } from 'history'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
 import { api } from '../../../test-data'
 import { DiffMethodLink } from './DiffItem'
 
@@ -42,6 +42,7 @@ describe('DiffMethodLink', () => {
   })
 
   test('it renders method and navigates on click', () => {
+    const pushSpy = jest.spyOn(history, 'push')
     renderWithTheme(
       <Router history={history}>
         <DiffMethodLink method={method} specKey={specKey} />
@@ -49,8 +50,8 @@ describe('DiffMethodLink', () => {
     )
     const link = screen.getByRole('link')
     expect(link).toHaveTextContent(`${method.name} for ${specKey}`)
-    expect(link).toHaveAttribute(
-      'href',
+    fireEvent.click(link)
+    expect(pushSpy).toHaveBeenCalledWith(
       `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`
     )
   })

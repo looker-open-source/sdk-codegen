@@ -25,6 +25,7 @@
  */
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import styled from 'styled-components'
 import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
@@ -59,12 +60,21 @@ export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   method,
   specKey,
 }) => {
+  const history = useHistory()
+
   if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
 
   const tag = method.schema.tags[0]
   const path = `${buildMethodPath(specKey, tag, method.name)}`
 
-  return <DiffLink href={path}>{`${method.name} for ${specKey}`}</DiffLink>
+  return (
+    <DiffLink
+      role="link"
+      onClick={() => {
+        history.push(path)
+      }}
+    >{`${method.name} for ${specKey}`}</DiffLink>
+  )
 }
 
 interface DiffItemProps {
