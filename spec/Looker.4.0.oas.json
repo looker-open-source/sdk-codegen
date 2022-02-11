@@ -16141,11 +16141,11 @@
             "in": "query",
             "description": "Suggestion filters with field name keys and comparison expressions",
             "required": false,
-            "additionalProperties": {
-              "type": "string"
-            },
             "schema": {
-              "type": "object"
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
             }
           }
         ],

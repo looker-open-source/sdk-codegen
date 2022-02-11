@@ -11742,10 +11742,7 @@
             "in": "query",
             "description": "Suggestion filters with field name keys and comparison expressions",
             "required": false,
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+            "type": "object"
           }
         ],
         "responses": {
