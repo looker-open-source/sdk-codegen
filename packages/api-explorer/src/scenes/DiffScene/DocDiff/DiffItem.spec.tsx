@@ -28,8 +28,7 @@ import { Router } from 'react-router'
 import type { MemoryHistory } from 'history'
 import { createMemoryHistory } from 'history'
 import { renderWithTheme } from '@looker/components-test-utils'
-import userEvent from '@testing-library/user-event'
-import { act, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { api } from '../../../test-data'
 import { DiffMethodLink } from './DiffItem'
 
@@ -37,11 +36,9 @@ describe('DiffMethodLink', () => {
   const method = api.methods.create_dashboard
   const specKey = '4.0'
   let history: MemoryHistory
-  let pushSpy: jasmine.Spy
 
   beforeEach(() => {
     history = createMemoryHistory()
-    pushSpy = spyOn(history, 'push')
   })
 
   test('it renders method and navigates on click', () => {
@@ -50,14 +47,12 @@ describe('DiffMethodLink', () => {
         <DiffMethodLink method={method} specKey={specKey} />
       </Router>
     )
-    const s = `${method.name} for ${specKey}`
-    expect(screen.getByText(s)).toBeInTheDocument()
-    userEvent.click(screen.getByText(s))
-    act(() => {
-      expect(pushSpy).toHaveBeenCalledWith(
-        `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`
-      )
-    })
+    const link = screen.getByRole('link')
+    expect(link).toHaveTextContent(`${method.name} for ${specKey}`)
+    expect(link).toHaveAttribute(
+      'href',
+      `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`
+    )
   })
 
   test('it renders missing method and does not navigate on click', () => {
@@ -68,9 +63,6 @@ describe('DiffMethodLink', () => {
     )
     const s = `Missing in ${specKey}`
     expect(screen.getByText(s)).toBeInTheDocument()
-    userEvent.click(screen.getByText(s))
-    act(() => {
-      expect(pushSpy).not.toHaveBeenCalled()
-    })
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 })
