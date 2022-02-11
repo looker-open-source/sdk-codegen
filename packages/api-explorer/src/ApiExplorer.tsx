@@ -65,10 +65,10 @@ import {
   useLodesStoreState,
   useSpecActions,
   useSpecStoreState,
-  selectCurrentSpec,
   selectSpecs,
+  selectCurrentSpec,
 } from './state'
-import { specKeyFromPath } from './utils/path'
+import { getSpecKey } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -111,7 +111,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     initSettingsAction()
     initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
 
-    const specKey = specKeyFromPath(location.pathname)
+    const specKey = getSpecKey(location)
     initSpecsAction({ specKey })
     return () => unregisterEnvAdaptor()
   }, [])

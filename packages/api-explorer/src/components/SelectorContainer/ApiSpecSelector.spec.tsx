@@ -28,15 +28,13 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as reactRedux from 'react-redux'
 
-import { specs, getLoadedSpecState } from '../../test-data'
+import { getLoadedSpecs, specs } from '../../test-data'
 import {
   renderWithReduxProvider,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
 import { useSpecActions } from '../../state'
 import { ApiSpecSelector } from './ApiSpecSelector'
-
-const specState = getLoadedSpecState()
 
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
@@ -57,15 +55,16 @@ jest.mock('../../state/specs', () => ({
 
 describe('ApiSpecSelector', () => {
   Element.prototype.scrollIntoView = jest.fn()
+  const spec = getLoadedSpecs()['4.0']
 
-  test('the current spec is selected by default', () => {
-    renderWithReduxProvider(<ApiSpecSelector spec={specState.spec} />)
+  test('the base spec is selected by default', () => {
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
     const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(`${specState.spec.key}`)
+    expect(selector).toHaveValue(`${spec.key}`)
   })
 
   test('it lists all available specs', async () => {
-    renderWithReduxProvider(<ApiSpecSelector spec={specState.spec} />)
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
     userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
@@ -79,7 +78,7 @@ describe('ApiSpecSelector', () => {
     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
     const { setCurrentSpecAction } = useSpecActions()
 
-    renderWithRouterAndReduxProvider(<ApiSpecSelector spec={specState.spec} />)
+    renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />)
     userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(

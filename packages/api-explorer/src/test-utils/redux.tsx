@@ -43,7 +43,7 @@ import {
   defaultSpecsState,
   specsSlice,
 } from '../state'
-import { specs } from '../test-data'
+import { specState } from '../test-data'
 import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
@@ -90,8 +90,7 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
         ...overrides?.lodes,
       } as LodesState,
       specs: {
-        ...defaultSpecsState,
-        specs,
+        ...specState,
         ...overrides?.specs,
       } as SpecState,
     },

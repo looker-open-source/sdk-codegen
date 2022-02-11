@@ -52,7 +52,6 @@ export interface InitSpecsAction {
 export interface InitSpecsSuccessPayload {
   specs: SpecList
   currentSpecKey: string
-  // api: ApiModel
 }
 
 export interface SetCurrentSpecAction {
@@ -78,7 +77,6 @@ export const specsSlice = createSlice({
     ) {
       state.specs = action.payload.specs
       state.currentSpecKey = action.payload.currentSpecKey
-      // state.specs[action.payload.currentSpecKey].api = action.payload.api
       state.working = false
       state.description = undefined
     },

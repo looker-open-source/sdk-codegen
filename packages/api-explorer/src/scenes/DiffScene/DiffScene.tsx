@@ -26,7 +26,7 @@
 
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
-import type { ApiModel, DiffRow, SpecList, SpecItem } from '@looker/sdk-codegen'
+import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import {
   Box,
@@ -38,34 +38,13 @@ import {
   SelectMulti,
 } from '@looker/components'
 import { SyncAlt } from '@styled-icons/material/SyncAlt'
+import { useSelector } from 'react-redux'
 
-import { getDefaultSpecKey } from '../../reducers/spec/utils'
-import { diffPath, fallbackFetch, funFetch } from '../../utils'
 import { ApixSection } from '../../components'
+import { selectCurrentSpec } from '../../state'
+import { diffPath, getApixAdaptor } from '../../utils'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
-
-/**
- * Pick the left key, or default spec
- * @param specs to pick from
- * @param leftKey spec key that may or may not have a value
- */
-const pickLeft = (specs: SpecList, leftKey: string) => {
-  if (leftKey) return leftKey
-  return getDefaultSpecKey(specs)
-}
-
-/**
- * Pick the right key, or "other" spec
- * @param specs to pick from
- * @param rightKey spec key from url path
- * @param leftKey spec key from url path
- */
-const pickRight = (specs: SpecList, rightKey: string, leftKey: string) => {
-  if (rightKey) return rightKey
-  if (!leftKey) leftKey = getDefaultSpecKey(specs)
-  return Object.keys(specs).find((k) => k !== leftKey) || ''
-}
 
 const diffToggles = [
   {
@@ -104,7 +83,10 @@ const validateParam = (specs: SpecList, specKey = '') => {
 }
 
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
+  const adaptor = getApixAdaptor()
   const history = useHistory()
+  const spec = useSelector(selectCurrentSpec)
+  const currentSpecKey = spec.key
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
   const l = validateParam(specs, match?.params.l)
   const r = validateParam(specs, match?.params.r)
@@ -114,10 +96,10 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     label: `${key} (${spec.status})`,
   }))
 
-  const [leftKey, setLeftKey] = useState<string>(pickLeft(specs, l))
-  const [rightKey, setRightKey] = useState<string>(pickRight(specs, r, leftKey))
+  const [leftKey, setLeftKey] = useState<string>(l || currentSpecKey)
+  const [rightKey, setRightKey] = useState<string>(r || '')
   const [leftApi, setLeftApi] = useState<ApiModel>(specs[leftKey].api!)
-  const [rightApi, setRightApi] = useState<ApiModel>(
+  const [rightApi, setRightApi] = useState<ApiModel>(() =>
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
   const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
@@ -126,63 +108,11 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     toggleNavigation(false)
   }, [])
 
-  const computeDelta = (left: string, right: string, toggles: string[]) => {
-    if (left && right && specs[left].api && specs[right].api) {
-      return diffSpecs(specs[left].api!, specs[right].api!, toggles)
-    }
-    return []
-  }
-  const [delta, setDelta] = useState<DiffRow[]>(
-    computeDelta(leftKey, rightKey, toggles)
-  )
-
-  const loadSpec = async (
-    specs: SpecList,
-    key: string,
-    setter: (spec: SpecItem) => void
-  ) => {
-    const spec = specs[key]
-    if (!spec.api) {
-      try {
-        const newSpec = { ...spec }
-        const api = await fallbackFetch(newSpec, funFetch)
-        if (api) {
-          spec.api = api
-          setter(spec)
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }
-
-  const compareKeys = async (left: string, right: string) => {
-    if (left !== leftKey || right !== rightKey) {
-      history.push(`/${diffPath}/${left}/${right}`)
-    }
-    if (!specs[left].api) {
-      await loadSpec(specs, leftKey, (spec) => setLeftApi(spec.api!))
-    }
-    if (!specs[right].api) {
-      await loadSpec(specs, rightKey, (spec) => setRightApi(spec.api!))
-    }
-    setDelta([...computeDelta(left, right, toggles)])
-  }
+  const [delta, setDelta] = useState<DiffRow[]>([])
 
   const handleLeftChange = (newLeft: string) => {
     setLeftKey(newLeft)
   }
-
-  const handleTogglesChange = (values?: string[]) => {
-    const newToggles = values || []
-    setToggles(newToggles)
-    setDelta([...computeDelta(leftKey, rightKey, newToggles)])
-  }
-
-  useEffect(() => {
-    compareKeys(leftKey, rightKey)
-  }, [leftKey, rightKey])
-
   const handleRightChange = (newRight: string) => {
     setRightKey(newRight)
   }
@@ -192,6 +122,31 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     setLeftKey(rightKey)
     setRightKey(currLeftKey)
   }
+
+  useEffect(() => {
+    adaptor.fetchSpec(specs[leftKey]).then((spec) => setLeftApi(spec.api!))
+  }, [leftKey])
+
+  useEffect(() => {
+    if (rightKey in specs) {
+      adaptor.fetchSpec(specs[rightKey]).then((spec) => setRightApi(spec.api!))
+    }
+  }, [rightKey])
+
+  useEffect(() => {
+    if (leftApi && rightApi) {
+      setDelta([...diffSpecs(leftApi, rightApi, toggles)])
+    }
+  }, [leftApi, rightApi, toggles])
+
+  const handleTogglesChange = (values?: string[]) => {
+    const newToggles = values || []
+    setToggles(newToggles)
+  }
+
+  useEffect(() => {
+    history.push(`/${diffPath}/${leftKey}/${rightKey}`)
+  }, [leftKey, rightKey])
 
   return (
     <ApixSection>
@@ -211,6 +166,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
           <IconButton
             label="switch"
             size="small"
+            disabled={!leftKey || !rightKey}
             icon={<SyncAlt />}
             mt="medium"
             onClick={handleSwitch}
@@ -221,6 +177,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
               mt="xxsmall"
               id="compare"
               name="Right Version"
+              placeholder="Select a comparison..."
               value={rightKey}
               options={options}
               onChange={handleRightChange}

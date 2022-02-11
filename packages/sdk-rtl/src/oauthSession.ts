@@ -130,10 +130,8 @@ export class OAuthSession extends AuthSession {
    */
   set returnUrl(value: string | null) {
     if (!value) {
-      console.log('Removing return url')
       sessionStorage.removeItem(OAuthSession.returnUrlKey)
     } else {
-      console.log(`Saving return url ${value}`)
       sessionStorage.setItem(OAuthSession.returnUrlKey, value)
     }
   }

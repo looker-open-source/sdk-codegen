@@ -24,13 +24,7 @@
 
  */
 export { highlightHTML } from './highlight'
-export {
-  buildPath,
-  buildMethodPath,
-  buildTypePath,
-  diffPath,
-  oAuthPath,
-} from './path'
+export * from './path'
 export { getLoded } from './lodeUtils'
 export { useWindowSize } from './useWindowSize'
 export * from './apixAdaptor'
