@@ -2561,11 +2561,11 @@ type RequestLogin struct {
 
 // Dynamically generated request type for model_fieldname_suggestions
 type RequestModelFieldnameSuggestions struct {
-  ModelName string  `json:"model_name"`         // Name of model
-  ViewName  string  `json:"view_name"`          // Name of view
-  FieldName string  `json:"field_name"`         // Name of field to use for suggestions
-  Term      *string `json:"term,omitempty"`     // Search term pattern (evaluated as as `%term%`)
-  Filters   *struct `json:"filters,omitempty"`  // Suggestion filters with field name keys and comparison expressions
+  ModelName string       `json:"model_name"`         // Name of model
+  ViewName  string       `json:"view_name"`          // Name of view
+  FieldName string       `json:"field_name"`         // Name of field to use for suggestions
+  Term      *string      `json:"term,omitempty"`     // Search term pattern (evaluated as as `%term%`)
+  Filters   *interface{} `json:"filters,omitempty"`  // Suggestion filters with field name keys and comparison expressions
 }
 
 // Dynamically generated request type for role_users
