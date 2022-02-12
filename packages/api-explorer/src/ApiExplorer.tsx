@@ -137,8 +137,8 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const themeOverrides = adaptor.themeOverrides()
 
   let neededSpec = location.pathname?.split('/')[1]
-  if (neededSpec === diffPath) {
-    neededSpec = spec.key
+  if (!neededSpec || neededSpec === diffPath) {
+    neededSpec = spec?.key
   }
 
   return (
@@ -147,7 +147,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
         loadGoogleFonts={themeOverrides.loadGoogleFonts}
         themeCustomizations={themeOverrides.themeCustomizations}
       >
-        {working || neededSpec !== spec.key ? (
+        {working || !neededSpec || neededSpec !== spec.key ? (
           <Loader message={description} themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>
