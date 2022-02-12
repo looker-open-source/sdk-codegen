@@ -68,11 +68,7 @@ export const ExtensionApiExplorer: FC = () => {
   return (
     <Provider store={store}>
       <RunItProvider basePath="">
-        <ApiExplorer
-          adaptor={extensionAdaptor}
-          // TODO We need expand/collapse side nav for the headless extension before we enabled this
-          headless={false}
-        />
+        <ApiExplorer adaptor={extensionAdaptor} headless={true} />
       </RunItProvider>
     </Provider>
   )
