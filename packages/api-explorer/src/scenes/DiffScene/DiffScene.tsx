@@ -105,22 +105,32 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
 
   useEffect(() => {
+    if (r !== rightKey) {
+      setRightKey(r)
+    }
+  }, [r, rightKey])
+
+  useEffect(() => {
+    if (l !== leftKey) {
+      setLeftKey(l)
+    }
+  }, [l, leftKey])
+
+  useEffect(() => {
     toggleNavigation(false)
   }, [])
 
   const [delta, setDelta] = useState<DiffRow[]>([])
 
   const handleLeftChange = (newLeft: string) => {
-    setLeftKey(newLeft)
+    history.push(`/${diffPath}/${newLeft}/${rightKey}`)
   }
   const handleRightChange = (newRight: string) => {
-    setRightKey(newRight)
+    history.push(`/${diffPath}/${leftKey}/${newRight}`)
   }
 
   const handleSwitch = () => {
-    const currLeftKey = leftKey
-    setLeftKey(rightKey)
-    setRightKey(currLeftKey)
+    history.push(`/${diffPath}/${rightKey}/${leftKey}`)
   }
 
   useEffect(() => {
@@ -143,10 +153,6 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     const newToggles = values || []
     setToggles(newToggles)
   }
-
-  useEffect(() => {
-    history.push(`/${diffPath}/${leftKey}/${rightKey}`)
-  }, [leftKey, rightKey])
 
   return (
     <ApixSection>
