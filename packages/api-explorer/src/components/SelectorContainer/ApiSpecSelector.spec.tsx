@@ -26,14 +26,12 @@
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import * as reactRedux from 'react-redux'
-
+import { useHistory } from 'react-router-dom'
 import { getLoadedSpecs, specs } from '../../test-data'
 import {
   renderWithReduxProvider,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
-import { useSpecActions } from '../../state'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
 jest.mock('react-router-dom', () => {
@@ -43,15 +41,16 @@ jest.mock('react-router-dom', () => {
     useLocation: () => ({
       pathname: '/4.0/methods/Dashboard/dashboard',
     }),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn() }),
   }
 })
 
-jest.mock('../../state/specs', () => ({
-  ...(jest.requireActual('../../state/specs') as Record<string, unknown>),
-  useSpecActions: jest
-    .fn()
-    .mockReturnValue({ setCurrentSpecAction: jest.fn() }),
-}))
+// jest.mock('../../state/specs', () => ({
+//   ...(jest.requireActual('../../state/specs') as Record<string, unknown>),
+//   useSpecActions: jest
+//     .fn()
+//     .mockReturnValue({ setCurrentSpecAction: jest.fn() }),
+// }))
 
 describe('ApiSpecSelector', () => {
   Element.prototype.scrollIntoView = jest.fn()
@@ -73,11 +72,8 @@ describe('ApiSpecSelector', () => {
     })
   })
 
-  test('fetches selected spec', async () => {
-    const mockDispatch = jest.fn()
-    jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-    const { setCurrentSpecAction } = useSpecActions()
-
+  test('requests selected spec', async () => {
+    const { push } = useHistory()
     renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />)
     userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
@@ -87,8 +83,6 @@ describe('ApiSpecSelector', () => {
     })
     const button = screen.getByText('3.1')
     userEvent.click(button)
-    expect(setCurrentSpecAction).toHaveBeenCalledWith({
-      currentSpecKey: '3.1',
-    })
+    expect(push).toHaveBeenCalledWith('/3.1/methods/Dashboard/dashboard')
   })
 })

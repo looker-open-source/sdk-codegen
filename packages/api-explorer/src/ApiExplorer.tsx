@@ -68,7 +68,7 @@ import {
   selectSpecs,
   selectCurrentSpec,
 } from './state'
-import { getSpecKey } from './utils'
+import { getSpecKey, diffPath } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -92,7 +92,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction } = useSettingActions()
-  const { initSpecsAction } = useSpecActions()
+  const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
   const [hasNavigation, setHasNavigation] = useState(true)
@@ -117,6 +117,13 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
+    const maybeSpec = location.pathname?.split('/')[1]
+    if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
+      setCurrentSpecAction({ currentSpecKey: maybeSpec })
+    }
+  }, [location.pathname, spec])
+
+  useEffect(() => {
     if (headless) {
       window.addEventListener('message', hasNavigationToggle)
     }
@@ -129,13 +136,18 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   const themeOverrides = adaptor.themeOverrides()
 
+  let neededSpec = location.pathname?.split('/')[1]
+  if (neededSpec === diffPath) {
+    neededSpec = spec.key
+  }
+
   return (
     <>
       <ComponentsProvider
         loadGoogleFonts={themeOverrides.loadGoogleFonts}
         themeCustomizations={themeOverrides.themeCustomizations}
       >
-        {working ? (
+        {working || neededSpec !== spec.key ? (
           <Loader message={description} themeOverrides={themeOverrides} />
         ) : (
           <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>

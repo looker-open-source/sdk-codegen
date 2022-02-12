@@ -31,7 +31,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import type { SpecItem } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
-import { selectSpecs, useSpecActions } from '../../state'
+import { selectSpecs } from '../../state'
 
 interface ApiSpecSelectorProps {
   spec: SpecItem
@@ -41,7 +41,6 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
   const history = useHistory()
   const location = useLocation()
   const specs = useSelector(selectSpecs)
-  const { setCurrentSpecAction } = useSpecActions()
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: key,
@@ -49,7 +48,6 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
   }))
 
   const handleChange = (specKey: string) => {
-    setCurrentSpecAction({ currentSpecKey: specKey })
     const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
     history.push(matchPath)
   }
