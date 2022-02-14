@@ -26,3 +26,4 @@
 export * from './store'
 export * from './settings'
 export * from './lodes'
+export * from './specs'

@@ -43,41 +43,35 @@ import {
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
 import { getEnvAdaptor } from '@looker/extension-utils'
+import type { ILookerVersions } from '@looker/sdk-codegen'
 
-import type { RunItSetter, RunItValues } from '../..'
+import type { RunItValues } from '../..'
+import { CollapserCard, RunItHeading, DarkSpan, readyToLogin } from '../..'
 import {
-  CollapserCard,
-  RunItFormKey,
-  RunItHeading,
-  DarkSpan,
-  readyToLogin,
-  RunItNoConfig,
-} from '../..'
-import type { ILoadedSpecs } from './configUtils'
-import {
+  getVersions,
   RunItConfigKey,
+  RunItNoConfig,
+  RunItFormKey,
   validateUrl,
-  loadSpecsFromVersions,
-} from './configUtils'
+} from './utils'
 
 const POSITIVE: MessageBarIntent = 'positive'
 
-interface IFieldValues extends ILoadedSpecs {
+interface IFieldValues {
+  baseUrl: string
+  webUrl: string
   fetchIntent: MessageBarIntent
+  fetchResult: string
 }
 
 const defaultFieldValues: IFieldValues = {
   baseUrl: '',
   webUrl: '',
-  /** not currently used but declared for property compatibility for ILoadedSpecs */
-  headless: false,
-  specs: {},
   fetchResult: '',
   fetchIntent: POSITIVE,
 }
 
 interface ConfigFormProps {
-  setVersionsUrl: RunItSetter
   /** A collection type react state to store path, query and body parameters as entered by the user  */
   requestContent: RunItValues
   /** Title for the config form */
@@ -87,7 +81,6 @@ interface ConfigFormProps {
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
-  setVersionsUrl,
   title,
   requestContent,
   setHasConfig,
@@ -105,7 +98,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   "enabled": true
 }
 `
-  const sdk = getEnvAdaptor().sdk
+  const adaptor = getEnvAdaptor()
+  const sdk = adaptor.sdk
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
   title = title || 'RunIt Configuration'
@@ -114,7 +108,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     // TODO: This is temporary until config settings are available in redux.
     // get configuration from storage, or default it
     const data = localStorage.getItem(RunItConfigKey)
-    const result = data ? JSON.parse(data) : { base_url: '', looker_url: '' } // TODO why is RunItNoConfig undefined here?
+    const result = data ? JSON.parse(data) : RunItNoConfig
     return result
   }
 
@@ -170,28 +164,26 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
-    // e.preventDefault()
+    updateMessage('inform', '')
+    const versionsUrl = `${fields.baseUrl}/versions`
     try {
-      updateMessage('inform', '')
-      const versionsUrl = `${fields.baseUrl}/versions`
-      const { webUrl, baseUrl } = await loadSpecsFromVersions(versionsUrl)
-      if (!baseUrl || !webUrl) {
-        fetchError('Invalid server configuration')
-      } else {
-        updateFields({ [BASE_URL]: baseUrl, [WEB_URL]: webUrl })
-        updateMessage(POSITIVE, 'Configuration is valid')
-        if (save) {
-          const data = { base_url: baseUrl, looker_url: webUrl }
-          // TODO: replace when redux is introduced to run it
-          localStorage.setItem(RunItConfigKey, JSON.stringify(data))
-          if (setHasConfig) setHasConfig(true)
-          setSaved(data)
-          setVersionsUrl(versionsUrl)
-          updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
-        }
+      const { web_server_url: webUrl, api_server_url: baseUrl } =
+        (await getVersions(versionsUrl)) as ILookerVersions
+      updateFields({
+        [BASE_URL]: baseUrl,
+        [WEB_URL]: webUrl,
+      })
+      updateMessage(POSITIVE, 'Configuration is valid')
+      if (save) {
+        const data = { base_url: baseUrl, looker_url: webUrl }
+        // TODO: replace when redux is introduced to run it
+        localStorage.setItem(RunItConfigKey, JSON.stringify(data))
+        if (setHasConfig) setHasConfig(true)
+        setSaved(data)
+        updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
       }
-    } catch (err: any) {
-      fetchError(err.message)
+    } catch (e: any) {
+      fetchError(e.message)
     }
   }
 
@@ -264,7 +256,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       localStorage.setItem(RunItFormKey, JSON.stringify(requestContent))
     }
     // This will set storage variables and return to OAuthScene when successful
-    await sdk.authSession.login()
+    await adaptor.login()
   }
 
   return (

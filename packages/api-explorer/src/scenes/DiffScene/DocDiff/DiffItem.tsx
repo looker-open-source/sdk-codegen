@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import type { FC, BaseSyntheticEvent } from 'react'
+import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import { useHistory } from 'react-router'
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import styled from 'styled-components'
-import { Accordion2, Box, Card, Grid, Heading } from '@looker/components'
+import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
 import type { DiffRow } from '@looker/sdk-codegen/src'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
@@ -42,7 +42,7 @@ interface DiffMethodLinkProps {
   specKey: string
 }
 
-const DiffLink = styled(Heading)`
+const DiffLink = styled(Link)`
   color: ${({ theme }) => theme.colors.ui5};
   cursor: pointer;
   display: block;
@@ -61,19 +61,18 @@ export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   specKey,
 }) => {
   const history = useHistory()
+
   if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
 
-  const handleClick = (e: BaseSyntheticEvent) => {
-    e.stopPropagation()
-    const tag = method.schema.tags[0]
-    const path = `${buildMethodPath(specKey, tag, method.name)}`
-    history.push(path)
-  }
+  const tag = method.schema.tags[0]
+  const path = `${buildMethodPath(specKey, tag, method.name)}`
 
   return (
     <DiffLink
-      as="h4"
-      onClick={handleClick}
+      role="link"
+      onClick={() => {
+        history.push(path)
+      }}
     >{`${method.name} for ${specKey}`}</DiffLink>
   )
 }

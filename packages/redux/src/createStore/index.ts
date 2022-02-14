@@ -67,7 +67,7 @@ export const createStore = <State>({
   const sagasSet = new WeakSet()
   const sagaMiddleware = createSagaMiddleware()
   const store = configureStore({
-    devTools: process.env.NODE_ENV !== 'production' || devTools,
+    devTools: devTools || process.env.NODE_ENV !== 'production',
     middleware: [sagaMiddleware, ...middleware],
     reducer: currentReducers,
     preloadedState,
