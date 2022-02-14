@@ -35,7 +35,7 @@ import { buildResponseTree } from './utils'
 describe('DocResponses', () => {
   test('it renders all response statuses and their types', async () => {
     const responses = api.methods.run_look.responses
-    renderWithRouter(<DocResponses responses={responses} />)
+    renderWithRouter(<DocResponses api={api} responses={responses} />)
 
     expect(screen.getByText('Response Models')).toBeInTheDocument()
 

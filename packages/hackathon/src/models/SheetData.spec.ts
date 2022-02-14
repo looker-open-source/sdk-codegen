@@ -24,7 +24,9 @@
 
  */
 
-import { ISheet, noDate, SheetSDK } from '@looker/wholly-sheet'
+import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { noDate } from '@looker/wholly-sheet'
+import { add } from 'date-fns'
 import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAHacker,
@@ -33,7 +35,7 @@ import {
   wait2Mins,
 } from '../test-data/mocks'
 import { initActiveSheet } from './SheetData'
-import { SheetData, ITeamMemberProps } from '.'
+import type { SheetData, ITeamMemberProps } from '.'
 
 let sheetSDK: SheetSDK
 let doc: ISheet
@@ -63,13 +65,22 @@ describe('SheetData', () => {
       expect(actual.teamMembers.checkHeader()).toEqual(true)
       expect(actual.technologies.checkHeader()).toEqual(true)
     })
-    test('gets current hackathon', () => {
-      data.hackathons.rows.forEach((h) => (h.default = false))
-      const actual = data.hackathons.getCurrentHackathon()
-      expect(actual).toBeDefined()
-      expect(actual?.judging_stops.getTime()).toBeGreaterThan(
-        new Date().getTime()
-      )
+    describe('current hackathon detection', () => {
+      test('always gets a hackathon', () => {
+        data.hackathons.rows.forEach((h) => (h.default = false))
+        const actual = data.hackathons.getCurrentHackathon()
+        expect(actual).toBeDefined()
+      })
+      test('gets next hackathon as current', () => {
+        data.hackathons.rows.forEach((h) => (h.default = false))
+        data.hackathons.rows[data.hackathons.rows.length - 1].judging_stops =
+          add(new Date(), { hours: 8 })
+        const actual = data.hackathons.getCurrentHackathon()
+        expect(actual).toBeDefined()
+        expect(actual?.judging_stops.getTime()).toBeGreaterThan(
+          new Date().getTime()
+        )
+      })
     })
     test('registers a user', async () => {
       const hackathon = data.currentHackathon
@@ -134,7 +145,7 @@ describe('SheetData', () => {
                 try {
                   project = await project.join(hacker)
                   expect('we').toEqual('should not be here')
-                } catch (e) {
+                } catch (e: any) {
                   expect(e.message).toMatch(/team members per project/)
                 }
               }
@@ -253,7 +264,7 @@ describe('SheetData', () => {
         try {
           await project.addJudge(hacker)
           expect('we').toEqual('should not be here')
-        } catch (e) {
+        } catch (e: any) {
           expect(e.message).toMatch(/is not a judge/)
         }
       })

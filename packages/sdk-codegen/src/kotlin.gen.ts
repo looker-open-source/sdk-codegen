@@ -24,17 +24,18 @@
 
  */
 
-import {
+import type {
   Arg,
-  EnumType,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  mayQuote,
+  ArgValues,
 } from './sdkModels'
-import { IMappedType, CodeGen, commentBlock } from './codeGen'
+import { EnumType, mayQuote } from './sdkModels'
+import type { IMappedType, CodeAssignment } from './codeGen'
+import { CodeGen, commentBlock, trimInputs } from './codeGen'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'
@@ -46,6 +47,18 @@ export class KotlinGen extends CodeGen {
   transport = 'transport'
 
   argDelimiter = ', '
+  // makeTheCall definitions
+  argSetSep = ' = '
+  hashSetSep = ' to '
+  arrayOpen = 'arrayOf('
+  arrayClose = ')'
+  hashOpen = 'mapOf('
+  hashClose = ')'
+  hashKeyQuote = '"'
+  typeOpen = '('
+  typeClose = ')'
+  useModelClassForTypes = true
+
   paramDelimiter = ',\n'
   propDelimiter = ',\n'
   codeQuote = '"'
@@ -117,7 +130,6 @@ class ${this.sdkClassName()}Stream(authSession: AuthSession) : APIMethods(authSe
 
 package com.looker.sdk${this.apiNamespace()}
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -156,14 +168,10 @@ import java.util.*
   declareProperty(indent: string, property: IProperty) {
     const optional = !property.required ? '? = null' : ''
     const type = this.typeMap(property.type)
-    // Bypass jackson serialization bug https://stackoverflow.com/questions/32270422/jackson-renames-primitive-boolean-field-by-removing-is
-    const attr =
-      property.hasSpecialNeeds ||
-      property.jsonName.startsWith('is') ||
-      property.jsonName.startsWith('get') ||
-      property.jsonName.startsWith('set')
-        ? `${indent}@get:JsonProperty("${property.jsonName}")\n${indent}@param:JsonProperty("${property.jsonName}")\n`
-        : ''
+    // handle property names with special characters
+    const attr = property.hasSpecialNeeds
+      ? `${indent}@SerializedName("${property.jsonName}")\n`
+      : ''
     const result = `${attr}${indent}var ${property.name}: ${type.name}${optional}`
     return result
   }
@@ -182,6 +190,65 @@ import java.util.*
       `${indent}${param.name}: ${mapped.name}${pOpt}` +
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
+  }
+
+  /**
+   * Maps input values into type
+   * @param indent starting indent level
+   * @param type that receives assignments
+   * @param inputs to assign to type
+   */
+  assignType(indent: string, type: IType, inputs: ArgValues): string {
+    const result = super.assignType(indent, type, inputs)
+    if (result || type.className !== 'DelimArrayType') return result
+    const mt = this.typeMap(type)
+    const args: string[] = []
+    // child properties are indented one level
+    const bump = this.bumper(indent)
+    const v = this.arrayValue(bump, type, inputs)
+    args.push(v)
+    const open = this.useModelClassForTypes
+      ? `${mt.name}${this.typeOpen}`
+      : this.typeOpen
+    const nl = `,\n${bump}`
+    // need a bump after `open` to account for the first argument
+    // not getting the proper bump from args.join()
+    return `${open}\n${bump}${args.join(nl)}\n${indent}${this.typeClose}`
+  }
+
+  // overridden from CodeGen
+  assignParams(method: IMethod, inputs: ArgValues): string {
+    const args: string[] = []
+    let hasComplexArg = false
+    if (Object.keys(inputs).length > 0) {
+      method.allParams.forEach((p) => {
+        const v = this.argValue(this.indentStr, p, inputs)
+        if (v !== '') {
+          // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
+          const arg = !p.required ? `${p.name}${this.argSetSep}${v}` : v
+          args.push(arg)
+          if (!p.type.intrinsic) {
+            hasComplexArg = true
+          }
+        }
+      })
+    }
+    let open = ''
+    if (args.length > 1 || hasComplexArg) {
+      open = `\n${this.indentStr}`
+    }
+    return args.length > 0 ? `${open}${args.join(this.argDelimiter)}` : ''
+  }
+
+  // overridden from CodeGen
+  makeTheCall(method: IMethod, inputs: ArgValues): string {
+    inputs = trimInputs(inputs)
+    const typeName = method.returnType?.type
+      ? this.typeMap(method.returnType.type).name
+      : 'String'
+    const resp = `val response = await sdk.ok<${typeName}>(sdk.${method.name}(`
+    const args = this.assignParams(method, inputs)
+    return `${resp}${args}))`
   }
 
   methodHeaderComment(method: IMethod, streamer = false) {
@@ -454,6 +521,7 @@ ${props.join(this.propDelimiter)}
   typeMap(type: IType): IMappedType {
     super.typeMap(type)
     const mt = this.nullStr
+    const asString: CodeAssignment = (_, v) => `"${v}"`
     const ktTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'Any' },
       boolean: { default: mt, name: 'Boolean' },
@@ -467,11 +535,11 @@ ${props.join(this.propDelimiter)}
       integer: { default: mt, name: 'Int' },
       number: { default: mt, name: 'Double' },
       object: { default: mt, name: 'Any' },
-      password: { default: mt, name: 'Password' },
-      string: { default: mt, name: 'String' },
-      uri: { default: mt, name: 'UriString' },
-      url: { default: mt, name: 'UrlString' },
-      void: { default: mt, name: 'Void' },
+      password: { default: mt, name: 'Password', asVal: asString },
+      string: { default: mt, name: 'String', asVal: asString },
+      uri: { default: mt, name: 'UriString', asVal: asString },
+      url: { default: mt, name: 'UrlString', asVal: asString },
+      void: { default: mt, name: 'Void', asVal: (_i, _v: any) => 'String' },
     }
 
     if (type.elementType) {
@@ -489,7 +557,11 @@ ${props.join(this.propDelimiter)}
         case 'DelimArrayType':
           return { default: this.nullStr, name: `DelimArray<${map.name}>` }
         case 'EnumType':
-          return { default: '', name: type.name }
+          return {
+            default: '',
+            name: type.name,
+            asVal: (_, v) => `${type.name}.${v}`,
+          }
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`)
     }

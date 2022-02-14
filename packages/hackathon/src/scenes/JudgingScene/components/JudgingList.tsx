@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -31,12 +32,12 @@ import {
   DataTableCell,
   Pagination,
 } from '@looker/components'
-import { Info } from '@styled-icons/material/Info'
-import { Create } from '@styled-icons/material/Create'
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
+import { Create } from '@styled-icons/material-outlined/Create'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
-import { IJudgingProps, sheetCell } from '../../../models'
+import type { IJudgingProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import {
   getHackerState,
   getJudgingsHeadings,
@@ -49,9 +50,9 @@ import {
   getJudgingsState,
   getJudgingsPageNumState,
 } from '../../../data/judgings/selectors'
-import { setMoreInfo } from '../../../data/projects/actions'
 import { canDoJudgingAction } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
+import { JudgingViewDialog } from '../../JudgingEditorScene'
 
 interface JudgingListProps {}
 
@@ -62,6 +63,9 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const hacker = useSelector(getHackerState)
   const judgings = useSelector(getJudgingsState)
   const currentPage = useSelector(getJudgingsPageNumState)
+  const [currentJudging, setCurrentJudging] = useState<
+    IJudgingProps | undefined
+  >(undefined)
 
   useEffect(() => {
     dispatch(getJudgingsRequest())
@@ -71,8 +75,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
     dispatch(updateJudgingsPageNum(pageNum))
   }
 
-  const openMoreInfo = ({ $title, $more_info }: IJudgingProps) => {
-    dispatch(setMoreInfo($title, $more_info))
+  const viewJudging = (judging: IJudgingProps) => {
+    setCurrentJudging(judging)
+  }
+
+  const closeView = () => {
+    setCurrentJudging(undefined)
   }
 
   const showJudging = (judgingId: string) => {
@@ -84,23 +92,21 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const actions = (judging: IJudgingProps) => {
     return (
       <>
-        {judging.$more_info && judging.$more_info !== '\0' && (
+        <DataTableAction
+          onClick={viewJudging.bind(null, judging)}
+          icon={<TextSnippet />}
+        >
+          View Judging
+        </DataTableAction>
+        {canDoJudgingAction(hacker, judging) && (
           <DataTableAction
-            onClick={openMoreInfo.bind(null, judging)}
-            icon={<Info />}
+            onClick={showJudging.bind(null, judging._id)}
+            icon={<Create />}
+            itemRole="link"
           >
-            More Information
+            Update Judging
           </DataTableAction>
         )}
-        <DataTableAction
-          onClick={showJudging.bind(null, judging._id)}
-          icon={<Create />}
-          itemRole="link"
-        >
-          {canDoJudgingAction(hacker, judging)
-            ? 'Update Judging'
-            : 'View Juding'}
-        </DataTableAction>
       </>
     )
   }
@@ -130,7 +136,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         pages={totalPages}
         onChange={updatePage}
       />
-      <MoreInfoDialog />
+      <JudgingViewDialog judging={currentJudging} onClose={closeView} />
     </>
   )
 }

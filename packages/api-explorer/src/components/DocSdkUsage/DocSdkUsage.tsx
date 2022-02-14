@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Box,
   Card,
@@ -34,13 +35,13 @@ import {
   Space,
   Pagination,
 } from '@looker/components'
-import { findExampleLanguages, IMethod } from '@looker/sdk-codegen'
+import type { IMethod } from '@looker/sdk-codegen'
+import { findExampleLanguages } from '@looker/sdk-codegen'
+import { CollapserCard } from '@looker/run-it'
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
 import { useSelector } from 'react-redux'
 
-import { getSelectedSdkLanguage } from '../../state'
-import { CollapserCard } from '../Collapser'
-import { LodeContext } from '../../context'
+import { selectSdkLanguage, selectExamplesLode } from '../../state'
 import {
   exampleColumns,
   EMPTY_STRING,
@@ -59,15 +60,16 @@ interface DocSdkUsageProps {
  *  links to the source files
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
-  const { examples } = useContext(LodeContext)
-  const sdkLanguage = useSelector(getSelectedSdkLanguage)
-  let languages = findExampleLanguages(examples, method.name)
+  const examples = useSelector(selectExamplesLode)
+  const sdkLanguage = useSelector(selectSdkLanguage)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
     setPage(1)
   }, [method])
 
+  if (!examples) return <></>
+  let languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
   languages = sortLanguagesByPreference(languages, sdkLanguage)

@@ -23,12 +23,14 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
-export { ProjectsScene } from './ProjectsScene'
-export { UsersScene } from './UsersScene'
-export { JudgingScene } from './JudgingScene'
-export { JudgingEditorScene } from './JudgingEditorScene'
-export { AdminScene } from './AdminScene'
-export { NotFoundScene } from './NotFoundScene'
-export { ProjectEditorScene } from './ProjectEditorScene'
-export { ResourceScene } from './ResourceScene'
+
+export * from './HomeScene'
+export * from './ProjectsScene'
+export * from './UsersScene'
+export * from './JudgingScene'
+export * from './JudgingEditorScene'
+export * from './AdminScene'
+export * from './NotFoundScene'
+export * from './ProjectEditorScene'
+export * from './ResourceScene'
+export * from './utils'

@@ -23,22 +23,12 @@
  SOFTWARE.
 
  */
-import React, { useEffect, FC } from 'react'
-import styled from 'styled-components'
-import { Heading, Section, SectionProps } from '@looker/components'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
+import type { SectionProps } from '@looker/components'
+import { Section } from '@looker/components'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-
-/**
- * Common styled components to be used across the whole library
- */
-
-export const ApixHeading = styled(Heading)``
-
-ApixHeading.defaultProps = {
-  mb: 'xsmall',
-  pt: 'xsmall',
-}
 
 export const REM_TO_PX = 16
 
@@ -58,7 +48,7 @@ export const ApixSection: FC<SectionProps> = (props: any) => {
       {...props}
       id="top"
       p="xxlarge"
-      style={{ height: `${sectionH}px`, overflow: 'auto' }}
+      style={{ height: `${sectionH}px`, overflow: 'auto', borderTop: '0px' }}
     />
   )
 }

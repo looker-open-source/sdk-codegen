@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { HomeScene } from './HomeScene'
+export * from './HomeScene'

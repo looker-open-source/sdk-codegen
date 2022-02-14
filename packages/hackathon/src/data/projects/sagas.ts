@@ -24,23 +24,25 @@
 
  */
 import { all, call, put, takeEvery, select } from 'redux-saga/effects'
-import { SagaIterator } from 'redux-saga'
-import { IProjectProps } from '../../models'
+import type { SagaIterator } from 'redux-saga'
+import type { IProjectProps } from '../../models'
 import { actionMessage, beginLoading, endLoading } from '../common/actions'
 import { sheetsClient } from '../sheets_client'
-import {
-  Actions,
-  currentProjectsRequest,
-  allProjectsResponse,
-  currentProjectsResponse,
+import type {
   UpdateProjectAction,
   DeleteProjectAction,
   LockProjectsAction,
   LockProjectAction,
   CreateProjectAction,
   ChangeMembershipAction,
-  saveProjectResponse,
   GetProjectRequestAction,
+} from './actions'
+import {
+  Actions,
+  currentProjectsRequest,
+  allProjectsResponse,
+  currentProjectsResponse,
+  saveProjectResponse,
   getProjectResponse,
 } from './actions'
 import { getCurrentProjectsState, getIsProjectMemberState } from './selectors'
@@ -48,9 +50,20 @@ import { getCurrentProjectsState, getIsProjectMemberState } from './selectors'
 const createNewProject = (): IProjectProps => {
   const newProject: unknown = {
     title: '',
-    description: '',
+    description: `<Put a project overview here. Should be at least one paragraph.>
+
+Team name: **My fabulous team**
+- Pre-recorded demo video link. Keep it as short as possible. (preferably youtube)
+  - [demo video link](https://youtube.com)
+- Working demo link (optional). Provide any relevant start-up instructions for someone to run the demo.
+  - [demo link](https://looker.com)
+  - start-up instructions
+- Links to any other supporting resources(slides, images, etc.) (preferably google slides and imgur)
+  - [supporting resource link](https://docs.google.com)
+- Add your pictures/screenshots of your team hacking to the [Hack@Home 2021 shared folder](https://bit.ly/hack2021pics). Create your own team folder inside it if you'd like!
+`,
     project_type: 'Open',
-    contestant: false,
+    contestant: true,
     locked: false,
     technologies: [],
     more_info: '',

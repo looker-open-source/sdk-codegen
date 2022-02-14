@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import type { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -36,6 +37,8 @@ import { qualifyMarkdownText, prepareCodeText } from './utils'
 import { TableCell } from './TableCell'
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
 
+type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+
 interface MarkdownProps {
   source: string
   pattern?: string
@@ -43,8 +46,6 @@ interface MarkdownProps {
   linkClickHandler?: (pathname: string, href: string) => void
   paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
 }
-
-type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 export const Markdown: FC<MarkdownProps> = ({
   source,
@@ -67,7 +68,10 @@ export const Markdown: FC<MarkdownProps> = ({
       // Could be a <mark> tag wrapped by an anchor
       const a = findAnchor(e.target)
       if (a) {
-        linkClickHandler(a.pathname, a.href)
+        linkClickHandler(
+          a.getAttribute('pathname') || '',
+          a.getAttribute('href') || ''
+        )
       }
     }
   }
@@ -146,5 +150,9 @@ const MarkdownWrapper = styled.div`
   & > ol {
     padding-left: 20px;
     list-style: decimal outside;
+  }
+  & mark {
+    background-color: #fff2c2;
+    font-weight: 500;
   }
 `

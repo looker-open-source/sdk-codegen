@@ -23,7 +23,18 @@
  SOFTWARE.
 
  */
-import { RootState } from '../store'
+import type { RootState } from '../store'
 
-export const getSelectedSdkLanguage = (state: RootState) =>
-  state.settings!.sdkLanguage
+const selectSettingsState = (state: RootState) => state.settings
+
+export const selectSdkLanguage = (state: RootState) =>
+  selectSettingsState(state).sdkLanguage
+
+export const selectSearchPattern = (state: RootState) =>
+  selectSettingsState(state).searchPattern
+
+export const selectSearchCriteria = (state: RootState) =>
+  selectSettingsState(state).searchCriteria
+
+export const isInitialized = (state: RootState) =>
+  selectSettingsState(state).initialized

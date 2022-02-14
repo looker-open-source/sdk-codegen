@@ -27,13 +27,13 @@
 import { Chatty } from '@looker/chatty'
 import { ExtensionHostApiImpl } from './extension_host_api'
 import { registerHostApi } from './global_listener'
-import {
-  ExtensionEvent,
+import type {
   ExtensionHostApi,
   ExtensionHostConfiguration,
   ExtensionInitializationResponse,
   ExtensionNotification,
 } from './types'
+import { ExtensionEvent } from './types'
 
 /**
  * Connect extension to Looker host. React extensions using the extension-sdk-react

@@ -36,7 +36,7 @@ import { quit } from './nodeUtils'
     const args = process.argv.slice(2)
 
     await runConfig(name, props, args)
-  } catch (e) {
+  } catch (e: any) {
     quit(e)
   }
 })()

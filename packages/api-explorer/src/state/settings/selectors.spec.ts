@@ -23,14 +23,21 @@
  SOFTWARE.
 
  */
-import { getSelectedSdkLanguage } from './selectors'
+import { createTestStore, preloadedState } from '../../test-utils'
+import { selectSdkLanguage, isInitialized } from './selectors'
 
-describe('settings selectors', () => {
-  test('getSelectedSdkLanguages returns selected sdk languages', () => {
-    const sdkLanguage = 'Kotlin'
-    const state = {
-      settings: { sdkLanguage },
-    }
-    expect(getSelectedSdkLanguage(state)).toEqual(sdkLanguage)
+const testStore = createTestStore()
+
+describe('Settings selectors', () => {
+  const state = testStore.getState()
+
+  test('selectSdkLanguage selects', () => {
+    expect(selectSdkLanguage(state)).toEqual(
+      preloadedState.settings.sdkLanguage
+    )
+  })
+
+  test('isInitialized selects', () => {
+    expect(isInitialized(state)).toEqual(preloadedState.settings.initialized)
   })
 })

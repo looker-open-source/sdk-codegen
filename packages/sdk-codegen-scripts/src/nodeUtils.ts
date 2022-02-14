@@ -25,7 +25,8 @@
  */
 
 import * as fs from 'fs'
-import { execSync, ExecSyncOptionsWithStringEncoding } from 'child_process'
+import type { ExecSyncOptionsWithStringEncoding } from 'child_process'
+import { execSync } from 'child_process'
 import path from 'path'
 import { warn } from '@looker/sdk-codegen-utils'
 
@@ -52,7 +53,7 @@ export const writeFileSync = (
 export const isDirSync = (filePath: string) => {
   try {
     return fs.statSync(filePath).isDirectory()
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       return false
     } else {
@@ -88,7 +89,7 @@ export const createJsonFile = (
 export const isFileSync = (filePath: string) => {
   try {
     return fs.statSync(filePath).isFile()
-  } catch (e) {
+  } catch (e: any) {
     if (e.code === 'ENOENT') {
       return false
     } else {
@@ -136,7 +137,7 @@ export const run = (
     // const result = await spawnSync(command, args, options)
     command += ' ' + args.join(' ')
     return execSync(command, options)
-  } catch (e) {
+  } catch (e: any) {
     if (warning) {
       warn(errMsg)
       return ''

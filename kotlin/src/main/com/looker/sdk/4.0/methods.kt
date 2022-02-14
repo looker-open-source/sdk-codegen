@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 437 API methods
  */
 
 
@@ -38,6 +38,186 @@ import java.util.*
 class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
   val stream by lazy { LookerSDKStream(this.authSession) }
+
+    //region Alert: Alert
+
+
+    /**
+     * ### Search Alerts
+     *
+     * @param {Long} limit (Optional) Number of results to return (used with `offset`).
+     * @param {Long} offset (Optional) Number of results to skip before returning any (used with `limit`).
+     * @param {String} group_by (Optional) Dimension by which to order the results(`dashboard` | `owner`)
+     * @param {String} fields (Optional) Requested fields.
+     * @param {Boolean} disabled (Optional) Filter on returning only enabled or disabled alerts.
+     * @param {String} frequency (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+     * @param {Boolean} condition_met (Optional) Filter on whether the alert has met its condition when it last executed
+     * @param {String} last_run_start (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+     * @param {String} last_run_end (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+     * @param {Boolean} all_owners (Admin only) (Optional) Filter for all owners.
+     *
+     * GET /alerts/search -> Array<Alert>
+     */
+    @JvmOverloads fun search_alerts(
+        limit: Long? = null,
+        offset: Long? = null,
+        group_by: String? = null,
+        fields: String? = null,
+        disabled: Boolean? = null,
+        frequency: String? = null,
+        condition_met: Boolean? = null,
+        last_run_start: String? = null,
+        last_run_end: String? = null,
+        all_owners: Boolean? = null
+    ) : SDKResponse {
+        return this.get<Array<Alert>>("/alerts/search", 
+            mapOf("limit" to limit,
+                 "offset" to offset,
+                 "group_by" to group_by,
+                 "fields" to fields,
+                 "disabled" to disabled,
+                 "frequency" to frequency,
+                 "condition_met" to condition_met,
+                 "last_run_start" to last_run_start,
+                 "last_run_end" to last_run_end,
+                 "all_owners" to all_owners))
+    }
+
+
+    /**
+     * ### Get an alert by a given alert ID
+     *
+     * @param {Long} alert_id ID of an alert
+     *
+     * GET /alerts/{alert_id} -> Alert
+     */
+    fun get_alert(
+        alert_id: Long
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.get<Alert>("/alerts/${path_alert_id}", mapOf())
+    }
+
+
+    /**
+     * ### Update an alert
+     * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     * #
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {WriteAlert} body
+     *
+     * PUT /alerts/{alert_id} -> Alert
+     */
+    fun update_alert(
+        alert_id: Long,
+        body: WriteAlert
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.put<Alert>("/alerts/${path_alert_id}", mapOf(), body)
+    }
+
+
+    /**
+     * ### Update select alert fields
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+     * #
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {AlertPatch} body
+     *
+     * PATCH /alerts/{alert_id} -> Alert
+     */
+    fun update_alert_field(
+        alert_id: Long,
+        body: AlertPatch
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.patch<Alert>("/alerts/${path_alert_id}", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete an alert by a given alert ID
+     *
+     * @param {Long} alert_id ID of an alert
+     *
+     * DELETE /alerts/{alert_id} -> Void
+     */
+    fun delete_alert(
+        alert_id: Long
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.delete<Void>("/alerts/${path_alert_id}", mapOf())
+    }
+
+
+    /**
+     * ### Create a new alert and return details of the newly created object
+     *
+     * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     *
+     * Example Request:
+     * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+     * ```
+     * {
+     *   "cron": "0 5 * * *",
+     *   "custom_title": "Alert when LA inventory is low",
+     *   "dashboard_element_id": 103,
+     *   "applied_dashboard_filters": [
+     *     {
+     *       "filter_title": "Warehouse Name",
+     *       "field_name": "distribution_centers.name",
+     *       "filter_value": "Los Angeles CA",
+     *       "filter_description": "is Los Angeles CA"
+     *     }
+     *   ],
+     *   "comparison_type": "LESS_THAN",
+     *   "destinations": [
+     *     {
+     *       "destination_type": "EMAIL",
+     *       "email_address": "test@test.com"
+     *     }
+     *   ],
+     *   "field": {
+     *     "title": "Number on Hand",
+     *     "name": "inventory_items.number_on_hand"
+     *   },
+     *   "is_disabled": false,
+     *   "is_public": true,
+     *   "threshold": 1000
+     * }
+     * ```
+     *
+     * @param {WriteAlert} body
+     *
+     * POST /alerts -> Alert
+     */
+    fun create_alert(
+        body: WriteAlert
+    ) : SDKResponse {
+        return this.post<Alert>("/alerts", mapOf(), body)
+    }
+
+
+    /**
+     * ### Enqueue an Alert by ID
+     *
+     * @param {Long} alert_id ID of an alert
+     * @param {Boolean} force Whether to enqueue an alert again if its already running.
+     *
+     * POST /alerts/{alert_id}/enqueue -> Void
+     */
+    @JvmOverloads fun enqueue_alert(
+        alert_id: Long,
+        force: Boolean? = null
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+        return this.post<Void>("/alerts/${path_alert_id}/enqueue", 
+            mapOf("force" to force))
+    }
+
+    //endregion Alert: Alert
 
     //region ApiAuth: API Authentication
 
@@ -134,6 +314,37 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     //endregion ApiAuth: API Authentication
 
     //region Auth: Manage User Authentication Configuration
+
+
+    /**
+     * ### Create an embed secret using the specified information.
+     *
+     * The value of the `secret` field will be set by Looker and returned.
+     *
+     * @param {WriteEmbedSecret} body
+     *
+     * POST /embed_config/secrets -> EmbedSecret
+     */
+    @JvmOverloads fun create_embed_secret(
+        body: WriteEmbedSecret? = null
+    ) : SDKResponse {
+        return this.post<EmbedSecret>("/embed_config/secrets", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete an embed secret.
+     *
+     * @param {Long} embed_secret_id Id of Embed Secret
+     *
+     * DELETE /embed_config/secrets/{embed_secret_id} -> String
+     */
+    fun delete_embed_secret(
+        embed_secret_id: Long
+    ) : SDKResponse {
+        val path_embed_secret_id = encodeParam(embed_secret_id)
+        return this.delete<String>("/embed_config/secrets/${path_embed_secret_id}", mapOf())
+    }
 
 
     /**
@@ -832,6 +1043,100 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         body: WriteSessionConfig
     ) : SDKResponse {
         return this.patch<SessionConfig>("/session_config", mapOf(), body)
+    }
+
+
+    /**
+     * ### Get Support Access Allowlist Users
+     *
+     * Returns the users that have been added to the Support Access Allowlist
+     *
+     * @param {String} fields Requested fields.
+     *
+     * GET /support_access/allowlist -> Array<SupportAccessAllowlistEntry>
+     */
+    @JvmOverloads fun get_support_access_allowlist_entries(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<Array<SupportAccessAllowlistEntry>>("/support_access/allowlist", 
+            mapOf("fields" to fields))
+    }
+
+
+    /**
+     * ### Add Support Access Allowlist Users
+     *
+     * Adds a list of emails to the Allowlist, using the provided reason
+     *
+     * @param {SupportAccessAddEntries} body
+     *
+     * POST /support_access/allowlist -> Array<SupportAccessAllowlistEntry>
+     */
+    fun add_support_access_allowlist_entries(
+        body: SupportAccessAddEntries
+    ) : SDKResponse {
+        return this.post<Array<SupportAccessAllowlistEntry>>("/support_access/allowlist", mapOf(), body)
+    }
+
+
+    /**
+     * ### Delete Support Access Allowlist User
+     *
+     * Deletes the specified Allowlist Entry Id
+     *
+     * @param {String} entry_id Id of Allowlist Entry
+     *
+     * DELETE /support_access/allowlist/{entry_id} -> String
+     */
+    fun delete_support_access_allowlist_entry(
+        entry_id: String
+    ) : SDKResponse {
+        val path_entry_id = encodeParam(entry_id)
+        return this.delete<String>("/support_access/allowlist/${path_entry_id}", mapOf())
+    }
+
+
+    /**
+     * ### Enable Support Access
+     *
+     * Enables Support Access for the provided duration
+     *
+     * @param {SupportAccessEnable} body
+     *
+     * PUT /support_access/enable -> SupportAccessStatus
+     */
+    fun enable_support_access(
+        body: SupportAccessEnable
+    ) : SDKResponse {
+        return this.put<SupportAccessStatus>("/support_access/enable", mapOf(), body)
+    }
+
+
+    /**
+     * ### Disable Support Access
+     *
+     * Disables Support Access immediately
+     *
+     * PUT /support_access/disable -> SupportAccessStatus
+     */
+    fun disable_support_access(
+
+    ) : SDKResponse {
+        return this.put<SupportAccessStatus>("/support_access/disable", mapOf())
+    }
+
+
+    /**
+     * ### Support Access Status
+     *
+     * Returns the current Support Access Status
+     *
+     * GET /support_access/status -> SupportAccessStatus
+     */
+    fun support_access_status(
+
+    ) : SDKResponse {
+        return this.get<SupportAccessStatus>("/support_access/status", mapOf())
     }
 
 
@@ -1554,13 +1859,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
      *
-     * @param {WriteCustomWelcomeEmail} body
+     * @param {CustomWelcomeEmail} body
      * @param {Boolean} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
      *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
     @JvmOverloads fun update_custom_welcome_email(
-        body: WriteCustomWelcomeEmail,
+        body: CustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
     ) : SDKResponse {
         return this.patch<CustomWelcomeEmail>("/custom_welcome_email", 
@@ -1743,21 +2048,67 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Get Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *  - custom_welcome_email
+     *  - onboarding_enabled
+     *
+     * @param {String} fields Requested fields
+     *
+     * GET /setting -> Setting
+     */
+    @JvmOverloads fun get_setting(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<Setting>("/setting", 
+            mapOf("fields" to fields))
+    }
+
+
+    /**
      * ### Configure Looker Settings
      *
      * Available settings are:
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *  - custom_welcome_email
+     *  - onboarding_enabled
      *
-     * @param {Setting} body
+     * See the `Setting` type for more information on the specific values that can be configured.
+     *
+     * @param {WriteSetting} body
+     * @param {String} fields Requested fields
      *
      * PATCH /setting -> Setting
      */
-    fun set_setting(
-        body: Setting
+    @JvmOverloads fun set_setting(
+        body: WriteSetting,
+        fields: String? = null
     ) : SDKResponse {
-        return this.patch<Setting>("/setting", mapOf(), body)
+        return this.patch<Setting>("/setting", 
+            mapOf("fields" to fields), body)
+    }
+
+
+    /**
+     * ### Get current SMTP status.
+     *
+     * @param {String} fields Include only these fields in the response
+     *
+     * GET /smtp_status -> SmtpStatus
+     */
+    @JvmOverloads fun smtp_status(
+        fields: String? = null
+    ) : SDKResponse {
+        return this.get<SmtpStatus>("/smtp_status", 
+            mapOf("fields" to fields))
     }
 
 
@@ -1791,12 +2142,12 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get an API specification for this Looker instance.
      *
-     * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+     * The specification is returned as a JSON document in Swagger 2.x format
      *
      * @param {String} api_version API version
      * @param {String} specification Specification name. Typically, this is "swagger.json"
      *
-     * GET /api_spec/{api_version}/{specification} -> String
+     * GET /api_spec/{api_version}/{specification} -> Any
      */
     fun api_spec(
         api_version: String,
@@ -1804,7 +2155,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_api_version = encodeParam(api_version)
         val path_specification = encodeParam(specification)
-        return this.get<String>("/api_spec/${path_api_version}/${path_specification}", mapOf())
+        return this.get<Any>("/api_spec/${path_api_version}/${path_specification}", mapOf())
     }
 
 
@@ -2954,6 +3305,29 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Move an existing dashboard
+     *
+     * Moves a dashboard to a specified folder, and returns the moved dashboard.
+     *
+     * `dashboard_id` and `folder_id` are required.
+     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+     *
+     * @param {String} dashboard_id Dashboard id to move.
+     * @param {String} folder_id Folder id to move to.
+     *
+     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
+     */
+    fun move_dashboard(
+        dashboard_id: String,
+        folder_id: String
+    ) : SDKResponse {
+        val path_dashboard_id = encodeParam(dashboard_id)
+        return this.patch<Dashboard>("/dashboards/${path_dashboard_id}/move", 
+            mapOf("folder_id" to folder_id))
+    }
+
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -2975,29 +3349,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_dashboard_id = encodeParam(dashboard_id)
         return this.post<Dashboard>("/dashboards/${path_dashboard_id}/copy", 
-            mapOf("folder_id" to folder_id))
-    }
-
-
-    /**
-     * ### Move an existing dashboard
-     *
-     * Moves a dashboard to a specified folder, and returns the moved dashboard.
-     *
-     * `dashboard_id` and `folder_id` are required.
-     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-     *
-     * @param {String} dashboard_id Dashboard id to move.
-     * @param {String} folder_id Folder id to move to.
-     *
-     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
-     */
-    fun move_dashboard(
-        dashboard_id: String,
-        folder_id: String
-    ) : SDKResponse {
-        val path_dashboard_id = encodeParam(dashboard_id)
-        return this.patch<Dashboard>("/dashboards/${path_dashboard_id}/move", 
             mapOf("folder_id" to folder_id))
     }
 
@@ -3459,6 +3810,52 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
     //endregion Datagroup: Manage Datagroups
 
+    //region DerivedTable: View Derived Table graphs
+
+
+    /**
+     * ### Discover information about derived tables
+     *
+     * @param {String} model The name of the Lookml model.
+     * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
+     * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
+     *
+     * GET /derived_table/graph/model/{model} -> DependencyGraph
+     */
+    @JvmOverloads fun graph_derived_tables_for_model(
+        model: String,
+        format: String? = null,
+        color: String? = null
+    ) : SDKResponse {
+        val path_model = encodeParam(model)
+        return this.get<DependencyGraph>("/derived_table/graph/model/${path_model}", 
+            mapOf("format" to format,
+                 "color" to color))
+    }
+
+
+    /**
+     * ### Get the subgraph representing this derived table and its dependencies.
+     *
+     * @param {String} view The derived table's view name.
+     * @param {String} models The models where this derived table is defined.
+     * @param {String} workspace The model directory to look in, either `dev` or `production`.
+     *
+     * GET /derived_table/graph/view/{view} -> DependencyGraph
+     */
+    @JvmOverloads fun graph_derived_tables_for_view(
+        view: String,
+        models: String? = null,
+        workspace: String? = null
+    ) : SDKResponse {
+        val path_view = encodeParam(view)
+        return this.get<DependencyGraph>("/derived_table/graph/view/${path_view}", 
+            mapOf("models" to models,
+                 "workspace" to workspace))
+    }
+
+    //endregion DerivedTable: View Derived Table graphs
+
     //region Folder: Manage Folders
 
 
@@ -3564,7 +3961,9 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+     * or if they contain soft-deleted content.
+     *
      * In API 4.0+, all personal folders will be returned.
      *
      * @param {String} fields Requested fields.
@@ -4539,13 +4938,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns detailed information about a Look and its associated Query.
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {String} fields Requested fields.
      *
      * GET /looks/{look_id} -> LookWithQuery
      */
     @JvmOverloads fun look(
-        look_id: Long,
+        look_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4576,14 +4975,14 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
      * database and destroyed. There is no "undo" for `delete_look()`.
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {WriteLookWithQuery} body
      * @param {String} fields Requested fields.
      *
      * PATCH /looks/{look_id} -> LookWithQuery
      */
     @JvmOverloads fun update_look(
-        look_id: Long,
+        look_id: String,
         body: WriteLookWithQuery,
         fields: String? = null
     ) : SDKResponse {
@@ -4602,12 +5001,12 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * For information about soft-delete (which can be undone) see [update_look()](#!/Look/update_look).
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      *
      * DELETE /looks/{look_id} -> String
      */
     fun delete_look(
-        look_id: Long
+        look_id: String
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
         return this.delete<String>("/looks/${path_look_id}", mapOf())
@@ -4634,7 +5033,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
      *
-     * @param {Long} look_id Id of look
+     * @param {String} look_id Id of look
      * @param {String} result_format Format of result
      * @param {Long} limit Row limit (may override the limit in the saved query).
      * @param {Boolean} apply_formatting Apply model-specified formatting to each result.
@@ -4654,7 +5053,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * **Note**: Binary content may be returned by this method.
      */
     @JvmOverloads fun run_look(
-        look_id: Long,
+        look_id: String,
         result_format: String,
         limit: Long? = null,
         apply_formatting: Boolean? = null,
@@ -4696,13 +5095,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
-     * @param {Long} look_id Look id to copy.
+     * @param {String} look_id Look id to copy.
      * @param {String} folder_id Folder id to copy to.
      *
      * POST /looks/{look_id}/copy -> LookWithQuery
      */
     @JvmOverloads fun copy_look(
-        look_id: Long,
+        look_id: String,
         folder_id: String? = null
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4719,13 +5118,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * `look_id` and `folder_id` are required.
      * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
      *
-     * @param {Long} look_id Look id to move.
+     * @param {String} look_id Look id to move.
      * @param {String} folder_id Folder id to move to.
      *
      * PATCH /looks/{look_id}/move -> LookWithQuery
      */
     fun move_look(
-        look_id: Long,
+        look_id: String,
         folder_id: String
     ) : SDKResponse {
         val path_look_id = encodeParam(look_id)
@@ -4736,27 +5135,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     //endregion Look: Run and Manage Looks
 
     //region LookmlModel: Manage LookML Models
-
-
-    /**
-     * ### Discover information about derived tables
-     *
-     * @param {String} model The name of the Lookml model.
-     * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
-     * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
-     *
-     * GET /derived_table/graph/model/{model} -> DependencyGraph
-     */
-    @JvmOverloads fun graph_derived_tables_for_model(
-        model: String,
-        format: String? = null,
-        color: String? = null
-    ) : SDKResponse {
-        val path_model = encodeParam(model)
-        return this.get<DependencyGraph>("/derived_table/graph/model/${path_model}", 
-            mapOf("format" to format,
-                 "color" to color))
-    }
 
 
     /**
@@ -4872,11 +5250,29 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Field name suggestions for a model and view
      *
+     * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+     *
+     * ```ruby
+     * {'users.age': '>=60'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '<30'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '=50'}
+     * ```
+     *
      * @param {String} model_name Name of model
      * @param {String} view_name Name of view
      * @param {String} field_name Name of field to use for suggestions
-     * @param {String} term Search term
-     * @param {String} filters Suggestion filters
+     * @param {String} term Search term pattern (evaluated as as `%term%`)
+     * @param {Any} filters Suggestion filters with field name keys and comparison expressions
      *
      * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
      */
@@ -4885,7 +5281,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         view_name: String,
         field_name: String,
         term: String? = null,
-        filters: String? = null
+        filters: Any? = null
     ) : SDKResponse {
         val path_model_name = encodeParam(model_name)
         val path_view_name = encodeParam(view_name)
@@ -4991,6 +5387,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} schema_name Optional. Return only tables for this schema
      * @param {Boolean} cache True to fetch from cache, false to load fresh
      * @param {String} fields Requested fields.
+     * @param {String} table_filter Optional. Return tables with names that contain this value
+     * @param {Long} table_limit Optional. Return tables up to the table_limit
      *
      * GET /connections/{connection_name}/tables -> Array<SchemaTables>
      */
@@ -4999,14 +5397,18 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         database: String? = null,
         schema_name: String? = null,
         cache: Boolean? = null,
-        fields: String? = null
+        fields: String? = null,
+        table_filter: String? = null,
+        table_limit: Long? = null
     ) : SDKResponse {
         val path_connection_name = encodeParam(connection_name)
         return this.get<Array<SchemaTables>>("/connections/${path_connection_name}/tables", 
             mapOf("database" to database,
                  "schema_name" to schema_name,
                  "cache" to cache,
-                 "fields" to fields))
+                 "fields" to fields,
+                 "table_filter" to table_filter,
+                 "table_limit" to table_limit))
     }
 
 
@@ -6074,6 +6476,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
+     * @param {String} source Specifies the source of this call.
      *
      * GET /queries/{query_id}/run/{result_format} -> String
      *
@@ -6093,7 +6496,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         cache_only: Boolean? = null,
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
-        server_table_calcs: Boolean? = null
+        server_table_calcs: Boolean? = null,
+        source: String? = null
     ) : SDKResponse {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
@@ -6109,7 +6513,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
                  "cache_only" to cache_only,
                  "path_prefix" to path_prefix,
                  "rebuild_pdts" to rebuild_pdts,
-                 "server_table_calcs" to server_table_calcs))
+                 "server_table_calcs" to server_table_calcs,
+                 "source" to source))
     }
 
 
@@ -6585,6 +6990,37 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_render_task_id = encodeParam(render_task_id)
         return this.get<String>("/render_tasks/${path_render_task_id}/results", mapOf())
+    }
+
+
+    /**
+     * ### Create a new task to render a dashboard element to an image.
+     *
+     * Returns a render task object.
+     * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+     * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+     *
+     * @param {String} dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+     * @param {String} result_format Output type: png or jpg
+     * @param {Long} width Output width in pixels
+     * @param {Long} height Output height in pixels
+     * @param {String} fields Requested fields.
+     *
+     * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+     */
+    @JvmOverloads fun create_dashboard_element_render_task(
+        dashboard_element_id: String,
+        result_format: String,
+        width: Long,
+        height: Long,
+        fields: String? = null
+    ) : SDKResponse {
+        val path_dashboard_element_id = encodeParam(dashboard_element_id)
+        val path_result_format = encodeParam(result_format)
+        return this.post<RenderTask>("/render_tasks/dashboard_elements/${path_dashboard_element_id}/${path_result_format}", 
+            mapOf("width" to width,
+                 "height" to height,
+                 "fields" to fields))
     }
 
     //endregion RenderTask: Manage Render Tasks
@@ -8035,8 +8471,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all users.
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
      *
@@ -8046,6 +8484,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         ids: DelimArray<Long>? = null
     ) : SDKResponse {
@@ -8053,6 +8493,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "ids" to ids))
     }
@@ -8108,8 +8550,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * names of other users who are members of the same group as the user.
      *
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {String} id Match User Id.
      * @param {String} first_name Match First name.
@@ -8128,6 +8572,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: String? = null,
         first_name: String? = null,
@@ -8144,6 +8590,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "id" to id,
                  "first_name" to first_name,
@@ -8168,8 +8616,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} pattern Pattern to match
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by
      * @param {Long} id Match User Id
      * @param {String} first_name Match First name
@@ -8185,6 +8635,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         id: Long? = null,
         first_name: String? = null,
@@ -8198,6 +8650,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts,
                  "id" to id,
                  "first_name" to first_name,
@@ -8634,19 +9088,17 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {Long} user_id id of user
-     * @param {CredentialsApi3} body
      * @param {String} fields Requested fields.
      *
-     * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+     * POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
      */
     @JvmOverloads fun create_user_credentials_api3(
         user_id: Long,
-        body: CredentialsApi3? = null,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
-        return this.post<CredentialsApi3>("/users/${path_user_id}/credentials_api3", 
-            mapOf("fields" to fields), body)
+        return this.post<CreateCredentialsApi3>("/users/${path_user_id}/credentials_api3", 
+            mapOf("fields" to fields))
     }
 
 
@@ -8975,6 +9427,31 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         val path_user_id = encodeParam(user_id)
         return this.post<CredentialsEmail>("/users/${path_user_id}/credentials_email/send_password_reset", 
             mapOf("fields" to fields))
+    }
+
+
+    /**
+     * ### Change a disabled user's email addresses
+     *
+     * Allows the admin to change the email addresses for all the user's
+     * associated credentials.  Will overwrite all associated email addresses with
+     * the value supplied in the 'email' body param.
+     * The user's 'is_disabled' status must be true.
+     *
+     * @param {Long} user_id Id of user
+     * @param {UserEmailOnly} body
+     * @param {String} fields Requested fields.
+     *
+     * POST /users/{user_id}/update_emails -> User
+     */
+    @JvmOverloads fun wipeout_user_emails(
+        user_id: Long,
+        body: UserEmailOnly,
+        fields: String? = null
+    ) : SDKResponse {
+        val path_user_id = encodeParam(user_id)
+        return this.post<User>("/users/${path_user_id}/update_emails", 
+            mapOf("fields" to fields), body)
     }
 
 

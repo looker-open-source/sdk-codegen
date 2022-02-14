@@ -280,8 +280,9 @@ def test_dict_getitem_child(bm):
     assert bm["list_model_no_refs1"][0] == ModelNoRefs1(name1="model_no_refs1_name")
     assert bm["list_model_no_refs1"][0] is bm.list_model_no_refs1[0]
     assert bm["list_model_no_refs1"][0]["name1"] == "model_no_refs1_name"
-    with pytest.raises(KeyError):
-        bm["opt_model_no_refs1"]
+    # Model defines this property and `bm.opt_model_no_refs1 is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["opt_model_no_refs1"] is None
     with pytest.raises(KeyError):
         bm["no_such_prop"]
 
@@ -344,12 +345,14 @@ def test_dict_setitem_enum(bm):
 def test_dict_delitem(bm):
     del bm["id"]
     assert bm.id is None
-    with pytest.raises(KeyError):
-        bm["id"]
+    # Model defines this property and `bm.id is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["id"] is None
     del bm["class"]
     assert bm.class_ is None
-    with pytest.raises(KeyError):
-        bm["class"]
+    # Model defines this property and `bm.class_ is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["class"] is None
     with pytest.raises(KeyError):
         del bm["no-such-key"]
 
@@ -447,20 +450,23 @@ def test_dict_get(bm):
 def test_dict_pop(bm):
     assert bm.pop("id") == 1
     assert bm.id is None
-    with pytest.raises(KeyError):
-        bm["id"]
+    # Model defines this property and `bm.id is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["id"] is None
 
     assert bm.pop("name", "default-name") == "my-name"
     assert bm.name is None
-    with pytest.raises(KeyError):
-        bm["name"]
+    # Model defines this property and `bm.name is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["name"] is None
 
     assert bm.pop("no-name", "default-name") == "default-name"
 
     assert bm.pop("class") == "model-name"
     assert bm.class_ is None
-    with pytest.raises(KeyError):
-        bm["class"]
+    # Model defines this property and `bm.name is None` so key
+    # access here should do the same (https://git.io/JRrKm)
+    assert bm["class"] is None
 
 
 def test_dict_popitem(bm):
@@ -510,9 +516,10 @@ def test_deserialize_single() -> None:
     Should handle python reserved keywords as well as attempting to
     convert field values to proper type.
     """
-    # check that type conversion happens, str -> int in this case
+    # check that type conversion happens, str -> int and int -> str in this case
     data = copy.deepcopy(MODEL_DATA)
     data["id"] = "1"
+    data["name"] = 25
 
     d = json.dumps(data)
     model = sr.deserialize(data=d, structure=Model, converter=converter)
@@ -526,7 +533,7 @@ def test_deserialize_single() -> None:
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         id=1,
-        name="my-name",
+        name="25",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
         finally_=[1, 2, 3],

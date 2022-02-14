@@ -28,14 +28,14 @@ import { pickTooltipContent } from './utils'
 describe('DocMethodSummary utils', () => {
   test.each`
     status            | expected
-    ${'beta'}         | ${'This beta endpoint is under development and subject to change.'}
-    ${'experimental'} | ${'This experimental endpoint is not fully developed and may be significantly changed or completely removed in future releases.'}
-    ${'deprecated'}   | ${'This endpoint has been deprecated and will be removed in the future.'}
-    ${'stable'}       | ${'This endpoint is considered stable for this API version.'}
-    ${'undocumented'} | ${'This is an internal-only endpoint.'}
-    ${'unknown'}      | ${'This endpoint has no status associated with it.'}
+    ${'beta'}         | ${'This beta item is under development and subject to change.'}
+    ${'experimental'} | ${'This experimental item is not fully developed and may be significantly changed or completely removed in future releases.'}
+    ${'deprecated'}   | ${'This item has been deprecated and will be removed in the future.'}
+    ${'stable'}       | ${'This item is considered stable for this API version.'}
+    ${'undocumented'} | ${'This is an internal-only item.'}
+    ${'unknown'}      | ${'This item has no status associated with it.'}
   `(
-    'pickTooltipContent returns correct $status endpoint tooltip content',
+    'pickTooltipContent returns correct $status item tooltip content',
     ({ status, expected }) => {
       const actual = pickTooltipContent(status)
       expect(actual).toEqual(expected)

@@ -23,17 +23,6 @@
  SOFTWARE.
 
  */
-export {
-  renderWithSearch,
-  renderWithSearchAndRouter,
-} from './render_with_search'
-export {
-  renderWithLode,
-  renderWithReduxProviderAndLode,
-} from './render_with_lode'
-export { renderWithRouter, withRouter } from './router'
-export {
-  renderWithRouterAndReduxProvider,
-  renderWithReduxProvider,
-  withReduxProvider,
-} from './redux'
+export * from './lodes'
+export * from './router'
+export * from './redux'

@@ -23,17 +23,19 @@
  SOFTWARE.
 
  */
+
 import { screen, fireEvent, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
-import { BaseSyntheticEvent } from 'react'
+import type { BaseSyntheticEvent } from 'react'
 
-import { RunItInput } from '../../RunIt'
+import type { RunItInput } from '../../RunIt'
 import {
   createComplexItem,
   createSimpleItem,
   showDataChangeWarning,
   updateNullableProp,
+  validateBody,
 } from './formUtils'
 
 describe('Simple Items', () => {
@@ -207,9 +209,13 @@ describe('Simple Items', () => {
       description: 'A simple item of type datetime',
     })
 
-    test('it creates a datetime item', () => {
+    test('it creates a datetime item', async () => {
       renderWithTheme(DateItem)
-      expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      const button = screen.getByRole('button', { name: 'Choose' })
+      userEvent.click(button)
+      await waitFor(() => {
+        expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      })
     })
   })
 
@@ -232,14 +238,14 @@ describe('Simple Items', () => {
 
 describe('Complex Item', () => {
   const handleComplexChange = jest.fn()
-  const requestContent = {}
 
-  test('it creates a complex item', () => {
+  test('it creates a complex item', async () => {
     const body = {
       query_id: 'string',
       fields: 'string[]',
       limit: 1,
     }
+    const requestContent = { 'A complex item': {} }
     const ComplexItem = createComplexItem(
       {
         name: 'A complex item',
@@ -253,6 +259,45 @@ describe('Complex Item', () => {
     )
     renderWithTheme(ComplexItem)
     expect(screen.getByText('A complex item')).toBeInTheDocument()
+    userEvent.hover(screen.getByTestId('body-param-tooltip'))
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Empty values are automatically removed from the request.'
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  describe('validateBody', () => {
+    const requiredKeys = ['model', 'view']
+    test.each`
+      value                                                      | expected                                                                | requiredKeys
+      ${{
+  view: 'users',
+  fields: ['users.id', 'users.first_name'],
+}} | ${'Error: Required properties "model" must be provided in the body'} | ${requiredKeys}
+      ${{
+  model: 'thelook',
+  view: 'users',
+  fields: ['users.id', 'users.first_name'],
+}} | ${''} | ${requiredKeys}
+      ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}                                                                   | ${[]}
+      ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'Syntax error in the body: luckyNumbers[]7'}                          | ${[]}
+      ${'{'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'}'}                                                     | ${'Syntax error in the body: Unexpected token } in JSON at position 0'} | ${[]}
+      ${'['}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'"'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
+      ${'"foo"'}                                                 | ${''}                                                                   | ${[]}
+      ${''}                                                      | ${''}                                                                   | ${[]}
+      ${'{}'}                                                    | ${''}                                                                   | ${[]}
+    `(
+      'it validates a body value of "$value"',
+      ({ value, expected, requiredKeys }) => {
+        const actual = validateBody(value, requiredKeys)
+        expect(actual).toEqual(expected)
+      }
+    )
   })
 })
 

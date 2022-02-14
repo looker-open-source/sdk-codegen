@@ -27,26 +27,19 @@
 import { readFileSync } from 'fs'
 import cloneDeep from 'lodash/cloneDeep'
 import pick from 'lodash/pick'
-import { OperationObject } from 'openapi3-ts'
+import type { OperationObject } from 'openapi3-ts'
 
+import type { DiffRow } from './specDiff'
 import {
   compareParams,
   compareSpecs,
   compareTypes,
-  DiffRow,
   includeDiffs,
   startCount,
 } from './specDiff'
 import { rootFile, TestConfig } from './testUtils'
-import {
-  PropertyList,
-  Type,
-  Method,
-  Parameter,
-  IApiModel,
-  ApiModel,
-  IMethod,
-} from './sdkModels'
+import type { PropertyList, IApiModel, IMethod } from './sdkModels'
+import { Type, Method, Parameter, ApiModel } from './sdkModels'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -243,7 +236,7 @@ describe('spec differ', () => {
       expect(actual).toHaveLength(1)
       expect(actual[0].diffCount).toEqual({
         added: 0,
-        changed: 2,
+        changed: 3,
         removed: 3,
       })
     })

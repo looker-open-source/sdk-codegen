@@ -24,7 +24,7 @@
 
  */
 
-import {
+import type {
   IHackerProps,
   IJudgingProps,
   IProjectProps,
@@ -60,6 +60,18 @@ export const canUpdateProject = (
         project?._user_id === hacker.registration._id &&
         !project.locked)
     ) {
+      return true
+    }
+  }
+  return false
+}
+
+export const canJoinProject = (
+  hacker: IHackerProps,
+  project?: IProjectProps
+): boolean => {
+  if (hacker.registration && hacker.registration._id) {
+    if (project && project.project_type === 'Open' && !project.locked) {
       return true
     }
   }

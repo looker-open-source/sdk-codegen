@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 interface CodeWrapperProps {
@@ -43,8 +44,10 @@ const Pre = styled.pre`
 
   // selector for search matches
   .match {
-    border: 1px yellow solid;
-    border-radius: 4px;
+    background: #000000;
+    border: 1px#fff2c2 solid;
+    border-radius: 10px;
+    padding: 0.15px 4px;
   }
 `
 const Code = styled.code`

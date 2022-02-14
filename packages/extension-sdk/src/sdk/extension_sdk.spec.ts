@@ -24,8 +24,8 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
-import { Looker31SDK } from '@looker/sdk'
+import type { ChattyHostConnection } from '@looker/chatty'
+import type { Looker31SDK } from '@looker/sdk'
 import { ExtensionHostApiImpl } from '../connect/extension_host_api'
 import { ExtensionNotificationType } from '../connect/types'
 import { LookerExtensionSDK } from './extension_sdk'

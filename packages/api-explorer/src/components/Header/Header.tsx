@@ -24,7 +24,8 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import {
   Icon,
@@ -35,19 +36,14 @@ import {
 } from '@looker/components'
 import { LookerLogo } from '@looker/icons'
 import { Menu } from '@styled-icons/material/Menu'
-import { SpecList } from '@looker/sdk-codegen'
+import type { SpecItem } from '@looker/sdk-codegen'
 
 import { Link } from '../Link'
-import { SpecState, SpecAction } from '../../reducers'
 import { SelectorContainer } from '../SelectorContainer'
 
 interface HeaderProps {
-  /** Specs to choose from */
-  specs: SpecList
   /** Current selected spec */
-  spec: SpecState
-  /** Spec state setter */
-  specDispatch: Dispatch<SpecAction>
+  spec: SpecItem
   /** Nav state setter */
   toggleNavigation: (target?: boolean) => void
   className?: string
@@ -55,14 +51,14 @@ interface HeaderProps {
 
 export const HEADER_REM = 4
 
+export const HEADER_TOGGLE_LABEL = 'Toggle Navigation'
+
 /**
  * Renders the API Explorer header
  */
 export const HeaderLayout: FC<HeaderProps> = ({
   className,
-  specs,
   spec,
-  specDispatch,
   toggleNavigation,
 }) => (
   <SemanticHeader
@@ -76,7 +72,8 @@ export const HeaderLayout: FC<HeaderProps> = ({
         size="small"
         onClick={() => toggleNavigation()}
         icon={<Menu />}
-        label="Toggle Navigation"
+        aria-label="nav toggle"
+        label={HEADER_TOGGLE_LABEL}
       />
 
       <Link to={`/${spec.key}`}>
@@ -91,7 +88,7 @@ export const HeaderLayout: FC<HeaderProps> = ({
         </Space>
       </Link>
     </Space>
-    <SelectorContainer specs={specs} spec={spec} specDispatch={specDispatch} />
+    <SelectorContainer spec={spec} />
   </SemanticHeader>
 )
 

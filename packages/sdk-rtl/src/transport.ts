@@ -24,9 +24,9 @@
 
  */
 
-import { Agent } from 'https'
-import { Headers } from 'request'
-import { Readable } from 'readable-stream'
+import type { Agent } from 'https'
+import type { Headers } from 'request'
+import type { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 
 export const agentPrefix = 'TS-SDK'
@@ -161,6 +161,8 @@ export enum StatusCode {
 
 /** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
+  /** Http method of the request */
+  method: HttpMethod
   /** ok is `true` if the response is successful, `false` otherwise */
   ok: boolean
   /** HTTP request url */
@@ -425,13 +427,40 @@ export function addQueryParams(path: string, obj?: Values) {
   return `${path}${qp ? '?' + qp : ''}`
 }
 
+const utf8 = 'utf-8'
+
+/**
+ * Convert this value to a string representation however we can do it
+ * @param val
+ */
+function bufferString(val: any) {
+  let result = 'Unknown error'
+  try {
+    const decoder = new TextDecoder(utf8)
+    result = decoder.decode(val)
+  } catch (e: any) {
+    // Supremely ugly hack. If we get here, we must be in Node (or IE 11, but who cares about that?)
+    // Node requires an import from `util` for TextDecoder to be found BUT it "just has" Buffer unless WebPack messes us up
+    try {
+      if (val instanceof Buffer) {
+        result = Buffer.from(val).toString(utf8)
+      } else {
+        result = JSON.stringify(val)
+      }
+    } catch (err: any) {
+      // The fallback logic here will at least give us some information about the error being thrown
+      result = JSON.stringify(val)
+    }
+  }
+  return result
+}
+
 /**
  * SDK error handler
  * @param response any kind of error
  * @returns a new `Error` object with the failure message
  */
 export function sdkError(response: any) {
-  const utf8 = 'utf-8'
   if (typeof response === 'string') {
     return new Error(response)
   }
@@ -441,20 +470,18 @@ export function sdkError(response: any) {
       return new Error(error)
     }
     // Try to get most specific error first
-    if ('statusMessage' in error) {
-      return new Error(error.statusMessage)
-    }
-    if ('error' in error && error.error instanceof Buffer) {
-      const result = Buffer.from(error.error).toString(utf8)
-      return new Error(result)
-    }
-    if (error instanceof Buffer) {
-      const result = Buffer.from(error).toString(utf8)
+    if ('error' in error) {
+      const result = bufferString(error.error)
       return new Error(result)
     }
     if ('message' in error) {
       return new Error(response.error.message.toString())
     }
+    if ('statusMessage' in error) {
+      return new Error(error.statusMessage)
+    }
+    const result = bufferString(error)
+    return new Error(result)
   }
   if ('message' in response) {
     return new Error(response.message)
@@ -504,4 +531,19 @@ export async function sdkOk<TSuccess, TError>(
 export function safeBase64(u8: Uint8Array) {
   const rawBase64 = btoa(String.fromCharCode(...u8))
   return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
+}
+
+/**
+ * Type predicate. Asserts that a given object is error-like.
+ * @param error a value of unknown type
+ * @return boolean true if the error has a `message` key of type string.
+ */
+export function isErrorLike<T extends unknown>(
+  error: T
+): error is T & { message: string } {
+  if (typeof error !== 'object') return false
+  if (!error) return false
+  if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false
+  if (typeof (error as { message: unknown }).message !== 'string') return false
+  return true
 }

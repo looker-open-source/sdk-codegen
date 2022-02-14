@@ -61,8 +61,6 @@ class Model:
 
         if isinstance(ret, enum.Enum):
             ret = ret.value
-        if ret is None:
-            raise KeyError(key)
         return ret
 
     def __setitem__(self, key, value):

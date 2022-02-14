@@ -24,7 +24,8 @@
 
  */
 
-import { IRawResponse, ITransportSettings, StatusCode } from '@looker/sdk-rtl'
+import type { IRawResponse, ITransportSettings } from '@looker/sdk-rtl'
+import { StatusCode } from '@looker/sdk-rtl'
 import { NodeCryptoHash, NodeTransport } from './nodeTransport'
 
 describe('NodeTransport', () => {
@@ -39,6 +40,7 @@ describe('NodeTransport', () => {
     const response = await xp.rawRequest('GET', fullPath)
     expect(response).toBeDefined()
     expect(response.ok).toEqual(true)
+    expect(response.method).toEqual('GET')
     expect(response.statusCode).toEqual(200)
     expect(response.statusMessage).toEqual('OK')
     expect(response.contentType).toContain('text/html')
@@ -55,6 +57,7 @@ describe('NodeTransport', () => {
       const errorMessage = `GET ${badPath}`
       expect(response).toBeDefined()
       expect(response.ok).toEqual(false)
+      expect(response.method).toEqual('GET')
       expect(response.statusCode).toEqual(404)
       expect(response.body).toBeDefined()
       expect(response.statusMessage.indexOf('"type":"Buffer"')).toEqual(-1)
@@ -76,6 +79,7 @@ describe('NodeTransport', () => {
 
   describe('ok check', () => {
     const raw: IRawResponse = {
+      method: 'GET',
       contentType: 'application/json',
       headers: {},
       url: 'bogus',

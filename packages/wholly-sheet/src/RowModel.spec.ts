@@ -23,14 +23,8 @@
  SOFTWARE.
 
  */
-import {
-  IRowModel,
-  nilCell,
-  noDate,
-  RowAction,
-  RowModel,
-  stringer,
-} from './RowModel'
+import type { IRowModel } from './RowModel'
+import { nilCell, noDate, RowAction, RowModel, stringer } from './RowModel'
 
 export interface ITestRowProps {
   name: string

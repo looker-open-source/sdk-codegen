@@ -47,6 +47,19 @@ describe('DelimArray', () => {
     expect(actual).toEqual('{1 2 3 4}')
   })
 
+  it('integer', () => {
+    const numbers = [2]
+    let values = new DelimArray<number>(numbers)
+    const expected = '2'
+    let actual = values.toString()
+    const normal = `${numbers}`
+    expect(normal).toEqual(expected)
+    expect(actual).toEqual(expected)
+    values = new DelimArray<number>(numbers, ' ', '{', '}')
+    actual = values.toString()
+    expect(actual).toEqual('{2}')
+  })
+
   it('strings', () => {
     const strings = ['a', 'b', 'c', 'd']
     let values = new DelimArray<string>(strings)

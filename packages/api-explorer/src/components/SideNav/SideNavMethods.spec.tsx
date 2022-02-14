@@ -29,7 +29,10 @@ import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 
 import { api } from '../../test-data'
-import { renderWithSearchAndRouter } from '../../test-utils'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { SideNavMethods } from './SideNavMethods'
 
 describe('SideNavMethods', () => {
@@ -37,7 +40,7 @@ describe('SideNavMethods', () => {
   const methods = api.tags[tag]
 
   test('it renders provided methods', () => {
-    renderWithSearchAndRouter(
+    renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
     )
     userEvent.click(screen.getByText(tag))
@@ -50,14 +53,15 @@ describe('SideNavMethods', () => {
   })
 
   test('it highlights text matching search pattern in both tag and methods', () => {
-    const highlightPattern = 'dash'
-    renderWithSearchAndRouter(
+    const store = createTestStore({ settings: { searchPattern: 'dash' } })
+    renderWithRouterAndReduxProvider(
       <SideNavMethods
         methods={pick(methods, 'create_dashboard')}
         tag={tag}
         specKey={'3.1'}
       />,
-      highlightPattern
+      undefined,
+      store
     )
     userEvent.click(screen.getByText('Dash'))
     const matches = screen.getAllByText(/dash/i)

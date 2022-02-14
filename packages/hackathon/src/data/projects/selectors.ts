@@ -24,9 +24,9 @@
 
  */
 
-import { ValidationMessages } from '@looker/components'
-import { RootState } from '../root_reducer'
-import { IProjectProps } from '../../models'
+import type { ValidationMessages } from '@looker/components'
+import type { RootState } from '../root_reducer'
+import type { IProjectProps } from '../../models'
 
 export const getProjectsState = (state: RootState): IProjectProps[] =>
   state.projectsState.projects
@@ -39,11 +39,6 @@ export const getProjectsLoadedState = (state: RootState): boolean =>
 
 export const getProjectsPageNumState = (state: RootState): number =>
   state.projectsState.currentPageNum
-
-export const getMoreInfoState = (
-  state: RootState
-): { title: string; moreInfo: string } | undefined =>
-  state.projectsState.moreInfo
 
 export const getProjectState = (state: RootState): IProjectProps | undefined =>
   state.projectsState.currentProject

@@ -24,62 +24,77 @@
 
  */
 
-import React, { FC, useReducer, useState, useEffect, useCallback } from 'react'
-import { useLocation } from 'react-router'
+import type { FC } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
-import { Aside, ComponentsProvider, Layout, Page } from '@looker/components'
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { SpecList } from '@looker/sdk-codegen'
 import {
-  SearchContext,
-  LodeContext,
-  defaultLodeContextValue,
-  EnvAdaptorContext,
-} from './context'
-import { EnvAdaptorConstants, getLoded, IApixEnvAdaptor } from './utils'
-import { Header, SideNav, ErrorBoundary } from './components'
+  Aside,
+  ComponentsProvider,
+  Divider,
+  Heading,
+  IconButton,
+  Layout,
+  Page,
+  Space,
+} from '@looker/components'
+import { FirstPage } from '@styled-icons/material/FirstPage'
+import { LastPage } from '@styled-icons/material/LastPage'
 import {
-  specReducer,
-  initDefaultSpecState,
-  searchReducer,
-  defaultSearchState,
-} from './reducers'
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
+} from '@looker/extension-utils'
+import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+
+import type { IApixAdaptor } from './utils'
+import {
+  Header,
+  SideNav,
+  ErrorBoundary,
+  SelectorContainer,
+  HEADER_TOGGLE_LABEL,
+  Loader,
+  Banner,
+} from './components'
 import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
-import { useActions } from './hooks'
+import {
+  useSettingActions,
+  useSettingStoreState,
+  useLodeActions,
+  useLodesStoreState,
+  useSpecActions,
+  useSpecStoreState,
+  selectSpecs,
+  selectCurrentSpec,
+} from './state'
+import { getSpecKey, diffPath } from './utils'
 
 export interface ApiExplorerProps {
-  specs: SpecList
-  sdk?: Looker31SDK | Looker40SDK
-  exampleLodeUrl?: string
+  adaptor: IApixAdaptor
+  examplesLodeUrl?: string
   declarationsLodeUrl?: string
-  envAdaptor: IApixEnvAdaptor
   headless?: boolean
 }
 
-export const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
+const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
 
-const ApiExplorer: FC<ApiExplorerProps> = ({
-  specs,
-  envAdaptor,
-  exampleLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
+export const ApiExplorer: FC<ApiExplorerProps> = ({
+  adaptor,
+  examplesLodeUrl = 'https://raw.githubusercontent.com/looker-open-source/sdk-codegen/main/examplesIndex.json',
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
+  useSettingStoreState()
+  useLodesStoreState()
+  const { working, description } = useSpecStoreState()
+  const specs = useSelector(selectSpecs)
+  const spec = useSelector(selectCurrentSpec)
+  const { initLodesAction } = useLodeActions()
+  const { initSettingsAction } = useSettingActions()
+  const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
+
   const location = useLocation()
-  const { setSdkLanguageAction } = useActions()
-
-  const [spec, specDispatch] = useReducer(
-    specReducer,
-    initDefaultSpecState(specs, location)
-  )
-  const [searchSettings, setSearchSettings] = useReducer(
-    searchReducer,
-    defaultSearchState
-  )
-
-  const [lode, setLode] = useState(defaultLodeContextValue)
-
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
@@ -89,6 +104,25 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
       setHasNavigation((currentHasNavigation) => !currentHasNavigation)
     }
   }, [])
+
+  registerEnvAdaptor(adaptor)
+
+  useEffect(() => {
+    initSettingsAction()
+    initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
+
+    const specKey = getSpecKey(location)
+    initSpecsAction({ specKey })
+    return () => unregisterEnvAdaptor()
+  }, [])
+
+  useEffect(() => {
+    const maybeSpec = location.pathname?.split('/')[1]
+    if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
+      setCurrentSpecAction({ currentSpecKey: maybeSpec })
+    }
+  }, [location.pathname, spec])
+
   useEffect(() => {
     if (headless) {
       window.addEventListener('message', hasNavigationToggle)
@@ -98,79 +132,98 @@ const ApiExplorer: FC<ApiExplorerProps> = ({
         window.removeEventListener('message', hasNavigationToggle)
       }
     }
-  }, [])
+  }, [headless, hasNavigationToggle])
 
-  useEffect(() => {
-    getLoded(exampleLodeUrl, declarationsLodeUrl).then((resp) => setLode(resp))
-  }, [exampleLodeUrl, declarationsLodeUrl])
+  const themeOverrides = adaptor.themeOverrides()
 
-  useEffect(() => {
-    const getSettings = async () => {
-      const resp = await envAdaptor.localStorageGetItem(
-        EnvAdaptorConstants.LOCALSTORAGE_SDK_LANGUAGE_KEY
-      )
-      if (resp) {
-        setSdkLanguageAction(resp)
-      }
-    }
-    getSettings()
-  }, [envAdaptor, setSdkLanguageAction])
-
-  const { loadGoogleFonts, themeCustomizations } = envAdaptor.themeOverrides()
+  let neededSpec = location.pathname?.split('/')[1]
+  if (!neededSpec || neededSpec === diffPath) {
+    neededSpec = spec?.key
+  }
 
   return (
     <>
       <ComponentsProvider
-        loadGoogleFonts={loadGoogleFonts}
-        themeCustomizations={themeCustomizations}
+        loadGoogleFonts={themeOverrides.loadGoogleFonts}
+        themeCustomizations={themeOverrides.themeCustomizations}
       >
-        <ErrorBoundary logError={envAdaptor.logError.bind(envAdaptor)}>
-          <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-            <LodeContext.Provider value={{ ...lode }}>
-              <SearchContext.Provider
-                value={{ searchSettings, setSearchSettings }}
-              >
-                <Page style={{ overflow: 'hidden' }}>
-                  {!headless && (
-                    <Header
-                      specs={specs}
-                      spec={spec}
-                      specDispatch={specDispatch}
-                      toggleNavigation={toggleNavigation}
-                    />
-                  )}
-                  <Layout hasAside height="100%">
-                    {hasNavigation && (
-                      <AsideBorder width="20rem">
-                        <SideNav
-                          headless={headless}
-                          specs={specs}
-                          spec={spec}
-                          specDispatch={specDispatch}
+        {working || !neededSpec || neededSpec !== spec.key ? (
+          <Loader message={description} themeOverrides={themeOverrides} />
+        ) : (
+          <ErrorBoundary logError={adaptor.logError.bind(adaptor)}>
+            <Banner adaptor={adaptor} specs={specs} />
+            <Page style={{ overflow: 'hidden' }}>
+              {!headless && (
+                <Header spec={spec} toggleNavigation={toggleNavigation} />
+              )}
+              <Layout hasAside height="100%">
+                <AsideBorder
+                  borderRight
+                  isOpen={hasNavigation}
+                  headless={headless}
+                >
+                  {headless && (
+                    <>
+                      <Space
+                        alignItems="center"
+                        py="u3"
+                        px={hasNavigation ? 'u5' : '0'}
+                        justifyContent={
+                          hasNavigation ? 'space-between' : 'center'
+                        }
+                      >
+                        {hasNavigation && (
+                          <Heading
+                            as="h2"
+                            fontSize="xsmall"
+                            fontWeight="bold"
+                            color="text2"
+                          >
+                            API DOCUMENTATION
+                          </Heading>
+                        )}
+                        <IconButton
+                          size="xsmall"
+                          shape="round"
+                          icon={hasNavigation ? <FirstPage /> : <LastPage />}
+                          label={HEADER_TOGGLE_LABEL}
+                          onClick={() => toggleNavigation()}
                         />
-                      </AsideBorder>
-                    )}
-                    <AppRouter
-                      api={spec.api}
-                      specKey={spec.key}
-                      specs={specs}
-                      toggleNavigation={toggleNavigation}
-                    />
-                  </Layout>
-                </Page>
-              </SearchContext.Provider>
-            </LodeContext.Provider>
-          </EnvAdaptorContext.Provider>
-        </ErrorBoundary>
+                      </Space>
+                      {hasNavigation && (
+                        <>
+                          <Divider mb="u3" appearance="light" />
+                          <SelectorContainer
+                            spec={spec}
+                            ml="large"
+                            mr="large"
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
+                  {hasNavigation && <SideNav headless={headless} spec={spec} />}
+                </AsideBorder>
+                <AppRouter
+                  specKey={spec.key}
+                  api={spec.api!}
+                  specs={specs}
+                  toggleNavigation={toggleNavigation}
+                />
+              </Layout>
+            </Page>
+          </ErrorBoundary>
+        )}
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
   )
 }
 
-/* Border support for `Aside` coming in @looker/components very soon */
-export const AsideBorder = styled(Aside)`
-  border-right: 1px solid ${({ theme }) => theme.colors.ui2};
+const AsideBorder = styled(Aside)<{
+  isOpen: boolean
+  headless: boolean
+}>`
+  width: ${({ isOpen, headless }) =>
+    isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
 `
-
-export default ApiExplorer

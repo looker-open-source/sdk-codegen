@@ -17,15 +17,15 @@ env:
   LOOKERSDK_VERIFY_SSL: false
   TOX_JUNIT_OUTPUT_DIR: results
 
-defaults:
-  run:
-    shell: bash
-    working-directory: python/
-
 jobs:
   typecheck:
     name: Mypy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.x
+          python-version: 3.9.9
       - run: pip install -e .
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
@@ -45,6 +45,11 @@ jobs:
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     strategy:
       # run all supported python versions on ubuntu
       # run only latest supported python version on windows/mac
@@ -54,7 +59,7 @@ jobs:
           - macos
           - windows
         python-version:
-          - '3.9'
+          - '3.9.9'
         include:
           - python-version: '3.6'
             os: ubuntu
@@ -66,21 +71,20 @@ jobs:
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install Tox and any other packages
         run: |
           python -m pip install --upgrade pip
           pip install tox
+
       - name: Run Unit Tests
         run: tox -e unit
-      - name: Twine upload check
-        run: |
-          pip install wheel twine
-          python setup.py sdist bdist_wheel
-          twine check dist/*
+
       - name: Upload pytest test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -94,15 +98,19 @@ jobs:
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
     strategy:
       matrix:
         os:
           - ubuntu
         looker:
-          - '21_6'
-          - '21_8'
-          - '21_10'
-          - '21_12'
+          - '21_18'
+          - '21_20'
+          - '22_0'
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
@@ -115,36 +123,28 @@ jobs:
           # the final layer(s) with Looker IP. This would speed up docker pull on
           # all OSs.
           #- os: macos
-          #  python-version: '3.x'
+          #  python-version: 3.9
           #  looker: '7_20'
           # TODO: currently can't run linux containers on windows.
           # Pending new windows server version
           # https://github.com/actions/virtual-environments/issues/1143#issuecomment-698797524
           #- os: windows
-          #  python-version: '3.x'
+          #  python-version: 3.9
           #  looker: '7_20'
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-      - name: Install Tox and any other packages
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox
-      - name: Set LOOKERSDK_CLIENT_{ID,SECRET}
-        # api client/secret stored as github secret per release, e.g. LOOKERSDK_CLIENT_ID__7_20
-        run: |
-          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', matrix.looker)] }}" >> $GITHUB_ENV
-          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', matrix.looker)] }}" >> $GITHUB_ENV
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
           export_default_credentials: true
+
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
       - name: Install docker on macos
         if: ${{ matrix.os == 'macos' }}
         uses: docker-practice/actions-setup-docker@v1
@@ -152,6 +152,7 @@ jobs:
           docker_channel: stable
           docker_buildx: false
           docker_cli_experimental: disabled
+
       - name: Bump docker for mac memory
         if: ${{ matrix.os == 'macos' }}
         run: |
@@ -167,8 +168,7 @@ jobs:
           done
           (( i )) && printf '\n'
           echo "-- Docker is ready."
-      - name: Authenticate Artifact Repository
-        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
@@ -177,9 +177,38 @@ jobs:
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
-          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+
+      - name: Install Tox and any other packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox
+
+      - name: Determine credentials version
+        # Prior to 21_18, each version had different credentials and a 
+        # different secret. 21_20 and later all use the same credentials
+        # as 21_18. The parse_version.sh script parses the version and
+        # yields 21_12, 21_14, 21_16 etc for those versions but 21_18 for
+        # anything 21_18, 21_20, 22_0, etc.
+        #
+        # This can be factored out entirely once 21_18 is the earliest
+        # supported looker version.
+        run: |
+          echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.sh <<< ${{ matrix.looker }})" >> $GITHUB_ENV
+
+      - name: Set up Looker credentials
+        # Load the correct credentials based on the version from
+        # the prior step.
+        run: |
+          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
+
+      - name: Check that Looker is ready
+        run: |
+          ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
       - name: Run Integration Tests
         run: tox -e integration
+
       - name: Upload pytest test results
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -187,8 +216,27 @@ jobs:
           name: python-test-results
           path: python/results/
 
+  twine:
+    needs: integration
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9.9
+      - name: Twine upload check
+        run: |
+          pip install wheel twine
+          python setup.py sdist bdist_wheel
+          twine check dist/*
+
   publish-test-results:
-    needs: [unit, integration]
+    needs: [unit, integration, twine]
     if: success() || failure()
     runs-on: ubuntu-latest
 
@@ -198,7 +246,33 @@ jobs:
         with:
           path: artifacts
 
+      # If there are no test result files the test is reported as passing!
+      # That allows for some weird failure modes, where an early failure
+      # is not distinguished from a pass.
+      - name: Check Results Files Exist
+        id: check-results-exist
+        run: |
+          if [[ $(ls -l artifacts/python-test-results/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
+            exit 0
+          else
+            curl --request POST \
+            --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+            --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            --header "content-type: application/json" \
+            --header "Accept: application/vnd.github.v3+json" \
+            --data '{
+              "name": "Python Tests",
+              "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+              "conclusion": "failure"
+            }' \
+            --fail \
+            -o /dev/null \
+            --silent
+            exit 1
+          fi
+
       - name: Publish Unit Test Results
+        if: steps.check-results-exist.outcome == 'success'
         uses: EnricoMi/publish-unit-test-result-action@v1.12
         with:
           # Cosmetic issue with `check_name` being associated to the wrong

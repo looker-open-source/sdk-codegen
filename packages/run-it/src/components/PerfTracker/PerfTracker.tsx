@@ -24,7 +24,8 @@
 
  */
 
-import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react'
+import type { BaseSyntheticEvent, FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Heading,
   FlexItem,
@@ -35,23 +36,27 @@ import {
 } from '@looker/components'
 import { Delete } from '@styled-icons/material/Delete'
 
-import { RunItConfigKey, RunItConfigurator } from '../ConfigForm'
+import { RunItConfigKey } from '../ConfigForm'
 import { Loading } from '../Loading'
-import { PerfTimings, LoadTimes } from './perfUtils'
+import type { LoadTimes } from './perfUtils'
+import { PerfTimings } from './perfUtils'
 import { PerfChart } from './PerfChart'
 import { PerfTable } from './PerfTable'
 
 interface PerfTrackerProps {
   perf?: PerfTimings
   showAllColumns?: boolean
-  configurator: RunItConfigurator
 }
 
-const perfFilter = (configurator: RunItConfigurator, all = false) => {
+const perfFilter = (all = false) => {
   if (all) return '.*'
-  const storage = configurator.getStorage(RunItConfigKey)
-  if (!storage.value) return '.*'
-  const config = JSON.parse(storage.value)
+  // TODO: temporary solution until redux is introduced in RunIt. Using the env
+  // adaptor makes the below async, which in turn makes it hard to use this to
+  // set the initial state. PerfTracker is only used in the standalone version
+  // so this achieves parity.
+  const value = localStorage.getItem(RunItConfigKey)
+  if (!value) return '.*'
+  const config = JSON.parse(value)
   const url = new URL(config.base_url)
   return `${url.protocol}//${url.hostname}.*`
 }
@@ -59,12 +64,11 @@ const perfFilter = (configurator: RunItConfigurator, all = false) => {
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
   showAllColumns = false,
-  configurator,
 }) => {
   // TODO UI option to filter by url pattern
   const [loading, setLoading] = useState(false)
   const [showAll, setShowAll] = useState(false)
-  const [filter, setFilter] = useState(perfFilter(configurator))
+  const [filter, setFilter] = useState(perfFilter())
   const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
   const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
 

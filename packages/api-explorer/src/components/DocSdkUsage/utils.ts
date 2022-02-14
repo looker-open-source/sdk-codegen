@@ -24,8 +24,10 @@
 
  */
 
-import { findExamples, IExampleMine } from '@looker/sdk-codegen'
-import { DataTableColumns, theme } from '@looker/components'
+import type { IExampleMine } from '@looker/sdk-codegen'
+import { findExamples } from '@looker/sdk-codegen'
+import type { DataTableColumns } from '@looker/components'
+import { theme } from '@looker/components'
 
 export const PER_PAGE_COUNT = 10
 

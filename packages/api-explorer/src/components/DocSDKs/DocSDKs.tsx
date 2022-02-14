@@ -24,21 +24,21 @@
 
  */
 
-import React, { FC, useState, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import {
+import type {
   IMethod,
   IType,
   ApiModel,
   KeyedCollection,
   CodeGen,
-  Method,
 } from '@looker/sdk-codegen'
-import { getGenerators } from '@looker/run-it'
+import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'
-import { getSelectedSdkLanguage } from '../../state'
-import { CollapserCard } from '../Collapser'
+import { selectSdkLanguage } from '../../state'
+import { isMethod } from '../../utils/path'
 import { noComment } from './utils'
 import { DocDeclarations } from './DocDeclarations'
 
@@ -59,10 +59,9 @@ const getDeclarations = (
   const declarations: KeyedCollection<string> = {}
   Object.entries(generators).forEach(([language, gen]) => {
     if (sdkLanguage === 'All' || language === sdkLanguage) {
-      const code =
-        item instanceof Method
-          ? gen.declareMethod('', item as IMethod)
-          : gen.declareType('', item as IType)
+      const code = isMethod(item)
+        ? gen.declareMethod('', item as IMethod)
+        : gen.declareType('', item as IType)
       declarations[language] = code
     }
   })
@@ -73,7 +72,7 @@ const getDeclarations = (
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
-  const sdkLanguage = useSelector(getSelectedSdkLanguage)
+  const sdkLanguage = useSelector(selectSdkLanguage)
   const generators = getGenerators(api)
   const [item, setItem] = useState(method ? noComment(method) : type!)
   const [declarations, setDeclarations] = useState(

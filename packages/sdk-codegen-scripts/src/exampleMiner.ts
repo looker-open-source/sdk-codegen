@@ -28,7 +28,7 @@ import * as fs from 'fs'
 import path from 'path'
 import { execSync } from 'child_process'
 import { warn } from '@looker/sdk-codegen-utils'
-import {
+import type {
   IFileCall,
   INugget,
   ISDKCall,

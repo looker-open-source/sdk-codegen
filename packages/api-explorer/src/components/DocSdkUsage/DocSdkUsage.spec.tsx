@@ -27,7 +27,7 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 import { findExampleLanguages } from '@looker/sdk-codegen'
 
-import { renderWithReduxProviderAndLode } from '../../test-utils'
+import { renderWithLode } from '../../test-utils'
 import { api, examples } from '../../test-data'
 import { DocSdkUsage } from './DocSdkUsage'
 import {
@@ -47,7 +47,7 @@ describe('DocSdkUsage', () => {
       method.operationId,
       1
     )
-    renderWithReduxProviderAndLode(<DocSdkUsage method={method} />, examples)
+    renderWithLode(<DocSdkUsage method={method} />, examples)
     expect(screen.getAllByRole('link')).toHaveLength(PER_PAGE_COUNT)
 
     expect(

@@ -25,22 +25,25 @@
  */
 
 import * as fs from 'fs'
-import { Readable } from 'readable-stream'
-import {
-  Looker40SDK as LookerSDK,
+import type { Readable } from 'readable-stream'
+import type {
   ICreateQueryTask,
   IQuery,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
+  IDashboard,
+} from '@looker/sdk'
+import {
+  Looker40SDK as LookerSDK,
   ResultFormat,
   environmentPrefix,
   Looker31SDK,
   Looker40SDK,
   Looker31SDKStream,
   Looker40SDKStream,
-  IDashboard,
 } from '@looker/sdk'
+import type { IRawResponse } from '@looker/sdk-rtl'
 import {
   DelimArray,
   boolDefault,
@@ -48,7 +51,6 @@ import {
   ApiConfigMap,
   pageAll,
   pager,
-  IRawResponse,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
@@ -245,7 +247,7 @@ describe('LookerNodeSDK', () => {
         )
         // We shouldn't get here but if we do, delete the test attribute
         await sdk.ok(sdk.delete_user_attribute(attrib.id!))
-      } catch (e) {
+      } catch (e: any) {
         // Using this instead of `rejects.toThrowError` because that pattern fails to match valid RegEx condition
         expect(e.message).toMatch(
           /hidden_value_domain_whitelist must be a comma-separated list of urls with optional wildcards/gim
@@ -265,7 +267,7 @@ describe('LookerNodeSDK', () => {
         expect(looks).toBeDefined()
         if (looks.length > 0) {
           type = 'look'
-          id = looks[0].id!.toString(10)
+          id = looks[0].id!.toString()
         } else {
           const dashboards = await sdk.ok(sdk.search_dashboards({ limit: 1 }))
           expect(dashboards).toBeDefined()
@@ -860,6 +862,46 @@ describe('LookerNodeSDK', () => {
         }
         await sdk.authSession.logout()
         expect(sdk.authSession.isAuthenticated()).toBeFalsy()
+      },
+      testTimeout
+    )
+
+    it(
+      'parses a query with no results',
+      async () => {
+        const sdk = new LookerSDK(session)
+        const query = await sdk.ok(
+          sdk.create_query({
+            model: 'system__activity',
+            view: 'dashboard',
+            limit: '2',
+            fields: ['dashboard.id', 'dashboard.title'],
+            filters: { 'dashboard.id': '-1' },
+          })
+        )
+        expect(query).toBeDefined()
+        expect(query.id).toBeDefined()
+        for (const format of ['csv', 'json', 'json_detail', 'txt', 'md']) {
+          let failed = ''
+          try {
+            const live = await sdk.ok(
+              sdk.run_query({ query_id: query.id!, result_format: format })
+            )
+            const cached = await sdk.ok(
+              sdk.run_query({
+                query_id: query.id!,
+                result_format: format,
+                cache: true,
+              })
+            )
+            expect(live).not.toEqual('{}')
+            expect(cached).not.toEqual('{}')
+          } catch (e: any) {
+            failed = e.message
+          }
+          expect(failed).toEqual('')
+        }
+        await sdk.authSession.logout()
       },
       testTimeout
     )

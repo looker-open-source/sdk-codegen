@@ -25,12 +25,8 @@
  */
 
 import fs from 'fs'
-import {
-  defaultTimeout,
-  boolDefault,
-  ApiConfigMap,
-  IApiSettings,
-} from '@looker/sdk-rtl'
+import type { IApiSettings } from '@looker/sdk-rtl'
+import { defaultTimeout, boolDefault, ApiConfigMap } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings'
 

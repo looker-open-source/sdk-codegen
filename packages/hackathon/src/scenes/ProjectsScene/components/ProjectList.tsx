@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DataTable,
   DataTableItem,
@@ -33,32 +34,34 @@ import {
   Tooltip,
   Icon,
 } from '@looker/components'
-import { ModelFile } from '@looker/icons'
-import { Lock } from '@styled-icons/material/Lock'
-import { Info } from '@styled-icons/material/Info'
-import { Create } from '@styled-icons/material/Create'
-import { Delete } from '@styled-icons/material/Delete'
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
+import { Lock } from '@styled-icons/material-outlined/Lock'
+import { Create } from '@styled-icons/material-outlined/Create'
+import { Delete } from '@styled-icons/material-outlined/Delete'
 import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
+import { Logout } from '@styled-icons/material-outlined/Logout'
+import { Login } from '@styled-icons/material-outlined/Login'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { MoreInfoDialog } from '../../../components/MoreInfoDialog'
-import { sheetCell, IProjectProps } from '../../../models'
+import type { IHackerProps, IProjectProps } from '../../../models'
+import { sheetCell } from '../../../models'
 import {
   getHackerState,
   getProjectsHeadings,
 } from '../../../data/hack_session/selectors'
-import { canDoProjectAction } from '../../../utils'
+import { canDoProjectAction, canJoinProject } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
 import {
   deleteProject,
   currentProjectsRequest,
   updateProjectsPageNum,
-  setMoreInfo,
+  changeMembership,
 } from '../../../data/projects/actions'
 import {
   getCurrentProjectsState,
   getProjectsPageNumState,
 } from '../../../data/projects/selectors'
+import { ProjectViewDialog } from '../../../components/ProjectViewDialog'
 
 interface ProjectListProps {}
 
@@ -71,13 +74,24 @@ export const ProjectList: FC<ProjectListProps> = () => {
     dispatch(currentProjectsRequest())
   }, [dispatch])
   const projects = useSelector(getCurrentProjectsState)
+  const [currentProject, setCurrentProject] = useState<
+    IProjectProps | undefined
+  >(undefined)
 
   const handleDelete = (project: IProjectProps) => {
     dispatch(deleteProject(project._id))
   }
 
-  const openMoreInfo = ({ title, more_info }: IProjectProps) => {
-    dispatch(setMoreInfo(title, more_info))
+  const isProjectMember = (hacker: IHackerProps, project: IProjectProps) => {
+    return !!project.$team.find(
+      (teamMember) => teamMember.user_id === String(hacker.id)
+    )
+  }
+
+  const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
+    const isMember = isProjectMember(hacker, project)
+    dispatch(changeMembership(project!._id, String(hacker.user.id), isMember))
+    dispatch(currentProjectsRequest())
   }
 
   const lockCol = columns[0]
@@ -103,20 +117,20 @@ export const ProjectList: FC<ProjectListProps> = () => {
     })
   }
 
+  const handleView = (project: IProjectProps) => {
+    setCurrentProject(project)
+  }
+
+  const closeView = () => {
+    setCurrentProject(undefined)
+  }
+
   const actions = (project: IProjectProps) => {
     const isLocked = project.locked
 
     return (
       <>
-        {project.more_info && project.more_info !== '\0' && (
-          <DataTableAction
-            onClick={openMoreInfo.bind(null, project)}
-            icon={<Info />}
-          >
-            More Information
-          </DataTableAction>
-        )}
-        {canDoProjectAction(hacker, project, 'update') ? (
+        {canDoProjectAction(hacker, project, 'update') && (
           <DataTableAction
             onClick={handleEdit.bind(null, project._id)}
             icon={isLocked ? <Lock /> : <Create />}
@@ -124,21 +138,33 @@ export const ProjectList: FC<ProjectListProps> = () => {
           >
             Update project
           </DataTableAction>
-        ) : (
-          <DataTableAction
-            onClick={handleEdit.bind(null, project._id)}
-            icon={isLocked ? <Lock /> : <ModelFile />}
-            itemRole="link"
-          >
-            View project
-          </DataTableAction>
         )}
+
+        <DataTableAction
+          onClick={handleView.bind(null, project)}
+          icon={<TextSnippet />}
+          itemRole="link"
+        >
+          View project
+        </DataTableAction>
+
         {canDoProjectAction(hacker, project, 'delete') && (
           <DataTableAction
             onClick={handleDelete.bind(null, project)}
             icon={<Delete />}
           >
             Delete project
+          </DataTableAction>
+        )}
+
+        {canJoinProject(hacker, project) && (
+          <DataTableAction
+            onClick={handleJoin.bind(null, project, hacker)}
+            icon={isProjectMember(hacker, project) ? <Logout /> : <Login />}
+          >
+            {isProjectMember(hacker, project)
+              ? 'Leave project'
+              : 'Join project'}
           </DataTableAction>
         )}
       </>
@@ -204,7 +230,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         pages={totalPages}
         onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
       />
-      <MoreInfoDialog />
+      <ProjectViewDialog project={currentProject} onClose={closeView} />
     </>
   )
 }

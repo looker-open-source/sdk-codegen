@@ -25,7 +25,7 @@
  */
 
 /**
- * 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
+ * 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
  */
 
 
@@ -33,7 +33,6 @@
 
 package com.looker.sdk
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.looker.rtl.*
 import java.io.Serializable
 import java.util.*
@@ -52,7 +51,130 @@ data class AccessToken (
 ) : Serializable
 
 /**
- * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property description An optional description for the alert. This supplements the title
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property followed Whether or not the user follows this alert. (read-only)
+ * @property followable Whether or not the alert is followable (read-only)
+ * @property id ID of the alert (read-only)
+ * @property is_disabled Whether or not the alert is disabled
+ * @property disabled_reason Reason for disabling alert
+ * @property is_public Whether or not the alert is public
+ * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
+ * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
+ * @property investigative_content_title The title of the investigative content. (read-only)
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property owner_display_name Alert owner's display name (read-only)
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class Alert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType,
+    var cron: String,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var description: String? = null,
+    var destinations: Array<AlertDestination>,
+    var field: AlertField,
+    var followed: Boolean? = null,
+    var followable: Boolean? = null,
+    var id: Long? = null,
+    var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
+    var is_public: Boolean? = null,
+    var investigative_content_type: InvestigativeContentType? = null,
+    var investigative_content_id: String? = null,
+    var investigative_content_title: String? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long,
+    var owner_display_name: String? = null,
+    var threshold: Double,
+    var time_series_condition_state: AlertConditionState? = null
+) : Serializable
+
+/**
+ * @property filter_title Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
+ * @property field_name Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
+ * @property filter_value Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+ * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
+ */
+data class AlertAppliedDashboardFilter (
+    var filter_title: String,
+    var field_name: String,
+    var filter_value: String,
+    var filter_description: String? = null
+) : Serializable
+
+/**
+ * @property previous_time_series_id (Write-Only) The second latest time string the alert has seen.
+ * @property latest_time_series_id (Write-Only) Latest time string the alert has seen.
+ */
+data class AlertConditionState (
+    var previous_time_series_id: String? = null,
+    var latest_time_series_id: String? = null
+) : Serializable
+
+/**
+ * @property destination_type Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".
+ * @property email_address Email address for the 'email' type
+ * @property action_hub_integration_id Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)
+ * @property action_hub_form_params_json Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)
+ */
+data class AlertDestination (
+    var destination_type: DestinationType,
+    var email_address: String? = null,
+    var action_hub_integration_id: String? = null,
+    var action_hub_form_params_json: String? = null
+) : Serializable
+
+/**
+ * @property title Field's title. Usually auto-generated to reflect field name and its filters
+ * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+ * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
+ */
+data class AlertField (
+    var title: String,
+    var name: String,
+    var filter: Array<AlertFieldFilter>? = null
+) : Serializable
+
+/**
+ * @property field_name Field Name. Has format `<view>.<field>`
+ * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+ * @property filter_value Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+ */
+data class AlertFieldFilter (
+    var field_name: String,
+    var field_value: Any,
+    var filter_value: String? = null
+) : Serializable
+
+/**
+ * @property owner_id New owner ID of the alert
+ * @property is_disabled Set alert enabled or disabled
+ * @property disabled_reason The reason this alert is disabled
+ * @property is_public Set alert public or private
+ * @property threshold New threshold value
+ */
+data class AlertPatch (
+    var owner_id: Long? = null,
+    var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
+    var is_public: Boolean? = null,
+    var threshold: Double? = null
+) : Serializable
+
+/**
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 enum class Align : Serializable {
     left,
@@ -75,12 +197,14 @@ data class ApiSession (
  * @property current_version
  * @property supported_versions Array of versions supported by this Looker instance (read-only)
  * @property api_server_url API server base url (read-only)
+ * @property web_server_url Web server base url (read-only)
  */
 data class ApiVersion (
     var looker_release_version: String? = null,
     var current_version: ApiVersionElement? = null,
     var supported_versions: Array<ApiVersionElement>? = null,
-    var api_server_url: String? = null
+    var api_server_url: String? = null,
+    var web_server_url: String? = null
 ) : Serializable
 
 /**
@@ -150,11 +274,15 @@ data class Board (
  * @property content_favorite_id Content favorite id associated with the item this content is based on (read-only)
  * @property content_metadata_id Content metadata id associated with the item this content is based on (read-only)
  * @property content_updated_at Last time the content that this item is based on was updated (read-only)
+ * @property custom_description Custom description entered by the user, if present
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property description The actual description for display (read-only)
  * @property favorite_count Number of times content has been favorited, if present (read-only)
  * @property board_section_id Associated Board Section
  * @property id Unique Id (read-only)
+ * @property image_url The actual image_url for display (read-only)
  * @property location The container folder name of the content (read-only)
  * @property look_id Look to base this item on
  * @property lookml_dashboard_id LookML Dashboard to base this item on
@@ -169,13 +297,17 @@ data class BoardItem (
     var content_favorite_id: Long? = null,
     var content_metadata_id: Long? = null,
     var content_updated_at: String? = null,
+    var custom_description: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var description: String? = null,
     var favorite_count: Long? = null,
     var board_section_id: Long? = null,
     var id: Long? = null,
+    var image_url: String? = null,
     var location: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null,
     var title: String? = null,
@@ -211,7 +343,7 @@ data class BoardSection (
 ) : Serializable
 
 /**
- * Field category Valid values are: "parameter", "filter", "measure", "dimension".
+ * Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
  */
 enum class Category : Serializable {
     parameter,
@@ -275,6 +407,20 @@ data class Command (
 ) : Serializable
 
 /**
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ */
+enum class ComparisonType : Serializable {
+    EQUAL_TO,
+    GREATER_THAN,
+    GREATER_THAN_OR_EQUAL_TO,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL_TO,
+    INCREASES_BY,
+    DECREASES_BY,
+    CHANGES_BY
+}
+
+/**
  * @property dialect_name Name of the dialect for this connection (read-only)
  * @property cost_estimate True for cost estimating support (read-only)
  * @property multiple_databases True for multiple database support (read-only)
@@ -325,7 +471,7 @@ data class ContentFavorite (
     var id: Long? = null,
     var user_id: Long? = null,
     var content_metadata_id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var look: LookBasic? = null,
     var dashboard: DashboardBase? = null,
@@ -351,7 +497,7 @@ data class ContentMeta (
     var name: String? = null,
     var parent_id: Long? = null,
     var dashboard_id: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var folder_id: String? = null,
     var content_type: String? = null,
     var inherits: Boolean? = null,
@@ -514,7 +660,7 @@ data class ContentValidationFolder (
  * @property folder
  */
 data class ContentValidationLook (
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var short_url: String? = null,
     var folder: ContentValidationFolder? = null
@@ -547,7 +693,7 @@ data class ContentValidationLookMLDashboardElement (
  */
 data class ContentValidationScheduledPlan (
     var name: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var id: Long? = null
 ) : Serializable
 
@@ -593,7 +739,7 @@ data class ContentValidatorError (
 data class ContentView (
     var can: Map<String,Boolean>? = null,
     var id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var title: String? = null,
     var content_metadata_id: Long? = null,
@@ -638,6 +784,27 @@ data class CostEstimate (
  */
 data class CreateCostEstimate (
     var sql: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property client_id API key client_id (read-only)
+ * @property created_at Timestamp for the creation of this credential (read-only)
+ * @property is_disabled Has this credential been disabled? (read-only)
+ * @property type Short name for the type of this kind of credential (read-only)
+ * @property client_secret API key client_secret (read-only)
+ * @property url Link to get this item (read-only)
+ */
+data class CreateCredentialsApi3 (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var client_id: String? = null,
+    var created_at: String? = null,
+    var is_disabled: Boolean? = null,
+    var type: String? = null,
+    var client_secret: String? = null,
+    var url: String? = null
 ) : Serializable
 
 /**
@@ -741,13 +908,11 @@ data class CreateQueryTask (
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null
 ) : Serializable
 
 /**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- *
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property client_id API key client_id (read-only)
@@ -761,8 +926,6 @@ data class CredentialsApi3 (
     var id: Long? = null,
     var client_id: String? = null,
     var created_at: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var url: String? = null
@@ -785,8 +948,6 @@ data class CredentialsEmail (
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
@@ -812,8 +973,6 @@ data class CredentialsEmailSearch (
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
@@ -839,8 +998,6 @@ data class CredentialsEmbed (
     var external_group_id: String? = null,
     var external_user_id: String? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -864,8 +1021,6 @@ data class CredentialsGoogle (
     var domain: String? = null,
     var email: String? = null,
     var google_user_id: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -887,8 +1042,6 @@ data class CredentialsLDAP (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var ldap_dn: String? = null,
     var ldap_id: String? = null,
@@ -912,8 +1065,6 @@ data class CredentialsLookerOpenid (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var logged_in_ip: String? = null,
@@ -936,8 +1087,6 @@ data class CredentialsOIDC (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var oidc_user_id: String? = null,
@@ -959,8 +1108,6 @@ data class CredentialsSaml (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var email: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var saml_user_id: String? = null,
@@ -981,8 +1128,6 @@ data class CredentialsSaml (
 data class CredentialsTotp (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var type: String? = null,
     var verified: Boolean? = null,
@@ -990,14 +1135,12 @@ data class CredentialsTotp (
 ) : Serializable
 
 /**
- * @property can Operations the current user is able to perform on this object (read-only)
  * @property enabled If true, custom email content will replace the default body of welcome emails
  * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
- * @property subject The text to appear in the email subject line.
- * @property header The text to appear in the header line of the email body.
+ * @property subject The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+ * @property header The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
  */
 data class CustomWelcomeEmail (
-    var can: Map<String,Boolean>? = null,
     var enabled: Boolean? = null,
     var content: String? = null,
     var subject: String? = null,
@@ -1021,7 +1164,7 @@ data class CustomWelcomeEmail (
  * @property user_id Id of User (read-only)
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes
  * @property background_color Background color
  * @property created_at Time that the Dashboard was created. (read-only)
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -1033,8 +1176,13 @@ data class CustomWelcomeEmail (
  * @property deleter_id Id of User that 'soft' deleted the dashboard. (read-only)
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
  * @property favorite_count Number of times favorited (read-only)
+ * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property last_accessed_at Time the dashboard was last accessed (read-only)
  * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
+ * @property updated_at Time that the Dashboard was most recently updated. (read-only)
+ * @property last_updater_id Id of User that most recently updated the dashboard. (read-only)
+ * @property last_updater_name Name of User that most recently updated the dashboard. (read-only)
+ * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
  * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -1077,8 +1225,13 @@ data class Dashboard (
     var deleter_id: Long? = null,
     var edit_uri: String? = null,
     var favorite_count: Long? = null,
+    var filters_bar_collapsed: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
+    var updated_at: Date? = null,
+    var last_updater_id: Long? = null,
+    var last_updater_name: String? = null,
+    var user_name: String? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -1460,6 +1613,7 @@ data class Datagroup (
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
+ * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
  */
 data class DBConnection (
     var can: Map<String,Boolean>? = null,
@@ -1468,7 +1622,7 @@ data class DBConnection (
     var snippets: Array<Snippet>? = null,
     var pdts_enabled: Boolean? = null,
     var host: String? = null,
-    var port: Long? = null,
+    var port: String? = null,
     var username: String? = null,
     var password: String? = null,
     var uses_oauth: Boolean? = null,
@@ -1502,7 +1656,8 @@ data class DBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null
+    var oauth_application_id: Long? = null,
+    var always_retry_failed_builds: Boolean? = null
 ) : Serializable
 
 /**
@@ -1585,13 +1740,21 @@ data class DependencyGraph (
 ) : Serializable
 
 /**
- * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+ * Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
  */
 enum class DependencyStatus : Serializable {
     lock_optional,
     lock_required,
     lock_error,
     install_none
+}
+
+/**
+ * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
+ */
+enum class DestinationType : Serializable {
+    EMAIL,
+    ACTION_HUB
 }
 
 /**
@@ -1675,8 +1838,6 @@ data class DialectInfoOptions (
  * @property is_enabled Whether or not digest emails are enabled
  */
 data class DigestEmails (
-    @get:JsonProperty("is_enabled")
-    @param:JsonProperty("is_enabled")
     var is_enabled: Boolean? = null
 ) : Serializable
 
@@ -1709,6 +1870,23 @@ data class EmbedParams (
     var target_url: String,
     var session_length: Long? = null,
     var force_logout_login: Boolean? = null
+) : Serializable
+
+/**
+ * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+ * @property created_at When secret was created (read-only)
+ * @property enabled Is this secret currently enabled
+ * @property id Unique Id (read-only)
+ * @property secret Secret for use with SSO embedding (read-only)
+ * @property user_id Id of user who created this secret (read-only)
+ */
+data class EmbedSecret (
+    var algorithm: String? = null,
+    var created_at: String? = null,
+    var enabled: Boolean? = null,
+    var id: Long? = null,
+    var secret: String? = null,
+    var user_id: Long? = null
 ) : Serializable
 
 /**
@@ -1778,7 +1956,7 @@ data class ExternalOauthApplication (
 ) : Serializable
 
 /**
- * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+ * The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
  */
 enum class FillStyle : Serializable {
     enumeration,
@@ -1814,26 +1992,12 @@ data class Folder (
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
-    @get:JsonProperty("is_embed")
-    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
-    @get:JsonProperty("is_embed_shared_root")
-    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
-    @get:JsonProperty("is_embed_users_root")
-    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
-    @get:JsonProperty("is_personal")
-    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
-    @get:JsonProperty("is_personal_descendant")
-    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
-    @get:JsonProperty("is_shared_root")
-    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
-    @get:JsonProperty("is_users_root")
-    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String,Boolean>? = null,
     var dashboards: Array<DashboardBase>? = null,
@@ -1867,32 +2031,18 @@ data class FolderBase (
     var creator_id: Long? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
-    @get:JsonProperty("is_embed")
-    @param:JsonProperty("is_embed")
     var is_embed: Boolean? = null,
-    @get:JsonProperty("is_embed_shared_root")
-    @param:JsonProperty("is_embed_shared_root")
     var is_embed_shared_root: Boolean? = null,
-    @get:JsonProperty("is_embed_users_root")
-    @param:JsonProperty("is_embed_users_root")
     var is_embed_users_root: Boolean? = null,
-    @get:JsonProperty("is_personal")
-    @param:JsonProperty("is_personal")
     var is_personal: Boolean? = null,
-    @get:JsonProperty("is_personal_descendant")
-    @param:JsonProperty("is_personal_descendant")
     var is_personal_descendant: Boolean? = null,
-    @get:JsonProperty("is_shared_root")
-    @param:JsonProperty("is_shared_root")
     var is_shared_root: Boolean? = null,
-    @get:JsonProperty("is_users_root")
-    @param:JsonProperty("is_users_root")
     var is_users_root: Boolean? = null,
     var can: Map<String,Boolean>? = null
 ) : Serializable
 
 /**
- * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+ * Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
  */
 enum class Format : Serializable {
     topojson,
@@ -1928,14 +2078,8 @@ data class GitBranch (
     var owner_name: String? = null,
     var readonly: Boolean? = null,
     var personal: Boolean? = null,
-    @get:JsonProperty("is_local")
-    @param:JsonProperty("is_local")
     var is_local: Boolean? = null,
-    @get:JsonProperty("is_remote")
-    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null,
-    @get:JsonProperty("is_production")
-    @param:JsonProperty("is_production")
     var is_production: Boolean? = null,
     var ahead_count: Long? = null,
     var behind_count: Long? = null,
@@ -2122,7 +2266,7 @@ data class HomepageItem (
     var id: Long? = null,
     var image_url: String? = null,
     var location: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null,
     var section_fetch_time: Float? = null,
@@ -2158,8 +2302,6 @@ data class HomepageSection (
     var homepage_id: Long? = null,
     var homepage_items: Array<HomepageItem>? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_header")
-    @param:JsonProperty("is_header")
     var is_header: Boolean? = null,
     var item_order: Array<Long>? = null,
     var title: String? = null,
@@ -2178,8 +2320,6 @@ data class ImportedProject (
     var name: String? = null,
     var url: String? = null,
     var ref: String? = null,
-    @get:JsonProperty("is_remote")
-    @param:JsonProperty("is_remote")
     var is_remote: Boolean? = null
 ) : Serializable
 
@@ -2317,6 +2457,13 @@ data class InternalHelpResourcesContent (
 ) : Serializable
 
 /**
+ * The type of the investigative content Valid values are: "dashboard". (Enum defined in Alert)
+ */
+enum class InvestigativeContentType : Serializable {
+    dashboard
+}
+
+/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
  * @property auth_password (Write-Only)  Password for the LDAP account used to access the LDAP server
@@ -2388,8 +2535,6 @@ data class LDAPConfig (
     var merge_new_users_by_email: Boolean? = null,
     var modified_at: String? = null,
     var modified_by: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_ldap_password: String? = null,
     var test_ldap_user: String? = null,
@@ -2429,8 +2574,6 @@ data class LDAPConfigTestIssue (
  */
 data class LDAPConfigTestResult (
     var details: String? = null,
-    @get:JsonProperty("issues")
-    @param:JsonProperty("issues")
     var issues: Array<LDAPConfigTestIssue>? = null,
     var message: String? = null,
     var status: String? = null,
@@ -2556,7 +2699,7 @@ data class LegacyFeature (
 ) : Serializable
 
 /**
- * Name of the command Valid values are: "dashboard", "lookml_dashboard".
+ * Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
  */
 enum class LinkedContentType : Serializable {
     dashboard,
@@ -2618,7 +2761,7 @@ data class LocalizationSettings (
 data class Look (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -2632,8 +2775,6 @@ data class Look (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -2725,6 +2866,7 @@ data class LookmlModel (
  * @property joins Views joined into this explore (read-only)
  * @property group_label Label used to group explores in the navigation menus (read-only)
  * @property supported_measure_types An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)
+ * @property always_join An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)
  */
 data class LookmlModelExplore (
     var id: String? = null,
@@ -2758,15 +2900,14 @@ data class LookmlModelExplore (
     var always_filter: Array<LookmlModelExploreAlwaysFilter>? = null,
     var conditionally_filter: Array<LookmlModelExploreConditionallyFilter>? = null,
     var index_fields: Array<String>? = null,
-    @get:JsonProperty("sets")
-    @param:JsonProperty("sets")
     var sets: Array<LookmlModelExploreSet>? = null,
     var tags: Array<String>? = null,
     var errors: Array<LookmlModelExploreError>? = null,
     var fields: LookmlModelExploreFieldset? = null,
     var joins: Array<LookmlModelExploreJoins>? = null,
     var group_label: String? = null,
-    var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null
+    var supported_measure_types: Array<LookmlModelExploreSupportedMeasureType>? = null,
+    var always_join: Array<String>? = null
 ) : Serializable
 
 /**
@@ -2889,17 +3030,9 @@ data class LookmlModelExploreField (
     var fiscal_month_offset: Long? = null,
     var has_allowed_values: Boolean? = null,
     var hidden: Boolean? = null,
-    @get:JsonProperty("is_filter")
-    @param:JsonProperty("is_filter")
     var is_filter: Boolean? = null,
-    @get:JsonProperty("is_fiscal")
-    @param:JsonProperty("is_fiscal")
     var is_fiscal: Boolean? = null,
-    @get:JsonProperty("is_numeric")
-    @param:JsonProperty("is_numeric")
     var is_numeric: Boolean? = null,
-    @get:JsonProperty("is_timeframe")
-    @param:JsonProperty("is_timeframe")
     var is_timeframe: Boolean? = null,
     var can_time_filter: Boolean? = null,
     var time_interval: LookmlModelExploreFieldTimeInterval? = null,
@@ -3162,7 +3295,7 @@ data class LookModel (
 data class LookWithDashboards (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -3176,8 +3309,6 @@ data class LookWithDashboards (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -3232,7 +3363,7 @@ data class LookWithDashboards (
 data class LookWithQuery (
     var can: Map<String,Boolean>? = null,
     var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var title: String? = null,
     var user_id: Long? = null,
     var content_favorite_id: Long? = null,
@@ -3246,8 +3377,6 @@ data class LookWithQuery (
     var favorite_count: Long? = null,
     var google_spreadsheet_formula: String? = null,
     var image_embed_url: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_updater_id: Long? = null,
@@ -3401,7 +3530,7 @@ data class ModelsNotValidated (
 ) : Serializable
 
 /**
- * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
+ * The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
  */
 enum class Name : Serializable {
     day,
@@ -3489,16 +3618,12 @@ data class OIDCConfig (
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
-    @get:JsonProperty("issuer")
-    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var modified_at: Date? = null,
     var modified_by: Long? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
     var secret: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_slug: String? = null,
     var token_endpoint: String? = null,
@@ -3614,7 +3739,7 @@ data class PermissionSet (
 ) : Serializable
 
 /**
- * Type of permission: "view" or "edit" Valid values are: "view", "edit".
+ * Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
  */
 enum class PermissionType : Serializable {
     view,
@@ -3666,8 +3791,6 @@ data class Project (
     var validation_required: Boolean? = null,
     var git_release_mgmt_enabled: Boolean? = null,
     var allow_warnings: Boolean? = null,
-    @get:JsonProperty("is_example")
-    @param:JsonProperty("is_example")
     var is_example: Boolean? = null,
     var dependency_status: String? = null
 ) : Serializable
@@ -3774,7 +3897,7 @@ data class ProjectWorkspace (
 ) : Serializable
 
 /**
- * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+ * The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
  */
 enum class PullRequestMode : Serializable {
     off,
@@ -3878,7 +4001,7 @@ data class QueryTask (
     var runtime: Float? = null,
     var rebuild_pdts: Boolean? = null,
     var result_source: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null,
     var result_format: String? = null
 ) : Serializable
@@ -3895,6 +4018,7 @@ data class QueryTask (
  * @property look_id Id of look to render (read-only)
  * @property lookml_dashboard_id Id of lookml dashboard to render (read-only)
  * @property query_id Id of query to render (read-only)
+ * @property dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)
  * @property query_runtime Number of seconds elapsed running queries (read-only)
  * @property render_runtime Number of seconds elapsed rendering data (read-only)
  * @property result_format Output format: pdf, png, or jpg (read-only)
@@ -3913,9 +4037,10 @@ data class RenderTask (
     var finalized_at: String? = null,
     var height: Long? = null,
     var id: String? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var query_id: Long? = null,
+    var dashboard_element_id: String? = null,
     var query_runtime: Double? = null,
     var render_runtime: Double? = null,
     var result_format: String? = null,
@@ -3944,13 +4069,11 @@ data class RepositoryCredential (
     var git_username: String? = null,
     var git_password: String? = null,
     var ssh_public_key: String? = null,
-    @get:JsonProperty("is_configured")
-    @param:JsonProperty("is_configured")
     var is_configured: Boolean? = null
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
@@ -4162,8 +4285,6 @@ data class SamlConfig (
     var default_new_user_groups: Array<Group>? = null,
     var default_new_user_role_ids: Array<Long>? = null,
     var default_new_user_group_ids: Array<Long>? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups: Array<SamlGroupRead>? = null,
@@ -4294,7 +4415,7 @@ data class ScheduledPlan (
     var user_id: Long? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,
@@ -4359,8 +4480,6 @@ data class ScheduledPlanDestination (
  */
 data class Schema (
     var name: String? = null,
-    @get:JsonProperty("is_default")
-    @param:JsonProperty("is_default")
     var is_default: Boolean? = null
 ) : Serializable
 
@@ -4421,13 +4540,13 @@ data class SchemaTable (
  * @property name Schema name (read-only)
  * @property is_default True if this is the default schema (read-only)
  * @property tables Tables for this schema (read-only)
+ * @property table_limit_hit True if the table limit was hit while retrieving tables in this schema (read-only)
  */
 data class SchemaTables (
     var name: String? = null,
-    @get:JsonProperty("is_default")
-    @param:JsonProperty("is_default")
     var is_default: Boolean? = null,
-    var tables: Array<SchemaTable>? = null
+    var tables: Array<SchemaTable>? = null,
+    var table_limit_hit: Boolean? = null
 ) : Serializable
 
 /**
@@ -4483,16 +4602,42 @@ data class SessionConfig (
 ) : Serializable
 
 /**
- * WARNING: no writeable properties found for POST, PUT, or PATCH
- *
- * @property extension_framework_enabled Toggle extension framework on or off (read-only)
- * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off (read-only)
- * @property marketplace_enabled Toggle marketplace on or off (read-only)
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration
+ * @property custom_welcome_email
+ * @property onboarding_enabled Toggle onboarding on or off
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
-    var marketplace_enabled: Boolean? = null
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WhitelabelConfiguration? = null,
+    var custom_welcome_email: CustomWelcomeEmail? = null,
+    var onboarding_enabled: Boolean? = null
+) : Serializable
+
+/**
+ * @property is_valid SMTP status of node (read-only)
+ * @property message Error message for node (read-only)
+ * @property hostname Host name of node (read-only)
+ */
+data class SmtpNodeStatus (
+    var is_valid: Boolean? = null,
+    var message: String? = null,
+    var hostname: String? = null
+) : Serializable
+
+/**
+ * @property is_valid Overall SMTP status of cluster (read-only)
+ * @property node_count Total number of nodes in cluster (read-only)
+ * @property node_status array of each node's status containing is_valid, message, hostname (read-only)
+ */
+data class SmtpStatus (
+    var is_valid: Boolean? = null,
+    var node_count: Long? = null,
+    var node_status: Array<SmtpNodeStatus>? = null
 ) : Serializable
 
 /**
@@ -4612,7 +4757,47 @@ data class SshTunnel (
 ) : Serializable
 
 /**
- * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+ * @property emails An array of emails to add to the Allowlist
+ * @property reason Reason for adding emails to the Allowlist
+ */
+data class SupportAccessAddEntries (
+    var emails: Array<String>? = null,
+    var reason: String? = null
+) : Serializable
+
+/**
+ * @property id Unique ID (read-only)
+ * @property email Email address
+ * @property full_name Full name of allowlisted user (read-only)
+ * @property reason Reason the Email is included in the Allowlist
+ * @property created_date Date the Email was added to the Allowlist (read-only)
+ */
+data class SupportAccessAllowlistEntry (
+    var id: String? = null,
+    var email: String? = null,
+    var full_name: String? = null,
+    var reason: String? = null,
+    var created_date: Date? = null
+) : Serializable
+
+/**
+ * @property duration_in_seconds Duration Support Access will remain enabled
+ */
+data class SupportAccessEnable (
+    var duration_in_seconds: Long
+) : Serializable
+
+/**
+ * @property open Whether or not Support Access is open (read-only)
+ * @property open_until Time that Support Access will expire (read-only)
+ */
+data class SupportAccessStatus (
+    var open: Boolean? = null,
+    var open_until: Date? = null
+) : Serializable
+
+/**
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
  */
 enum class SupportedActionTypes : Serializable {
     cell,
@@ -4621,7 +4806,7 @@ enum class SupportedActionTypes : Serializable {
 }
 
 /**
- * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+ * A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
  */
 enum class SupportedDownloadSettings : Serializable {
     push,
@@ -4629,7 +4814,7 @@ enum class SupportedDownloadSettings : Serializable {
 }
 
 /**
- * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
  */
 enum class SupportedFormats : Serializable {
     txt,
@@ -4648,7 +4833,7 @@ enum class SupportedFormats : Serializable {
 }
 
 /**
- * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+ * A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
  */
 enum class SupportedFormattings : Serializable {
     formatted,
@@ -4656,7 +4841,7 @@ enum class SupportedFormattings : Serializable {
 }
 
 /**
- * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+ * A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
  */
 enum class SupportedVisualizationFormattings : Serializable {
     apply,
@@ -4677,8 +4862,6 @@ data class Theme (
     var end_at: Date? = null,
     var id: Long? = null,
     var name: String? = null,
-    @get:JsonProperty("settings")
-    @param:JsonProperty("settings")
     var settings: ThemeSettings? = null
 ) : Serializable
 
@@ -4807,8 +4990,6 @@ data class User (
     var group_ids: Array<Long>? = null,
     var home_folder_id: String? = null,
     var id: Long? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
@@ -4848,11 +5029,7 @@ data class UserAttribute (
     var label: String,
     var type: String,
     var default_value: String? = null,
-    @get:JsonProperty("is_system")
-    @param:JsonProperty("is_system")
     var is_system: Boolean? = null,
-    @get:JsonProperty("is_permanent")
-    @param:JsonProperty("is_permanent")
     var is_permanent: Boolean? = null,
     var value_is_hidden: Boolean? = null,
     var user_can_view: Boolean? = null,
@@ -4861,7 +5038,7 @@ data class UserAttribute (
 ) : Serializable
 
 /**
- * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+ * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
  */
 enum class UserAttributeFilterTypes : Serializable {
     advanced_filter_string,
@@ -4921,6 +5098,13 @@ data class UserAttributeWithValue (
     var user_attribute_id: Long? = null,
     var source: String? = null,
     var hidden_value_domain_whitelist: String? = null
+) : Serializable
+
+/**
+ * @property email Email Address
+ */
+data class UserEmailOnly (
+    var email: String
 ) : Serializable
 
 /**
@@ -4992,7 +5176,7 @@ data class ValidationErrorDetail (
 ) : Serializable
 
 /**
- * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+ * The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
  */
 enum class WeekStartDay : Serializable {
     monday,
@@ -5016,7 +5200,6 @@ data class WelcomeEmailTest (
 ) : Serializable
 
 /**
- * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property logo_url Logo image url (read-only) (read-only)
@@ -5035,7 +5218,6 @@ data class WelcomeEmailTest (
  * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
  */
 data class WhitelabelConfiguration (
-    var can: Map<String,Boolean>? = null,
     var id: Long? = null,
     var logo_file: String? = null,
     var logo_url: String? = null,
@@ -5048,8 +5230,6 @@ data class WhitelabelConfiguration (
     var allow_looker_mentions: Boolean? = null,
     var allow_looker_links: Boolean? = null,
     var custom_welcome_email_advanced: Boolean? = null,
-    @get:JsonProperty("setup_mentions")
-    @param:JsonProperty("setup_mentions")
     var setup_mentions: Boolean? = null,
     var alerts_logo: Boolean? = null,
     var alerts_links: Boolean? = null,
@@ -5065,6 +5245,50 @@ data class Workspace (
     var can: Map<String,Boolean>? = null,
     var id: String? = null,
     var projects: Array<Project>? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for Alert removes:
+ * followed, followable, id, investigative_content_title, owner_display_name
+ *
+ * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_title An optional, user-defined title for the alert
+ * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
+ * @property description An optional description for the alert. This supplements the title
+ * @property destinations Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
+ * @property field
+ * @property is_disabled Whether or not the alert is disabled
+ * @property disabled_reason Reason for disabling alert
+ * @property is_public Whether or not the alert is public
+ * @property investigative_content_type The type of the investigative content Valid values are: "dashboard".
+ * @property investigative_content_id The ID of the investigative content. For dashboards, this will be the dashboard ID
+ * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
+ * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property owner_id User id of alert owner
+ * @property threshold Value of the alert threshold
+ * @property time_series_condition_state
+ */
+data class WriteAlert (
+    var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
+    var comparison_type: ComparisonType,
+    var cron: String,
+    var custom_title: String? = null,
+    var dashboard_element_id: Long? = null,
+    var description: String? = null,
+    var destinations: Array<AlertDestination>,
+    var field: AlertField,
+    var is_disabled: Boolean? = null,
+    var disabled_reason: String? = null,
+    var is_public: Boolean? = null,
+    var investigative_content_type: InvestigativeContentType? = null,
+    var investigative_content_id: String? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_link_id: String? = null,
+    var owner_id: Long,
+    var threshold: Double,
+    var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
 
 /**
@@ -5113,8 +5337,11 @@ data class WriteBoard (
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
  *
+ * @property custom_description Custom description entered by the user, if present
+ * @property custom_title Custom title entered by the user, if present
+ * @property custom_url Custom url entered by the user, if present
  * @property dashboard_id Dashboard to base this item on
  * @property board_section_id Associated Board Section
  * @property look_id Look to base this item on
@@ -5122,9 +5349,12 @@ data class WriteBoard (
  * @property order An arbitrary integer representing the sort order within the section
  */
 data class WriteBoardItem (
+    var custom_description: String? = null,
+    var custom_title: String? = null,
+    var custom_url: String? = null,
     var dashboard_id: Long? = null,
     var board_section_id: Long? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var order: Long? = null
 ) : Serializable
@@ -5257,7 +5487,7 @@ data class WriteCreateQueryTask (
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: String? = null
 ) : Serializable
 
@@ -5274,24 +5504,8 @@ data class WriteCredentialsEmail (
 ) : Serializable
 
 /**
- * Dynamic writeable type for CustomWelcomeEmail removes:
- * can
- *
- * @property enabled If true, custom email content will replace the default body of welcome emails
- * @property content The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
- * @property subject The text to appear in the email subject line.
- * @property header The text to appear in the header line of the email body.
- */
-data class WriteCustomWelcomeEmail (
-    var enabled: Boolean? = null,
-    var content: String? = null,
-    var subject: String? = null,
-    var header: String? = null
-) : Serializable
-
-/**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
  *
  * @property description Description
  * @property hidden Is Hidden
@@ -5302,10 +5516,11 @@ data class WriteCustomWelcomeEmail (
  * @property title Dashboard Title
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
- * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)
+ * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
  * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
@@ -5330,6 +5545,7 @@ data class WriteDashboard (
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
+    var filters_bar_collapsed: Boolean? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -5517,11 +5733,12 @@ data class WriteDatagroup (
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
+ * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
  */
 data class WriteDBConnection (
     var name: String? = null,
     var host: String? = null,
-    var port: Long? = null,
+    var port: String? = null,
     var username: String? = null,
     var password: String? = null,
     var certificate: String? = null,
@@ -5548,7 +5765,8 @@ data class WriteDBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null
+    var oauth_application_id: Long? = null,
+    var always_retry_failed_builds: Boolean? = null
 ) : Serializable
 
 /**
@@ -5579,6 +5797,18 @@ data class WriteDBConnectionOverride (
     var schema: String? = null,
     var jdbc_additional_params: String? = null,
     var after_connect_statements: String? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for EmbedSecret removes:
+ * created_at, id, secret, user_id
+ *
+ * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
+ * @property enabled Is this secret currently enabled
+ */
+data class WriteEmbedSecret (
+    var algorithm: String? = null,
+    var enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -5740,8 +5970,6 @@ data class WriteLDAPConfig (
     var groups_user_attribute: String? = null,
     var groups_with_role_ids: Array<LDAPGroupWrite>? = null,
     var merge_new_users_by_email: Boolean? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var test_ldap_password: String? = null,
     var test_ldap_user: String? = null,
@@ -5817,8 +6045,6 @@ data class WriteLookWithQuery (
     var user_id: Long? = null,
     var deleted: Boolean? = null,
     var description: String? = null,
-    @get:JsonProperty("is_run_on_load")
-    @param:JsonProperty("is_run_on_load")
     var is_run_on_load: Boolean? = null,
     var public: Boolean? = null,
     var query_id: Long? = null,
@@ -5919,14 +6145,10 @@ data class WriteOIDCConfig (
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
     var identifier: String? = null,
-    @get:JsonProperty("issuer")
-    @param:JsonProperty("issuer")
     var issuer: String? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
     var secret: String? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var token_endpoint: String? = null,
     var user_attribute_map_email: String? = null,
@@ -6145,8 +6367,6 @@ data class WriteSamlConfig (
     var alternate_email_login_allowed: Boolean? = null,
     var default_new_user_role_ids: Array<Long>? = null,
     var default_new_user_group_ids: Array<Long>? = null,
-    @get:JsonProperty("set_roles_from_groups")
-    @param:JsonProperty("set_roles_from_groups")
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<SamlGroupWrite>? = null,
@@ -6196,7 +6416,7 @@ data class WriteScheduledPlan (
     var user_id: Long? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
-    var look_id: Long? = null,
+    var look_id: String? = null,
     var dashboard_id: Long? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,
@@ -6236,6 +6456,26 @@ data class WriteSessionConfig (
     var unlimited_sessions_per_user: Boolean? = null,
     var use_inactivity_based_logout: Boolean? = null,
     var track_session_location: Boolean? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for Setting
+ *
+ * @property extension_framework_enabled Toggle extension framework on or off
+ * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property marketplace_enabled Toggle marketplace on or off
+ * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
+ * id, logo_url, favicon_url
+ * @property custom_welcome_email
+ * @property onboarding_enabled Toggle onboarding on or off
+ */
+data class WriteSetting (
+    var extension_framework_enabled: Boolean? = null,
+    var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_enabled: Boolean? = null,
+    var whitelabel_configuration: WriteWhitelabelConfiguration? = null,
+    var custom_welcome_email: CustomWelcomeEmail? = null,
+    var onboarding_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -6281,8 +6521,6 @@ data class WriteTheme (
     var begin_at: Date? = null,
     var end_at: Date? = null,
     var name: String? = null,
-    @get:JsonProperty("settings")
-    @param:JsonProperty("settings")
     var settings: ThemeSettings? = null
 ) : Serializable
 
@@ -6304,8 +6542,6 @@ data class WriteUser (
     var credentials_email: WriteCredentialsEmail? = null,
     var first_name: String? = null,
     var home_folder_id: String? = null,
-    @get:JsonProperty("is_disabled")
-    @param:JsonProperty("is_disabled")
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
@@ -6349,7 +6585,7 @@ data class WriteUserAttributeWithValue (
 
 /**
  * Dynamic writeable type for WhitelabelConfiguration removes:
- * can, id, logo_url, favicon_url
+ * id, logo_url, favicon_url
  *
  * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
  * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)
@@ -6375,8 +6611,6 @@ data class WriteWhitelabelConfiguration (
     var allow_looker_mentions: Boolean? = null,
     var allow_looker_links: Boolean? = null,
     var custom_welcome_email_advanced: Boolean? = null,
-    @get:JsonProperty("setup_mentions")
-    @param:JsonProperty("setup_mentions")
     var setup_mentions: Boolean? = null,
     var alerts_logo: Boolean? = null,
     var alerts_links: Boolean? = null,

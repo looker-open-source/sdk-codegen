@@ -48,7 +48,7 @@ describe('typescript generator', () => {
         six: {},
         seven: [],
       }
-      const expected = { two: 'assigned', three: true, four: false }
+      const expected = { two: 'assigned', three: true, four: false, six: {} }
       const actual = trimInputs(inputs)
       expect(actual).toEqual(expected)
     })
@@ -80,7 +80,7 @@ describe('typescript generator', () => {
         three: true,
         four: false,
         five: '',
-        six: { a: true, b: 0, c: null },
+        six: { a: true, b: 0, c: null, d: {} },
       }
       const expected = {
         zero: [0, 1, 2, 3],
@@ -137,6 +137,13 @@ describe('typescript generator', () => {
       const param = method.params[0]
       const actual = gen.declareParameter(indent, method, param)
       expect(actual).toEqual(`query_id: number`)
+    })
+
+    it('intrinsic body', () => {
+      const method = apiTestModel.methods.parse_saml_idp_metadata
+      const param = method.params[0]
+      const actual = gen.declareParameter(indent, method, param)
+      expect(actual).toEqual(`body: string`)
     })
 
     it('optional parameter', () => {
@@ -904,7 +911,7 @@ body: ICreateDashboardRenderTask`)
   /**
    * The local state of each project in the workspace (read-only)
    */
-  projects?: IProject[]
+  projects?: IProject[] | null
 }`)
     })
     it('with refs, arrays and nullable', () => {
@@ -914,12 +921,12 @@ body: ICreateDashboardRenderTask`)
   /**
    * Current Looker release version number (read-only)
    */
-  looker_release_version?: string
+  looker_release_version?: string | null
   current_version?: IApiVersionElement
   /**
    * Array of versions supported by this Looker instance (read-only)
    */
-  supported_versions?: IApiVersionElement[]
+  supported_versions?: IApiVersionElement[] | null
 }`)
     })
     it('required properties', () => {
@@ -934,15 +941,15 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ${name}
+  result_format: ${name} | null
   /**
    * Source of query task
    */
-  source?: string
+  source?: string | null
   /**
    * Create the task but defer execution
    */
@@ -950,11 +957,11 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of look associated with query.
    */
-  look_id?: number
+  look_id?: number | null
   /**
    * Id of dashboard associated with query.
    */
-  dashboard_id?: string
+  dashboard_id?: string | null
 }`)
     })
 
@@ -971,6 +978,11 @@ body: ICreateDashboardRenderTask`)
         expect(actual['a-one']).toEqual('one')
         expect(actual['a two']).toEqual(true)
         expect(actual['a-three']).toEqual(3)
+      })
+
+      it('does not reserve body param array type names', () => {
+        const actual = gen.reserve('IProjectGeneratorTable[]')
+        expect(actual).toEqual('IProjectGeneratorTable[]')
       })
 
       it('reserves special names in method parameters', () => {
@@ -1025,7 +1037,7 @@ async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSetting
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -1046,7 +1058,7 @@ export enum ResultFormat {
         expect(type instanceof EnumType).toBeTruthy()
         const actual = gen.declareType('', type)
         expect(actual).toEqual(`/**
- * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+ * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 export enum Align {
   left = 'left',
@@ -1060,11 +1072,11 @@ export enum Align {
   /**
    * Id of query to run
    */
-  query_id: number
+  query_id: number | null
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormat
+  result_format: ResultFormat | null
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
@@ -1073,7 +1085,55 @@ export enum Align {
   /**
    * Roles assigned to group (read-only)
    */
-  roles?: IRole[]
+  roles?: IRole[] | null
+}`)
+      })
+
+      it('duplicate enum resolution', () => {
+        const type = apiTestModel.types.SecondResponseWithEnums
+        // Should have:
+        // - a fully named ResultFormat type because it doesn't match the other `ResultFormat` type declared previously
+        // - an `another_format` property with `AnotherFormat` enum name with the same values as the previously declared `ResultFormat` type
+        const type1 = apiTestModel.types.RequiredResponseWithEnums
+        const rf1 = type1.properties.result_format.type as EnumType
+        const rf2 = type.properties.another_format.type as EnumType
+        const rf3 = type.properties.result_format.type as EnumType
+        const otherValues = [
+          'other',
+          'json',
+          'csv',
+          'html',
+          'md',
+          'txt',
+          'xlsx',
+          'gsxml',
+        ]
+        expect(rf1.values).toEqual(rf2.values)
+        expect(rf3.values).toEqual(otherValues)
+
+        const actual = gen.declareType(indent, type)
+        expect(actual).toEqual(`export interface ISecondResponseWithEnums {
+  /**
+   * Id of query to run
+   */
+  query_id: number | null
+  /**
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   */
+  result_format: SecondResponseWithEnumsResultFormat | null
+  /**
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   */
+  another_format?: AnotherFormat | null
+  /**
+   * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
+   */
+  an_array_of_enums?: AnArrayOfEnums[]
+  user: IUserPublic
+  /**
+   * Roles assigned to group (read-only)
+   */
+  roles?: IRole[] | null
 }`)
       })
     })

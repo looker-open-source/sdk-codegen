@@ -23,18 +23,16 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Tooltip } from '@looker/components'
-import { IMethod } from '@looker/sdk-codegen'
 
 import { pickStatus, pickTooltipContent } from './utils'
 
 interface DocSummaryStatusProps {
-  method: IMethod
+  status: string
 }
 
-export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ method }) => (
-  <Tooltip content={pickTooltipContent(method.status)}>
-    {pickStatus(method.status)}
-  </Tooltip>
+export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ status }) => (
+  <Tooltip content={pickTooltipContent(status)}>{pickStatus(status)}</Tooltip>
 )

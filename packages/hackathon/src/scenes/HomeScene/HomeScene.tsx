@@ -24,98 +24,48 @@
 
  */
 
-import React, { FC } from 'react'
-import styled from 'styled-components'
-import {
-  Card,
-  Text,
-  Heading,
-  Divider,
-  Link,
-  Badge,
-  Box,
-  SpaceVertical,
-  ButtonTransparent,
-} from '@looker/components'
-import { Scroller } from '../../components/Scroller'
+import type { FC } from 'react'
+import React from 'react'
 
-export const HomeScene: FC = () => (
-  <>
-    <Box height="40px" />
-    <Card width="50vw" height="75vh" raised>
-      <Scroller>
-        <SpaceVertical p="medium">
-          <Heading color="secondary">Agenda — Oct 15</Heading>
-          <Box>
-            <Time width="100px">9:00am</Time>
-            <Text> Welcome and Kickoff</Text>
-          </Box>
-          <Box>
-            <Time>9:30am</Time>
-            <Text> Supported Hacking Hours Begin</Text>
-          </Box>
-          <Box>
-            <Time>10:30am</Time>
-            <Text> Jumpstart sessions broadcast</Text>
-            <Link
-              href="https://looker.com/events/join-2020#agenda"
-              target="_blank"
-            >
-              <Badge mx="10px" intent="inform">
-                Re-watch
-              </Badge>
-            </Link>
-          </Box>
-          <Box>
-            <Time>1:00pm</Time>
-            <Text> HandStandup & Stretch</Text>
-            {/* <Badge mx="10px" intent="critical">Now</Badge> */}
-          </Box>
-          <Box>
-            <Time>2:00pm</Time>
-            <Text> Live feedback lounge</Text>
-          </Box>
-          <Box>
-            <Time>3:00pm</Time>
-            <Text> Supported Hacking Hours Close</Text>
-          </Box>
-          <Box>
-            <Time>12:00am</Time>
-            <Text> Midnight Hack Party (optional)</Text>
-          </Box>
-          <Divider appearance="dark" />
-          <Heading color="secondary">Agenda — Oct 16</Heading>
-          <Box>
-            <Time>9:00am</Time>
-            <Text> Day 2 Kickoff</Text>
-          </Box>
-          <Box>
-            <Time>10:30am</Time>
-            <Text> Live feedback lounge</Text>
-          </Box>
-          <Box>
-            <Time>12:00pm PT</Time>
-            <Text> Final submissions due</Text>
-          </Box>
-          <Box>
-            <Time>12:05pm PT</Time>
-            <Text> Final HandStandup & Stretch</Text>
-          </Box>
-          <Box>
-            <Time>2:00pm PT</Time>
-            <Text> Winner Announcements & Demos</Text>
-          </Box>
-          <Box>
-            <Time>2:30pm PT</Time>
-            <Text> Hacky Hour</Text>
-          </Box>
-        </SpaceVertical>
-      </Scroller>
-    </Card>
-  </>
-)
+import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
+import { getExtensionSDK } from '@looker/extension-sdk'
+import type { IHackerProps } from '../../models'
+import { ExtMarkdown } from '../../components'
+import { Agenda } from './components'
+import { localAgenda } from './agenda'
 
-const Time = styled(ButtonTransparent)`
-  width: 100px;
-  margin-right: 20px;
+interface HomeSceneProps {
+  hacker: IHackerProps
+}
+
+const MARKDOWN_LINEBREAK = '  '
+
+export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
+  const schedule = localAgenda(hacker.locale)
+  const host = getExtensionSDK().lookerHostData?.hostUrl
+  const intro =
+    hacker.locale === 'ja_JP'
+      ? `### ハッカソン詳細については、[よくある質問記事](https://community.looker.com/hackathome-2021-1026/hackathome-2021-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F-28518)をご確認いただけます。
+現地時間が表示されるため、[アカウント](${host}/account)の「タイムゾーン」を設定できます。${MARKDOWN_LINEBREAK}
+アジェンダが日本語で表示されるため、[アカウント](${host}/account)の「Locale」は「ja_JP」に指定できます。
 `
+      : `### Our [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429) contains all event details!
+*Change your [account](${host}/account) timezone to display times in your timezone*${MARKDOWN_LINEBREAK}
+*Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`
+
+  return (
+    <>
+      <SpaceVertical gap="u5">
+        <Span>
+          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+            Agenda
+          </Heading>
+          <Paragraph>
+            <ExtMarkdown source={intro} />
+          </Paragraph>
+        </Span>
+        <Agenda schedule={schedule} hacker={hacker} />
+      </SpaceVertical>
+    </>
+  )
+}

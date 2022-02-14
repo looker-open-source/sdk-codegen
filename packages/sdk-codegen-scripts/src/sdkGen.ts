@@ -27,7 +27,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import { danger, log, warn } from '@looker/sdk-codegen-utils'
-import { IVersionInfo } from '@looker/sdk-codegen'
+import type { IVersionInfo } from '@looker/sdk-codegen'
 import {
   FunctionGenerator,
   InterfaceGenerator,
@@ -60,7 +60,7 @@ export const writeCodeFile = (fileName: string, content: string): string => {
   let config
   try {
     config = await prepGen(process.argv.slice(2))
-  } catch (e) {
+  } catch (e: any) {
     quit(e)
   }
   if (!config) return
@@ -142,7 +142,7 @@ export const writeCodeFile = (fileName: string, content: string): string => {
     }
     // finally, reformat all the files that have been generated
     formatter.reformat()
-  } catch (e) {
+  } catch (e: any) {
     quit(e)
   }
 })()
