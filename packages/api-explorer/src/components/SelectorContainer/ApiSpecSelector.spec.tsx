@@ -24,39 +24,46 @@
 
  */
 import React from 'react'
-import { act, screen, waitFor } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-
-import { specs, specState } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
+import { useHistory } from 'react-router-dom'
+import { getLoadedSpecs, specs } from '../../test-data'
+import {
+  renderWithReduxProvider,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { ApiSpecSelector } from './ApiSpecSelector'
 
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useLocation: () => ({
+      pathname: '/4.0/methods/Dashboard/dashboard',
+    }),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn() }),
+  }
+})
+
+// jest.mock('../../state/specs', () => ({
+//   ...(jest.requireActual('../../state/specs') as Record<string, unknown>),
+//   useSpecActions: jest
+//     .fn()
+//     .mockReturnValue({ setCurrentSpecAction: jest.fn() }),
+// }))
+
 describe('ApiSpecSelector', () => {
-  const specDispatch = jest.fn()
   Element.prototype.scrollIntoView = jest.fn()
+  const spec = getLoadedSpecs()['4.0']
 
-  test('the default spec is selected by default', () => {
-    renderWithTheme(
-      <ApiSpecSelector
-        specs={specs}
-        spec={specState}
-        specDispatch={specDispatch}
-      />
-    )
-
+  test('the base spec is selected by default', () => {
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
     const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(`${specState.key}`)
+    expect(selector).toHaveValue(`${spec.key}`)
   })
 
   test('it lists all available specs', async () => {
-    renderWithTheme(
-      <ApiSpecSelector
-        specs={specs}
-        spec={specState}
-        specDispatch={specDispatch}
-      />
-    )
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
     userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
@@ -65,26 +72,17 @@ describe('ApiSpecSelector', () => {
     })
   })
 
-  test('it fires a SELECT_SPEC action when another spec is selected', async () => {
-    renderWithRouter(
-      <ApiSpecSelector
-        specs={specs}
-        spec={specState}
-        specDispatch={specDispatch}
-      />
-    )
-
-    await act(async () => {
-      await userEvent.click(screen.getByRole('textbox'))
-      await userEvent.click(screen.getByRole('option', { name: '3.1 current' }))
-      await waitFor(() => {
-        expect(specDispatch).toHaveBeenCalledTimes(1)
-        expect(specDispatch).toHaveBeenCalledWith({
-          type: 'SELECT_SPEC',
-          key: '3.1',
-          payload: specs,
-        })
-      })
+  test('requests selected spec', async () => {
+    const { push } = useHistory()
+    renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />)
+    userEvent.click(screen.getByRole('textbox'))
+    await waitFor(() => {
+      expect(screen.getAllByRole('option')).toHaveLength(
+        Object.keys(specs).length
+      )
     })
+    const button = screen.getByText('3.1')
+    userEvent.click(button)
+    expect(push).toHaveBeenCalledWith('/3.1/methods/Dashboard/dashboard')
   })
 })

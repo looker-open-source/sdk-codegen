@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
-export { ProjectsScene } from './ProjectsScene'
+
+export * from './ProjectsScene'
+export * from './components'

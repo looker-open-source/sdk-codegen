@@ -23,12 +23,15 @@
  SOFTWARE.
 
  */
-import React, { FC, useContext } from 'react'
-import { findDeclaration, IMethod, IType } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { IMethod, IType } from '@looker/sdk-codegen'
+import { findDeclaration } from '@looker/sdk-codegen'
 import { Icon, Link, Tooltip } from '@looker/components'
 import { IdeFileDocument } from '@looker/icons'
+import { useSelector } from 'react-redux'
 
-import { LodeContext } from '../../context'
+import { selectDeclarationsLode } from '../../state'
 
 interface DocSourceProps {
   method?: IMethod
@@ -36,7 +39,7 @@ interface DocSourceProps {
 }
 
 export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
-  const { declarations } = useContext(LodeContext)
+  const declarations = useSelector(selectDeclarationsLode)
   let sourceLink
   let declaration
   if (declarations) {

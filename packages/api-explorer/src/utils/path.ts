@@ -24,11 +24,15 @@
 
  */
 
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import { firstMethodRef } from '@looker/sdk-codegen'
+import type { Location as HLocation } from 'history'
+
 /**
  * Builds a path matching the route used by MethodScene
- * @param methodName A method name
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding method tag
+ * @param methodName A method name
  * @returns a Method path
  */
 export const buildMethodPath = (
@@ -39,12 +43,81 @@ export const buildMethodPath = (
 
 /**
  * Builds a path matching the route used by TypeScene
- * @param typeName A type name
  * @param specKey A string to identify the spec in the URL
+ * @param tag Corresponding type tag
+ * @param typeName A type name
  * @returns a Type path
  */
-export const buildTypePath = (specKey: string, typeName: string) =>
-  `/${specKey}/types/${typeName}`
+export const buildTypePath = (specKey: string, tag: string, typeName: string) =>
+  `/${specKey}/types/${tag}/${typeName}`
 
 export const diffPath = 'diff'
 export const oAuthPath = 'oauth'
+
+/**
+ * Returns the tag for a given method name
+ * @param api Parsed api
+ * @param methodName SDK method name
+ * @returns Corresponding tag
+ */
+const getMethodTag = (api: ApiModel, methodName: string) => {
+  // Find tag containing methodName
+  return Object.entries(api.tags)
+    .filter(([, methods]) => methodName in methods)
+    .map(([methodTag]) => methodTag)[0]
+}
+
+/**
+ * Is this item a method? Check without requiring `instanceof Method`
+ * @param item to check for method or type
+ */
+export const isMethod = (item: IMethod | IType) => 'params' in item
+
+/**
+ * Return the tag for a give type
+ * @param api Parsed api
+ * @param type to tag
+ */
+const getTypeTag = (api: ApiModel, type: IType) => {
+  const method = firstMethodRef(api, type)
+  return getMethodTag(api, method.name)
+}
+
+/**
+ * Builds a path matching MethodScene or TypeScene route
+ * @param api parsed api
+ * @param item A method or type item
+ * @param specKey A string to identify the spec in the url
+ * @returns a method or type path
+ */
+export const buildPath = (
+  api: ApiModel,
+  item: IMethod | IType,
+  specKey: string
+) => {
+  let path
+  if (isMethod(item)) {
+    const tag = getMethodTag(api, item.name)
+    path = buildMethodPath(specKey, tag, item.name)
+  } else {
+    const tag = getTypeTag(api, item as IType)
+    path = buildTypePath(specKey, tag, item.name)
+  }
+  return path
+}
+
+/**
+ * Determine API specification keys from URL pattern
+ * @param location service to examine
+ */
+export const getSpecKey = (location: HLocation | Location): string | null => {
+  const pathname = location.pathname
+  let match
+  if (pathname.startsWith(`/${diffPath}`)) {
+    const pattern = new RegExp(`(?:/${diffPath})/(?<specKey>\\w+.\\w+)`)
+    match = pathname.match(pattern)
+  } else {
+    match = pathname.match(/\/(?<specKey>\w+\.\w+).*/)
+  }
+  return match?.groups?.specKey || null
+}

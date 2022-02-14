@@ -24,7 +24,7 @@
 
  */
 import { mockHackathons } from '../test-data'
-import { Hackathon } from './Hackathons'
+import type { Hackathon } from './Hackathons'
 
 const hackathons = mockHackathons()
 

@@ -25,25 +25,45 @@
  */
 
 import React from 'react'
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { defaultConfigurator } from '..'
-import { LoginForm } from './LoginForm'
+import userEvent from '@testing-library/user-event'
+import {
+  BrowserAdaptor,
+  registerTestEnvAdaptor,
+  OAuthConfigProvider,
+} from '@looker/extension-utils'
+
+import { initRunItSdk, readyToLogin } from '../..'
+import { LoginForm, notReadyToLogin } from './LoginForm'
 
 describe('LoginForm', () => {
-  // https://testing-library.com/docs/guide-which-query
+  const sdk = initRunItSdk()
+  registerTestEnvAdaptor(new BrowserAdaptor(sdk))
 
-  test('it creates a login form', async () => {
-    renderWithTheme(<LoginForm configurator={defaultConfigurator} />)
-    const title = screen.getByRole('heading') as HTMLHeadingElement
-    expect(title).toHaveTextContent('OAuth Login')
-    expect(
-      await screen.findByText(/OAuth authentication is already configured/)
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('button', {
-        name: 'Login',
-      })
-    ).toBeInTheDocument()
+  test('it renders a login form with instructions if auth is not configured', async () => {
+    renderWithTheme(<LoginForm requestContent={{}} />)
+    const login = screen.getByRole('button', {
+      name: 'Login',
+    })
+    await waitFor(() => {
+      userEvent.hover(login)
+      expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin)
+    })
+  })
+
+  test('it displays a ready to login message if auth is configured', async () => {
+    jest
+      .spyOn(OAuthConfigProvider.prototype, 'authIsConfigured')
+      .mockReturnValue(true)
+
+    renderWithTheme(<LoginForm requestContent={{}} />)
+    const login = screen.getByRole('button', {
+      name: 'Login',
+    })
+    await waitFor(() => {
+      userEvent.hover(login)
+      expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin)
+    })
   })
 })

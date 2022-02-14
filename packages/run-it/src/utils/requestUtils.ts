@@ -24,11 +24,31 @@
 
  */
 
-import { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
+import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
+import { isEmpty } from 'lodash'
+import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import {
+  ArrayType,
+  DelimArrayType,
+  EnumType,
+  HashType,
+  IntrinsicType,
+  trimInputs,
+} from '@looker/sdk-codegen'
+import { getEnvAdaptor } from '@looker/extension-utils'
 
-import { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
-import { runItSDK } from './RunItSDK'
+import type { RunItHttpMethod, RunItInput, RunItValues } from '../RunIt'
+import { RunItFormKey } from '../components'
+
+/** Hook to set a URL somewhere else in APIX */
+export type RunItSetter = (value: any) => any
+
+/**
+ * A "no-op" function
+ * @param value passed through
+ */
+export const runItNoSet: RunItSetter = (value: any) => value
 
 /**
  * Replaces {foo} with vars[foo] in provided path
@@ -53,6 +73,11 @@ export const pathify = (path: string, pathParams?: RunItValues): string => {
   return result
 }
 
+/**
+ * Prepares the inputs for use with the SDK and other RunIt components
+ * @param inputs An array describing RunIt form inputs
+ * @param requestContent Current request parameters
+ */
 export const prepareInputs = (
   inputs: RunItInput[],
   requestContent: RunItValues
@@ -62,7 +87,18 @@ export const prepareInputs = (
     const name = input.name
     if (input.location === 'body') {
       try {
-        result[name] = JSON.parse(result[name])
+        let parsed
+        if (name in requestContent) {
+          const value = requestContent[name]
+          /** The value is not a string when the user has not interacted with this param and prepareInputs has been
+           * called (e.g. if user navigates to the Code tab).
+           */
+          parsed = typeof value === 'string' ? JSON.parse(value) : value
+        } else {
+          /** This scenario occurs when RunIt is about to be mounted for a new method */
+          parsed = input.type
+        }
+        result[name] = parsed
       } catch (e) {
         /** Treat as x-www-form-urlencoded */
         result[name] = requestContent[name]
@@ -70,6 +106,37 @@ export const prepareInputs = (
     }
   }
   return result
+}
+
+/**
+ * Load and clear any saved form values from the session
+ * @param configurator storage service
+ */
+export const formValues = async () => {
+  const adaptor = getEnvAdaptor()
+  const formValue = await adaptor.localStorageGetItem(RunItFormKey)
+  const result = formValue ? JSON.parse(formValue) : {}
+  adaptor.localStorageRemoveItem(RunItFormKey)
+  return result
+}
+
+/**
+ * Initializes the request content object from local storage or input definitions, in that order
+ * @param configurator storage service
+ * @param inputs
+ * @param requestContent the current request content
+ */
+export const initRequestContent = (
+  inputs: RunItInput[],
+  requestContent = {}
+) => {
+  // TODO: Temporarily disabling request form state persistence until RunIt is using redux
+  // let content = await formValues()
+  let content = {}
+  if (isEmpty(content)) {
+    content = prepareInputs(inputs, requestContent)
+  }
+  return content
 }
 
 /**
@@ -85,18 +152,19 @@ export const createRequestParams = (
   const pathParams = {}
   const queryParams = {}
   const prepped = prepareInputs(inputs, requestContent)
+  const trimmed = trimInputs(prepped)
   let body
   for (const input of inputs) {
     const name = input.name
     switch (input.location) {
       case 'path':
-        pathParams[name] = prepped[name]
+        pathParams[name] = trimmed[name]
         break
       case 'query':
-        queryParams[name] = prepped[name]
+        queryParams[name] = trimmed[name]
         break
       case 'body':
-        body = prepped[name]
+        body = trimmed[name]
         break
       default:
         throw new Error(`Invalid input location: '${input.location}'`)
@@ -125,14 +193,111 @@ export const runRequest = async (
   body: any
 ): Promise<IRawResponse> => {
   if (!sdk.authSession.isAuthenticated()) {
-    await sdk.ok(runItSDK.authSession.login())
+    await sdk.ok(sdk.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
-  return await sdk.authSession.transport.rawRequest(
+  const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
     queryParams,
     body,
-    (props) => runItSDK.authSession.authenticate(props)
+    (props) => sdk.authSession.authenticate(props)
   )
+  return raw
 }
+
+/**
+ * Return a default value for a given type name
+ * @param type A type name
+ */
+const getTypeDefault = (type: string) => {
+  // TODO: use potential equivalent from sdk-codegen, confirm formats
+  switch (type) {
+    case 'boolean':
+      return false
+    case 'int64':
+    case 'integer':
+      return 0
+    case 'float':
+    case 'double':
+      return 0.0
+    case 'hostname':
+    case 'ipv4':
+    case 'ipv6':
+    case 'uuid':
+    case 'uri':
+    case 'string':
+    case 'email':
+      return ''
+    case 'string[]':
+      return []
+    case 'object':
+      return {}
+    case 'datetime':
+      return ''
+    default:
+      return ''
+  }
+}
+
+/**
+ * Given a type object reduce it to its writeable intrinsic and/or custom type properties and their default values
+ * @param spec Api spec
+ * @param type A type object
+ */
+const createSampleBody = (spec: IApiModel, type: IType) => {
+  /* eslint-disable @typescript-eslint/no-use-before-define */
+  const getSampleValue = (type: IType) => {
+    if (type instanceof IntrinsicType) return getTypeDefault(type.name)
+    if (type instanceof DelimArrayType)
+      return getTypeDefault(type.elementType.name)
+    if (type instanceof EnumType) return ''
+    if (type instanceof ArrayType)
+      return type.customType
+        ? [recurse(spec.types[type.customType])]
+        : getTypeDefault(type.name)
+    if (type instanceof HashType)
+      return type.customType ? recurse(spec.types[type.customType]) : {}
+
+    return recurse(type)
+  }
+  /* eslint-enable @typescript-eslint/no-use-before-define */
+
+  const recurse = (type: IType) => {
+    const sampleBody: RunItValues = {}
+    for (const prop of type.writeable) {
+      const sampleValue = getSampleValue(prop.type)
+      if (sampleValue !== undefined) {
+        sampleBody[prop.name] = sampleValue
+      }
+    }
+    return sampleBody
+  }
+  return recurse(type)
+}
+
+/**
+ * Convert model type to an editable type
+ * @param spec API model for building input editor
+ * @param type to convert
+ */
+const editType = (spec: IApiModel, type: IType) => {
+  if (type instanceof IntrinsicType) return type.name
+  // TODO create a DelimArray editing component as part of the complex type editor
+  if (type instanceof DelimArrayType) return 'string'
+  return createSampleBody(spec, type)
+}
+
+/**
+ * Given an SDK method create and return an array of inputs for the run-it form
+ * @param spec Api spec
+ * @param method A method object
+ */
+export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
+  method.allParams.map((param) => ({
+    name: param.name,
+    location: param.location,
+    type: editType(spec, param.type),
+    required: param.required,
+    description: param.description,
+  }))

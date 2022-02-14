@@ -24,9 +24,10 @@
 
  */
 
-import React, { ReactElement } from 'react'
+import type { ReactElement } from 'react'
+import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { RenderOptions } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 
 export const withRouter = (

@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IMine, IFileCall, permaLink } from './exampleInfo'
-import { KeyedCollection } from './sdkModels'
+import type { IMine, IFileCall } from './exampleInfo'
+import { permaLink } from './exampleInfo'
+import type { KeyedCollection } from './sdkModels'
 
 /** All mined declaration data */
 export interface IDeclarationMine extends IMine {

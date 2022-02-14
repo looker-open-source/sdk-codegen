@@ -27,8 +27,8 @@
 import { DelimArray } from '@looker/sdk-rtl'
 import { TestConfig } from './testUtils'
 import { PythonGen } from './python.gen'
-import { IEnumType, IType } from './sdkModels'
-import { IMappedType } from './codeGen'
+import type { IEnumType, IType } from './sdkModels'
+import type { IMappedType } from './codeGen'
 
 const config = TestConfig()
 const apiTestModel = config.apiTestModel
@@ -77,7 +77,7 @@ import datetime
 from typing import Any, MutableMapping, Optional, Sequence, Union, cast
 import warnings
 
-from . import models
+from . import models as mdls
 from looker_sdk.rtl import api_methods
 from looker_sdk.rtl import transport
 
@@ -190,7 +190,7 @@ sr.converter.register_structure_hook(
       const args = gen.httpArgs('', method)
       const expected = `
     path=f"/groups/{group_id}/groups",
-    structure=models.Group,
+    structure=mdls.Group,
     body=body,
     transport_options=transport_options`.replace(/^\n/, '')
       expect(args).toEqual(expected)
@@ -200,7 +200,7 @@ sr.converter.register_structure_hook(
       const args = gen.httpArgs('', method)
       const expected = `
     path="/queries",
-    structure=models.Query,
+    structure=mdls.Query,
     query_params={"fields": fields},
     body=body,
     transport_options=transport_options`.replace(/^\n/, '')
@@ -211,7 +211,7 @@ sr.converter.register_structure_hook(
       const args = gen.httpArgs('', method)
       const expected = `
     path="/dashboards",
-    structure=models.Dashboard,
+    structure=mdls.Dashboard,
     body=body,
     transport_options=transport_options`.replace(/^\n/, '')
       expect(args).toEqual(expected)
@@ -223,11 +223,11 @@ sr.converter.register_structure_hook(
       const method = apiTestModel.methods.all_datagroups
       const expected = `# ### Get information about all datagroups.
 #
-# GET /datagroups -> Sequence[models.Datagroup]
+# GET /datagroups -> Sequence[mdls.Datagroup]
 def all_datagroups(
     self,
     transport_options: Optional[transport.TransportOptions] = None,
-) -> Sequence[models.Datagroup]:
+) -> Sequence[mdls.Datagroup]:
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -243,15 +243,15 @@ def all_datagroups(
 #
 # Unsupported tests in the request will be ignored.
 #
-# PUT /connections/{connection_name}/test -> Sequence[models.DBConnectionTestResult]
+# PUT /connections/{connection_name}/test -> Sequence[mdls.DBConnectionTestResult]
 def test_connection(
     self,
     # Name of connection
     connection_name: str,
     # Array of names of tests to run
-    tests: Optional[models.DelimSequence[str]] = None,
+    tests: Optional[mdls.DelimSequence[str]] = None,
     transport_options: Optional[transport.TransportOptions] = None,
-) -> Sequence[models.DBConnectionTestResult]:
+) -> Sequence[mdls.DBConnectionTestResult]:
 `
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
@@ -396,10 +396,10 @@ result_format = self.encode_path_param(result_format)
       const method = apiTestModel.methods.add_group_group
       const expected = `
 response = cast(
-    models.Group,
+    mdls.Group,
     self.post(
         path=f"/groups/{group_id}/groups",
-        structure=models.Group,
+        structure=mdls.Group,
         body=body,
         transport_options=transport_options
     )
@@ -427,10 +427,10 @@ return response`.replace(/^\n/, '')
       const method = apiTestModel.methods.active_themes
       const expected = `
 response = cast(
-    Sequence[models.Theme],
+    Sequence[mdls.Theme],
     self.get(
         path="/themes/active",
-        structure=Sequence[models.Theme],
+        structure=Sequence[mdls.Theme],
         query_params={"name": name, "ts": ts, "fields": fields},
         transport_options=transport_options
     )
@@ -444,10 +444,10 @@ return response`.replace(/^\n/, '')
       const expected = `
 warnings.warn("login_user behavior changed significantly in 21.4.0. See https://git.io/JOtH1")
 response = cast(
-    models.AccessToken,
+    mdls.AccessToken,
     self.post(
         path=f"/login/{user_id}",
-        structure=models.AccessToken,
+        structure=mdls.AccessToken,
         query_params={"associative": associative},
         transport_options=transport_options
     )
@@ -710,7 +710,7 @@ class ApiVersion(model.Model):
       const expected = `
 class PermissionType(enum.Enum):
     """
-    Type of permission: "view" or "edit" Valid values are: "view", "edit".
+    Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 
     """
     view = "view"
@@ -917,10 +917,10 @@ class MergeFields(model.Model):
       const actual = gen.makeTheCall(method, inputs)
       const expected = `response = sdk.update_look(
     look_id=17,
-    body=models.WriteLookWithQuery(
+    body=mdls.WriteLookWithQuery(
         title="test title",
         description="gen test",
-        query=models.WriteQuery(
+        query=mdls.WriteQuery(
             model="the_look",
             view="users",
             total=true
@@ -940,9 +940,9 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.create_query_task
       const actual = gen.makeTheCall(method, inputs)
       const expected = `response = sdk.create_query_task(
-    body=models.WriteCreateQueryTask(
+    body=mdls.WriteCreateQueryTask(
         query_id=1,
-        result_format=models.ResultFormat.csv
+        result_format=mdls.ResultFormat.csv
     ))`
       expect(actual).toEqual(expected)
     })
@@ -954,7 +954,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.all_users
       const actual = gen.makeTheCall(method, inputs)
       const expected = `response = sdk.all_users(
-    ids=models.DelimSequence([1,2,3]))`
+    ids=mdls.DelimSequence([1,2,3]))`
       expect(actual).toEqual(expected)
     })
 
@@ -965,7 +965,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.all_users
       const actual = gen.makeTheCall(method, inputs)
       const expected = `response = sdk.all_users(
-    ids=models.DelimSequence([1,2,3]))`
+    ids=mdls.DelimSequence([1,2,3]))`
       expect(actual).toEqual(expected)
     })
 
@@ -1001,7 +1001,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.create_merge_query
       const actual = gen.makeTheCall(method, inputs)
       const expected = `response = sdk.create_merge_query(
-    body=models.WriteMergeQuery(
+    body=mdls.WriteMergeQuery(
         column_limit="5",
         pivots=[
             "one",
@@ -1010,9 +1010,9 @@ class MergeFields(model.Model):
         ],
         sorts=["a"],
         source_queries=[
-            models.MergeQuerySourceQuery(
+            mdls.MergeQuerySourceQuery(
                 merge_fields=[
-                    models.MergeFields(
+                    mdls.MergeFields(
                         field_name="merge_1",
                         source_field_name="source_1"
                     )
@@ -1020,9 +1020,9 @@ class MergeFields(model.Model):
                 name="first query",
                 query_id=1
             ),
-            models.MergeQuerySourceQuery(
+            mdls.MergeQuerySourceQuery(
                 merge_fields=[
-                    models.MergeFields(
+                    mdls.MergeFields(
                         field_name="merge_2",
                         source_field_name="source_2"
                     )
@@ -1045,7 +1045,7 @@ class MergeFields(model.Model):
       const inputs = { body: query }
       const method = apiTestModel.methods.create_sql_query
       const expected = `response = sdk.create_sql_query(
-    body=models.SqlQueryCreate(
+    body=mdls.SqlQueryCreate(
         connection_name="looker",
         model_name="the_look",
         vis_config={
@@ -1122,9 +1122,9 @@ class MergeFields(model.Model):
         }
         const type = apiTestModel.types.MergeQuerySourceQuery
         expect(type).toBeDefined()
-        const expected = `models.MergeQuerySourceQuery(
+        const expected = `mdls.MergeQuerySourceQuery(
         merge_fields=[
-            models.MergeFields(
+            mdls.MergeFields(
                 field_name="merge_1",
                 source_field_name="source_1"
             )

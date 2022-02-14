@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import { ApiModel, SpecList } from '@looker/sdk-codegen'
-
-import { initDefaultSpecState } from '../reducers'
+import type { SpecList } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen'
+import type { SpecState } from '../state'
+import { defaultSpecsState } from '../state'
 
 export const specs: SpecList = {
   '3.1': {
@@ -46,7 +47,17 @@ export const specs: SpecList = {
   },
 }
 
-export const specState = initDefaultSpecState(specs, window.location)
-
 export const api = ApiModel.fromJson(specs['3.1'].specContent)
 export const api40 = ApiModel.fromJson(specs['4.0'].specContent)
+
+export const getLoadedSpecs = () => {
+  const loadedSpecs = { ...specs }
+  loadedSpecs['3.1'].api = api
+  loadedSpecs['4.0'].api = api40
+  return loadedSpecs
+}
+
+export const specState: SpecState = {
+  ...defaultSpecsState,
+  specs: getLoadedSpecs(),
+}

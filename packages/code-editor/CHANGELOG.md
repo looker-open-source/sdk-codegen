@@ -1,5 +1,105 @@
 # Changelog
 
+### [0.1.17](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.16...code-editor-v0.1.17) (2021-12-20)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.3.0 to ^21.3.1
+
+### [0.1.16](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.15...code-editor-v0.1.16) (2021-12-16)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.2.1 to ^21.3.0
+
+### [0.1.15](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.14...code-editor-v0.1.15) (2021-12-06)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.2.0 to ^21.2.1
+
+### [0.1.14](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.13...code-editor-v0.1.14) (2021-11-10)
+
+
+### Features
+
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.1.1 to ^21.2.0
+
+### [0.1.13](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.12...code-editor-v0.1.13) (2021-10-27)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.1.0 to ^21.1.1
+
+### [0.1.12](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.11...code-editor-v0.1.12) (2021-10-24)
+
+
+### Features
+
+* personalized Hackathon agenda ([#853](https://www.github.com/looker-open-source/sdk-codegen/issues/853)) ([a143225](https://www.github.com/looker-open-source/sdk-codegen/commit/a1432250bad0bd35d5d9c5044aced81cf2cc1346))
+
+### [0.1.11](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.10...code-editor-v0.1.11) (2021-10-19)
+
+
+### Features
+
+* lots of RunIt form cleanup ([#814](https://www.github.com/looker-open-source/sdk-codegen/issues/814)) ([e92eae8](https://www.github.com/looker-open-source/sdk-codegen/commit/e92eae8fc127a0aa99545ca9c577152c08d59000))
+* Use agenda data for the Hackathon home page ([#842](https://www.github.com/looker-open-source/sdk-codegen/issues/842)) ([0da2523](https://www.github.com/looker-open-source/sdk-codegen/commit/0da25239c3f108cb684309818c33c91c2a7c3278))
+
+
+### Bug Fixes
+
+* Extension Api Explorer markdown link clicks ([#830](https://www.github.com/looker-open-source/sdk-codegen/issues/830)) ([dd8a3f0](https://www.github.com/looker-open-source/sdk-codegen/commit/dd8a3f03b8ea03858271bf55307c7d359631455a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.25 to ^21.1.0
+
+### [0.1.10](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.9...code-editor-v0.1.10) (2021-09-01)
+
+
+### Features
+
+* new configuration UI for API Explorer ([#803](https://www.github.com/looker-open-source/sdk-codegen/issues/803)) ([e6c67d1](https://www.github.com/looker-open-source/sdk-codegen/commit/e6c67d1211b412d4ce83127c9f7a8f091e3cf27f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.24 to ^21.0.25
+
+### [0.1.9](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.8...code-editor-v0.1.9) (2021-08-11)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.0.23 to ^21.0.24
+
 ### [0.1.8](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.7...code-editor-v0.1.8) (2021-07-30)
 
 

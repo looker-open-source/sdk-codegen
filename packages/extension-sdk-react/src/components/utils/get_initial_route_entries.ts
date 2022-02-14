@@ -25,7 +25,7 @@
  */
 
 import * as H from 'history'
-import { RouteData } from '../ExtensionConnector/types'
+import type { RouteData } from '../ExtensionConnector/types'
 
 export const getInitialRouteEntries = (initialRouteData?: RouteData) => {
   let initialEntries: H.LocationDescriptor[] | undefined

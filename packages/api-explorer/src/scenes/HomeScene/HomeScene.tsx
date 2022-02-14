@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import type { ApiModel } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { ApixSection, DocMarkdown, DocTitle } from '../../components'
 
@@ -41,7 +42,7 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
 
   return (
     <ApixSection>
-      <DocTitle>{`Looker API ${specKey} Reference`}</DocTitle>
+      <DocTitle>{api.spec.info.title}</DocTitle>
       {api.spec.info.description && (
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />
       )}

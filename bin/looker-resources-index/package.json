@@ -1,0 +1,21 @@
+{
+  "name": "looker-resources-index",
+  "description": "A listing of Looker-related resources, and some automation for publishing the listing in consumable formats",
+  "main": "src/resource-data/resources.ts",
+  "private": true,
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "start": "echo \"No 'start' command available. Did you want to 'build'?\"",
+    "build": "node_modules/.bin/tsc --project . && node tmp/compiled-typescript/scripts/build.js",
+    "analyze": "node_modules/.bin/tsc --project .  && node tmp/compiled-typescript/scripts/analyze/cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^16.11.13",
+    "typescript": "^4.5.4"
+  }
+}

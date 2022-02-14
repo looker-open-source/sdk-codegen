@@ -23,11 +23,14 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
+import { Space, Heading } from '@looker/components'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from './components'
+
 interface JudgingSceneProps {}
 
 export const JudgingScene: FC<JudgingSceneProps> = () => {
@@ -35,7 +38,12 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
 
   return (
     <>
-      <Loading loading={isLoading} message={'Processing judgings...'} />
+      <Space>
+        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+          Judgings
+        </Heading>
+        {isLoading && <Loading message={'Processing judgings...'} />}
+      </Space>
       <JudgingList />
     </>
   )

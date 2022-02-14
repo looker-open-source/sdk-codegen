@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 376 API methods
+/// 378 API methods
 
 #nullable enable
 using System;
@@ -2447,6 +2447,52 @@ namespace Looker.SDK.API31
 
   #endregion Datagroup: Manage Datagroups
 
+  #region DerivedTable: View Derived Table graphs
+
+  /// ### Discover information about derived tables
+  ///
+  /// GET /derived_table/graph/model/{model} -> DependencyGraph
+  ///
+  /// <returns><c>DependencyGraph</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model">The name of the Lookml model.</param>
+  /// <param name="format">The format of the graph. Valid values are [dot]. Default is `dot`</param>
+  /// <param name="color">Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.</param>
+  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_model(
+    string model,
+    string? format = null,
+    string? color = null,
+    ITransportSettings? options = null)
+{  
+      model = SdkUtils.EncodeParam(model);
+    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/model/{model}", new Values {
+      { "format", format },
+      { "color", color }},null,options);
+  }
+
+  /// ### Get the subgraph representing this derived table and its dependencies.
+  ///
+  /// GET /derived_table/graph/view/{view} -> DependencyGraph
+  ///
+  /// <returns><c>DependencyGraph</c> Graph of the derived table component, represented in the DOT language. (application/json)</returns>
+  ///
+  /// <param name="view">The derived table's view name.</param>
+  /// <param name="models">The models where this derived table is defined.</param>
+  /// <param name="workspace">The model directory to look in, either `dev` or `production`.</param>
+  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_view(
+    string view,
+    string? models = null,
+    string? workspace = null,
+    ITransportSettings? options = null)
+{  
+      view = SdkUtils.EncodeParam(view);
+    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/view/{view}", new Values {
+      { "models", models },
+      { "workspace", workspace }},null,options);
+  }
+
+  #endregion DerivedTable: View Derived Table graphs
+
   #region Folder: Manage Folders
 
   /// Search for folders by creator id, parent id, name, etc
@@ -2549,7 +2595,9 @@ namespace Looker.SDK.API31
 
   /// ### Get information about all folders.
   ///
-  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+  /// or if they contain soft-deleted content.
+  ///
   /// In API 4.0+, all personal folders will be returned.
   ///
   /// GET /folders -> Folder[]
@@ -3833,27 +3881,6 @@ namespace Looker.SDK.API31
   #endregion Look: Run and Manage Looks
 
   #region LookmlModel: Manage LookML Models
-
-  /// ### Discover information about derived tables
-  ///
-  /// GET /derived_table/graph/model/{model} -> DependencyGraph
-  ///
-  /// <returns><c>DependencyGraph</c> Derived Table (application/json)</returns>
-  ///
-  /// <param name="model">The name of the Lookml model.</param>
-  /// <param name="format">The format of the graph. Valid values are [dot]. Default is `dot`</param>
-  /// <param name="color">Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.</param>
-  public async Task<SdkResponse<DependencyGraph, Exception>> graph_derived_tables_for_model(
-    string model,
-    string? format = null,
-    string? color = null,
-    ITransportSettings? options = null)
-{  
-      model = SdkUtils.EncodeParam(model);
-    return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/model/{model}", new Values {
-      { "format", format },
-      { "color", color }},null,options);
-  }
 
   /// ### Get information about all lookml models.
   ///
@@ -6587,7 +6614,9 @@ namespace Looker.SDK.API31
 
   /// ### Get information about all spaces.
   ///
-  /// In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
+  /// In API 3.x, this will not return empty personal spaces, unless they belong to the calling user,
+  /// or if they contain soft-deleted content.
+  ///
   /// In API 4.0+, all personal spaces will be returned.
   ///
   /// GET /spaces -> SpaceBase[]
@@ -7081,8 +7110,8 @@ namespace Looker.SDK.API31
   /// <returns><c>User[]</c> All users. (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional list of ids to get specific users.</param>
   public async Task<SdkResponse<User[], Exception>> all_users(

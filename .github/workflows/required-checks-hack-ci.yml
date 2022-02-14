@@ -13,63 +13,163 @@
 # definition in a different workflow file:
 #
 # codegen-ci.yml: Codegen Tests
-# tssdk-ci.yml: Typescript Tests
-# python-ci.yml: Python Tests
+# tssdk-ci.yml: Typescript SDK Tests
+# python-ci.yml: Python SDK Tests
 # apix-ci.yml: APIX Tests
+# go-ci.yml: Go SDK Tests
 #
-# By hard-coding passing jobs with the same name here every PR will satisfy the
-# repo's "required checks" EXCEPT those that trigger the "real" job AND that
-# "real" job fails.
-#
-# It will look a little confusing: any PR that triggers a corresponding "real"
-# job will have duplicate check entries (namespaced by the workflow name): one
-# that passes (this noop job) and the "real" job that either passes or fails.
-#
-# The real versions of these checks are provided by the
-# EnricoMi/publish-unit-test-result-action github action that parses junit
-# results and provides a nice visual report as a comment on the PR. Additionally
-# it will report itself as a separate check from the workflow job with a
-# pass/fail status according to the junit results. To add confusion, there is a
-# github checks API limitation the author has identified which accounts for
-# the "real" version of these checks not actually being associated with the
-# workflow file that triggered them. Rather they are all associated with the
-# workflow that triggered last on the PR:
-# https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
-#
+
 name: Required Checks Hack
 on:
   pull_request:
 
+  push:
+    branches:
+      - main
+
 jobs:
-  noop-codegen-results:
-    name: Codegen Tests
-    runs-on: ubuntu-latest
-    steps:
-      # using `sleep 480` as a naive solution to avoiding early approval: 99% of
-      # real CI jobs finish in under 8 minutes. Waiting 8 minutes here should
-      # mostly avoid the scenario where these noop jobs meet all required checks
-      # on a PR prior to a corresponding real CI job being able to report.
-      #
-      # A more elegant hack to this github-lack-of-configurable-required-checks
-      # might be to run a script with https://github.com/octokit/action.js/
-      # that uses either the REST or GraphQL API to figure out when all
-      # outstanding workflows for this PR have finished and only then `exit 0`
-      - run: sleep 480 && exit 0
+  satisfy-required-checks:
+    name: Satisfy Required Checks
 
-  noop-typescript-results:
-    name: Typescript Tests
     runs-on: ubuntu-latest
     steps:
-      - run: sleep 480 && exit 0
+      - name: Repo Checkout
+        uses: actions/checkout@v2
 
-  noop-python-results:
-    name: Python Tests
-    runs-on: ubuntu-latest
-    steps:
-      - run: sleep 480 && exit 0
+      - uses: tony84727/changed-file-filter@v0.2.0
+        id: filter
+        with:
+          filters: |
+            apix:
+              - packages/code-editor/**/*
+              - packages/run-it/**/*
+              - packages/api-explorer/**/*
+              - packages/extension-api-explorer/**/*
+              - packages/extension-utils/**/*
+            codegen:
+              - packages/sdk-codegen/**/*
+              - packages/sdk-codegen-utils/**/*
+              - packages/sdk-codegen-scripts/**/*
+            hackathon:
+              - packages/wholly-sheet/**/*
+              - packages/hackathon/**/*
+            python:
+              - python/**/*
+            resources:
+              - bin/looker-resources-index/**/*
+              - docs/resources/**/*
+            tssdk:
+              - packages/sdk/**/*
+              - packages/sdk-rtl/**/*
+              - packages/sdk-node/**/*
+              - packages/extension-sdk/**/*
+              - packages/extension-sdk-react/**/*
+              - packages/extension-utils/**/*
+            gosdk:
+              - packages/go/**/*
 
-  noop-apix-results:
-    name: APIX Tests
-    runs-on: ubuntu-latest
-    steps:
-      - run: sleep 480 && exit 0
+      - name: Debug info
+        run: |
+          echo "${{ toJSON(steps.filter.outputs) }}"
+          echo "apix: ${{ steps.filter.outputs.apix }}"
+          echo "codegen: ${{ steps.filter.outputs.codegen }}"
+          echo "hackathon: ${{ steps.filter.outputs.hackathon }}"
+          echo "python: ${{ steps.filter.outputs.python }}"
+          echo "resources: ${{ steps.filter.outputs.resources }}"
+          echo "tssdk: ${{ steps.filter.outputs.tssdk }}"
+          echo "gosdk: ${{ steps.filter.outputs.gosdk }}"
+
+      - name: Create Codegen check
+        if: steps.filter.outputs.codegen == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Codegen Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Codegen Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail
+
+      - name: Create Typescript check
+        if: steps.filter.outputs.tssdk == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Typescript Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Typescript Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail
+
+      - name: Create Python check
+        if: steps.filter.outputs.python == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Python Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Python Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail
+
+      - name: Create APIX check
+        if: steps.filter.outputs.apix == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "APIX Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / APIX Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail
+
+      - name: Create Go check
+        if: steps.filter.outputs.gosdk == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Go Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Go Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail

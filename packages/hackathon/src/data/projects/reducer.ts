@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import { ValidationMessages } from '@looker/components'
-import { IProjectProps } from '../../models'
-import { ProjectAction, Actions } from './actions'
+import type { ValidationMessages } from '@looker/components'
+import type { IProjectProps } from '../../models'
+import type { ProjectAction } from './actions'
+import { Actions } from './actions'
 
 export interface ProjectsState {
   currentPageNum: number
@@ -37,10 +38,6 @@ export interface ProjectsState {
   validationMessages?: ValidationMessages
   projectUpdated?: boolean
   projectLoaded: boolean
-  moreInfo?: {
-    title: string
-    moreInfo: string
-  }
 }
 
 const defaultState: Readonly<ProjectsState> = Object.freeze({
@@ -121,11 +118,6 @@ export const projectsReducer = (
         validationMessages: action.payload.validationMessages,
         isProjectMember: action.payload.isProjectMember,
         projectUpdated: true,
-      }
-    case Actions.SET_MORE_INFO:
-      return {
-        ...state,
-        moreInfo: action.payload,
       }
     default:
       return state

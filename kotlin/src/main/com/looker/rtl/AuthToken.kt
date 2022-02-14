@@ -24,18 +24,28 @@
 
 package com.looker.rtl
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.TypeAdapter
+import com.google.gson.annotations.SerializedName
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 import com.looker.sdk.AccessToken
+import io.ktor.client.features.json.GsonSerializer
+import io.ktor.client.features.json.defaultSerializer
+import java.lang.reflect.Type
 import java.time.LocalDateTime
 
 data class AuthToken(
-    @JsonProperty("access_token")
+    @SerializedName("access_token")
     var accessToken: String = "", // TODO: Consider making this/these vals and using new objects instead of mutating
-    @JsonProperty("token_type")
+    @SerializedName("token_type")
     var tokenType: String = "",
-    @JsonProperty("expires_in")
+    @SerializedName("expires_in")
     var expiresIn: Long = 0L,
-    @JsonProperty("refresh_token")
+    @SerializedName("refresh_token")
     var refreshToken: String? = null
 ) {
 
@@ -78,5 +88,57 @@ data class AuthToken(
     fun reset() { // TODO: Should this just return a blank AuthToken object instead?
         accessToken = ""
         expiresIn = 0
+    }
+}
+
+/**
+ * Adapter for serialization/deserialization of [AuthToken].
+ * This is required since Gson used no-args constructor to create objects. Gson's default
+ * deserializer first creates an [AuthToken] object with default values which results with incorrect
+ * value being assigned to [AuthToken.expiresAt] in its init block.
+ *
+ * This adapter mitigates this by calling the constructor with deserialized values.
+ */
+class AuthTokenAdapter: TypeAdapter<AuthToken>() {
+    override fun read(jsonReader: JsonReader?): AuthToken {
+        val authToken = AuthToken()
+        jsonReader?.beginObject()
+
+        while (jsonReader?.hasNext() == true) {
+            if (jsonReader.peek().equals(JsonToken.NAME)) {
+                when (jsonReader.nextName()) {
+                    "access_token" -> authToken.accessToken = jsonReader.nextString()
+                    "token_type" -> authToken.tokenType = jsonReader.nextString()
+                    "expires_in" -> authToken.expiresIn = jsonReader.nextLong()
+                    "refresh_token" -> {
+                        if (jsonReader.peek().equals(JsonToken.NULL)) {
+                            authToken.refreshToken = null
+                            jsonReader.nextNull()
+                        } else {
+                            authToken.refreshToken = jsonReader.nextString()
+                        }
+                    }
+                    else -> break
+                }
+            }
+        }
+
+        jsonReader?.endObject()
+
+        // return new AuthToken calling its constructor with deserialized values
+        return AuthToken(authToken.accessToken, authToken.tokenType, authToken.expiresIn, authToken.refreshToken)
+    }
+
+    override fun write(jsonWriter: JsonWriter?, authToken: AuthToken?) {
+        jsonWriter?.beginObject()
+        jsonWriter?.name("access_token")
+        jsonWriter?.value(authToken?.accessToken)
+        jsonWriter?.name("token_type")
+        jsonWriter?.value(authToken?.tokenType)
+        jsonWriter?.name("expires_in")
+        jsonWriter?.value(authToken?.expiresIn)
+        jsonWriter?.name("refresh_token")
+        jsonWriter?.value(authToken?.refreshToken)
+        jsonWriter?.endObject()
     }
 }

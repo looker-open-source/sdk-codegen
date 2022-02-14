@@ -26,11 +26,11 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { codeGenerators } from '@looker/sdk-codegen'
-import { Store } from 'redux'
+import type { Store } from 'redux'
 
 import { api } from '../../test-data'
-import { renderWithReduxProvider } from '../../test-utils'
-import { configureStore, RootState } from '../../state'
+import { renderWithReduxProvider, createTestStore } from '../../test-utils'
+import type { RootState } from '../../state'
 import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {
@@ -39,7 +39,12 @@ describe('DocSDKs', () => {
   const pattern = new RegExp(`${supportedLanguages.join('|')}`)
 
   beforeAll(() => {
-    store = configureStore({ settings: { sdkLanguage: 'All' } })
+    store = createTestStore({
+      settings: {
+        initialized: false,
+        sdkLanguage: 'All',
+      },
+    })
   })
 
   test.each([
@@ -60,7 +65,9 @@ describe('DocSDKs', () => {
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
     (sdkLanguage) => {
-      store = configureStore({ settings: { sdkLanguage } })
+      store = createTestStore({
+        settings: { initialized: false, sdkLanguage },
+      })
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,
         store

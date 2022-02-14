@@ -24,18 +24,18 @@
 
  */
 
-import { CodeGen, IMappedType, IVersionInfo, commentBlock } from './codeGen'
-import {
+import type { IMappedType, IVersionInfo } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
+import type {
   ApiModel,
   Arg,
-  EnumType,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  strBody,
 } from './sdkModels'
+import { EnumType, strBody } from './sdkModels'
 
 const align = (str: string, size: number): string => {
   const num = size - str.length + 1
@@ -123,6 +123,10 @@ export class GoGen extends CodeGen {
       this.apiVersion.indexOf('.')
     )}`
     this.apiVersion = this.packageName
+  }
+
+  supportsMultiApi(): boolean {
+    return false
   }
 
   reserve(name: string) {
@@ -375,21 +379,12 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
   }
 
   modelsPrologue(_indent: string) {
-    let goImport = `
+    const goImport = `
 import (
   "github.com/looker-open-source/sdk-codegen/go/rtl"
   "time"
 )`
 
-    // v3 still uses url.URL
-    if (this.packageName === 'v3') {
-      goImport = `
-import (
-  "github.com/looker-open-source/sdk-codegen/go/rtl"
-  "net/url"
-  "time"
-)`
-    }
     return `
 // ${this.warnEditing()}
 
@@ -437,7 +432,7 @@ ${goImport}
       int64: { default: mt, name: 'int64' },
       integer: { default: mt, name: 'int' },
       number: { default: mt, name: 'float64' },
-      object: { default: mt, name: 'struct' },
+      object: { default: mt, name: 'interface{}' },
       password: { default: mt, name: 'string' },
       string: { default: mt, name: 'string' },
       uri: { default: mt, name: 'url.URL' },

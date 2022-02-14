@@ -24,10 +24,13 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { Markdown } from '@looker/code-editor'
-import { EnvAdaptorContext, SearchContext } from '../../context'
+import { useSelector } from 'react-redux'
+import { getEnvAdaptor } from '@looker/extension-utils'
+import { selectSearchPattern } from '../../state'
 import { transformURL } from './utils'
 
 interface DocMarkdownProps {
@@ -36,24 +39,23 @@ interface DocMarkdownProps {
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const { envAdaptor } = useContext(EnvAdaptorContext)
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
-
+  const searchPattern = useSelector(selectSearchPattern)
   const history = useHistory()
 
   const linkClickHandler = (pathname: string, url: string) => {
     if (pathname.startsWith(`/${specKey}`)) {
       history.push(pathname)
+    } else if (url.startsWith(`/${specKey}`)) {
+      history.push(url)
     } else if (url.startsWith('https://')) {
-      envAdaptor.openBrowserWindow(url)
+      const adaptor = getEnvAdaptor()
+      adaptor.openBrowserWindow(url)
     }
   }
   return (
     <Markdown
       source={source}
-      pattern={pattern}
+      pattern={searchPattern}
       linkClickHandler={linkClickHandler}
       transformLinkUri={transformURL.bind(null, specKey)}
     />

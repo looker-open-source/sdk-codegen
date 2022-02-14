@@ -24,56 +24,66 @@
 
  */
 
-import React, { FC } from 'react'
-import { useRouteMatch } from 'react-router-dom'
-import {
-  RunItProvider,
-  defaultConfigurator,
-  initRunItSdk,
-} from '@looker/run-it'
-import { IAPIMethods } from '@looker/sdk-rtl'
-import { SpecList } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
+import { initRunItSdk, RunItProvider } from '@looker/run-it'
+import type { OAuthConfigProvider } from '@looker/extension-utils'
+import { OAuthScene } from '@looker/extension-utils'
 import { Provider } from 'react-redux'
+import { useLocation } from 'react-router'
 
-import ApiExplorer from './ApiExplorer'
-import { configureStore } from './state'
-import { StandaloneEnvAdaptor } from './utils'
+import { ApiExplorer } from './ApiExplorer'
+import { store } from './state'
+import { oAuthPath, ApixAdaptor } from './utils'
+import { Loader } from './components'
 
-export interface StandloneApiExplorerProps {
-  specs: SpecList
+export interface StandaloneApiExplorerProps {
   headless?: boolean
+  versionsUrl: string
 }
 
-const standaloneEnvAdaptor = new StandaloneEnvAdaptor()
-const store = configureStore()
-
-export const StandaloneApiExplorer: FC<StandloneApiExplorerProps> = ({
-  specs,
+export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   headless = false,
 }) => {
-  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
-  const specKey = match?.params.specKey || ''
-  // TODO we may not need this restriction any more?
-  // Check explicitly for specs 3.0 and 3.1 as run it is not supported.
-  // This is done as the return from OAUTH does not provide a spec key
-  // but an SDK is needed.
-  const chosenSdk: IAPIMethods | undefined =
-    specKey === '3.0' || specKey === '3.1'
-      ? undefined
-      : initRunItSdk(defaultConfigurator)
+  const [browserAdaptor] = useState(
+    new ApixAdaptor(initRunItSdk(), window.origin)
+  )
+  const location = useLocation()
+  const oauthReturn = location.pathname === `/${oAuthPath}`
+  const sdk = browserAdaptor.sdk
+  const canLogin =
+    (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured() &&
+    !sdk.authSession.isAuthenticated() &&
+    !oauthReturn
+
+  useEffect(() => {
+    const login = async () => await browserAdaptor.login()
+    if (canLogin) {
+      login()
+    }
+  }, [])
+
+  const { looker_url } = (
+    sdk.authSession.settings as OAuthConfigProvider
+  ).getStoredConfig()
 
   return (
     <Provider store={store}>
-      <RunItProvider
-        sdk={chosenSdk}
-        configurator={defaultConfigurator}
-        basePath="/api/4.0"
-      >
-        <ApiExplorer
-          specs={specs}
-          envAdaptor={standaloneEnvAdaptor}
-          headless={headless}
-        />
+      <RunItProvider basePath="/api/4.0">
+        {canLogin ? (
+          <Loader
+            themeOverrides={browserAdaptor.themeOverrides()}
+            message={`Configuration found. Logging into ${looker_url}`}
+          />
+        ) : (
+          <>
+            {oauthReturn ? (
+              <OAuthScene adaptor={browserAdaptor} />
+            ) : (
+              <ApiExplorer adaptor={browserAdaptor} headless={headless} />
+            )}
+          </>
+        )}
       </RunItProvider>
     </Provider>
   )

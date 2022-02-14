@@ -24,7 +24,7 @@
 
  */
 
-import { ICryptoHash } from '@looker/sdk-rtl'
+import type { ICryptoHash } from '@looker/sdk-rtl'
 
 export class MockCrypto implements ICryptoHash {
   secureRandom(_byteCount: number): string {

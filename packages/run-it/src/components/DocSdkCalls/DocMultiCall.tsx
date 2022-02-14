@@ -23,40 +23,25 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import type { FC } from 'react'
+import React from 'react'
+import { Tabs2, Tab2 } from '@looker/components'
+import { CodeCopy } from '@looker/code-editor'
 
-import { CodeDisplay } from '@looker/code-editor'
-import { getGenerators } from './callUtils'
-import { DocSdkCallsProps } from './DocSdkCalls'
+interface DocMultiCallProps {
+  /** An object with keys representing the language and values for call syntax */
+  calls: Record<string, string>
+}
 
 /**
  * Generates the SDK call syntax for all supported languages
  */
-export const DocMultiCall: FC<Omit<DocSdkCallsProps, 'sdkLanguage'>> = ({
-  api,
-  inputs,
-  method,
-}) => {
-  const tabs = useTabs()
-  const generators = getGenerators(api)
-  return (
-    <>
-      <TabList {...tabs}>
-        {Object.keys(generators).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(generators).map(([language, gen]) => {
-          const code = gen.makeTheCall(method, inputs)
-          return (
-            <TabPanel key={language}>
-              <CodeDisplay code={code} language={language} />
-            </TabPanel>
-          )
-        })}
-      </TabPanels>
-    </>
-  )
-}
+export const DocMultiCall: FC<DocMultiCallProps> = ({ calls }) => (
+  <Tabs2>
+    {Object.entries(calls).map(([language, callSyntax]) => (
+      <Tab2 label={language} key={language}>
+        <CodeCopy code={callSyntax} language={language} />
+      </Tab2>
+    ))}
+  </Tabs2>
+)

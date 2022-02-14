@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { UsersScene } from './UsersScene'
+export * from './UsersScene'

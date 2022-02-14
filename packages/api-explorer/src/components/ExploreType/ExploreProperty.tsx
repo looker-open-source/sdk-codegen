@@ -24,10 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
+import type { IconType } from '@looker/components'
 import {
   Box,
-  IconType,
   Icon,
   Tree,
   TreeItem,
@@ -38,7 +39,7 @@ import {
 import { Done } from '@styled-icons/material/Done'
 import { Lock } from '@styled-icons/material/Lock'
 import { Remove } from '@styled-icons/material/Remove'
-import { IProperty } from '@looker/sdk-codegen'
+import type { IProperty, ApiModel } from '@looker/sdk-codegen'
 import { Markdown } from '@looker/code-editor'
 import {
   expandable,
@@ -160,17 +161,23 @@ const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
     />
   ) : null
 
+interface ExploreApiPropertyProps extends ExplorePropertyProps {
+  /** parsed api */
+  api: ApiModel
+}
+
 /**
  * Show the details of the property
  * @param property
  * @constructor
  */
-export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
+export const ExplorePropertyDetail: FC<ExploreApiPropertyProps> = ({
   property,
+  api,
 }) => (
   <Space style={{ fontSize: 'small', marginLeft: '10rem' }}>
     <Box width="10rem">
-      <ExploreTypeLink type={property.type} />
+      <ExploreTypeLink type={property.type} api={api} />
     </Box>
     <Box width="5rem">
       <ExplorePropertyRequired property={property} />
@@ -188,12 +195,15 @@ export const ExplorePropertyDetail: FC<ExplorePropertyProps> = ({
  * @param property to display
  * @constructor
  */
-export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
+export const ExplorePropertyNode: FC<ExploreApiPropertyProps> = ({
+  property,
+  api,
+}) => {
   const legend = typeIcon(property.type)
   return (
     <TreeItem
       {...legend}
-      detail={<ExplorePropertyDetail property={property} />}
+      detail={<ExplorePropertyDetail api={api} property={property} />}
     >
       {property.jsonName}
     </TreeItem>
@@ -208,8 +218,9 @@ export const ExplorePropertyNode: FC<ExplorePropertyProps> = ({ property }) => {
  * @param openAll expands entire tree if true
  * @constructor
  */
-export const ExploreProperty: FC<ExplorePropertyProps> = ({
+export const ExploreProperty: FC<ExploreApiPropertyProps> = ({
   property,
+  api,
   level = 0,
   maxDepth = -1,
   openAll = false,
@@ -218,6 +229,7 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
   if (!picked.intrinsic) {
     return (
       <ExplorePropertyType
+        api={api}
         property={property}
         open={false}
         level={level + 1}
@@ -226,16 +238,17 @@ export const ExploreProperty: FC<ExplorePropertyProps> = ({
       />
     )
   }
-  return <ExplorePropertyNode property={property} />
+  return <ExplorePropertyNode api={api} property={property} />
 }
 
-interface ExplorePropertyTypeProps extends ExplorePropertyProps {
+interface ExplorePropertyTypeProps extends ExploreApiPropertyProps {
   /** Open the node display immediately? */
   open?: boolean
 }
 
 export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   property,
+  api,
   open = true,
   level = 0,
   maxDepth = -1,
@@ -246,7 +259,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   const nest = expandable(level, maxDepth)
   const legend = typeIcon(type)
   if (!nest) {
-    return <ExplorePropertyNode property={property} />
+    return <ExplorePropertyNode api={api} property={property} />
   }
   return (
     <Tree
@@ -255,10 +268,11 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       icon={legend.icon}
       defaultOpen={open || openAll}
       density={-3}
-      detail={<ExplorePropertyDetail property={property} />}
+      detail={<ExplorePropertyDetail api={api} property={property} />}
     >
       {Object.values(props).map((property) => (
         <ExploreProperty
+          api={api}
           key={property.fullName}
           property={property}
           level={level + 1}

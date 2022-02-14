@@ -25,8 +25,9 @@
  */
 
 import isEmpty from 'lodash/isEmpty'
-import { APIMethods, Url } from '@looker/sdk-rtl'
-import { ApiModel, ArgValues, IApiModel, KeyedCollection } from './sdkModels'
+import type { APIMethods } from '@looker/sdk-rtl'
+import type { ArgValues, IApiModel, KeyedCollection } from './sdkModels'
+import { ApiModel } from './sdkModels'
 
 const warn = (warning: string) => {
   throw new Error(warning)
@@ -34,7 +35,7 @@ const warn = (warning: string) => {
 
 const appJson = 'application/json'
 
-/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+/** This declaration is duplicated DIRECTLY from @looker/sdk API 4.0 models to detach dependency */
 export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
@@ -49,26 +50,30 @@ export interface IApiVersion {
    * API server base url (read-only)
    */
   api_server_url?: string
+  /**
+   * Web server base url (read-only)
+   */
+  web_server_url?: string
 }
 
-/** This declaration is duplicated DIRECTLY from @looker/sdk to detach dependency */
+/** This declaration is duplicated DIRECTLY from @looker/sdk API 4.0 models to detach dependency */
 export interface IApiVersionElement {
   /**
    * Version number as it appears in '/api/xxx/' urls (read-only)
    */
-  version?: string
+  version?: string | null
   /**
    * Full version number including minor version (read-only)
    */
-  full_version?: string
+  full_version?: string | null
   /**
    * Status of this version (read-only)
    */
-  status?: string
+  status?: string | null
   /**
    * Url for swagger.json for this version (read-only)
    */
-  swagger_url?: Url
+  swagger_url?: string | null
 }
 
 /**
@@ -124,15 +129,34 @@ export interface ISpecItem {
  * Callback for fetching and compiling specification to ApiModel
  */
 export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+export type IncludeVersion = (version: IApiVersionElement) => boolean
+
+/**
+ * Should this specification version be included?
+ * @param ver to check
+ */
+export const include31 = (ver: IApiVersionElement) => {
+  return (
+    (ver.status &&
+      ver.version &&
+      ver.swagger_url &&
+      ver.status !== 'internal_test' &&
+      ver.status !== 'deprecated' &&
+      ver.status !== 'legacy') ||
+    (ver.version || '') >= '3.1' // unfortunately, need to hard-code this for API Explorer's spec selector
+  )
+}
 
 /**
  * Return all public API specifications from an ApiVersion payload
  * @param versions payload from a Looker server
  * @param fetcher fetches and compiles spec to ApiModel
+ * @param include test for specification version inclusion
  */
 export const getSpecsFromVersions = async (
   versions: IApiVersion,
-  fetcher: SpecFetcher | undefined = undefined
+  fetcher: SpecFetcher | undefined = undefined,
+  include: IncludeVersion = include31
 ): Promise<SpecList> => {
   const items = {}
 
@@ -160,11 +184,7 @@ export const getSpecsFromVersions = async (
     for (const v of versions.supported_versions) {
       // Tell TypeScript these are all defined because IApiVersion definition is lax
       if (v.status && v.version && v.swagger_url) {
-        if (
-          v.status !== 'internal_test' &&
-          v.status !== 'deprecated' &&
-          v.status !== 'legacy'
-        ) {
+        if (include(v)) {
           const spec: SpecItem = {
             key: uniqueId(v),
             status: v.status,
@@ -195,6 +215,8 @@ export interface ILookerVersions {
   supported_versions: ISpecItem[]
   /** API server url */
   api_server_url: string
+  /** Web server url */
+  web_server_url: string
 }
 
 // TODO this work was duplicated in API Explorer. Need to merge and use one version.
@@ -632,12 +654,12 @@ export const upgradeSpec = (spec: string | Record<string, unknown>) => {
 }
 
 /**
- * Fetches Looker specs from the API server url
+ * Fetches specs via /versions payload from the API server url
  * @param sdk APIMethods implementation that supports authenticating a request
- * @param apiServerUrl base url of the API server. Typically something like https://my.looker.com:19999
+ * @param serverUrl base url of the /versions server. Typically something like https://my.looker.com:19999 or https://my.looker.com
  */
-export const getLookerSpecs = async (sdk: APIMethods, apiServerUrl: string) => {
-  const versionUrl = `${apiServerUrl}/versions`
+export const getLookerSpecs = async (sdk: APIMethods, serverUrl: string) => {
+  const versionUrl = `${serverUrl}/versions`
   const versions = await sdk.ok(sdk.get<ILookerVersions, Error>(versionUrl))
   return versions
 }

@@ -144,7 +144,7 @@ func TestDelimInt64_UnmarshalJSON(t *testing.T) {
 			args: args{
 				b: []byte("\"1,2,3\""),
 			},
-			want: DelimInt64{1,2,3},
+			want:    DelimInt64{1, 2, 3},
 			wantErr: false,
 		},
 		{
@@ -153,7 +153,7 @@ func TestDelimInt64_UnmarshalJSON(t *testing.T) {
 			args: args{
 				b: []byte("null"),
 			},
-			want: nil,
+			want:    nil,
 			wantErr: false,
 		},
 	}

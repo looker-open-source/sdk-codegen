@@ -24,49 +24,47 @@
 
  */
 
-import React, { BaseSyntheticEvent, Dispatch, FC } from 'react'
-import { Button, Heading, Text, Paragraph, Space } from '@looker/components'
-import { IAPIMethods } from '@looker/sdk-rtl'
-import { runItSDK } from '../../utils'
-import { ConfigDialog, RunItConfigurator } from '../ConfigForm'
+import type { BaseSyntheticEvent, FC } from 'react'
+import React from 'react'
+import { Button, Tooltip } from '@looker/components'
+import type { OAuthConfigProvider } from '@looker/extension-utils'
+import { getEnvAdaptor } from '@looker/extension-utils'
+
+import { RunItFormKey } from '../ConfigForm'
+import type { RunItValues } from '../..'
 
 interface LoginFormProps {
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
-  setHasConfig?: Dispatch<boolean>
-  /** SDK to use for login. Defaults to the `runItSDK` */
-  sdk?: IAPIMethods
-  configurator: RunItConfigurator
+  requestContent: RunItValues
 }
 
-export const LoginForm: FC<LoginFormProps> = ({
-  sdk = runItSDK,
-  setHasConfig,
-  configurator,
-}) => {
-  const handleSubmit = async (e: BaseSyntheticEvent) => {
+export const readyToLogin =
+  'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.'
+
+export const notReadyToLogin =
+  'OAuth is not configured. Configure it to be able to Login.'
+
+export const LoginForm: FC<LoginFormProps> = ({ requestContent }) => {
+  const adaptor = getEnvAdaptor()
+  const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
+    if (requestContent) {
+      adaptor.localStorageSetItem(RunItFormKey, JSON.stringify(requestContent))
+    }
     // This will set storage variables and return to OAuthScene when successful
-    await sdk?.authSession.login()
+    await adaptor.login()
   }
 
   return (
-    <>
-      <Heading>
-        <Text>OAuth Login</Text>
-      </Heading>
-      <Paragraph>
-        OAuth authentication is already configured, but the browser session is
-        not authenticated. Please click <strong>Login</strong> to authenticate.
-      </Paragraph>
-      <Space>
-        <Button onClick={handleSubmit}>Login</Button>
-        {setHasConfig && (
-          <ConfigDialog
-            setHasConfig={setHasConfig}
-            configurator={configurator}
-          />
-        )}
-      </Space>
-    </>
+    <Tooltip
+      content={
+        (
+          adaptor.sdk.authSession.settings as OAuthConfigProvider
+        ).authIsConfigured()
+          ? readyToLogin
+          : notReadyToLogin
+      }
+    >
+      <Button onClick={handleLogin}>Login</Button>
+    </Tooltip>
   )
 }

@@ -24,9 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
-import { typeRefs, methodRefs, ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
+import type { ApiModel } from '@looker/sdk-codegen'
+import { typeRefs, methodRefs } from '@looker/sdk-codegen'
+import { useHistory, useParams } from 'react-router-dom'
 import { Space, Box } from '@looker/components'
 
 import {
@@ -51,28 +53,38 @@ interface DocTypeParams {
 export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const { specKey, typeName } = useParams<DocTypeParams>()
   const type = api.types[typeName]
-  const typesUsed = typeRefs(api, type.customTypes)
-  const methodsUsedBy = methodRefs(api, type.methodRefs)
-  const typesUsedBy = typeRefs(api, type.parentTypes)
+  const history = useHistory()
+  const typesUsed = typeRefs(api, type?.customTypes)
+  const methodsUsedBy = methodRefs(api, type?.methodRefs)
+  const typesUsedBy = typeRefs(api, type?.parentTypes)
+  useEffect(() => {
+    if (!type) {
+      history.push(`/${specKey}/types`)
+    }
+  }, [history, specKey, type])
 
   return (
-    <ApixSection>
-      <Space>
-        <DocTitle>{type.name}</DocTitle>
-        <DocSource type={type} />
-      </Space>
-      <Box pb="xlarge">
-        <ExploreType type={type} />
-      </Box>
-      <DocReferences
-        typesUsed={typesUsed}
-        typesUsedBy={typesUsedBy}
-        methodsUsedBy={methodsUsedBy}
-        api={api}
-        specKey={specKey}
-      />
-      <DocSDKs type={type} api={api} />
-      <DocSchema object={type.schema} />
-    </ApixSection>
+    <>
+      {type && (
+        <ApixSection>
+          <Space>
+            <DocTitle>{type.name}</DocTitle>
+            <DocSource type={type} />
+          </Space>
+          <Box pb="xlarge">
+            <ExploreType api={api} type={type} />
+          </Box>
+          <DocReferences
+            typesUsed={typesUsed}
+            typesUsedBy={typesUsedBy}
+            methodsUsedBy={methodsUsedBy}
+            api={api}
+            specKey={specKey}
+          />
+          <DocSDKs type={type} api={api} />
+          <DocSchema object={type.schema} />
+        </ApixSection>
+      )}
+    </>
   )
 }

@@ -24,21 +24,19 @@
 
  */
 
-import {
+import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
-  BaseTransport,
   ITransportSettings,
   SDKResponse,
   Values,
-  agentPrefix,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
-  LookerAppId,
 } from '@looker/sdk-rtl'
-import {
+import { BaseTransport, agentPrefix, LookerAppId } from '@looker/sdk-rtl'
+import type {
   ExtensionSDK,
   FetchCustomParameters,
   FetchProxyDataResponse,
@@ -135,6 +133,7 @@ export class ExtensionProxyTransport extends BaseTransport {
     // const responseBody =
     //   mode === ResponseMode.binary ? await res.body : await res.body.toString()
     return {
+      method,
       url: requestPath,
       body: res.body,
       contentType,
@@ -168,7 +167,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       } else {
         return { error: res.body, ok: false }
       }
-    } catch (e) {
+    } catch (e: any) {
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

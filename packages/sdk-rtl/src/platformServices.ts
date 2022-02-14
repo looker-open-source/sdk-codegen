@@ -24,9 +24,9 @@
 
  */
 
-import { IApiSettings } from './apiSettings'
-import { ITransport } from './transport'
-import { ICryptoHash } from './cryptoHash'
+import type { IApiSettings } from './apiSettings'
+import type { ITransport } from './transport'
+import type { ICryptoHash } from './cryptoHash'
 
 /**
  * Contract for OAuth authentication services

@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.2.0...sdk-rtl-v21.3.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Bug Fixes
+
+* rtl IError type ([#928](https://www.github.com/looker-open-source/sdk-codegen/issues/928)) ([7d8f906](https://www.github.com/looker-open-source/sdk-codegen/commit/7d8f906f4b10b5e915df292fcf30d1eb456c3463))
+* **sdk-rtl/src/delimArray:** Fixed issue with single element number array ([#927](https://www.github.com/looker-open-source/sdk-codegen/issues/927)) ([6e94d73](https://www.github.com/looker-open-source/sdk-codegen/commit/6e94d73f88fb6c2f3138818967f4e8cb49ff89e6))
+
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.3.0...sdk-rtl-v21.3.1) (2021-12-20)
+
+
+### Bug Fixes
+
+* rtl IError type ([#928](https://www.github.com/looker-open-source/sdk-codegen/issues/928)) ([7d8f906](https://www.github.com/looker-open-source/sdk-codegen/commit/7d8f906f4b10b5e915df292fcf30d1eb456c3463))
+
+## [21.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.2.0...sdk-rtl-v21.3.0) (2021-12-16)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+## [21.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.1.1...sdk-rtl-v21.2.0) (2021-11-10)
+
+
+### Features
+
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+
+### [21.1.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.1.0...sdk-rtl-v21.1.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* another TS SDK error handling tweak ([#873](https://www.github.com/looker-open-source/sdk-codegen/issues/873)) ([1c04952](https://www.github.com/looker-open-source/sdk-codegen/commit/1c049527e22926fa7fe0ae011ab4595520005e2f))
+
+## [21.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.20...sdk-rtl-v21.1.0) (2021-10-19)
+
+
+### Features
+
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+
+### [21.0.20](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.19...sdk-rtl-v21.0.20) (2021-09-01)
+
+
+### Features
+
+* http response explorer for RunIt ([#800](https://www.github.com/looker-open-source/sdk-codegen/issues/800)) ([3f273ea](https://www.github.com/looker-open-source/sdk-codegen/commit/3f273ea7f849dafece8f4f5f60558021ecd41705))
+
+
+### Bug Fixes
+
+* placate TypeScript 4.4 ([#809](https://www.github.com/looker-open-source/sdk-codegen/issues/809)) ([6509c17](https://www.github.com/looker-open-source/sdk-codegen/commit/6509c17da655be1fb7d51d0275b9e198aa6ae929))
+
 ### [21.0.19](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.0.18...sdk-rtl-v21.0.19) (2021-07-30)
 
 

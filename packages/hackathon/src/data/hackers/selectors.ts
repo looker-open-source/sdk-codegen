@@ -24,8 +24,8 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { IHackerProps } from '../../models'
+import type { RootState } from '../root_reducer'
+import type { IHackerProps } from '../../models'
 
 export const getHackersState = (state: RootState): IHackerProps[] =>
   state.hackersState.hackers

@@ -1,10 +1,10 @@
 using System;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Looker.RTL;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.ObjectModel;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -23,7 +23,8 @@ namespace sdkrtl.Tests
 
         private TestConfig _config;
         private dynamic _contentTypes;
-        
+        private readonly string[] _versionKeys = { "looker_release_version", "current_version", "supported_versions" };
+
         public TransportTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
@@ -62,7 +63,7 @@ namespace sdkrtl.Tests
             Assert.NotNull(content);
             Assert.Contains("looker_release_version", content);
             var json = JsonSerializer.Deserialize<Values>(content);
-            Assert.Equal(json.Keys, new string[] {"looker_release_version", "current_version", "supported_versions"});
+            Assert.Equal(json.Keys, _versionKeys);
         }
 
         [Fact]
@@ -74,8 +75,49 @@ namespace sdkrtl.Tests
                 "/versions"
             );
             Assert.True(actual.Ok);
-            Assert.Equal(actual.Value.Keys,
-                new string[] {"looker_release_version", "current_version", "supported_versions"});
+            Assert.Equal(actual.Value.Keys, _versionKeys);
+        }
+
+        class TestModel : SdkModel
+        {
+            public string? string1 { get; set; } = null;
+            public long? num1 { get; set; } = null;
+            public string? string2 { get; set; } = null;
+            public long? num2 { get; set; } = null;
+            public string? string3 { get; set; } = null;
+            public long? num3 { get; set; } = null;
+        }
+
+        [Fact]
+        public async Task JsonTypingTest()
+        {
+            var payload = @"
+{
+  ""string1"": 1,
+    ""num1"": 1,
+    ""string2"": ""2"",
+    ""num2"": ""2"",
+    ""string3"": ""3"",
+    ""num3"": 3,
+    ""string4"": ""4"",
+    ""num4"": 4
+}
+";
+            var resp = new RawResponse
+            {
+                Method = HttpMethod.Get,
+                Body = payload,
+                StatusCode = HttpStatusCode.OK,
+                StatusMessage = "test",
+                ContentType = "application/json"
+            } as IRawResponse;
+            var actual = Transport.ParseResponse<TestModel, Exception>(resp).Value;
+            Assert.Equal("1", actual.string1);
+            Assert.Equal(1, actual.num1);
+            Assert.Equal("2", actual.string2);
+            Assert.Equal(2, actual.num2);
+            Assert.Equal("3", actual.string3);
+            Assert.Equal(3, actual.num3);
         }
     }
 }

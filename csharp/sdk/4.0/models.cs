@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 286 API models: 213 Spec, 0 Request, 56 Write, 17 Enum
+/// 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -51,7 +51,124 @@ public class AccessToken : SdkModel
   public string? refresh_token { get; set; } = null;
 }
 
-/// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right".
+public class Alert : SdkModel
+{
+  /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
+  public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ComparisonType comparison_type { get; set; }
+  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  public string cron { get; set; } = "";
+  /// <summary>An optional, user-defined title for the alert</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
+  public long? dashboard_element_id { get; set; } = null;
+  /// <summary>An optional description for the alert. This supplements the title</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
+  public AlertDestination[] destinations { get; set; } = null;
+  public AlertField field { get; set; } = null;
+  /// <summary>Whether or not the user follows this alert. (read-only)</summary>
+  public bool? followed { get; set; } = null;
+  /// <summary>Whether or not the alert is followable (read-only)</summary>
+  public bool? followable { get; set; } = null;
+  /// <summary>ID of the alert (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Whether or not the alert is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Reason for disabling alert</summary>
+  public string? disabled_reason { get; set; } = null;
+  /// <summary>Whether or not the alert is public</summary>
+  public bool? is_public { get; set; } = null;
+  /// <summary>The type of the investigative content Valid values are: "dashboard".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public InvestigativeContentType? investigative_content_type { get; set; }
+  /// <summary>The ID of the investigative content. For dashboards, this will be the dashboard ID</summary>
+  public string? investigative_content_id { get; set; } = null;
+  /// <summary>The title of the investigative content. (read-only)</summary>
+  public string? investigative_content_title { get; set; } = null;
+  /// <summary>ID of the LookML dashboard associated with the alert</summary>
+  public string? lookml_dashboard_id { get; set; } = null;
+  /// <summary>ID of the LookML dashboard element associated with the alert</summary>
+  public string? lookml_link_id { get; set; } = null;
+  /// <summary>User id of alert owner</summary>
+  public long owner_id { get; set; }
+  /// <summary>Alert owner's display name (read-only)</summary>
+  public string? owner_display_name { get; set; } = null;
+  /// <summary>Value of the alert threshold</summary>
+  public double threshold { get; set; }
+  public AlertConditionState? time_series_condition_state { get; set; }
+}
+
+public class AlertAppliedDashboardFilter : SdkModel
+{
+  /// <summary>Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`</summary>
+  public string filter_title { get; set; } = "";
+  /// <summary>Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`</summary>
+  public string field_name { get; set; } = "";
+  /// <summary>Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`</summary>
+  public string filter_value { get; set; } = "";
+  /// <summary>Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)</summary>
+  public string? filter_description { get; set; } = null;
+}
+
+public class AlertConditionState : SdkModel
+{
+  /// <summary>(Write-Only) The second latest time string the alert has seen.</summary>
+  public string? previous_time_series_id { get; set; } = null;
+  /// <summary>(Write-Only) Latest time string the alert has seen.</summary>
+  public string? latest_time_series_id { get; set; } = null;
+}
+
+public class AlertDestination : SdkModel
+{
+  /// <summary>Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DestinationType destination_type { get; set; }
+  /// <summary>Email address for the 'email' type</summary>
+  public string? email_address { get; set; } = null;
+  /// <summary>Action hub integration id for the 'action_hub' type. [Integration](#!/types/Integration)</summary>
+  public string? action_hub_integration_id { get; set; } = null;
+  /// <summary>Action hub form params json for the 'action_hub' type [IntegrationParam](#!/types/IntegrationParam)</summary>
+  public string? action_hub_form_params_json { get; set; } = null;
+}
+
+public class AlertField : SdkModel
+{
+  /// <summary>Field's title. Usually auto-generated to reflect field name and its filters</summary>
+  public string title { get; set; } = "";
+  /// <summary>Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details</summary>
+  public string name { get; set; } = "";
+  /// <summary>(Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`</summary>
+  public AlertFieldFilter[]? filter { get; set; } = null;
+}
+
+public class AlertFieldFilter : SdkModel
+{
+  /// <summary>Field Name. Has format `<view>.<field>`</summary>
+  public string field_name { get; set; } = "";
+  /// <summary>Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`</summary>
+  public object field_value { get; set; } = null;
+  /// <summary>Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
+  public string? filter_value { get; set; } = null;
+}
+
+public class AlertPatch : SdkModel
+{
+  /// <summary>New owner ID of the alert</summary>
+  public long? owner_id { get; set; } = null;
+  /// <summary>Set alert enabled or disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>The reason this alert is disabled</summary>
+  public string? disabled_reason { get; set; } = null;
+  /// <summary>Set alert public or private</summary>
+  public bool? is_public { get; set; } = null;
+  /// <summary>New threshold value</summary>
+  public double? threshold { get; set; } = null;
+}
+
+/// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
 public enum Align
 {
   [EnumMember(Value = "left")]
@@ -79,6 +196,8 @@ public class ApiVersion : SdkModel
   public ApiVersionElement[]? supported_versions { get; set; } = null;
   /// <summary>API server base url (read-only)</summary>
   public string? api_server_url { get; set; } = null;
+  /// <summary>Web server base url (read-only)</summary>
+  public string? web_server_url { get; set; } = null;
 }
 
 public class ApiVersionElement : SdkModel
@@ -151,6 +270,12 @@ public class BoardItem : SdkModel
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
+  /// <summary>Custom description entered by the user, if present</summary>
+  public string? custom_description { get; set; } = null;
+  /// <summary>Custom title entered by the user, if present</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>Custom url entered by the user, if present</summary>
+  public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>The actual description for display (read-only)</summary>
@@ -161,10 +286,12 @@ public class BoardItem : SdkModel
   public long? board_section_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
+  /// <summary>The actual image_url for display (read-only)</summary>
+  public string? image_url { get; set; } = null;
   /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -203,7 +330,7 @@ public class BoardSection : SdkModel
   public DateTime? updated_at { get; set; } = null;
 }
 
-/// Field category Valid values are: "parameter", "filter", "measure", "dimension".
+/// Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
 public enum Category
 {
   [EnumMember(Value = "parameter")]
@@ -267,6 +394,27 @@ public class Command : SdkModel
   public LinkedContentType? linked_content_type { get; set; }
 }
 
+/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+public enum ComparisonType
+{
+  [EnumMember(Value = "EQUAL_TO")]
+  EQUAL_TO,
+  [EnumMember(Value = "GREATER_THAN")]
+  GREATER_THAN,
+  [EnumMember(Value = "GREATER_THAN_OR_EQUAL_TO")]
+  GREATER_THAN_OR_EQUAL_TO,
+  [EnumMember(Value = "LESS_THAN")]
+  LESS_THAN,
+  [EnumMember(Value = "LESS_THAN_OR_EQUAL_TO")]
+  LESS_THAN_OR_EQUAL_TO,
+  [EnumMember(Value = "INCREASES_BY")]
+  INCREASES_BY,
+  [EnumMember(Value = "DECREASES_BY")]
+  DECREASES_BY,
+  [EnumMember(Value = "CHANGES_BY")]
+  CHANGES_BY
+}
+
 public class ConnectionFeatures : SdkModel
 {
   /// <summary>Name of the dialect for this connection (read-only)</summary>
@@ -312,7 +460,7 @@ public class ContentFavorite : SdkModel
   /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Id of a look (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
   public LookBasic? look { get; set; }
@@ -334,7 +482,7 @@ public class ContentMeta : SdkModel
   /// <summary>Id of associated dashboard when content_type is "dashboard" (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>Id of associated look when content_type is "look" (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of associated folder when content_type is "space" (read-only)</summary>
   public string? folder_id { get; set; } = null;
   /// <summary>Content Type ("dashboard", "look", or "folder") (read-only)</summary>
@@ -489,7 +637,7 @@ public class ContentValidationFolder : SdkModel
 public class ContentValidationLook : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>Short Url (read-only)</summary>
@@ -520,7 +668,7 @@ public class ContentValidationScheduledPlan : SdkModel
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
 }
@@ -548,7 +696,7 @@ public class ContentView : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Id of viewed Look (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of the viewed Dashboard (read-only)</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Name or title of underlying content (read-only)</summary>
@@ -598,6 +746,26 @@ public class CreateCostEstimate : SdkModel
 {
   /// <summary>SQL statement to estimate (read-only)</summary>
   public string? sql { get; set; } = null;
+}
+
+public class CreateCredentialsApi3 : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>API key client_id (read-only)</summary>
+  public string? client_id { get; set; } = null;
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>Has this credential been disabled? (read-only)</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>API key client_secret (read-only)</summary>
+  public string? client_secret { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
 }
 
 public class CreateDashboardFilter : SdkModel
@@ -687,12 +855,11 @@ public class CreateQueryTask : SdkModel
   /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
 
-/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class CredentialsApi3 : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -906,15 +1073,13 @@ public class CredentialsTotp : SdkModel
 
 public class CustomWelcomeEmail : SdkModel
 {
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
   public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
+  /// <summary>The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
+  /// <summary>The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.</summary>
   public string? header { get; set; } = null;
 }
 
@@ -950,7 +1115,7 @@ public class Dashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -974,10 +1139,20 @@ public class Dashboard : SdkModel
   public string? edit_uri { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
+  /// <summary>Time that the Dashboard was most recently updated. (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+  /// <summary>Id of User that most recently updated the dashboard. (read-only)</summary>
+  public long? last_updater_id { get; set; } = null;
+  /// <summary>Name of User that most recently updated the dashboard. (read-only)</summary>
+  public string? last_updater_name { get; set; } = null;
+  /// <summary>Name of User that created the dashboard. (read-only)</summary>
+  public string? user_name { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
@@ -1320,7 +1495,7 @@ public class DBConnection : SdkModel
   /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server</summary>
-  public long? port { get; set; } = null;
+  public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
@@ -1388,6 +1563,8 @@ public class DBConnection : SdkModel
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
   public long? oauth_application_id { get; set; } = null;
+  /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
+  public bool? always_retry_failed_builds { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -1463,7 +1640,7 @@ public class DependencyGraph : SdkModel
   public string? graph_text { get; set; } = null;
 }
 
-/// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none".
+/// Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
 public enum DependencyStatus
 {
   [EnumMember(Value = "lock_optional")]
@@ -1474,6 +1651,15 @@ public enum DependencyStatus
   lock_error,
   [EnumMember(Value = "install_none")]
   install_none
+}
+
+/// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
+public enum DestinationType
+{
+  [EnumMember(Value = "EMAIL")]
+  EMAIL,
+  [EnumMember(Value = "ACTION_HUB")]
+  ACTION_HUB
 }
 
 public class Dialect : SdkModel
@@ -1583,6 +1769,22 @@ public class EmbedParams : SdkModel
   public bool? force_logout_login { get; set; } = null;
 }
 
+public class EmbedSecret : SdkModel
+{
+  /// <summary>Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`</summary>
+  public string? algorithm { get; set; } = null;
+  /// <summary>When secret was created (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>Is this secret currently enabled</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Secret for use with SSO embedding (read-only)</summary>
+  public string? secret { get; set; } = null;
+  /// <summary>Id of user who created this secret (read-only)</summary>
+  public long? user_id { get; set; } = null;
+}
+
 public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
@@ -1645,7 +1847,7 @@ public class ExternalOauthApplication : SdkModel
   public DateTime? created_at { get; set; } = null;
 }
 
-/// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range".
+/// The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
 public enum FillStyle
 {
   [EnumMember(Value = "enumeration")]
@@ -1730,7 +1932,7 @@ public class FolderBase : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
 }
 
-/// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region".
+/// Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
 public enum Format
 {
   [EnumMember(Value = "topojson")]
@@ -1934,7 +2136,7 @@ public class HomepageItem : SdkModel
   /// <summary>The container folder name of the content (read-only)</summary>
   public string? location { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -2123,6 +2325,13 @@ public class InternalHelpResourcesContent : SdkModel
   public string? organization_name { get; set; } = null;
   /// <summary>Content to be displayed in the internal help resources page/modal</summary>
   public string? markdown_content { get; set; } = null;
+}
+
+/// The type of the investigative content Valid values are: "dashboard". (Enum defined in Alert)
+public enum InvestigativeContentType
+{
+  [EnumMember(Value = "dashboard")]
+  dashboard
 }
 
 public class LDAPConfig : SdkModel
@@ -2350,7 +2559,7 @@ public class LegacyFeature : SdkModel
   public bool? has_disabled_on_upgrade { get; set; } = null;
 }
 
-/// Name of the command Valid values are: "dashboard", "lookml_dashboard".
+/// Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
 public enum LinkedContentType
 {
   [EnumMember(Value = "dashboard")]
@@ -2384,7 +2593,7 @@ public class Look : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -2550,6 +2759,8 @@ public class LookmlModelExplore : SdkModel
   public string? group_label { get; set; } = null;
   /// <summary>An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type. (read-only)</summary>
   public LookmlModelExploreSupportedMeasureType[]? supported_measure_types { get; set; } = null;
+  /// <summary>An array of joins that will always be included in the SQL for this explore, even if the user has not selected a field from the joined view. (read-only)</summary>
+  public string[]? always_join { get; set; } = null;
 }
 
 public class LookmlModelExploreAccessFilter : SdkModel
@@ -2893,7 +3104,7 @@ public class LookWithDashboards : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -2957,7 +3168,7 @@ public class LookWithQuery : SdkModel
   /// <summary>Id of content metadata (read-only)</summary>
   public long? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
@@ -3137,7 +3348,7 @@ public class ModelsNotValidated : SdkModel
   public string? project_file_id { get; set; } = null;
 }
 
-/// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
+/// The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
 public enum Name
 {
   [EnumMember(Value = "day")]
@@ -3345,7 +3556,7 @@ public class PermissionSet : SdkModel
   public string? url { get; set; } = null;
 }
 
-/// Type of permission: "view" or "edit" Valid values are: "view", "edit".
+/// Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 public enum PermissionType
 {
   [EnumMember(Value = "view")]
@@ -3498,7 +3709,7 @@ public class ProjectWorkspace : SdkModel
   public string? lookml_type { get; set; } = null;
 }
 
-/// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+/// The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
 public enum PullRequestMode
 {
   [EnumMember(Value = "off")]
@@ -3601,7 +3812,7 @@ public class QueryTask : SdkModel
   /// <summary>Source of the results of the query. (read-only)</summary>
   public string? result_source { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>The data format of the query results. (read-only)</summary>
@@ -3627,11 +3838,13 @@ public class RenderTask : SdkModel
   /// <summary>Id of this render task (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Id of look to render (read-only)</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of lookml dashboard to render (read-only)</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Id of query to render (read-only)</summary>
   public long? query_id { get; set; } = null;
+  /// <summary>Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)</summary>
+  public string? dashboard_element_id { get; set; } = null;
   /// <summary>Number of seconds elapsed running queries (read-only)</summary>
   public double? query_runtime { get; set; } = null;
   /// <summary>Number of seconds elapsed rendering data (read-only)</summary>
@@ -3670,7 +3883,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -3971,7 +4184,7 @@ public class ScheduledPlan : SdkModel
   /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>
@@ -4123,6 +4336,8 @@ public class SchemaTables : SdkModel
   public bool? is_default { get; set; } = null;
   /// <summary>Tables for this schema (read-only)</summary>
   public SchemaTable[]? tables { get; set; } = null;
+  /// <summary>True if the table limit was hit while retrieving tables in this schema (read-only)</summary>
+  public bool? table_limit_hit { get; set; } = null;
 }
 
 public class Session : SdkModel
@@ -4175,15 +4390,38 @@ public class SessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
-/// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class Setting : SdkModel
 {
-  /// <summary>Toggle extension framework on or off (read-only)</summary>
+  /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace auto install on or off (read-only)</summary>
+  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace on or off (read-only)</summary>
+  /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  public WhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public CustomWelcomeEmail? custom_welcome_email { get; set; }
+  /// <summary>Toggle onboarding on or off</summary>
+  public bool? onboarding_enabled { get; set; } = null;
+}
+
+public class SmtpNodeStatus : SdkModel
+{
+  /// <summary>SMTP status of node (read-only)</summary>
+  public bool? is_valid { get; set; } = null;
+  /// <summary>Error message for node (read-only)</summary>
+  public string? message { get; set; } = null;
+  /// <summary>Host name of node (read-only)</summary>
+  public string? hostname { get; set; } = null;
+}
+
+public class SmtpStatus : SdkModel
+{
+  /// <summary>Overall SMTP status of cluster (read-only)</summary>
+  public bool? is_valid { get; set; } = null;
+  /// <summary>Total number of nodes in cluster (read-only)</summary>
+  public long? node_count { get; set; } = null;
+  /// <summary>array of each node's status containing is_valid, message, hostname (read-only)</summary>
+  public SmtpNodeStatus[]? node_status { get; set; } = null;
 }
 
 public class Snippet : SdkModel
@@ -4294,7 +4532,43 @@ public class SshTunnel : SdkModel
   public string? status { get; set; } = null;
 }
 
-/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard".
+public class SupportAccessAddEntries : SdkModel
+{
+  /// <summary>An array of emails to add to the Allowlist</summary>
+  public string[]? emails { get; set; } = null;
+  /// <summary>Reason for adding emails to the Allowlist</summary>
+  public string? reason { get; set; } = null;
+}
+
+public class SupportAccessAllowlistEntry : SdkModel
+{
+  /// <summary>Unique ID (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Email address</summary>
+  public string? email { get; set; } = null;
+  /// <summary>Full name of allowlisted user (read-only)</summary>
+  public string? full_name { get; set; } = null;
+  /// <summary>Reason the Email is included in the Allowlist</summary>
+  public string? reason { get; set; } = null;
+  /// <summary>Date the Email was added to the Allowlist (read-only)</summary>
+  public DateTime? created_date { get; set; } = null;
+}
+
+public class SupportAccessEnable : SdkModel
+{
+  /// <summary>Duration Support Access will remain enabled</summary>
+  public long duration_in_seconds { get; set; }
+}
+
+public class SupportAccessStatus : SdkModel
+{
+  /// <summary>Whether or not Support Access is open (read-only)</summary>
+  public bool? open { get; set; } = null;
+  /// <summary>Time that Support Access will expire (read-only)</summary>
+  public DateTime? open_until { get; set; } = null;
+}
+
+/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
 public enum SupportedActionTypes
 {
   [EnumMember(Value = "cell")]
@@ -4305,7 +4579,7 @@ public enum SupportedActionTypes
   dashboard
 }
 
-/// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url".
+/// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
 public enum SupportedDownloadSettings
 {
   [EnumMember(Value = "push")]
@@ -4314,7 +4588,7 @@ public enum SupportedDownloadSettings
   url
 }
 
-/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip".
+/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 public enum SupportedFormats
 {
   [EnumMember(Value = "txt")]
@@ -4345,7 +4619,7 @@ public enum SupportedFormats
   csv_zip
 }
 
-/// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted".
+/// A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
 public enum SupportedFormattings
 {
   [EnumMember(Value = "formatted")]
@@ -4354,7 +4628,7 @@ public enum SupportedFormattings
   unformatted
 }
 
-/// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply".
+/// A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
 public enum SupportedVisualizationFormattings
 {
   [EnumMember(Value = "apply")]
@@ -4537,7 +4811,7 @@ public class UserAttribute : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
-/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
+/// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
 public enum UserAttributeFilterTypes
 {
   [EnumMember(Value = "advanced_filter_string")]
@@ -4605,6 +4879,12 @@ public class UserAttributeWithValue : SdkModel
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
+public class UserEmailOnly : SdkModel
+{
+  /// <summary>Email Address</summary>
+  public string email { get; set; } = "";
+}
+
 public class UserLoginLockout : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4669,7 +4949,7 @@ public class ValidationErrorDetail : SdkModel
   public string documentation_url { get; set; } = "";
 }
 
-/// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
+/// The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
 public enum WeekStartDay
 {
   [EnumMember(Value = "monday")]
@@ -4700,8 +4980,6 @@ public class WelcomeEmailTest : SdkModel
 
 public class WhitelabelConfiguration : SdkModel
 {
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public long? id { get; set; } = null;
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
@@ -4746,6 +5024,48 @@ public class Workspace : SdkModel
   public Project[]? projects { get; set; } = null;
 }
 
+/// Dynamic writeable type for Alert removes:
+/// followed, followable, id, investigative_content_title, owner_display_name
+public class WriteAlert : SdkModel
+{
+  /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
+  public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ComparisonType comparison_type { get; set; }
+  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  public string cron { get; set; } = "";
+  /// <summary>An optional, user-defined title for the alert</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
+  public long? dashboard_element_id { get; set; } = null;
+  /// <summary>An optional description for the alert. This supplements the title</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
+  public AlertDestination[] destinations { get; set; } = null;
+  public AlertField field { get; set; } = null;
+  /// <summary>Whether or not the alert is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Reason for disabling alert</summary>
+  public string? disabled_reason { get; set; } = null;
+  /// <summary>Whether or not the alert is public</summary>
+  public bool? is_public { get; set; } = null;
+  /// <summary>The type of the investigative content Valid values are: "dashboard".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public InvestigativeContentType? investigative_content_type { get; set; }
+  /// <summary>The ID of the investigative content. For dashboards, this will be the dashboard ID</summary>
+  public string? investigative_content_id { get; set; } = null;
+  /// <summary>ID of the LookML dashboard associated with the alert</summary>
+  public string? lookml_dashboard_id { get; set; } = null;
+  /// <summary>ID of the LookML dashboard element associated with the alert</summary>
+  public string? lookml_link_id { get; set; } = null;
+  /// <summary>User id of alert owner</summary>
+  public long owner_id { get; set; }
+  /// <summary>Value of the alert threshold</summary>
+  public double threshold { get; set; }
+  public AlertConditionState? time_series_condition_state { get; set; }
+}
+
 /// Dynamic writeable type for ApiSession removes:
 /// can, sudo_user_id
 public class WriteApiSession : SdkModel
@@ -4785,15 +5105,21 @@ public class WriteBoard : SdkModel
 }
 
 /// Dynamic writeable type for BoardItem removes:
-/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, location, title, url, view_count
+/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
 public class WriteBoardItem : SdkModel
 {
+  /// <summary>Custom description entered by the user, if present</summary>
+  public string? custom_description { get; set; } = null;
+  /// <summary>Custom title entered by the user, if present</summary>
+  public string? custom_title { get; set; } = null;
+  /// <summary>Custom url entered by the user, if present</summary>
+  public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Associated Board Section</summary>
   public long? board_section_id { get; set; } = null;
   /// <summary>Look to base this item on</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
@@ -4919,7 +5245,7 @@ public class WriteCreateQueryTask : SdkModel
   /// <summary>Create the task but defer execution</summary>
   public bool? deferred { get; set; } = null;
   /// <summary>Id of look associated with query.</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
 }
@@ -4934,22 +5260,8 @@ public class WriteCredentialsEmail : SdkModel
   public bool? forced_password_reset_at_next_login { get; set; } = null;
 }
 
-/// Dynamic writeable type for CustomWelcomeEmail removes:
-/// can
-public class WriteCustomWelcomeEmail : SdkModel
-{
-  /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
-  public bool? enabled { get; set; } = null;
-  /// <summary>The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.</summary>
-  public string? content { get; set; } = null;
-  /// <summary>The text to appear in the email subject line.</summary>
-  public string? subject { get; set; } = null;
-  /// <summary>The text to appear in the header line of the email body.</summary>
-  public string? header { get; set; } = null;
-}
-
 /// Dynamic writeable type for Dashboard removes:
-/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, view_count, url
+/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
 public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>
@@ -4971,7 +5283,7 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
-  /// <summary>Enables alerts to keep in sync with dashboard filter changes - only available in alerts 2.0 (beta)</summary>
+  /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
@@ -4979,6 +5291,8 @@ public class WriteDashboard : SdkModel
   public bool? crossfilter_enabled { get; set; } = null;
   /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
+  /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
+  public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
@@ -5145,7 +5459,7 @@ public class WriteDBConnection : SdkModel
   /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server</summary>
-  public long? port { get; set; } = null;
+  public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
@@ -5203,6 +5517,8 @@ public class WriteDBConnection : SdkModel
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
   public long? oauth_application_id { get; set; } = null;
+  /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
+  public bool? always_retry_failed_builds { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -5231,6 +5547,16 @@ public class WriteDBConnectionOverride : SdkModel
   public string? jdbc_additional_params { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+}
+
+/// Dynamic writeable type for EmbedSecret removes:
+/// created_at, id, secret, user_id
+public class WriteEmbedSecret : SdkModel
+{
+  /// <summary>Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`</summary>
+  public string? algorithm { get; set; } = null;
+  /// <summary>Is this secret currently enabled</summary>
+  public bool? enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for ExternalOauthApplication removes:
@@ -5774,7 +6100,7 @@ public class WriteScheduledPlan : SdkModel
   /// <summary>Whether the ScheduledPlan is enabled</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Id of a look</summary>
-  public long? look_id { get; set; } = null;
+  public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>
@@ -5833,6 +6159,25 @@ public class WriteSessionConfig : SdkModel
   public bool? use_inactivity_based_logout { get; set; } = null;
   /// <summary>Track location of session when user logs in.</summary>
   public bool? track_session_location { get; set; } = null;
+}
+
+/// Dynamic writeable type for Setting
+public class WriteSetting : SdkModel
+{
+  /// <summary>Toggle extension framework on or off</summary>
+  public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  public bool? marketplace_auto_install_enabled { get; set; } = null;
+  /// <summary>Toggle marketplace on or off</summary>
+  public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for WhitelabelConfiguration removes:
+  /// id, logo_url, favicon_url
+  /// </summary>
+  public WriteWhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public CustomWelcomeEmail? custom_welcome_email { get; set; }
+  /// <summary>Toggle onboarding on or off</summary>
+  public bool? onboarding_enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:
@@ -5930,7 +6275,7 @@ public class WriteUserAttributeWithValue : SdkModel
 }
 
 /// Dynamic writeable type for WhitelabelConfiguration removes:
-/// can, id, logo_url, favicon_url
+/// id, logo_url, favicon_url
 public class WriteWhitelabelConfiguration : SdkModel
 {
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>

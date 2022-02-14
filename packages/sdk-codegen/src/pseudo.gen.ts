@@ -25,7 +25,8 @@
  */
 
 import { CodeGen } from './codeGen'
-import { ArrayType, IMethod, IParameter, IProperty, IType } from './sdkModels'
+import type { IMethod, IParameter, IProperty, IType } from './sdkModels'
+import { ArrayType } from './sdkModels'
 
 // eslint-disable @typescript-eslint/no-unused-vars
 

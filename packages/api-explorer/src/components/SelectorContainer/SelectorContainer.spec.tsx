@@ -28,30 +28,21 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 
-import { specs, specState } from '../../test-data'
-import { renderWithRouter, withReduxProvider } from '../../test-utils'
+import { getLoadedSpecs, specs } from '../../test-data'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { defaultSettingsState } from '../../state'
 import { SelectorContainer } from './SelectorContainer'
 
 describe('SelectorContainer', () => {
-  const specDispatch = jest.fn()
-
+  const spec = getLoadedSpecs()['4.0']
   beforeAll(() => {
     window.HTMLElement.prototype.scrollIntoView = jest.fn()
   })
 
   test('it renders a spec selector with the correct default value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-        />
-      )
-    )
+    renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />)
     const selector = screen.getByLabelText('spec selector')
-    expect(selector).toHaveValue(`${specState.key}`)
+    expect(selector).toHaveValue(`${spec.key}`)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {
@@ -63,15 +54,7 @@ describe('SelectorContainer', () => {
   })
 
   test('it renders an sdk language selector with the correct value and options', async () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-        />
-      )
-    )
+    renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />)
     const selector = screen.getByLabelText('sdk language selector')
     expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
     await act(async () => {
@@ -85,21 +68,13 @@ describe('SelectorContainer', () => {
   })
 
   test('it renders an icon button for the differ', () => {
-    renderWithRouter(
-      withReduxProvider(
-        <SelectorContainer
-          specs={specs}
-          spec={specState}
-          specDispatch={specDispatch}
-        />
-      )
-    )
+    renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />)
     expect(
       screen
         .getByRole('button', {
           name: 'Compare Specifications',
         })
         .closest('a')
-    ).toHaveAttribute('href', `/diff/${specState.key}/`)
+    ).toHaveAttribute('href', `/diff/${spec.key}/`)
   })
 })

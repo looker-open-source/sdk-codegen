@@ -23,10 +23,19 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Tab, TabList, TabPanels, TabPanel } from '@looker/components'
+import {
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel,
+  Heading,
+  Space,
+  SpaceVertical,
+} from '@looker/components'
 import { Routes } from '../../routes/AppRouter'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
@@ -87,9 +96,17 @@ export const UsersScene: FC<UsersSceneProps> = () => {
 
   return (
     <>
-      <Loading loading={isLoading} message={'Processing hackers...'} />
+      <Space>
+        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+          Users
+        </Heading>
+        {isLoading && <Loading message={'Processing users...'} />}
+      </Space>
+      {/* Tab components incorrectly sets content height causing unnecessary
+      scrolling. Wrapping with SpaceVertical fixes this. TODO: Remove this hack
+      once tab components are fixed. */}
       {hackers && (
-        <>
+        <SpaceVertical gap="none">
           <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
             <Tab key="hackers">Hackers</Tab>
             <Tab key="staff">Staff</Tab>
@@ -126,7 +143,7 @@ export const UsersScene: FC<UsersSceneProps> = () => {
               />
             </TabPanel>
           </TabPanels>
-        </>
+        </SpaceVertical>
       )}
     </>
   )

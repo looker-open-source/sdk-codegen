@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import { IRowModel, RowModel } from '@looker/wholly-sheet'
-import { IHacker } from './Hacker'
+import type { IRowModel } from '@looker/wholly-sheet'
+import { RowModel } from '@looker/wholly-sheet'
+import type { IHacker } from './Hacker'
 
 export interface ISheetRow extends IRowModel {
   /** can the user create this row? */

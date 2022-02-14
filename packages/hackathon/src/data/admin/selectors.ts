@@ -24,8 +24,8 @@
 
  */
 
-import { RootState } from '../root_reducer'
-import { AdminUserAttributes } from './actions'
+import type { RootState } from '../root_reducer'
+import type { AdminUserAttributes } from './actions'
 
 export const getUserAttributesState = (
   state: RootState

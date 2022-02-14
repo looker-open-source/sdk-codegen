@@ -25,12 +25,12 @@
  */
 
 import React, { useState } from 'react'
-import { ExtensionHostApi } from '@looker/extension-sdk'
-import {
+import type { ExtensionHostApi } from '@looker/extension-sdk'
+import type {
   BaseExtensionContextData,
-  ExtensionConnector,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
+import { ExtensionConnector } from '../ExtensionConnector'
 
 /**
  * React context provider for extension API and SDK

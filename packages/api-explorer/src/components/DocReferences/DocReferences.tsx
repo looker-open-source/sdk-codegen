@@ -24,11 +24,13 @@
 
  */
 
-import React, { FC, useContext } from 'react'
-import { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
+import { CollapserCard } from '@looker/run-it'
 
-import { SearchContext } from '../../context'
-import { CollapserCard } from '../Collapser'
+import { useSelector } from 'react-redux'
+import { selectSearchPattern } from '../../state'
 import { DocReferenceItems } from './utils'
 
 interface DocReferencesProps {
@@ -49,9 +51,7 @@ export const DocReferences: FC<DocReferencesProps> = ({
   methodsUsedBy = [],
   typesUsedBy = [],
 }) => {
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
+  const searchPattern = useSelector(selectSearchPattern)
 
   if (
     typesUsed.length === 0 &&
@@ -68,21 +68,21 @@ export const DocReferences: FC<DocReferencesProps> = ({
           typesUsed,
           api,
           specKey,
-          pattern
+          searchPattern
         )}
         {DocReferenceItems(
           'Used by types:',
           typesUsedBy,
           api,
           specKey,
-          pattern
+          searchPattern
         )}
         {DocReferenceItems(
           'Used by methods:',
           methodsUsedBy,
           api,
           specKey,
-          pattern
+          searchPattern
         )}
       </>
     </CollapserCard>

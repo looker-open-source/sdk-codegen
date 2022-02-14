@@ -24,20 +24,27 @@
 
  */
 
-import {
+import type {
   Arg,
-  EnumType,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+} from './sdkModels'
+import {
+  EnumType,
   mayQuote,
   strBody,
+  TypeOfType,
+  typeOfType,
 } from './sdkModels'
-import { IMappedType, CodeGen, commentBlock } from './codeGen'
+import type { IMappedType } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
 
 export class SwiftGen extends CodeGen {
+  // Use AnyString JSON parser for number or string ids
+  anyString = true
   codePath = './swift/'
   packagePath = 'looker'
   itself = 'self'
@@ -233,6 +240,69 @@ import Foundation
     return '' // No end MARK in Swift, and XCode appears to no longer process MARKs anyway
   }
 
+  isIdProp(_property: IProperty) {
+    // sadly we can't scope fuzzy decoding to only id fields because some "id" refs are not named correctly
+    // TODO just return true until we figure out a generic solution for fuzzy JSON decoding
+    return true
+    // const nameCheck = property.name.toLowerCase()
+    // return (
+    //   nameCheck === 'id' ||
+    //   nameCheck.endsWith('_id') ||
+    //   nameCheck.endsWith('_ids')
+    // )
+  }
+
+  itemType(property: IProperty) {
+    if (
+      typeOfType(property.type) === TypeOfType.Array &&
+      property.type.elementType
+    ) {
+      return property.type.elementType
+    }
+    return property.type
+  }
+
+  /**
+   * true if this property should use AnyString
+   * @param property to check
+   */
+  useAnyString(property: IProperty) {
+    const typeCheck = this.itemType(property).name.toLowerCase()
+    return this.anyString && typeCheck === 'string' && this.isIdProp(property)
+  }
+
+  /**
+   * true if this property should use AnyInt
+   * @param property to check
+   */
+  useAnyInt(property: IProperty) {
+    const typeCheck = this.itemType(property).name.toLowerCase()
+    return (
+      this.anyString &&
+      (typeCheck === 'integer' || typeCheck === 'int64') &&
+      this.isIdProp(property)
+    )
+  }
+
+  /**
+   * Private version of the name (_ prefix)
+   *
+   * Strips reserved character markings from the name if present
+   *
+   * @param name to privatize
+   */
+  privy(name: string) {
+    return this.reserve('_' + name.replace(/`/g, ''))
+  }
+
+  getSpecialHandling(property: IProperty) {
+    return this.useAnyString(property)
+      ? 'AnyString'
+      : this.useAnyInt(property)
+      ? 'AnyInt'
+      : ''
+  }
+
   declareProperty(indent: string, property: IProperty) {
     // const optional = (property.nullable || !property.required) ? '?' : ''
     const optional = property.required ? '' : '?'
@@ -251,11 +321,43 @@ import Foundation
       )
     }
     const type = this.typeMap(property.type)
-    return (
-      this.commentHeader(indent, this.describeProperty(property)) +
-      `${indent}public var ${this.reserve(property.name)}: ${
+    const specialHandling = this.getSpecialHandling(property)
+    let munge = ''
+    let declaration = `${indent}public var ${this.reserve(property.name)}: ${
+      type.name
+    }${optional}\n`
+    if (specialHandling) {
+      const ra = typeOfType(property.type) === TypeOfType.Array
+      const privy = this.reserve('_' + property.name)
+      const bump = this.bumper(indent)
+      const setter = property.required
+        ? ra
+          ? `${privy} = newValue.map { ${specialHandling}.init($0) }`
+          : `${privy} = ${specialHandling}.init(newValue)`
+        : ra
+        ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } } else { ${privy} = nil }`
+        : `${privy} = newValue.map(${specialHandling}.init)`
+      const getter = property.required
+        ? ra
+          ? `${privy}.map { $0.value }`
+          : `${privy}.value`
+        : ra
+        ? `if let v = ${privy} { return v.map { $0.value } } else { return nil }`
+        : `${privy}${optional}.value`
+      munge = ra
+        ? `${indent}private var ${privy}: [${specialHandling}]${optional}\n`
+        : `${indent}private var ${privy}: ${specialHandling}${optional}\n`
+      declaration = `${indent}public var ${this.reserve(property.name)}: ${
         type.name
-      }${optional}`
+      }${optional} {
+${bump}get { ${getter} }
+${bump}set { ${setter} }
+${indent}}\n`
+    }
+    return (
+      munge +
+      this.commentHeader(indent, this.describeProperty(property)) +
+      declaration
     )
   }
 
@@ -286,6 +388,29 @@ import Foundation
     )
   }
 
+  initProp(prop: IProperty) {
+    const propName = this.reserve(prop.name)
+    const specialHandling = this.getSpecialHandling(prop)
+    if (specialHandling) {
+      const ra = typeOfType(prop.type) === TypeOfType.Array
+      const varName = this.privy(propName)
+      if (prop.required) {
+        if (ra) {
+          return `${this.it(
+            varName
+          )} = ${propName}.map { ${specialHandling}.init($0) }`
+        }
+        return `${this.it(varName)} = ${specialHandling}.init(${propName})`
+      } else {
+        if (ra) {
+          return `if let v = ${propName} { ${varName} = v.map { ${specialHandling}.init($0) } } else { ${varName} = nil }`
+        }
+        return `${this.it(varName)} = ${propName}.map(${specialHandling}.init)`
+      }
+    }
+    return `${this.it(propName)} = ${propName}`
+  }
+
   construct(indent: string, type: IType) {
     if (type instanceof EnumType) return ''
     indent = this.bumper(indent)
@@ -299,7 +424,7 @@ import Foundation
       const propName = this.reserve(prop.name)
       args.push(this.declareConstructorArg('', prop))
       posArgs.push(this.declarePositionalArg('', prop))
-      inits.push(`${bump}${this.it(propName)} = ${propName}`)
+      inits.push(`${bump}${this.initProp(prop)}`)
       posInits.push(`${propName}: ${propName}`)
     })
     const namedInit =
@@ -315,7 +440,7 @@ import Foundation
         `${bump}${this.it('init')}(${posInits.join(', ')})` +
         `\n${indent}}\n`
     }
-    return `\n\n${namedInit}\n${posInit}`
+    return `\n${namedInit}\n${posInit}`
   }
 
   declarePositionalArg(indent: string, property: IProperty) {
@@ -353,7 +478,7 @@ import Foundation
     let headComment =
       (head ? `${head}\n\n` : '') +
       `${method.httpMethod} ${method.endpoint} -> ${type.name}`
-    let fragment = ''
+    let fragment
     const requestType = this.requestTypeName(method)
     const bump = indent + this.indentStr
 
@@ -426,16 +551,31 @@ import Foundation
   }
 
   codingKeys(indent: string, type: IType) {
-    if (!type.hasSpecialNeeds) return ''
+    let special = false
 
+    const keys = Object.values(type.properties).map((p) => {
+      let name = this.reserve(p.name)
+      let alias = ''
+      const useIt = this.useAnyString(p) || this.useAnyInt(p)
+      if (useIt) {
+        name = this.privy(name)
+        special = true
+        alias = p.jsonName
+      } else if (p.hasSpecialNeeds) {
+        special = true
+        alias = p.jsonName
+      }
+      return name + (alias ? ` = "${alias}"` : '')
+    })
+
+    if (!special) return ''
     const bump = this.bumper(indent)
     const bump2 = this.bumper(bump)
-    const keys = Object.values(type.properties).map(
-      (p) => p.name + (p.hasSpecialNeeds ? ` = "${p.jsonName}"` : '')
-    )
+    const cases = keys.join(`\n${bump2}case `)
+
     return (
       `\n${bump}private enum CodingKeys : String, CodingKey {` +
-      `\n${bump2}case ${keys.join(', ')}` +
+      `\n${bump2}case ${cases}` +
       `\n${bump}}\n`
     )
   }
@@ -520,7 +660,7 @@ import Foundation
   }
 
   asAny(param: IParameter): Arg {
-    let castIt = false
+    let castIt
     if (param.type.elementType) {
       castIt = true
     } else {

@@ -1,0 +1,53 @@
+name: Resources Index CI
+on:
+  pull_request:
+    paths:
+      - bin/looker-resources-index/**
+      - docs/resources/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - bin/looker-resources-index/**
+      - docs/resources/**
+
+defaults:
+  run:
+    shell: bash
+    working-directory: bin/looker-resources-index
+
+jobs:
+  analyzebuild:
+    name: Analyze and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install Dependencies
+        run: |
+          yarn install
+
+      - name: Test and Analyze
+        run: |
+          yarn run analyze
+
+      - name: Build
+        run: |
+          yarn run build
+
+      - name: Check if missing changes to resources.json/resources-lock.json
+        run: |
+          git diff --exit-code ../../docs/resources

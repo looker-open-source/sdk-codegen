@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { Scroller } from './Scroller'
+export * from './Scroller'

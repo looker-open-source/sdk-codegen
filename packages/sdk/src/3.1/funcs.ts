@@ -25,7 +25,7 @@
  */
 
 /**
- * 376 API methods
+ * 378 API methods
  */
 
 import type {
@@ -147,6 +147,7 @@ import type {
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -960,13 +961,13 @@ export const create_saml_test_config = async (
  * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<string>
+ * @param body string
  * @param options one-time API call overrides
  *
  */
 export const parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  body: Partial<string>,
+  body: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
   return sdk.post<ISamlMetadataParseResult, IError>(
@@ -985,13 +986,13 @@ export const parse_saml_idp_metadata = async (
  * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<string>
+ * @param body string
  * @param options one-time API call overrides
  *
  */
 export const fetch_and_parse_saml_idp_metadata = async (
   sdk: IAPIMethods,
-  body: Partial<string>,
+  body: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> => {
   return sdk.post<ISamlMetadataParseResult, IError>(
@@ -3590,6 +3591,58 @@ export const update_datagroup = async (
 
 //#endregion Datagroup: Manage Datagroups
 
+//#region DerivedTable: View Derived Table graphs
+
+/**
+ * ### Discover information about derived tables
+ *
+ * GET /derived_table/graph/model/{model} -> IDependencyGraph
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const graph_derived_tables_for_model = async (
+  sdk: IAPIMethods,
+  request: IRequestGraphDerivedTablesForModel,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDependencyGraph, IError>> => {
+  request.model = encodeParam(request.model)
+  return sdk.get<IDependencyGraph, IError>(
+    `/derived_table/graph/model/${request.model}`,
+    { format: request.format, color: request.color },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get the subgraph representing this derived table and its dependencies.
+ *
+ * GET /derived_table/graph/view/{view} -> IDependencyGraph
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const graph_derived_tables_for_view = async (
+  sdk: IAPIMethods,
+  request: IRequestGraphDerivedTablesForView,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDependencyGraph, IError>> => {
+  request.view = encodeParam(request.view)
+  return sdk.get<IDependencyGraph, IError>(
+    `/derived_table/graph/view/${request.view}`,
+    { models: request.models, workspace: request.workspace },
+    null,
+    options
+  )
+}
+
+//#endregion DerivedTable: View Derived Table graphs
+
 //#region Folder: Manage Folders
 
 /**
@@ -3708,7 +3761,9 @@ export const delete_folder = async (
 /**
  * ### Get information about all folders.
  *
- * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+ * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+ * or if they contain soft-deleted content.
+ *
  * In API 4.0+, all personal folders will be returned.
  *
  * GET /folders -> IFolder[]
@@ -5356,30 +5411,6 @@ export const run_look = async (
 //#endregion Look: Run and Manage Looks
 
 //#region LookmlModel: Manage LookML Models
-
-/**
- * ### Discover information about derived tables
- *
- * GET /derived_table/graph/model/{model} -> IDependencyGraph
- *
- * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
- * @param options one-time API call overrides
- *
- */
-export const graph_derived_tables_for_model = async (
-  sdk: IAPIMethods,
-  request: IRequestGraphDerivedTablesForModel,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDependencyGraph, IError>> => {
-  request.model = encodeParam(request.model)
-  return sdk.get<IDependencyGraph, IError>(
-    `/derived_table/graph/model/${request.model}`,
-    { format: request.format, color: request.color },
-    null,
-    options
-  )
-}
 
 /**
  * ### Get information about all lookml models.
@@ -8707,7 +8738,9 @@ export const delete_space = async (
 /**
  * ### Get information about all spaces.
  *
- * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
+ * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user,
+ * or if they contain soft-deleted content.
+ *
  * In API 4.0+, all personal spaces will be returned.
  *
  * GET /spaces -> ISpaceBase[]
