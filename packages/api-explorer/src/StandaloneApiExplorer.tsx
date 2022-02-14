@@ -26,19 +26,15 @@
 
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
-import {
-  RunItProvider,
-  loadSpecsFromVersions,
-  RunItConfigKey,
-  RunItNoConfig,
-  initRunItSdk,
-} from '@looker/run-it'
-import type { SpecList } from '@looker/sdk-codegen'
+import { initRunItSdk, RunItProvider } from '@looker/run-it'
+import type { OAuthConfigProvider } from '@looker/extension-utils'
+import { OAuthScene } from '@looker/extension-utils'
 import { Provider } from 'react-redux'
-import { BrowserAdaptor } from '@looker/extension-utils'
+import { useLocation } from 'react-router'
 
 import { ApiExplorer } from './ApiExplorer'
 import { store } from './state'
+import { oAuthPath, ApixAdaptor } from './utils'
 import { Loader } from './components'
 
 export interface StandaloneApiExplorerProps {
@@ -46,59 +42,48 @@ export interface StandaloneApiExplorerProps {
   versionsUrl: string
 }
 
-const browserAdaptor = new BrowserAdaptor(initRunItSdk())
-
-const loadVersions = async (current: string) => {
-  const data = await browserAdaptor.localStorageGetItem(RunItConfigKey)
-  const config = data ? JSON.parse(data) : RunItNoConfig
-  let url = config.base_url ? `${config.base_url}/versions` : current
-  let response = await loadSpecsFromVersions(url)
-  if (response.fetchResult) {
-    console.error(
-      `Reverting to ${current} due to ${url} error: ${response.fetchResult}`
-    )
-    // The stored server location has an error so default to current
-    url = current
-    response = await loadSpecsFromVersions(url)
-  }
-  return { url, response }
-}
-
 export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   headless = false,
-  versionsUrl = '',
 }) => {
-  const [specs, setSpecs] = useState<SpecList | undefined>()
-  const [currentVersionsUrl, setCurrentVersionsUrl] =
-    useState<string>(versionsUrl)
+  const [browserAdaptor] = useState(
+    new ApixAdaptor(initRunItSdk(), window.origin)
+  )
+  const location = useLocation()
+  const oauthReturn = location.pathname === `/${oAuthPath}`
+  const sdk = browserAdaptor.sdk
+  const canLogin =
+    (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured() &&
+    !sdk.authSession.isAuthenticated() &&
+    !oauthReturn
 
   useEffect(() => {
-    if (currentVersionsUrl) {
-      loadVersions(currentVersionsUrl).then((result) => {
-        setCurrentVersionsUrl(result.url)
-        const response = result.response
-        setSpecs(response.specs)
-      })
-    } else {
-      setSpecs(undefined)
+    const login = async () => await browserAdaptor.login()
+    if (canLogin) {
+      login()
     }
-  }, [versionsUrl, currentVersionsUrl])
+  }, [])
+
+  const { looker_url } = (
+    sdk.authSession.settings as OAuthConfigProvider
+  ).getStoredConfig()
 
   return (
     <Provider store={store}>
       <RunItProvider basePath="/api/4.0">
-        <>
-          {specs ? (
-            <ApiExplorer
-              specs={specs}
-              adaptor={browserAdaptor}
-              headless={headless}
-              setVersionsUrl={setCurrentVersionsUrl}
-            />
-          ) : (
-            <Loader themeOverrides={browserAdaptor.themeOverrides()} />
-          )}
-        </>
+        {canLogin ? (
+          <Loader
+            themeOverrides={browserAdaptor.themeOverrides()}
+            message={`Configuration found. Logging into ${looker_url}`}
+          />
+        ) : (
+          <>
+            {oauthReturn ? (
+              <OAuthScene adaptor={browserAdaptor} />
+            ) : (
+              <ApiExplorer adaptor={browserAdaptor} headless={headless} />
+            )}
+          </>
+        )}
       </RunItProvider>
     </Provider>
   )

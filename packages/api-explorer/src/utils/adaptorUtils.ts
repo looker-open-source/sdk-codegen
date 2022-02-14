@@ -25,21 +25,13 @@
  */
 
 import type { ILookerVersions, SpecItem, SpecList } from '@looker/sdk-codegen'
-import {
-  ApiModel,
-  getSpecsFromVersions,
-  upgradeSpecObject,
-} from '@looker/sdk-codegen'
-import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
+import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
 import { api_spec } from '@looker/sdk'
 import { getEnvAdaptor } from '@looker/extension-utils'
-
-import type { RunItValues } from '../..'
+import type { RunItValues } from '@looker/run-it'
+import { getUrl } from '@looker/run-it'
 
 export type StorageLocation = 'session' | 'local'
-export const RunItConfigKey = 'RunItConfig'
-export const RunItFormKey = 'RunItForm'
-export const RunItNoConfig = { base_url: '', looker_url: '' }
 
 /** Object returned from storage service */
 export interface IStorageValue {
@@ -85,21 +77,6 @@ export interface IAPIXConfig extends ILookerVersions {
 }
 
 /**
- * Validates URL and standardizes it
- * @param url to validate
- * @returns the standardized url.origin if it's valid, or an empty string if it's not
- */
-export const validateUrl = (url: string): string => {
-  try {
-    const result = new URL(url)
-    if (url.endsWith(':')) return url
-    return result.origin
-  } catch {
-    return ''
-  }
-}
-
-/**
  * Convert content into an ApiModel
  * @param content to convert
  */
@@ -112,20 +89,6 @@ const makeApi = (content: string | RunItValues) => {
   }
   json = upgradeSpecObject(json)
   return ApiModel.fromJson(json)
-}
-
-/**
- * Use the browser transport to GET a url
- * @param url to fetch
- */
-export const getUrl = async (url: string): Promise<string | RunItValues> => {
-  const settings = {
-    ...DefaultSettings(),
-    ...{ base_url: url, verify_ssl: false },
-  }
-  const xp = new BrowserTransport(settings)
-  const response = await xp.rawRequest('GET', url)
-  return response.body
 }
 
 /**
@@ -167,61 +130,6 @@ export const specUrlFetch = async (url: string): Promise<ParsedSpec> => {
     return makeApi(content)
   } catch (error) {
     return undefined
-  }
-}
-
-/**
- * Load versions payload and retrieve all supported specs
- *
- * The versions payload should match the structure of Looker's /versions endpoint
- *
- * @param url that has an unauthenticated versions payload. For Looker, this is <LookerHostName>/versions
- * @param content content of versions payload that may already be assigned
- * @param defer true to defer fetching and parsing the spec. Defaults to true.
- */
-export const loadSpecsFromVersions = async (
-  url: string,
-  content: string | Record<string, unknown> = '',
-  defer = true
-): Promise<ILoadedSpecs> => {
-  let fetchResult = ''
-  let specs: SpecList = {}
-  let baseUrl = ''
-  let webUrl = ''
-  let headless = false
-  try {
-    if (!content) {
-      content = await getUrl(url)
-    }
-    const versions = (
-      typeof content === 'string' ? JSON.parse(content) : content
-    ) as IAPIXConfig
-    const origin = (window as any).location.origin
-    baseUrl = versions.api_server_url
-    webUrl = versions.web_server_url
-    if (versions.headless !== undefined) {
-      headless = versions.headless
-    }
-    const fetchSpec = async (spec: SpecItem) => {
-      if (spec.specURL) {
-        spec.specURL = fullify(spec.specURL, origin)
-        if (!defer) {
-          spec.api = await fallbackFetch(spec, funFetch)
-        }
-      }
-      return spec.api
-    }
-    specs = await getSpecsFromVersions(versions, fetchSpec)
-  } catch (e: any) {
-    fetchResult = e.message
-  }
-
-  return {
-    baseUrl,
-    webUrl,
-    specs,
-    headless,
-    fetchResult: fetchResult,
   }
 }
 

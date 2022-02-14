@@ -24,24 +24,82 @@
 
  */
 import { createStore } from '@looker/redux'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Action } from 'redux'
+import map from 'lodash/map'
+import type { SpecList } from '@looker/sdk-codegen'
 
 import type { SettingState } from './settings'
 import { defaultSettingsState, settingsSlice } from './settings'
 import type { LodesState } from './lodes'
 import { lodesSlice, defaultLodesState } from './lodes'
+import type { SpecState, InitSpecsSuccessPayload } from './specs'
+import { defaultSpecsState, specsSlice } from './specs'
+
+const isInitSuccessAction = (
+  action: any
+): action is PayloadAction<InitSpecsSuccessPayload> => !!action.payload?.specs
+
+const actionSanitizer = <A extends Partial<Action>>(
+  action: A,
+  _id: number
+): A => {
+  if (isInitSuccessAction(action)) {
+    action = {
+      ...action,
+      payload: {
+        ...action.payload,
+        specs: sanitizeSpecs(action.payload.specs),
+      },
+    }
+  }
+  return action
+}
+
+const stateSanitizer = <S extends Partial<RootState>>(
+  state: S,
+  _index: number
+): S => {
+  if (state.specs) {
+    return {
+      ...state,
+      specs: {
+        ...state.specs,
+        specs: sanitizeSpecs(state.specs.specs),
+      },
+    }
+  }
+  return state
+}
+
+const sanitizeSpecs = (specList: SpecList) =>
+  map(specList, (spec) => ({
+    ...spec,
+    api: spec.api ? '<api>' : undefined,
+    specContent: spec.specContent ? '<specContent>' : undefined,
+  })) as unknown as SpecList
+
+const devTools =
+  process.env.NODE_ENV !== 'production'
+    ? { actionSanitizer, stateSanitizer }
+    : false
 
 export const store = createStore({
+  devTools,
   preloadedState: {
     settings: defaultSettingsState,
     lodes: defaultLodesState,
+    specs: defaultSpecsState,
   },
   reducer: {
     settings: settingsSlice.reducer,
     lodes: lodesSlice.reducer,
+    specs: specsSlice.reducer,
   },
 })
 
 export interface RootState {
   settings: SettingState
   lodes: LodesState
+  specs: SpecState
 }

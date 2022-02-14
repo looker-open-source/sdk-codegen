@@ -52,7 +52,6 @@ describe('RequestForm', () => {
       const message = 'Invalid message'
       renderWithTheme(
         <RequestForm
-          setVersionsUrl={runItNoSet}
           inputs={[
             {
               name: 'user_id',
@@ -86,7 +85,6 @@ describe('RequestForm', () => {
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'user_id',
@@ -119,7 +117,6 @@ describe('RequestForm', () => {
   test('it creates a form with a simple item, submit button, and config button if running as an extension', () => {
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'user_id',
@@ -155,7 +152,6 @@ describe('RequestForm', () => {
     const name = 'boolean_item'
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name,
@@ -200,7 +196,6 @@ describe('RequestForm', () => {
     const name = 'date_item'
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name,
@@ -238,7 +233,6 @@ describe('RequestForm', () => {
     const name = 'number_item'
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name,
@@ -268,7 +262,6 @@ describe('RequestForm', () => {
   test('interacting with a text simple item changes the request content', async () => {
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'text_item',
@@ -314,7 +307,6 @@ describe('RequestForm', () => {
     ]
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={inputs}
         handleSubmit={handleSubmit}
         httpMethod={'POST'}
@@ -340,7 +332,6 @@ describe('RequestForm', () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
-        setVersionsUrl={runItNoSet}
         inputs={[
           {
             name: 'id',

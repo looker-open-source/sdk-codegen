@@ -34,19 +34,21 @@ import { createStore } from '@looker/redux'
 import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
 import { initRunItSdk } from '@looker/run-it'
 
-import type { LodesState, RootState, SettingState } from '../state'
+import type { LodesState, RootState, SettingState, SpecState } from '../state'
 import {
   settingsSlice,
   defaultLodesState,
   defaultSettingsState,
-  store as defaultStore,
   lodesSlice,
+  defaultSpecsState,
+  specsSlice,
 } from '../state'
+import { specState } from '../test-data'
 import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
-  store: Store<RootState> = defaultStore
+  store: Store<RootState> = createTestStore()
 ) => {
   registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()))
   return <Provider store={store}>{consumers}</Provider>
@@ -69,6 +71,7 @@ export const renderWithRouterAndReduxProvider = (
 export const preloadedState: RootState = {
   settings: defaultSettingsState,
   lodes: defaultLodesState,
+  specs: defaultSpecsState,
 }
 
 type DeepPartial<T> = {
@@ -86,6 +89,14 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
         ...defaultLodesState,
         ...overrides?.lodes,
       } as LodesState,
+      specs: {
+        ...specState,
+        ...overrides?.specs,
+      } as SpecState,
     },
-    reducer: { settings: settingsSlice.reducer, lodes: lodesSlice.reducer },
+    reducer: {
+      settings: settingsSlice.reducer,
+      lodes: lodesSlice.reducer,
+      specs: specsSlice.reducer,
+    },
   })
