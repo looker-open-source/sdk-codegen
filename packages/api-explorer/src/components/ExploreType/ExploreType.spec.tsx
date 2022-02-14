@@ -100,28 +100,5 @@ describe('ExploreType', () => {
         `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
       )
     })
-    test('recognizes anything', () => {
-      const specKey = 'anything'
-      const path = `/${specKey}/methods/foo`
-      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
-
-      const actual = screen.getByText(targetType.jsonName)
-      expect(actual).toBeInTheDocument()
-      expect(actual).toHaveProperty(
-        'href',
-        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
-      )
-    })
-    test('ignores oauth path', () => {
-      const specKey = 'oauth'
-      const path = `/${specKey}/methods/foo`
-      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
-      const actual = screen.getByText(targetType.jsonName)
-      expect(actual).toBeInTheDocument()
-      expect(actual).toHaveProperty(
-        'href',
-        `http://types/ColorCollection/${targetType.jsonName}`
-      )
-    })
   })
 })

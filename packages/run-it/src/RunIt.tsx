@@ -60,8 +60,7 @@ import {
   prepareInputs,
   createInputs,
 } from './utils'
-import type { RunItSetter } from '.'
-import { runItNoSet, RunItContext } from '.'
+import { RunItContext } from '.'
 
 export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
 
@@ -106,8 +105,6 @@ interface RunItProps {
   api: ApiModel
   /** Method to test */
   method: IMethod
-  /** Set versions Url callback */
-  setVersionsUrl: RunItSetter
   /** Sdk language to use for generating call syntax */
   sdkLanguage?: string
 }
@@ -120,7 +117,6 @@ export const RunIt: FC<RunItProps> = ({
   adaptor,
   api,
   method,
-  setVersionsUrl = runItNoSet,
   sdkLanguage = 'All',
 }) => {
   const httpMethod = method.httpMethod as RunItHttpMethod
@@ -241,7 +237,6 @@ export const RunIt: FC<RunItProps> = ({
                 isExtension={isExtension}
                 validationMessage={validationMessage}
                 setValidationMessage={setValidationMessage}
-                setVersionsUrl={setVersionsUrl}
               />
             </TabPanel>
             <TabPanel key="response">
@@ -276,7 +271,6 @@ export const RunIt: FC<RunItProps> = ({
               <TabPanel key="config">
                 <ConfigForm
                   setHasConfig={setHasConfig}
-                  setVersionsUrl={setVersionsUrl}
                   requestContent={requestContent}
                 />
               </TabPanel>

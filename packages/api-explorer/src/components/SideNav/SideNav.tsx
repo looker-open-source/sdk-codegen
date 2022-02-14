@@ -24,7 +24,7 @@
 
  */
 
-import type { FC, Dispatch } from 'react'
+import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import {
@@ -37,7 +37,6 @@ import {
 } from '@looker/components'
 import type {
   SpecItem,
-  SpecList,
   ISearchResult,
   ApiModel,
   TagList,
@@ -46,7 +45,6 @@ import type {
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 
-import type { SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, useSettingActions } from '../../state'
@@ -65,12 +63,8 @@ interface SideNavState {
 
 interface SideNavProps {
   headless?: boolean
-  /** Specs to choose from */
-  specs: SpecList
   /** Current selected spec */
   spec: SpecItem
-  /** Spec state setter */
-  specDispatch: Dispatch<SpecAction>
 }
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {

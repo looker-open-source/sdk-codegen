@@ -129,15 +129,34 @@ export interface ISpecItem {
  * Callback for fetching and compiling specification to ApiModel
  */
 export type SpecFetcher = (spec: SpecItem) => Promise<ApiModel | undefined>
+export type IncludeVersion = (version: IApiVersionElement) => boolean
+
+/**
+ * Should this specification version be included?
+ * @param ver to check
+ */
+export const include31 = (ver: IApiVersionElement) => {
+  return (
+    (ver.status &&
+      ver.version &&
+      ver.swagger_url &&
+      ver.status !== 'internal_test' &&
+      ver.status !== 'deprecated' &&
+      ver.status !== 'legacy') ||
+    (ver.version || '') >= '3.1' // unfortunately, need to hard-code this for API Explorer's spec selector
+  )
+}
 
 /**
  * Return all public API specifications from an ApiVersion payload
  * @param versions payload from a Looker server
  * @param fetcher fetches and compiles spec to ApiModel
+ * @param include test for specification version inclusion
  */
 export const getSpecsFromVersions = async (
   versions: IApiVersion,
-  fetcher: SpecFetcher | undefined = undefined
+  fetcher: SpecFetcher | undefined = undefined,
+  include: IncludeVersion = include31
 ): Promise<SpecList> => {
   const items = {}
 
@@ -165,11 +184,7 @@ export const getSpecsFromVersions = async (
     for (const v of versions.supported_versions) {
       // Tell TypeScript these are all defined because IApiVersion definition is lax
       if (v.status && v.version && v.swagger_url) {
-        if (
-          v.status !== 'internal_test' &&
-          v.status !== 'deprecated' &&
-          v.status !== 'legacy'
-        ) {
+        if (include(v)) {
           const spec: SpecItem = {
             key: uniqueId(v),
             status: v.status,

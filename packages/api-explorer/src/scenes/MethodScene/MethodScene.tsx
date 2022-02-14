@@ -36,13 +36,13 @@ import {
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
 import { useHistory, useParams } from 'react-router-dom'
-import type { RunItSetter } from '@looker/run-it'
 import { RunIt, RunItFormKey } from '@looker/run-it'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+
+import { getApixAdaptor } from '../../utils'
 import {
   ApixSection,
   DocActivityType,
@@ -62,8 +62,6 @@ import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {
   api: ApiModel
-  adaptor: IEnvironmentAdaptor
-  setVersionsUrl: RunItSetter
 }
 
 interface MethodSceneParams {
@@ -77,11 +75,8 @@ const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
   return !!data
 }
 
-export const MethodScene: FC<MethodSceneProps> = ({
-  api,
-  adaptor,
-  setVersionsUrl,
-}) => {
+export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
+  const adaptor = getApixAdaptor()
   const history = useHistory()
   const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
@@ -175,7 +170,6 @@ export const MethodScene: FC<MethodSceneProps> = ({
               sdkLanguage={sdkLanguage}
               api={api}
               method={method}
-              setVersionsUrl={setVersionsUrl}
             />
           </ExtendComponentsThemeProvider>
         </Aside>

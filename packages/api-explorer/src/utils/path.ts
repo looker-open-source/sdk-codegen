@@ -26,6 +26,7 @@
 
 import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 import { firstMethodRef } from '@looker/sdk-codegen'
+import type { Location as HLocation } from 'history'
 
 /**
  * Builds a path matching the route used by MethodScene
@@ -103,4 +104,20 @@ export const buildPath = (
     path = buildTypePath(specKey, tag, item.name)
   }
   return path
+}
+
+/**
+ * Determine API specification keys from URL pattern
+ * @param location service to examine
+ */
+export const getSpecKey = (location: HLocation | Location): string | null => {
+  const pathname = location.pathname
+  let match
+  if (pathname.startsWith(`/${diffPath}`)) {
+    const pattern = new RegExp(`(?:/${diffPath})/(?<specKey>\\w+.\\w+)`)
+    match = pathname.match(pattern)
+  } else {
+    match = pathname.match(/\/(?<specKey>\w+\.\w+).*/)
+  }
+  return match?.groups?.specKey || null
 }

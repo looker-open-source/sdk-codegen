@@ -23,4 +23,15 @@
  SOFTWARE.
 
  */
-export * from './spec'
+import type { SpecItem } from '@looker/sdk-codegen'
+
+import type { RootState } from '../store'
+
+const selectSpecsState = (state: RootState) => state.specs
+
+export const selectSpecs = (state: RootState) => selectSpecsState(state).specs
+
+export const selectCurrentSpec = (state: RootState): SpecItem => {
+  const specState = selectSpecsState(state)
+  return specState.specs[specState.currentSpecKey]
+}

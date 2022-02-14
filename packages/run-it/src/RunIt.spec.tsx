@@ -33,7 +33,7 @@ import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { BrowserAdaptor, OAuthConfigProvider } from '@looker/extension-utils'
 import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
-import { initRunItSdk, runItNoSet } from './utils'
+import { initRunItSdk } from './utils'
 import { RunItProvider } from './RunItProvider'
 
 describe('RunIt', () => {
@@ -47,12 +47,7 @@ describe('RunIt', () => {
   ) => {
     renderWithTheme(
       <RunItProvider basePath="/api/4.0">
-        <RunIt
-          adaptor={adaptor}
-          api={_api}
-          method={method}
-          setVersionsUrl={runItNoSet}
-        />
+        <RunIt adaptor={adaptor} api={_api} method={method} />
       </RunItProvider>
     )
   }
