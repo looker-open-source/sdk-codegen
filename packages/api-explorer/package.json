@@ -34,7 +34,7 @@
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.5",
     "@looker/sdk-codegen-scripts": "^21.2.1",
-    "@looker/sdk-node": "^22.0.0",
+    "@looker/sdk-node": "^21.20.1",
     "@styled-icons/styled-icon": "^10.6.3",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -75,7 +75,7 @@
     "@looker/icons": "^1.5.3",
     "@looker/redux": "0.0.0",
     "@looker/run-it": "^0.9.26",
-    "@looker/sdk": "^22.0.0",
+    "@looker/sdk": "^21.20.1",
     "@looker/sdk-codegen": "^21.3.2",
     "@looker/sdk-rtl": "^21.3.2",
     "@reduxjs/toolkit": "^1.6.2",
