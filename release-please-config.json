@@ -14,7 +14,7 @@
     "packages/hackathon": { },
     "packages/run-it": { "release-as": "" },
     "packages/sdk": { },
-    "packages/sdk-codegen": { "release-as": "" },
+    "packages/sdk-codegen": { "release-as": "21.4.0" },
     "packages/sdk-codegen-scripts": { "release-as": "" },
     "packages/sdk-codegen-utils": { "release-as": "" },
     "packages/sdk-node": { },
