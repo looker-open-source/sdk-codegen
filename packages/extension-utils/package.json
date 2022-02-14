@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@looker/components": "^2.8.1",
-    "@looker/extension-sdk": "^21.20.1",
+    "@looker/extension-sdk": "^22.0.0",
     "@looker/extension-sdk-react": "^22.0.0",
     "@looker/sdk-rtl": "^21.3.2",
     "react": "^16.13.1"

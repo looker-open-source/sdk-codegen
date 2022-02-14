@@ -36,7 +36,7 @@
   "dependencies": {
     "@looker/code-editor": "^0.1.18",
     "@looker/components": "^2.8.1",
-    "@looker/extension-sdk": "^21.20.1",
+    "@looker/extension-sdk": "^22.0.0",
     "@looker/extension-sdk-react": "^22.0.0",
     "@looker/extension-utils": "^0.1.4",
     "@looker/icons": "^1.5.3",
