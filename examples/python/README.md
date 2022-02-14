@@ -41,4 +41,8 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 ## User : Manage Users
 
 - [Disable all active user sessions](logout_all_users.py)
+- [Add a list of users to a group from a CSV](add_users_to_group_from_csv.py)
+
+## Project : Manage Projects
+- [Update projects to use Main asthe production branch](update_prod_branches_to_main.py)
 - [Google Cloud Function: User Creation](cloud-function-user-provision)
