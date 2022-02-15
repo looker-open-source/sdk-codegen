@@ -30,8 +30,8 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 
-import { initRunItSdk, runItNoSet } from '../..'
-import { ConfigForm, loadSpecsFromVersions, RunItConfigKey } from '.'
+import { initRunItSdk } from '../..'
+import { ConfigForm, RunItConfigKey } from '.'
 
 describe('ConfigForm', () => {
   const adaptor = new BrowserAdaptor(initRunItSdk())
@@ -44,9 +44,7 @@ describe('ConfigForm', () => {
   })
 
   test('it creates an empty config form without stored config', async () => {
-    renderWithTheme(
-      <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
-    )
+    renderWithTheme(<ConfigForm requestContent={{}} />)
     expect(
       screen.getByRole('heading', { name: 'RunIt Configuration' })
     ).toBeInTheDocument()
@@ -81,9 +79,7 @@ describe('ConfigForm', () => {
   })
 
   test('it disables and enables verify for bad and good urls', async () => {
-    renderWithTheme(
-      <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
-    )
+    renderWithTheme(<ConfigForm requestContent={{}} />)
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
     }) as HTMLInputElement
@@ -114,28 +110,14 @@ describe('ConfigForm', () => {
 
   test('it can have a custom title', () => {
     const title = 'New title'
-    renderWithTheme(
-      <ConfigForm
-        setVersionsUrl={runItNoSet}
-        title={title}
-        requestContent={{}}
-      />
-    )
+    renderWithTheme(<ConfigForm title={title} requestContent={{}} />)
     expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
   })
 
   describe('storage', () => {
     test.skip('it saves and clears storage', async () => {
       // TODO need to rewrite this test
-      ;(loadSpecsFromVersions as jest.Mock).mockReturnValue(
-        Promise.resolve({
-          base_url: 'http://locb',
-          web_server_url: 'http://local',
-        })
-      )
-      renderWithTheme(
-        <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
-      )
+      renderWithTheme(<ConfigForm requestContent={{}} />)
       const apiUrl = screen.getByRole('textbox', {
         name: apiLabel,
       }) as HTMLInputElement
@@ -185,9 +167,7 @@ describe('ConfigForm', () => {
         })
       )
 
-      renderWithTheme(
-        <ConfigForm setVersionsUrl={runItNoSet} requestContent={{}} />
-      )
+      renderWithTheme(<ConfigForm requestContent={{}} />)
       expect(
         screen.getByRole('heading', { name: 'RunIt Configuration' })
       ).toBeInTheDocument()

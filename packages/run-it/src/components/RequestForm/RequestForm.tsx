@@ -36,7 +36,6 @@ import {
 } from '@looker/components'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { LoginForm } from '../LoginForm'
-import type { RunItSetter } from '../..'
 import {
   createSimpleItem,
   createComplexItem,
@@ -63,8 +62,6 @@ interface RequestFormProps {
   hasConfig: boolean
   /** Handle config button click */
   handleConfig: (e: BaseSyntheticEvent) => void
-  /** Hook to refresh specifications */
-  setVersionsUrl: RunItSetter
   /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Validation message to display */

@@ -432,7 +432,7 @@ ${goImport}
       int64: { default: mt, name: 'int64' },
       integer: { default: mt, name: 'int' },
       number: { default: mt, name: 'float64' },
-      object: { default: mt, name: 'struct' },
+      object: { default: mt, name: 'interface{}' },
       password: { default: mt, name: 'string' },
       string: { default: mt, name: 'string' },
       uri: { default: mt, name: 'url.URL' },

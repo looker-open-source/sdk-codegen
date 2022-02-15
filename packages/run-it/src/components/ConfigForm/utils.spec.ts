@@ -24,7 +24,7 @@
 
  */
 
-import { validateUrl } from './configUtils'
+import { validateUrl } from './utils'
 
 describe('configUtils', () => {
   describe('validateUrl', () => {

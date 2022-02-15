@@ -29,9 +29,9 @@ import React from 'react'
 import { Code, Tree, TreeItem } from '@looker/components'
 import type { IType, ApiModel } from '@looker/sdk-codegen'
 import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
-import { useLocation } from 'react-router'
+import { useRouteMatch } from 'react-router-dom'
+
 import { Link } from '../Link'
-import { getSpecKey } from '../../reducers'
 import { buildPath } from '../../utils'
 import {
   ExploreProperty,
@@ -48,7 +48,8 @@ interface ExploreTypeLinkProps {
 }
 
 export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type, api }) => {
-  const location = useLocation()
+  const match = useRouteMatch<{ specKey: string }>('/:specKey')
+  const specKey = match?.params.specKey
   const picked = pickType(type)
   const name = picked.name
   const prefix = typeLinkPrefix(type)
@@ -56,12 +57,10 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type, api }) => {
   const typed = typeOfType(picked)
   if (typed === TypeOfType.Intrinsic)
     return <Code fontSize="small">{type.jsonName}</Code>
-
-  const specKey = getSpecKey(location)
   return (
     <>
       {prefix}
-      <Link key={type.fullName} to={buildPath(api, type, specKey)}>
+      <Link key={type.fullName} to={buildPath(api, type, specKey!)}>
         {name}
       </Link>
       {suffix}

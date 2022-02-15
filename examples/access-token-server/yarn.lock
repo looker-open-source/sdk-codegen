@@ -502,13 +502,13 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@looker/sdk-node@^21.14.0":
-  version "21.14.0"
-  resolved "https://registry.yarnpkg.com/@looker/sdk-node/-/sdk-node-21.14.0.tgz#2a7a6d8995f85832cef87165bc99e51041e8d75a"
-  integrity sha512-JoN7o/WdbMiz3IYRkNlcD0zuGGH4jv73ngz4IrljX7uAKDZmxRaZwQnPvFpN6CF5BDXRCLhfMaA0yCwBYV1xig==
+"@looker/sdk-node@^22.0.0":
+  version "21.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-node/-/sdk-node-21.20.1.tgz#4cef072397ad32ec8d0628bae36c461c8e091d3b"
+  integrity sha512-0xi2uSfGslB8KdXAaG2kVWv9suzgg5yiBOqzpKQaOeLRZY2rZAx8nn3FDNKzk15ZZAG/zwXNGmYblJny24AMLQ==
   dependencies:
-    "@looker/sdk" "^21.14.0"
-    "@looker/sdk-rtl" "^21.0.20"
+    "@looker/sdk" "^21.20.1"
+    "@looker/sdk-rtl" "^21.3.1"
     ini "^1.3.8"
     readable-stream "^3.4.0"
     request "^2.88.0"
@@ -524,12 +524,22 @@
     request "^2.88.0"
     request-promise-native "^1.0.8"
 
-"@looker/sdk@^21.14.0":
-  version "21.14.0"
-  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.14.0.tgz#56d6da1eb1ea65e145e25291f09160cc283f9e4f"
-  integrity sha512-0/oh+95HYNG9VoqzKRim6z7bPic9ZgvlnDoBpQ1OZDLuufAWImZPiIwn2qBZESpCEgq1Sj3f2zdD+oqrLfCLIQ==
+"@looker/sdk-rtl@^21.3.1":
+  version "21.3.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-rtl/-/sdk-rtl-21.3.1.tgz#ff860249959ccf12a9f48d3c79267113e61724d1"
+  integrity sha512-i4SKNTtpNgNz7hLYMJ2W8xOrgQI81gw674q8pgDw1dFWuUA3yq4nTvuR9CFnStYCIoY/1ar2WcTkWp0YSlFzTw==
   dependencies:
-    "@looker/sdk-rtl" "^21.0.20"
+    ini "^1.3.8"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+
+"@looker/sdk@^21.20.1", "@looker/sdk@^22.0.0":
+  version "21.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.1.tgz#3d257309c2fe5ad1246e01837ea71aeeb7f4df22"
+  integrity sha512-t54yXAMeJAIeq7uUc1Oa3SdFsE3zvQaL9S28ebXy9TrljbnHG4FsVMacfq0XQGYPDzYUIoEySShWcBOsFZ+eyw==
+  dependencies:
+    "@looker/sdk-rtl" "^21.3.1"
     ini "^1.3.8"
     readable-stream "^3.4.0"
     request "^2.88.0"
