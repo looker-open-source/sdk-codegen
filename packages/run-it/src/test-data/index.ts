@@ -32,5 +32,6 @@ export {
   testUnknownResponse,
   testErrorResponse,
   testBogusJsonResponse,
+  testOneRowComplexJson,
 } from './responses'
 export { api } from './specs'

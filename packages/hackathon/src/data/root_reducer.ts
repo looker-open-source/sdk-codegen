@@ -25,16 +25,25 @@
  */
 
 import { combineReducers } from 'redux'
-import { commonReducer, CommonState } from './common/reducer'
-import { adminReducer, AdminState } from './admin/reducer'
-import { projectsReducer, ProjectsState } from './projects/reducer'
-import { hackSessionReducer, HackSessionState } from './hack_session/reducer'
-import { hackersReducer, HackersState } from './hackers/reducer'
-import { judgingsReducer, JudgingsState } from './judgings/reducer'
+import type { CommonState } from './common/reducer'
+import { commonReducer } from './common/reducer'
+import type { AdminState } from './admin/reducer'
+import { adminReducer } from './admin/reducer'
+import type { AddUserState } from './add_user/reducer'
+import { addUserReducer } from './add_user/reducer'
+import type { ProjectsState } from './projects/reducer'
+import { projectsReducer } from './projects/reducer'
+import type { HackSessionState } from './hack_session/reducer'
+import { hackSessionReducer } from './hack_session/reducer'
+import type { HackersState } from './hackers/reducer'
+import { hackersReducer } from './hackers/reducer'
+import type { JudgingsState } from './judgings/reducer'
+import { judgingsReducer } from './judgings/reducer'
 
 export interface RootStore {
   commonState: CommonState
   adminState: AdminState
+  addUserState: AddUserState
   hackSessionState: HackSessionState
   projectsState: ProjectsState
   hackersState: HackersState
@@ -44,6 +53,7 @@ export interface RootStore {
 export const rootReducer = combineReducers({
   commonState: commonReducer,
   adminState: adminReducer,
+  addUserState: addUserReducer,
   hackSessionState: hackSessionReducer,
   projectsState: projectsReducer,
   hackersState: hackersReducer,

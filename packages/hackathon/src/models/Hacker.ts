@@ -24,9 +24,9 @@
 
  */
 
-import { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
+import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
 import { SheetError, TypedRows } from '@looker/wholly-sheet'
-import { SheetData, Registration, Hackathon } from '.'
+import type { SheetData, Registration, Hackathon } from '.'
 
 export type UserPermission = 'delete' | 'create' | 'update'
 /** This will probably need to change but it's a start at establishing user permissions for data operations */
@@ -62,10 +62,14 @@ export interface IHackerProps {
   canJudge: boolean
   /** is this user an admin? */
   canAdmin: boolean
-  /** assign the current user their roles and permissions from Looker user lookup */
+  /** locale user attribute value */
+  locale: string
+  /** timezone user attribute value */
+  timezone: string
 }
 
 export interface IHacker extends IHackerProps {
+  /** assign the current user their roles and permissions from Looker user lookup */
   getMe(): Promise<IHacker>
 }
 
@@ -80,6 +84,8 @@ export class Hacker implements IHacker {
   user: ILookerUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
+  locale = ''
+  timezone = ''
   api3 = false
   registration!: Registration
   canAdmin = false
@@ -133,6 +139,17 @@ export class Hacker implements IHacker {
   async getMe() {
     if (this.sdk) {
       this.user = await this.sdk.ok(this.sdk.me())
+      // not limiting user_attribute_ids because I'd rather resolve them by name since id could change
+      const attribs = await this.sdk.ok(
+        this.sdk.user_attribute_user_values({
+          user_id: this.user.id!,
+          fields: 'name,value',
+        })
+      )
+      this.locale = attribs.find((a) => a.name === 'locale')?.value || 'en'
+      this.timezone =
+        attribs.find((a) => a.name === 'timezone')?.value ||
+        'America/Los_Angeles'
       return await this.assignRoles()
     }
     return this
@@ -145,7 +162,7 @@ export class Hacker implements IHacker {
         if (this.staffRole) this.roles.add('staff')
         if (this.judgeRole) this.roles.add('judge')
         if (this.adminRole) this.roles.add('admin')
-      } catch (err) {
+      } catch (err: any) {
         if (err.message !== 'Not found') {
           throw err
         }
@@ -298,6 +315,7 @@ export class Hackers extends TypedRows<Hacker> {
       const adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
       if (adminRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: adminRole.id! })
         )
         admins = users.map((user) => user.id?.toString() || 'no id')
@@ -307,6 +325,7 @@ export class Hackers extends TypedRows<Hacker> {
       )
       if (judgeRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: judgeRole.id! })
         )
         judges = users.map((user) => user.id?.toString() || 'no id')
@@ -316,6 +335,7 @@ export class Hackers extends TypedRows<Hacker> {
       )
       if (staffRole) {
         const users = await this.sdk.ok(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: staffRole.id! })
         )
         staff = users.map((user) => user.id?.toString() || 'no id')

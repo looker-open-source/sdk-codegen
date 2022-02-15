@@ -28,18 +28,18 @@ import React from 'react'
 import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 
-import { renderWithSearch } from '../../../api-explorer/src/test-utils'
 import { Markdown } from './Markdown'
 
 describe('Markdown', () => {
   test('it renders markdown', () => {
-    renderWithSearch(
+    renderWithTheme(
       <Markdown
         source={
           '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
         }
       />
     )
+
     const heading = screen.getByRole('heading')
     expect(heading).toHaveTextContent('Markdown Component')
     const link = screen.getByRole('link')
@@ -62,7 +62,7 @@ describe('Markdown', () => {
   })
 
   test('it renders url links', () => {
-    renderWithSearch(
+    renderWithTheme(
       <Markdown source={'[external_link](https://www.foo.com)'} />
     )
     expect(screen.getByText('external_link')).toHaveAttribute(
@@ -125,9 +125,11 @@ Before.
 After.
     `
     const { container } = renderWithTheme(<Markdown source={markdown} />)
+    // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('th')?.innerHTML).toContain(
       'Search Parameters'
     )
+    // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('td')?.innerHTML).toContain('begin_at')
   })
 })

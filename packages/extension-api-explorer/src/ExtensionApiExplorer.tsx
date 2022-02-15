@@ -24,117 +24,51 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState } from 'react'
-import { IStorageValue, RunItProvider, RunItConfigurator } from '@looker/run-it'
-import { useRouteMatch } from 'react-router-dom'
-import {
-  ExtensionContext,
-  ExtensionContextData,
-} from '@looker/extension-sdk-react'
-import {
-  ApiModel,
-  getSpecsFromVersions,
-  SpecItem,
-  SpecList,
-  upgradeSpecObject,
-} from '@looker/sdk-codegen'
-import { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import ApiExplorer from '@looker/api-explorer/src/ApiExplorer'
+import type { FC } from 'react'
+import React, { useContext } from 'react'
+import { RunItProvider } from '@looker/run-it'
+import type { ExtensionContextData } from '@looker/extension-sdk-react'
+import { ExtensionContext } from '@looker/extension-sdk-react'
+import type { IApixAdaptor } from '@looker/api-explorer'
+import { ApiExplorer, store, sdkSpecFetch } from '@looker/api-explorer'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { configureStore } from '@looker/api-explorer/src/state'
 import { Provider } from 'react-redux'
-import { ExtensionEnvAdaptor } from './utils'
-import { Loader } from './Loader'
+import { ExtensionAdaptor } from '@looker/extension-utils'
+import type { SpecItem } from '@looker/sdk-codegen'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
+import cloneDeep from 'lodash/cloneDeep'
+import type { ILooker40SDK } from '@looker/sdk'
 
-class ExtensionConfigurator implements RunItConfigurator {
-  storage: Record<string, string> = {}
-  getStorage(key: string, defaultValue = ''): IStorageValue {
-    const value = this.storage[key]
-    if (value) {
-      return {
-        location: 'session',
-        value,
-      }
-    }
-    return {
-      location: 'session',
-      value: defaultValue,
-    }
+class ApixExtensionAdaptor extends ExtensionAdaptor implements IApixAdaptor {
+  async fetchSpecList() {
+    const sdk = this.sdk as ILooker40SDK
+    const versions = await sdk.ok(sdk.versions())
+    const result = await getSpecsFromVersions(versions)
+    return result
   }
 
-  setStorage(key: string, value: string): string {
-    this.storage[key] = value
-    return value
-  }
-
-  removeStorage(key: string) {
-    delete this.storage[key]
+  async fetchSpec(spec: SpecItem): Promise<SpecItem> {
+    const sdk = this.sdk as ILooker40SDK
+    const _spec = cloneDeep(spec)
+    _spec.api = await sdkSpecFetch(spec, (version, name) =>
+      sdk.ok(sdk.api_spec(version, name))
+    )
+    return _spec
   }
 }
 
-const configurator = new ExtensionConfigurator()
-const store = configureStore()
-
 export const ExtensionApiExplorer: FC = () => {
-  const match = useRouteMatch<{ specKey: string }>(`/:specKey`)
   const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const [specs, setSpecs] = useState<SpecList>()
 
-  let sdk: Looker31SDK | Looker40SDK
-  if (match?.params.specKey === '3.1') {
-    sdk = extensionContext.core31SDK
-  } else {
-    sdk = extensionContext.core40SDK
-  }
-
-  /**
-   * fetch and compile an API specification to an ApiModel
-   *
-   * @param spec to fetch and compile
-   */
-  async function extFetch(spec: SpecItem) {
-    if (!spec.specURL) return undefined
-    const sdk = extensionContext.core40SDK
-    const [version, name] = spec.specURL.split('/').slice(-2)
-    const content = await sdk.ok(sdk.api_spec(version, name))
-    // TODO switch this to just call const api = ApiModel.fromString(content) now
-    // TODO I think we can remove this this crazy step now that the api_spec endpoint is cleaner
-    let json
-    if (typeof content === 'string') {
-      json = JSON.parse(content)
-    } else {
-      json = content
-    }
-    json = upgradeSpecObject(json)
-    const api = ApiModel.fromJson(json)
-    return api
-  }
-
-  useEffect(() => {
-    /** Load Looker /versions information and retrieve all supported specs */
-    async function loadSpecs() {
-      const versions = await sdk.ok(sdk.versions())
-      const result = await getSpecsFromVersions(versions, (spec: SpecItem) =>
-        extFetch(spec)
-      )
-      setSpecs(result)
-    }
-
-    if (sdk && !specs) loadSpecs().catch((err) => console.error(err))
-  }, [specs, sdk])
-
-  const extensionEnvAdaptor = new ExtensionEnvAdaptor(getExtensionSDK())
+  const extensionAdaptor = new ApixExtensionAdaptor(
+    getExtensionSDK(),
+    extensionContext.core40SDK
+  )
 
   return (
     <Provider store={store}>
-      <RunItProvider sdk={sdk} configurator={configurator} basePath="">
-        <>
-          {specs ? (
-            <ApiExplorer specs={specs} envAdaptor={extensionEnvAdaptor} />
-          ) : (
-            <Loader themeOverrides={extensionEnvAdaptor.themeOverrides()} />
-          )}
-        </>
+      <RunItProvider basePath="">
+        <ApiExplorer adaptor={extensionAdaptor} headless={true} />
       </RunItProvider>
     </Provider>
   )

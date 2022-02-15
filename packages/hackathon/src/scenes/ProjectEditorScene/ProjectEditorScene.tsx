@@ -23,7 +23,9 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+
+import type { FC } from 'react'
+import React from 'react'
 import { ProjectForm } from './components'
 
 export const ProjectEditorScene: FC = () => {

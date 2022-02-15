@@ -24,15 +24,11 @@
 
  */
 
-import { ITabTable, SheetError, SheetSDK, SheetValues } from './SheetSDK'
+import type { ITabTable, SheetSDK, SheetValues } from './SheetSDK'
+import { SheetError } from './SheetSDK'
 
-import {
-  ColumnHeaders,
-  IRowModel,
-  RowAction,
-  rowPosition,
-  stringer,
-} from './RowModel'
+import type { ColumnHeaders, IRowModel } from './RowModel'
+import { RowAction, rowPosition, stringer } from './RowModel'
 
 /**
  * Compare dates without running into numeric comparison problems
@@ -583,7 +579,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
         delta.deletes.forEach((d) =>
           this.checkOutdated(d, this.typeRow(values[d._row - 1]))
         )
-      } catch (e) {
+      } catch (e: any) {
         errors.push(e.message)
       }
       if (errors.length > 0) throw new SheetError(errors.join('\n'))

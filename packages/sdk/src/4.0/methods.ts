@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 437 API methods
  */
 
 import type {
@@ -44,6 +44,8 @@ import { sdkVersion } from '../constants'
 import type { ILooker40SDK } from './methodsInterface'
 import type {
   IAccessToken,
+  IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -61,6 +63,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -95,6 +98,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IError,
@@ -168,6 +172,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -179,6 +184,7 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -209,11 +215,16 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
   ISshServer,
   ISshTunnel,
+  ISupportAccessAddEntries,
+  ISupportAccessAllowlistEntry,
+  ISupportAccessEnable,
+  ISupportAccessStatus,
   ITheme,
   ITimezone,
   IUpdateCommand,
@@ -222,12 +233,14 @@ import type {
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
   IValidationError,
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -239,7 +252,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteCustomWelcomeEmail,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -247,6 +259,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -271,6 +284,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -290,6 +304,202 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion
   }
+
+  //#region Alert: Alert
+
+  /**
+   * ### Search Alerts
+   *
+   * GET /alerts/search -> IAlert[]
+   *
+   * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_alerts(
+    request: IRequestSearchAlerts,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert[], IError>> {
+    return this.get<IAlert[], IError>(
+      '/alerts/search',
+      {
+        limit: request.limit,
+        offset: request.offset,
+        group_by: request.group_by,
+        fields: request.fields,
+        disabled: request.disabled,
+        frequency: request.frequency,
+        condition_met: request.condition_met,
+        last_run_start: request.last_run_start,
+        last_run_end: request.last_run_end,
+        all_owners: request.all_owners,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get an alert by a given alert ID
+   *
+   * GET /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async get_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError>> {
+    return this.get<IAlert, IError>(`/alerts/${alert_id}`, null, null, options)
+  }
+
+  /**
+   * ### Update an alert
+   * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * #
+   *
+   * PUT /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert(
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.put<IAlert, IError | IValidationError>(
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Update select alert fields
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+   * #
+   *
+   * PATCH /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IAlertPatch>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_alert_field(
+    alert_id: number,
+    body: Partial<IAlertPatch>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.patch<IAlert, IError | IValidationError>(
+      `/alerts/${alert_id}`,
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an alert by a given alert ID
+   *
+   * DELETE /alerts/{alert_id} -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    return this.delete<void, IError>(`/alerts/${alert_id}`, null, null, options)
+  }
+
+  /**
+   * ### Create a new alert and return details of the newly created object
+   *
+   * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   *
+   * Example Request:
+   * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+   * ```
+   * {
+   *   "cron": "0 5 * * *",
+   *   "custom_title": "Alert when LA inventory is low",
+   *   "dashboard_element_id": 103,
+   *   "applied_dashboard_filters": [
+   *     {
+   *       "filter_title": "Warehouse Name",
+   *       "field_name": "distribution_centers.name",
+   *       "filter_value": "Los Angeles CA",
+   *       "filter_description": "is Los Angeles CA"
+   *     }
+   *   ],
+   *   "comparison_type": "LESS_THAN",
+   *   "destinations": [
+   *     {
+   *       "destination_type": "EMAIL",
+   *       "email_address": "test@test.com"
+   *     }
+   *   ],
+   *   "field": {
+   *     "title": "Number on Hand",
+   *     "name": "inventory_items.number_on_hand"
+   *   },
+   *   "is_disabled": false,
+   *   "is_public": true,
+   *   "threshold": 1000
+   * }
+   * ```
+   *
+   * POST /alerts -> IAlert
+   *
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_alert(
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>> {
+    return this.post<IAlert, IError | IValidationError>(
+      '/alerts',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Enqueue an Alert by ID
+   *
+   * POST /alerts/{alert_id}/enqueue -> void
+   *
+   * @param alert_id ID of an alert
+   * @param force Whether to enqueue an alert again if its already running.
+   * @param options one-time API call overrides
+   *
+   */
+  async enqueue_alert(
+    alert_id: number,
+    force?: boolean,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    return this.post<void, IError>(
+      `/alerts/${alert_id}/enqueue`,
+      { force },
+      null,
+      options
+    )
+  }
+
+  //#endregion Alert: Alert
 
   //#region ApiAuth: API Authentication
 
@@ -396,6 +606,50 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   *
+   * The value of the `secret` field will be set by Looker and returned.
+   *
+   * POST /embed_config/secrets -> IEmbedSecret
+   *
+   * @param body Partial<IWriteEmbedSecret>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_embed_secret(
+    body?: Partial<IWriteEmbedSecret>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IEmbedSecret, IError | IValidationError>> {
+    return this.post<IEmbedSecret, IError | IValidationError>(
+      '/embed_config/secrets',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete an embed secret.
+   *
+   * DELETE /embed_config/secrets/{embed_secret_id} -> string
+   *
+   * @param embed_secret_id Id of Embed Secret
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_embed_secret(
+    embed_secret_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    return this.delete<string, IError>(
+      `/embed_config/secrets/${embed_secret_id}`,
+      null,
+      null,
+      options
+    )
+  }
 
   /**
    * ### Create SSO Embed URL
@@ -1225,12 +1479,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
@@ -1248,12 +1502,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
@@ -1300,6 +1554,143 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       '/session_config',
       null,
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Get Support Access Allowlist Users
+   *
+   * Returns the users that have been added to the Support Access Allowlist
+   *
+   * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async get_support_access_allowlist_entries(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessAllowlistEntry[], IError>> {
+    return this.get<ISupportAccessAllowlistEntry[], IError>(
+      '/support_access/allowlist',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Add Support Access Allowlist Users
+   *
+   * Adds a list of emails to the Allowlist, using the provided reason
+   *
+   * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param body Partial<ISupportAccessAddEntries>
+   * @param options one-time API call overrides
+   *
+   */
+  async add_support_access_allowlist_entries(
+    body: Partial<ISupportAccessAddEntries>,
+    options?: Partial<ITransportSettings>
+  ): Promise<
+    SDKResponse<ISupportAccessAllowlistEntry[], IError | IValidationError>
+  > {
+    return this.post<ISupportAccessAllowlistEntry[], IError | IValidationError>(
+      '/support_access/allowlist',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Delete Support Access Allowlist User
+   *
+   * Deletes the specified Allowlist Entry Id
+   *
+   * DELETE /support_access/allowlist/{entry_id} -> string
+   *
+   * @param entry_id Id of Allowlist Entry
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_support_access_allowlist_entry(
+    entry_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    entry_id = encodeParam(entry_id)
+    return this.delete<string, IError>(
+      `/support_access/allowlist/${entry_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Enable Support Access
+   *
+   * Enables Support Access for the provided duration
+   *
+   * PUT /support_access/enable -> ISupportAccessStatus
+   *
+   * @param body Partial<ISupportAccessEnable>
+   * @param options one-time API call overrides
+   *
+   */
+  async enable_support_access(
+    body: Partial<ISupportAccessEnable>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError | IValidationError>> {
+    return this.put<ISupportAccessStatus, IError | IValidationError>(
+      '/support_access/enable',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Disable Support Access
+   *
+   * Disables Support Access immediately
+   *
+   * PUT /support_access/disable -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async disable_support_access(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>> {
+    return this.put<ISupportAccessStatus, IError>(
+      '/support_access/disable',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Support Access Status
+   *
+   * Returns the current Support Access Status
+   *
+   * GET /support_access/status -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async support_access_status(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>> {
+    return this.get<ISupportAccessStatus, IError>(
+      '/support_access/status',
+      null,
+      null,
       options
     )
   }
@@ -2171,6 +2562,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
    *
+   * @deprecated
+   *
    * @param options one-time API call overrides
    *
    */
@@ -2190,13 +2583,15 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * PATCH /custom_welcome_email -> ICustomWelcomeEmail
    *
-   * @param body Partial<IWriteCustomWelcomeEmail>
+   * @deprecated
+   *
+   * @param body Partial<ICustomWelcomeEmail>
    * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
    * @param options one-time API call overrides
    *
    */
   async update_custom_welcome_email(
-    body: Partial<IWriteCustomWelcomeEmail>,
+    body: Partial<ICustomWelcomeEmail>,
     send_test_welcome_email?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICustomWelcomeEmail, IError | IValidationError>> {
@@ -2471,27 +2866,84 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Get Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   *
+   * GET /setting -> ISetting
+   *
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async get_setting(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISetting, IError | IValidationError>> {
+    return this.get<ISetting, IError | IValidationError>(
+      '/setting',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Configure Looker Settings
    *
    * Available settings are:
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   *
+   * See the `Setting` type for more information on the specific values that can be configured.
    *
    * PATCH /setting -> ISetting
    *
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+   * @param body Partial<IWriteSetting>
+   * @param fields Requested fields
    * @param options one-time API call overrides
    *
    */
   async set_setting(
-    body: Partial<ISetting>,
+    body: Partial<IWriteSetting>,
+    fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISetting, IError | IValidationError>> {
     return this.patch<ISetting, IError | IValidationError>(
       '/setting',
-      null,
+      { fields },
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Get current SMTP status.
+   *
+   * GET /smtp_status -> ISmtpStatus
+   *
+   * @param fields Include only these fields in the response
+   * @param options one-time API call overrides
+   *
+   */
+  async smtp_status(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISmtpStatus, IError>> {
+    return this.get<ISmtpStatus, IError>(
+      '/smtp_status',
+      { fields },
+      null,
       options
     )
   }
@@ -2529,9 +2981,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get an API specification for this Looker instance.
    *
-   * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+   * The specification is returned as a JSON document in Swagger 2.x format
    *
-   * GET /api_spec/{api_version}/{specification} -> string
+   * GET /api_spec/{api_version}/{specification} -> any
    *
    * @param api_version API version
    * @param specification Specification name. Typically, this is "swagger.json"
@@ -2542,10 +2994,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     api_version: string,
     specification: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>> {
+  ): Promise<SDKResponse<any, IError>> {
     api_version = encodeParam(api_version)
     specification = encodeParam(specification)
-    return this.get<string, IError>(
+    return this.get<any, IError>(
       `/api_spec/${api_version}/${specification}`,
       null,
       null,
@@ -2558,6 +3010,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    *
    * GET /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -2579,6 +3033,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * ### Update the whitelabel configuration
    *
    * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param body Partial<IWriteWhitelabelConfiguration>
    * @param options one-time API call overrides
@@ -3957,6 +4413,35 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Move an existing dashboard
+   *
+   * Moves a dashboard to a specified folder, and returns the moved dashboard.
+   *
+   * `dashboard_id` and `folder_id` are required.
+   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   *
+   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
+   *
+   * @param dashboard_id Dashboard id to move.
+   * @param folder_id Folder id to move to.
+   * @param options one-time API call overrides
+   *
+   */
+  async move_dashboard(
+    dashboard_id: string,
+    folder_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboard, IError | IValidationError>> {
+    dashboard_id = encodeParam(dashboard_id)
+    return this.patch<IDashboard, IError | IValidationError>(
+      `/dashboards/${dashboard_id}/move`,
+      { folder_id },
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3982,35 +4467,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     dashboard_id = encodeParam(dashboard_id)
     return this.post<IDashboard, IError | IValidationError>(
       `/dashboards/${dashboard_id}/copy`,
-      { folder_id },
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Move an existing dashboard
-   *
-   * Moves a dashboard to a specified folder, and returns the moved dashboard.
-   *
-   * `dashboard_id` and `folder_id` are required.
-   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-   *
-   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
-   *
-   * @param dashboard_id Dashboard id to move.
-   * @param folder_id Folder id to move to.
-   * @param options one-time API call overrides
-   *
-   */
-  async move_dashboard(
-    dashboard_id: string,
-    folder_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDashboard, IError | IValidationError>> {
-    dashboard_id = encodeParam(dashboard_id)
-    return this.patch<IDashboard, IError | IValidationError>(
-      `/dashboards/${dashboard_id}/move`,
       { folder_id },
       null,
       options
@@ -4612,6 +5068,54 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.model = encodeParam(request.model)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/model/${request.model}`,
+      { format: request.format, color: request.color },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.view = encodeParam(request.view)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/view/${request.view}`,
+      { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -4722,7 +5226,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -5812,10 +6318,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async look(
-    look_id: number,
+    look_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError>> {
+    look_id = encodeParam(look_id)
     return this.get<ILookWithQuery, IError>(
       `/looks/${look_id}`,
       { fields },
@@ -5855,11 +6362,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async update_look(
-    look_id: number,
+    look_id: string,
     body: Partial<IWriteLookWithQuery>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.patch<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}`,
       { fields },
@@ -5884,9 +6392,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async delete_look(
-    look_id: number,
+    look_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>> {
+    look_id = encodeParam(look_id)
     return this.delete<string, IError>(`/looks/${look_id}`, null, null, options)
   }
 
@@ -5923,6 +6432,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     request: IRequestRunLook,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError | IValidationError>> {
+    request.look_id = encodeParam(request.look_id)
     request.result_format = encodeParam(request.result_format)
     return this.get<string, IError | IValidationError>(
       `/looks/${request.look_id}/run/${request.result_format}`,
@@ -5962,10 +6472,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async copy_look(
-    look_id: number,
+    look_id: string,
     folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.post<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}/copy`,
       { folder_id },
@@ -5990,10 +6501,11 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async move_look(
-    look_id: number,
+    look_id: string,
     folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>> {
+    look_id = encodeParam(look_id)
     return this.patch<ILookWithQuery, IError | IValidationError>(
       `/looks/${look_id}/move`,
       { folder_id },
@@ -6005,28 +6517,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>> {
-    request.model = encodeParam(request.model)
-    return this.get<IDependencyGraph, IError>(
-      `/derived_table/graph/model/${request.model}`,
-      { format: request.format, color: request.color },
-      null,
-      options
-    )
-  }
 
   /**
    * ### Get information about all lookml models.
@@ -6173,6 +6663,24 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   /**
    * ### Field name suggestions for a model and view
+   *
+   * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+   *
+   * ```ruby
+   * {'users.age': '>=60'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '<30'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '=50'}
+   * ```
    *
    * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> IModelFieldSuggestions
    *
@@ -6325,6 +6833,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         schema_name: request.schema_name,
         cache: request.cache,
         fields: request.fields,
+        table_filter: request.table_filter,
+        table_limit: request.table_limit,
       },
       null,
       options
@@ -7604,6 +8114,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        source: request.source,
       },
       null,
       options
@@ -8130,6 +8641,41 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.get<string, IError>(
       `/render_tasks/${render_task_id}/results`,
       null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create a new task to render a dashboard element to an image.
+   *
+   * Returns a render task object.
+   * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+   * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+   *
+   * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> IRenderTask
+   *
+   * @param dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+   * @param result_format Output type: png or jpg
+   * @param width Output width in pixels
+   * @param height Output height in pixels
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async create_dashboard_element_render_task(
+    dashboard_element_id: string,
+    result_format: string,
+    width: number,
+    height: number,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> {
+    dashboard_element_id = encodeParam(dashboard_element_id)
+    result_format = encodeParam(result_format)
+    return this.post<IRenderTask, IError | IValidationError>(
+      `/render_tasks/dashboard_elements/${dashboard_element_id}/${result_format}`,
+      { width, height, fields },
       null,
       options
     )
@@ -9760,6 +10306,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         ids: request.ids,
       },
@@ -9839,6 +10387,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,
@@ -9881,6 +10431,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         id: request.id,
         first_name: request.first_name,
@@ -10431,24 +10983,22 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param user_id id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async create_user_credentials_api3(
     user_id: number,
-    body?: Partial<ICredentialsApi3>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>> {
-    return this.post<ICredentialsApi3, IError | IValidationError>(
+  ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>> {
+    return this.post<ICreateCredentialsApi3, IError | IValidationError>(
       `/users/${user_id}/credentials_api3`,
       { fields },
-      body,
+      null,
       options
     )
   }
@@ -10838,6 +11388,36 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
       `/users/${user_id}/credentials_email/send_password_reset`,
       { fields },
       null,
+      options
+    )
+  }
+
+  /**
+   * ### Change a disabled user's email addresses
+   *
+   * Allows the admin to change the email addresses for all the user's
+   * associated credentials.  Will overwrite all associated email addresses with
+   * the value supplied in the 'email' body param.
+   * The user's 'is_disabled' status must be true.
+   *
+   * POST /users/{user_id}/update_emails -> IUser
+   *
+   * @param user_id Id of user
+   * @param body Partial<IUserEmailOnly>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async wipeout_user_emails(
+    user_id: number,
+    body: Partial<IUserEmailOnly>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUser, IError | IValidationError>> {
+    return this.post<IUser, IError | IValidationError>(
+      `/users/${user_id}/update_emails`,
+      { fields },
+      body,
       options
     )
   }

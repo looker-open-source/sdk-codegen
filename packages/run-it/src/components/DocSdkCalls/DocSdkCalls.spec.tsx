@@ -40,15 +40,7 @@ describe('DocSdkCalls', () => {
       <DocSdkCalls
         api={api}
         method={api.methods.user}
-        inputs={[
-          {
-            name: 'user_id',
-            location: 'path',
-            type: 'string',
-            required: true,
-            description: 'A unique identifier for a user',
-          },
-        ]}
+        inputs={{ user_id: 1 }}
         sdkLanguage="All"
       />
     )
@@ -69,15 +61,7 @@ describe('DocSdkCalls', () => {
         <DocSdkCalls
           api={api}
           method={api.methods.user}
-          inputs={[
-            {
-              name: 'user_id',
-              location: 'path',
-              type: 'string',
-              required: true,
-              description: 'A unique identifier for a user',
-            },
-          ]}
+          inputs={{ user_id: 1 }}
           sdkLanguage={sdkLanguage}
         />
       )
@@ -87,4 +71,22 @@ describe('DocSdkCalls', () => {
       ).toBeInTheDocument()
     }
   )
+
+  test('shows useful message when it errors while parsing complex structures', () => {
+    renderWithTheme(
+      <DocSdkCalls
+        api={api}
+        method={api.methods.run_inline_query}
+        inputs={{
+          body: '{\n  "k1": "v1",\n',
+        }}
+        sdkLanguage="All"
+      />
+    )
+    expect(
+      screen.getByText(
+        'Cannot generate SDK call syntax. Ensure all complex structures in the request form are valid.'
+      )
+    ).toBeInTheDocument()
+  })
 })

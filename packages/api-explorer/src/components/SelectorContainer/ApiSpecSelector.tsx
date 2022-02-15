@@ -24,25 +24,23 @@
 
  */
 
-import React, { FC, Dispatch } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Select } from '@looker/components'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
+import type { SpecItem } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 
-import { SpecList } from '@looker/sdk-codegen'
-import { SpecAction, SpecState, selectSpec } from '../../reducers'
+import { selectSpecs } from '../../state'
 
 interface ApiSpecSelectorProps {
-  specs: SpecList
-  spec: SpecState
-  specDispatch: Dispatch<SpecAction>
+  spec: SpecItem
 }
 
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
-  specs,
-  spec,
-  specDispatch,
-}) => {
+export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
   const history = useHistory()
+  const location = useLocation()
+  const specs = useSelector(selectSpecs)
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: key,
@@ -50,8 +48,8 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({
   }))
 
   const handleChange = (specKey: string) => {
-    specDispatch(selectSpec(specs, specKey))
-    history.push(`/${specKey}`)
+    const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
+    history.push(matchPath)
   }
 
   return (

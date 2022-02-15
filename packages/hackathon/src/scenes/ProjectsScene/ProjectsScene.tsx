@@ -24,21 +24,27 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, Space } from '@looker/components'
-import { AddCircle } from '@styled-icons/material/AddCircle'
-import { Create } from '@styled-icons/material/Create'
-import { Lock } from '@styled-icons/material/Lock'
-import { lockProjects } from '../../data/projects/actions'
+import { Button, ButtonOutline, Space, Heading, Span } from '@looker/components'
+import { Add } from '@styled-icons/material-outlined/Add'
+import { Create } from '@styled-icons/material-outlined/Create'
+import { Lock } from '@styled-icons/material-outlined/Lock'
+import {
+  currentProjectsRequest,
+  lockProjects,
+} from '../../data/projects/actions'
 import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
-import { Routes } from '../../routes/AppRouter'
+import { Loading } from '../../components'
+import { Routes } from '../../routes'
 import {
   getCurrentHackathonState,
   getHackerState,
 } from '../../data/hack_session/selectors'
+import { canLockProject } from '../../utils'
+import { Era, eraColor, zonedLocaleDate } from '../HomeScene/components'
 import { ProjectList } from './components'
 
 interface ProjectSceneProps {}
@@ -62,15 +68,42 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
     if (hackathon) dispatch(lockProjects(false, hackathon._id))
   }
 
+  const handleReload = () => {
+    dispatch(currentProjectsRequest())
+  }
+
+  let judgingStarted = false
+  let judgingString = ''
+  if (hackathon && hacker) {
+    judgingStarted = hackathon.judging_starts?.getTime() < new Date().getTime()
+
+    const dateString = zonedLocaleDate(
+      hackathon.judging_starts,
+      hacker.timezone,
+      hacker.locale
+    )
+
+    if (judgingStarted) {
+      judgingString = `Judging started: ${dateString}`
+    } else {
+      judgingString = `Judging starts: ${dateString}`
+    }
+  }
+
   return (
     <>
-      <Loading loading={isLoading} message={'Processing projects...'} />
+      <Space>
+        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+          Projects <ButtonOutline onClick={handleReload}>Reload</ButtonOutline>
+        </Heading>
+        {isLoading && <Loading message={'Processing projects...'} />}
+      </Space>
       <ProjectList />
       <Space pt="xlarge">
         <Button
-          iconBefore={<AddCircle />}
+          iconBefore={<Add />}
           onClick={handleAdd}
-          disabled={isLoading}
+          disabled={(isLoading || judgingStarted) && !canLockProject(hacker)}
         >
           Add Project
         </Button>
@@ -94,6 +127,9 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
             </>
           )}
         </>
+        <Span color={eraColor(judgingStarted ? Era.past : Era.future)}>
+          {judgingString}
+        </Span>
       </Space>
     </>
   )

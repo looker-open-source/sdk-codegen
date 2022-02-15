@@ -1,0 +1,218 @@
+name: Go SDK CI
+on:
+  pull_request:
+    paths:
+      - go/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - go/**
+
+  workflow_dispatch:
+
+env:
+  LOOKERSDK_BASE_URL: https://localhost:20000
+  LOOKERSDK_VERIFY_SSL: false
+  JUNIT_OUTPUT_DIR: results
+  JUNIT_ARTIFACT_DIR: gosdk-test-results
+
+jobs:
+  unit:
+    name: Unit - ${{ matrix.os }} / Go ${{ matrix.go-version }}
+    env:
+      GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.gounit.${{ matrix.go-version }}.xml
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        go-version: [1.17.6, 1.16.13]
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Install dependencies
+        run: go install github.com/jstemmer/go-junit-report@latest
+
+      - name: Run unit tests
+        run: |
+          mkdir ${{ env.JUNIT_OUTPUT_DIR }}
+          cd go/rtl
+          go test -v 2>&1 | go-junit-report > ../../${{ env.JUNIT_OUTPUT_DIR }}/${{ env.GO_JUNIT_OUTPUT_NAME }}
+
+      - name: Upload Go unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.JUNIT_ARTIFACT_DIR }}
+          path: ${{ env.JUNIT_OUTPUT_DIR }}
+
+  integration:
+    needs: unit
+    name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
+    env:
+      GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.gointegration.xml
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        looker:
+          - '21_18'
+          - '21_20'
+          - '22_0'
+          # TODO uncomment `include:` when either macos or windows works to satisfaction.
+          #include:
+          # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
+          # to ~4 minutes for ubuntu) because docker install takes ~5 minutes
+          # and docker pull takes ~10 minutes. We can probably figure out how to
+          # cache the docker install but hopefully github will soon have docker
+          # available pre-installed on macos so not worth the effort now.
+          # Regarding docker pull ... it would be nice if there's a way to cache
+          # only some layers of the image on the runner but we don't want to cache
+          # the final layer(s) with Looker IP. This would speed up docker pull on
+          # all OSs.
+          #- os: macos
+          #  python-version: 3.9
+          #  looker: '7_20'
+          # TODO: currently can't run linux containers on windows.
+          # Pending new windows server version
+          # https://github.com/actions/virtual-environments/issues/1143#issuecomment-698797524
+          #- os: windows
+          #  python-version: 3.9
+          #  looker: '7_20'
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Authenticate Artifact Repository
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
+
+      - name: Install docker on macos
+        if: ${{ matrix.os == 'macos' }}
+        uses: docker-practice/actions-setup-docker@v1
+        with:
+          docker_channel: stable
+          docker_buildx: false
+          docker_cli_experimental: disabled
+
+      - name: Bump docker for mac memory
+        if: ${{ matrix.os == 'macos' }}
+        run: |
+          osascript -e 'quit app "Docker"'
+          sed -i'.original' -e's/  "memoryMiB" : 2048/  "memoryMiB" : 8192/' ~/Library/Group\ Containers/group.com.docker/settings.json
+          open -g /Applications/Docker.app
+          # re-run docker startup logic from docker-practice/actions-setup-docker action
+          sleep 60
+          i=0
+          while ! docker system info &>/dev/null; do
+          (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
+          sleep 1
+          done
+          (( i )) && printf '\n'
+          echo "-- Docker is ready."
+
+      - name: Pull and run Looker docker image
+        # TODO: can we cache some layers of the image for faster download?
+        # we probably don't want to cache the final image for IP security...
+        run: |
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker logs -f looker-sdk-codegen-ci --until=30s &
+
+      - name: Install Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.6
+          check-latest: true
+
+      - name: Install dependencies
+        run: go install github.com/jstemmer/go-junit-report@latest
+
+      - name: Determine credentials version
+        # Prior to 21_18, each version had different credentials and a
+        # different secret. 21_20 and later all use the same credentials
+        # as 21_18. The parse_version.sh script parses the version and
+        # yields 21_12, 21_14, 21_16 etc for those versions but 21_18 for
+        # anything 21_18, 21_20, 22_0, etc.
+        #
+        # This can be factored out entirely once 21_18 is the earliest
+        # supported looker version.
+        run: |
+          echo "CREDENTIALS_VERSION=$(${{ github.workspace }}/.github/scripts/parse_version.sh <<< ${{ matrix.looker }})" >> $GITHUB_ENV
+
+      - name: Set up Looker credentials
+        # Load the correct credentials based on the version from
+        # the prior step.
+        run: |
+          echo "LOOKERSDK_CLIENT_ID=${{ secrets[format('LOOKERSDK_CLIENT_ID__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
+          echo "LOOKERSDK_CLIENT_SECRET=${{ secrets[format('LOOKERSDK_CLIENT_SECRET__{0}', env.CREDENTIALS_VERSION )] }}" >> $GITHUB_ENV
+
+      - name: Check that Looker is ready
+        run: |
+          ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
+      - name: Run integration tests
+        run: |
+          mkdir ${{ env.JUNIT_OUTPUT_DIR }}
+          cd go/integration
+          go test -v 2>&1 | go-junit-report > ../../${{ env.JUNIT_OUTPUT_DIR }}/${{ env.GO_JUNIT_OUTPUT_NAME }}
+
+      - name: Upload Go unit test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.JUNIT_ARTIFACT_DIR }}
+          path: ${{ env.JUNIT_OUTPUT_DIR }}
+
+  publish-test-results:
+    needs: [unit, integration]
+    if: success() || failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Publish All Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        with:
+          # Cosmetic issue with `check_name` being associated to the wrong
+          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+          check_name: Go Tests
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          report_individual_runs: true
+          hide_comments: orphaned commits
+          check_run_annotations_branch: '*'
+          files: 'artifacts/${{ env.JUNIT_ARTIFACT_DIR }}/*.xml'

@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import React, { FC, PropsWithChildren } from 'react'
+import type { FC, PropsWithChildren } from 'react'
+import React from 'react'
 import { DataTableCell, Span } from '@looker/components'
 
 import { getTableItemBottomBorder } from './utils'

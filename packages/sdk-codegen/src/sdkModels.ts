@@ -26,12 +26,8 @@
 
 import * as OAS from 'openapi3-ts'
 import md5 from 'blueimp-md5'
-import {
-  HttpMethod,
-  ResponseMode,
-  responseMode,
-  StatusCode,
-} from '@looker/sdk-rtl'
+import type { HttpMethod } from '@looker/sdk-rtl'
+import { ResponseMode, responseMode, StatusCode } from '@looker/sdk-rtl'
 
 /**
  * Handy specification references
@@ -54,7 +50,7 @@ const lookerValuesTag = 'x-looker-values'
 const enumTag = 'enum'
 
 /** simple symbol name pattern */
-const simpleName = /^[a-z_][a-z_\d]*$/im
+const simpleName = /^[a-z_][a-z_\d]*(\[])?$/im
 
 /**
  * Convenience enum for exploring types
@@ -98,7 +94,7 @@ export const typeOfType = (type: IType): TypeOfType => {
 /**
  * Does this name have special characters?
  * @param name to name check
- * @returns true if the name isn't a standard variable name
+ * @returns true if the name isn't a standard variable name, optionally ending with []
  */
 export const isSpecialName = (name: string) => {
   if (!name) return false
@@ -227,24 +223,26 @@ export type KeyedCollection<T> = Record<string, T>
 export type MethodList = KeyedCollection<IMethod>
 export type TypeList = KeyedCollection<IType>
 export type TagList = KeyedCollection<MethodList>
+export type TypeTagList = KeyedCollection<TypeList>
 export type PropertyList = KeyedCollection<IProperty>
 export type KeyList = Set<string>
 export type EnumValueType = string | number
 
 /**
  * Returns sorted string array for IKeylist type
- * @param {KeyList} keys Set of values
- * @returns {string[]} sorted string array of keys
+ * @param list Set of values
+ * @returns sorted string array of keys
  */
-export const keyValues = (keys: KeyList): string[] => {
-  return Array.from(keys.values()).sort()
+export const keyValues = (list: KeyList): string[] => {
+  if (!list) return []
+  return Array.from(list.values()).sort()
 }
 
 /**
  * Optionally quote a string if quotes are required
  * @param value to convert to string and optionally quote
- * @param {string} quoteChar defaults to "'"
- * @returns {string} the quoted or unquoted value
+ * @param quoteChar defaults to "'"
+ * @returns the quoted or unquoted value
  */
 export const mayQuote = (value: any, quoteChar = `'`): string => {
   const str = value.toString()
@@ -254,9 +252,9 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
 
 /**
  * Resolve a list of method keys into an IMethod[] in alphabetical order by name
- * @param {IApiModel} api model to use
- * @param {KeyList} refs references to models
- * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ * @param api model to use
+ * @param refs references to models
+ * @returns Populated method list. Anything not matched is skipped
  */
 export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
   const keys = keyValues(refs)
@@ -271,18 +269,85 @@ export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
 
 /**
  * Resolve a list of method keys into an IType[] in alphabetical order by name
- * @param {IApiModel} api model to use
- * @param {KeyList} refs references to models
- * @returns {IMethod[]} Populated method list. Anything not matched is skipped
+ * @param api model to use
+ * @param refs references to models
+ * @returns Populated method list. Anything not matched is skipped
  */
 export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs)
   const result: IType[] = []
   keys.forEach((k) => {
-    if (k in api.types) {
-      result.push(api.types[k])
+    const ref = api.types[k]
+    if (ref) {
+      result.push(ref)
     }
   })
+  return result
+}
+
+/**
+ * Resolves first method ref it can find
+ * @param api parsed spec
+ * @param type tree to walk
+ * @param stack call stack to prevent infinite recursion
+ */
+export const firstMethodRef = (
+  api: ApiModel,
+  type: IType,
+  stack: KeyList = new Set<string>()
+): IMethod => {
+  stack.add(type.name)
+
+  let method = methodRefs(api, type.methodRefs)[0]
+  if (!method) {
+    const parents = typeRefs(api, type.parentTypes)
+    for (const parent of parents) {
+      if (!stack.has(parent.name)) {
+        method = firstMethodRef(api, parent, stack)
+      }
+      if (method) break
+    }
+  }
+  return method
+}
+
+/**
+ * Returns the first method (if any) that uses the reference type for updating
+ * @param api parsed spec
+ * @param type to check for writing
+ * @param stack call stack to prevent infinite recursion
+ */
+const anyWriter = (
+  api: ApiModel,
+  type: IType,
+  stack: KeyList = new Set<string>()
+): IMethod | undefined => {
+  let result: IMethod | undefined
+  if (stack.has(type.name)) return undefined
+  stack.add(type.name)
+  const methods = methodRefs(api, type.methodRefs)
+  for (const method of methods) {
+    if (
+      method.httpMethod === 'POST' ||
+      method.httpMethod === 'PUT' ||
+      method.httpMethod === 'PATCH'
+    ) {
+      result = method
+      break
+    }
+  }
+  if (!result) {
+    const allTypes = new Set([...type.parentTypes, ...type.customTypes])
+    allTypes.delete(type.name)
+    const refs = typeRefs(api, allTypes)
+
+    for (const ref of refs) {
+      result = anyWriter(api, ref, stack)
+      if (result) {
+        break
+      }
+    }
+  }
   return result
 }
 
@@ -321,7 +386,7 @@ export const SearchAll: SearchCriteria = new Set([
   SearchCriterion.response,
 ])
 
-export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
+export const criteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set()
   criteria.forEach((name) => {
     const val = SearchCriterion[name as SearchCriterionTerm]
@@ -331,7 +396,7 @@ export const CriteriaToSet = (criteria: string[]): SearchCriteria => {
   return result
 }
 
-export const SetToCriteria = (criteria: SearchCriteria): string[] => {
+export const setToCriteria = (criteria: SearchCriteria): string[] => {
   const result: string[] = []
   criteria.forEach((value) => result.push(SearchCriterion[value]))
   return result
@@ -346,6 +411,20 @@ export interface ISearchResult {
 
 export interface ISymbolTable extends ISymbolList {
   resolveType(schema: OAS.SchemaObject): IType
+}
+
+/** Type of type */
+export enum MetaType {
+  /** scalar type */
+  Intrinsic = 'Intrinsic',
+  /** from API specification */
+  Specification = 'Specification',
+  /** writeable type */
+  Write = 'Write',
+  /** Request type for API methods */
+  Request = 'Request',
+  /** enumerated type */
+  Enumerated = 'Enumerated',
 }
 
 export interface IType extends ISymbol {
@@ -454,6 +533,11 @@ export interface IType extends ISymbol {
   intrinsic: boolean
 
   /**
+   * type classification
+   */
+  metaType: MetaType
+
+  /**
    * Hacky workaround for inexplicable instanceof failures
    * @param {string} className name of class to check
    * @returns {boolean} true if class name matches this.className
@@ -502,6 +586,38 @@ export interface IMethodResponse {
   search(rx: RegExp, criteria: SearchCriteria): boolean
 
   searchString(criteria: SearchCriteria): string
+}
+
+/**
+ * categorize all types using their method refs
+ *
+ * @param api parsed Api specification
+ * @param types to categorize
+ */
+export const tagTypes = (api: ApiModel, types: TypeList) => {
+  const typeTags = {}
+  Object.entries(types)
+    .filter(([_, type]) => !type.intrinsic)
+    .forEach(([name, type]) => {
+      let methods = methodRefs(api, type.methodRefs)
+      // If no method is found, look up parents until you get a method
+      if (methods.length === 0) {
+        const first = firstMethodRef(api, type)
+        if (first) methods = [first]
+      }
+      methods.forEach((method) => {
+        // The type is tagged for each method's tags
+        for (const tag of method.schema.tags) {
+          let list: TypeList = typeTags[tag]
+          if (!list) {
+            list = {}
+            typeTags[tag] = list
+          }
+          list[name] = type
+        }
+      })
+    })
+  return typeTags
 }
 
 class MethodResponse implements IMethodResponse {
@@ -1461,6 +1577,14 @@ export class Type implements IType {
     this.description = this.schema.description || ''
   }
 
+  get metaType(): MetaType {
+    if (this.intrinsic) return MetaType.Intrinsic
+    if (this instanceof RequestType) return MetaType.Request
+    if (this instanceof WriteType) return MetaType.Write
+    if (this instanceof EnumType) return MetaType.Enumerated
+    return MetaType.Specification
+  }
+
   get fullName(): string {
     return this.name
   }
@@ -1562,7 +1686,12 @@ export class Type implements IType {
   load(api: ApiModel): void {
     Object.entries(this.schema.properties || {}).forEach(
       ([propName, propSchema]) => {
-        const propType = api.resolveType(propSchema, undefined, propName)
+        const propType = api.resolveType(
+          propSchema,
+          undefined,
+          propName,
+          this.name
+        )
         // Using class name instead of instanceof check because TypeScript
         // linting complains about declaration order
         if (propType.instanceOf('EnumType')) {
@@ -1696,7 +1825,7 @@ export class EnumType extends Type implements IEnumType {
   constructor(
     public elementType: IType,
     schema: OAS.SchemaObject,
-    types: TypeList,
+    api: ApiModel,
     typeName?: string,
     methodName?: string
   ) {
@@ -1712,24 +1841,40 @@ export class EnumType extends Type implements IEnumType {
       )
     }
     if (methodName) {
-      this.description = `Type defined in ${methodName}\n${this.description}`
+      this.description = `${this.description}${
+        this.description ? ' ' : ''
+      }(Enum defined in ${methodName})`
     }
 
-    this.name = this.findName(types, typeName, methodName)
+    this.name = this.findName(api, typeName, methodName)
   }
 
-  private findName(types: TypeList, typeName?: string, methodName?: string) {
+  private findName(api: ApiModel, typeName?: string, methodName?: string) {
+    const hash = md5(this.asHashString())
+    const enums = api.getEnumList()
     let name = titleCase(this.name || typeName || 'Enum')
-    if (name in types) {
+    if (name in api.types) {
+      const matched = enums[hash]
+      if (matched?.name === name) {
+        /**
+         * this type is the same as the other enum of the same name, although description may vary.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         * since this has the same name, it will replace the previous version in the keyed collection of types
+         */
+        return name
+      }
+
       // Enum values don't match existing enum of this name. Pick a new name
       const baseName = methodName ? titleCase(`${methodName}_${name}`) : name
       let newName = baseName
       let i = 0
-      while (newName in types) {
+      while (newName in api.types) {
         newName = `${baseName}${++i}`
       }
       name = newName
     }
+    // register the enum hash value
+    enums[hash] = this
     return name
   }
 
@@ -1910,6 +2055,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
   methods: MethodList = {}
   types: TypeList = {}
   tags: TagList = {}
+  typeTags: TypeTagList = {}
 
   constructor(public readonly spec: OAS.OpenAPIObject) {
     ;[
@@ -2113,13 +2259,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
           return new DelimArrayType(resolved, schema)
         }
         if (this.schemaHasEnums(schema)) {
-          const num = new EnumType(
-            resolved,
-            schema,
-            this.types,
-            typeName,
-            methodName
-          )
+          const num = new EnumType(resolved, schema, this, typeName, methodName)
           this.registerEnum(num, methodName)
           const result = new ArrayType(num, schema)
           return result
@@ -2127,10 +2267,16 @@ export class ApiModel implements ISymbolTable, IApiModel {
         return new ArrayType(resolved, schema)
       }
       if (this.schemaHasEnums(schema)) {
+        const resolved = this.resolveType(
+          schema.type,
+          style,
+          typeName,
+          methodName
+        )
         const result = new EnumType(
-          this.resolveType(schema.type),
+          resolved,
           schema,
-          this.types,
+          this,
           typeName,
           methodName
         )
@@ -2182,23 +2328,27 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   registerEnum(type: IType, methodName?: string) {
     if (!(type instanceof EnumType)) return type
-    const hash = md5(type.asHashString())
 
-    if (hash in this.enumTypes) {
-      /**
-       * whatever type this was, it's now the same as the existing enum type
-       */
-      return this.enumTypes[hash]
+    if (type.name in this.types) {
+      const hash = md5(type.asHashString())
+      const matched = this.enumTypes[hash]
+      if (matched?.name === type.name) {
+        /**
+         * this type is the same as the other enum of the same name, although description may vary.
+         * The descriptions may vary, but we prioritize type name over description for identical enum values
+         */
+        return this.enumTypes[hash]
+      }
     }
 
     if (methodName) {
       const method = this.methods[methodName]
       if (method) {
+        // add a type reference for the method
         method.types.add(type.name)
         method.customTypes.add(type.name)
       }
     }
-    this.enumTypes[hash] = type
     this.types[type.name] = type
     return type
   }
@@ -2209,8 +2359,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * if needed, create the request type from method parameters
    * add to this.types collection
    *
-   * @param {IMethod} method for request type
-   * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
+   * @param method for request type
+   * @returns returns type if request type is needed, otherwise it doesn't
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
@@ -2239,6 +2389,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return result
   }
 
+  /**
+   * Read-only accessor for private enum collection used within this source file as a "friend"
+   */
+  getEnumList(): TypeList {
+    return this.enumTypes
+  }
+
   makeWriteableType(hash: string, type: IType) {
     const writer = new WriteType(this, type)
     this.types[writer.name] = writer
@@ -2248,6 +2405,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * a writeable type will need to be found or created if the passed type has read-only properties
+   * and is used by any method that updates the structure
    * @param type to check for read-only properties
    * @returns either writeable type or undefined
    */
@@ -2255,6 +2413,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (type.intrinsic) return undefined
     if (type.elementType?.intrinsic) return undefined
     if (type instanceof WriteType) return type
+    if (!anyWriter(this, type)) return undefined
     const props = Object.entries(type.properties).map(([, prop]) => prop)
     if (props.length === 0) return undefined
     const obj = type as Type
@@ -2313,6 +2472,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
     // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
+    this.typeTags = this.sortList(this.typeTags)
+    const typeKeys = Object.keys(this.typeTags)
+    typeKeys.forEach((key) => {
+      this.typeTags[key] = this.sortList(this.typeTags[key])
+    })
     // commented out to leave methods in natural order within the tag
     // const keys = Object.keys(this.tags).sort(localeSort)
     // keys.forEach((key) => {
@@ -2362,6 +2526,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       })
     }
     this.loadDynamicTypes()
+    this.typeTags = tagTypes(this, this.types)
     this.sortLists()
   }
 

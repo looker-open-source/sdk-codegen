@@ -23,9 +23,10 @@
  SOFTWARE.
 
  */
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { IHackerProps, IHackathonProps } from '../models'
+import type { IHackerProps, IHackathonProps } from '../models'
 import {
   HomeScene,
   UsersScene,
@@ -37,12 +38,14 @@ import {
   ProjectEditorScene,
   ResourceScene,
 } from '../scenes'
+
 export enum Routes {
   HOME = '/home',
   ADMIN = '/admin',
   JUDGING = '/judging',
   EDIT_JUDGING = '/judging/:id',
   PROJECTS = '/projects',
+  VIEW_PROJECT = '/projectview/:id',
   CREATE_PROJECT = '/projects/new',
   EDIT_PROJECT = '/projects/:id',
   USERS = '/users',
@@ -50,6 +53,7 @@ export enum Routes {
 }
 
 export interface AppRouterProps {
+  hacker: IHackerProps
   authorizedRoutes: Routes[]
 }
 
@@ -63,6 +67,7 @@ export const getAuthorizedRoutes = (
   if (hacker) {
     if (currentHackathon) {
       authorizedRoutes.push(Routes.PROJECTS)
+      authorizedRoutes.push(Routes.VIEW_PROJECT)
       authorizedRoutes.push(Routes.CREATE_PROJECT)
       authorizedRoutes.push(Routes.EDIT_PROJECT)
       if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
@@ -80,7 +85,7 @@ export const getAuthorizedRoutes = (
   return authorizedRoutes
 }
 
-export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
+export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
   <Switch>
     {authorizedRoutes.length > 0 && (
       <Redirect
@@ -91,7 +96,7 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes }) => (
     )}
     {authorizedRoutes.includes(Routes.HOME) && (
       <Route path={Routes.HOME} exact>
-        <HomeScene />
+        <HomeScene hacker={hacker} />
       </Route>
     )}
     {authorizedRoutes.includes(Routes.ADMIN) && (

@@ -24,10 +24,11 @@
 
  */
 
-import React, { FC } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 
 import { CodeDisplay } from '@looker/code-editor'
-import { CollapserCard } from '../Collapser'
+import { CollapserCard } from '@looker/run-it'
 
 interface DocSchemaProps {
   object: any

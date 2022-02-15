@@ -25,10 +25,12 @@
  */
 
 import nodeCrypto from 'crypto'
-import rq, { Request } from 'request'
+import type { Request } from 'request'
+import rq from 'request'
 
 import rp from 'request-promise-native'
-import { PassThrough, Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream'
+import { PassThrough } from 'readable-stream'
 import { StatusCodeError } from 'request-promise-native/errors'
 import {
   BaseTransport,
@@ -107,6 +109,7 @@ export class NodeTransport extends BaseTransport {
       const res = await req
       const resTyped = res as rq.Response
       rawResponse = {
+        method,
         url: resTyped.url || init.url.toString() || '',
         body: await resTyped.body,
         contentType: String(resTyped.headers['content-type']),
@@ -117,7 +120,7 @@ export class NodeTransport extends BaseTransport {
       }
       // Update OK with response statusCode check
       rawResponse.ok = this.ok(rawResponse)
-    } catch (e) {
+    } catch (e: any) {
       let statusMessage = `${method} ${path}`
       let statusCode = 404
       let contentType = 'text'
@@ -142,6 +145,7 @@ export class NodeTransport extends BaseTransport {
         contentType = 'application/json'
       }
       rawResponse = {
+        method,
         url: init.url.toString(),
         body,
         contentType,
@@ -198,7 +202,7 @@ export class NodeTransport extends BaseTransport {
     if (!error) {
       response = { ok: true, value: result }
     } else {
-      response = { ok: false, error }
+      response = { ok: false, error: error as TError }
     }
     return response
   }
@@ -221,7 +225,7 @@ export class NodeTransport extends BaseTransport {
         options
       )
       return await this.parseResponse<TSuccess, TError>(res)
-    } catch (e) {
+    } catch (e: any) {
       const error: ISDKError = {
         message:
           typeof e.message === 'string'

@@ -20,8 +20,8 @@ env:
   LOOKERSDK_BASE_URL: https://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
   TS_JUNIT_OUTPUT_DIR: results/sdk-codegen
-  LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_12 }}
-  LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_12 }}
+  LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_18 }}
+  LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_18 }}
 
 jobs:
   unit:
@@ -32,32 +32,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v2
+
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Repo Checkout
-        uses: actions/checkout@v2
-
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 15.x
-
-      - name: Install dependencies
-        run: |
-          yarn
-          yarn build
-          yarn lint:es --quiet
-
-      - name: Mock looker.ini
-        run: |
-          echo "[Looker]" > looker.ini
-          echo "base_url=https://localhost:20000" >> looker.ini
-          echo "verify_ssl=false" >> looker.ini
-          echo "timeout=30" >> looker.ini
-          echo "[Miner]" >> looker.ini
-          echo "base_url=." >> looker.ini
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
@@ -69,23 +50,58 @@ jobs:
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.x
-
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_12
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_0
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/21_12
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_0
           docker logs -f looker-sdk-codegen-ci --until=30s &
-          python ${{ github.workspace }}/.github/scripts/wait_for_looker.py
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn build
+          yarn lint:es --quiet
+          yarn dedupe:ci
+
+      - name: Mock looker.ini
+        run: |
+          echo "[Looker]" > looker.ini
+          echo "base_url=https://localhost:20000" >> looker.ini
+          echo "verify_ssl=false" >> looker.ini
+          echo "timeout=30" >> looker.ini
+          echo "[Miner]" >> looker.ini
+          echo "base_url=." >> looker.ini
+
+      - name: Check that Looker is ready
+        run: |
+          ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
+      # if this job fails before this point the required state check "Codegen Tests"
+      #  is never set, so we will set it manually.
+      - name: Report Failure
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Codegen Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "conclusion": "failure"
+          }' \
+          --fail
+        if: failure()
 
       - name: Run unit tests
-        run: yarn jest "packages/sdk-codegen(-utils|-scripts)/src" --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini

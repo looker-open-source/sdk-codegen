@@ -15,7 +15,7 @@ The access token gets google oauth access tokens using a service account. The re
 
 ## Environment variables
 
-The server will read an update environment variables from a .env file in this directory. The format the of .env file is as follows
+The server will read an update environment variables from a .env file in this directory. The format of the `.env` file is:
 
 ### Required
 

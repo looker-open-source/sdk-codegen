@@ -3,7 +3,6 @@ package rtl
 import (
 	"bytes"
 	"crypto/tls"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,6 +10,9 @@ import (
 	"os"
 	"reflect"
 	"time"
+
+	json "github.com/json-iterator/go"
+	extra "github.com/json-iterator/go/extra"
 )
 
 type AccessToken struct {
@@ -42,18 +44,19 @@ type AuthSession struct {
 func NewAuthSession(config ApiSettings) *AuthSession {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: config.VerifySsl,
+			InsecureSkipVerify: !config.VerifySsl,
 		},
 	}
 	return &AuthSession{
-		Config: config,
+		Config:    config,
 		Transport: tr,
 	}
 }
 
+// The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
 	return &AuthSession{
-		Config: config,
+		Config:    config,
 		Transport: transport,
 	}
 }
@@ -121,7 +124,6 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return err
 	}
 
-
 	cl := http.Client{
 		Transport: s.Transport,
 		Timeout:   time.Duration(s.Config.Timeout) * time.Second,
@@ -133,12 +135,12 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return err
 	}
 	defer res.Body.Close()
-	
 
 	if res.StatusCode < 200 || res.StatusCode > 226 {
 		return fmt.Errorf("response error: %s", res.Status)
 	}
 
+	extra.RegisterFuzzyDecoders()
 	err = json.NewDecoder(res.Body).Decode(&result)
 
 	return nil

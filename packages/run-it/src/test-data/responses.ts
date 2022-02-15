@@ -24,11 +24,12 @@
 
  */
 
-import { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse } from '@looker/sdk-rtl'
 
 export const testJsonResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/json/data',
-  headers: {},
+  headers: { 'content-type': 'application/json' },
   contentType: 'application/json',
   ok: true,
   statusCode: 200,
@@ -36,9 +37,72 @@ export const testJsonResponse: IRawResponse = {
   body: Buffer.from('[{"key1": "value1" }]'),
 }
 
+export const testOneRowComplexJson: IRawResponse = {
+  method: 'GET',
+  url: 'https://some/json/data',
+  headers: { 'content-type': 'application/json' },
+  contentType: 'application/json',
+  ok: true,
+  statusCode: 200,
+  statusMessage: 'OK',
+  body: Buffer.from(`{
+  "id": 520,
+  "view": "orders",
+  "fields": [
+    "orders.id",
+    "users.age",
+    "users.city"
+  ],
+  "pivots": [],
+  "fill_fields": [],
+  "filters": null,
+  "filter_expression": "",
+  "sorts": [],
+  "limit": "",
+  "column_limit": "",
+  "total": null,
+  "row_total": "",
+  "subtotals": [],
+  "vis_config": null,
+  "filter_config": null,
+  "visible_ui_sections": "",
+  "slug": "64zJjJw",
+  "client_id": "zfn3SwIaaHbJTbsXSJ0JO7",
+  "share_url": "https://localhost:9999/x/zfn3SwIaaHbJTbsXSJ0JO7",
+  "expanded_share_url": "https://localhost:9999/explore/thelook/orders?fields=orders.id,users.age,users.city&origin=share-expanded",
+  "url": "/explore/thelook/orders?fields=orders.id,users.age,users.city",
+  "has_table_calculations": false,
+  "model": "thelook",
+  "dynamic_fields": "",
+  "query_timezone": "",
+  "quick_calcs": null,
+  "analysis_config": null,
+  "can": {
+    "run": true,
+    "see_results": true,
+    "explore": true,
+    "create": true,
+    "show": true,
+    "cost_estimate": true,
+    "index": true,
+    "see_lookml": true,
+    "see_aggregate_table_lookml": true,
+    "see_derived_table_lookml": true,
+    "see_sql": true,
+    "save": true,
+    "generate_drill_links": true,
+    "download": true,
+    "download_unlimited": true,
+    "use_custom_fields": true,
+    "schedule": true
+  }
+}`),
+}
+
 export const testTextResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/text/data',
-  headers: {},
+  headers: { 'content-type': 'text/plain;charset=utf-8' },
   contentType: 'text/plain;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -47,8 +111,9 @@ export const testTextResponse: IRawResponse = {
 }
 
 export const testHtmlResponse: IRawResponse = {
+  method: 'GET',
   url: `https://some/html`,
-  headers: {},
+  headers: { 'content-type': 'text/html;charset=utf-8' },
   contentType: 'text/html;charset=utf-8',
   ok: true,
   statusCode: 200,
@@ -62,8 +127,9 @@ export const testHtmlResponse: IRawResponse = {
 }
 
 export const testSqlResponse: IRawResponse = {
+  method: 'GET',
   url: `https://some/sql`,
-  headers: {},
+  headers: { 'content-type': 'application/sql' },
   contentType: 'application/sql',
   ok: true,
   statusCode: 200,
@@ -76,8 +142,9 @@ LIMIT 500`),
 }
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
+  method: 'GET',
   url: `http://${contentType}`,
-  headers: {},
+  headers: { 'content-type': contentType },
   contentType,
   ok: true,
   statusCode: 200,
@@ -86,6 +153,7 @@ export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
 })
 
 export const testUnknownResponse: IRawResponse = {
+  method: 'GET',
   url: 'http://bogus',
   headers: {},
   contentType: 'bogus',
@@ -96,6 +164,7 @@ export const testUnknownResponse: IRawResponse = {
 }
 
 export const testErrorResponse: IRawResponse = {
+  method: 'GET',
   url: 'http://error',
   headers: {},
   body: Buffer.from(
@@ -108,6 +177,7 @@ export const testErrorResponse: IRawResponse = {
 }
 
 export const testBogusJsonResponse: IRawResponse = {
+  method: 'GET',
   url: 'https://some/json/data',
   headers: {},
   contentType: 'application/json',

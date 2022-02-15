@@ -1,25 +1,27 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 // INI parser from https://gist.github.com/jetmind/f776c0d223e4ac6aec1ff9389e874553
@@ -88,29 +90,29 @@ open class ApiConfig: IApiSettings {
         let config = parseConfig(self.fileName)
         return config[section ?? self.section] ?? [:]
     }
-    
+
     public func isConfigured() -> Bool {
         return (base_url != "" && api_version != "")
     }
-    
+
     public var base_url: String?
     public var api_version: String?
     public var headers: Headers?
     public var verify_ssl: Bool?
     public var timeout: Int?
     public var encoding: String?
-    
+
     private var fileName = ""
     private var section = "Looker"
-    
+
     public init() {
         self.assign(DefaultSettings())
     }
-    
+
     public init(_ settings: IApiSettings) {
         self.assign(settings)
     }
-    
+
     /// Get SDK settings from a configuration file with environment variable overrides
     public init(_ fileName: String = "", _ section: String = "Looker") throws {
         let fm = FileManager.default
@@ -147,7 +149,7 @@ open class ApiConfig: IApiSettings {
         self.headers = values?["headers"] as Any? ?? defaults.headers
         self.encoding = values?["encoding"] ?? defaults.encoding
     }
-    
+
     public func assign(_ values: IApiSettings) {
         let defaults = DefaultSettings()
         self.base_url = unquote(values.base_url) ?? defaults.base_url

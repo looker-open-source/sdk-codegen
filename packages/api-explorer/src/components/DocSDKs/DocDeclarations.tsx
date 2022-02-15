@@ -24,8 +24,9 @@
 
  */
 import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import { KeyedCollection } from '@looker/sdk-codegen'
-import React, { FC } from 'react'
+import type { KeyedCollection } from '@looker/sdk-codegen'
+import type { FC } from 'react'
+import React from 'react'
 import { DocCode } from '../DocCode'
 
 interface DocDeclarationsProps {

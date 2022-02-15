@@ -27,15 +27,16 @@
 import { LinkHeader, linkHeaderParser, pager, TotalCountHeader } from './paging'
 import { APIMethods } from './apiMethods'
 import { AuthSession } from './authSession'
-import { ApiSettings, IApiSettings } from './apiSettings'
+import type { IApiSettings } from './apiSettings'
+import { ApiSettings } from './apiSettings'
 import { BrowserTransport } from './browserTransport'
-import {
+import type {
   IRawResponse,
   IRequestProps,
   ITransport,
-  sdkOk,
   SDKResponse,
 } from './transport'
+import { sdkOk } from './transport'
 
 const firstUrl =
   'http://localhost/api/4.0/alerts/search?fields=id&limit=3&offset=0'
@@ -87,6 +88,7 @@ const totalCount = 10
 
 const mockRawResponse = (url?: string, body?: any): IRawResponse => {
   const result: IRawResponse = {
+    method: 'GET',
     ok: true,
     body: JSON.stringify(mockedRows),
     headers: { [LinkHeader]: allLinks, [TotalCountHeader]: ` ${totalCount}` },

@@ -25,12 +25,13 @@
  */
 
 /**
- * 415 API methods
+ * 437 API methods
  */
 
 import type {
   DelimArray,
   IDictionary,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
 } from '@looker/sdk-rtl'
@@ -40,6 +41,8 @@ import type {
  */
 import type {
   IAccessToken,
+  IAlert,
+  IAlertPatch,
   IApiSession,
   IApiVersion,
   IBackupConfiguration,
@@ -57,6 +60,7 @@ import type {
   IContentView,
   ICostEstimate,
   ICreateCostEstimate,
+  ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
   ICreateFolder,
   ICreateOAuthApplicationUserStateRequest,
@@ -91,6 +95,7 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEmbedParams,
+  IEmbedSecret,
   IEmbedSsoParams,
   IEmbedUrlResponse,
   IError,
@@ -164,6 +169,7 @@ import type {
   IRequestFolderChildrenSearch,
   IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
@@ -175,6 +181,7 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAlerts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -205,11 +212,16 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
   ISshServer,
   ISshTunnel,
+  ISupportAccessAddEntries,
+  ISupportAccessAllowlistEntry,
+  ISupportAccessEnable,
+  ISupportAccessStatus,
   ITheme,
   ITimezone,
   IUpdateCommand,
@@ -218,12 +230,14 @@ import type {
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
   IValidationError,
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
   IWriteBoard,
@@ -235,7 +249,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteCustomWelcomeEmail,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -243,6 +256,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDatagroup,
   IWriteDBConnection,
+  IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
   IWriteGroup,
@@ -267,6 +281,7 @@ import type {
   IWriteSamlConfig,
   IWriteScheduledPlan,
   IWriteSessionConfig,
+  IWriteSetting,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -276,7 +291,153 @@ import type {
   IWriteWhitelabelConfiguration,
 } from './models'
 
-export interface ILooker40SDK {
+export interface ILooker40SDK extends IAPIMethods {
+  //#region Alert: Alert
+
+  /**
+   * ### Search Alerts
+   *
+   * GET /alerts/search -> IAlert[]
+   *
+   * @param request composed interface "IRequestSearchAlerts" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_alerts(
+    request: IRequestSearchAlerts,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert[], IError>>
+
+  /**
+   * ### Get an alert by a given alert ID
+   *
+   * GET /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  get_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError>>
+
+  /**
+   * ### Update an alert
+   * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * #
+   *
+   * PUT /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  update_alert(
+    alert_id: number,
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>>
+
+  /**
+   * ### Update select alert fields
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+   * #
+   *
+   * PATCH /alerts/{alert_id} -> IAlert
+   *
+   * @param alert_id ID of an alert
+   * @param body Partial<IAlertPatch>
+   * @param options one-time API call overrides
+   *
+   */
+  update_alert_field(
+    alert_id: number,
+    body: Partial<IAlertPatch>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>>
+
+  /**
+   * ### Delete an alert by a given alert ID
+   *
+   * DELETE /alerts/{alert_id} -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  delete_alert(
+    alert_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>>
+
+  /**
+   * ### Create a new alert and return details of the newly created object
+   *
+   * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   *
+   * Example Request:
+   * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+   * ```
+   * {
+   *   "cron": "0 5 * * *",
+   *   "custom_title": "Alert when LA inventory is low",
+   *   "dashboard_element_id": 103,
+   *   "applied_dashboard_filters": [
+   *     {
+   *       "filter_title": "Warehouse Name",
+   *       "field_name": "distribution_centers.name",
+   *       "filter_value": "Los Angeles CA",
+   *       "filter_description": "is Los Angeles CA"
+   *     }
+   *   ],
+   *   "comparison_type": "LESS_THAN",
+   *   "destinations": [
+   *     {
+   *       "destination_type": "EMAIL",
+   *       "email_address": "test@test.com"
+   *     }
+   *   ],
+   *   "field": {
+   *     "title": "Number on Hand",
+   *     "name": "inventory_items.number_on_hand"
+   *   },
+   *   "is_disabled": false,
+   *   "is_public": true,
+   *   "threshold": 1000
+   * }
+   * ```
+   *
+   * POST /alerts -> IAlert
+   *
+   * @param body Partial<IWriteAlert>
+   * @param options one-time API call overrides
+   *
+   */
+  create_alert(
+    body: Partial<IWriteAlert>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlert, IError | IValidationError>>
+
+  /**
+   * ### Enqueue an Alert by ID
+   *
+   * POST /alerts/{alert_id}/enqueue -> void
+   *
+   * @param alert_id ID of an alert
+   * @param force Whether to enqueue an alert again if its already running.
+   * @param options one-time API call overrides
+   *
+   */
+  enqueue_alert(
+    alert_id: number,
+    force?: boolean,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>>
+
+  //#endregion Alert: Alert
+
   //#region ApiAuth: API Authentication
 
   /**
@@ -366,6 +527,36 @@ export interface ILooker40SDK {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   *
+   * The value of the `secret` field will be set by Looker and returned.
+   *
+   * POST /embed_config/secrets -> IEmbedSecret
+   *
+   * @param body Partial<IWriteEmbedSecret>
+   * @param options one-time API call overrides
+   *
+   */
+  create_embed_secret(
+    body?: Partial<IWriteEmbedSecret>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IEmbedSecret, IError | IValidationError>>
+
+  /**
+   * ### Delete an embed secret.
+   *
+   * DELETE /embed_config/secrets/{embed_secret_id} -> string
+   *
+   * @param embed_secret_id Id of Embed Secret
+   * @param options one-time API call overrides
+   *
+   */
+  delete_embed_secret(
+    embed_secret_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>
 
   /**
    * ### Create SSO Embed URL
@@ -996,12 +1187,12 @@ export interface ILooker40SDK {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
@@ -1012,12 +1203,12 @@ export interface ILooker40SDK {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>>
 
@@ -1046,6 +1237,100 @@ export interface ILooker40SDK {
     body: Partial<IWriteSessionConfig>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISessionConfig, IError | IValidationError>>
+
+  /**
+   * ### Get Support Access Allowlist Users
+   *
+   * Returns the users that have been added to the Support Access Allowlist
+   *
+   * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  get_support_access_allowlist_entries(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessAllowlistEntry[], IError>>
+
+  /**
+   * ### Add Support Access Allowlist Users
+   *
+   * Adds a list of emails to the Allowlist, using the provided reason
+   *
+   * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
+   *
+   * @param body Partial<ISupportAccessAddEntries>
+   * @param options one-time API call overrides
+   *
+   */
+  add_support_access_allowlist_entries(
+    body: Partial<ISupportAccessAddEntries>,
+    options?: Partial<ITransportSettings>
+  ): Promise<
+    SDKResponse<ISupportAccessAllowlistEntry[], IError | IValidationError>
+  >
+
+  /**
+   * ### Delete Support Access Allowlist User
+   *
+   * Deletes the specified Allowlist Entry Id
+   *
+   * DELETE /support_access/allowlist/{entry_id} -> string
+   *
+   * @param entry_id Id of Allowlist Entry
+   * @param options one-time API call overrides
+   *
+   */
+  delete_support_access_allowlist_entry(
+    entry_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>
+
+  /**
+   * ### Enable Support Access
+   *
+   * Enables Support Access for the provided duration
+   *
+   * PUT /support_access/enable -> ISupportAccessStatus
+   *
+   * @param body Partial<ISupportAccessEnable>
+   * @param options one-time API call overrides
+   *
+   */
+  enable_support_access(
+    body: Partial<ISupportAccessEnable>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError | IValidationError>>
+
+  /**
+   * ### Disable Support Access
+   *
+   * Disables Support Access immediately
+   *
+   * PUT /support_access/disable -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  disable_support_access(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>>
+
+  /**
+   * ### Support Access Status
+   *
+   * Returns the current Support Access Status
+   *
+   * GET /support_access/status -> ISupportAccessStatus
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  support_access_status(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISupportAccessStatus, IError>>
 
   /**
    * ### Get currently locked-out users.
@@ -1645,6 +1930,8 @@ export interface ILooker40SDK {
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
    *
+   * @deprecated
+   *
    * @param options one-time API call overrides
    *
    */
@@ -1657,13 +1944,15 @@ export interface ILooker40SDK {
    *
    * PATCH /custom_welcome_email -> ICustomWelcomeEmail
    *
-   * @param body Partial<IWriteCustomWelcomeEmail>
+   * @deprecated
+   *
+   * @param body Partial<ICustomWelcomeEmail>
    * @param send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
    * @param options one-time API call overrides
    *
    */
   update_custom_welcome_email(
-    body: Partial<IWriteCustomWelcomeEmail>,
+    body: Partial<ICustomWelcomeEmail>,
     send_test_welcome_email?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICustomWelcomeEmail, IError | IValidationError>>
@@ -1843,23 +2132,66 @@ export interface ILooker40SDK {
   ): Promise<SDKResponse<IMobileSettings, IError>>
 
   /**
+   * ### Get Looker Settings
+   *
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   *
+   * GET /setting -> ISetting
+   *
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_setting(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISetting, IError | IValidationError>>
+
+  /**
    * ### Configure Looker Settings
    *
    * Available settings are:
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
+   *  - whitelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   *
+   * See the `Setting` type for more information on the specific values that can be configured.
    *
    * PATCH /setting -> ISetting
    *
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+   * @param body Partial<IWriteSetting>
+   * @param fields Requested fields
    * @param options one-time API call overrides
    *
    */
   set_setting(
-    body: Partial<ISetting>,
+    body: Partial<IWriteSetting>,
+    fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISetting, IError | IValidationError>>
+
+  /**
+   * ### Get current SMTP status.
+   *
+   * GET /smtp_status -> ISmtpStatus
+   *
+   * @param fields Include only these fields in the response
+   * @param options one-time API call overrides
+   *
+   */
+  smtp_status(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISmtpStatus, IError>>
 
   /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -1890,9 +2222,9 @@ export interface ILooker40SDK {
   /**
    * ### Get an API specification for this Looker instance.
    *
-   * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+   * The specification is returned as a JSON document in Swagger 2.x format
    *
-   * GET /api_spec/{api_version}/{specification} -> string
+   * GET /api_spec/{api_version}/{specification} -> any
    *
    * @param api_version API version
    * @param specification Specification name. Typically, this is "swagger.json"
@@ -1903,13 +2235,15 @@ export interface ILooker40SDK {
     api_version: string,
     specification: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>
+  ): Promise<SDKResponse<any, IError>>
 
   /**
    * ### This feature is enabled only by special license.
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    *
    * GET /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -1924,6 +2258,8 @@ export interface ILooker40SDK {
    * ### Update the whitelabel configuration
    *
    * PUT /whitelabel_configuration -> IWhitelabelConfiguration
+   *
+   * @deprecated
    *
    * @param body Partial<IWriteWhitelabelConfiguration>
    * @param options one-time API call overrides
@@ -2865,6 +3201,27 @@ export interface ILooker40SDK {
   ): Promise<SDKResponse<IDashboardLookml, IError>>
 
   /**
+   * ### Move an existing dashboard
+   *
+   * Moves a dashboard to a specified folder, and returns the moved dashboard.
+   *
+   * `dashboard_id` and `folder_id` are required.
+   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   *
+   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
+   *
+   * @param dashboard_id Dashboard id to move.
+   * @param folder_id Folder id to move to.
+   * @param options one-time API call overrides
+   *
+   */
+  move_dashboard(
+    dashboard_id: string,
+    folder_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboard, IError | IValidationError>>
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -2885,27 +3242,6 @@ export interface ILooker40SDK {
   copy_dashboard(
     dashboard_id: string,
     folder_id?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDashboard, IError | IValidationError>>
-
-  /**
-   * ### Move an existing dashboard
-   *
-   * Moves a dashboard to a specified folder, and returns the moved dashboard.
-   *
-   * `dashboard_id` and `folder_id` are required.
-   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-   *
-   * PATCH /dashboards/{dashboard_id}/move -> IDashboard
-   *
-   * @param dashboard_id Dashboard id to move.
-   * @param folder_id Folder id to move to.
-   * @param options one-time API call overrides
-   *
-   */
-  move_dashboard(
-    dashboard_id: string,
-    folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard, IError | IValidationError>>
 
@@ -3316,6 +3652,38 @@ export interface ILooker40SDK {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -3382,7 +3750,9 @@ export interface ILooker40SDK {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -4126,7 +4496,7 @@ export interface ILooker40SDK {
    *
    */
   look(
-    look_id: number,
+    look_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError>>
@@ -4162,7 +4532,7 @@ export interface ILooker40SDK {
    *
    */
   update_look(
-    look_id: number,
+    look_id: string,
     body: Partial<IWriteLookWithQuery>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -4184,7 +4554,7 @@ export interface ILooker40SDK {
    *
    */
   delete_look(
-    look_id: number,
+    look_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -4239,7 +4609,7 @@ export interface ILooker40SDK {
    *
    */
   copy_look(
-    look_id: number,
+    look_id: string,
     folder_id?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
@@ -4260,7 +4630,7 @@ export interface ILooker40SDK {
    *
    */
   move_look(
-    look_id: number,
+    look_id: string,
     folder_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookWithQuery, IError | IValidationError>>
@@ -4268,20 +4638,6 @@ export interface ILooker40SDK {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>>
 
   /**
    * ### Get information about all lookml models.
@@ -4381,6 +4737,24 @@ export interface ILooker40SDK {
 
   /**
    * ### Field name suggestions for a model and view
+   *
+   * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+   *
+   * ```ruby
+   * {'users.age': '>=60'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '<30'}
+   * ```
+   *
+   * or
+   *
+   * ```ruby
+   * {'users.age': '=50'}
+   * ```
    *
    * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> IModelFieldSuggestions
    *
@@ -5779,6 +6153,32 @@ export interface ILooker40SDK {
     render_task_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
+
+  /**
+   * ### Create a new task to render a dashboard element to an image.
+   *
+   * Returns a render task object.
+   * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+   * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+   *
+   * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> IRenderTask
+   *
+   * @param dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+   * @param result_format Output type: png or jpg
+   * @param width Output width in pixels
+   * @param height Output height in pixels
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  create_dashboard_element_render_task(
+    dashboard_element_id: string,
+    result_format: string,
+    width: number,
+    height: number,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IRenderTask, IError | IValidationError>>
 
   //#endregion RenderTask: Manage Render Tasks
 
@@ -7471,20 +7871,18 @@ export interface ILooker40SDK {
   /**
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
+   * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param user_id id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   create_user_credentials_api3(
     user_id: number,
-    body?: Partial<ICredentialsApi3>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>>
+  ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>>
 
   /**
    * ### Embed login information for the specified user.
@@ -7761,6 +8159,29 @@ export interface ILooker40SDK {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmail, IError>>
+
+  /**
+   * ### Change a disabled user's email addresses
+   *
+   * Allows the admin to change the email addresses for all the user's
+   * associated credentials.  Will overwrite all associated email addresses with
+   * the value supplied in the 'email' body param.
+   * The user's 'is_disabled' status must be true.
+   *
+   * POST /users/{user_id}/update_emails -> IUser
+   *
+   * @param user_id Id of user
+   * @param body Partial<IUserEmailOnly>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  wipeout_user_emails(
+    user_id: number,
+    body: Partial<IUserEmailOnly>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUser, IError | IValidationError>>
 
   /**
    * Create an embed user from an external user ID

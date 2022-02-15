@@ -24,18 +24,16 @@
 
  */
 
-import {
-  IRowModelProps,
-  ITabTable,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { Project } from './Projects'
-import { User } from './Users'
-import { getActiveSheet, SheetData } from './SheetData'
-import { Hacker, IHacker } from './Hacker'
-import { Hackathon } from './Hackathons'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { Project } from './Projects'
+import type { User } from './Users'
+import type { SheetData } from './SheetData'
+import { getActiveSheet } from './SheetData'
+import type { Hacker, IHacker } from './Hacker'
+import type { Hackathon } from './Hackathons'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IJudgingProps extends IRowModelProps {
@@ -49,7 +47,9 @@ export interface IJudgingProps extends IRowModelProps {
   notes: string
   $title: string
   $description: string
-  $more_info: string
+  $project_type: string
+  $contestant: boolean
+  $technologies: string[]
   $judge_name: string
   $members: string[]
 }
@@ -74,8 +74,10 @@ export class Judging extends SheetRow<IJudging> {
   notes = ''
   $title = ''
   $description = ''
-  $more_info = ''
   $judge_name = ''
+  $project_type = ''
+  $contestant = false
+  $technologies: string[] = []
   $members: string[] = []
 
   constructor(values?: any) {
@@ -97,10 +99,12 @@ export class Judging extends SheetRow<IJudging> {
     }
     const p = data.projects?.find(this.project_id) as Project
     if (p) {
+      this.$project_type = p.project_type
+      this.$contestant = p.contestant
+      this.$technologies = p.technologies
       this.$title = p.title
       this.$description = p.description
       this.$members = p.$members
-      this.$more_info = p.more_info
     }
   }
 

@@ -24,16 +24,12 @@
 
  */
 
-import {
-  IRowModelProps,
-  ITabTable,
-  SheetError,
-  SheetSDK,
-  WhollySheet,
-} from '@looker/wholly-sheet'
-import { ISheetRow, SheetRow } from './SheetRow'
-import { SheetData } from './SheetData'
-import { User } from './Users'
+import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
+import { SheetError, WhollySheet } from '@looker/wholly-sheet'
+import type { ISheetRow } from './SheetRow'
+import { SheetRow } from './SheetRow'
+import type { SheetData } from './SheetData'
+import type { User } from './Users'
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITeamMemberProps extends IRowModelProps {

@@ -24,18 +24,19 @@
 
  */
 import React from 'react'
-import { CriteriaToSet } from '@looker/sdk-codegen'
+import { criteriaToSet } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
-import { act, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 
-import { specs, specState } from '../../test-data'
-import { renderWithRouter, renderWithSearchAndRouter } from '../../test-utils'
-import { defaultSearchState } from '../../reducers'
+import { getLoadedSpecs } from '../../test-data'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
+const spec = getLoadedSpecs()['4.0']
+
 describe('SideNav', () => {
-  const specDispatch = jest.fn()
   const allTagsPattern = /^(Auth|ApiAuth)$/
   const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
 
@@ -54,9 +55,7 @@ describe('SideNav', () => {
   })
 
   test('it renders search, methods tab and types tab', () => {
-    renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
-    )
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
     const search = screen.getByLabelText('Search')
     expect(search).toHaveProperty('placeholder', 'Search')
     const tabs = screen.getAllByRole('tab', {
@@ -64,18 +63,14 @@ describe('SideNav', () => {
     })
     expect(tabs).toHaveLength(2)
     expect(tabs[0]).toHaveTextContent(
-      `Methods (${countMethods(specState.api.tags)})`
+      `Methods (${countMethods(spec.api!.tags)})`
     )
 
-    expect(tabs[1]).toHaveTextContent(
-      `Types (${countTypes(specState.api.types)})`
-    )
+    expect(tabs[1]).toHaveTextContent(`Types (${countTypes(spec.api!.types)})`)
   })
 
   test('Methods tab is the default active tab', () => {
-    renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
-    )
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
@@ -83,60 +78,37 @@ describe('SideNav', () => {
 
     userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
 
-    // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
-    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
-      2
-    )
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
 
   test('url determines active tab', () => {
-    renderWithRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />,
-      ['/3.1/types']
-    )
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/types'])
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(0)
-    expect(screen.getAllByRole('link', { name: allTypesPattern })).toHaveLength(
-      2
-    )
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
 })
 
 describe('Search', () => {
-  const specDispatch = jest.fn()
-
   test('it filters methods and types on input', async () => {
-    renderWithSearchAndRouter(
-      <SideNav specs={specs} spec={specState} specDispatch={specDispatch} />
-    )
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    jest.spyOn(specState.api, 'search')
-    await act(async () => {
-      /** Pasting to avoid triggering search multiple times */
-      await userEvent.paste(input, searchPattern)
-      await waitFor(() => {
-        expect(specState.api.search).toHaveBeenCalledWith(
-          searchPattern,
-          CriteriaToSet(defaultSearchState.criteria)
-        )
-        const methods = screen.getByRole('tab', { name: 'Methods (1)' })
-        const types = screen.getByRole('tab', { name: 'Types (1)' })
-        userEvent.click(methods)
-        expect(
-          screen.getByRole('heading', {
-            name: specState.api.tags.Auth.create_sso_embed_url.summary,
-          })
-        ).toBeInTheDocument()
-
-        userEvent.click(types)
-        expect(
-          screen.getByRole('heading', {
-            name: specState.api.types.EmbedSsoParams.name,
-          })
-        ).toBeInTheDocument()
-      })
+    jest.spyOn(spec.api!, 'search')
+    /** Pasting to avoid triggering search multiple times */
+    await userEvent.paste(input, searchPattern)
+    await waitFor(() => {
+      expect(spec.api!.search).toHaveBeenCalledWith(
+        searchPattern,
+        criteriaToSet(defaultSettingsState.searchCriteria)
+      )
+      const methods = screen.getByRole('tab', { name: 'Methods (1)' })
+      userEvent.click(methods)
+      expect(
+        screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
+      ).toBeInTheDocument()
+      const types = screen.getByRole('tab', { name: 'Types (1)' })
+      userEvent.click(types)
+      expect(screen.getByText('EmbedSso')).toBeInTheDocument()
     })
   })
 })

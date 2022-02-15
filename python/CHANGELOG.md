@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.20.0...looker_sdk-v22.0.0) (2022-02-14)
+
+
+### Features
+
+* SDK build for 22.0. ([#959](https://www.github.com/looker-open-source/sdk-codegen/issues/959)) ([de651b3](https://www.github.com/looker-open-source/sdk-codegen/commit/de651b373978fd3689429c0cbdb364a2820fe211))
+
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.20.0...looker_sdk-v21.20.0) (2022-01-27)
+
+
+### Bug Fixes
+
+* restrict python version and update cattrs version restriction ([#949](https://www.github.com/looker-open-source/sdk-codegen/issues/949)) ([ba28ac6](https://www.github.com/looker-open-source/sdk-codegen/commit/ba28ac6a288b140b906ab8f164aa65b1389027a3))
+
+## [21.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.18.0...looker_sdk-v21.20.0) (2021-11-10)
+
+
+### Features
+
+* Looker 21.20 bindings ([#899](https://www.github.com/looker-open-source/sdk-codegen/issues/899)) ([304d0d0](https://www.github.com/looker-open-source/sdk-codegen/commit/304d0d0688349efad0499d37609605e14df7e97d))
+
+## [21.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.16.0...looker_sdk-v21.18.0) (2021-10-24)
+
+
+### Features
+
+* Looker 21.18 bindings ([#865](https://www.github.com/looker-open-source/sdk-codegen/issues/865)) ([fa98888](https://www.github.com/looker-open-source/sdk-codegen/commit/fa988886c2d88290044d2818de7f549ca28b49bc))
+
+## [21.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.14.0...looker_sdk-v21.16.0) (2021-10-19)
+
+
+### Features
+
+* 21.16 release ([#859](https://www.github.com/looker-open-source/sdk-codegen/issues/859)) ([0b4385c](https://www.github.com/looker-open-source/sdk-codegen/commit/0b4385c83c5225acf0a9b0c76f9e890600a449af))
+
+## [21.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.2...looker_sdk-v21.14.0) (2021-09-01)
+
+
+### Features
+
+* Looker 21.14 release ([#807](https://www.github.com/looker-open-source/sdk-codegen/issues/807)) ([99db26d](https://www.github.com/looker-open-source/sdk-codegen/commit/99db26dcd812135d775e61e495c98a66057c6f54))
+
+### [21.12.2](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.1...looker_sdk-v21.12.2) (2021-08-11)
+
+
+### Bug Fixes
+
+* relax python dict key access ([#791](https://www.github.com/looker-open-source/sdk-codegen/issues/791)) ([d923c2f](https://www.github.com/looker-open-source/sdk-codegen/commit/d923c2faf3bde822307fa3d4f3367f270f47b49e)), closes [#778](https://www.github.com/looker-open-source/sdk-codegen/issues/778)
+
+### [21.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.12.0...looker_sdk-v21.12.1) (2021-08-09)
+
+
+### Bug Fixes
+
+* remove python setup.py author_email ([#787](https://www.github.com/looker-open-source/sdk-codegen/issues/787)) ([7939a73](https://www.github.com/looker-open-source/sdk-codegen/commit/7939a7397c44864e1f48cea7a408ce1bfdef9782))
+
+## [21.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.10.1...looker_sdk-v21.12.0) (2021-08-06)
+
+
+### Features
+
+* Looker 21.12 bindings ([#782](https://www.github.com/looker-open-source/sdk-codegen/issues/782)) ([a00b908](https://www.github.com/looker-open-source/sdk-codegen/commit/a00b908e6fee79250c4c1ffb1b1e8915d58dd633))
+
+
+### Bug Fixes
+
+* documentation refs and notes for Typescript SDK and more ([#783](https://www.github.com/looker-open-source/sdk-codegen/issues/783)) ([b2487ea](https://www.github.com/looker-open-source/sdk-codegen/commit/b2487ea4a113ce17a080ccab9b4c4139813e8810))
+
 ### [21.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.10.0...looker_sdk-v21.10.1) (2021-07-30)
 
 

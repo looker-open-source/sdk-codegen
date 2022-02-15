@@ -24,7 +24,8 @@
 
  */
 import { theme } from '@looker/components'
-import { Language, Prism } from 'prism-react-renderer'
+import type { Language } from 'prism-react-renderer'
+import { Prism } from 'prism-react-renderer'
 import blockTheme from 'prism-react-renderer/themes/vsDark'
 import inlineTheme from 'prism-react-renderer/themes/github'
 
@@ -61,7 +62,7 @@ export const getPrismLanguage = (language: string): Language => {
  * applies package overrides to the default theme. Inline CodeDisplay uses githubLight theme, else uses vsCodeDark theme.
  * @returns modified prism theme object
  */
-export const getOverridenTheme = (transparent: boolean, inline: boolean) => {
+export const getOverriddenTheme = (transparent: boolean, inline: boolean) => {
   if (inline) {
     inlineTheme.plain.backgroundColor = theme.colors.ui1
     inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`

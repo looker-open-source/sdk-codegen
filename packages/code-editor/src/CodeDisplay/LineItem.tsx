@@ -24,8 +24,9 @@
 
  */
 
-import React, { FC } from 'react'
-import { LineItemProps } from './types'
+import type { FC } from 'react'
+import React from 'react'
+import type { LineItemProps } from './types'
 
 /**
  * Takes a 'line of code' as a list of Tokens and returns syntax highlighting styled spans

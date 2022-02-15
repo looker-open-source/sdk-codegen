@@ -1,0 +1,42 @@
+{
+  "name": "@looker/extension-utils",
+  "version": "0.1.4",
+  "description": "Looker Extension Utilities",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": false,
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/extension-utils"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/extension-utils",
+  "scripts": {
+    "watch": "yarn lerna exec --scope @looker/extension-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "dependencies": {
+    "@looker/components": "^2.8.1",
+    "@looker/extension-sdk": "^22.0.0",
+    "@looker/extension-sdk-react": "^22.0.0",
+    "@looker/sdk-rtl": "^21.3.2",
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/react-router": "^5.1.18",
+    "@types/redux": "^3.6.0",
+    "webpack-bundle-analyzer": "^4.2.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  }
+}

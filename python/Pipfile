@@ -8,6 +8,7 @@ pytest = "*"
 ptpython = "*"
 ipython = "*"
 mypy = "*"
+types-requests = "*"
 pytest-cov = "*"
 black = "*"
 flake8 = "*"
@@ -26,11 +27,12 @@ tox-pyenv = "*"
 [packages]
 requests = "*"
 attrs = "*"
-cattrs = "==1.1.2"
+cattrs = ">=1.3"
 python-dateutil = "*"
 
 [requires]
-python_full_version = "3.8.2"
+# pin python at 3.9.9 due to https://github.com/looker-open-source/sdk-codegen/issues/944
+python_full_version = "3.9.9"
 
 [pipenv]
 # for `black`

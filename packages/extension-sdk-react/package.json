@@ -1,10 +1,10 @@
 {
   "name": "@looker/extension-sdk-react",
-  "version": "21.10.2",
+  "version": "22.0.0",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
-  "sideEffects": "false",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/sdk-rtl"
+    "directory": "packages/extension-sdk-react"
   },
   "author": "Looker",
   "license": "MIT",
@@ -43,9 +43,9 @@
     "react-router-dom": "^5.1.2"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^21.10.2",
-    "@looker/sdk": "^21.10.2",
-    "@looker/sdk-rtl": "^21.0.19",
+    "@looker/extension-sdk": "^22.0.0",
+    "@looker/sdk": "^22.0.0",
+    "@looker/sdk-rtl": "^21.3.2",
     "history": "^4.9.0",
     "lodash": "^4.17.20"
   },

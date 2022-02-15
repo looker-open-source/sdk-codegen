@@ -24,68 +24,88 @@
 
  */
 
-import React, { FC, useContext, useEffect, useState, Dispatch } from 'react'
+import type { FC } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import {
-  Heading,
   TabList,
   Tab,
   TabPanel,
   TabPanels,
   useTabs,
   InputSearch,
-  SpaceVertical,
 } from '@looker/components'
-import { SpecList, CriteriaToSet, ISearchResult } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
+import type {
+  SpecItem,
+  ISearchResult,
+  ApiModel,
+  TagList,
+  TypeTagList,
+} from '@looker/sdk-codegen'
+import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 
-import { SearchContext } from '../../context'
-import { setPattern, SpecState, SpecAction } from '../../reducers'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-import { SelectorContainer } from '../SelectorContainer'
-import { SideNavTags } from './SideNavTags'
-import { SideNavTypes } from './SideNavTypes'
+import { selectSearchCriteria, useSettingActions } from '../../state'
+import { SideNavMethodTags } from './SideNavMethodTags'
+import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
 
+interface SideNavState {
+  tags: TagList
+  typeTags: TypeTagList
+  methodCount: number
+  typeCount: number
+  searchResults?: ISearchResult
+}
+
 interface SideNavProps {
   headless?: boolean
-  /** Specs to choose from */
-  specs: SpecList
   /** Current selected spec */
-  spec: SpecState
-  /** Spec state setter */
-  specDispatch: Dispatch<SpecAction>
+  spec: SpecItem
 }
 
-interface SideNavParams {
-  sideNavTab: string
-}
-
-export const SideNav: FC<SideNavProps> = ({
-  headless = false,
-  specs,
-  spec,
-  specDispatch,
-}) => {
-  const api = spec.api
+export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
+  const history = useHistory()
+  const location = useLocation()
   const specKey = spec.key
   const tabNames = ['methods', 'types']
-  const match = useRouteMatch<SideNavParams>(`/:specKey/:sideNavTab?`)
-  let defaultIndex = tabNames.indexOf('methods')
-  if (match && match.params.sideNavTab) {
-    defaultIndex = tabNames.indexOf(match.params.sideNavTab)
+  const pathParts = location.pathname.split('/')
+  const sideNavTab = pathParts[1] === 'diff' ? pathParts[3] : pathParts[2]
+  let defaultIndex = tabNames.indexOf(sideNavTab)
+  if (defaultIndex < 0) {
+    defaultIndex = tabNames.indexOf('methods')
   }
-  const tabs = useTabs({ defaultIndex })
-  const { searchSettings, setSearchSettings } = useContext(SearchContext)
-  const [pattern, setSearchPattern] = useState(searchSettings.pattern)
+  const onTabChange = (index: number) => {
+    const parts = location.pathname.split('/')
+    if (parts[1] === 'diff') {
+      if (parts[3] !== tabNames[index]) {
+        parts[3] = tabNames[index]
+        history.push(parts.join('/'))
+      }
+    } else {
+      if (parts[2] !== tabNames[index]) {
+        parts[2] = tabNames[index]
+        history.push(parts.join('/'))
+      }
+    }
+  }
+  const tabs = useTabs({ defaultIndex, onChange: onTabChange })
+  const searchCriteria = useSelector(selectSearchCriteria)
+  const { setSearchPatternAction } = useSettingActions()
+
+  const [pattern, setSearchPattern] = useState('')
   const debouncedPattern = useDebounce(pattern, 250)
-  const [searchResults, setSearchResults] = useState<ISearchResult>()
-  const searchCriteria = CriteriaToSet(searchSettings.criteria)
-  const [tags, setTags] = useState(api.tags || {})
-  const [types, setTypes] = useState(api.types || {})
-  const [methodCount, setMethodCount] = useState(countMethods(tags))
-  const [typeCount, setTypeCount] = useState(countTypes(types))
+  const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
+    tags: spec?.api?.tags || {},
+    typeTags: spec?.api?.typeTags || {},
+    methodCount: countMethods(spec?.api?.tags || {}),
+    typeCount: countTypes(spec?.api?.types || {}),
+    searchResults: undefined,
+  }))
+  const { tags, typeTags, methodCount, typeCount, searchResults } = sideNavState
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
@@ -95,22 +115,43 @@ export const SideNav: FC<SideNavProps> = ({
     let results
     let newTags
     let newTypes
-    if (debouncedPattern) {
-      results = api.search(pattern, searchCriteria)
+    let newTypeTags
+    const api = spec.api || ({} as ApiModel)
+
+    if (debouncedPattern && api.search) {
+      results = api.search(pattern, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
+      newTypeTags = tagTypes(api, results.types)
     } else {
       newTags = api.tags || {}
       newTypes = api.types || {}
+      newTypeTags = api.typeTags || {}
     }
 
-    setTags(newTags)
-    setTypes(newTypes)
-    setMethodCount(countMethods(newTags))
-    setTypeCount(countTypes(newTypes))
-    setSearchResults(results)
-    setSearchSettings(setPattern(debouncedPattern!))
-  }, [debouncedPattern, specKey])
+    setSideNavState({
+      tags: newTags,
+      typeTags: newTypeTags,
+      typeCount: countTypes(newTypes),
+      methodCount: countMethods(newTags),
+      searchResults: results,
+    })
+    setSearchPatternAction({ searchPattern: debouncedPattern })
+  }, [
+    debouncedPattern,
+    specKey,
+    spec,
+    setSearchPatternAction,
+    pattern,
+    searchCriteria,
+  ])
+
+  useEffect(() => {
+    const { selectedIndex, onSelectTab } = tabs
+    if (defaultIndex !== selectedIndex) {
+      onSelectTab(defaultIndex)
+    }
+  }, [defaultIndex, tabs])
 
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
@@ -118,28 +159,17 @@ export const SideNav: FC<SideNavProps> = ({
 
   return (
     <nav>
-      <SpaceVertical alignItems="center" p="large" gap="xsmall">
-        {headless && (
-          <SpaceVertical>
-            <Heading as="h5" color="key" fontWeight="bold">
-              API Documentation
-            </Heading>
-            <SelectorContainer
-              specs={specs}
-              spec={spec}
-              specDispatch={specDispatch}
-            />
-          </SpaceVertical>
-        )}
-        <InputSearch
-          aria-label="Search"
-          onChange={handleInputChange}
-          placeholder="Search"
-          value={pattern}
-          isClearable
-          changeOnSelect
-        />
-      </SpaceVertical>
+      <InputSearch
+        pl="large"
+        pr="large"
+        pb="large"
+        pt={headless ? 'u3' : 'large'}
+        aria-label="Search"
+        onChange={handleInputChange}
+        placeholder="Search"
+        value={pattern}
+        isClearable
+      />
       <SearchMessage search={searchResults} />
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>
@@ -147,14 +177,18 @@ export const SideNav: FC<SideNavProps> = ({
       </TabList>
       <TabPanels {...tabs} pt="xsmall" height={`${menuH}px`} overflow="auto">
         <TabPanel>
-          <SideNavTags
+          <SideNavMethodTags
             tags={tags}
             specKey={specKey}
             defaultOpen={!!searchResults}
           />
         </TabPanel>
         <TabPanel>
-          <SideNavTypes types={types} specKey={specKey} />
+          <SideNavTypeTags
+            tags={typeTags}
+            specKey={specKey}
+            defaultOpen={!!searchResults}
+          />
         </TabPanel>
       </TabPanels>
     </nav>

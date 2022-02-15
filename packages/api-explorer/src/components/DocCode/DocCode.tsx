@@ -24,10 +24,13 @@
 
  */
 
-import React, { FC, useContext } from 'react'
+import type { FC } from 'react'
+import React from 'react'
 import { findGenerator } from '@looker/sdk-codegen'
 import { CodeDisplay } from '@looker/code-editor'
-import { SearchContext } from '../../context/search'
+import { useSelector } from 'react-redux'
+
+import { selectSearchPattern } from '../../state'
 
 interface DocCodeProps {
   code: string
@@ -35,11 +38,9 @@ interface DocCodeProps {
 }
 
 export const DocCode: FC<DocCodeProps> = ({ code, language = 'json' }) => {
+  const searchPattern = useSelector(selectSearchPattern)
   const gen = findGenerator(language)
   if (gen) language = gen.language.toLocaleLowerCase()
-  const {
-    searchSettings: { pattern },
-  } = useContext(SearchContext)
 
-  return <CodeDisplay language={language} code={code} pattern={pattern} />
+  return <CodeDisplay language={language} code={code} pattern={searchPattern} />
 }

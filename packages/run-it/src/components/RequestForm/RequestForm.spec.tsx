@@ -26,14 +26,17 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { defaultConfigurator } from '../ConfigForm'
+import { formatDateString } from '@looker/components-date'
+import type { RunItInput } from '../..'
+import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
+  // const mockSdk = {} as unknown as IAPIMethods
   let requestContent = {}
   const setRequestContent = jest.fn((content) => {
     requestContent = content
@@ -44,10 +47,44 @@ describe('RequestForm', () => {
     jest.resetAllMocks()
   })
 
+  describe('validation messages', () => {
+    test('validation errors are displayed', () => {
+      const message = 'Invalid message'
+      renderWithTheme(
+        <RequestForm
+          inputs={[
+            {
+              name: 'user_id',
+              location: 'path',
+              type: 'string',
+              required: true,
+              description: 'A unique identifier for a user',
+            },
+          ]}
+          handleSubmit={handleSubmit}
+          httpMethod={'GET'}
+          requestContent={requestContent}
+          setRequestContent={setRequestContent}
+          needsAuth={false}
+          hasConfig={true}
+          setHasConfig={() => true}
+          isExtension={false}
+          validationMessage={message}
+          handleConfig={runItNoSet}
+        />
+      )
+
+      expect(screen.getByRole('img', { name: 'Error' })).toBeInTheDocument()
+      expect(screen.getByText(message)).toBeInTheDocument()
+    })
+
+    test.todo('clear removes validation messages')
+    test.todo('clicking run with an invalid body shows a messagebar')
+  })
+
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'user_id',
@@ -61,8 +98,11 @@ describe('RequestForm', () => {
         httpMethod={'GET'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
         setHasConfig={() => true}
         isExtension={false}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -72,13 +112,11 @@ describe('RequestForm', () => {
     /** Warning checkbox should only be rendered for operations that modify data */
     expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument()
   })
 
   test('it creates a form with a simple item, submit button, and config button if running as an extension', () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'user_id',
@@ -93,6 +131,9 @@ describe('RequestForm', () => {
         requestContent={requestContent}
         setRequestContent={setRequestContent}
         isExtension={true}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -111,7 +152,6 @@ describe('RequestForm', () => {
     const name = 'boolean_item'
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name,
@@ -125,6 +165,9 @@ describe('RequestForm', () => {
         httpMethod={'POST'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -135,11 +178,61 @@ describe('RequestForm', () => {
     })
   })
 
-  test('interactive with a number simple item changes the request content', async () => {
+  /** Return time that matches day picker in calendar */
+  const noon = () => {
+    const now = new Date()
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      12,
+      0,
+      0,
+      0
+    )
+  }
+
+  test('interacting with a date picker changes the request content', async () => {
+    const name = 'date_item'
+    renderWithTheme(
+      <RequestForm
+        inputs={[
+          {
+            name,
+            location: 'query',
+            required: true,
+            type: 'datetime',
+            description: 'some datetime item description',
+          },
+        ]}
+        handleSubmit={handleSubmit}
+        httpMethod={'POST'}
+        requestContent={requestContent}
+        setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
+      />
+    )
+
+    const button = screen.getByRole('button', { name: 'Choose' })
+    expect(button).toBeInTheDocument()
+    userEvent.click(button)
+    await waitFor(() => {
+      const today = noon()
+      const pickName = formatDateString(today, undefined, 'iii PP')
+      const cell = screen.getByRole('gridcell', {
+        name: pickName,
+      })
+      userEvent.click(cell)
+      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
+    })
+  })
+
+  test('interacting with a number simple item changes the request content', async () => {
     const name = 'number_item'
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name,
@@ -153,6 +246,9 @@ describe('RequestForm', () => {
         httpMethod={'POST'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -166,7 +262,6 @@ describe('RequestForm', () => {
   test('interacting with a text simple item changes the request content', async () => {
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'text_item',
@@ -180,6 +275,9 @@ describe('RequestForm', () => {
         httpMethod={'POST'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
 
@@ -192,45 +290,48 @@ describe('RequestForm', () => {
     })
   })
 
-  test('interacting with a complex item changes the request content', () => {
+  test('interacting with a complex item changes the request content', async () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
+    const inputs: RunItInput[] = [
+      {
+        name: 'body',
+        location: 'body',
+        type: {
+          model: 'string',
+          view: 'string',
+          fields: ['string'],
+        },
+        required: true,
+        description: 'Request body',
+      },
+    ]
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
-        inputs={[
-          {
-            name: 'body',
-            location: 'body',
-            type: {
-              model: 'string',
-              view: 'string',
-              fields: ['string'],
-            },
-            required: true,
-            description: 'Request body',
-          },
-        ]}
+        inputs={inputs}
         handleSubmit={handleSubmit}
         httpMethod={'POST'}
-        requestContent={requestContent}
+        requestContent={{ body: JSON.stringify(inputs[0].type) }}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
-
     expect(screen.getByRole('checkbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
-    // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-    userEvent.paste(input, 'content')
-    expect(setRequestContent).toHaveBeenCalled()
-    userEvent.click(screen.getByRole('button', { name: run }))
-    expect(handleSubmit).toHaveBeenCalledTimes(1)
+    await act(async () => {
+      // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
+      await userEvent.paste(input, 'content')
+      expect(setRequestContent).toHaveBeenCalled()
+      await userEvent.click(screen.getByRole('button', { name: run }))
+      expect(handleSubmit).toHaveBeenCalledTimes(1)
+    })
   })
 
   test('pressing enter submits the request form', async () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
-        configurator={defaultConfigurator}
         inputs={[
           {
             name: 'id',
@@ -244,13 +345,16 @@ describe('RequestForm', () => {
         httpMethod={'POST'}
         requestContent={requestContent}
         setRequestContent={setRequestContent}
+        needsAuth={false}
+        hasConfig={true}
+        handleConfig={runItNoSet}
       />
     )
 
     expect(screen.getByRole('textbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
-    await userEvent.paste(input, 'foo')
-    await userEvent.type(input, '{enter}')
+    userEvent.paste(input, 'foo')
+    userEvent.type(input, '{enter}')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
         id: 'foo',

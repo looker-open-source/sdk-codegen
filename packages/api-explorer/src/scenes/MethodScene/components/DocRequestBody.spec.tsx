@@ -34,7 +34,7 @@ import { DocRequestBody } from './DocRequestBody'
 describe('DocRequestBody', () => {
   test('it shows Request body for a method with a body type', () => {
     const method = api.methods.create_dashboard
-    renderWithTheme(<DocRequestBody method={method} />)
+    renderWithTheme(<DocRequestBody api={api} method={method} />)
     expect(
       screen.getByText('Request body', { exact: false })
     ).toBeInTheDocument()
@@ -42,7 +42,7 @@ describe('DocRequestBody', () => {
 
   test('it skips Request body for a method without a body type', () => {
     const method = api.methods.dashboard
-    renderWithTheme(<DocRequestBody method={method} />)
+    renderWithTheme(<DocRequestBody api={api} method={method} />)
     expect(
       screen.queryByText('Request body', { exact: false })
     ).not.toBeInTheDocument()

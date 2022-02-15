@@ -25,23 +25,25 @@
  */
 
 import { DelimArray } from '@looker/sdk-rtl'
-import {
+import type {
   ApiModel,
   Arg,
   ArgValues,
-  ArrayType,
-  EnumType,
   EnumValueType,
-  HashType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+} from './sdkModels'
+import {
+  ArrayType,
+  EnumType,
+  HashType,
   mayQuote,
   strBody,
   Type,
 } from './sdkModels'
-import { SpecItem } from './specConverter'
+import type { SpecItem } from './specConverter'
 
 export const commentBlock = (
   text: string | undefined,
@@ -67,27 +69,34 @@ export interface IVersionInfo {
  * @param inputs current inputs
  * @returns inputs with all "empty" values removed so the key no longer exists
  */
-export const trimInputs = (inputs: any): any => {
-  function isEmpty(value: any) {
+export const trimInputs = (inputs: any, depth = 0): any => {
+  function isEmpty(value: any, depth: number): boolean {
     if (Array.isArray(value)) return value.length === 0
     if (value === undefined) return true
     if (value === null) return true
     if (value === '') return true
-    if (value instanceof Object) return Object.keys(value).length === 0
+    if (value instanceof Object) {
+      if (depth === 1) {
+        // Top level empty objects are kept. i.e { one: {} } is left unchanged.
+        return false
+      }
+      return Object.keys(value).length === 0
+    }
     return false
   }
 
   let result: any
-  if (isEmpty(inputs)) return {}
   if (inputs instanceof DelimArray) return inputs
   if (Array.isArray(inputs)) {
     result = []
-    Object.values(inputs).forEach((v: any) => result.push(trimInputs(v)))
+    Object.values(inputs).forEach((v: any) =>
+      result.push(trimInputs(v, depth + 1))
+    )
   } else if (inputs instanceof Object) {
     result = {}
     Object.entries(inputs).forEach(([key, value]) => {
-      const trimmed = trimInputs(value)
-      if (!isEmpty(trimmed)) {
+      const trimmed = trimInputs(value, depth + 1)
+      if (!isEmpty(trimmed, depth + 1)) {
         result[key] = trimmed
       }
     })
@@ -139,6 +148,9 @@ export interface ICodeGen {
    * e.g. 'sdk` for python
    */
   sdkPath: string
+
+  /** use special handling for a JSON value that can be a string or a number. Introduced for Swift. */
+  anyString: boolean
 
   /** current version of the Api being generated */
   apiVersion: string
@@ -715,6 +727,7 @@ export interface ICodeGen {
 
 export abstract class CodeGen implements ICodeGen {
   willItStream = false
+  anyString = false
   codePath = './'
   packagePath = 'looker'
   sdkPath = 'sdk'
@@ -723,8 +736,6 @@ export abstract class CodeGen implements ICodeGen {
   itself = ''
   fileExtension = '.code'
   argDelimiter = ', '
-  argSetSep = ': '
-  hashSetSep = ': '
   paramDelimiter = ',\n'
   propDelimiter = '\n'
   enumDelimiter = ',\n'
@@ -733,6 +744,10 @@ export abstract class CodeGen implements ICodeGen {
   useNamedArguments = true
   useFunctions = false
   useInterfaces = false
+
+  // makeTheCall definitions
+  argSetSep = ': '
+  hashSetSep = ': '
   arrayOpen = '['
   arrayClose = ']'
   hashOpen = '{'
@@ -897,6 +912,8 @@ export abstract class CodeGen implements ICodeGen {
       argVal = mt.asVal(indent, val)
     } else if (argType instanceof ArrayType) {
       argVal = this.arrayValue(indent, argType, val)
+      // } else if (argType instanceof DelimArrayType) {
+      //   argVal = this.delimArrayValue(indent, argType, val)
     } else if (argType instanceof HashType) {
       argVal = this.hashValue(indent, val)
     } else if (!argType.intrinsic) {
@@ -988,9 +1005,9 @@ export abstract class CodeGen implements ICodeGen {
     let open = this.arrayOpen
     let close = this.arrayClose
     let arrayValDelimiter = this.argDelimiter
-    // multiple intrisinc element or 1 or more non-intrinsic element array
+    // multiple intrinsic elements or 1 or more non-intrinsic element array
     // renders multiple lines
-    if (Object.values(val).length > 1 || !et.intrinsic) {
+    if (val.length > 1 || !et.intrinsic) {
       // the opener uses bump to account for the first argument
       // not getting the proper bump from args.join()
       open = `${open}\n${bump}`
@@ -1009,7 +1026,7 @@ export abstract class CodeGen implements ICodeGen {
     // passing `bump` to `asVal` - typically intrinsic asVal ignores
     // indentation but certainly for the assignType case we want the
     // nested object to be indented a level further
-    Object.values(val).forEach((v) => args.push(asVal(bump, v)))
+    val.forEach((v: any) => args.push(asVal(bump, v)))
     return open + args.join(arrayValDelimiter) + close
   }
 

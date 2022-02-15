@@ -24,7 +24,7 @@
 
  */
 
-import { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
 
 export const apixFilesHost = 'http://localhost:30000'
 
@@ -38,17 +38,17 @@ const fetchLode = async (lodeUrl: string) => {
 }
 
 interface FullLode {
-  examples: IExampleMine
+  examples?: IExampleMine
   declarations?: IDeclarationMine
 }
 
 export const getLoded = async (
-  examplesLodeUrl: string,
+  examplesLodeUrl?: string,
   declarationsLodeUrl?: string
 ): Promise<FullLode> => {
   // First try to load from the apix-files server
   let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
-  if (!examples) {
+  if (!examples && examplesLodeUrl) {
     examples = await fetchLode(examplesLodeUrl)
   }
 
@@ -57,9 +57,7 @@ export const getLoded = async (
     declarations = await fetchLode(declarationsLodeUrl)
   }
 
-  const lode: FullLode = {
-    examples: { commitHash: '', nuggets: {}, remoteOrigin: '', summaries: {} },
-  }
+  const lode: FullLode = { examples: undefined, declarations: undefined }
   if (examples) {
     lode.examples = JSON.parse(examples)
   }

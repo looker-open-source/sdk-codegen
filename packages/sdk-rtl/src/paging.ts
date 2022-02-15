@@ -24,14 +24,10 @@
 
  */
 
-import {
-  IRawResponse,
-  ITransportSettings,
-  sdkOk,
-  SDKResponse,
-} from './transport'
-import { IAPIMethods } from './apiMethods'
-import { BaseTransport } from './baseTransport'
+import type { IRawResponse, ITransportSettings, SDKResponse } from './transport'
+import { sdkOk } from './transport'
+import type { IAPIMethods } from './apiMethods'
+import type { BaseTransport } from './baseTransport'
 
 export const LinkHeader = 'Link'
 export const TotalCountHeader = 'X-Total-Count'
@@ -362,7 +358,7 @@ export class Paging<TSuccess extends ILength, TError>
       this.parse(raw)
       this.items = await sdkOk(this.transport.parseResponse(raw))
       result = { ok: true, value: this.items }
-    } catch (e) {
+    } catch (e: any) {
       result = { ok: false, error: e }
     }
     return result

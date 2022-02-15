@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API methods
+ * 437 API methods
  */
 
 
@@ -37,6 +37,215 @@ import Foundation
 open class LookerSDK: APIMethods {
 
     public lazy var stream = LookerSDKStream(authSession)
+
+    // MARK Alert: Alert
+
+    /**
+     * ### Search Alerts
+     *
+     * GET /alerts/search -> [Alert]
+     */
+    public func search_alerts(
+        /**
+         * @param {Int64} limit (Optional) Number of results to return (used with `offset`).
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset (Optional) Number of results to skip before returning any (used with `limit`).
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} group_by (Optional) Dimension by which to order the results(`dashboard` | `owner`)
+         */
+        group_by: String? = nil,
+        /**
+         * @param {String} fields (Optional) Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Bool} disabled (Optional) Filter on returning only enabled or disabled alerts.
+         */
+        disabled: Bool? = nil,
+        /**
+         * @param {String} frequency (Optional) Filter on alert frequency, such as: monthly, weekly, daily, hourly, minutes
+         */
+        frequency: String? = nil,
+        /**
+         * @param {Bool} condition_met (Optional) Filter on whether the alert has met its condition when it last executed
+         */
+        condition_met: Bool? = nil,
+        /**
+         * @param {String} last_run_start (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+         */
+        last_run_start: String? = nil,
+        /**
+         * @param {String} last_run_end (Optional) Filter on the start range of the last time the alerts were run. Example: 2021-01-01T01:01:01-08:00.
+         */
+        last_run_end: String? = nil,
+        /**
+         * @param {Bool} all_owners (Admin only) (Optional) Filter for all owners.
+         */
+        all_owners: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[Alert], SDKError> {
+        let result: SDKResponse<[Alert], SDKError> = self.get("/alerts/search", 
+            ["limit": limit, "offset": offset, "group_by": group_by, "fields": fields, "disabled": disabled as Any?, "frequency": frequency, "condition_met": condition_met as Any?, "last_run_start": last_run_start, "last_run_end": last_run_end, "all_owners": all_owners as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get an alert by a given alert ID
+     *
+     * GET /alerts/{alert_id} -> Alert
+     */
+    public func get_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.get("/alerts/\(path_alert_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Update an alert
+     * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     * #
+     *
+     * PUT /alerts/{alert_id} -> Alert
+     */
+    public func update_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {WriteAlert} body
+         */
+        _ body: WriteAlert,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.put("/alerts/\(path_alert_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update select alert fields
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+     * #
+     *
+     * PATCH /alerts/{alert_id} -> Alert
+     */
+    public func update_alert_field(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {AlertPatch} body
+         */
+        _ body: AlertPatch,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Alert, SDKError> = self.patch("/alerts/\(path_alert_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete an alert by a given alert ID
+     *
+     * DELETE /alerts/{alert_id} -> Voidable
+     */
+    public func delete_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Voidable, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Voidable, SDKError> = self.delete("/alerts/\(path_alert_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a new alert and return details of the newly created object
+     *
+     * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+     *
+     * Example Request:
+     * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+     * ```
+     * {
+     *   "cron": "0 5 * * *",
+     *   "custom_title": "Alert when LA inventory is low",
+     *   "dashboard_element_id": 103,
+     *   "applied_dashboard_filters": [
+     *     {
+     *       "filter_title": "Warehouse Name",
+     *       "field_name": "distribution_centers.name",
+     *       "filter_value": "Los Angeles CA",
+     *       "filter_description": "is Los Angeles CA"
+     *     }
+     *   ],
+     *   "comparison_type": "LESS_THAN",
+     *   "destinations": [
+     *     {
+     *       "destination_type": "EMAIL",
+     *       "email_address": "test@test.com"
+     *     }
+     *   ],
+     *   "field": {
+     *     "title": "Number on Hand",
+     *     "name": "inventory_items.number_on_hand"
+     *   },
+     *   "is_disabled": false,
+     *   "is_public": true,
+     *   "threshold": 1000
+     * }
+     * ```
+     *
+     * POST /alerts -> Alert
+     */
+    public func create_alert(
+        /**
+         * @param {WriteAlert} body
+         */
+        _ body: WriteAlert,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Alert, SDKError> {
+        let result: SDKResponse<Alert, SDKError> = self.post("/alerts", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Enqueue an Alert by ID
+     *
+     * POST /alerts/{alert_id}/enqueue -> Voidable
+     */
+    public func enqueue_alert(
+        /**
+         * @param {Int64} alert_id ID of an alert
+         */
+        _ alert_id: Int64,
+        /**
+         * @param {Bool} force Whether to enqueue an alert again if its already running.
+         */
+        force: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Voidable, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Voidable, SDKError> = self.post("/alerts/\(path_alert_id)/enqueue", 
+            ["force": force as Any?], nil, options)
+        return result
+    }
+
+
 
     // MARK ApiAuth: API Authentication
 
@@ -140,6 +349,41 @@ open class LookerSDK: APIMethods {
 
 
     // MARK Auth: Manage User Authentication Configuration
+
+    /**
+     * ### Create an embed secret using the specified information.
+     *
+     * The value of the `secret` field will be set by Looker and returned.
+     *
+     * POST /embed_config/secrets -> EmbedSecret
+     */
+    public func create_embed_secret(
+        /**
+         * @param {WriteEmbedSecret} body
+         */
+        body: WriteEmbedSecret?,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<EmbedSecret, SDKError> {
+        let result: SDKResponse<EmbedSecret, SDKError> = self.post("/embed_config/secrets", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete an embed secret.
+     *
+     * DELETE /embed_config/secrets/{embed_secret_id} -> String
+     */
+    public func delete_embed_secret(
+        /**
+         * @param {Int64} embed_secret_id Id of Embed Secret
+         */
+        _ embed_secret_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_embed_secret_id = encodeParam(embed_secret_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/embed_config/secrets/\(path_embed_secret_id)", nil, nil, options)
+        return result
+    }
 
     /**
      * ### Create SSO Embed URL
@@ -909,6 +1153,108 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<SessionConfig, SDKError> {
         let result: SDKResponse<SessionConfig, SDKError> = self.patch("/session_config", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Get Support Access Allowlist Users
+     *
+     * Returns the users that have been added to the Support Access Allowlist
+     *
+     * GET /support_access/allowlist -> [SupportAccessAllowlistEntry]
+     */
+    public func get_support_access_allowlist_entries(
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[SupportAccessAllowlistEntry], SDKError> {
+        let result: SDKResponse<[SupportAccessAllowlistEntry], SDKError> = self.get("/support_access/allowlist", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Add Support Access Allowlist Users
+     *
+     * Adds a list of emails to the Allowlist, using the provided reason
+     *
+     * POST /support_access/allowlist -> [SupportAccessAllowlistEntry]
+     */
+    public func add_support_access_allowlist_entries(
+        /**
+         * @param {SupportAccessAddEntries} body
+         */
+        _ body: SupportAccessAddEntries,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[SupportAccessAllowlistEntry], SDKError> {
+        let result: SDKResponse<[SupportAccessAllowlistEntry], SDKError> = self.post("/support_access/allowlist", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Support Access Allowlist User
+     *
+     * Deletes the specified Allowlist Entry Id
+     *
+     * DELETE /support_access/allowlist/{entry_id} -> String
+     */
+    public func delete_support_access_allowlist_entry(
+        /**
+         * @param {String} entry_id Id of Allowlist Entry
+         */
+        _ entry_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_entry_id = encodeParam(entry_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/support_access/allowlist/\(path_entry_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Enable Support Access
+     *
+     * Enables Support Access for the provided duration
+     *
+     * PUT /support_access/enable -> SupportAccessStatus
+     */
+    public func enable_support_access(
+        /**
+         * @param {SupportAccessEnable} body
+         */
+        _ body: SupportAccessEnable,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.put("/support_access/enable", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Disable Support Access
+     *
+     * Disables Support Access immediately
+     *
+     * PUT /support_access/disable -> SupportAccessStatus
+     */
+    public func disable_support_access(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.put("/support_access/disable", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Support Access Status
+     *
+     * Returns the current Support Access Status
+     *
+     * GET /support_access/status -> SupportAccessStatus
+     */
+    public func support_access_status(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SupportAccessStatus, SDKError> {
+        let result: SDKResponse<SupportAccessStatus, SDKError> = self.get("/support_access/status", nil, nil, options)
         return result
     }
 
@@ -1754,9 +2100,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_custom_welcome_email(
         /**
-         * @param {WriteCustomWelcomeEmail} body
+         * @param {CustomWelcomeEmail} body
          */
-        _ body: WriteCustomWelcomeEmail,
+        _ body: CustomWelcomeEmail,
         /**
          * @param {Bool} send_test_welcome_email If true a test email with the content from the request will be sent to the current user after saving
          */
@@ -1957,23 +2303,75 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Get Looker Settings
+     *
+     * Available settings are:
+     *  - extension_framework_enabled
+     *  - marketplace_auto_install_enabled
+     *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *  - custom_welcome_email
+     *  - onboarding_enabled
+     *
+     * GET /setting -> Setting
+     */
+    public func get_setting(
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Setting, SDKError> {
+        let result: SDKResponse<Setting, SDKError> = self.get("/setting", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
      * ### Configure Looker Settings
      *
      * Available settings are:
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
+     *  - whitelabel_configuration
+     *  - custom_welcome_email
+     *  - onboarding_enabled
+     *
+     * See the `Setting` type for more information on the specific values that can be configured.
      *
      * PATCH /setting -> Setting
      */
     public func set_setting(
         /**
-         * @param {Setting} body
+         * @param {WriteSetting} body
          */
-        _ body: Setting,
+        _ body: WriteSetting,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Setting, SDKError> {
-        let result: SDKResponse<Setting, SDKError> = self.patch("/setting", nil, try! self.encode(body), options)
+        let result: SDKResponse<Setting, SDKError> = self.patch("/setting", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Get current SMTP status.
+     *
+     * GET /smtp_status -> SmtpStatus
+     */
+    public func smtp_status(
+        /**
+         * @param {String} fields Include only these fields in the response
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SmtpStatus, SDKError> {
+        let result: SDKResponse<SmtpStatus, SDKError> = self.get("/smtp_status", 
+            ["fields": fields], nil, options)
         return result
     }
 
@@ -2009,9 +2407,9 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get an API specification for this Looker instance.
      *
-     * **Note**: Although the API specification is in JSON format, the return type is temporarily `text/plain`, so the response should be treated as standard JSON to consume it.
+     * The specification is returned as a JSON document in Swagger 2.x format
      *
-     * GET /api_spec/{api_version}/{specification} -> String
+     * GET /api_spec/{api_version}/{specification} -> AnyCodable
      */
     public func api_spec(
         /**
@@ -2023,10 +2421,10 @@ open class LookerSDK: APIMethods {
          */
         _ specification: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<String, SDKError> {
+    ) -> SDKResponse<AnyCodable, SDKError> {
         let path_api_version = encodeParam(api_version)
         let path_specification = encodeParam(specification)
-        let result: SDKResponse<String, SDKError> = self.get("/api_spec/\(path_api_version)/\(path_specification)", nil, nil, options)
+        let result: SDKResponse<AnyCodable, SDKError> = self.get("/api_spec/\(path_api_version)/\(path_specification)", nil, nil, options)
         return result
     }
 
@@ -3370,6 +3768,33 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Move an existing dashboard
+     *
+     * Moves a dashboard to a specified folder, and returns the moved dashboard.
+     *
+     * `dashboard_id` and `folder_id` are required.
+     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+     *
+     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
+     */
+    public func move_dashboard(
+        /**
+         * @param {String} dashboard_id Dashboard id to move.
+         */
+        _ dashboard_id: String,
+        /**
+         * @param {String} folder_id Folder id to move to.
+         */
+        _ folder_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let path_dashboard_id = encodeParam(dashboard_id)
+        let result: SDKResponse<Dashboard, SDKError> = self.patch("/dashboards/\(path_dashboard_id)/move", 
+            ["folder_id": folder_id], nil, options)
+        return result
+    }
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3395,33 +3820,6 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<Dashboard, SDKError> {
         let path_dashboard_id = encodeParam(dashboard_id)
         let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards/\(path_dashboard_id)/copy", 
-            ["folder_id": folder_id], nil, options)
-        return result
-    }
-
-    /**
-     * ### Move an existing dashboard
-     *
-     * Moves a dashboard to a specified folder, and returns the moved dashboard.
-     *
-     * `dashboard_id` and `folder_id` are required.
-     * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
-     *
-     * PATCH /dashboards/{dashboard_id}/move -> Dashboard
-     */
-    public func move_dashboard(
-        /**
-         * @param {String} dashboard_id Dashboard id to move.
-         */
-        _ dashboard_id: String,
-        /**
-         * @param {String} folder_id Folder id to move to.
-         */
-        _ folder_id: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Dashboard, SDKError> {
-        let path_dashboard_id = encodeParam(dashboard_id)
-        let result: SDKResponse<Dashboard, SDKError> = self.patch("/dashboards/\(path_dashboard_id)/move", 
             ["folder_id": folder_id], nil, options)
         return result
     }
@@ -3976,6 +4374,62 @@ open class LookerSDK: APIMethods {
 
 
 
+    // MARK DerivedTable: View Derived Table graphs
+
+    /**
+     * ### Discover information about derived tables
+     *
+     * GET /derived_table/graph/model/{model} -> DependencyGraph
+     */
+    public func graph_derived_tables_for_model(
+        /**
+         * @param {String} model The name of the Lookml model.
+         */
+        _ model: String,
+        /**
+         * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
+         */
+        format: String? = nil,
+        /**
+         * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
+         */
+        color: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DependencyGraph, SDKError> {
+        let path_model = encodeParam(model)
+        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/model/\(path_model)", 
+            ["format": format, "color": color], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get the subgraph representing this derived table and its dependencies.
+     *
+     * GET /derived_table/graph/view/{view} -> DependencyGraph
+     */
+    public func graph_derived_tables_for_view(
+        /**
+         * @param {String} view The derived table's view name.
+         */
+        _ view: String,
+        /**
+         * @param {String} models The models where this derived table is defined.
+         */
+        models: String? = nil,
+        /**
+         * @param {String} workspace The model directory to look in, either `dev` or `production`.
+         */
+        workspace: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DependencyGraph, SDKError> {
+        let path_view = encodeParam(view)
+        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/view/\(path_view)", 
+            ["models": models, "workspace": workspace], nil, options)
+        return result
+    }
+
+
+
     // MARK Folder: Manage Folders
 
     /**
@@ -4103,7 +4557,9 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+     * or if they contain soft-deleted content.
+     *
      * In API 4.0+, all personal folders will be returned.
      *
      * GET /folders -> [Folder]
@@ -5275,9 +5731,9 @@ open class LookerSDK: APIMethods {
      */
     public func look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -5316,9 +5772,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {WriteLookWithQuery} body
          */
@@ -5348,9 +5804,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_look_id = encodeParam(look_id)
@@ -5384,9 +5840,9 @@ open class LookerSDK: APIMethods {
      */
     public func run_look(
         /**
-         * @param {Int64} look_id Id of look
+         * @param {String} look_id Id of look
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} result_format Format of result
          */
@@ -5461,9 +5917,9 @@ open class LookerSDK: APIMethods {
      */
     public func copy_look(
         /**
-         * @param {Int64} look_id Look id to copy.
+         * @param {String} look_id Look id to copy.
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} folder_id Folder id to copy to.
          */
@@ -5488,9 +5944,9 @@ open class LookerSDK: APIMethods {
      */
     public func move_look(
         /**
-         * @param {Int64} look_id Look id to move.
+         * @param {String} look_id Look id to move.
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} folder_id Folder id to move to.
          */
@@ -5506,32 +5962,6 @@ open class LookerSDK: APIMethods {
 
 
     // MARK LookmlModel: Manage LookML Models
-
-    /**
-     * ### Discover information about derived tables
-     *
-     * GET /derived_table/graph/model/{model} -> DependencyGraph
-     */
-    public func graph_derived_tables_for_model(
-        /**
-         * @param {String} model The name of the Lookml model.
-         */
-        _ model: String,
-        /**
-         * @param {String} format The format of the graph. Valid values are [dot]. Default is `dot`
-         */
-        format: String? = nil,
-        /**
-         * @param {String} color Color denoting the build status of the graph. Grey = not built, green = built, yellow = building, red = error.
-         */
-        color: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<DependencyGraph, SDKError> {
-        let path_model = encodeParam(model)
-        let result: SDKResponse<DependencyGraph, SDKError> = self.get("/derived_table/graph/model/\(path_model)", 
-            ["format": format, "color": color], nil, options)
-        return result
-    }
 
     /**
      * ### Get information about all lookml models.
@@ -5668,6 +6098,24 @@ open class LookerSDK: APIMethods {
     /**
      * ### Field name suggestions for a model and view
      *
+     * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+     *
+     * ```ruby
+     * {'users.age': '>=60'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '<30'}
+     * ```
+     *
+     * or
+     *
+     * ```ruby
+     * {'users.age': '=50'}
+     * ```
+     *
      * GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
      */
     public func model_fieldname_suggestions(
@@ -5684,13 +6132,13 @@ open class LookerSDK: APIMethods {
          */
         _ field_name: String,
         /**
-         * @param {String} term Search term
+         * @param {String} term Search term pattern (evaluated as as `%term%`)
          */
         term: String? = nil,
         /**
-         * @param {String} filters Suggestion filters
+         * @param {Any} filters Suggestion filters with field name keys and comparison expressions
          */
-        filters: String? = nil,
+        filters: Any? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<ModelFieldSuggestions, SDKError> {
         let path_model_name = encodeParam(model_name)
@@ -5828,11 +6276,19 @@ open class LookerSDK: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {String} table_filter Optional. Return tables with names that contain this value
+         */
+        table_filter: String? = nil,
+        /**
+         * @param {Int64} table_limit Optional. Return tables up to the table_limit
+         */
+        table_limit: Int64? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[SchemaTables], SDKError> {
         let path_connection_name = encodeParam(connection_name)
         let result: SDKResponse<[SchemaTables], SDKError> = self.get("/connections/\(path_connection_name)/tables", 
-            ["database": database, "schema_name": schema_name, "cache": cache as Any?, "fields": fields], nil, options)
+            ["database": database, "schema_name": schema_name, "cache": cache as Any?, "fields": fields, "table_filter": table_filter, "table_limit": table_limit], nil, options)
         return result
     }
 
@@ -7120,12 +7576,16 @@ open class LookerSDK: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
+        /**
+         * @param {String} source Specifies the source of this call.
+         */
+        source: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<String, SDKError> = self.get("/queries/\(path_query_id)/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], nil, options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source], nil, options)
         return result
     }
 
@@ -7680,6 +8140,45 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<String, SDKError> {
         let path_render_task_id = encodeParam(render_task_id)
         let result: SDKResponse<String, SDKError> = self.get("/render_tasks/\(path_render_task_id)/results", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a new task to render a dashboard element to an image.
+     *
+     * Returns a render task object.
+     * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+     * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+     *
+     * POST /render_tasks/dashboard_elements/{dashboard_element_id}/{result_format} -> RenderTask
+     */
+    public func create_dashboard_element_render_task(
+        /**
+         * @param {String} dashboard_element_id Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id
+         */
+        _ dashboard_element_id: String,
+        /**
+         * @param {String} result_format Output type: png or jpg
+         */
+        _ result_format: String,
+        /**
+         * @param {Int64} width Output width in pixels
+         */
+        _ width: Int64,
+        /**
+         * @param {Int64} height Output height in pixels
+         */
+        _ height: Int64,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<RenderTask, SDKError> {
+        let path_dashboard_element_id = encodeParam(dashboard_element_id)
+        let path_result_format = encodeParam(result_format)
+        let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/dashboard_elements/\(path_dashboard_element_id)/\(path_result_format)", 
+            ["width": width, "height": height, "fields": fields], nil, options)
         return result
     }
 
@@ -9327,13 +9826,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -9345,7 +9852,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "ids": ids as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "ids": ids as Any?], nil, options)
         return result
     }
 
@@ -9410,13 +9917,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Return only page N of paginated results
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Return N rows of data per page
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -9464,7 +9979,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
         return result
     }
 
@@ -9488,13 +10003,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Return only page N of paginated results
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Return N rows of data per page
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by
          */
@@ -9527,7 +10050,7 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<[User], SDKError> {
         let path_pattern = encodeParam(pattern)
         let result: SDKResponse<[User], SDKError> = self.get("/users/search/names/\(path_pattern)", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "email": email, "is_disabled": is_disabled as Any?], nil, options)
         return result
     }
 
@@ -10042,7 +10565,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * POST /users/{user_id}/credentials_api3 -> CredentialsApi3
+     * POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
      */
     public func create_user_credentials_api3(
         /**
@@ -10050,18 +10573,14 @@ open class LookerSDK: APIMethods {
          */
         _ user_id: Int64,
         /**
-         * @param {CredentialsApi3} body
-         */
-        body: CredentialsApi3?,
-        /**
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<CredentialsApi3, SDKError> {
+    ) -> SDKResponse<CreateCredentialsApi3, SDKError> {
         let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<CredentialsApi3, SDKError> = self.post("/users/\(path_user_id)/credentials_api3", 
-            ["fields": fields], try! self.encode(body), options)
+        let result: SDKResponse<CreateCredentialsApi3, SDKError> = self.post("/users/\(path_user_id)/credentials_api3", 
+            ["fields": fields], nil, options)
         return result
     }
 
@@ -10461,6 +10980,37 @@ open class LookerSDK: APIMethods {
         let path_user_id = encodeParam(user_id)
         let result: SDKResponse<CredentialsEmail, SDKError> = self.post("/users/\(path_user_id)/credentials_email/send_password_reset", 
             ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Change a disabled user's email addresses
+     *
+     * Allows the admin to change the email addresses for all the user's
+     * associated credentials.  Will overwrite all associated email addresses with
+     * the value supplied in the 'email' body param.
+     * The user's 'is_disabled' status must be true.
+     *
+     * POST /users/{user_id}/update_emails -> User
+     */
+    public func wipeout_user_emails(
+        /**
+         * @param {Int64} user_id Id of user
+         */
+        _ user_id: Int64,
+        /**
+         * @param {UserEmailOnly} body
+         */
+        _ body: UserEmailOnly,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<User, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<User, SDKError> = self.post("/users/\(path_user_id)/update_emails", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 

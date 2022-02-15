@@ -25,12 +25,8 @@
  */
 
 import Papa from 'papaparse'
-import {
-  DataTableColumn,
-  DataTableColumns,
-  DataTableCell,
-  DataTableItem,
-} from '@looker/components'
+import type { DataTableColumn, DataTableColumns } from '@looker/components'
+import { DataTableCell, DataTableItem } from '@looker/components'
 import React from 'react'
 
 export const parseCsv = (content: string) => {

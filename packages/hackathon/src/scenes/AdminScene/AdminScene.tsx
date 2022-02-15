@@ -23,14 +23,23 @@
  SOFTWARE.
 
  */
-import React, { FC, useEffect } from 'react'
-import { TabList, Tab, TabPanels, TabPanel } from '@looker/components'
+import type { FC } from 'react'
+import React, { useEffect } from 'react'
+import {
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Heading,
+  SpaceVertical,
+} from '@looker/components'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { Routes } from '../../routes/AppRouter'
 import { getTabInfo } from '../../utils'
 import { UserAttributes } from './components/UserAttributes'
+import { AddUsers } from './components/AddUsers'
 
-const tabnames = ['general', 'config']
+const tabnames = ['general', 'config', 'addusers']
 
 export const AdminScene: FC = () => {
   const history = useHistory()
@@ -57,18 +66,30 @@ export const AdminScene: FC = () => {
 
   return (
     <>
-      <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
-        <Tab>General</Tab>
-        <Tab>Configuration</Tab>
-      </TabList>
-      <TabPanels selectedIndex={tabIndex}>
-        <TabPanel>
-          <div>General admin stuff TBD</div>
-        </TabPanel>
-        <TabPanel>
-          <UserAttributes />
-        </TabPanel>
-      </TabPanels>
+      <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+        Admin
+      </Heading>
+      {/* Tab components incorrectly sets content height causing unnecessary
+      scrolling. Wrapping with SpaceVertical fixes this. TODO: Remove this hack
+      once tab components are fixed. */}
+      <SpaceVertical gap="none">
+        <TabList selectedIndex={tabIndex} onSelectTab={onSelectTab}>
+          <Tab>General</Tab>
+          <Tab>Configuration</Tab>
+          <Tab>Add Users</Tab>
+        </TabList>
+        <TabPanels selectedIndex={tabIndex}>
+          <TabPanel>
+            <div>General admin stuff TBD</div>
+          </TabPanel>
+          <TabPanel>
+            <UserAttributes />
+          </TabPanel>
+          <TabPanel>
+            <AddUsers />
+          </TabPanel>
+        </TabPanels>
+      </SpaceVertical>
     </>
   )
 }

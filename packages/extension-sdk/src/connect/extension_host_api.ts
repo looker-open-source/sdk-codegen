@@ -24,22 +24,24 @@
 
  */
 
-import { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
 import { FetchProxyImpl } from './fetch_proxy'
-import {
-  ExtensionEvent,
+import type {
   ExtensionInitializationResponse,
   ExtensionHostApi,
   ExtensionHostApiConfiguration,
   ExtensionNotification,
-  ExtensionNotificationType,
-  ExtensionRequestType,
   FetchCustomParameters,
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
   RouteChangeData,
+} from './types'
+import {
+  ExtensionEvent,
+  ExtensionNotificationType,
+  ExtensionRequestType,
 } from './types'
 
 export const EXTENSION_SDK_VERSION = '0.10.5'
@@ -500,9 +502,10 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     }
     if (
       authParameters.response_type !== 'token' &&
+      authParameters.response_type !== 'id_token' &&
       authParameters.response_type !== 'code'
     ) {
-      return `invalid response_type, must be token or code, ${authParameters.response_type}`
+      return `invalid response_type, must be token, id_token or code, ${authParameters.response_type}`
     }
     return undefined
   }

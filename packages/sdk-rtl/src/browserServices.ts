@@ -24,11 +24,12 @@
 
  */
 
-import { ICryptoHash } from './cryptoHash'
-import { IApiSettings } from './apiSettings'
-import { ITransport, sdkError } from './transport'
+import type { ICryptoHash } from './cryptoHash'
+import type { IApiSettings } from './apiSettings'
+import type { ITransport } from './transport'
+import { sdkError } from './transport'
 import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import { IPlatformServices } from './platformServices'
+import type { IPlatformServices } from './platformServices'
 
 export class BrowserServices implements IPlatformServices {
   crypto: ICryptoHash

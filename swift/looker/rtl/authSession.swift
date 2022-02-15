@@ -1,25 +1,27 @@
-/*
- * The MIT License (MIT)
- *
- * Copyright (c) 2019 Looker Data Sciences, Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+/**
+
+ MIT License
+
+ Copyright (c) 2021 Looker Data Sciences, Inc.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
  */
 
 import Foundation
@@ -48,13 +50,13 @@ open class AuthSession: IAuthSession {
             return self._authToken
         }
     }
-    
+
     public init(_ settings: IApiSettings, _ transport: ITransport? = nil) {
         self.settings = settings
         self.transport = transport ?? BaseTransport(settings)
         self.apiPath = "/api/\(settings.api_version!)"
     }
-    
+
    open func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             // this is currently a synchronous call so unblocking
@@ -62,35 +64,35 @@ open class AuthSession: IAuthSession {
         }
         return self.activeToken
     }
-    
+
     /// sets the default auth token and resets any value for the sudo token
     open func setToken(_ token: AccessToken) -> AuthToken {
         self._sudoToken.reset()
         let _ = self._authToken.setToken(token)
         return self.activeToken
     }
-    
+
     open func isSudo() -> Bool {
         return ((!self.sudoId.isEmpty) && self._sudoToken.isActive())
     }
-    
+
     open func login(_ sudoId: String = "") -> AuthToken {
         if (sudoId != self.sudoId || !self.isAuthenticated()) {
             _ = try? self._login(sudoId)
         }
         return self.activeToken
     }
-    
+
     open func reset() {
         self.sudoId = ""
         self._authToken.reset()
         self._sudoToken.reset()
     }
-    
+
     open func isAuthenticated() -> Bool {
         return self.activeToken.isActive()
     }
-    
+
     open func authenticate(_ props: URLRequest) throws -> URLRequest {
         let token = try self.getToken()
         var updated = props
@@ -99,7 +101,7 @@ open class AuthSession: IAuthSession {
         }
         return updated
     }
-    
+
     open func logout() -> Bool {
         var result = false
         if (self.isAuthenticated()) {
@@ -107,7 +109,7 @@ open class AuthSession: IAuthSession {
         }
         return result
     }
-    
+
     open func ok<TSuccess, TError>(_ response: SDKResponse<TSuccess, TError>) throws -> TSuccess {
         switch response {
         case .success(let response):
@@ -124,11 +126,11 @@ open class AuthSession: IAuthSession {
     private func _login(_ newId: String = "") throws -> AuthToken {
         // If we've got sudo logged in, log 'em out
         _ = self.sudoLogout()
-        
+
         if (newId != self.sudoId) {
             self.sudoId = newId
         }
-        
+
         if (!self._authToken.isActive()) {
             self.reset()
             let section = self.settings.readConfig(nil)
@@ -148,7 +150,7 @@ open class AuthSession: IAuthSession {
             let token = try? self.ok(response)
             _ = self._authToken.setToken(token!)
         }
-        
+
         if (!self.sudoId.isEmpty) {
             let token = self.activeToken
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
@@ -169,7 +171,7 @@ open class AuthSession: IAuthSession {
         }
         return self.activeToken
     }
-    
+
     private func sudoLogout() -> Bool {
         var result = false
         if (self.isSudo()) {
@@ -178,7 +180,7 @@ open class AuthSession: IAuthSession {
         }
         return result
     }
-    
+
     private func _logout() -> Bool {
         var result = true
         let token = self.activeToken
@@ -211,5 +213,5 @@ open class AuthSession: IAuthSession {
         }
         return result
     }
-    
+
 }

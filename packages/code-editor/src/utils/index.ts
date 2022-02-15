@@ -25,6 +25,6 @@
  */
 export {
   getPrismLanguage,
-  getOverridenTheme,
+  getOverriddenTheme,
   instanceOfPrismLanguage,
 } from './utils'

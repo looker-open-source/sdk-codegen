@@ -23,4 +23,7 @@
  SOFTWARE.
 
  */
-export { JudgingForm } from './JudgingForm'
+
+export * from './JudgingForm'
+export * from './JudgingView'
+export * from './JudgingViewDialog'

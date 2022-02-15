@@ -23,7 +23,8 @@
  SOFTWARE.
 
  */
-import { SheetSDK, ISheet } from '@looker/wholly-sheet'
+import type { SheetSDK, ISheet } from '@looker/wholly-sheet'
+import type { Hackathon, Hacker } from '.'
 import {
   Projects,
   Registrations,
@@ -31,8 +32,6 @@ import {
   Hackathons,
   TeamMembers,
   Judgings,
-  Hackathon,
-  Hacker,
   Registration,
   Users,
   User,

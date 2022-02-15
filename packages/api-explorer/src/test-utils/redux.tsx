@@ -23,49 +23,80 @@
  SOFTWARE.
 
  */
-import React, { ReactElement } from 'react'
+
+import type { ReactElement } from 'react'
+import React from 'react'
 import { Provider } from 'react-redux'
-import { Store } from 'redux'
+import type { Store } from 'redux'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { RenderOptions } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
+import { createStore } from '@looker/redux'
+import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
+import { initRunItSdk } from '@looker/run-it'
 
-import { configureStore, RootState } from '../state'
-import { IApixEnvAdaptor, StandaloneEnvAdaptor } from '../utils'
-import { EnvAdaptorContext } from '../context'
-import { renderWithRouter } from '.'
-
-const defaultStore = configureStore()
+import type { LodesState, RootState, SettingState, SpecState } from '../state'
+import {
+  settingsSlice,
+  defaultLodesState,
+  defaultSettingsState,
+  lodesSlice,
+  defaultSpecsState,
+  specsSlice,
+} from '../state'
+import { specState } from '../test-data'
+import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
-  store: Store<RootState> = defaultStore,
-  envAdaptor: IApixEnvAdaptor = new StandaloneEnvAdaptor()
+  store: Store<RootState> = createTestStore()
 ) => {
-  return (
-    <Provider store={store}>
-      <EnvAdaptorContext.Provider value={{ envAdaptor }}>
-        {consumers}
-      </EnvAdaptorContext.Provider>
-    </Provider>
-  )
+  registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()))
+  return <Provider store={store}>{consumers}</Provider>
 }
 
 export const renderWithReduxProvider = (
   consumers: ReactElement<any>,
   store?: Store<RootState>,
-  envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
-) => renderWithTheme(withReduxProvider(consumers, store, envAdaptor), options)
+) => renderWithTheme(withReduxProvider(consumers, store), options)
 
 export const renderWithRouterAndReduxProvider = (
   consumers: ReactElement<any>,
   initialEntries: string[] = ['/'],
   store?: Store<RootState>,
-  envAdaptor?: IApixEnvAdaptor,
   options?: Omit<RenderOptions, 'queries'>
 ) =>
-  renderWithRouter(
-    withReduxProvider(consumers, store, envAdaptor),
-    initialEntries,
-    options
-  )
+  renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
+
+export const preloadedState: RootState = {
+  settings: defaultSettingsState,
+  lodes: defaultLodesState,
+  specs: defaultSpecsState,
+}
+
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+export const createTestStore = (overrides?: DeepPartial<RootState>) =>
+  createStore({
+    preloadedState: {
+      settings: {
+        ...preloadedState.settings,
+        ...overrides?.settings,
+      } as SettingState,
+      lodes: {
+        ...defaultLodesState,
+        ...overrides?.lodes,
+      } as LodesState,
+      specs: {
+        ...specState,
+        ...overrides?.specs,
+      } as SpecState,
+    },
+    reducer: {
+      settings: settingsSlice.reducer,
+      lodes: lodesSlice.reducer,
+      specs: specsSlice.reducer,
+    },
+  })

@@ -25,7 +25,7 @@
  */
 
 /**
- * 376 API methods
+ * 378 API methods
  */
 
 import type {
@@ -145,6 +145,7 @@ import type {
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
   IRequestGraphDerivedTablesForModel,
+  IRequestGraphDerivedTablesForView,
   IRequestLogin,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -914,12 +915,12 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
@@ -937,12 +938,12 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
-   * @param body Partial<string>
+   * @param body string
    * @param options one-time API call overrides
    *
    */
   async fetch_and_parse_saml_idp_metadata(
-    body: Partial<string>,
+    body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISamlMetadataParseResult, IError>> {
     return this.post<ISamlMetadataParseResult, IError>(
@@ -3356,6 +3357,54 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   *
+   * GET /derived_table/graph/model/{model} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_model(
+    request: IRequestGraphDerivedTablesForModel,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.model = encodeParam(request.model)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/model/${request.model}`,
+      { format: request.format, color: request.color },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   *
+   * GET /derived_table/graph/view/{view} -> IDependencyGraph
+   *
+   * @param request composed interface "IRequestGraphDerivedTablesForView" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async graph_derived_tables_for_view(
+    request: IRequestGraphDerivedTablesForView,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDependencyGraph, IError>> {
+    request.view = encodeParam(request.view)
+    return this.get<IDependencyGraph, IError>(
+      `/derived_table/graph/view/${request.view}`,
+      { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
@@ -3466,7 +3515,9 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Get information about all folders.
    *
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal folders will be returned.
    *
    * GET /folders -> IFolder[]
@@ -5011,28 +5062,6 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
-
-  /**
-   * ### Discover information about derived tables
-   *
-   * GET /derived_table/graph/model/{model} -> IDependencyGraph
-   *
-   * @param request composed interface "IRequestGraphDerivedTablesForModel" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async graph_derived_tables_for_model(
-    request: IRequestGraphDerivedTablesForModel,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDependencyGraph, IError>> {
-    request.model = encodeParam(request.model)
-    return this.get<IDependencyGraph, IError>(
-      `/derived_table/graph/model/${request.model}`,
-      { format: request.format, color: request.color },
-      null,
-      options
-    )
-  }
 
   /**
    * ### Get information about all lookml models.
@@ -8178,7 +8207,9 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Get information about all spaces.
    *
-   * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal spaces, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   *
    * In API 4.0+, all personal spaces will be returned.
    *
    * GET /spaces -> ISpaceBase[]

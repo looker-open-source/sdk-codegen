@@ -1,10 +1,10 @@
 {
   "name": "@looker/extension-sdk",
-  "version": "21.10.2",
+  "version": "22.0.0",
   "description": "Looker Extension SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
-  "sideEffects": "false",
+  "sideEffects": false,
   "typings": "lib/index.d.ts",
   "files": [
     "lib"
@@ -16,7 +16,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
-    "directory": "packages/sdk-rtl"
+    "directory": "packages/extension-sdk"
   },
   "author": "Looker",
   "license": "MIT",
@@ -40,8 +40,8 @@
   },
   "dependencies": {
     "@looker/chatty": "^2.3.0",
-    "@looker/sdk": "^21.10.2",
-    "@looker/sdk-rtl": "^21.0.19",
+    "@looker/sdk": "^22.0.0",
+    "@looker/sdk-rtl": "^21.3.2",
     "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

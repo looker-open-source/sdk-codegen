@@ -5,6 +5,143 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.3.1...sdk-codegen-v21.4.0) (2022-02-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* SDK support for 22.0
+
+### Features
+
+* fuzzy JSON value handling for the Swift SDK ([#961](https://www.github.com/looker-open-source/sdk-codegen/issues/961)) ([0b6b696](https://www.github.com/looker-open-source/sdk-codegen/commit/0b6b696742d67d1abc0cf69dfbf820f5a28d0f86))
+* SDK build for 22.0. ([#959](https://www.github.com/looker-open-source/sdk-codegen/issues/959)) ([de651b3](https://www.github.com/looker-open-source/sdk-codegen/commit/de651b373978fd3689429c0cbdb364a2820fe211))
+* SDK support for 22.0 ([5f9930c](https://www.github.com/looker-open-source/sdk-codegen/commit/5f9930c0b0f7bde59f0b9b47f882ae1f3ff9e490))
+
+
+### Bug Fixes
+
+* Update go codegen to set object as interface{} ([#980](https://www.github.com/looker-open-source/sdk-codegen/issues/980)) ([007989d](https://www.github.com/looker-open-source/sdk-codegen/commit/007989d6c438fa42ec261f5b216f2d933b489742))
+
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.2.0...sdk-codegen-v21.3.1) (2022-01-27)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+* support string or numeric JSON format for numeric IDs in Swift ([#937](https://www.github.com/looker-open-source/sdk-codegen/issues/937)) ([1487d8a](https://www.github.com/looker-open-source/sdk-codegen/commit/1487d8a38432cef2e994d14001df18659522ca90))
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.3.0...sdk-codegen-v21.3.1) (2021-12-20)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.3.0 to ^21.3.1
+
+## [21.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.2.1...sdk-codegen-v21.3.0) (2021-12-16)
+
+
+### Features
+
+* add http method to IRawResponse ([#925](https://www.github.com/looker-open-source/sdk-codegen/issues/925)) ([25cef47](https://www.github.com/looker-open-source/sdk-codegen/commit/25cef47fa61a5f15565560b48f5e0c45a0cd9b44))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.2.0 to ^21.3.0
+
+### [21.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.2.0...sdk-codegen-v21.2.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* enum naming and registration ([#918](https://www.github.com/looker-open-source/sdk-codegen/issues/918)) ([9d4a6cb](https://www.github.com/looker-open-source/sdk-codegen/commit/9d4a6cbfac5defad3a35389e2d46947d2135d349))
+
+## [21.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.1.1...sdk-codegen-v21.2.0) (2021-11-10)
+
+
+### Features
+
+* create @looker/extension-utils ([#886](https://www.github.com/looker-open-source/sdk-codegen/issues/886)) ([9d1720d](https://www.github.com/looker-open-source/sdk-codegen/commit/9d1720d9a4cec00c45195dd9c716d9a2a929264f))
+* Looker 21.20 bindings ([#899](https://www.github.com/looker-open-source/sdk-codegen/issues/899)) ([304d0d0](https://www.github.com/looker-open-source/sdk-codegen/commit/304d0d0688349efad0499d37609605e14df7e97d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.1.1 to ^21.2.0
+
+### [21.1.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.1.0...sdk-codegen-v21.1.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* another TS SDK error handling tweak ([#873](https://www.github.com/looker-open-source/sdk-codegen/issues/873)) ([1c04952](https://www.github.com/looker-open-source/sdk-codegen/commit/1c049527e22926fa7fe0ae011ab4595520005e2f))
+* do not "reserve" type names ending in [] ([#876](https://www.github.com/looker-open-source/sdk-codegen/issues/876)) ([bab56ef](https://www.github.com/looker-open-source/sdk-codegen/commit/bab56ef1c60389d04e8a1e4973afde0d0b75d5ec))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.1.0 to ^21.1.1
+
+## [21.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.25...sdk-codegen-v21.1.0) (2021-10-19)
+
+
+### Features
+
+* closest path match for API Explorer ([#811](https://www.github.com/looker-open-source/sdk-codegen/issues/811)) ([45fd26f](https://www.github.com/looker-open-source/sdk-codegen/commit/45fd26fb0f325fa90edfec72f835ed3a79b9afeb))
+* makeTheCall for Kotlin and type tagging ([#833](https://www.github.com/looker-open-source/sdk-codegen/issues/833)) ([2ca950e](https://www.github.com/looker-open-source/sdk-codegen/commit/2ca950e16c9c172d3e67de58261df16e424efaa3))
+* support either string or numeric JSON values with AnyString ([#848](https://www.github.com/looker-open-source/sdk-codegen/issues/848)) ([9b428f5](https://www.github.com/looker-open-source/sdk-codegen/commit/9b428f5dc871477402f1683cffaadfad55501878))
+* Update Kotlin SDK to use Gson instead of Jackson ([#836](https://www.github.com/looker-open-source/sdk-codegen/issues/836)) ([4d1f789](https://www.github.com/looker-open-source/sdk-codegen/commit/4d1f789fa3b97b0808f06d5d547c96de3ca890ff))
+
+
+### Bug Fixes
+
+* intrinsic type params are not Partial<T> ([#819](https://www.github.com/looker-open-source/sdk-codegen/issues/819)) ([4b31490](https://www.github.com/looker-open-source/sdk-codegen/commit/4b31490f7ce5c9593854e56518245c5399ea9548))
+* Property names with special characters in Kotlin SDK ([#838](https://www.github.com/looker-open-source/sdk-codegen/issues/838)) ([40b6b24](https://www.github.com/looker-open-source/sdk-codegen/commit/40b6b24bfedf8ba16b5dbae2abbbdce2f73c1ffd))
+* request content initialization and filtering for RunIt requests ([#852](https://www.github.com/looker-open-source/sdk-codegen/issues/852)) ([474ee93](https://www.github.com/looker-open-source/sdk-codegen/commit/474ee9365dafe6549826a9f627ac0a79dc0e9a56))
+* stack overflow for type tagging during codegen ([#845](https://www.github.com/looker-open-source/sdk-codegen/issues/845)) ([4ece1b3](https://www.github.com/looker-open-source/sdk-codegen/commit/4ece1b374d9d4b73c1f3fd0512ab54da209c6be6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.20 to ^21.1.0
+
+### [21.0.25](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.24...sdk-codegen-v21.0.25) (2021-09-01)
+
+
+### Bug Fixes
+
+* spec refresh ([#801](https://www.github.com/looker-open-source/sdk-codegen/issues/801)) ([a10245a](https://www.github.com/looker-open-source/sdk-codegen/commit/a10245aa7ea180670d9d8219810aab88eb50854d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.0.19 to ^21.0.20
+
+### [21.0.24](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.23...sdk-codegen-v21.0.24) (2021-08-11)
+
+
+### Features
+
+* fetch API specifications for stand-alone API Explorer ([#789](https://www.github.com/looker-open-source/sdk-codegen/issues/789)) ([f7be1fb](https://www.github.com/looker-open-source/sdk-codegen/commit/f7be1fb589570137c5ab39304910c57f721de8fb))
+
 ### [21.0.23](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.0.22...sdk-codegen-v21.0.23) (2021-07-30)
 
 

@@ -24,9 +24,9 @@
 
  */
 
-import { IRequestProps, ITransport, sdkError, SDKResponse } from './transport'
-import { IApiSettings } from './apiSettings'
-import { Url } from './constants'
+import type { IRequestProps, ITransport, SDKResponse } from './transport'
+import { sdkError } from './transport'
+import type { IApiSettings } from './apiSettings'
 
 /**
  * Same as the Looker API access token object
@@ -59,11 +59,11 @@ export interface IError {
   /**
    * Error details (read-only)
    */
-  message: string
+  message: string | null
   /**
    * Documentation link (read-only)
    */
-  documentation_url: Url
+  documentation_url: string | null
 }
 
 /**

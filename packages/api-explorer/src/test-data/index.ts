@@ -23,5 +23,6 @@
  SOFTWARE.
 
  */
-export { api, api40, specs, specState } from './specs'
+export * from './specs'
 export { examples } from './examples'
+export * from './declarations'

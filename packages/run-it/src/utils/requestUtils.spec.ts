@@ -23,13 +23,18 @@
  SOFTWARE.
 
  */
-import { RunItInput } from '../RunIt'
-import { testJsonResponse } from '../test-data'
-import { StandaloneConfigurator } from '../components/ConfigForm/configUtils'
-import { createRequestParams, pathify, runRequest } from './requestUtils'
+import type { RunItInput } from '../RunIt'
+import { testJsonResponse, api } from '../test-data'
+import {
+  createRequestParams,
+  pathify,
+  runRequest,
+  createInputs,
+  initRequestContent,
+} from './requestUtils'
 import { initRunItSdk } from './RunItSDK'
 
-const sdk = initRunItSdk(new StandaloneConfigurator())
+const sdk = initRunItSdk()
 
 describe('requestUtils', () => {
   afterEach(() => {
@@ -94,6 +99,26 @@ describe('requestUtils', () => {
         limit: '500',
       }),
     }
+
+    const noBody = {
+      result_format: 'json',
+      cache: true,
+      body: '{}',
+    }
+
+    test('empty json body is not removed', () => {
+      const [pathParams, queryParams, body] = createRequestParams(
+        inputs,
+        noBody
+      )
+      expect(pathParams).toEqual({
+        result_format: noBody.result_format,
+      })
+      expect(queryParams).toEqual({
+        cache: noBody.cache,
+      })
+      expect(body).toEqual({})
+    })
 
     test('it correctly identifies requestContent params location', () => {
       const [pathParams, queryParams, body] = createRequestParams(
@@ -160,6 +185,175 @@ describe('requestUtils', () => {
         expect.any(Function)
       )
       expect(resp).toEqual(testJsonResponse)
+    })
+  })
+
+  describe('createInputs', () => {
+    test('converts delimarray to string', () => {
+      const method = api.methods.all_users
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+      expect(actual[4]).toEqual({
+        name: 'ids',
+        location: 'query',
+        type: 'string',
+        required: false,
+        description: 'Optional list of ids to get specific users.',
+      })
+    })
+
+    test('converts enums in body to string', () => {
+      const method = api.methods.create_query_task
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+      expect(actual[0]).toEqual({
+        name: 'body',
+        location: 'body',
+        type: {
+          query_id: 0,
+          result_format: '',
+          source: '',
+          deferred: false,
+          look_id: 0,
+          dashboard_id: '',
+        },
+        required: true,
+        description: '',
+      })
+    })
+
+    test('works with various param types', () => {
+      const method = api.methods.run_inline_query
+      const actual = createInputs(api, method)
+      expect(actual).toHaveLength(method.allParams.length)
+
+      expect(actual).toEqual(
+        expect.arrayContaining([
+          /** Boolean param */
+          {
+            name: 'cache',
+            location: 'query',
+            type: 'boolean',
+            required: false,
+            description: 'Get results from cache if available.',
+          },
+          /** Number param */
+          {
+            name: 'limit',
+            location: 'query',
+            type: 'int64',
+            required: false,
+            description: expect.any(String),
+          },
+          /** String param */
+          {
+            name: 'result_format',
+            location: 'path',
+            type: 'string',
+            required: true,
+            description: 'Format of result',
+          },
+          /** Body param */
+          {
+            name: 'body',
+            location: 'body',
+            type: expect.objectContaining({
+              model: '',
+              view: '',
+              fields: [],
+              pivots: [],
+              fill_fields: [],
+              filters: {},
+              filter_expression: '',
+              sorts: [],
+              limit: '',
+              column_limit: '',
+              total: false,
+              row_total: '',
+              subtotals: [],
+              vis_config: {},
+              filter_config: {},
+              visible_ui_sections: '',
+              dynamic_fields: '',
+              client_id: '',
+              query_timezone: '',
+            }),
+            required: true,
+            description: '',
+          },
+        ])
+      )
+    })
+  })
+
+  describe('request content initialization', () => {
+    test('it initialzies body params with default values', () => {
+      const inputs = createInputs(api, api.methods.run_inline_query)
+      const actual = initRequestContent(inputs)
+      expect(actual).toEqual({
+        body: {
+          client_id: '',
+          column_limit: '',
+          dynamic_fields: '',
+          fields: [],
+          fill_fields: [],
+          filter_config: {},
+          filter_expression: '',
+          filters: {},
+          limit: '',
+          model: '',
+          pivots: [],
+          query_timezone: '',
+          row_total: '',
+          runtime: 0,
+          sorts: [],
+          subtotals: [],
+          total: false,
+          view: '',
+          vis_config: {},
+          visible_ui_sections: '',
+        },
+      })
+    })
+
+    test('it contains default-empty body params', () => {
+      const inputs = createInputs(api, api.methods.fetch_integration_form)
+      const bodyInput = inputs.find((i) => i.location === 'body')!
+      expect(bodyInput.name).toEqual('body')
+      expect(bodyInput.type).toEqual({})
+      const actual = initRequestContent(inputs)
+      expect(actual).toEqual({
+        body: {},
+      })
+    })
+  })
+
+  describe('createRequestParams', () => {
+    const inputs = createInputs(api, api.methods.run_inline_query)
+
+    test('removes empties for path, query and body params', () => {
+      const requestContent = initRequestContent(inputs)
+      const [pathParams, queryParams, body] = createRequestParams(
+        inputs,
+        requestContent
+      )
+      expect(pathParams).toEqual({})
+      expect(queryParams).toEqual({})
+      expect(body).toEqual({
+        runtime: 0,
+        total: false,
+      })
+    })
+
+    test('does mot remove empty bodies', () => {
+      const requestContent = { body: {} }
+      const [pathParams, queryParams, body] = createRequestParams(
+        inputs,
+        requestContent
+      )
+      expect(pathParams).toEqual({})
+      expect(queryParams).toEqual({})
+      expect(body).toEqual({})
     })
   })
 })

@@ -24,14 +24,11 @@
 
  */
 
-import React, { createContext, FC, ReactElement } from 'react'
-import { IAPIMethods } from '@looker/sdk-rtl'
-import { RunItConfigurator } from './components'
+import type { FC, ReactElement } from 'react'
+import React, { createContext } from 'react'
 
 export interface RunItContextProps {
   basePath: string
-  sdk?: IAPIMethods | undefined
-  configurator: RunItConfigurator
 }
 
 export interface RunItProviderProps extends RunItContextProps {
@@ -40,21 +37,23 @@ export interface RunItProviderProps extends RunItContextProps {
 
 const defaultRunItContextValue: RunItContextProps = {
   basePath: '',
-  configurator: {} as RunItConfigurator,
 }
 
 export const RunItContext = createContext<RunItContextProps>(
   defaultRunItContextValue
 )
 
+/**
+ * TODO: Eliminate this provider. Configurator currently duplicates adaptor
+ * functionality. basePath can be passed as a prop and should be stored using
+ * redux when RunIt has it.
+ */
 export const RunItProvider: FC<RunItProviderProps> = ({
   children,
-  sdk,
   basePath,
-  configurator,
 }) => {
   return (
-    <RunItContext.Provider value={{ sdk, configurator, basePath }}>
+    <RunItContext.Provider value={{ basePath }}>
       {children}
     </RunItContext.Provider>
   )
