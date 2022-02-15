@@ -178,13 +178,6 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
-      - name: Upload pytest test results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: python-test-results
-          path: python/results/
-
       - name: Run unit tests
         run: |
           mkdir ${{ env.JUNIT_OUTPUT_DIR }}
