@@ -44,7 +44,7 @@ type AuthSession struct {
 func NewAuthSession(config ApiSettings) *AuthSession {
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: config.VerifySsl,
+			InsecureSkipVerify: !config.VerifySsl,
 		},
 	}
 	return &AuthSession{
@@ -53,6 +53,7 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 	}
 }
 
+// The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
 	return &AuthSession{
 		Config:    config,
