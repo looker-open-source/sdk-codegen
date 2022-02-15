@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  LOOKERSDK_BASE_URL: https://localhost:20000
+  LOOKERSDK_BASE_URL: http://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
   JUNIT_OUTPUT_DIR: results
   JUNIT_ARTIFACT_DIR: gosdk-test-results
@@ -68,7 +68,7 @@ jobs:
     needs: unit
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
-      GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.gointegration.${{ matrix.go-version }}.xml
+      GO_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.gointegration.xml
     runs-on: ${{ matrix.os }}-latest
     defaults:
       run:
@@ -153,6 +153,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.17.6
+          check-latest: true
 
       - name: Install dependencies
         run: go install github.com/jstemmer/go-junit-report@latest
