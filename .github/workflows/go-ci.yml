@@ -180,7 +180,7 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
-      - name: Run unit tests
+      - name: Run integration tests
         run: |
           mkdir ${{ env.JUNIT_OUTPUT_DIR }}
           cd go/integration
