@@ -27,6 +27,9 @@ on:
     branches:
       - main
 
+permissions:
+  checks: write
+
 jobs:
   satisfy-required-checks:
     name: Satisfy Required Checks
@@ -84,7 +87,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -103,7 +106,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -122,7 +125,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -141,7 +144,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -160,7 +163,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
