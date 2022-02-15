@@ -129,9 +129,7 @@
     "webpack-merge": "^5.7.3",
     "yarn-deduplicate": "^3.1.0"
   },
-  "dependencies": {
-    "@looker/extension-sdk-react": "^22.0.0"
-  },
+  "dependencies": {},
   "lint-staged": {
     "**/*.ts?(x)": [
       "eslint"
