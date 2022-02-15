@@ -49,7 +49,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Install dependencies
-        run: go get -u github.com/jstemmer/go-junit-report
+        run: go install github.com/jstemmer/go-junit-report@latest
 
       - name: Run unit tests
         run: |
@@ -155,7 +155,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Install dependencies
-        run: go get -u github.com/jstemmer/go-junit-report
+        run: go install github.com/jstemmer/go-junit-report@latest
 
       - name: Determine credentials version
         # Prior to 21_18, each version had different credentials and a
