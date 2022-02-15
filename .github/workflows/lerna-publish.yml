@@ -56,6 +56,7 @@ jobs:
           yarn
           yarn build
           yarn dedupe:ci
+          git checkout yarn.lock
 
       # setup test env so prepublishOnly lifecycle script can run
       - name: Mock looker.ini
