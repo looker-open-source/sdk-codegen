@@ -23,22 +23,15 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import type { SpecItem } from '@looker/sdk-codegen'
 
-import { specs } from '../../test-data'
-import type { SelectSpecAction } from '.'
-import { specReducer, initDefaultSpecState, Actions } from '.'
+import type { RootState } from '../store'
 
-describe('Spec Reducer', () => {
-  test('it selects a spec', () => {
-    const action: SelectSpecAction = {
-      type: Actions.SELECT_SPEC,
-      payload: '4.0',
-    }
+const selectSpecsState = (state: RootState) => state.specs
 
-    const state = specReducer(initDefaultSpecState(specs, location), action)
-    expect(state.spec.api).toBeInstanceOf(ApiModel)
-    expect(state.spec.key).toEqual('4.0')
-    expect(state.spec.status).toEqual(specs['4.0'].status)
-  })
-})
+export const selectSpecs = (state: RootState) => selectSpecsState(state).specs
+
+export const selectCurrentSpec = (state: RootState): SpecItem => {
+  const specState = selectSpecsState(state)
+  return specState.specs[specState.currentSpecKey]
+}

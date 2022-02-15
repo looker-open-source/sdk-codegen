@@ -50,6 +50,7 @@ interface IRefreshTokenGrantTypeParams {
 export class OAuthSession extends AuthSession {
   activeToken = new AuthToken()
   crypto: ICryptoHash
+  reentry = false
   private static readonly codeVerifierKey = 'looker_oauth_code_verifier'
   public static readonly returnUrlKey = 'looker_oauth_return_url'
 
@@ -145,7 +146,9 @@ export class OAuthSession extends AuthSession {
 
   async login(_sudoId?: string | number): Promise<any> {
     if (!this.isAuthenticated()) {
-      if (!this.returnUrl) {
+      if (this.reentry) {
+        // do nothing
+      } else if (!this.returnUrl) {
         // OAuth has not been initiated
         const authUrl = await this.createAuthCodeRequestUrl(
           'cors_api',
@@ -156,6 +159,7 @@ export class OAuthSession extends AuthSession {
         // Save the current URL so redirected successful OAuth login can restore it
         window.location.href = authUrl
       } else {
+        this.reentry = true
         // If return URL is stored, we must be coming back from an OAuth request
         // so release the stored return url at the start of the redemption
         this.returnUrl = null

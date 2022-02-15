@@ -38,6 +38,7 @@ export class ExtensionAuthAdaptor implements IAuthAdaptor {
 
   async login() {
     // Noop for extensions. Authentication is not required in an extension context
+    return true
   }
 }
 

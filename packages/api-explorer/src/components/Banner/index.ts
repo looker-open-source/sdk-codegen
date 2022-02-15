@@ -23,6 +23,4 @@
  SOFTWARE.
 
  */
-export * from './utils'
-export * from './actions'
-export * from './reducer'
+export { Banner } from './Banner'

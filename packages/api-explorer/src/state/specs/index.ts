@@ -23,4 +23,5 @@
  SOFTWARE.
 
  */
-export * from './spec'
+export * from './selectors'
+export * from './slice'

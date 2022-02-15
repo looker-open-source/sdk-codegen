@@ -13,9 +13,10 @@
 # definition in a different workflow file:
 #
 # codegen-ci.yml: Codegen Tests
-# tssdk-ci.yml: Typescript Tests
-# python-ci.yml: Python Tests
+# tssdk-ci.yml: Typescript SDK Tests
+# python-ci.yml: Python SDK Tests
 # apix-ci.yml: APIX Tests
+# go-ci.yml: Go SDK Tests
 #
 
 name: Required Checks Hack
@@ -25,6 +26,9 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  checks: write
 
 jobs:
   satisfy-required-checks:
@@ -64,6 +68,8 @@ jobs:
               - packages/extension-sdk/**/*
               - packages/extension-sdk-react/**/*
               - packages/extension-utils/**/*
+            gosdk:
+              - packages/go/**/*
 
       - name: Debug info
         run: |
@@ -74,13 +80,14 @@ jobs:
           echo "python: ${{ steps.filter.outputs.python }}"
           echo "resources: ${{ steps.filter.outputs.resources }}"
           echo "tssdk: ${{ steps.filter.outputs.tssdk }}"
+          echo "gosdk: ${{ steps.filter.outputs.gosdk }}"
 
       - name: Create Codegen check
         if: steps.filter.outputs.codegen == 'false'
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -99,7 +106,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -118,7 +125,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -137,7 +144,7 @@ jobs:
         run: |
           curl --request POST \
           --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
-          --header "authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           --header "content-type: application/json" \
           --header "Accept: application/vnd.github.v3+json" \
           --data '{
@@ -145,6 +152,25 @@ jobs:
             "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
             "output": {
               "title": "Required Checks Hack / APIX Tests",
+              "summary": "Associated files have not been changed so this can be skipped"
+              },
+            "conclusion": "success"
+          }' \
+          --fail
+
+      - name: Create Go check
+        if: steps.filter.outputs.gosdk == 'false'
+        run: |
+          curl --request POST \
+          --url https://api.github.com/repos/looker-open-source/sdk-codegen/check-runs \
+          --header "authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          --header "content-type: application/json" \
+          --header "Accept: application/vnd.github.v3+json" \
+          --data '{
+            "name": "Go Tests",
+            "head_sha": "${{ github.event.pull_request.head.sha || github.sha }}",
+            "output": {
+              "title": "Required Checks Hack / Go Tests",
               "summary": "Associated files have not been changed so this can be skipped"
               },
             "conclusion": "success"
