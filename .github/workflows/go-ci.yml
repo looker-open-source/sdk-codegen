@@ -13,6 +13,8 @@ on:
   workflow_dispatch:
 
 env:
+  LOOKERSDK_BASE_URL: https://localhost:20000
+  LOOKERSDK_VERIFY_SSL: false
   JUNIT_OUTPUT_DIR: results
   JUNIT_ARTIFACT_DIR: gosdk-test-results
 
