@@ -502,7 +502,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@looker/sdk-node@^22.0.0":
+"@looker/sdk-node@^21.20.1":
   version "21.20.1"
   resolved "https://registry.yarnpkg.com/@looker/sdk-node/-/sdk-node-21.20.1.tgz#4cef072397ad32ec8d0628bae36c461c8e091d3b"
   integrity sha512-0xi2uSfGslB8KdXAaG2kVWv9suzgg5yiBOqzpKQaOeLRZY2rZAx8nn3FDNKzk15ZZAG/zwXNGmYblJny24AMLQ==
@@ -534,7 +534,7 @@
     request "^2.88.0"
     request-promise-native "^1.0.8"
 
-"@looker/sdk@^21.20.1", "@looker/sdk@^22.0.0":
+"@looker/sdk@^21.20.1":
   version "21.20.1"
   resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.1.tgz#3d257309c2fe5ad1246e01837ea71aeeb7f4df22"
   integrity sha512-t54yXAMeJAIeq7uUc1Oa3SdFsE3zvQaL9S28ebXy9TrljbnHG4FsVMacfq0XQGYPDzYUIoEySShWcBOsFZ+eyw==
@@ -3433,10 +3433,10 @@ node-fetch@*:
     data-uri-to-buffer "^3.0.1"
     fetch-blob "^3.1.2"
 
-node-fetch@^2.6.1:
-  version "2.6.5"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.5.tgz#42735537d7f080a7e5f78b6c549b7146be1742fd"
-  integrity sha512-mmlIVHJEu5rnIxgEgez6b9GgWXbkZj5YZ7fx+2r94a2E+Uirsp6HsPTPlomfdHtpt/B0cdKviwkoaM6pyvUOpQ==
+node-fetch@^2.6.1, node-fetch@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
 
