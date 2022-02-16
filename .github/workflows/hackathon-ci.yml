@@ -48,7 +48,18 @@ jobs:
       - name: Install dependencies
         run: |
           yarn
+
+      - name: Lint
+        run: |
           yarn lint:es --quiet
           yarn lint:ts
+
+      - name: Build all
+        run: |
           yarn build
           yarn dedupe:ci
+
+      - name: Bundle hackathon
+        run: |
+          yarn bundle
+        working-directory: packages/hackathon
