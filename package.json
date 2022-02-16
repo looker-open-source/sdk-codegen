@@ -256,6 +256,12 @@
     "css-what": ">= 5.0.1",
     "trim-newlines": ">= 3.0.1",
     "glob-parent": ">= 5.1.2",
-    "ws": ">= 7.4.6"
+    "ws": ">= 7.4.6",
+    "**/node-forge": "1.0.0",
+    "**/axios": "0.21.2",
+    "**/postcss": "8.2.13",
+    "**/json-schema": "0.4.0",
+    "**/node-fetch": "2.6.7",
+    "**/follow-redirects": "1.14.8"
   }
 }
