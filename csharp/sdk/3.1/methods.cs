@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 378 API methods
+/// 382 API methods
 
 #nullable enable
 using System;
@@ -1089,6 +1089,21 @@ namespace Looker.SDK.API31
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Locale[], Exception>(HttpMethod.Get, "/locales", null,null,options);
+  }
+
+  /// ### Configure SMTP Settings
+  ///   This API allows users to configure the SMTP settings on the Looker instance.
+  ///   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+  ///
+  /// POST /smtp_settings -> void
+  ///
+  /// <returns><c>void</c> Successfully updated SMTP settings ()</returns>
+  ///
+  public async Task<SdkResponse<string, Exception>> set_smtp_settings(
+    SmtpSettings body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Post, "/smtp_settings", null,body,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -2489,6 +2504,69 @@ namespace Looker.SDK.API31
     return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/view/{view}", new Values {
       { "models", models },
       { "workspace", workspace }},null,options);
+  }
+
+  /// Enqueue materialization for a PDT with the given model name and view name
+  ///
+  /// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model_name">The model of the PDT to start building.</param>
+  /// <param name="view_name">The view name of the PDT to start building.</param>
+  /// <param name="force_rebuild">Force rebuild of required dependent PDTs, even if they are already materialized.</param>
+  /// <param name="force_full_incremental">Force involved incremental PDTs to fully re-materialize.</param>
+  /// <param name="workspace">Workspace in which to materialize selected PDT ('dev' or default 'production').</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> start_pdt_build(
+    string model_name,
+    string view_name,
+    string? force_rebuild = null,
+    string? force_full_incremental = null,
+    string? workspace = null,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      model_name = SdkUtils.EncodeParam(model_name);
+      view_name = SdkUtils.EncodeParam(view_name);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{model_name}/{view_name}/start", new Values {
+      { "force_rebuild", force_rebuild },
+      { "force_full_incremental", force_full_incremental },
+      { "workspace", workspace },
+      { "source", source }},null,options);
+  }
+
+  /// Check status of PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/status -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to check status for.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> check_pdt_build(
+    string materialization_id,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/status", null,null,options);
+  }
+
+  /// Stop a PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to stop.</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> stop_pdt_build(
+    string materialization_id,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/stop", new Values {
+      { "source", source }},null,options);
   }
 
   #endregion DerivedTable: View Derived Table graphs

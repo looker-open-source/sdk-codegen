@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
+/// 312 API models: 232 Spec, 0 Request, 59 Write, 21 Enum
 
 #nullable enable
 using System;
@@ -1387,7 +1387,9 @@ public class DashboardLookml : SdkModel
 {
   /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// <summary>lookml of UDD (read-only)</summary>
+  /// <summary>(Write-Only) Id of the folder</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>lookml of UDD</summary>
   public string? lookml { get; set; } = null;
 }
 
@@ -1565,6 +1567,10 @@ public class DBConnection : SdkModel
   public long? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>When true, query cost estimate will be displayed in explore.</summary>
+  public bool? cost_estimate_enabled { get; set; } = null;
+  /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
+  public bool? pdt_api_control_enabled { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -1757,6 +1763,12 @@ public class DiscretePalette : SdkModel
   public string? type { get; set; } = null;
   /// <summary>Array of colors in the palette</summary>
   public string[]? colors { get; set; } = null;
+}
+
+public class EgressIpAddresses : SdkModel
+{
+  /// <summary>Egress IP addresses (read-only)</summary>
+  public string[]? egress_ip_addresses { get; set; } = null;
 }
 
 public class EmbedParams : SdkModel
@@ -3237,6 +3249,14 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
+public class MaterializePDT : SdkModel
+{
+  /// <summary>The ID of the enqueued materialization task (read-only)</summary>
+  public string? materialization_id { get; set; } = null;
+  /// <summary>Detailed response in text format (read-only)</summary>
+  public string? resp_text { get; set; } = null;
+}
+
 public class MergeFields : SdkModel
 {
   /// <summary>Field name to map onto in the merged results</summary>
@@ -4414,6 +4434,25 @@ public class SmtpNodeStatus : SdkModel
   public string? hostname { get; set; } = null;
 }
 
+public class SmtpSettings : SdkModel
+{
+  /// <summary>SMTP Server url</summary>
+  public string? address { get; set; } = null;
+  /// <summary>From e-mail address</summary>
+  public string? from { get; set; } = null;
+  /// <summary>User name</summary>
+  public string? user_name { get; set; } = null;
+  /// <summary>Password</summary>
+  public string? password { get; set; } = null;
+  /// <summary>SMTP Server's port</summary>
+  public long? port { get; set; } = null;
+  /// <summary>Is TLS encryption enabled?</summary>
+  public bool? enable_starttls_auto { get; set; } = null;
+  /// <summary>TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SslVersion? ssl_version { get; set; }
+}
+
 public class SmtpStatus : SdkModel
 {
   /// <summary>Overall SMTP status of cluster (read-only)</summary>
@@ -4530,6 +4569,17 @@ public class SshTunnel : SdkModel
   public long? database_port { get; set; } = null;
   /// <summary>Current connection status for this Tunnel (read-only)</summary>
   public string? status { get; set; } = null;
+}
+
+/// TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+public enum SslVersion
+{
+  [EnumMember(Value = "TLSv1_1")]
+  TLSv1_1,
+  [EnumMember(Value = "SSLv23")]
+  SSLv23,
+  [EnumMember(Value = "TLSv1_2")]
+  TLSv1_2
 }
 
 public class SupportAccessAddEntries : SdkModel
@@ -5440,6 +5490,16 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? height { get; set; } = null;
 }
 
+/// Dynamic writeable type for DashboardLookml removes:
+/// dashboard_id
+public class WriteDashboardLookml : SdkModel
+{
+  /// <summary>(Write-Only) Id of the folder</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>lookml of UDD</summary>
+  public string? lookml { get; set; } = null;
+}
+
 /// Dynamic writeable type for Datagroup removes:
 /// can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 public class WriteDatagroup : SdkModel
@@ -5519,6 +5579,10 @@ public class WriteDBConnection : SdkModel
   public long? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>When true, query cost estimate will be displayed in explore.</summary>
+  public bool? cost_estimate_enabled { get; set; } = null;
+  /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
+  public bool? pdt_api_control_enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:

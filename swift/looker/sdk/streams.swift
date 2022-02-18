@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 443 API methods
  */
 
 
@@ -2171,6 +2171,20 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Get Egress IP Addresses
+     *
+     * Returns the list of public egress IP Addresses for a hosted customer's instance
+     *
+     * GET /public_egress_ip_addresses -> EgressIpAddresses
+     */
+    public func public_egress_ip_addresses(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/public_egress_ip_addresses", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Set the menu item name and content for internal help resources
      *
      * GET /internal_help_resources_content -> InternalHelpResourcesContent
@@ -2353,6 +2367,24 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.patch("/setting", 
             ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Configure SMTP Settings
+     *   This API allows users to configure the SMTP settings on the Looker instance.
+     *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+     *
+     * POST /smtp_settings -> Voidable
+     */
+    public func set_smtp_settings(
+        /**
+         * @param {SmtpSettings} body
+         */
+        _ body: SmtpSettings,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/smtp_settings", nil, try! self.encode(body), options)
         return result
     }
 
@@ -3793,6 +3825,31 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     *
+     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     *
+     * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+     * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+     * ).
+     *
+     * Note that the created dashboard is not linked to any LookML Dashboard,
+     * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * POST /dashboards/from_lookml -> DashboardLookml
+     */
+    public func create_dashboard_from_lookml(
+        /**
+         * @param {WriteDashboardLookml} body
+         */
+        _ body: WriteDashboardLookml,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/dashboards/from_lookml", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -4423,6 +4480,84 @@ open class LookerSDKStream: APIMethods {
         let path_view = encodeParam(view)
         let result: SDKResponse<Data, SDKError> = self.get("/derived_table/graph/view/\(path_view)", 
             ["models": models, "workspace": workspace], nil, options)
+        return result
+    }
+
+    /**
+     * Enqueue materialization for a PDT with the given model name and view name
+     *
+     * GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+     */
+    public func start_pdt_build(
+        /**
+         * @param {String} model_name The model of the PDT to start building.
+         */
+        _ model_name: String,
+        /**
+         * @param {String} view_name The view name of the PDT to start building.
+         */
+        _ view_name: String,
+        /**
+         * @param {String} force_rebuild Force rebuild of required dependent PDTs, even if they are already materialized.
+         */
+        force_rebuild: String? = nil,
+        /**
+         * @param {String} force_full_incremental Force involved incremental PDTs to fully re-materialize.
+         */
+        force_full_incremental: String? = nil,
+        /**
+         * @param {String} workspace Workspace in which to materialize selected PDT ('dev' or default 'production').
+         */
+        workspace: String? = nil,
+        /**
+         * @param {String} source The source of this request.
+         */
+        source: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_model_name = encodeParam(model_name)
+        let path_view_name = encodeParam(view_name)
+        let result: SDKResponse<Data, SDKError> = self.get("/derived_table/\(path_model_name)/\(path_view_name)/start", 
+            ["force_rebuild": force_rebuild, "force_full_incremental": force_full_incremental, "workspace": workspace, "source": source], nil, options)
+        return result
+    }
+
+    /**
+     * Check status of PDT materialization
+     *
+     * GET /derived_table/{materialization_id}/status -> MaterializePDT
+     */
+    public func check_pdt_build(
+        /**
+         * @param {String} materialization_id The materialization id to check status for.
+         */
+        _ materialization_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_materialization_id = encodeParam(materialization_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/derived_table/\(path_materialization_id)/status", nil, nil, options)
+        return result
+    }
+
+    /**
+     * Stop a PDT materialization
+     *
+     * GET /derived_table/{materialization_id}/stop -> MaterializePDT
+     */
+    public func stop_pdt_build(
+        /**
+         * @param {String} materialization_id The materialization id to stop.
+         */
+        _ materialization_id: String,
+        /**
+         * @param {String} source The source of this request.
+         */
+        source: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_materialization_id = encodeParam(materialization_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/derived_table/\(path_materialization_id)/stop", 
+            ["source": source], nil, options)
         return result
     }
 

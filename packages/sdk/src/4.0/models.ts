@@ -25,7 +25,7 @@
  */
 
 /**
- * 362 API models: 229 Spec, 55 Request, 58 Write, 20 Enum
+ * 368 API models: 232 Spec, 56 Request, 59 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -2305,7 +2305,11 @@ export interface IDashboardLookml {
    */
   dashboard_id?: string | null
   /**
-   * lookml of UDD (read-only)
+   * (Write-Only) Id of the folder
+   */
+  folder_id?: string | null
+  /**
+   * lookml of UDD
    */
   lookml?: string | null
 }
@@ -2616,6 +2620,14 @@ export interface IDBConnection {
    * When true, error PDTs will be retried every regenerator cycle
    */
   always_retry_failed_builds?: boolean | null
+  /**
+   * When true, query cost estimate will be displayed in explore.
+   */
+  cost_estimate_enabled?: boolean | null
+  /**
+   * PDT builds on this connection can be kicked off and cancelled via API.
+   */
+  pdt_api_control_enabled?: boolean | null
 }
 
 export interface IDBConnectionBase {
@@ -2917,6 +2929,13 @@ export interface IDiscretePalette {
    * Array of colors in the palette
    */
   colors?: string[]
+}
+
+export interface IEgressIpAddresses {
+  /**
+   * Egress IP addresses (read-only)
+   */
+  egress_ip_addresses?: string[] | null
 }
 
 export interface IEmbedParams {
@@ -5494,6 +5513,17 @@ export interface IManifest {
    */
   imports?: IImportedProject[] | null
   localization_settings?: ILocalizationSettings
+}
+
+export interface IMaterializePDT {
+  /**
+   * The ID of the enqueued materialization task (read-only)
+   */
+  materialization_id?: string
+  /**
+   * Detailed response in text format (read-only)
+   */
+  resp_text?: string | null
 }
 
 export interface IMergeFields {
@@ -8376,6 +8406,36 @@ export interface IRequestSearchUsersNames {
 }
 
 /**
+ * Dynamically generated request type for start_pdt_build
+ */
+export interface IRequestStartPdtBuild {
+  /**
+   * The model of the PDT to start building.
+   */
+  model_name: string
+  /**
+   * The view name of the PDT to start building.
+   */
+  view_name: string
+  /**
+   * Force rebuild of required dependent PDTs, even if they are already materialized.
+   */
+  force_rebuild?: string | null
+  /**
+   * Force involved incremental PDTs to fully re-materialize.
+   */
+  force_full_incremental?: string | null
+  /**
+   * Workspace in which to materialize selected PDT ('dev' or default 'production').
+   */
+  workspace?: string | null
+  /**
+   * The source of this request.
+   */
+  source?: string | null
+}
+
+/**
  * Dynamically generated request type for tag_ref
  */
 export interface IRequestTagRef {
@@ -9346,6 +9406,37 @@ export interface ISmtpNodeStatus {
   hostname?: string | null
 }
 
+export interface ISmtpSettings {
+  /**
+   * SMTP Server url
+   */
+  address?: string
+  /**
+   * From e-mail address
+   */
+  from?: string
+  /**
+   * User name
+   */
+  user_name?: string
+  /**
+   * Password
+   */
+  password?: string
+  /**
+   * SMTP Server's port
+   */
+  port?: number
+  /**
+   * Is TLS encryption enabled?
+   */
+  enable_starttls_auto?: boolean
+  /**
+   * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+   */
+  ssl_version?: SslVersion | null
+}
+
 export interface ISmtpStatus {
   /**
    * Overall SMTP status of cluster (read-only)
@@ -9543,6 +9634,15 @@ export interface ISshTunnel {
    * Current connection status for this Tunnel (read-only)
    */
   status?: string
+}
+
+/**
+ * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+ */
+export enum SslVersion {
+  TLSv1_1 = 'TLSv1_1',
+  SSLv23 = 'SSLv23',
+  TLSv1_2 = 'TLSv1_2',
 }
 
 export interface ISupportAccessAddEntries {
@@ -10967,6 +11067,21 @@ export interface IWriteDashboardLayoutComponent {
 }
 
 /**
+ * Dynamic writeable type for DashboardLookml removes:
+ * dashboard_id
+ */
+export interface IWriteDashboardLookml {
+  /**
+   * (Write-Only) Id of the folder
+   */
+  folder_id?: string | null
+  /**
+   * lookml of UDD
+   */
+  lookml?: string | null
+}
+
+/**
  * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
@@ -11111,6 +11226,14 @@ export interface IWriteDBConnection {
    * When true, error PDTs will be retried every regenerator cycle
    */
   always_retry_failed_builds?: boolean | null
+  /**
+   * When true, query cost estimate will be displayed in explore.
+   */
+  cost_estimate_enabled?: boolean | null
+  /**
+   * PDT builds on this connection can be kicked off and cancelled via API.
+   */
+  pdt_api_control_enabled?: boolean | null
 }
 
 /**
