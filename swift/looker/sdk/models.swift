@@ -25,7 +25,7 @@
  */
 
 /**
- * 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
+ * 312 API models: 232 Spec, 0 Request, 59 Write, 21 Enum
  */
 
 
@@ -5833,6 +5833,7 @@ public struct DashboardLookml: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _dashboard_id = "dashboard_id"
+        case _folder_id = "folder_id"
         case _lookml = "lookml"
     }
     private var _dashboard_id: AnyString?
@@ -5844,17 +5845,27 @@ public struct DashboardLookml: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
+    private var _folder_id: AnyString?
+    /**
+     * (Write-Only) Id of the folder
+     */
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
     private var _lookml: AnyString?
     /**
-     * lookml of UDD (read-only)
+     * lookml of UDD
      */
     public var lookml: String? {
         get { _lookml?.value }
         set { _lookml = newValue.map(AnyString.init) }
     }
 
-    public init(dashboard_id: String? = nil, lookml: String? = nil) {
+    public init(dashboard_id: String? = nil, folder_id: String? = nil, lookml: String? = nil) {
         self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._folder_id = folder_id.map(AnyString.init)
         self._lookml = lookml.map(AnyString.init)
     }
 
@@ -6260,6 +6271,8 @@ public struct DBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case cost_estimate_enabled
+        case pdt_api_control_enabled
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -6573,7 +6586,17 @@ public struct DBConnection: SDKModel {
      */
     public var always_retry_failed_builds: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil) {
+    /**
+     * When true, query cost estimate will be displayed in explore.
+     */
+    public var cost_estimate_enabled: Bool?
+
+    /**
+     * PDT builds on this connection can be kicked off and cancelled via API.
+     */
+    public var pdt_api_control_enabled: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -6616,6 +6639,8 @@ public struct DBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyInt.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.cost_estimate_enabled = cost_estimate_enabled
+        self.pdt_api_control_enabled = pdt_api_control_enabled
     }
 
 }
@@ -7294,6 +7319,26 @@ public struct DiscretePalette: SDKModel {
         self._label = label.map(AnyString.init)
         self._type = type.map(AnyString.init)
         if let v = colors { _colors = v.map { AnyString.init($0) } } else { _colors = nil }
+    }
+
+}
+
+public struct EgressIpAddresses: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _egress_ip_addresses = "egress_ip_addresses"
+    }
+    private var _egress_ip_addresses: [AnyString]?
+    /**
+     * Egress IP addresses (read-only)
+     */
+    public var egress_ip_addresses: [String]? {
+        get { if let v = _egress_ip_addresses { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _egress_ip_addresses = v.map { AnyString.init($0) } } else { _egress_ip_addresses = nil } }
+    }
+
+    public init(egress_ip_addresses: [String]? = nil) {
+        if let v = egress_ip_addresses { _egress_ip_addresses = v.map { AnyString.init($0) } } else { _egress_ip_addresses = nil }
     }
 
 }
@@ -13531,6 +13576,37 @@ public struct Manifest: SDKModel {
 
 }
 
+public struct MaterializePDT: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _materialization_id = "materialization_id"
+        case _resp_text = "resp_text"
+    }
+    private var _materialization_id: AnyString?
+    /**
+     * The ID of the enqueued materialization task (read-only)
+     */
+    public var materialization_id: String? {
+        get { _materialization_id?.value }
+        set { _materialization_id = newValue.map(AnyString.init) }
+    }
+
+    private var _resp_text: AnyString?
+    /**
+     * Detailed response in text format (read-only)
+     */
+    public var resp_text: String? {
+        get { _resp_text?.value }
+        set { _resp_text = newValue.map(AnyString.init) }
+    }
+
+    public init(materialization_id: String? = nil, resp_text: String? = nil) {
+        self._materialization_id = materialization_id.map(AnyString.init)
+        self._resp_text = resp_text.map(AnyString.init)
+    }
+
+}
+
 public struct MergeFields: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -18345,6 +18421,84 @@ public struct SmtpNodeStatus: SDKModel {
 
 }
 
+public struct SmtpSettings: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _address = "address"
+        case _from = "from"
+        case _user_name = "user_name"
+        case _password = "password"
+        case _port = "port"
+        case enable_starttls_auto
+        case ssl_version
+    }
+    private var _address: AnyString?
+    /**
+     * SMTP Server url
+     */
+    public var address: String? {
+        get { _address?.value }
+        set { _address = newValue.map(AnyString.init) }
+    }
+
+    private var _from: AnyString?
+    /**
+     * From e-mail address
+     */
+    public var from: String? {
+        get { _from?.value }
+        set { _from = newValue.map(AnyString.init) }
+    }
+
+    private var _user_name: AnyString?
+    /**
+     * User name
+     */
+    public var user_name: String? {
+        get { _user_name?.value }
+        set { _user_name = newValue.map(AnyString.init) }
+    }
+
+    private var _password: AnyString?
+    /**
+     * Password
+     */
+    public var password: String? {
+        get { _password?.value }
+        set { _password = newValue.map(AnyString.init) }
+    }
+
+    private var _port: AnyInt?
+    /**
+     * SMTP Server's port
+     */
+    public var port: Int64? {
+        get { _port?.value }
+        set { _port = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Is TLS encryption enabled?
+     */
+    public var enable_starttls_auto: Bool?
+
+    /**
+     * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+     */
+    public var ssl_version: SslVersion?
+
+    public init(address: String? = nil, from: String? = nil, user_name: String? = nil, password: String? = nil, port: Int64? = nil, enable_starttls_auto: Bool? = nil, ssl_version: SslVersion? = nil) {
+        self._address = address.map(AnyString.init)
+        self._from = from.map(AnyString.init)
+        self._user_name = user_name.map(AnyString.init)
+        self._password = password.map(AnyString.init)
+        self._port = port.map(AnyInt.init)
+        self.enable_starttls_auto = enable_starttls_auto
+        self.ssl_version = ssl_version
+    }
+
+}
+
 public struct SmtpStatus: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -18870,6 +19024,15 @@ public struct SshTunnel: SDKModel {
         self._status = status.map(AnyString.init)
     }
 
+}
+
+/**
+ * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+ */
+public enum SslVersion: String, Codable {
+    case TLSv1_1 = "TLSv1_1"
+    case SSLv23 = "SSLv23"
+    case TLSv1_2 = "TLSv1_2"
 }
 
 public struct SupportAccessAddEntries: SDKModel {
@@ -22201,6 +22364,41 @@ public struct WriteDashboardLayoutComponent: SDKModel {
 }
 
 /**
+ * Dynamic writeable type for DashboardLookml removes:
+ * dashboard_id
+ */
+public struct WriteDashboardLookml: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _folder_id = "folder_id"
+        case _lookml = "lookml"
+    }
+    private var _folder_id: AnyString?
+    /**
+     * (Write-Only) Id of the folder
+     */
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml: AnyString?
+    /**
+     * lookml of UDD
+     */
+    public var lookml: String? {
+        get { _lookml?.value }
+        set { _lookml = newValue.map(AnyString.init) }
+    }
+
+    public init(folder_id: String? = nil, lookml: String? = nil) {
+        self._folder_id = folder_id.map(AnyString.init)
+        self._lookml = lookml.map(AnyString.init)
+    }
+
+}
+
+/**
  * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  */
@@ -22273,6 +22471,8 @@ public struct WriteDBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case cost_estimate_enabled
+        case pdt_api_control_enabled
     }
     private var _name: AnyString?
     /**
@@ -22522,7 +22722,17 @@ public struct WriteDBConnection: SDKModel {
      */
     public var always_retry_failed_builds: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil) {
+    /**
+     * When true, query cost estimate will be displayed in explore.
+     */
+    public var cost_estimate_enabled: Bool?
+
+    /**
+     * PDT builds on this connection can be kicked off and cancelled via API.
+     */
+    public var pdt_api_control_enabled: Bool?
+
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -22554,6 +22764,8 @@ public struct WriteDBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyInt.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.cost_estimate_enabled = cost_estimate_enabled
+        self.pdt_api_control_enabled = pdt_api_control_enabled
     }
 
 }
