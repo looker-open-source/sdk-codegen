@@ -23,33 +23,13 @@
  SOFTWARE.
 
  */
-
-import type { IApiSettings } from '@looker/sdk-rtl'
-import {
-  BrowserSession,
-  BrowserTransport,
-  DefaultSettings,
-} from '@looker/sdk-rtl'
+import { initSdk } from '@looker/extension-utils'
+import type { BrowserSession } from '@looker/sdk-rtl'
 import { functionalSdk40 } from '@looker/sdk'
-import { OAuthConfigProvider } from '@looker/extension-utils'
 
-import { RunItConfigKey } from '../components'
-
-export const initRunItSdk = () => {
-  const settings = {
-    ...DefaultSettings(),
-    base_url: 'https://self-signed.looker.com:19999',
-    agentTag: 'RunIt 0.8',
-  } as IApiSettings
-
-  const options = new OAuthConfigProvider(settings, RunItConfigKey)
-  const transport = new BrowserTransport(options)
-  const session = new BrowserSession(options, transport)
-  const sdk = functionalSdk40(session)
-  BrowserTransport.trackPerformance = true
-  return sdk
-}
-
-export enum StoreConstants {
-  LOCALSTORAGE_SETTINGS_KEY = 'settings',
-}
+export const testSdk = initSdk({
+  agentTag: 'RunIt',
+  configKey: 'ConfigKey',
+  clientId: 'looker.api-explorer',
+  createSdkCallback: (session: BrowserSession) => functionalSdk40(session),
+})

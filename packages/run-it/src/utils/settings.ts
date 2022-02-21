@@ -23,12 +23,6 @@
  SOFTWARE.
 
  */
-
-import { initRunItSdk } from '@looker/run-it'
-
-describe('RunItSDK', () => {
-  it('should keep agentTag', () => {
-    const actual = initRunItSdk()
-    expect(actual.authSession.settings.agentTag).toContain('RunIt')
-  })
-})
+export enum StoreConstants {
+  LOCALSTORAGE_SETTINGS_KEY = 'settings',
+}

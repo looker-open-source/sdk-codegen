@@ -25,17 +25,17 @@
  */
 import ReduxSagaTester from 'redux-saga-tester'
 import { registerTestEnvAdaptor } from '@looker/extension-utils'
-import { initRunItSdk } from '@looker/run-it'
 import cloneDeep from 'lodash/cloneDeep'
 import { ApixAdaptor } from '../../utils'
 
 import { getLoadedSpecs } from '../../test-data'
+import { testSdk } from '../../test-utils'
 import { specActions, specsSlice } from './slice'
 import * as sagas from './sagas'
 
 describe('Specs Sagas', () => {
   let sagaTester: ReduxSagaTester<any>
-  const adaptor = new ApixAdaptor(initRunItSdk(), '')
+  const adaptor = new ApixAdaptor(testSdk, '')
   registerTestEnvAdaptor(adaptor)
   const specState = getLoadedSpecs()
   const mockError = new Error('boom')

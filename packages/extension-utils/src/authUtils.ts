@@ -23,8 +23,13 @@
  SOFTWARE.
 
  */
-import type { IApiSection, IApiSettings } from '@looker/sdk-rtl'
-import { ApiSettings } from '@looker/sdk-rtl'
+import type { APIMethods, IApiSection, IApiSettings } from '@looker/sdk-rtl'
+import {
+  ApiSettings,
+  DefaultSettings,
+  BrowserTransport,
+  BrowserSession,
+} from '@looker/sdk-rtl'
 
 export type StorageLocation = 'session' | 'local'
 
@@ -42,7 +47,9 @@ export interface IStorageValue {
 export class OAuthConfigProvider extends ApiSettings {
   constructor(
     settings: Partial<IApiSettings>,
-    private readonly configKey: string
+    /** local storage key for retrieving auth config */
+    private readonly configKey: string,
+    private readonly clientId: string
   ) {
     super(settings)
   }
@@ -108,9 +115,46 @@ export class OAuthConfigProvider extends ApiSettings {
       ...{
         base_url,
         looker_url,
-        client_id: 'looker.api-explorer',
+        client_id: this.clientId,
         redirect_uri: `${window.location.origin}/oauth`,
       },
     }
   }
+}
+
+export interface InitSdkSettings {
+  /** agent tag to use for the SDK requests */
+  agentTag: string
+  /** Local storage key for retrieving auth configuration settings */
+  configKey: string
+  /** Id used to register this application on the Looker server */
+  clientId: string
+  /** A callback function that returns an sdk instance */
+  createSdkCallback: (session: BrowserSession) => APIMethods
+  /** Track request performance if the browser has the necessary APIs. Defaults to false. */
+  trackPerformance?: boolean
+}
+
+/**
+ * Initializes an sdk with provided settings
+ * @returns An sdk instance
+ */
+export const initSdk = (initSettings: InitSdkSettings) => {
+  const settings = {
+    ...DefaultSettings(),
+    /** Albeit not used, this has to be set otherwise ApiSettings throws */
+    base_url: 'https://localhost:8080',
+    agentTag: initSettings.agentTag,
+  } as IApiSettings
+
+  const options = new OAuthConfigProvider(
+    settings,
+    initSettings.configKey,
+    initSettings.clientId
+  )
+  const transport = new BrowserTransport(options)
+  const session = new BrowserSession(options, transport)
+  const sdk = initSettings.createSdkCallback(session)
+  BrowserTransport.trackPerformance = initSettings.trackPerformance ?? false
+  return sdk
 }

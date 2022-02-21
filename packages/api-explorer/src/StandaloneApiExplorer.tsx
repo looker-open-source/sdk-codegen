@@ -26,11 +26,13 @@
 
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
-import { initRunItSdk, RunItProvider } from '@looker/run-it'
+import { RunItConfigKey, RunItProvider } from '@looker/run-it'
 import type { OAuthConfigProvider } from '@looker/extension-utils'
-import { OAuthScene } from '@looker/extension-utils'
+import { initSdk, OAuthScene } from '@looker/extension-utils'
 import { Provider } from 'react-redux'
 import { useLocation } from 'react-router'
+import { functionalSdk40 } from '@looker/sdk'
+import type { BrowserSession } from '@looker/sdk-rtl'
 
 import { ApiExplorer } from './ApiExplorer'
 import { store } from './state'
@@ -46,8 +48,19 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   headless = false,
 }) => {
   const [browserAdaptor] = useState(
-    new ApixAdaptor(initRunItSdk(), window.origin)
+    () =>
+      new ApixAdaptor(
+        initSdk({
+          agentTag: 'RunIt 0.8',
+          configKey: RunItConfigKey,
+          clientId: 'looker.api-explorer',
+          createSdkCallback: (session: BrowserSession) =>
+            functionalSdk40(session),
+        }),
+        window.origin
+      )
   )
+
   const location = useLocation()
   const oauthReturn = location.pathname === `/${oAuthPath}`
   const sdk = browserAdaptor.sdk

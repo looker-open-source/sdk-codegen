@@ -23,5 +23,4 @@
  SOFTWARE.
 
  */
-export * from './requestUtils'
-export * from './settings'
+export { testSdk } from './sdk'
