@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-437 API methods
+443 API methods
 */
 
 
@@ -1573,6 +1573,19 @@ func (l *LookerSDK) CreateDigestEmailSend(
 
 }
 
+// ### Get Egress IP Addresses
+//
+// Returns the list of public egress IP Addresses for a hosted customer's instance
+//
+// GET /public_egress_ip_addresses -> EgressIpAddresses
+func (l *LookerSDK) PublicEgressIpAddresses(
+    options *rtl.ApiSettings) (EgressIpAddresses, error) {
+    var result EgressIpAddresses
+    err := l.session.Do(&result, "GET", "/4.0", "/public_egress_ip_addresses", nil, nil, options)
+    return result, err
+
+}
+
 // ### Set the menu item name and content for internal help resources
 //
 // GET /internal_help_resources_content -> InternalHelpResourcesContent
@@ -1719,6 +1732,19 @@ func (l *LookerSDK) SetSetting(
     var result Setting
     err := l.session.Do(&result, "PATCH", "/4.0", "/setting", map[string]interface{}{"fields": fields}, body, options)
     return result, err
+
+}
+
+// ### Configure SMTP Settings
+//   This API allows users to configure the SMTP settings on the Looker instance.
+//   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+//
+// POST /smtp_settings -> Void
+func (l *LookerSDK) SetSmtpSettings(
+    body SmtpSettings,
+    options *rtl.ApiSettings) (error) {
+    err := l.session.Do(nil, "POST", "/4.0", "/smtp_settings", nil, body, options)
+    return err
 
 }
 
@@ -2640,6 +2666,27 @@ func (l *LookerSDK) MoveDashboard(
 
 }
 
+// ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+//
+// This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+//
+// LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+// from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+// ).
+//
+// Note that the created dashboard is not linked to any LookML Dashboard,
+// i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+//
+// POST /dashboards/from_lookml -> DashboardLookml
+func (l *LookerSDK) CreateDashboardFromLookml(
+    body WriteDashboardLookml,
+    options *rtl.ApiSettings) (DashboardLookml, error) {
+    var result DashboardLookml
+    err := l.session.Do(&result, "POST", "/4.0", "/dashboards/from_lookml", nil, body, options)
+    return result, err
+
+}
+
 // ### Copy an existing dashboard
 //
 // Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3038,6 +3085,46 @@ func (l *LookerSDK) GraphDerivedTablesForView(request RequestGraphDerivedTablesF
     request.View = url.PathEscape(request.View)
     var result DependencyGraph
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
+    return result, err
+
+}
+
+// Enqueue materialization for a PDT with the given model name and view name
+//
+// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+func (l *LookerSDK) StartPdtBuild(request RequestStartPdtBuild,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    request.ModelName = url.PathEscape(request.ModelName)
+    request.ViewName = url.PathEscape(request.ViewName)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/%v/start", request.ModelName, request.ViewName), map[string]interface{}{"force_rebuild": request.ForceRebuild, "force_full_incremental": request.ForceFullIncremental, "workspace": request.Workspace, "source": request.Source}, nil, options)
+    return result, err
+
+}
+
+// Check status of PDT materialization
+//
+// GET /derived_table/{materialization_id}/status -> MaterializePDT
+func (l *LookerSDK) CheckPdtBuild(
+    materializationId string,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    materializationId = url.PathEscape(materializationId)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/status", materializationId), nil, nil, options)
+    return result, err
+
+}
+
+// Stop a PDT materialization
+//
+// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+func (l *LookerSDK) StopPdtBuild(
+    materializationId string,
+    source string,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    materializationId = url.PathEscape(materializationId)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/stop", materializationId), map[string]interface{}{"source": source}, nil, options)
     return result, err
 
 }

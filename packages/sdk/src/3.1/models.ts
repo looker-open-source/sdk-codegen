@@ -25,7 +25,7 @@
  */
 
 /**
- * 303 API models: 188 Spec, 48 Request, 51 Write, 16 Enum
+ * 307 API models: 190 Spec, 49 Request, 51 Write, 17 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -1697,7 +1697,11 @@ export interface IDashboardLookml {
    */
   dashboard_id?: string | null
   /**
-   * lookml of UDD (read-only)
+   * (Write-Only) Id of the folder
+   */
+  folder_id?: string | null
+  /**
+   * lookml of UDD
    */
   lookml?: string | null
 }
@@ -4747,6 +4751,17 @@ export interface IManifest {
   localization_settings?: ILocalizationSettings
 }
 
+export interface IMaterializePDT {
+  /**
+   * The ID of the enqueued materialization task (read-only)
+   */
+  materialization_id?: string
+  /**
+   * Detailed response in text format (read-only)
+   */
+  resp_text?: string | null
+}
+
 export interface IMergeFields {
   /**
    * Field name to map onto in the merged results
@@ -7306,6 +7321,36 @@ export interface IRequestSpaceChildrenSearch {
 }
 
 /**
+ * Dynamically generated request type for start_pdt_build
+ */
+export interface IRequestStartPdtBuild {
+  /**
+   * The model of the PDT to start building.
+   */
+  model_name: string
+  /**
+   * The view name of the PDT to start building.
+   */
+  view_name: string
+  /**
+   * Force rebuild of required dependent PDTs, even if they are already materialized.
+   */
+  force_rebuild?: string | null
+  /**
+   * Force involved incremental PDTs to fully re-materialize.
+   */
+  force_full_incremental?: string | null
+  /**
+   * Workspace in which to materialize selected PDT ('dev' or default 'production').
+   */
+  workspace?: string | null
+  /**
+   * The source of this request.
+   */
+  source?: string | null
+}
+
+/**
  * Dynamically generated request type for tag_ref
  */
 export interface IRequestTagRef {
@@ -8088,6 +8133,37 @@ export interface ISessionConfig {
   track_session_location?: boolean
 }
 
+export interface ISmtpSettings {
+  /**
+   * SMTP Server url
+   */
+  address?: string
+  /**
+   * From e-mail address
+   */
+  from?: string
+  /**
+   * User name
+   */
+  user_name?: string
+  /**
+   * Password
+   */
+  password?: string
+  /**
+   * SMTP Server's port
+   */
+  port?: number
+  /**
+   * Is TLS encryption enabled?
+   */
+  enable_starttls_auto?: boolean
+  /**
+   * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+   */
+  ssl_version?: SslVersion | null
+}
+
 export interface ISnippet {
   /**
    * Name of the snippet (read-only)
@@ -8323,6 +8399,15 @@ export interface ISqlQueryCreate {
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
   vis_config?: IDictionary<any> | null
+}
+
+/**
+ * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+ */
+export enum SslVersion {
+  TLSv1_1 = 'TLSv1_1',
+  SSLv23 = 'SSLv23',
+  TLSv1_2 = 'TLSv1_2',
 }
 
 /**

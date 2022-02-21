@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 443 API methods
  */
 
 
@@ -1927,6 +1927,20 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Get Egress IP Addresses
+     *
+     * Returns the list of public egress IP Addresses for a hosted customer's instance
+     *
+     * GET /public_egress_ip_addresses -> ByteArray
+     */
+    fun public_egress_ip_addresses(
+
+    ) : SDKResponse {
+            return this.get<ByteArray>("/public_egress_ip_addresses", mapOf())
+    }
+
+
+    /**
      * ### Set the menu item name and content for internal help resources
      *
      * GET /internal_help_resources_content -> ByteArray
@@ -2093,6 +2107,22 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
             return this.patch<ByteArray>("/setting", 
                 mapOf("fields" to fields), body)
+    }
+
+
+    /**
+     * ### Configure SMTP Settings
+     *   This API allows users to configure the SMTP settings on the Looker instance.
+     *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+     *
+     * @param {SmtpSettings} body
+     *
+     * POST /smtp_settings -> ByteArray
+     */
+    fun set_smtp_settings(
+        body: SmtpSettings
+    ) : SDKResponse {
+            return this.post<ByteArray>("/smtp_settings", mapOf(), body)
     }
 
 
@@ -3327,6 +3357,29 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     *
+     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     *
+     * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+     * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+     * ).
+     *
+     * Note that the created dashboard is not linked to any LookML Dashboard,
+     * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * @param {WriteDashboardLookml} body
+     *
+     * POST /dashboards/from_lookml -> ByteArray
+     */
+    fun create_dashboard_from_lookml(
+        body: WriteDashboardLookml
+    ) : SDKResponse {
+            return this.post<ByteArray>("/dashboards/from_lookml", mapOf(), body)
+    }
+
+
+    /**
      * ### Copy an existing dashboard
      *
      * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3851,6 +3904,69 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
             return this.get<ByteArray>("/derived_table/graph/view/${path_view}", 
                 mapOf("models" to models,
                      "workspace" to workspace))
+    }
+
+
+    /**
+     * Enqueue materialization for a PDT with the given model name and view name
+     *
+     * @param {String} model_name The model of the PDT to start building.
+     * @param {String} view_name The view name of the PDT to start building.
+     * @param {String} force_rebuild Force rebuild of required dependent PDTs, even if they are already materialized.
+     * @param {String} force_full_incremental Force involved incremental PDTs to fully re-materialize.
+     * @param {String} workspace Workspace in which to materialize selected PDT ('dev' or default 'production').
+     * @param {String} source The source of this request.
+     *
+     * GET /derived_table/{model_name}/{view_name}/start -> ByteArray
+     */
+    @JvmOverloads fun start_pdt_build(
+        model_name: String,
+        view_name: String,
+        force_rebuild: String? = null,
+        force_full_incremental: String? = null,
+        workspace: String? = null,
+        source: String? = null
+    ) : SDKResponse {
+        val path_model_name = encodeParam(model_name)
+        val path_view_name = encodeParam(view_name)
+            return this.get<ByteArray>("/derived_table/${path_model_name}/${path_view_name}/start", 
+                mapOf("force_rebuild" to force_rebuild,
+                     "force_full_incremental" to force_full_incremental,
+                     "workspace" to workspace,
+                     "source" to source))
+    }
+
+
+    /**
+     * Check status of PDT materialization
+     *
+     * @param {String} materialization_id The materialization id to check status for.
+     *
+     * GET /derived_table/{materialization_id}/status -> ByteArray
+     */
+    fun check_pdt_build(
+        materialization_id: String
+    ) : SDKResponse {
+        val path_materialization_id = encodeParam(materialization_id)
+            return this.get<ByteArray>("/derived_table/${path_materialization_id}/status", mapOf())
+    }
+
+
+    /**
+     * Stop a PDT materialization
+     *
+     * @param {String} materialization_id The materialization id to stop.
+     * @param {String} source The source of this request.
+     *
+     * GET /derived_table/{materialization_id}/stop -> ByteArray
+     */
+    @JvmOverloads fun stop_pdt_build(
+        materialization_id: String,
+        source: String? = null
+    ) : SDKResponse {
+        val path_materialization_id = encodeParam(materialization_id)
+            return this.get<ByteArray>("/derived_table/${path_materialization_id}/stop", 
+                mapOf("source" to source))
     }
 
     //endregion DerivedTable: View Derived Table graphs

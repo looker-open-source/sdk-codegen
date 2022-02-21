@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API methods
+ * 382 API methods
  */
 
 import type {
@@ -114,6 +114,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IModelSet,
   IOIDCConfig,
@@ -174,6 +175,7 @@ import type {
   IRequestSearchUsersNames,
   IRequestSpaceChildren,
   IRequestSpaceChildrenSearch,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -184,6 +186,7 @@ import type {
   IScheduledPlan,
   ISession,
   ISessionConfig,
+  ISmtpSettings,
   ISpace,
   ISpaceBase,
   ISqlQuery,
@@ -1792,6 +1795,31 @@ export const all_locales = async (
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILocale[], IError>> => {
   return sdk.get<ILocale[], IError>('/locales', null, null, options)
+}
+
+/**
+ * ### Configure SMTP Settings
+ *   This API allows users to configure the SMTP settings on the Looker instance.
+ *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+ *
+ * POST /smtp_settings -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISmtpSettings>
+ * @param options one-time API call overrides
+ *
+ */
+export const set_smtp_settings = async (
+  sdk: IAPIMethods,
+  body: Partial<ISmtpSettings>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError | IValidationError>> => {
+  return sdk.post<void, IError | IValidationError>(
+    '/smtp_settings',
+    null,
+    body,
+    options
+  )
 }
 
 /**
@@ -3636,6 +3664,86 @@ export const graph_derived_tables_for_view = async (
   return sdk.get<IDependencyGraph, IError>(
     `/derived_table/graph/view/${request.view}`,
     { models: request.models, workspace: request.workspace },
+    null,
+    options
+  )
+}
+
+/**
+ * Enqueue materialization for a PDT with the given model name and view name
+ *
+ * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const start_pdt_build = async (
+  sdk: IAPIMethods,
+  request: IRequestStartPdtBuild,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  request.model_name = encodeParam(request.model_name)
+  request.view_name = encodeParam(request.view_name)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${request.model_name}/${request.view_name}/start`,
+    {
+      force_rebuild: request.force_rebuild,
+      force_full_incremental: request.force_full_incremental,
+      workspace: request.workspace,
+      source: request.source,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * Check status of PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to check status for.
+ * @param options one-time API call overrides
+ *
+ */
+export const check_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/status`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * Stop a PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to stop.
+ * @param source The source of this request.
+ * @param options one-time API call overrides
+ *
+ */
+export const stop_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  source?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/stop`,
+    { source },
     null,
     options
   )

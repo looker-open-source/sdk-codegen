@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API methods
+ * 382 API methods
  */
 
 import type {
@@ -109,6 +109,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IModelSet,
   IOIDCConfig,
@@ -169,6 +170,7 @@ import type {
   IRequestSearchUsersNames,
   IRequestSpaceChildren,
   IRequestSpaceChildrenSearch,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -179,6 +181,7 @@ import type {
   IScheduledPlan,
   ISession,
   ISessionConfig,
+  ISmtpSettings,
   ISpace,
   ISpaceBase,
   ISqlQuery,
@@ -1280,6 +1283,22 @@ export interface ILooker31SDK extends IAPIMethods {
   all_locales(
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILocale[], IError>>
+
+  /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *
+   * POST /smtp_settings -> void
+   *
+   * @param body Partial<ISmtpSettings>
+   * @param options one-time API call overrides
+   *
+   */
+  set_smtp_settings(
+    body: Partial<ISmtpSettings>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError | IValidationError>>
 
   /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -2465,6 +2484,50 @@ export interface ILooker31SDK extends IAPIMethods {
     request: IRequestGraphDerivedTablesForView,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   *
+   * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+   *
+   * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  start_pdt_build(
+    request: IRequestStartPdtBuild,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Check status of PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to check status for.
+   * @param options one-time API call overrides
+   *
+   */
+  check_pdt_build(
+    materialization_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Stop a PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to stop.
+   * @param source The source of this request.
+   * @param options one-time API call overrides
+   *
+   */
+  stop_pdt_build(
+    materialization_id: string,
+    source?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
 
   //#endregion DerivedTable: View Derived Table graphs
 
