@@ -137,7 +137,7 @@ example file:
 For any ``.ini`` setting you can use an environment variable instead. It takes the form of
 ``LOOKERSDK_<UPPERCASE-SETTING-FROM-INI>`` e.g. ``LOOKERSDK_CLIENT_SECRET``
 
-A final option is to provide your own implementation of the ApiSettings class. In particular you may want to override the ``read_config`` function. Example:
+A final option is to provide your own implementation of the ApiSettings class. It is easiest to subclass ``api_settings.ApiSettings`` and override the ``read_config`` function (don't forget a call to ``super().read_config()`` if appropriate, Example below). However, at a minimum your class must implement the `api_settings.PApiSettings` protocol.
 
 
 .. code-block:: python
@@ -153,6 +153,7 @@ A final option is to provide your own implementation of the ApiSettings class. I
 
         def read_config(self) -> t.Dict[str, str]:
             config = super().read_config()
+            # See api_settings.SettingsConfig for required fields
             if self.my_var == "foo":
                 config["base_url"] = "https://foo.com"
                 config["client_id"] = os.getenv("FOO_CLIENT")
