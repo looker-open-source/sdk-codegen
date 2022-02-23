@@ -264,6 +264,7 @@
     "**/node-fetch": "2.6.7",
     "**/follow-redirects": "1.14.8",
     "**/url-parse": "1.5.6",
-    "**/ansi-regex": "5.0.1"
+    "**/ansi-regex": "5.0.1",
+    "**/ansi-html": "https://registry.yarnpkg.com/ansi-html-community/-/ansi-html-community-0.0.8.tgz#69fbc4d6ccbe383f9736934ae34c3f8290f1bf41"
   }
 }
