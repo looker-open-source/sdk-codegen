@@ -32,7 +32,6 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import type { RenderOptions } from '@testing-library/react'
 import { createStore } from '@looker/redux'
 import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
-import { initRunItSdk } from '@looker/run-it'
 
 import type { LodesState, RootState, SettingState, SpecState } from '../state'
 import {
@@ -44,13 +43,14 @@ import {
   specsSlice,
 } from '../state'
 import { specState } from '../test-data'
+import { testSdk } from './sdk'
 import { renderWithRouter } from './router'
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = createTestStore()
 ) => {
-  registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()))
+  registerEnvAdaptor(new BrowserAdaptor(testSdk))
   return <Provider store={store}>{consumers}</Provider>
 }
 

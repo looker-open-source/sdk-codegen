@@ -33,12 +33,11 @@ import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { BrowserAdaptor, OAuthConfigProvider } from '@looker/extension-utils'
 import { RunIt } from './RunIt'
 import { api, testTextResponse } from './test-data'
-import { initRunItSdk } from './utils'
+import { testSdk as sdk } from './test-utils'
 import { RunItProvider } from './RunItProvider'
 
 describe('RunIt', () => {
   const run = 'Run'
-  const sdk = initRunItSdk()
   const adaptor = new BrowserAdaptor(sdk)
 
   const renderRunIt = (

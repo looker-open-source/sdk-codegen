@@ -25,6 +25,7 @@
  */
 import type { RunItInput } from '../RunIt'
 import { testJsonResponse, api } from '../test-data'
+import { testSdk as sdk } from '../test-utils'
 import {
   createRequestParams,
   pathify,
@@ -32,9 +33,6 @@ import {
   createInputs,
   initRequestContent,
 } from './requestUtils'
-import { initRunItSdk } from './RunItSDK'
-
-const sdk = initRunItSdk()
 
 describe('requestUtils', () => {
   afterEach(() => {

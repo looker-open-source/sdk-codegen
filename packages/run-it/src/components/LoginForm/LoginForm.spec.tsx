@@ -34,12 +34,12 @@ import {
   OAuthConfigProvider,
 } from '@looker/extension-utils'
 
-import { initRunItSdk, readyToLogin } from '../..'
+import { readyToLogin } from '../..'
+import { testSdk } from '../../test-utils'
 import { LoginForm, notReadyToLogin } from './LoginForm'
 
 describe('LoginForm', () => {
-  const sdk = initRunItSdk()
-  registerTestEnvAdaptor(new BrowserAdaptor(sdk))
+  registerTestEnvAdaptor(new BrowserAdaptor(testSdk))
 
   test('it renders a login form with instructions if auth is not configured', async () => {
     renderWithTheme(<LoginForm requestContent={{}} />)

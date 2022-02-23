@@ -30,11 +30,11 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 
-import { initRunItSdk } from '../..'
+import { testSdk } from '../../test-utils'
 import { ConfigForm, RunItConfigKey } from '.'
 
 describe('ConfigForm', () => {
-  const adaptor = new BrowserAdaptor(initRunItSdk())
+  const adaptor = new BrowserAdaptor(testSdk)
   registerTestEnvAdaptor(adaptor)
 
   const apiLabel = /API server URL/i

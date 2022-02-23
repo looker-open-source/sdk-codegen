@@ -23,5 +23,25 @@
  SOFTWARE.
 
  */
-export * from './requestUtils'
-export * from './settings'
+import { functionalSdk40 } from '@looker/sdk'
+import type { BrowserSession } from '@looker/sdk-rtl'
+
+import type { InitSdkSettings } from './authUtils'
+import { initSdk } from './authUtils'
+
+describe('Auth utilities', () => {
+  describe('initSdk', () => {
+    it('should initialize with provided settings', () => {
+      const settings: InitSdkSettings = {
+        agentTag: 'RunIt',
+        configKey: 'RunItConfigKey',
+        clientId: 'looker.api-explorer',
+        createSdkCallback: (session: BrowserSession) =>
+          functionalSdk40(session),
+        trackPerformance: false,
+      }
+      const actual = initSdk(settings)
+      expect(actual.authSession.settings.agentTag).toEqual(settings.agentTag)
+    })
+  })
+})

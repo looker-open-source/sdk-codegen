@@ -23,5 +23,14 @@
  SOFTWARE.
 
  */
-export * from './requestUtils'
-export * from './settings'
+
+import { initSdk } from '@looker/extension-utils'
+import type { BrowserSession } from '@looker/sdk-rtl'
+import { functionalSdk40 } from '@looker/sdk'
+
+export const testSdk = initSdk({
+  agentTag: 'RunIt',
+  configKey: 'ConfigKey',
+  clientId: 'looker.api-explorer',
+  createSdkCallback: (session: BrowserSession) => functionalSdk40(session),
+})
