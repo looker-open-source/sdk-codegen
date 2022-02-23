@@ -32,9 +32,18 @@ import warnings
 from looker_sdk.rtl import transport
 
 if sys.version_info >= (3, 8):
-    from typing import Protocol
+    from typing import Protocol, TypedDict
 else:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol, TypedDict
+
+
+from typing_extensions import Required
+
+
+class SettingsConfig(TypedDict, total=False):
+    client_id: Required[str]
+    client_secret: Required[str]
+    verify_ssl: str
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
