@@ -46,14 +46,6 @@ class SettingsConfig(TypedDict, total=False):
     timeout: str
 
 
-class SettingsConfigOverride(TypedDict, total=False):
-    client_id: str
-    client_secret: str
-    base_url: str
-    verify_ssl: str
-    timeout: str
-
-
 class PApiSettings(transport.PTransportSettings, Protocol):
     def read_config(self) -> SettingsConfig:
         ...
