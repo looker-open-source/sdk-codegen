@@ -35,15 +35,24 @@ if sys.version_info >= (3, 8):
     from typing import Protocol, TypedDict
 else:
     from typing_extensions import Protocol, TypedDict
-
 from typing_extensions import Required
+
 
 class SettingsConfig(TypedDict, total=False):
     client_id: Required[str]
     client_secret: Required[str]
-    base_url: Required[str]
+    base_url: str
     verify_ssl: str
     timeout: str
+
+
+class SettingsConfigOverride(TypedDict, total=False):
+    client_id: str
+    client_secret: str
+    base_url: str
+    verify_ssl: str
+    timeout: str
+
 
 class PApiSettings(transport.PTransportSettings, Protocol):
     def read_config(self) -> SettingsConfig:
@@ -101,13 +110,16 @@ class ApiSettings(PApiSettings):
         if sdk_version:
             self.agent_tag += f" {sdk_version}"
 
-    def read_config(self) -> Dict[str, str]:
-        # See SettingsConfig for required fields
+    def read_config(self) -> SettingsConfig:
         cfg_parser = cp.ConfigParser()
+        data: SettingsConfig = {
+            "client_id": "",
+            "client_secret": "",
+        }
         try:
             config_file = open(self.filename)
         except FileNotFoundError:
-            data: Dict[str, str] = {}
+            pass
         else:
             cfg_parser.read_file(config_file)
             config_file.close()
@@ -115,10 +127,10 @@ class ApiSettings(PApiSettings):
             section = self.section or cfg_parser.sections()[0]
             if not cfg_parser.has_section(section):
                 raise cp.NoSectionError(section)
-            data = dict(cfg_parser[section])
+            self._override_settings(data, dict(cfg_parser[section]))
 
         if self.env_prefix:
-            data.update(self._override_from_env())
+            self._override_settings(data, self._override_from_env())
         return self._clean_input(data)
 
     @staticmethod
@@ -130,6 +142,21 @@ class ApiSettings(PApiSettings):
         else:
             raise TypeError
         return converted
+
+    def _override_settings(
+        self, data: SettingsConfig, overrides: Dict[str, str]
+    ) -> SettingsConfig:
+        if "base_url" in overrides:
+            data["base_url"] = overrides["base_url"]
+        if "verify_ssl" in overrides:
+            data["verify_ssl"] = overrides["verify_ssl"]
+        if "timeout" in overrides:
+            data["timeout"] = overrides["timeout"]
+        if "client_id" in overrides:
+            data["client_id"] = overrides["client_id"]
+        if "client_secret" in overrides:
+            data["client_secret"] = overrides["client_secret"]
+        return data
 
     def _override_from_env(self) -> Dict[str, str]:
         overrides = {}
@@ -155,23 +182,33 @@ class ApiSettings(PApiSettings):
 
         return overrides
 
-    def _clean_input(self, data: Dict[str, str]) -> Dict[str, str]:
-        """Remove surrounding quotes and discard empty strings.
-        """
-        cleaned = {}
-        for setting, value in data.items():
-            if setting in self.deprecated_settings:
-                warnings.warn(
-                    message=DeprecationWarning(
-                        f"'{setting}' config setting is deprecated"
-                    )
-                )
-            # Remove empty setting values
-            if value in ['""', "''", ""]:
-                continue
-            # Strip quotes from setting values
-            elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
-                cleaned[setting] = value.strip("\"'")
-            else:
-                cleaned[setting] = value
+    def _clean_value(self, setting: str, value: str) -> Optional[str]:
+        if setting in self.deprecated_settings:
+            warnings.warn(
+                message=DeprecationWarning(f"'{setting}' config setting is deprecated")
+            )
+        # Remove empty setting values
+        if value in ['""', "''", ""]:
+            return None
+        # Strip quotes from setting values
+        return value.strip("\"'")
+
+    def _clean_input(self, data: SettingsConfig) -> SettingsConfig:
+        """Remove surrounding quotes and discard empty strings."""
+        cleaned: SettingsConfig = {
+            "client_id": data["client_id"].strip("\"'"),
+            "client_secret": data["client_secret"].strip("\"'"),
+        }
+        if "base_url" in data:
+            maybe_value = self._clean_value("base_url", data["base_url"])
+            if maybe_value:
+                cleaned["base_url"] = maybe_value
+        if "verify_ssl" in data:
+            maybe_value = self._clean_value("verify_ssl", data["verify_ssl"])
+            if maybe_value:
+                cleaned["verify_ssl"] = maybe_value
+        if "timeout" in data:
+            maybe_value = self._clean_value("timeout", data["timeout"])
+            if maybe_value:
+                cleaned["timeout"] = maybe_value
         return cleaned

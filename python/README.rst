@@ -155,11 +155,9 @@ A final option is to provide your own implementation of the ApiSettings class. I
             config = super().read_config()
             # See api_settings.SettingsConfig for required fields
             if self.my_var == "foo":
-                config["base_url"] = "https://foo.com"
                 config["client_id"] = os.getenv("FOO_CLIENT")
                 config["client_secret"] = os.getenv("FOO_SECRET")
             else:
-                config["base_url"] = "https://bar.com"
                 config["client_id"] = os.getenv("BAR_CLIENT")
                 config["client_secret"] = os.getenv("BAR_SECRET")
             return config
