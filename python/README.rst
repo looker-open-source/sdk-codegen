@@ -151,7 +151,7 @@ A final option is to provide your own implementation of the ApiSettings class. I
             self.my_var = kw_args.pop("my_var")
             super().__init__(*args, **kw_args)
 
-        def read_config(self) -> t.Dict[str, str]:
+        def read_config(self) -> api_settings.SettingsConfig:
             config = super().read_config()
             # See api_settings.SettingsConfig for required fields
             if self.my_var == "foo":

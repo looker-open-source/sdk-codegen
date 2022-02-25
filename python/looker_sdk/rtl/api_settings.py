@@ -26,7 +26,7 @@ with the settings as attributes
 import configparser as cp
 import os
 import sys
-from typing import Dict, Optional, Set
+from typing import Dict, Optional, Set, cast
 import warnings
 
 from looker_sdk.rtl import transport
@@ -44,6 +44,8 @@ class SettingsConfig(TypedDict, total=False):
     base_url: str
     verify_ssl: str
     timeout: str
+    redirect_uri: str
+    looker_url: str
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
@@ -138,16 +140,10 @@ class ApiSettings(PApiSettings):
     def _override_settings(
         self, data: SettingsConfig, overrides: Dict[str, str]
     ) -> SettingsConfig:
-        if "base_url" in overrides:
-            data["base_url"] = overrides["base_url"]
-        if "verify_ssl" in overrides:
-            data["verify_ssl"] = overrides["verify_ssl"]
-        if "timeout" in overrides:
-            data["timeout"] = overrides["timeout"]
-        if "client_id" in overrides:
-            data["client_id"] = overrides["client_id"]
-        if "client_secret" in overrides:
-            data["client_secret"] = overrides["client_secret"]
+        # https://github.com/python/mypy/issues/6262
+        for setting in SettingsConfig.__annotations__.keys(): # type: ignore
+            if setting in overrides:
+                data[setting] = overrides[setting] # type: ignore
         return data
 
     def _override_from_env(self) -> Dict[str, str]:
@@ -174,33 +170,25 @@ class ApiSettings(PApiSettings):
 
         return overrides
 
-    def _clean_value(self, setting: str, value: str) -> Optional[str]:
-        if setting in self.deprecated_settings:
-            warnings.warn(
-                message=DeprecationWarning(f"'{setting}' config setting is deprecated")
-            )
-        # Remove empty setting values
-        if value in ['""', "''", ""]:
-            return None
-        # Strip quotes from setting values
-        return value.strip("\"'")
-
     def _clean_input(self, data: SettingsConfig) -> SettingsConfig:
-        """Remove surrounding quotes and discard empty strings."""
-        cleaned: SettingsConfig = {
-            "client_id": data["client_id"].strip("\"'"),
-            "client_secret": data["client_secret"].strip("\"'"),
-        }
-        if "base_url" in data:
-            maybe_value = self._clean_value("base_url", data["base_url"])
-            if maybe_value:
-                cleaned["base_url"] = maybe_value
-        if "verify_ssl" in data:
-            maybe_value = self._clean_value("verify_ssl", data["verify_ssl"])
-            if maybe_value:
-                cleaned["verify_ssl"] = maybe_value
-        if "timeout" in data:
-            maybe_value = self._clean_value("timeout", data["timeout"])
-            if maybe_value:
-                cleaned["timeout"] = maybe_value
-        return cleaned
+        """Remove surrounding quotes and discard empty strings.
+        """
+        cleaned = {}
+        for setting, value in data.items():
+            if setting in self.deprecated_settings:
+                warnings.warn(
+                    message=DeprecationWarning(
+                        f"'{setting}' config setting is deprecated"
+                    )
+                )
+            if not isinstance(value, str):
+                continue
+            # Remove empty setting values
+            if value in ['""', "''", ""]:
+                continue
+            # Strip quotes from setting values
+            elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
+                cleaned[setting] = value.strip("\"'")
+            else:
+                cleaned[setting] = value
+        return cast(SettingsConfig, cleaned)
