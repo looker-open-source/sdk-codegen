@@ -3638,6 +3638,7 @@ class Looker40SDK(api_methods.APIMethods):
     # POST /content_metadata_access -> mdls.ContentMetaGroupUser
     def create_content_metadata_access(
         self,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.ContentMetaGroupUser,
         # Optionally sends notification email when granting access to a board.
         send_boards_notification_email: Optional[bool] = None,
@@ -3665,6 +3666,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of content metadata access
         content_metadata_access_id: str,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.ContentMetaGroupUser,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ContentMetaGroupUser:
@@ -5813,6 +5815,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of group
         group_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.GroupIdForGroupInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.Group:
@@ -5869,6 +5872,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of group
         group_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.GroupIdForGroupUserInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.User:
@@ -5939,6 +5943,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Id of user attribute
         user_attribute_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.UserAttributeGroupValue,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.UserAttributeGroupValue:
@@ -7085,6 +7090,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of connection
         connection_name: str,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.CreateCostEstimate,
         # Requested fields.
         fields: Optional[str] = None,
@@ -11160,6 +11166,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: Optional[mdls.CredentialsTotp] = None,
         # Requested fields.
         fields: Optional[str] = None,
