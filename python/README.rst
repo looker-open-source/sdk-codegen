@@ -99,8 +99,13 @@ Install looker_sdk using pipenv
 Configuring the SDK
 ===================
 
-The SDK supports configuration through a ``.ini`` file on disk as well
-as `setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration>`_ (the latter override the former).
+The SDK supports configuration through
+
+1. an ``.ini`` file on disk
+2. `setting environment variables <https://github.com/looker-open-source/sdk-codegen#environment-variable-configuration>`_
+3. providing your own implementation of the ApiSettings class
+
+. The latter override the former.
 
 **Note**: The ``.ini`` configuration for the Looker SDK is a sample
 implementation intended to speed up the initial development of python
@@ -131,6 +136,34 @@ example file:
 
 For any ``.ini`` setting you can use an environment variable instead. It takes the form of
 ``LOOKERSDK_<UPPERCASE-SETTING-FROM-INI>`` e.g. ``LOOKERSDK_CLIENT_SECRET``
+
+A final option is to provide your own implementation of the ApiSettings class. It is easiest to subclass ``api_settings.ApiSettings`` and override the ``read_config`` function (don't forget a call to ``super().read_config()`` if appropriate, Example below). However, at a minimum your class must implement the `api_settings.PApiSettings` protocol.
+
+
+.. code-block:: python
+
+    import os
+    import looker_sdk
+    from looker_sdk import api_settings
+
+    class MyApiSettings(api_settings.ApiSettings):
+        def __init__(self, *args, **kw_args):
+            self.my_var = kw_args.pop("my_var")
+            super().__init__(*args, **kw_args)
+
+        def read_config(self) -> api_settings.SettingsConfig:
+            config = super().read_config()
+            # See api_settings.SettingsConfig for required fields
+            if self.my_var == "foo":
+                config["client_id"] = os.getenv("FOO_CLIENT")
+                config["client_secret"] = os.getenv("FOO_SECRET")
+            else:
+                config["client_id"] = os.getenv("BAR_CLIENT")
+                config["client_secret"] = os.getenv("BAR_SECRET")
+            return config
+
+    sdk = looker_sdk.init40(config_settings=MyApiSettings(my_var="foo"))
+    ...
 
 
 Code example

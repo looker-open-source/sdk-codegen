@@ -49,10 +49,14 @@ def _settings(
 
 
 def init31(
-    config_file: str = "looker.ini", section: Optional[str] = None
+    config_file: str = "looker.ini",
+    section: Optional[str] = None,
+    config_settings: Optional[api_settings.ApiSettings] = None,
 ) -> methods31.Looker31SDK:
     """Default dependency configuration"""
-    settings = _settings(config_file, section)
+    settings = (
+        _settings(config_file, section) if config_settings is None else config_settings
+    )
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods31.Looker31SDK(
@@ -65,10 +69,14 @@ def init31(
 
 
 def init40(
-    config_file: str = "looker.ini", section: Optional[str] = None
+    config_file: str = "looker.ini",
+    section: Optional[str] = None,
+    config_settings: Optional[api_settings.ApiSettings] = None,
 ) -> methods40.Looker40SDK:
     """Default dependency configuration"""
-    settings = _settings(config_file, section)
+    settings = (
+        _settings(config_file, section) if config_settings is None else config_settings
+    )
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
     return methods40.Looker40SDK(
