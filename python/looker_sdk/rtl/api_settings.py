@@ -26,19 +26,30 @@ with the settings as attributes
 import configparser as cp
 import os
 import sys
-from typing import Dict, Optional, Set
+from typing import Dict, Optional, Set, cast
 import warnings
 
 from looker_sdk.rtl import transport
 
 if sys.version_info >= (3, 8):
-    from typing import Protocol
+    from typing import Protocol, TypedDict
 else:
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol, TypedDict
+from typing_extensions import Required
+
+
+class SettingsConfig(TypedDict, total=False):
+    client_id: Required[str]
+    client_secret: Required[str]
+    base_url: str
+    verify_ssl: str
+    timeout: str
+    redirect_uri: str
+    looker_url: str
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
-    def read_config(self) -> Dict[str, str]:
+    def read_config(self) -> SettingsConfig:
         ...
 
 
@@ -93,12 +104,16 @@ class ApiSettings(PApiSettings):
         if sdk_version:
             self.agent_tag += f" {sdk_version}"
 
-    def read_config(self) -> Dict[str, str]:
+    def read_config(self) -> SettingsConfig:
         cfg_parser = cp.ConfigParser()
+        data: SettingsConfig = {
+            "client_id": "",
+            "client_secret": "",
+        }
         try:
             config_file = open(self.filename)
         except FileNotFoundError:
-            data: Dict[str, str] = {}
+            pass
         else:
             cfg_parser.read_file(config_file)
             config_file.close()
@@ -106,10 +121,10 @@ class ApiSettings(PApiSettings):
             section = self.section or cfg_parser.sections()[0]
             if not cfg_parser.has_section(section):
                 raise cp.NoSectionError(section)
-            data = dict(cfg_parser[section])
+            self._override_settings(data, dict(cfg_parser[section]))
 
         if self.env_prefix:
-            data.update(self._override_from_env())
+            self._override_settings(data, self._override_from_env())
         return self._clean_input(data)
 
     @staticmethod
@@ -121,6 +136,15 @@ class ApiSettings(PApiSettings):
         else:
             raise TypeError
         return converted
+
+    def _override_settings(
+        self, data: SettingsConfig, overrides: Dict[str, str]
+    ) -> SettingsConfig:
+        # https://github.com/python/mypy/issues/6262
+        for setting in SettingsConfig.__annotations__.keys(): # type: ignore
+            if setting in overrides:
+                data[setting] = overrides[setting] # type: ignore
+        return data
 
     def _override_from_env(self) -> Dict[str, str]:
         overrides = {}
@@ -146,7 +170,7 @@ class ApiSettings(PApiSettings):
 
         return overrides
 
-    def _clean_input(self, data: Dict[str, str]) -> Dict[str, str]:
+    def _clean_input(self, data: SettingsConfig) -> SettingsConfig:
         """Remove surrounding quotes and discard empty strings.
         """
         cleaned = {}
@@ -157,6 +181,8 @@ class ApiSettings(PApiSettings):
                         f"'{setting}' config setting is deprecated"
                     )
                 )
+            if not isinstance(value, str):
+                continue
             # Remove empty setting values
             if value in ['""', "''", ""]:
                 continue
@@ -165,4 +191,4 @@ class ApiSettings(PApiSettings):
                 cleaned[setting] = value.strip("\"'")
             else:
                 cleaned[setting] = value
-        return cleaned
+        return cast(SettingsConfig, cleaned)
