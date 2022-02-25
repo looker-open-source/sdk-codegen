@@ -71,6 +71,29 @@ describe('c# generator', () => {
     })
   })
 
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const expected = `/// Endpoint to test deprecation flags
+///
+/// GET /old_login -> AccessToken
+///
+/// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
+///
+/// <param name="old_cred">(DEPRECATED) obsolete parameter</param>
+[Obsolete("Deprecated")]
+public async Task<SdkResponse<AccessToken, Exception>> old_login(
+  string? old_cred = null,
+  ITransportSettings? options = null)
+{
+  return await AuthRequest<AccessToken, Exception>(HttpMethod.Get, "/old_login", new Values {
+      { "old_cred", old_cred }},null,options);
+}`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
+  })
+
   describe('type creation', () => {
     it('generates a type', () => {
       const type = apiTestModel.types.AccessToken

@@ -49,6 +49,32 @@ describe('swift generator', () => {
     })
   })
 
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const space = ' ' // Needed because editors trim trailing spaces!
+    const expected = `/**
+ * Endpoint to test deprecation flags
+ *
+ * GET /old_login -> AccessToken
+ */
+@available(*, deprecated)
+public func old_login(
+    /**
+     * @param {String} old_cred (DEPRECATED) obsolete parameter
+     */
+    old_cred: String? = nil,
+    options: ITransportSettings? = nil
+) -> SDKResponse<AccessToken, SDKError> {
+    let result: SDKResponse<AccessToken, SDKError> = self.get("/old_login",${space}
+        ["old_cred": old_cred], nil, options)
+    return result
+}`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
+  })
+
   describe('types', () => {
     it('enum type', () => {
       const type = apiTestModel.types.PermissionType as IEnumType
@@ -421,6 +447,7 @@ public enum PermissionType: String, Codable {
 }`
       expect(actual).toEqual(expected)
     })
+
     it('generates one init for no required/positional args', () => {
       const type = apiTestModel.types.ColorStop
       const actual = gen.declareType(indent, type)

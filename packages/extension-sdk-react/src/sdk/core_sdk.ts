@@ -32,7 +32,7 @@ import {
 
 /**
  * Register the core SDK. The ExtensionProvider will automatically
- * call this when connection with the host suceeds. An extension using
+ * call this when connection with the host succeeds. An extension using
  * the ExtensionProvider should  never call this.
  * @param coreSDK core sdk
  * @deprecated use registerCore31SDK or registerCore40SDK instead
@@ -42,7 +42,7 @@ export const registerCoreSDK = registerCore31SDK
 /**
  * Unregister the core SDK. The ExtensionProvider will automatically
  * call this when it is unloaded. An extension using
- * the ExtensionProvider should  never call this.
+ * the ExtensionProvider should never call this.
  * @deprecated use unregisterCore31SDK or unregisterCore40SDK instead
  */
 export const unregisterCoreSDK = unregisterCore31SDK

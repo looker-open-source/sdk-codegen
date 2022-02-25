@@ -1848,6 +1848,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /custom_welcome_email -> ByteArray
      */
+    @Deprecated(message = "Deprecated method")
     fun custom_welcome_email(
 
     ) : SDKResponse {
@@ -1863,6 +1864,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /custom_welcome_email -> ByteArray
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun update_custom_welcome_email(
         body: CustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
@@ -2196,6 +2198,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /whitelabel_configuration -> ByteArray
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun whitelabel_configuration(
         fields: String? = null
     ) : SDKResponse {
@@ -2211,6 +2214,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /whitelabel_configuration -> ByteArray
      */
+    @Deprecated(message = "Deprecated method")
     fun update_whitelabel_configuration(
         body: WriteWhitelabelConfiguration
     ) : SDKResponse {
@@ -2820,7 +2824,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Create content metadata access.
      *
-     * @param {ContentMetaGroupUser} body
+     * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {Boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      *
      * POST /content_metadata_access -> ByteArray
@@ -2838,7 +2842,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Update type of access for content metadata.
      *
      * @param {String} content_metadata_access_id Id of content metadata access
-     * @param {ContentMetaGroupUser} body
+     * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * PUT /content_metadata_access/{content_metadata_access_id} -> ByteArray
      */
@@ -3005,6 +3009,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> ByteArray
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun vector_thumbnail(
         type: String,
         resource_id: String,
@@ -4560,7 +4565,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Adds a new group to a group.
      *
      * @param {Long} group_id Id of group
-     * @param {GroupIdForGroupInclusion} body
+     * @param {GroupIdForGroupInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/groups -> ByteArray
      */
@@ -4604,7 +4609,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Adds a new user to a group.
      *
      * @param {Long} group_id Id of group
-     * @param {GroupIdForGroupUserInclusion} body
+     * @param {GroupIdForGroupUserInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/users -> ByteArray
      */
@@ -4660,7 +4665,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {Long} group_id Id of group
      * @param {Long} user_attribute_id Id of user attribute
-     * @param {UserAttributeGroupValue} body
+     * @param {UserAttributeGroupValue} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> ByteArray
      */
@@ -5591,7 +5596,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * **Note**: If the connection's dialect has no support for cost estimates, an error will be returned
      *
      * @param {String} connection_name Name of connection
-     * @param {CreateCostEstimate} body
+     * @param {CreateCostEstimate} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {String} fields Requested fields.
      *
      * POST /connections/{connection_name}/cost_estimate -> ByteArray
@@ -8979,7 +8984,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Two-factor login information for the specified user.
      *
      * @param {Long} user_id id of user
-     * @param {CredentialsTotp} body
+     * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_totp -> ByteArray

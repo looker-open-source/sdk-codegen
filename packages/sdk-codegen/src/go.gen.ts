@@ -35,7 +35,7 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { EnumType, strBody } from './sdkModels'
+import { describeParam, EnumType, strBody } from './sdkModels'
 
 const align = (str: string, size: number): string => {
   const num = size - str.length + 1
@@ -230,7 +230,7 @@ export class GoGen extends CodeGen {
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
-    return `@param {${mapped.name}} ${param.name} ${param.description}`
+    return `@param {${mapped.name}} ${param.name} ${describeParam(param)}`
   }
 
   encodePathParams(indent: string, method: IMethod) {
