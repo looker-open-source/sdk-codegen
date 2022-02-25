@@ -17,7 +17,7 @@
     "packages/sdk-codegen-scripts": { "release-as": "" },
     "packages/sdk-codegen-utils": { "release-as": "" },
     "packages/sdk-node": { },
-    "packages/sdk-rtl": { "release-as": "21.3.3" },
+    "packages/sdk-rtl": { "release-as": "" },
     "packages/wholly-sheet": { "release-as": "" },
     "python": { "release-type": "python", "package-name": "looker_sdk" }
   }

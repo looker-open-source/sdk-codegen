@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 443 API methods
  */
 
 import type {
@@ -94,6 +94,7 @@ import type {
   IDialectInfo,
   IDigestEmails,
   IDigestEmailSend,
+  IEgressIpAddresses,
   IEmbedParams,
   IEmbedSecret,
   IEmbedSsoParams,
@@ -126,6 +127,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IMobileSettings,
   IModel,
@@ -197,6 +199,7 @@ import type {
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
   IRequestSearchUsersNames,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -212,6 +215,7 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpSettings,
   ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
@@ -254,6 +258,7 @@ import type {
   IWriteDashboardFilter,
   IWriteDashboardLayout,
   IWriteDashboardLayoutComponent,
+  IWriteDashboardLookml,
   IWriteDatagroup,
   IWriteDBConnection,
   IWriteEmbedSecret,
@@ -2012,6 +2017,20 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IDigestEmailSend, IError>>
 
   /**
+   * ### Get Egress IP Addresses
+   *
+   * Returns the list of public egress IP Addresses for a hosted customer's instance
+   *
+   * GET /public_egress_ip_addresses -> IEgressIpAddresses
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  public_egress_ip_addresses(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IEgressIpAddresses, IError>>
+
+  /**
    * ### Set the menu item name and content for internal help resources
    *
    * GET /internal_help_resources_content -> IInternalHelpResourcesContent
@@ -2178,6 +2197,22 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISetting, IError | IValidationError>>
+
+  /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *
+   * POST /smtp_settings -> void
+   *
+   * @param body Partial<ISmtpSettings>
+   * @param options one-time API call overrides
+   *
+   */
+  set_smtp_settings(
+    body: Partial<ISmtpSettings>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError | IValidationError>>
 
   /**
    * ### Get current SMTP status.
@@ -3222,6 +3257,29 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IDashboard, IError | IValidationError>>
 
   /**
+   * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+   *
+   * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+   *
+   * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+   * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+   * ).
+   *
+   * Note that the created dashboard is not linked to any LookML Dashboard,
+   * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+   *
+   * POST /dashboards/from_lookml -> IDashboardLookml
+   *
+   * @param body Partial<IWriteDashboardLookml>
+   * @param options one-time API call overrides
+   *
+   */
+  create_dashboard_from_lookml(
+    body: Partial<IWriteDashboardLookml>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboardLookml, IError | IValidationError>>
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -3681,6 +3739,50 @@ export interface ILooker40SDK extends IAPIMethods {
     request: IRequestGraphDerivedTablesForView,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   *
+   * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+   *
+   * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  start_pdt_build(
+    request: IRequestStartPdtBuild,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Check status of PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to check status for.
+   * @param options one-time API call overrides
+   *
+   */
+  check_pdt_build(
+    materialization_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Stop a PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to stop.
+   * @param source The source of this request.
+   * @param options one-time API call overrides
+   *
+   */
+  stop_pdt_build(
+    materialization_id: string,
+    source?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
 
   //#endregion DerivedTable: View Derived Table graphs
 

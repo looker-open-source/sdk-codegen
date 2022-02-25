@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.0.0...sdk-codegen-all-v2.1.0) (2022-02-18)
+
+
+### Features
+
+* Go SDK integration tests and CI ([#988](https://www.github.com/looker-open-source/sdk-codegen/issues/988)) ([fd7c979](https://www.github.com/looker-open-source/sdk-codegen/commit/fd7c979a43a87cee8df476f3a850dcff5f601781))
+* SDK for Looker 22_2 ([#966](https://www.github.com/looker-open-source/sdk-codegen/issues/966)) ([3ba5420](https://www.github.com/looker-open-source/sdk-codegen/commit/3ba5420c75d602692c1c8aa806648e2c2dd73cac))
+
+
+### Bug Fixes
+
+* Fixed incorrect VerifySSL setting implementation ([#989](https://www.github.com/looker-open-source/sdk-codegen/issues/989)) ([a4f1dec](https://www.github.com/looker-open-source/sdk-codegen/commit/a4f1dec40804280f54fd06d47dc760e37d37895f))
+* Update readme to link to update_prod_branches_to_main.py ([#971](https://www.github.com/looker-open-source/sdk-codegen/issues/971)) ([#986](https://www.github.com/looker-open-source/sdk-codegen/issues/986)) ([5bb2fdb](https://www.github.com/looker-open-source/sdk-codegen/commit/5bb2fdbb474e8201d4df6e031fe49c019fd608e8))
+
 ## [2.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.21.1...sdk-codegen-all-v2.0.0) (2022-02-14)
 
 

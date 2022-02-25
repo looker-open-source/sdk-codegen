@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-362 API models: 229 Spec, 55 Request, 58 Write, 20 Enum
+368 API models: 232 Spec, 56 Request, 59 Write, 21 Enum
 */
 
 
@@ -858,6 +858,7 @@ type DashboardLayoutComponent struct {
 
 type DashboardLookml struct {
   DashboardId *string `json:"dashboard_id,omitempty"`  // Id of Dashboard
+  FolderId    *string `json:"folder_id,omitempty"`     // (Write-Only) Id of the folder
   Lookml      *string `json:"lookml,omitempty"`        // lookml of UDD
 }
 
@@ -965,6 +966,8 @@ type DBConnection struct {
   DisableContextComment    *bool                 `json:"disable_context_comment,omitempty"`       // When disable_context_comment is true comment will not be added to SQL
   OauthApplicationId       *int64                `json:"oauth_application_id,omitempty"`          // An External OAuth Application to use for authenticating to the database
   AlwaysRetryFailedBuilds  *bool                 `json:"always_retry_failed_builds,omitempty"`    // When true, error PDTs will be retried every regenerator cycle
+  CostEstimateEnabled      *bool                 `json:"cost_estimate_enabled,omitempty"`         // When true, query cost estimate will be displayed in explore.
+  PdtApiControlEnabled     *bool                 `json:"pdt_api_control_enabled,omitempty"`       // PDT builds on this connection can be kicked off and cancelled via API.
 }
 
 
@@ -1085,6 +1088,11 @@ type DiscretePalette struct {
   Label  *string   `json:"label,omitempty"`   // Label for palette
   Type   *string   `json:"type,omitempty"`    // Type of palette
   Colors *[]string `json:"colors,omitempty"`  // Array of colors in the palette
+}
+
+
+type EgressIpAddresses struct {
+  EgressIpAddresses *[]string `json:"egress_ip_addresses,omitempty"`  // Egress IP addresses
 }
 
 
@@ -1956,6 +1964,12 @@ type Manifest struct {
   Name                 *string               `json:"name,omitempty"`                   // Manifest project name
   Imports              *[]ImportedProject    `json:"imports,omitempty"`                // Imports for a project
   LocalizationSettings *LocalizationSettings `json:"localization_settings,omitempty"`
+}
+
+
+type MaterializePDT struct {
+  MaterializationId *string `json:"materialization_id,omitempty"`  // The ID of the enqueued materialization task
+  RespText          *string `json:"resp_text,omitempty"`           // Detailed response in text format
 }
 
 
@@ -2919,6 +2933,16 @@ type RequestSearchUsersNames struct {
   IsDisabled             *bool   `json:"is_disabled,omitempty"`               // Include or exclude disabled accounts in the results
 }
 
+// Dynamically generated request type for start_pdt_build
+type RequestStartPdtBuild struct {
+  ModelName            string  `json:"model_name"`                        // The model of the PDT to start building.
+  ViewName             string  `json:"view_name"`                         // The view name of the PDT to start building.
+  ForceRebuild         *string `json:"force_rebuild,omitempty"`           // Force rebuild of required dependent PDTs, even if they are already materialized.
+  ForceFullIncremental *string `json:"force_full_incremental,omitempty"`  // Force involved incremental PDTs to fully re-materialize.
+  Workspace            *string `json:"workspace,omitempty"`               // Workspace in which to materialize selected PDT ('dev' or default 'production').
+  Source               *string `json:"source,omitempty"`                  // The source of this request.
+}
+
 // Dynamically generated request type for tag_ref
 type RequestTagRef struct {
   ProjectId  string       `json:"project_id"`             // Project Id
@@ -3263,6 +3287,17 @@ type SmtpNodeStatus struct {
 }
 
 
+type SmtpSettings struct {
+  Address            *string     `json:"address,omitempty"`               // SMTP Server url
+  From               *string     `json:"from,omitempty"`                  // From e-mail address
+  UserName           *string     `json:"user_name,omitempty"`             // User name
+  Password           *string     `json:"password,omitempty"`              // Password
+  Port               *int64      `json:"port,omitempty"`                  // SMTP Server's port
+  EnableStarttlsAuto *bool       `json:"enable_starttls_auto,omitempty"`  // Is TLS encryption enabled?
+  SslVersion         *SslVersion `json:"ssl_version,omitempty"`           // TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+}
+
+
 type SmtpStatus struct {
   IsValid    *bool             `json:"is_valid,omitempty"`     // Overall SMTP status of cluster
   NodeCount  *int64            `json:"node_count,omitempty"`   // Total number of nodes in cluster
@@ -3335,6 +3370,12 @@ type SshTunnel struct {
   DatabasePort  *int64  `json:"database_port,omitempty"`    // Port that the Database Server is listening on
   Status        *string `json:"status,omitempty"`           // Current connection status for this Tunnel
 }
+
+type SslVersion string
+const SslVersion_TLSv1_1 SslVersion = "TLSv1_1"
+const SslVersion_SSLv23  SslVersion = "SSLv23"
+const SslVersion_TLSv1_2 SslVersion = "TLSv1_2"
+
 
 
 type SupportAccessAddEntries struct {
@@ -3873,6 +3914,13 @@ type WriteDashboardLayoutComponent struct {
   Height             *int64  `json:"height,omitempty"`                // Height
 }
 
+// Dynamic writeable type for DashboardLookml removes:
+// dashboard_id
+type WriteDashboardLookml struct {
+  FolderId *string `json:"folder_id,omitempty"`  // (Write-Only) Id of the folder
+  Lookml   *string `json:"lookml,omitempty"`     // lookml of UDD
+}
+
 // Dynamic writeable type for Datagroup removes:
 // can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 type WriteDatagroup struct {
@@ -3915,6 +3963,8 @@ type WriteDBConnection struct {
   DisableContextComment    *bool                      `json:"disable_context_comment,omitempty"`       // When disable_context_comment is true comment will not be added to SQL
   OauthApplicationId       *int64                     `json:"oauth_application_id,omitempty"`          // An External OAuth Application to use for authenticating to the database
   AlwaysRetryFailedBuilds  *bool                      `json:"always_retry_failed_builds,omitempty"`    // When true, error PDTs will be retried every regenerator cycle
+  CostEstimateEnabled      *bool                      `json:"cost_estimate_enabled,omitempty"`         // When true, query cost estimate will be displayed in explore.
+  PdtApiControlEnabled     *bool                      `json:"pdt_api_control_enabled,omitempty"`       // PDT builds on this connection can be kicked off and cancelled via API.
 }
 
 // Dynamic writeable type for DBConnectionOverride removes:
