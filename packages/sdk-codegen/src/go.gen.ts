@@ -35,7 +35,7 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { describeParam, EnumType, strBody } from './sdkModels'
+import { EnumType, strBody } from './sdkModels'
 
 const align = (str: string, size: number): string => {
   const num = size - str.length + 1
@@ -177,9 +177,12 @@ export class GoGen extends CodeGen {
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : ''
     }
     if (method.responseIsBoth()) {
-      headComment += `\n\n**Note**: Binary content may be returned by this method.`
+      headComment += `\n\n**Note**: Binary content may be returned by this method.\n`
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
+    }
+    if (method.deprecated) {
+      headComment += '\n\nDeprecated: This method is deprecated.\n'
     }
     const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`
     const retType = mapped.name === 'Void' ? '' : `${mapped.name}, `
@@ -222,15 +225,12 @@ export class GoGen extends CodeGen {
       pOpt = mapped.default ? '' : '*'
     }
     return (
+      // so it turns out Go doesn't like parameter comments. Go figure https://stackoverflow.com/a/67878816
       // this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${this.toCamelCase(this.reserve(param.name))} ${pOpt}${
         mapped.name
       }`
     )
-  }
-
-  paramComment(param: IParameter, mapped: IMappedType) {
-    return `@param {${mapped.name}} ${param.name} ${describeParam(param)}`
   }
 
   encodePathParams(indent: string, method: IMethod) {
