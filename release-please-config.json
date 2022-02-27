@@ -19,6 +19,6 @@
     "packages/sdk-node": { },
     "packages/sdk-rtl": { "release-as": "" },
     "packages/wholly-sheet": { "release-as": "" },
-    "python": { "release-type": "python", "package-name": "looker_sdk" }
+    "python": { "release-type": "python", "package-name": "looker_sdk", "release-as": "22.2.1" }
   }
 }
