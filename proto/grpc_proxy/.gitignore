@@ -1,0 +1,6 @@
+.env
+.gradle
+build
+out
+ssl
+src/main/java/com/google/looker/server/sdk/LookerModels.java

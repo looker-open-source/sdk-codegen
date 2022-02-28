@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package looker;
+
+option java_package = "com.google.looker.server.rtl";
+option java_multiple_files = true;
+
+message PingRequest {}
+
+message PingResponse {
+  bool active = 1;
+}

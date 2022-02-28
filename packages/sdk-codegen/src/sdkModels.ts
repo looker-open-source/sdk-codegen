@@ -140,6 +140,16 @@ export const titleCase = (value: string) => {
 }
 
 /**
+ * convert string to snake_case
+ * @param value string value to convert to snake_case
+ */
+export const snakeCase = (value: string) => {
+  if (!value) return ''
+  value = value.charAt(0).toLowerCase() + value.substring(1)
+  return value.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
+}
+
+/**
  * Only first character of string should be uppercase
  *
  * Values are first converted to camelCase()
@@ -151,6 +161,18 @@ export const firstCase = (value: string) => {
   if (!value) return ''
   value = camelCase(value)
   return value[0].toLocaleUpperCase() + value.substr(1).toLocaleLowerCase()
+}
+
+/**
+ * Derive a hash from a string.
+ * @param s string to hash
+ */
+export const stringToHashCode = (s: string): number => {
+  let h = 0
+  for (let n = 0; n < s.length; n++) {
+    h = ((h << 5) - h + s.charCodeAt(n)) | 0
+  }
+  return h
 }
 
 export interface IModel {}
