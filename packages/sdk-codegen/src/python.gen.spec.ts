@@ -88,19 +88,15 @@ class LookerSDK(api_methods.APIMethods):
       const type = apiTestModel.types.LookmlModelExploreJoins
       gen.declareType(indent, type)
       expect(gen.modelsEpilogue('')).toEqual(`
-
-# The following cattrs structure hook registrations are a workaround
-# for https://github.com/Tinche/cattrs/pull/42 Once this issue is resolved
-# these calls will be removed.
-
 import functools  # noqa:E402
 
-forward_ref_structure_hook = functools.partial(sr.forward_ref_structure_hook, globals(), sr.converter)
-translate_keys_structure_hook = functools.partial(sr.translate_keys_structure_hook, sr.converter)
-sr.converter.register_structure_hook(
-    ForwardRef("LookmlModelExploreJoins"),  # type: ignore
-    forward_ref_structure_hook  # type:ignore
+forward_ref_structure_hook = functools.partial(
+    sr.forward_ref_structure_hook, globals(), sr.converter
 )
+sr.converter.register_structure_hook_func(
+    lambda t: t.__class__ is ForwardRef, forward_ref_structure_hook
+)
+translate_keys_structure_hook = functools.partial(sr.translate_keys_structure_hook, sr.converter)
 sr.converter.register_structure_hook(
     LookmlModelExploreJoins,  # type: ignore
     translate_keys_structure_hook  # type:ignore

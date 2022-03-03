@@ -100,7 +100,6 @@ export class PythonGen extends CodeGen {
 
   // cattrs [un]structure hooks for model [de]serialization
   hooks: string[] = []
-  structureHookFR = 'forward_ref_structure_hook'
   structureHookTK = 'translate_keys_structure_hook'
   pythonReservedKeywordClasses: Set<string> = new Set()
 
@@ -141,18 +140,14 @@ DelimSequence = model.DelimSequence
 `
 
   modelsEpilogue = (_indent: string) => `
-
-# The following cattrs structure hook registrations are a workaround
-# for https://github.com/Tinche/cattrs/pull/42 Once this issue is resolved
-# these calls will be removed.
-
 import functools  # noqa:E402
 
-${
-  this.structureHookFR
-} = functools.partial(sr.forward_ref_structure_hook, globals(), sr.converter${
-    this.apiRef
-  })
+forward_ref_structure_hook = functools.partial(
+    sr.forward_ref_structure_hook, globals(), sr.converter${this.apiRef}
+)
+sr.converter${this.apiRef}.register_structure_hook_func(
+    lambda t: t.__class__ is ForwardRef, forward_ref_structure_hook
+)
 ${
   this.structureHookTK
 } = functools.partial(sr.translate_keys_structure_hook, sr.converter${
@@ -476,10 +471,6 @@ ${this.hooks.join('\n')}
       }
     }
 
-    const forwardRef = `ForwardRef("${type.name}")`
-    this.hooks.push(
-      `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${forwardRef},  # type: ignore\n${bump}${this.structureHookFR}  # type:ignore\n)`
-    )
     if (usesReservedPythonKeyword) {
       this.hooks.push(
         `sr.converter${this.apiRef}.register_structure_hook(\n${bump}${type.name},  # type: ignore\n${bump}${this.structureHookTK}  # type:ignore\n)`
