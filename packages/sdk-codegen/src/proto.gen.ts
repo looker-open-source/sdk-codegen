@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,8 @@
  */
 
 import { CodeGen } from './codeGen'
-import {
-  IMethod,
-  IParameter,
-  IProperty,
-  IType,
-  EnumType,
-  snakeCase,
-  stringToHashCode,
-  titleCase,
-} from './sdkModels'
+import type { IMethod, IParameter, IProperty, IType } from './sdkModels'
+import { EnumType, snakeCase, stringToHashCode, titleCase } from './sdkModels'
 
 // eslint-disable @typescript-eslint/no-unused-vars
 
@@ -102,7 +94,7 @@ export class ProtoGen extends CodeGen {
     const methodName = titleCase(_method.operationId)
     return `${this.formatComments(
       _method.description
-    )}  rpc ${methodName}(${methodName}Request) returns (${methodName}Response);`
+    )}  rpc ${methodName}(${methodName}Req) returns (${methodName}Response);`
   }
 
   declareStreamer(_indent: string, _method: IMethod): string {
@@ -112,7 +104,7 @@ export class ProtoGen extends CodeGen {
       : ''
     return `${this.formatComments(
       _method.description
-    )}  rpc ${methodName}(${methodName}Request) returns (stream ${methodName}${streamResponse}Response);`
+    )}  rpc ${methodName}(${methodName}Req) returns (stream ${methodName}${streamResponse}Response);`
   }
 
   declareParameter(
@@ -161,7 +153,7 @@ message ${titleCase(method.operationId)}StreamResponse {
 }`
         }
         return `
-message ${titleCase(method.operationId)}Request {
+message ${titleCase(method.operationId)}Req {
 ${this.methodArguments(method)}
 }
 
@@ -305,7 +297,7 @@ service ${serviceName} {
       return 'bool'
     } else if (type === 'datetime') {
       return 'google.protobuf.Timestamp'
-    } else if (type === 'any') {
+    } else if (type === 'any' || type === 'object') {
       return 'google.protobuf.Any'
     } else if (type === 'uri') {
       return 'string'
@@ -329,7 +321,7 @@ service ${serviceName} {
   // less than equal to 536870911. So far their have been
   // no collisions but I suspect there are better implementations.
   private generateIdentifier(name: string): number {
-    let hashCode = stringToHashCode(name)
+    let hashCode = stringToHashCode(name.split('').reverse().join(''))
     hashCode = hashCode < 0 ? hashCode * -1 : hashCode
     while (hashCode > 536870911) {
       hashCode = hashCode >> 1

@@ -5,19 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.looker.client.LookerGrpcClient;
-import com.google.looker.grpc.services.AllConnectionsRequest;
+import com.google.looker.grpc.services.AllConnectionsReq;
 import com.google.looker.grpc.services.AllConnectionsResponse;
-import com.google.looker.grpc.services.ConnectionRequest;
+import com.google.looker.grpc.services.ConnectionReq;
 import com.google.looker.grpc.services.ConnectionResponse;
-import com.google.looker.grpc.services.CreateConnectionRequest;
+import com.google.looker.grpc.services.CreateConnectionReq;
 import com.google.looker.grpc.services.CreateConnectionResponse;
 import com.google.looker.grpc.services.DBConnection;
-import com.google.looker.grpc.services.DeleteConnectionRequest;
+import com.google.looker.grpc.services.DeleteConnectionReq;
 import com.google.looker.grpc.services.DeleteConnectionResponse;
 import com.google.looker.grpc.services.LookerServiceGrpc;
-import com.google.looker.grpc.services.TestConnectionRequest;
+import com.google.looker.grpc.services.TestConnectionReq;
 import com.google.looker.grpc.services.TestConnectionResponse;
-import com.google.looker.grpc.services.UpdateConnectionRequest;
+import com.google.looker.grpc.services.UpdateConnectionReq;
 import com.google.looker.grpc.services.UpdateConnectionResponse;
 import javax.net.ssl.SSLException;
 import org.junit.jupiter.api.AfterEach;
@@ -51,7 +51,7 @@ public class ConnectionTests {
     // Get all connections
     AllConnectionsResponse allConnectionsResponse = stub
         .allConnections(
-            AllConnectionsRequest
+            AllConnectionsReq
                 .newBuilder()
                 .build()
         );
@@ -61,7 +61,7 @@ public class ConnectionTests {
     String connectionName = allConnectionsResponse.getResult(0).getName();
     ConnectionResponse connectionResponse = stub
         .connection(
-            ConnectionRequest
+            ConnectionReq
                 .newBuilder()
                 .setConnectionName(connectionName)
                 .setFields("name")
@@ -73,7 +73,7 @@ public class ConnectionTests {
     // Create a connection
     cleanupTestConnection();
     CreateConnectionResponse createConnectionResponse = stub.createConnection(
-        CreateConnectionRequest
+        CreateConnectionReq
             .newBuilder()
             .setBody(
                 DBConnection
@@ -81,7 +81,7 @@ public class ConnectionTests {
                     .setName(TEST_CONNECTION_NAME)
                     .setDialectName("mysql")
                     .setHost("db1.looker.com")
-                    .setPort(3306)
+                    .setPort("3306")
                     .setUsername(System.getProperty("TEST_LOOKER_USERNAME") + "X")
                     .setPassword(System.getProperty("TEST_LOOKER_PASSWORD"))
                     .setDatabase("demo_db2")
@@ -95,7 +95,7 @@ public class ConnectionTests {
 
     // Update connection
     UpdateConnectionResponse updateConnectionResponse = stub.updateConnection(
-        UpdateConnectionRequest
+        UpdateConnectionReq
             .newBuilder()
             .setConnectionName(TEST_CONNECTION_NAME)
             .setBody(
@@ -111,7 +111,7 @@ public class ConnectionTests {
         updateConnectionResponse.getResult().getUsername());
 
     // Test connection
-    TestConnectionResponse testConnectionResponse = stub.testConnection(TestConnectionRequest
+    TestConnectionResponse testConnectionResponse = stub.testConnection(TestConnectionReq
         .newBuilder()
         .setConnectionName(System.getProperty("TEST_CONNECTION_NAME"))
         .setTests("connect")
@@ -121,7 +121,7 @@ public class ConnectionTests {
 
     // Delete connection
     DeleteConnectionResponse deleteConnectionResponse = stub.deleteConnection(
-        DeleteConnectionRequest
+        DeleteConnectionReq
             .newBuilder()
             .setConnectionName(TEST_CONNECTION_NAME)
             .build()
@@ -133,14 +133,14 @@ public class ConnectionTests {
   private void cleanupTestConnection() {
     try {
       stub.connection(
-          ConnectionRequest
+          ConnectionReq
               .newBuilder()
               .setConnectionName(TEST_CONNECTION_NAME)
               .setFields("name")
               .build()
       );
       stub.deleteConnection(
-          DeleteConnectionRequest
+          DeleteConnectionReq
               .newBuilder()
               .setConnectionName(TEST_CONNECTION_NAME)
               .build()

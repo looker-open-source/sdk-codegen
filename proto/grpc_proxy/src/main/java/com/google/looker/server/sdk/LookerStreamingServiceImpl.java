@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2019 Looker Data Sciences, Inc.
+// Copyright (c) 2021 Looker Data Sciences, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+//
 
-// 401 API methods
+// 438 API methods
 
 
 package com.google.looker.server.sdk;
@@ -47,6 +48,290 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   }
 
     
+  //#region Alert: Alert
+
+  /**
+   * ### Search Alerts
+   * 
+   */
+    @Override
+    public void searchAlerts(SearchAlertsReq request, StreamObserver<SearchAlertsStreamResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/alerts/search", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SearchAlertsResponse.Builder responseBuilder = SearchAlertsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseBuilder.getResultList().forEach(entry -> {
+          SearchAlertsStreamResponse.Builder responseBuilder2 = SearchAlertsStreamResponse.newBuilder();
+          responseBuilder2.setResult(entry);
+          responseObserver.onNext(responseBuilder2.build());
+        });
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Get an alert by a given alert ID
+   * 
+   */
+    @Override
+    public void getAlert(GetAlertReq request, StreamObserver<GetAlertResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/alerts/{alert_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GetAlertResponse.Builder responseBuilder = GetAlertResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Update an alert
+   * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * #
+   * 
+   */
+    @Override
+    public void updateAlert(UpdateAlertReq request, StreamObserver<UpdateAlertResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.put("/alerts/{alert_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        UpdateAlertResponse.Builder responseBuilder = UpdateAlertResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Update select alert fields
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+   * #
+   * 
+   */
+    @Override
+    public void updateAlertField(UpdateAlertFieldReq request, StreamObserver<UpdateAlertFieldResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.patch("/alerts/{alert_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        UpdateAlertFieldResponse.Builder responseBuilder = UpdateAlertFieldResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Delete an alert by a given alert ID
+   * 
+   */
+    @Override
+    public void deleteAlert(DeleteAlertReq request, StreamObserver<DeleteAlertResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.delete("/alerts/{alert_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        DeleteAlertResponse.Builder responseBuilder = DeleteAlertResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Create a new alert and return details of the newly created object
+   * 
+   * Required fields: `field`, `destinations`, `comparison_type`, `threshold`, `cron`
+   * 
+   * Example Request:
+   * Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
+   * ```
+   * {
+   *   "cron": "0 5 * * *",
+   *   "custom_title": "Alert when LA inventory is low",
+   *   "dashboard_element_id": 103,
+   *   "applied_dashboard_filters": [
+   *     {
+   *       "filter_title": "Warehouse Name",
+   *       "field_name": "distribution_centers.name",
+   *       "filter_value": "Los Angeles CA",
+   *       "filter_description": "is Los Angeles CA"
+   *     }
+   *   ],
+   *   "comparison_type": "LESS_THAN",
+   *   "destinations": [
+   *     {
+   *       "destination_type": "EMAIL",
+   *       "email_address": "test@test.com"
+   *     }
+   *   ],
+   *   "field": {
+   *     "title": "Number on Hand",
+   *     "name": "inventory_items.number_on_hand"
+   *   },
+   *   "is_disabled": false,
+   *   "is_public": true,
+   *   "threshold": 1000
+   * }
+   * ```
+   * 
+   */
+    @Override
+    public void createAlert(CreateAlertReq request, StreamObserver<CreateAlertResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/alerts", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateAlertResponse.Builder responseBuilder = CreateAlertResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Enqueue an Alert by ID
+   * 
+   */
+    @Override
+    public void enqueueAlert(EnqueueAlertReq request, StreamObserver<EnqueueAlertResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/alerts/{alert_id}/enqueue", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        EnqueueAlertResponse.Builder responseBuilder = EnqueueAlertResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  //#endregion Alert: Alert
+
   //#region ApiAuth: API Authentication
 
   /**
@@ -81,7 +366,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void login(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
+    public void login(LoginReq request, StreamObserver<LoginResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -130,7 +415,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void loginUser(LoginUserRequest request, StreamObserver<LoginUserResponse> responseObserver) {
+    public void loginUser(LoginUserReq request, StreamObserver<LoginUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -164,7 +449,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void logout(LogoutRequest request, StreamObserver<LogoutResponse> responseObserver) {
+    public void logout(LogoutReq request, StreamObserver<LogoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -196,6 +481,76 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   //#endregion ApiAuth: API Authentication
 
   //#region Auth: Manage User Authentication Configuration
+
+  /**
+   * ### Create an embed secret using the specified information.
+   * 
+   * The value of the `secret` field will be set by Looker and returned.
+   * 
+   */
+    @Override
+    public void createEmbedSecret(CreateEmbedSecretReq request, StreamObserver<CreateEmbedSecretResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/embed_config/secrets", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateEmbedSecretResponse.Builder responseBuilder = CreateEmbedSecretResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Delete an embed secret.
+   * 
+   */
+    @Override
+    public void deleteEmbedSecret(DeleteEmbedSecretReq request, StreamObserver<DeleteEmbedSecretResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.delete("/embed_config/secrets/{embed_secret_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        DeleteEmbedSecretResponse.Builder responseBuilder = DeleteEmbedSecretResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
 
   /**
    * ### Create SSO Embed URL
@@ -235,7 +590,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createSsoEmbedUrl(CreateSsoEmbedUrlRequest request, StreamObserver<CreateSsoEmbedUrlResponse> responseObserver) {
+    public void createSsoEmbedUrl(CreateSsoEmbedUrlReq request, StreamObserver<CreateSsoEmbedUrlResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -293,7 +648,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createEmbedUrlAsMe(CreateEmbedUrlAsMeRequest request, StreamObserver<CreateEmbedUrlAsMeResponse> responseObserver) {
+    public void createEmbedUrlAsMe(CreateEmbedUrlAsMeReq request, StreamObserver<CreateEmbedUrlAsMeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -342,7 +697,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void ldapConfig(LdapConfigRequest request, StreamObserver<LdapConfigResponse> responseObserver) {
+    public void ldapConfig(LdapConfigReq request, StreamObserver<LdapConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -386,7 +741,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateLdapConfig(UpdateLdapConfigRequest request, StreamObserver<UpdateLdapConfigResponse> responseObserver) {
+    public void updateLdapConfig(UpdateLdapConfigReq request, StreamObserver<UpdateLdapConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -437,7 +792,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testLdapConfigConnection(TestLdapConfigConnectionRequest request, StreamObserver<TestLdapConfigConnectionResponse> responseObserver) {
+    public void testLdapConfigConnection(TestLdapConfigConnectionReq request, StreamObserver<TestLdapConfigConnectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -491,7 +846,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testLdapConfigAuth(TestLdapConfigAuthRequest request, StreamObserver<TestLdapConfigAuthResponse> responseObserver) {
+    public void testLdapConfigAuth(TestLdapConfigAuthReq request, StreamObserver<TestLdapConfigAuthResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -534,7 +889,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testLdapConfigUserInfo(TestLdapConfigUserInfoRequest request, StreamObserver<TestLdapConfigUserInfoResponse> responseObserver) {
+    public void testLdapConfigUserInfo(TestLdapConfigUserInfoReq request, StreamObserver<TestLdapConfigUserInfoResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -577,7 +932,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testLdapConfigUserAuth(TestLdapConfigUserAuthRequest request, StreamObserver<TestLdapConfigUserAuthResponse> responseObserver) {
+    public void testLdapConfigUserAuth(TestLdapConfigUserAuthReq request, StreamObserver<TestLdapConfigUserAuthResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -617,7 +972,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allOauthClientApps(AllOauthClientAppsRequest request, StreamObserver<AllOauthClientAppsStreamResponse> responseObserver) {
+    public void allOauthClientApps(AllOauthClientAppsReq request, StreamObserver<AllOauthClientAppsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -657,7 +1012,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void oauthClientApp(OauthClientAppRequest request, StreamObserver<OauthClientAppResponse> responseObserver) {
+    public void oauthClientApp(OauthClientAppReq request, StreamObserver<OauthClientAppResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -696,7 +1051,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void registerOauthClientApp(RegisterOauthClientAppRequest request, StreamObserver<RegisterOauthClientAppResponse> responseObserver) {
+    public void registerOauthClientApp(RegisterOauthClientAppReq request, StreamObserver<RegisterOauthClientAppResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -732,7 +1087,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateOauthClientApp(UpdateOauthClientAppRequest request, StreamObserver<UpdateOauthClientAppResponse> responseObserver) {
+    public void updateOauthClientApp(UpdateOauthClientAppReq request, StreamObserver<UpdateOauthClientAppResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -771,7 +1126,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteOauthClientApp(DeleteOauthClientAppRequest request, StreamObserver<DeleteOauthClientAppResponse> responseObserver) {
+    public void deleteOauthClientApp(DeleteOauthClientAppReq request, StreamObserver<DeleteOauthClientAppResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -808,7 +1163,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void invalidateTokens(InvalidateTokensRequest request, StreamObserver<InvalidateTokensResponse> responseObserver) {
+    public void invalidateTokens(InvalidateTokensReq request, StreamObserver<InvalidateTokensResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -848,7 +1203,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void activateAppUser(ActivateAppUserRequest request, StreamObserver<ActivateAppUserResponse> responseObserver) {
+    public void activateAppUser(ActivateAppUserReq request, StreamObserver<ActivateAppUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -891,7 +1246,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deactivateAppUser(DeactivateAppUserRequest request, StreamObserver<DeactivateAppUserResponse> responseObserver) {
+    public void deactivateAppUser(DeactivateAppUserReq request, StreamObserver<DeactivateAppUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -936,7 +1291,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void oidcConfig(OidcConfigRequest request, StreamObserver<OidcConfigResponse> responseObserver) {
+    public void oidcConfig(OidcConfigReq request, StreamObserver<OidcConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -978,7 +1333,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateOidcConfig(UpdateOidcConfigRequest request, StreamObserver<UpdateOidcConfigResponse> responseObserver) {
+    public void updateOidcConfig(UpdateOidcConfigReq request, StreamObserver<UpdateOidcConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1012,7 +1367,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void oidcTestConfig(OidcTestConfigRequest request, StreamObserver<OidcTestConfigResponse> responseObserver) {
+    public void oidcTestConfig(OidcTestConfigReq request, StreamObserver<OidcTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1046,7 +1401,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteOidcTestConfig(DeleteOidcTestConfigRequest request, StreamObserver<DeleteOidcTestConfigResponse> responseObserver) {
+    public void deleteOidcTestConfig(DeleteOidcTestConfigReq request, StreamObserver<DeleteOidcTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1080,7 +1435,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createOidcTestConfig(CreateOidcTestConfigRequest request, StreamObserver<CreateOidcTestConfigResponse> responseObserver) {
+    public void createOidcTestConfig(CreateOidcTestConfigReq request, StreamObserver<CreateOidcTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1114,7 +1469,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void passwordConfig(PasswordConfigRequest request, StreamObserver<PasswordConfigResponse> responseObserver) {
+    public void passwordConfig(PasswordConfigReq request, StreamObserver<PasswordConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1148,7 +1503,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updatePasswordConfig(UpdatePasswordConfigRequest request, StreamObserver<UpdatePasswordConfigResponse> responseObserver) {
+    public void updatePasswordConfig(UpdatePasswordConfigReq request, StreamObserver<UpdatePasswordConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1182,7 +1537,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void forcePasswordResetAtNextLoginForAllUsers(ForcePasswordResetAtNextLoginForAllUsersRequest request, StreamObserver<ForcePasswordResetAtNextLoginForAllUsersResponse> responseObserver) {
+    public void forcePasswordResetAtNextLoginForAllUsers(ForcePasswordResetAtNextLoginForAllUsersReq request, StreamObserver<ForcePasswordResetAtNextLoginForAllUsersResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1227,7 +1582,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void samlConfig(SamlConfigRequest request, StreamObserver<SamlConfigResponse> responseObserver) {
+    public void samlConfig(SamlConfigReq request, StreamObserver<SamlConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1269,7 +1624,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateSamlConfig(UpdateSamlConfigRequest request, StreamObserver<UpdateSamlConfigResponse> responseObserver) {
+    public void updateSamlConfig(UpdateSamlConfigReq request, StreamObserver<UpdateSamlConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1303,7 +1658,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void samlTestConfig(SamlTestConfigRequest request, StreamObserver<SamlTestConfigResponse> responseObserver) {
+    public void samlTestConfig(SamlTestConfigReq request, StreamObserver<SamlTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1337,7 +1692,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteSamlTestConfig(DeleteSamlTestConfigRequest request, StreamObserver<DeleteSamlTestConfigResponse> responseObserver) {
+    public void deleteSamlTestConfig(DeleteSamlTestConfigReq request, StreamObserver<DeleteSamlTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1371,7 +1726,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createSamlTestConfig(CreateSamlTestConfigRequest request, StreamObserver<CreateSamlTestConfigResponse> responseObserver) {
+    public void createSamlTestConfig(CreateSamlTestConfigReq request, StreamObserver<CreateSamlTestConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1405,7 +1760,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void parseSamlIdpMetadata(ParseSamlIdpMetadataRequest request, StreamObserver<ParseSamlIdpMetadataResponse> responseObserver) {
+    public void parseSamlIdpMetadata(ParseSamlIdpMetadataReq request, StreamObserver<ParseSamlIdpMetadataResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1441,7 +1796,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void fetchAndParseSamlIdpMetadata(FetchAndParseSamlIdpMetadataRequest request, StreamObserver<FetchAndParseSamlIdpMetadataResponse> responseObserver) {
+    public void fetchAndParseSamlIdpMetadata(FetchAndParseSamlIdpMetadataReq request, StreamObserver<FetchAndParseSamlIdpMetadataResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1475,7 +1830,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void sessionConfig(SessionConfigRequest request, StreamObserver<SessionConfigResponse> responseObserver) {
+    public void sessionConfig(SessionConfigReq request, StreamObserver<SessionConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1509,7 +1864,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateSessionConfig(UpdateSessionConfigRequest request, StreamObserver<UpdateSessionConfigResponse> responseObserver) {
+    public void updateSessionConfig(UpdateSessionConfigReq request, StreamObserver<UpdateSessionConfigResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1539,11 +1894,235 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Get Support Access Allowlist Users
+   * 
+   * Returns the users that have been added to the Support Access Allowlist
+   * 
+   */
+    @Override
+    public void getSupportAccessAllowlistEntries(GetSupportAccessAllowlistEntriesReq request, StreamObserver<GetSupportAccessAllowlistEntriesStreamResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/support_access/allowlist", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GetSupportAccessAllowlistEntriesResponse.Builder responseBuilder = GetSupportAccessAllowlistEntriesResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseBuilder.getResultList().forEach(entry -> {
+          GetSupportAccessAllowlistEntriesStreamResponse.Builder responseBuilder2 = GetSupportAccessAllowlistEntriesStreamResponse.newBuilder();
+          responseBuilder2.setResult(entry);
+          responseObserver.onNext(responseBuilder2.build());
+        });
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Add Support Access Allowlist Users
+   * 
+   * Adds a list of emails to the Allowlist, using the provided reason
+   * 
+   */
+    @Override
+    public void addSupportAccessAllowlistEntries(AddSupportAccessAllowlistEntriesReq request, StreamObserver<AddSupportAccessAllowlistEntriesStreamResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/support_access/allowlist", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        AddSupportAccessAllowlistEntriesResponse.Builder responseBuilder = AddSupportAccessAllowlistEntriesResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseBuilder.getResultList().forEach(entry -> {
+          AddSupportAccessAllowlistEntriesStreamResponse.Builder responseBuilder2 = AddSupportAccessAllowlistEntriesStreamResponse.newBuilder();
+          responseBuilder2.setResult(entry);
+          responseObserver.onNext(responseBuilder2.build());
+        });
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Delete Support Access Allowlist User
+   * 
+   * Deletes the specified Allowlist Entry Id
+   * 
+   */
+    @Override
+    public void deleteSupportAccessAllowlistEntry(DeleteSupportAccessAllowlistEntryReq request, StreamObserver<DeleteSupportAccessAllowlistEntryResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.delete("/support_access/allowlist/{entry_id}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        DeleteSupportAccessAllowlistEntryResponse.Builder responseBuilder = DeleteSupportAccessAllowlistEntryResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Enable Support Access
+   * 
+   * Enables Support Access for the provided duration
+   * 
+   */
+    @Override
+    public void enableSupportAccess(EnableSupportAccessReq request, StreamObserver<EnableSupportAccessResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.put("/support_access/enable", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        EnableSupportAccessResponse.Builder responseBuilder = EnableSupportAccessResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Disable Support Access
+   * 
+   * Disables Support Access immediately
+   * 
+   */
+    @Override
+    public void disableSupportAccess(DisableSupportAccessReq request, StreamObserver<DisableSupportAccessResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.put("/support_access/disable", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        DisableSupportAccessResponse.Builder responseBuilder = DisableSupportAccessResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Support Access Status
+   * 
+   * Returns the current Support Access Status
+   * 
+   */
+    @Override
+    public void supportAccessStatus(SupportAccessStatusReq request, StreamObserver<SupportAccessStatusResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/support_access/status", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SupportAccessStatusResponse.Builder responseBuilder = SupportAccessStatusResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Get currently locked-out users.
    * 
    */
     @Override
-    public void allUserLoginLockouts(AllUserLoginLockoutsRequest request, StreamObserver<AllUserLoginLockoutsStreamResponse> responseObserver) {
+    public void allUserLoginLockouts(AllUserLoginLockoutsReq request, StreamObserver<AllUserLoginLockoutsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1581,7 +2160,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchUserLoginLockouts(SearchUserLoginLockoutsRequest request, StreamObserver<SearchUserLoginLockoutsStreamResponse> responseObserver) {
+    public void searchUserLoginLockouts(SearchUserLoginLockoutsReq request, StreamObserver<SearchUserLoginLockoutsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1619,7 +2198,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteUserLoginLockout(DeleteUserLoginLockoutRequest request, StreamObserver<DeleteUserLoginLockoutResponse> responseObserver) {
+    public void deleteUserLoginLockout(DeleteUserLoginLockoutReq request, StreamObserver<DeleteUserLoginLockoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1657,7 +2236,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allBoards(AllBoardsRequest request, StreamObserver<AllBoardsStreamResponse> responseObserver) {
+    public void allBoards(AllBoardsReq request, StreamObserver<AllBoardsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1695,7 +2274,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createBoard(CreateBoardRequest request, StreamObserver<CreateBoardResponse> responseObserver) {
+    public void createBoard(CreateBoardReq request, StreamObserver<CreateBoardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1751,7 +2330,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchBoards(SearchBoardsRequest request, StreamObserver<SearchBoardsStreamResponse> responseObserver) {
+    public void searchBoards(SearchBoardsReq request, StreamObserver<SearchBoardsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1789,7 +2368,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void board(BoardRequest request, StreamObserver<BoardResponse> responseObserver) {
+    public void board(BoardReq request, StreamObserver<BoardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1823,7 +2402,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateBoard(UpdateBoardRequest request, StreamObserver<UpdateBoardResponse> responseObserver) {
+    public void updateBoard(UpdateBoardReq request, StreamObserver<UpdateBoardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1857,7 +2436,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteBoard(DeleteBoardRequest request, StreamObserver<DeleteBoardResponse> responseObserver) {
+    public void deleteBoard(DeleteBoardReq request, StreamObserver<DeleteBoardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1891,7 +2470,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allBoardItems(AllBoardItemsRequest request, StreamObserver<AllBoardItemsStreamResponse> responseObserver) {
+    public void allBoardItems(AllBoardItemsReq request, StreamObserver<AllBoardItemsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1929,7 +2508,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createBoardItem(CreateBoardItemRequest request, StreamObserver<CreateBoardItemResponse> responseObserver) {
+    public void createBoardItem(CreateBoardItemReq request, StreamObserver<CreateBoardItemResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1963,7 +2542,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void boardItem(BoardItemRequest request, StreamObserver<BoardItemResponse> responseObserver) {
+    public void boardItem(BoardItemReq request, StreamObserver<BoardItemResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -1997,7 +2576,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateBoardItem(UpdateBoardItemRequest request, StreamObserver<UpdateBoardItemResponse> responseObserver) {
+    public void updateBoardItem(UpdateBoardItemReq request, StreamObserver<UpdateBoardItemResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2031,7 +2610,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteBoardItem(DeleteBoardItemRequest request, StreamObserver<DeleteBoardItemResponse> responseObserver) {
+    public void deleteBoardItem(DeleteBoardItemReq request, StreamObserver<DeleteBoardItemResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2065,7 +2644,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allBoardSections(AllBoardSectionsRequest request, StreamObserver<AllBoardSectionsStreamResponse> responseObserver) {
+    public void allBoardSections(AllBoardSectionsReq request, StreamObserver<AllBoardSectionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2103,7 +2682,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createBoardSection(CreateBoardSectionRequest request, StreamObserver<CreateBoardSectionResponse> responseObserver) {
+    public void createBoardSection(CreateBoardSectionReq request, StreamObserver<CreateBoardSectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2137,7 +2716,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void boardSection(BoardSectionRequest request, StreamObserver<BoardSectionResponse> responseObserver) {
+    public void boardSection(BoardSectionReq request, StreamObserver<BoardSectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2171,7 +2750,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateBoardSection(UpdateBoardSectionRequest request, StreamObserver<UpdateBoardSectionResponse> responseObserver) {
+    public void updateBoardSection(UpdateBoardSectionReq request, StreamObserver<UpdateBoardSectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2205,7 +2784,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteBoardSection(DeleteBoardSectionRequest request, StreamObserver<DeleteBoardSectionResponse> responseObserver) {
+    public void deleteBoardSection(DeleteBoardSectionReq request, StreamObserver<DeleteBoardSectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2251,7 +2830,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allColorCollections(AllColorCollectionsRequest request, StreamObserver<AllColorCollectionsStreamResponse> responseObserver) {
+    public void allColorCollections(AllColorCollectionsReq request, StreamObserver<AllColorCollectionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2298,7 +2877,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createColorCollection(CreateColorCollectionRequest request, StreamObserver<CreateColorCollectionResponse> responseObserver) {
+    public void createColorCollection(CreateColorCollectionReq request, StreamObserver<CreateColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2338,7 +2917,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void colorCollectionsCustom(ColorCollectionsCustomRequest request, StreamObserver<ColorCollectionsCustomStreamResponse> responseObserver) {
+    public void colorCollectionsCustom(ColorCollectionsCustomReq request, StreamObserver<ColorCollectionsCustomStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2382,7 +2961,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void colorCollectionsStandard(ColorCollectionsStandardRequest request, StreamObserver<ColorCollectionsStandardStreamResponse> responseObserver) {
+    public void colorCollectionsStandard(ColorCollectionsStandardReq request, StreamObserver<ColorCollectionsStandardStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2424,7 +3003,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void defaultColorCollection(DefaultColorCollectionRequest request, StreamObserver<DefaultColorCollectionResponse> responseObserver) {
+    public void defaultColorCollection(DefaultColorCollectionReq request, StreamObserver<DefaultColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2462,7 +3041,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setDefaultColorCollection(SetDefaultColorCollectionRequest request, StreamObserver<SetDefaultColorCollectionResponse> responseObserver) {
+    public void setDefaultColorCollection(SetDefaultColorCollectionReq request, StreamObserver<SetDefaultColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2506,7 +3085,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void colorCollection(ColorCollectionRequest request, StreamObserver<ColorCollectionResponse> responseObserver) {
+    public void colorCollection(ColorCollectionReq request, StreamObserver<ColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2542,7 +3121,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateColorCollection(UpdateColorCollectionRequest request, StreamObserver<UpdateColorCollectionResponse> responseObserver) {
+    public void updateColorCollection(UpdateColorCollectionReq request, StreamObserver<UpdateColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2584,7 +3163,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteColorCollection(DeleteColorCollectionRequest request, StreamObserver<DeleteColorCollectionResponse> responseObserver) {
+    public void deleteColorCollection(DeleteColorCollectionReq request, StreamObserver<DeleteColorCollectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2615,155 +3194,6 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
 
   //#endregion ColorCollection: Manage Color Collections
 
-  //#region Command: Manage Commands
-
-  /**
-   * ### Get All Commands.
-   * 
-   */
-    @Override
-    public void getAllCommands(GetAllCommandsRequest request, StreamObserver<GetAllCommandsStreamResponse> responseObserver) {
-    try {
-      String inputJson = JsonFormat
-        .printer()
-        .preservingProtoFieldNames()
-        .print(request);
-      LookerClientResponse lookerResponse = lookerClient.get("/commands", inputJson);
-      Status lookerStatus = lookerResponse.getStatus();
-      if (lookerStatus != null) {
-        responseObserver.onError(lookerStatus.asRuntimeException());
-      } else {
-        GetAllCommandsResponse.Builder responseBuilder = GetAllCommandsResponse.newBuilder();
-        String outputJson = lookerResponse.getJsonResponse();
-        if (outputJson != null) {
-          JsonFormat
-            .parser()
-            .ignoringUnknownFields()
-            .merge(outputJson, responseBuilder);
-        }
-        responseBuilder.getResultList().forEach(entry -> {
-          GetAllCommandsStreamResponse.Builder responseBuilder2 = GetAllCommandsStreamResponse.newBuilder();
-          responseBuilder2.setResult(entry);
-          responseObserver.onNext(responseBuilder2.build());
-        });
-        responseObserver.onCompleted();
-      }
-    } catch (InvalidProtocolBufferException e) {
-      LOGGER.error("invalid protobuf data", e);
-      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
-    }
-  }
-    
-
-  /**
-   * ### Create a new command.
-   * # Required fields: [:name, :linked_content_id, :linked_content_type]
-   * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-   * #
-   * 
-   */
-    @Override
-    public void createCommand(CreateCommandRequest request, StreamObserver<CreateCommandResponse> responseObserver) {
-    try {
-      String inputJson = JsonFormat
-        .printer()
-        .preservingProtoFieldNames()
-        .print(request);
-      LookerClientResponse lookerResponse = lookerClient.post("/commands", inputJson);
-      Status lookerStatus = lookerResponse.getStatus();
-      if (lookerStatus != null) {
-        responseObserver.onError(lookerStatus.asRuntimeException());
-      } else {
-        CreateCommandResponse.Builder responseBuilder = CreateCommandResponse.newBuilder();
-        String outputJson = lookerResponse.getJsonResponse();
-        if (outputJson != null) {
-          JsonFormat
-            .parser()
-            .ignoringUnknownFields()
-            .merge(outputJson, responseBuilder);
-        }
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
-      }
-    } catch (InvalidProtocolBufferException e) {
-      LOGGER.error("invalid protobuf data", e);
-      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
-    }
-  }
-    
-
-  /**
-   * ### Update an existing custom command.
-   * # Optional fields: ['name', 'description']
-   * #
-   * 
-   */
-    @Override
-    public void updateCommand(UpdateCommandRequest request, StreamObserver<UpdateCommandResponse> responseObserver) {
-    try {
-      String inputJson = JsonFormat
-        .printer()
-        .preservingProtoFieldNames()
-        .print(request);
-      LookerClientResponse lookerResponse = lookerClient.patch("/commands/{command_id}", inputJson);
-      Status lookerStatus = lookerResponse.getStatus();
-      if (lookerStatus != null) {
-        responseObserver.onError(lookerStatus.asRuntimeException());
-      } else {
-        UpdateCommandResponse.Builder responseBuilder = UpdateCommandResponse.newBuilder();
-        String outputJson = lookerResponse.getJsonResponse();
-        if (outputJson != null) {
-          JsonFormat
-            .parser()
-            .ignoringUnknownFields()
-            .merge(outputJson, responseBuilder);
-        }
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
-      }
-    } catch (InvalidProtocolBufferException e) {
-      LOGGER.error("invalid protobuf data", e);
-      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
-    }
-  }
-    
-
-  /**
-   * ### Delete an existing custom command.
-   * 
-   */
-    @Override
-    public void deleteCommand(DeleteCommandRequest request, StreamObserver<DeleteCommandResponse> responseObserver) {
-    try {
-      String inputJson = JsonFormat
-        .printer()
-        .preservingProtoFieldNames()
-        .print(request);
-      LookerClientResponse lookerResponse = lookerClient.delete("/commands/{command_id}", inputJson);
-      Status lookerStatus = lookerResponse.getStatus();
-      if (lookerStatus != null) {
-        responseObserver.onError(lookerStatus.asRuntimeException());
-      } else {
-        DeleteCommandResponse.Builder responseBuilder = DeleteCommandResponse.newBuilder();
-        String outputJson = lookerResponse.getJsonResponse();
-        if (outputJson != null) {
-          JsonFormat
-            .parser()
-            .ignoringUnknownFields()
-            .merge(outputJson, responseBuilder);
-        }
-        responseObserver.onNext(responseBuilder.build());
-        responseObserver.onCompleted();
-      }
-    } catch (InvalidProtocolBufferException e) {
-      LOGGER.error("invalid protobuf data", e);
-      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
-    }
-  }
-    
-
-  //#endregion Command: Manage Commands
-
   //#region Config: Manage General Configuration
 
   /**
@@ -2771,7 +3201,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void cloudStorageConfiguration(CloudStorageConfigurationRequest request, StreamObserver<CloudStorageConfigurationResponse> responseObserver) {
+    public void cloudStorageConfiguration(CloudStorageConfigurationReq request, StreamObserver<CloudStorageConfigurationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2805,7 +3235,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateCloudStorageConfiguration(UpdateCloudStorageConfigurationRequest request, StreamObserver<UpdateCloudStorageConfigurationResponse> responseObserver) {
+    public void updateCloudStorageConfiguration(UpdateCloudStorageConfigurationReq request, StreamObserver<UpdateCloudStorageConfigurationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2839,7 +3269,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void customWelcomeEmail(CustomWelcomeEmailRequest request, StreamObserver<CustomWelcomeEmailResponse> responseObserver) {
+    public void customWelcomeEmail(CustomWelcomeEmailReq request, StreamObserver<CustomWelcomeEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2873,7 +3303,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateCustomWelcomeEmail(UpdateCustomWelcomeEmailRequest request, StreamObserver<UpdateCustomWelcomeEmailResponse> responseObserver) {
+    public void updateCustomWelcomeEmail(UpdateCustomWelcomeEmailReq request, StreamObserver<UpdateCustomWelcomeEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2907,7 +3337,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateCustomWelcomeEmailTest(UpdateCustomWelcomeEmailTestRequest request, StreamObserver<UpdateCustomWelcomeEmailTestResponse> responseObserver) {
+    public void updateCustomWelcomeEmailTest(UpdateCustomWelcomeEmailTestReq request, StreamObserver<UpdateCustomWelcomeEmailTestResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2941,7 +3371,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void digestEmailsEnabled(DigestEmailsEnabledRequest request, StreamObserver<DigestEmailsEnabledResponse> responseObserver) {
+    public void digestEmailsEnabled(DigestEmailsEnabledReq request, StreamObserver<DigestEmailsEnabledResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -2975,7 +3405,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateDigestEmailsEnabled(UpdateDigestEmailsEnabledRequest request, StreamObserver<UpdateDigestEmailsEnabledResponse> responseObserver) {
+    public void updateDigestEmailsEnabled(UpdateDigestEmailsEnabledReq request, StreamObserver<UpdateDigestEmailsEnabledResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3010,7 +3440,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Emails will be sent at a later time from Looker's internal system if the Digest Emails feature is enabled in settings.
    */
     @Override
-    public void createDigestEmailSend(CreateDigestEmailSendRequest request, StreamObserver<CreateDigestEmailSendResponse> responseObserver) {
+    public void createDigestEmailSend(CreateDigestEmailSendReq request, StreamObserver<CreateDigestEmailSendResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3040,11 +3470,47 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Get Egress IP Addresses
+   * 
+   * Returns the list of public egress IP Addresses for a hosted customer's instance
+   * 
+   */
+    @Override
+    public void publicEgressIpAddresses(PublicEgressIpAddressesReq request, StreamObserver<PublicEgressIpAddressesResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/public_egress_ip_addresses", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        PublicEgressIpAddressesResponse.Builder responseBuilder = PublicEgressIpAddressesResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Set the menu item name and content for internal help resources
    * 
    */
     @Override
-    public void internalHelpResourcesContent(InternalHelpResourcesContentRequest request, StreamObserver<InternalHelpResourcesContentResponse> responseObserver) {
+    public void internalHelpResourcesContent(InternalHelpResourcesContentReq request, StreamObserver<InternalHelpResourcesContentResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3078,7 +3544,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateInternalHelpResourcesContent(UpdateInternalHelpResourcesContentRequest request, StreamObserver<UpdateInternalHelpResourcesContentResponse> responseObserver) {
+    public void updateInternalHelpResourcesContent(UpdateInternalHelpResourcesContentReq request, StreamObserver<UpdateInternalHelpResourcesContentResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3112,7 +3578,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void internalHelpResources(InternalHelpResourcesRequest request, StreamObserver<InternalHelpResourcesResponse> responseObserver) {
+    public void internalHelpResources(InternalHelpResourcesReq request, StreamObserver<InternalHelpResourcesResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3146,7 +3612,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateInternalHelpResources(UpdateInternalHelpResourcesRequest request, StreamObserver<UpdateInternalHelpResourcesResponse> responseObserver) {
+    public void updateInternalHelpResources(UpdateInternalHelpResourcesReq request, StreamObserver<UpdateInternalHelpResourcesResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3180,7 +3646,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allLegacyFeatures(AllLegacyFeaturesRequest request, StreamObserver<AllLegacyFeaturesStreamResponse> responseObserver) {
+    public void allLegacyFeatures(AllLegacyFeaturesReq request, StreamObserver<AllLegacyFeaturesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3218,7 +3684,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void legacyFeature(LegacyFeatureRequest request, StreamObserver<LegacyFeatureResponse> responseObserver) {
+    public void legacyFeature(LegacyFeatureReq request, StreamObserver<LegacyFeatureResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3252,7 +3718,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateLegacyFeature(UpdateLegacyFeatureRequest request, StreamObserver<UpdateLegacyFeatureResponse> responseObserver) {
+    public void updateLegacyFeature(UpdateLegacyFeatureReq request, StreamObserver<UpdateLegacyFeatureResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3286,7 +3752,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allLocales(AllLocalesRequest request, StreamObserver<AllLocalesStreamResponse> responseObserver) {
+    public void allLocales(AllLocalesReq request, StreamObserver<AllLocalesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3320,11 +3786,202 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Get all mobile settings.
+   * 
+   */
+    @Override
+    public void mobileSettings(MobileSettingsReq request, StreamObserver<MobileSettingsResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/mobile/settings", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        MobileSettingsResponse.Builder responseBuilder = MobileSettingsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Get Looker Settings
+   * 
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - privatelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   * 
+   * 
+   */
+    @Override
+    public void getSetting(GetSettingReq request, StreamObserver<GetSettingResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/setting", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GetSettingResponse.Builder responseBuilder = GetSettingResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Configure Looker Settings
+   * 
+   * Available settings are:
+   *  - extension_framework_enabled
+   *  - marketplace_auto_install_enabled
+   *  - marketplace_enabled
+   *  - privatelabel_configuration
+   *  - custom_welcome_email
+   *  - onboarding_enabled
+   * 
+   * See the `Setting` type for more information on the specific values that can be configured.
+   * 
+   */
+    @Override
+    public void setSetting(SetSettingReq request, StreamObserver<SetSettingResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.patch("/setting", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SetSettingResponse.Builder responseBuilder = SetSettingResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   * 
+   */
+    @Override
+    public void setSmtpSettings(SetSmtpSettingsReq request, StreamObserver<SetSmtpSettingsResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/smtp_settings", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SetSmtpSettingsResponse.Builder responseBuilder = SetSmtpSettingsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Get current SMTP status.
+   * 
+   */
+    @Override
+    public void smtpStatus(SmtpStatusReq request, StreamObserver<SmtpStatusResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/smtp_status", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SmtpStatusResponse.Builder responseBuilder = SmtpStatusResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
    * 
    */
     @Override
-    public void allTimezones(AllTimezonesRequest request, StreamObserver<AllTimezonesStreamResponse> responseObserver) {
+    public void allTimezones(AllTimezonesReq request, StreamObserver<AllTimezonesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3362,7 +4019,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void versions(VersionsRequest request, StreamObserver<VersionsResponse> responseObserver) {
+    public void versions(VersionsReq request, StreamObserver<VersionsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3392,12 +4049,48 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Get an API specification for this Looker instance.
+   * 
+   * The specification is returned as a JSON document in Swagger 2.x format
+   * 
+   */
+    @Override
+    public void apiSpec(ApiSpecReq request, StreamObserver<ApiSpecResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/api_spec/{api_version}/{specification}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        ApiSpecResponse.Builder responseBuilder = ApiSpecResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### This feature is enabled only by special license.
    * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
    * 
    */
     @Override
-    public void whitelabelConfiguration(WhitelabelConfigurationRequest request, StreamObserver<WhitelabelConfigurationResponse> responseObserver) {
+    public void whitelabelConfiguration(WhitelabelConfigurationReq request, StreamObserver<WhitelabelConfigurationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3431,7 +4124,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateWhitelabelConfiguration(UpdateWhitelabelConfigurationRequest request, StreamObserver<UpdateWhitelabelConfigurationResponse> responseObserver) {
+    public void updateWhitelabelConfiguration(UpdateWhitelabelConfigurationReq request, StreamObserver<UpdateWhitelabelConfigurationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3469,7 +4162,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allConnections(AllConnectionsRequest request, StreamObserver<AllConnectionsStreamResponse> responseObserver) {
+    public void allConnections(AllConnectionsReq request, StreamObserver<AllConnectionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3507,7 +4200,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createConnection(CreateConnectionRequest request, StreamObserver<CreateConnectionResponse> responseObserver) {
+    public void createConnection(CreateConnectionReq request, StreamObserver<CreateConnectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3541,7 +4234,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connection(ConnectionRequest request, StreamObserver<ConnectionResponse> responseObserver) {
+    public void connection(ConnectionReq request, StreamObserver<ConnectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3575,7 +4268,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateConnection(UpdateConnectionRequest request, StreamObserver<UpdateConnectionResponse> responseObserver) {
+    public void updateConnection(UpdateConnectionReq request, StreamObserver<UpdateConnectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3609,7 +4302,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteConnection(DeleteConnectionRequest request, StreamObserver<DeleteConnectionResponse> responseObserver) {
+    public void deleteConnection(DeleteConnectionReq request, StreamObserver<DeleteConnectionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3643,7 +4336,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteConnectionOverride(DeleteConnectionOverrideRequest request, StreamObserver<DeleteConnectionOverrideResponse> responseObserver) {
+    public void deleteConnectionOverride(DeleteConnectionOverrideReq request, StreamObserver<DeleteConnectionOverrideResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3684,7 +4377,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testConnection(TestConnectionRequest request, StreamObserver<TestConnectionStreamResponse> responseObserver) {
+    public void testConnection(TestConnectionReq request, StreamObserver<TestConnectionStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3729,7 +4422,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testConnectionConfig(TestConnectionConfigRequest request, StreamObserver<TestConnectionConfigStreamResponse> responseObserver) {
+    public void testConnectionConfig(TestConnectionConfigReq request, StreamObserver<TestConnectionConfigStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3767,7 +4460,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allDialectInfos(AllDialectInfosRequest request, StreamObserver<AllDialectInfosStreamResponse> responseObserver) {
+    public void allDialectInfos(AllDialectInfosReq request, StreamObserver<AllDialectInfosStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3803,9 +4496,11 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   /**
    * ### Get all External OAuth Applications.
    * 
+   * This is an OAuth Application which Looker uses to access external systems.
+   * 
    */
     @Override
-    public void allExternalOauthApplications(AllExternalOauthApplicationsRequest request, StreamObserver<AllExternalOauthApplicationsStreamResponse> responseObserver) {
+    public void allExternalOauthApplications(AllExternalOauthApplicationsReq request, StreamObserver<AllExternalOauthApplicationsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3841,9 +4536,11 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   /**
    * ### Create an OAuth Application using the specified configuration.
    * 
+   * This is an OAuth Application which Looker uses to access external systems.
+   * 
    */
     @Override
-    public void createExternalOauthApplication(CreateExternalOauthApplicationRequest request, StreamObserver<CreateExternalOauthApplicationResponse> responseObserver) {
+    public void createExternalOauthApplication(CreateExternalOauthApplicationReq request, StreamObserver<CreateExternalOauthApplicationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3873,11 +4570,45 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Create OAuth User state.
+   * 
+   */
+    @Override
+    public void createOauthApplicationUserState(CreateOauthApplicationUserStateReq request, StreamObserver<CreateOauthApplicationUserStateResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/external_oauth_applications/user_state", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateOauthApplicationUserStateResponse.Builder responseBuilder = CreateOauthApplicationUserStateResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Get information about all SSH Servers.
    * 
    */
     @Override
-    public void allSshServers(AllSshServersRequest request, StreamObserver<AllSshServersStreamResponse> responseObserver) {
+    public void allSshServers(AllSshServersReq request, StreamObserver<AllSshServersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3915,7 +4646,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createSshServer(CreateSshServerRequest request, StreamObserver<CreateSshServerResponse> responseObserver) {
+    public void createSshServer(CreateSshServerReq request, StreamObserver<CreateSshServerResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3949,7 +4680,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void sshServer(SshServerRequest request, StreamObserver<SshServerResponse> responseObserver) {
+    public void sshServer(SshServerReq request, StreamObserver<SshServerResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -3983,7 +4714,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateSshServer(UpdateSshServerRequest request, StreamObserver<UpdateSshServerResponse> responseObserver) {
+    public void updateSshServer(UpdateSshServerReq request, StreamObserver<UpdateSshServerResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4017,7 +4748,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteSshServer(DeleteSshServerRequest request, StreamObserver<DeleteSshServerResponse> responseObserver) {
+    public void deleteSshServer(DeleteSshServerReq request, StreamObserver<DeleteSshServerResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4051,7 +4782,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testSshServer(TestSshServerRequest request, StreamObserver<TestSshServerResponse> responseObserver) {
+    public void testSshServer(TestSshServerReq request, StreamObserver<TestSshServerResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4085,7 +4816,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allSshTunnels(AllSshTunnelsRequest request, StreamObserver<AllSshTunnelsStreamResponse> responseObserver) {
+    public void allSshTunnels(AllSshTunnelsReq request, StreamObserver<AllSshTunnelsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4123,7 +4854,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createSshTunnel(CreateSshTunnelRequest request, StreamObserver<CreateSshTunnelResponse> responseObserver) {
+    public void createSshTunnel(CreateSshTunnelReq request, StreamObserver<CreateSshTunnelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4157,7 +4888,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void sshTunnel(SshTunnelRequest request, StreamObserver<SshTunnelResponse> responseObserver) {
+    public void sshTunnel(SshTunnelReq request, StreamObserver<SshTunnelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4191,7 +4922,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateSshTunnel(UpdateSshTunnelRequest request, StreamObserver<UpdateSshTunnelResponse> responseObserver) {
+    public void updateSshTunnel(UpdateSshTunnelReq request, StreamObserver<UpdateSshTunnelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4225,7 +4956,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteSshTunnel(DeleteSshTunnelRequest request, StreamObserver<DeleteSshTunnelResponse> responseObserver) {
+    public void deleteSshTunnel(DeleteSshTunnelReq request, StreamObserver<DeleteSshTunnelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4259,7 +4990,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void testSshTunnel(TestSshTunnelRequest request, StreamObserver<TestSshTunnelResponse> responseObserver) {
+    public void testSshTunnel(TestSshTunnelReq request, StreamObserver<TestSshTunnelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4295,7 +5026,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void sshPublicKey(SshPublicKeyRequest request, StreamObserver<SshPublicKeyResponse> responseObserver) {
+    public void sshPublicKey(SshPublicKeyReq request, StreamObserver<SshPublicKeyResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4355,7 +5086,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchContentFavorites(SearchContentFavoritesRequest request, StreamObserver<SearchContentFavoritesStreamResponse> responseObserver) {
+    public void searchContentFavorites(SearchContentFavoritesReq request, StreamObserver<SearchContentFavoritesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4392,7 +5123,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get favorite content by its id
    */
     @Override
-    public void contentFavorite(ContentFavoriteRequest request, StreamObserver<ContentFavoriteResponse> responseObserver) {
+    public void contentFavorite(ContentFavoriteReq request, StreamObserver<ContentFavoriteResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4425,7 +5156,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Delete favorite content
    */
     @Override
-    public void deleteContentFavorite(DeleteContentFavoriteRequest request, StreamObserver<DeleteContentFavoriteResponse> responseObserver) {
+    public void deleteContentFavorite(DeleteContentFavoriteReq request, StreamObserver<DeleteContentFavoriteResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4458,7 +5189,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Create favorite content
    */
     @Override
-    public void createContentFavorite(CreateContentFavoriteRequest request, StreamObserver<CreateContentFavoriteResponse> responseObserver) {
+    public void createContentFavorite(CreateContentFavoriteReq request, StreamObserver<CreateContentFavoriteResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4492,7 +5223,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allContentMetadatas(AllContentMetadatasRequest request, StreamObserver<AllContentMetadatasStreamResponse> responseObserver) {
+    public void allContentMetadatas(AllContentMetadatasReq request, StreamObserver<AllContentMetadatasStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4530,7 +5261,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void contentMetadata(ContentMetadataRequest request, StreamObserver<ContentMetadataResponse> responseObserver) {
+    public void contentMetadata(ContentMetadataReq request, StreamObserver<ContentMetadataResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4564,7 +5295,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateContentMetadata(UpdateContentMetadataRequest request, StreamObserver<UpdateContentMetadataResponse> responseObserver) {
+    public void updateContentMetadata(UpdateContentMetadataReq request, StreamObserver<UpdateContentMetadataResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4598,7 +5329,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allContentMetadataAccesses(AllContentMetadataAccessesRequest request, StreamObserver<AllContentMetadataAccessesStreamResponse> responseObserver) {
+    public void allContentMetadataAccesses(AllContentMetadataAccessesReq request, StreamObserver<AllContentMetadataAccessesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4636,7 +5367,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createContentMetadataAccess(CreateContentMetadataAccessRequest request, StreamObserver<CreateContentMetadataAccessResponse> responseObserver) {
+    public void createContentMetadataAccess(CreateContentMetadataAccessReq request, StreamObserver<CreateContentMetadataAccessResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4670,7 +5401,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateContentMetadataAccess(UpdateContentMetadataAccessRequest request, StreamObserver<UpdateContentMetadataAccessResponse> responseObserver) {
+    public void updateContentMetadataAccess(UpdateContentMetadataAccessReq request, StreamObserver<UpdateContentMetadataAccessResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4704,7 +5435,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteContentMetadataAccess(DeleteContentMetadataAccessRequest request, StreamObserver<DeleteContentMetadataAccessResponse> responseObserver) {
+    public void deleteContentMetadataAccess(DeleteContentMetadataAccessReq request, StreamObserver<DeleteContentMetadataAccessResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4741,7 +5472,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void contentThumbnail(ContentThumbnailRequest request, StreamObserver<ContentThumbnailResponse> responseObserver) {
+    public void contentThumbnail(ContentThumbnailReq request, StreamObserver<ContentThumbnailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4778,7 +5509,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void contentValidation(ContentValidationRequest request, StreamObserver<ContentValidationResponse> responseObserver) {
+    public void contentValidation(ContentValidationReq request, StreamObserver<ContentValidationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4834,7 +5565,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchContentViews(SearchContentViewsRequest request, StreamObserver<SearchContentViewsStreamResponse> responseObserver) {
+    public void searchContentViews(SearchContentViewsReq request, StreamObserver<SearchContentViewsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4877,7 +5608,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void vectorThumbnail(VectorThumbnailRequest request, StreamObserver<VectorThumbnailResponse> responseObserver) {
+    public void vectorThumbnail(VectorThumbnailReq request, StreamObserver<VectorThumbnailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4921,7 +5652,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allDashboards(AllDashboardsRequest request, StreamObserver<AllDashboardsStreamResponse> responseObserver) {
+    public void allDashboards(AllDashboardsReq request, StreamObserver<AllDashboardsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -4959,8 +5690,8 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    * 
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    * 
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -4972,7 +5703,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createDashboard(CreateDashboardRequest request, StreamObserver<CreateDashboardResponse> responseObserver) {
+    public void createDashboard(CreateDashboardReq request, StreamObserver<CreateDashboardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5034,7 +5765,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchDashboards(SearchDashboardsRequest request, StreamObserver<SearchDashboardsStreamResponse> responseObserver) {
+    public void searchDashboards(SearchDashboardsReq request, StreamObserver<SearchDashboardsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5070,7 +5801,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   /**
    * ### Import a LookML dashboard to a space as a UDD
    * Creates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard
-   * and puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
+   * and places it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
    * 
    * To give the imported dashboard specify a (e.g. title: "my title") in the body of your request, otherwise the imported
    * dashboard will have the same title as the original LookML dashboard.
@@ -5083,7 +5814,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void importLookmlDashboard(ImportLookmlDashboardRequest request, StreamObserver<ImportLookmlDashboardResponse> responseObserver) {
+    public void importLookmlDashboard(ImportLookmlDashboardReq request, StreamObserver<ImportLookmlDashboardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5125,7 +5856,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void syncLookmlDashboard(SyncLookmlDashboardRequest request, StreamObserver<SyncLookmlDashboardStreamResponse> responseObserver) {
+    public void syncLookmlDashboard(SyncLookmlDashboardReq request, StreamObserver<SyncLookmlDashboardStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5169,7 +5900,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void dashboard(DashboardRequest request, StreamObserver<DashboardResponse> responseObserver) {
+    public void dashboard(DashboardReq request, StreamObserver<DashboardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5212,7 +5943,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateDashboard(UpdateDashboardRequest request, StreamObserver<UpdateDashboardResponse> responseObserver) {
+    public void updateDashboard(UpdateDashboardReq request, StreamObserver<UpdateDashboardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5252,7 +5983,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteDashboard(DeleteDashboardRequest request, StreamObserver<DeleteDashboardResponse> responseObserver) {
+    public void deleteDashboard(DeleteDashboardReq request, StreamObserver<DeleteDashboardResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5289,7 +6020,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void dashboardAggregateTableLookml(DashboardAggregateTableLookmlRequest request, StreamObserver<DashboardAggregateTableLookmlResponse> responseObserver) {
+    public void dashboardAggregateTableLookml(DashboardAggregateTableLookmlReq request, StreamObserver<DashboardAggregateTableLookmlResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5326,7 +6057,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void dashboardLookml(DashboardLookmlRequest request, StreamObserver<DashboardLookmlResponse> responseObserver) {
+    public void dashboardLookml(DashboardLookmlReq request, StreamObserver<DashboardLookmlResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5338,6 +6069,131 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
         responseObserver.onError(lookerStatus.asRuntimeException());
       } else {
         DashboardLookmlResponse.Builder responseBuilder = DashboardLookmlResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Move an existing dashboard
+   * 
+   * Moves a dashboard to a specified folder, and returns the moved dashboard.
+   * 
+   * `dashboard_id` and `folder_id` are required.
+   * `dashboard_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   * 
+   */
+    @Override
+    public void moveDashboard(MoveDashboardReq request, StreamObserver<MoveDashboardResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.patch("/dashboards/{dashboard_id}/move", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        MoveDashboardResponse.Builder responseBuilder = MoveDashboardResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+   * 
+   * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+   * 
+   * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+   * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with 
+   * ).
+   * 
+   * Note that the created dashboard is not linked to any LookML Dashboard,
+   * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+   * 
+   * 
+   */
+    @Override
+    public void createDashboardFromLookml(CreateDashboardFromLookmlReq request, StreamObserver<CreateDashboardFromLookmlResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/dashboards/from_lookml", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateDashboardFromLookmlResponse.Builder responseBuilder = CreateDashboardFromLookmlResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Copy an existing dashboard
+   * 
+   * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
+   * 
+   * `dashboard_id` is required, `dashboard_id` and `folder_id` must already exist if specified.
+   * `folder_id` will default to the existing folder.
+   * 
+   * If a dashboard with the same title already exists in the target folder, the copy will have '(copy)'
+   *   or '(copy <# of copies>)' appended.
+   * 
+   */
+    @Override
+    public void copyDashboard(CopyDashboardReq request, StreamObserver<CopyDashboardResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/dashboards/{dashboard_id}/copy", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CopyDashboardResponse.Builder responseBuilder = CopyDashboardResponse.newBuilder();
         String outputJson = lookerResponse.getJsonResponse();
         if (outputJson != null) {
           JsonFormat
@@ -5384,7 +6240,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchDashboardElements(SearchDashboardElementsRequest request, StreamObserver<SearchDashboardElementsStreamResponse> responseObserver) {
+    public void searchDashboardElements(SearchDashboardElementsReq request, StreamObserver<SearchDashboardElementsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5421,7 +6277,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the dashboard element with a specific id.
    */
     @Override
-    public void dashboardElement(DashboardElementRequest request, StreamObserver<DashboardElementResponse> responseObserver) {
+    public void dashboardElement(DashboardElementReq request, StreamObserver<DashboardElementResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5454,7 +6310,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Update the dashboard element with a specific id.
    */
     @Override
-    public void updateDashboardElement(UpdateDashboardElementRequest request, StreamObserver<UpdateDashboardElementResponse> responseObserver) {
+    public void updateDashboardElement(UpdateDashboardElementReq request, StreamObserver<UpdateDashboardElementResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5487,7 +6343,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Delete a dashboard element with a specific id.
    */
     @Override
-    public void deleteDashboardElement(DeleteDashboardElementRequest request, StreamObserver<DeleteDashboardElementResponse> responseObserver) {
+    public void deleteDashboardElement(DeleteDashboardElementReq request, StreamObserver<DeleteDashboardElementResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5520,7 +6376,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about all the dashboard elements on a dashboard with a specific id.
    */
     @Override
-    public void dashboardDashboardElements(DashboardDashboardElementsRequest request, StreamObserver<DashboardDashboardElementsStreamResponse> responseObserver) {
+    public void dashboardDashboardElements(DashboardDashboardElementsReq request, StreamObserver<DashboardDashboardElementsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5557,7 +6413,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Create a dashboard element on the dashboard with a specific id.
    */
     @Override
-    public void createDashboardElement(CreateDashboardElementRequest request, StreamObserver<CreateDashboardElementResponse> responseObserver) {
+    public void createDashboardElement(CreateDashboardElementReq request, StreamObserver<CreateDashboardElementResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5590,7 +6446,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the dashboard filters with a specific id.
    */
     @Override
-    public void dashboardFilter(DashboardFilterRequest request, StreamObserver<DashboardFilterResponse> responseObserver) {
+    public void dashboardFilter(DashboardFilterReq request, StreamObserver<DashboardFilterResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5623,7 +6479,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Update the dashboard filter with a specific id.
    */
     @Override
-    public void updateDashboardFilter(UpdateDashboardFilterRequest request, StreamObserver<UpdateDashboardFilterResponse> responseObserver) {
+    public void updateDashboardFilter(UpdateDashboardFilterReq request, StreamObserver<UpdateDashboardFilterResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5656,7 +6512,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Delete a dashboard filter with a specific id.
    */
     @Override
-    public void deleteDashboardFilter(DeleteDashboardFilterRequest request, StreamObserver<DeleteDashboardFilterResponse> responseObserver) {
+    public void deleteDashboardFilter(DeleteDashboardFilterReq request, StreamObserver<DeleteDashboardFilterResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5689,7 +6545,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about all the dashboard filters on a dashboard with a specific id.
    */
     @Override
-    public void dashboardDashboardFilters(DashboardDashboardFiltersRequest request, StreamObserver<DashboardDashboardFiltersStreamResponse> responseObserver) {
+    public void dashboardDashboardFilters(DashboardDashboardFiltersReq request, StreamObserver<DashboardDashboardFiltersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5726,7 +6582,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Create a dashboard filter on the dashboard with a specific id.
    */
     @Override
-    public void createDashboardFilter(CreateDashboardFilterRequest request, StreamObserver<CreateDashboardFilterResponse> responseObserver) {
+    public void createDashboardFilter(CreateDashboardFilterReq request, StreamObserver<CreateDashboardFilterResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5759,7 +6615,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the dashboard elements with a specific id.
    */
     @Override
-    public void dashboardLayoutComponent(DashboardLayoutComponentRequest request, StreamObserver<DashboardLayoutComponentResponse> responseObserver) {
+    public void dashboardLayoutComponent(DashboardLayoutComponentReq request, StreamObserver<DashboardLayoutComponentResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5792,7 +6648,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Update the dashboard element with a specific id.
    */
     @Override
-    public void updateDashboardLayoutComponent(UpdateDashboardLayoutComponentRequest request, StreamObserver<UpdateDashboardLayoutComponentResponse> responseObserver) {
+    public void updateDashboardLayoutComponent(UpdateDashboardLayoutComponentReq request, StreamObserver<UpdateDashboardLayoutComponentResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5825,7 +6681,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about all the dashboard layout components for a dashboard layout with a specific id.
    */
     @Override
-    public void dashboardLayoutDashboardLayoutComponents(DashboardLayoutDashboardLayoutComponentsRequest request, StreamObserver<DashboardLayoutDashboardLayoutComponentsStreamResponse> responseObserver) {
+    public void dashboardLayoutDashboardLayoutComponents(DashboardLayoutDashboardLayoutComponentsReq request, StreamObserver<DashboardLayoutDashboardLayoutComponentsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5862,7 +6718,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the dashboard layouts with a specific id.
    */
     @Override
-    public void dashboardLayout(DashboardLayoutRequest request, StreamObserver<DashboardLayoutResponse> responseObserver) {
+    public void dashboardLayout(DashboardLayoutReq request, StreamObserver<DashboardLayoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5895,7 +6751,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Update the dashboard layout with a specific id.
    */
     @Override
-    public void updateDashboardLayout(UpdateDashboardLayoutRequest request, StreamObserver<UpdateDashboardLayoutResponse> responseObserver) {
+    public void updateDashboardLayout(UpdateDashboardLayoutReq request, StreamObserver<UpdateDashboardLayoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5928,7 +6784,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Delete a dashboard layout with a specific id.
    */
     @Override
-    public void deleteDashboardLayout(DeleteDashboardLayoutRequest request, StreamObserver<DeleteDashboardLayoutResponse> responseObserver) {
+    public void deleteDashboardLayout(DeleteDashboardLayoutReq request, StreamObserver<DeleteDashboardLayoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5961,7 +6817,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about all the dashboard elements on a dashboard with a specific id.
    */
     @Override
-    public void dashboardDashboardLayouts(DashboardDashboardLayoutsRequest request, StreamObserver<DashboardDashboardLayoutsStreamResponse> responseObserver) {
+    public void dashboardDashboardLayouts(DashboardDashboardLayoutsReq request, StreamObserver<DashboardDashboardLayoutsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -5998,7 +6854,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Create a dashboard layout on the dashboard with a specific id.
    */
     @Override
-    public void createDashboardLayout(CreateDashboardLayoutRequest request, StreamObserver<CreateDashboardLayoutResponse> responseObserver) {
+    public void createDashboardLayout(CreateDashboardLayoutReq request, StreamObserver<CreateDashboardLayoutResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6035,7 +6891,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
    */
     @Override
-    public void performDataAction(PerformDataActionRequest request, StreamObserver<PerformDataActionResponse> responseObserver) {
+    public void performDataAction(PerformDataActionReq request, StreamObserver<PerformDataActionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6068,7 +6924,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * For some data actions, the remote server may supply a form requesting further user input. This endpoint takes a data action, asks the remote server to generate a form for it, and returns that form to you for presentation to the user.
    */
     @Override
-    public void fetchRemoteDataActionForm(FetchRemoteDataActionFormRequest request, StreamObserver<FetchRemoteDataActionFormResponse> responseObserver) {
+    public void fetchRemoteDataActionForm(FetchRemoteDataActionFormReq request, StreamObserver<FetchRemoteDataActionFormResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6106,7 +6962,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allDatagroups(AllDatagroupsRequest request, StreamObserver<AllDatagroupsStreamResponse> responseObserver) {
+    public void allDatagroups(AllDatagroupsReq request, StreamObserver<AllDatagroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6144,7 +7000,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void datagroup(DatagroupRequest request, StreamObserver<DatagroupResponse> responseObserver) {
+    public void datagroup(DatagroupReq request, StreamObserver<DatagroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6178,7 +7034,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateDatagroup(UpdateDatagroupRequest request, StreamObserver<UpdateDatagroupResponse> responseObserver) {
+    public void updateDatagroup(UpdateDatagroupReq request, StreamObserver<UpdateDatagroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6209,13 +7065,184 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DerivedTable: View Derived Table graphs
+
+  /**
+   * ### Discover information about derived tables
+   * 
+   */
+    @Override
+    public void graphDerivedTablesForModel(GraphDerivedTablesForModelReq request, StreamObserver<GraphDerivedTablesForModelResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/derived_table/graph/model/{model}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GraphDerivedTablesForModelResponse.Builder responseBuilder = GraphDerivedTablesForModelResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Get the subgraph representing this derived table and its dependencies.
+   * 
+   */
+    @Override
+    public void graphDerivedTablesForView(GraphDerivedTablesForViewReq request, StreamObserver<GraphDerivedTablesForViewResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/derived_table/graph/view/{view}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GraphDerivedTablesForViewResponse.Builder responseBuilder = GraphDerivedTablesForViewResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   */
+    @Override
+    public void startPdtBuild(StartPdtBuildReq request, StreamObserver<StartPdtBuildResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/derived_table/{model_name}/{view_name}/start", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        StartPdtBuildResponse.Builder responseBuilder = StartPdtBuildResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * Check status of PDT materialization
+   */
+    @Override
+    public void checkPdtBuild(CheckPdtBuildReq request, StreamObserver<CheckPdtBuildResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/derived_table/{materialization_id}/status", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CheckPdtBuildResponse.Builder responseBuilder = CheckPdtBuildResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * Stop a PDT materialization
+   */
+    @Override
+    public void stopPdtBuild(StopPdtBuildReq request, StreamObserver<StopPdtBuildResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/derived_table/{materialization_id}/stop", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        StopPdtBuildResponse.Builder responseBuilder = StopPdtBuildResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  //#endregion DerivedTable: View Derived Table graphs
+
   //#region Folder: Manage Folders
 
   /**
    * Search for folders by creator id, parent id, name, etc
    */
     @Override
-    public void searchFolders(SearchFoldersRequest request, StreamObserver<SearchFoldersStreamResponse> responseObserver) {
+    public void searchFolders(SearchFoldersReq request, StreamObserver<SearchFoldersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6252,7 +7279,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the folder with a specific id.
    */
     @Override
-    public void folder(FolderRequest request, StreamObserver<FolderResponse> responseObserver) {
+    public void folder(FolderReq request, StreamObserver<FolderResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6285,7 +7312,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Update the folder with a specific id.
    */
     @Override
-    public void updateFolder(UpdateFolderRequest request, StreamObserver<UpdateFolderResponse> responseObserver) {
+    public void updateFolder(UpdateFolderReq request, StreamObserver<UpdateFolderResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6320,7 +7347,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteFolder(DeleteFolderRequest request, StreamObserver<DeleteFolderResponse> responseObserver) {
+    public void deleteFolder(DeleteFolderReq request, StreamObserver<DeleteFolderResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6352,13 +7379,15 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   /**
    * ### Get information about all folders.
    * 
-   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user.
+   * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
+   * or if they contain soft-deleted content.
+   * 
    * In API 4.0+, all personal folders will be returned.
    * 
    * 
    */
     @Override
-    public void allFolders(AllFoldersRequest request, StreamObserver<AllFoldersStreamResponse> responseObserver) {
+    public void allFolders(AllFoldersReq request, StreamObserver<AllFoldersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6399,7 +7428,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createFolder(CreateFolderRequest request, StreamObserver<CreateFolderResponse> responseObserver) {
+    public void createFolder(CreateFolderReq request, StreamObserver<CreateFolderResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6432,7 +7461,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get the children of a folder.
    */
     @Override
-    public void folderChildren(FolderChildrenRequest request, StreamObserver<FolderChildrenStreamResponse> responseObserver) {
+    public void folderChildren(FolderChildrenReq request, StreamObserver<FolderChildrenStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6469,7 +7498,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Search the children of a folder
    */
     @Override
-    public void folderChildrenSearch(FolderChildrenSearchRequest request, StreamObserver<FolderChildrenSearchStreamResponse> responseObserver) {
+    public void folderChildrenSearch(FolderChildrenSearchReq request, StreamObserver<FolderChildrenSearchStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6506,7 +7535,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get the parent of a folder
    */
     @Override
-    public void folderParent(FolderParentRequest request, StreamObserver<FolderParentResponse> responseObserver) {
+    public void folderParent(FolderParentReq request, StreamObserver<FolderParentResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6539,7 +7568,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get the ancestors of a folder
    */
     @Override
-    public void folderAncestors(FolderAncestorsRequest request, StreamObserver<FolderAncestorsStreamResponse> responseObserver) {
+    public void folderAncestors(FolderAncestorsReq request, StreamObserver<FolderAncestorsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6579,7 +7608,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void folderLooks(FolderLooksRequest request, StreamObserver<FolderLooksStreamResponse> responseObserver) {
+    public void folderLooks(FolderLooksReq request, StreamObserver<FolderLooksStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6616,7 +7645,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get the dashboards in a folder
    */
     @Override
-    public void folderDashboards(FolderDashboardsRequest request, StreamObserver<FolderDashboardsStreamResponse> responseObserver) {
+    public void folderDashboards(FolderDashboardsReq request, StreamObserver<FolderDashboardsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6658,7 +7687,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allGroups(AllGroupsRequest request, StreamObserver<AllGroupsStreamResponse> responseObserver) {
+    public void allGroups(AllGroupsReq request, StreamObserver<AllGroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6696,7 +7725,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createGroup(CreateGroupRequest request, StreamObserver<CreateGroupResponse> responseObserver) {
+    public void createGroup(CreateGroupReq request, StreamObserver<CreateGroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6754,7 +7783,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchGroups(SearchGroupsRequest request, StreamObserver<SearchGroupsStreamResponse> responseObserver) {
+    public void searchGroups(SearchGroupsReq request, StreamObserver<SearchGroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6816,7 +7845,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchGroupsWithRoles(SearchGroupsWithRolesRequest request, StreamObserver<SearchGroupsWithRolesStreamResponse> responseObserver) {
+    public void searchGroupsWithRoles(SearchGroupsWithRolesReq request, StreamObserver<SearchGroupsWithRolesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6879,7 +7908,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchGroupsWithHierarchy(SearchGroupsWithHierarchyRequest request, StreamObserver<SearchGroupsWithHierarchyStreamResponse> responseObserver) {
+    public void searchGroupsWithHierarchy(SearchGroupsWithHierarchyReq request, StreamObserver<SearchGroupsWithHierarchyStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6917,7 +7946,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void group(GroupRequest request, StreamObserver<GroupResponse> responseObserver) {
+    public void group(GroupReq request, StreamObserver<GroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6950,7 +7979,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Updates the a group (admin only).
    */
     @Override
-    public void updateGroup(UpdateGroupRequest request, StreamObserver<UpdateGroupResponse> responseObserver) {
+    public void updateGroup(UpdateGroupReq request, StreamObserver<UpdateGroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -6984,7 +8013,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteGroup(DeleteGroupRequest request, StreamObserver<DeleteGroupResponse> responseObserver) {
+    public void deleteGroup(DeleteGroupReq request, StreamObserver<DeleteGroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7018,7 +8047,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allGroupGroups(AllGroupGroupsRequest request, StreamObserver<AllGroupGroupsStreamResponse> responseObserver) {
+    public void allGroupGroups(AllGroupGroupsReq request, StreamObserver<AllGroupGroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7056,7 +8085,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void addGroupGroup(AddGroupGroupRequest request, StreamObserver<AddGroupGroupResponse> responseObserver) {
+    public void addGroupGroup(AddGroupGroupReq request, StreamObserver<AddGroupGroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7090,7 +8119,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allGroupUsers(AllGroupUsersRequest request, StreamObserver<AllGroupUsersStreamResponse> responseObserver) {
+    public void allGroupUsers(AllGroupUsersReq request, StreamObserver<AllGroupUsersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7128,7 +8157,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void addGroupUser(AddGroupUserRequest request, StreamObserver<AddGroupUserResponse> responseObserver) {
+    public void addGroupUser(AddGroupUserReq request, StreamObserver<AddGroupUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7162,7 +8191,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteGroupUser(DeleteGroupUserRequest request, StreamObserver<DeleteGroupUserResponse> responseObserver) {
+    public void deleteGroupUser(DeleteGroupUserReq request, StreamObserver<DeleteGroupUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7196,7 +8225,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteGroupFromGroup(DeleteGroupFromGroupRequest request, StreamObserver<DeleteGroupFromGroupResponse> responseObserver) {
+    public void deleteGroupFromGroup(DeleteGroupFromGroupReq request, StreamObserver<DeleteGroupFromGroupResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7232,7 +8261,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateUserAttributeGroupValue(UpdateUserAttributeGroupValueRequest request, StreamObserver<UpdateUserAttributeGroupValueResponse> responseObserver) {
+    public void updateUserAttributeGroupValue(UpdateUserAttributeGroupValueReq request, StreamObserver<UpdateUserAttributeGroupValueResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7266,7 +8295,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteUserAttributeGroupValue(DeleteUserAttributeGroupValueRequest request, StreamObserver<DeleteUserAttributeGroupValueResponse> responseObserver) {
+    public void deleteUserAttributeGroupValue(DeleteUserAttributeGroupValueReq request, StreamObserver<DeleteUserAttributeGroupValueResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7304,7 +8333,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allPrimaryHomepageSections(AllPrimaryHomepageSectionsRequest request, StreamObserver<AllPrimaryHomepageSectionsStreamResponse> responseObserver) {
+    public void allPrimaryHomepageSections(AllPrimaryHomepageSectionsReq request, StreamObserver<AllPrimaryHomepageSectionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7346,7 +8375,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allIntegrationHubs(AllIntegrationHubsRequest request, StreamObserver<AllIntegrationHubsStreamResponse> responseObserver) {
+    public void allIntegrationHubs(AllIntegrationHubsReq request, StreamObserver<AllIntegrationHubsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7386,7 +8415,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createIntegrationHub(CreateIntegrationHubRequest request, StreamObserver<CreateIntegrationHubResponse> responseObserver) {
+    public void createIntegrationHub(CreateIntegrationHubReq request, StreamObserver<CreateIntegrationHubResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7420,7 +8449,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void integrationHub(IntegrationHubRequest request, StreamObserver<IntegrationHubResponse> responseObserver) {
+    public void integrationHub(IntegrationHubReq request, StreamObserver<IntegrationHubResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7456,7 +8485,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateIntegrationHub(UpdateIntegrationHubRequest request, StreamObserver<UpdateIntegrationHubResponse> responseObserver) {
+    public void updateIntegrationHub(UpdateIntegrationHubReq request, StreamObserver<UpdateIntegrationHubResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7490,7 +8519,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteIntegrationHub(DeleteIntegrationHubRequest request, StreamObserver<DeleteIntegrationHubResponse> responseObserver) {
+    public void deleteIntegrationHub(DeleteIntegrationHubReq request, StreamObserver<DeleteIntegrationHubResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7523,7 +8552,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
    */
     @Override
-    public void acceptIntegrationHubLegalAgreement(AcceptIntegrationHubLegalAgreementRequest request, StreamObserver<AcceptIntegrationHubLegalAgreementResponse> responseObserver) {
+    public void acceptIntegrationHubLegalAgreement(AcceptIntegrationHubLegalAgreementReq request, StreamObserver<AcceptIntegrationHubLegalAgreementResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7557,7 +8586,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allIntegrations(AllIntegrationsRequest request, StreamObserver<AllIntegrationsStreamResponse> responseObserver) {
+    public void allIntegrations(AllIntegrationsReq request, StreamObserver<AllIntegrationsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7595,7 +8624,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void integration(IntegrationRequest request, StreamObserver<IntegrationResponse> responseObserver) {
+    public void integration(IntegrationReq request, StreamObserver<IntegrationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7629,7 +8658,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateIntegration(UpdateIntegrationRequest request, StreamObserver<UpdateIntegrationResponse> responseObserver) {
+    public void updateIntegration(UpdateIntegrationReq request, StreamObserver<UpdateIntegrationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7662,7 +8691,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Returns the Integration form for presentation to the user.
    */
     @Override
-    public void fetchIntegrationForm(FetchIntegrationFormRequest request, StreamObserver<FetchIntegrationFormResponse> responseObserver) {
+    public void fetchIntegrationForm(FetchIntegrationFormReq request, StreamObserver<FetchIntegrationFormResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7695,7 +8724,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Tests the integration to make sure all the settings are working.
    */
     @Override
-    public void testIntegration(TestIntegrationRequest request, StreamObserver<TestIntegrationResponse> responseObserver) {
+    public void testIntegration(TestIntegrationReq request, StreamObserver<TestIntegrationResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7739,7 +8768,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allLooks(AllLooksRequest request, StreamObserver<AllLooksStreamResponse> responseObserver) {
+    public void allLooks(AllLooksReq request, StreamObserver<AllLooksStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7783,7 +8812,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createLook(CreateLookRequest request, StreamObserver<CreateLookResponse> responseObserver) {
+    public void createLook(CreateLookReq request, StreamObserver<CreateLookResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7843,7 +8872,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchLooks(SearchLooksRequest request, StreamObserver<SearchLooksStreamResponse> responseObserver) {
+    public void searchLooks(SearchLooksReq request, StreamObserver<SearchLooksStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7884,7 +8913,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void look(LookRequest request, StreamObserver<LookResponse> responseObserver) {
+    public void look(LookReq request, StreamObserver<LookResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7937,7 +8966,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateLook(UpdateLookRequest request, StreamObserver<UpdateLookResponse> responseObserver) {
+    public void updateLook(UpdateLookReq request, StreamObserver<UpdateLookResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -7977,7 +9006,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteLook(DeleteLookRequest request, StreamObserver<DeleteLookResponse> responseObserver) {
+    public void deleteLook(DeleteLookReq request, StreamObserver<DeleteLookResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8030,7 +9059,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runLook(RunLookRequest request, StreamObserver<RunLookResponse> responseObserver) {
+    public void runLook(RunLookReq request, StreamObserver<RunLookResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8059,6 +9088,85 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   }
     
 
+  /**
+   * ### Copy an existing look
+   * 
+   * Creates a copy of an existing look, in a specified folder, and returns the copied look.
+   * 
+   * `look_id` and `folder_id` are required.
+   * 
+   * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   * 
+   */
+    @Override
+    public void copyLook(CopyLookReq request, StreamObserver<CopyLookResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/looks/{look_id}/copy", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CopyLookResponse.Builder responseBuilder = CopyLookResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Move an existing look
+   * 
+   * Moves a look to a specified folder, and returns the moved look.
+   * 
+   * `look_id` and `folder_id` are required.
+   * `look_id` and `folder_id` must already exist, and `folder_id` must be different from the current `folder_id` of the dashboard.
+   * 
+   */
+    @Override
+    public void moveLook(MoveLookReq request, StreamObserver<MoveLookResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.patch("/looks/{look_id}/move", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        MoveLookResponse.Builder responseBuilder = MoveLookResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
   //#endregion Look: Run and Manage Looks
 
   //#region LookmlModel: Manage LookML Models
@@ -8068,7 +9176,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allLookmlModels(AllLookmlModelsRequest request, StreamObserver<AllLookmlModelsStreamResponse> responseObserver) {
+    public void allLookmlModels(AllLookmlModelsReq request, StreamObserver<AllLookmlModelsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8106,7 +9214,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createLookmlModel(CreateLookmlModelRequest request, StreamObserver<CreateLookmlModelResponse> responseObserver) {
+    public void createLookmlModel(CreateLookmlModelReq request, StreamObserver<CreateLookmlModelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8140,7 +9248,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void lookmlModel(LookmlModelRequest request, StreamObserver<LookmlModelResponse> responseObserver) {
+    public void lookmlModel(LookmlModelReq request, StreamObserver<LookmlModelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8174,7 +9282,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateLookmlModel(UpdateLookmlModelRequest request, StreamObserver<UpdateLookmlModelResponse> responseObserver) {
+    public void updateLookmlModel(UpdateLookmlModelReq request, StreamObserver<UpdateLookmlModelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8208,7 +9316,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteLookmlModel(DeleteLookmlModelRequest request, StreamObserver<DeleteLookmlModelResponse> responseObserver) {
+    public void deleteLookmlModel(DeleteLookmlModelReq request, StreamObserver<DeleteLookmlModelResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8242,7 +9350,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void lookmlModelExplore(LookmlModelExploreRequest request, StreamObserver<LookmlModelExploreResponse> responseObserver) {
+    public void lookmlModelExplore(LookmlModelExploreReq request, StreamObserver<LookmlModelExploreResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8278,10 +9386,27 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   /**
    * ### Field name suggestions for a model and view
    * 
+   * `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
+   * 
+   * ```ruby
+   * {'users.age': '>=60'}
+   * ```
+   * 
+   * or
+   * 
+   * ```ruby
+   * {'users.age': '<30'}
+   * ```
+   * 
+   * or
+   * 
+   * ```ruby
+   * {'users.age': '=50'}
+   * ```
    * 
    */
     @Override
-    public void modelFieldnameSuggestions(ModelFieldnameSuggestionsRequest request, StreamObserver<ModelFieldnameSuggestionsResponse> responseObserver) {
+    public void modelFieldnameSuggestions(ModelFieldnameSuggestionsReq request, StreamObserver<ModelFieldnameSuggestionsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8293,6 +9418,41 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
         responseObserver.onError(lookerStatus.asRuntimeException());
       } else {
         ModelFieldnameSuggestionsResponse.Builder responseBuilder = ModelFieldnameSuggestionsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Get a single model
+   * 
+   * 
+   */
+    @Override
+    public void getModel(GetModelReq request, StreamObserver<GetModelResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/models/{model_name}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        GetModelResponse.Builder responseBuilder = GetModelResponse.newBuilder();
         String outputJson = lookerResponse.getJsonResponse();
         if (outputJson != null) {
           JsonFormat
@@ -8323,7 +9483,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionDatabases(ConnectionDatabasesRequest request, StreamObserver<ConnectionDatabasesStreamResponse> responseObserver) {
+    public void connectionDatabases(ConnectionDatabasesReq request, StreamObserver<ConnectionDatabasesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8364,7 +9524,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionFeatures(ConnectionFeaturesRequest request, StreamObserver<ConnectionFeaturesResponse> responseObserver) {
+    public void connectionFeatures(ConnectionFeaturesReq request, StreamObserver<ConnectionFeaturesResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8399,7 +9559,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionSchemas(ConnectionSchemasRequest request, StreamObserver<ConnectionSchemasStreamResponse> responseObserver) {
+    public void connectionSchemas(ConnectionSchemasReq request, StreamObserver<ConnectionSchemasStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8442,7 +9602,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionTables(ConnectionTablesRequest request, StreamObserver<ConnectionTablesStreamResponse> responseObserver) {
+    public void connectionTables(ConnectionTablesReq request, StreamObserver<ConnectionTablesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8481,7 +9641,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionColumns(ConnectionColumnsRequest request, StreamObserver<ConnectionColumnsStreamResponse> responseObserver) {
+    public void connectionColumns(ConnectionColumnsReq request, StreamObserver<ConnectionColumnsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8521,7 +9681,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionSearchColumns(ConnectionSearchColumnsRequest request, StreamObserver<ConnectionSearchColumnsStreamResponse> responseObserver) {
+    public void connectionSearchColumns(ConnectionSearchColumnsReq request, StreamObserver<ConnectionSearchColumnsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8563,7 +9723,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void connectionCostEstimate(ConnectionCostEstimateRequest request, StreamObserver<ConnectionCostEstimateResponse> responseObserver) {
+    public void connectionCostEstimate(ConnectionCostEstimateReq request, StreamObserver<ConnectionCostEstimateResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8608,7 +9768,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void lockAll(LockAllRequest request, StreamObserver<LockAllResponse> responseObserver) {
+    public void lockAll(LockAllReq request, StreamObserver<LockAllResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8644,7 +9804,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allGitBranches(AllGitBranchesRequest request, StreamObserver<AllGitBranchesStreamResponse> responseObserver) {
+    public void allGitBranches(AllGitBranchesReq request, StreamObserver<AllGitBranchesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8684,7 +9844,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void gitBranch(GitBranchRequest request, StreamObserver<GitBranchResponse> responseObserver) {
+    public void gitBranch(GitBranchReq request, StreamObserver<GitBranchResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8727,7 +9887,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateGitBranch(UpdateGitBranchRequest request, StreamObserver<UpdateGitBranchResponse> responseObserver) {
+    public void updateGitBranch(UpdateGitBranchReq request, StreamObserver<UpdateGitBranchResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8769,7 +9929,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createGitBranch(CreateGitBranchRequest request, StreamObserver<CreateGitBranchResponse> responseObserver) {
+    public void createGitBranch(CreateGitBranchReq request, StreamObserver<CreateGitBranchResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8805,7 +9965,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void findGitBranch(FindGitBranchRequest request, StreamObserver<FindGitBranchResponse> responseObserver) {
+    public void findGitBranch(FindGitBranchReq request, StreamObserver<FindGitBranchResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8841,7 +10001,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteGitBranch(DeleteGitBranchRequest request, StreamObserver<DeleteGitBranchResponse> responseObserver) {
+    public void deleteGitBranch(DeleteGitBranchReq request, StreamObserver<DeleteGitBranchResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8884,7 +10044,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deployRefToProduction(DeployRefToProductionRequest request, StreamObserver<DeployRefToProductionResponse> responseObserver) {
+    public void deployRefToProduction(DeployRefToProductionReq request, StreamObserver<DeployRefToProductionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8930,7 +10090,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deployToProduction(DeployToProductionRequest request, StreamObserver<DeployToProductionResponse> responseObserver) {
+    public void deployToProduction(DeployToProductionReq request, StreamObserver<DeployToProductionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -8966,7 +10126,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void resetProjectToProduction(ResetProjectToProductionRequest request, StreamObserver<ResetProjectToProductionResponse> responseObserver) {
+    public void resetProjectToProduction(ResetProjectToProductionReq request, StreamObserver<ResetProjectToProductionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9002,7 +10162,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void resetProjectToRemote(ResetProjectToRemoteRequest request, StreamObserver<ResetProjectToRemoteResponse> responseObserver) {
+    public void resetProjectToRemote(ResetProjectToRemoteReq request, StreamObserver<ResetProjectToRemoteResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9038,7 +10198,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allProjects(AllProjectsRequest request, StreamObserver<AllProjectsStreamResponse> responseObserver) {
+    public void allProjects(AllProjectsReq request, StreamObserver<AllProjectsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9083,7 +10243,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createProject(CreateProjectRequest request, StreamObserver<CreateProjectResponse> responseObserver) {
+    public void createProject(CreateProjectReq request, StreamObserver<CreateProjectResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9119,7 +10279,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void project(ProjectRequest request, StreamObserver<ProjectResponse> responseObserver) {
+    public void project(ProjectReq request, StreamObserver<ProjectResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9175,7 +10335,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateProject(UpdateProjectRequest request, StreamObserver<UpdateProjectResponse> responseObserver) {
+    public void updateProject(UpdateProjectReq request, StreamObserver<UpdateProjectResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9211,7 +10371,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void manifest(ManifestRequest request, StreamObserver<ManifestResponse> responseObserver) {
+    public void manifest(ManifestReq request, StreamObserver<ManifestResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9247,7 +10407,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void gitDeployKey(GitDeployKeyRequest request, StreamObserver<GitDeployKeyResponse> responseObserver) {
+    public void gitDeployKey(GitDeployKeyReq request, StreamObserver<GitDeployKeyResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9289,7 +10449,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createGitDeployKey(CreateGitDeployKeyRequest request, StreamObserver<CreateGitDeployKeyResponse> responseObserver) {
+    public void createGitDeployKey(CreateGitDeployKeyReq request, StreamObserver<CreateGitDeployKeyResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9334,7 +10494,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void projectValidationResults(ProjectValidationResultsRequest request, StreamObserver<ProjectValidationResultsResponse> responseObserver) {
+    public void projectValidationResults(ProjectValidationResultsReq request, StreamObserver<ProjectValidationResultsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9376,7 +10536,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void validateProject(ValidateProjectRequest request, StreamObserver<ValidateProjectResponse> responseObserver) {
+    public void validateProject(ValidateProjectReq request, StreamObserver<ValidateProjectResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9412,7 +10572,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void projectWorkspace(ProjectWorkspaceRequest request, StreamObserver<ProjectWorkspaceResponse> responseObserver) {
+    public void projectWorkspace(ProjectWorkspaceReq request, StreamObserver<ProjectWorkspaceResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9448,7 +10608,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allProjectFiles(AllProjectFilesRequest request, StreamObserver<AllProjectFilesStreamResponse> responseObserver) {
+    public void allProjectFiles(AllProjectFilesReq request, StreamObserver<AllProjectFilesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9488,7 +10648,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void projectFile(ProjectFileRequest request, StreamObserver<ProjectFileResponse> responseObserver) {
+    public void projectFile(ProjectFileReq request, StreamObserver<ProjectFileResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9531,7 +10691,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allGitConnectionTests(AllGitConnectionTestsRequest request, StreamObserver<AllGitConnectionTestsStreamResponse> responseObserver) {
+    public void allGitConnectionTests(AllGitConnectionTestsReq request, StreamObserver<AllGitConnectionTestsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9575,7 +10735,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runGitConnectionTest(RunGitConnectionTestRequest request, StreamObserver<RunGitConnectionTestResponse> responseObserver) {
+    public void runGitConnectionTest(RunGitConnectionTestReq request, StreamObserver<RunGitConnectionTestResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9613,7 +10773,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allLookmlTests(AllLookmlTestsRequest request, StreamObserver<AllLookmlTestsStreamResponse> responseObserver) {
+    public void allLookmlTests(AllLookmlTestsReq request, StreamObserver<AllLookmlTestsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9653,7 +10813,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runLookmlTest(RunLookmlTestRequest request, StreamObserver<RunLookmlTestStreamResponse> responseObserver) {
+    public void runLookmlTest(RunLookmlTestReq request, StreamObserver<RunLookmlTestStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9687,6 +10847,42 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
+   * 
+   * This is an internal-only, undocumented route.
+   * 
+   */
+    @Override
+    public void tagRef(TagRefReq request, StreamObserver<TagRefResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/projects/{project_id}/tag", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        TagRefResponse.Builder responseBuilder = TagRefResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Configure Repository Credential for a remote dependency
    * 
    * Admin required.
@@ -9697,7 +10893,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateRepositoryCredential(UpdateRepositoryCredentialRequest request, StreamObserver<UpdateRepositoryCredentialResponse> responseObserver) {
+    public void updateRepositoryCredential(UpdateRepositoryCredentialReq request, StreamObserver<UpdateRepositoryCredentialResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9736,7 +10932,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteRepositoryCredential(DeleteRepositoryCredentialRequest request, StreamObserver<DeleteRepositoryCredentialResponse> responseObserver) {
+    public void deleteRepositoryCredential(DeleteRepositoryCredentialReq request, StreamObserver<DeleteRepositoryCredentialResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9772,7 +10968,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void getAllRepositoryCredentials(GetAllRepositoryCredentialsRequest request, StreamObserver<GetAllRepositoryCredentialsStreamResponse> responseObserver) {
+    public void getAllRepositoryCredentials(GetAllRepositoryCredentialsReq request, StreamObserver<GetAllRepositoryCredentialsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9819,7 +11015,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createQueryTask(CreateQueryTaskRequest request, StreamObserver<CreateQueryTaskResponse> responseObserver) {
+    public void createQueryTask(CreateQueryTaskReq request, StreamObserver<CreateQueryTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9859,7 +11055,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void queryTaskMultiResults(QueryTaskMultiResultsRequest request, StreamObserver<QueryTaskMultiResultsResponse> responseObserver) {
+    public void queryTaskMultiResults(QueryTaskMultiResultsReq request, StreamObserver<QueryTaskMultiResultsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9899,7 +11095,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void queryTask(QueryTaskRequest request, StreamObserver<QueryTaskResponse> responseObserver) {
+    public void queryTask(QueryTaskReq request, StreamObserver<QueryTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -9955,7 +11151,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void queryTaskResults(QueryTaskResultsRequest request, StreamObserver<QueryTaskResultsResponse> responseObserver) {
+    public void queryTaskResults(QueryTaskResultsReq request, StreamObserver<QueryTaskResultsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10006,7 +11202,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void query(QueryRequest request, StreamObserver<QueryResponse> responseObserver) {
+    public void query(QueryReq request, StreamObserver<QueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10056,7 +11252,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void queryForSlug(QueryForSlugRequest request, StreamObserver<QueryForSlugResponse> responseObserver) {
+    public void queryForSlug(QueryForSlugReq request, StreamObserver<QueryForSlugResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10098,7 +11294,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createQuery(CreateQueryRequest request, StreamObserver<CreateQueryResponse> responseObserver) {
+    public void createQuery(CreateQueryReq request, StreamObserver<CreateQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10154,7 +11350,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runQuery(RunQueryRequest request, StreamObserver<RunQueryResponse> responseObserver) {
+    public void runQuery(RunQueryReq request, StreamObserver<RunQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10239,7 +11435,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runInlineQuery(RunInlineQueryRequest request, StreamObserver<RunInlineQueryResponse> responseObserver) {
+    public void runInlineQuery(RunInlineQueryReq request, StreamObserver<RunInlineQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10294,11 +11490,11 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    * 
@@ -10326,7 +11522,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void runUrlEncodedQuery(RunUrlEncodedQueryRequest request, StreamObserver<RunUrlEncodedQueryResponse> responseObserver) {
+    public void runUrlEncodedQuery(RunUrlEncodedQueryReq request, StreamObserver<RunUrlEncodedQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10362,7 +11558,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void mergeQuery(MergeQueryRequest request, StreamObserver<MergeQueryResponse> responseObserver) {
+    public void mergeQuery(MergeQueryReq request, StreamObserver<MergeQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10412,7 +11608,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createMergeQuery(CreateMergeQueryRequest request, StreamObserver<CreateMergeQueryResponse> responseObserver) {
+    public void createMergeQuery(CreateMergeQueryReq request, StreamObserver<CreateMergeQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10446,7 +11642,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allRunningQueries(AllRunningQueriesRequest request, StreamObserver<AllRunningQueriesStreamResponse> responseObserver) {
+    public void allRunningQueries(AllRunningQueriesReq request, StreamObserver<AllRunningQueriesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10484,7 +11680,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void killQuery(KillQueryRequest request, StreamObserver<KillQueryResponse> responseObserver) {
+    public void killQuery(KillQueryReq request, StreamObserver<KillQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10517,7 +11713,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Get a SQL Runner query.
    */
     @Override
-    public void sqlQuery(SqlQueryRequest request, StreamObserver<SqlQueryResponse> responseObserver) {
+    public void sqlQuery(SqlQueryReq request, StreamObserver<SqlQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10553,7 +11749,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createSqlQuery(CreateSqlQueryRequest request, StreamObserver<CreateSqlQueryResponse> responseObserver) {
+    public void createSqlQuery(CreateSqlQueryReq request, StreamObserver<CreateSqlQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10586,7 +11782,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * Execute a SQL Runner query in a given result_format.
    */
     @Override
-    public void runSqlQuery(RunSqlQueryRequest request, StreamObserver<RunSqlQueryResponse> responseObserver) {
+    public void runSqlQuery(RunSqlQueryReq request, StreamObserver<RunSqlQueryResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10629,7 +11825,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createLookRenderTask(CreateLookRenderTaskRequest request, StreamObserver<CreateLookRenderTaskResponse> responseObserver) {
+    public void createLookRenderTask(CreateLookRenderTaskReq request, StreamObserver<CreateLookRenderTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10668,7 +11864,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createQueryRenderTask(CreateQueryRenderTaskRequest request, StreamObserver<CreateQueryRenderTaskResponse> responseObserver) {
+    public void createQueryRenderTask(CreateQueryRenderTaskReq request, StreamObserver<CreateQueryRenderTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10707,7 +11903,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createDashboardRenderTask(CreateDashboardRenderTaskRequest request, StreamObserver<CreateDashboardRenderTaskResponse> responseObserver) {
+    public void createDashboardRenderTask(CreateDashboardRenderTaskReq request, StreamObserver<CreateDashboardRenderTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10746,7 +11942,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void renderTask(RenderTaskRequest request, StreamObserver<RenderTaskResponse> responseObserver) {
+    public void renderTask(RenderTaskReq request, StreamObserver<RenderTaskResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10796,7 +11992,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void renderTaskResults(RenderTaskResultsRequest request, StreamObserver<RenderTaskResultsResponse> responseObserver) {
+    public void renderTaskResults(RenderTaskResultsReq request, StreamObserver<RenderTaskResultsResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10808,6 +12004,45 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
         responseObserver.onError(lookerStatus.asRuntimeException());
       } else {
         RenderTaskResultsResponse.Builder responseBuilder = RenderTaskResultsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * ### Create a new task to render a dashboard element to an image.
+   * 
+   * Returns a render task object.
+   * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
+   * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
+   * 
+   * 
+   */
+    @Override
+    public void createDashboardElementRenderTask(CreateDashboardElementRenderTaskReq request, StreamObserver<CreateDashboardElementRenderTaskResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/render_tasks/dashboard_elements/{dashboard_element_id}/{result_format}", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateDashboardElementRenderTaskResponse.Builder responseBuilder = CreateDashboardElementRenderTaskResponse.newBuilder();
         String outputJson = lookerResponse.getJsonResponse();
         if (outputJson != null) {
           JsonFormat
@@ -10856,7 +12091,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchModelSets(SearchModelSetsRequest request, StreamObserver<SearchModelSetsStreamResponse> responseObserver) {
+    public void searchModelSets(SearchModelSetsReq request, StreamObserver<SearchModelSetsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10894,7 +12129,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void modelSet(ModelSetRequest request, StreamObserver<ModelSetResponse> responseObserver) {
+    public void modelSet(ModelSetReq request, StreamObserver<ModelSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10928,7 +12163,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateModelSet(UpdateModelSetRequest request, StreamObserver<UpdateModelSetResponse> responseObserver) {
+    public void updateModelSet(UpdateModelSetReq request, StreamObserver<UpdateModelSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10962,7 +12197,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteModelSet(DeleteModelSetRequest request, StreamObserver<DeleteModelSetResponse> responseObserver) {
+    public void deleteModelSet(DeleteModelSetReq request, StreamObserver<DeleteModelSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -10996,7 +12231,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allModelSets(AllModelSetsRequest request, StreamObserver<AllModelSetsStreamResponse> responseObserver) {
+    public void allModelSets(AllModelSetsReq request, StreamObserver<AllModelSetsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11034,7 +12269,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createModelSet(CreateModelSetRequest request, StreamObserver<CreateModelSetResponse> responseObserver) {
+    public void createModelSet(CreateModelSetReq request, StreamObserver<CreateModelSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11068,7 +12303,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allPermissions(AllPermissionsRequest request, StreamObserver<AllPermissionsStreamResponse> responseObserver) {
+    public void allPermissions(AllPermissionsReq request, StreamObserver<AllPermissionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11128,7 +12363,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchPermissionSets(SearchPermissionSetsRequest request, StreamObserver<SearchPermissionSetsStreamResponse> responseObserver) {
+    public void searchPermissionSets(SearchPermissionSetsReq request, StreamObserver<SearchPermissionSetsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11166,7 +12401,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void permissionSet(PermissionSetRequest request, StreamObserver<PermissionSetResponse> responseObserver) {
+    public void permissionSet(PermissionSetReq request, StreamObserver<PermissionSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11200,7 +12435,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updatePermissionSet(UpdatePermissionSetRequest request, StreamObserver<UpdatePermissionSetResponse> responseObserver) {
+    public void updatePermissionSet(UpdatePermissionSetReq request, StreamObserver<UpdatePermissionSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11234,7 +12469,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deletePermissionSet(DeletePermissionSetRequest request, StreamObserver<DeletePermissionSetResponse> responseObserver) {
+    public void deletePermissionSet(DeletePermissionSetReq request, StreamObserver<DeletePermissionSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11268,7 +12503,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allPermissionSets(AllPermissionSetsRequest request, StreamObserver<AllPermissionSetsStreamResponse> responseObserver) {
+    public void allPermissionSets(AllPermissionSetsReq request, StreamObserver<AllPermissionSetsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11306,7 +12541,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createPermissionSet(CreatePermissionSetRequest request, StreamObserver<CreatePermissionSetResponse> responseObserver) {
+    public void createPermissionSet(CreatePermissionSetReq request, StreamObserver<CreatePermissionSetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11340,7 +12575,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allRoles(AllRolesRequest request, StreamObserver<AllRolesStreamResponse> responseObserver) {
+    public void allRoles(AllRolesReq request, StreamObserver<AllRolesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11378,7 +12613,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createRole(CreateRoleRequest request, StreamObserver<CreateRoleResponse> responseObserver) {
+    public void createRole(CreateRoleReq request, StreamObserver<CreateRoleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11436,7 +12671,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchRoles(SearchRolesRequest request, StreamObserver<SearchRolesStreamResponse> responseObserver) {
+    public void searchRoles(SearchRolesReq request, StreamObserver<SearchRolesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11470,11 +12705,74 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
     
 
   /**
+   * ### Search roles include user count
+   * 
+   * Returns all role records that match the given search criteria, and attaches
+   * associated user counts.
+   * 
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   * 
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   * 
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   * 
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   * 
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   * 
+   * Boolean search params accept only "true" and "false" as values.
+   * 
+   * 
+   */
+    @Override
+    public void searchRolesWithUserCount(SearchRolesWithUserCountReq request, StreamObserver<SearchRolesWithUserCountStreamResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/roles/search/with_user_count", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SearchRolesWithUserCountResponse.Builder responseBuilder = SearchRolesWithUserCountResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseBuilder.getResultList().forEach(entry -> {
+          SearchRolesWithUserCountStreamResponse.Builder responseBuilder2 = SearchRolesWithUserCountStreamResponse.newBuilder();
+          responseBuilder2.setResult(entry);
+          responseObserver.onNext(responseBuilder2.build());
+        });
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Get information about the role with a specific id.
    * 
    */
     @Override
-    public void role(RoleRequest request, StreamObserver<RoleResponse> responseObserver) {
+    public void role(RoleReq request, StreamObserver<RoleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11508,7 +12806,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateRole(UpdateRoleRequest request, StreamObserver<UpdateRoleResponse> responseObserver) {
+    public void updateRole(UpdateRoleReq request, StreamObserver<UpdateRoleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11542,7 +12840,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteRole(DeleteRoleRequest request, StreamObserver<DeleteRoleResponse> responseObserver) {
+    public void deleteRole(DeleteRoleReq request, StreamObserver<DeleteRoleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11576,7 +12874,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void roleGroups(RoleGroupsRequest request, StreamObserver<RoleGroupsStreamResponse> responseObserver) {
+    public void roleGroups(RoleGroupsReq request, StreamObserver<RoleGroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11614,7 +12912,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setRoleGroups(SetRoleGroupsRequest request, StreamObserver<SetRoleGroupsStreamResponse> responseObserver) {
+    public void setRoleGroups(SetRoleGroupsReq request, StreamObserver<SetRoleGroupsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11652,7 +12950,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void roleUsers(RoleUsersRequest request, StreamObserver<RoleUsersStreamResponse> responseObserver) {
+    public void roleUsers(RoleUsersReq request, StreamObserver<RoleUsersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11690,7 +12988,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setRoleUsers(SetRoleUsersRequest request, StreamObserver<SetRoleUsersStreamResponse> responseObserver) {
+    public void setRoleUsers(SetRoleUsersReq request, StreamObserver<SetRoleUsersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11734,7 +13032,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlansForSpace(ScheduledPlansForSpaceRequest request, StreamObserver<ScheduledPlansForSpaceStreamResponse> responseObserver) {
+    public void scheduledPlansForSpace(ScheduledPlansForSpaceReq request, StreamObserver<ScheduledPlansForSpaceStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11774,7 +13072,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlan(ScheduledPlanRequest request, StreamObserver<ScheduledPlanResponse> responseObserver) {
+    public void scheduledPlan(ScheduledPlanReq request, StreamObserver<ScheduledPlanResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11851,7 +13149,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateScheduledPlan(UpdateScheduledPlanRequest request, StreamObserver<UpdateScheduledPlanResponse> responseObserver) {
+    public void updateScheduledPlan(UpdateScheduledPlanReq request, StreamObserver<UpdateScheduledPlanResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11889,7 +13187,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteScheduledPlan(DeleteScheduledPlanRequest request, StreamObserver<DeleteScheduledPlanResponse> responseObserver) {
+    public void deleteScheduledPlan(DeleteScheduledPlanReq request, StreamObserver<DeleteScheduledPlanResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -11935,7 +13233,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allScheduledPlans(AllScheduledPlansRequest request, StreamObserver<AllScheduledPlansStreamResponse> responseObserver) {
+    public void allScheduledPlans(AllScheduledPlansReq request, StreamObserver<AllScheduledPlansStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12032,7 +13330,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createScheduledPlan(CreateScheduledPlanRequest request, StreamObserver<CreateScheduledPlanResponse> responseObserver) {
+    public void createScheduledPlan(CreateScheduledPlanReq request, StreamObserver<CreateScheduledPlanResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12104,7 +13402,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlanRunOnce(ScheduledPlanRunOnceRequest request, StreamObserver<ScheduledPlanRunOnceResponse> responseObserver) {
+    public void scheduledPlanRunOnce(ScheduledPlanRunOnceReq request, StreamObserver<ScheduledPlanRunOnceResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12150,7 +13448,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlansForLook(ScheduledPlansForLookRequest request, StreamObserver<ScheduledPlansForLookStreamResponse> responseObserver) {
+    public void scheduledPlansForLook(ScheduledPlansForLookReq request, StreamObserver<ScheduledPlansForLookStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12200,7 +13498,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlansForDashboard(ScheduledPlansForDashboardRequest request, StreamObserver<ScheduledPlansForDashboardStreamResponse> responseObserver) {
+    public void scheduledPlansForDashboard(ScheduledPlansForDashboardReq request, StreamObserver<ScheduledPlansForDashboardStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12250,7 +13548,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlansForLookmlDashboard(ScheduledPlansForLookmlDashboardRequest request, StreamObserver<ScheduledPlansForLookmlDashboardStreamResponse> responseObserver) {
+    public void scheduledPlansForLookmlDashboard(ScheduledPlansForLookmlDashboardReq request, StreamObserver<ScheduledPlansForLookmlDashboardStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12335,7 +13633,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void scheduledPlanRunOnceById(ScheduledPlanRunOnceByIdRequest request, StreamObserver<ScheduledPlanRunOnceByIdResponse> responseObserver) {
+    public void scheduledPlanRunOnceById(ScheduledPlanRunOnceByIdReq request, StreamObserver<ScheduledPlanRunOnceByIdResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12375,7 +13673,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void session(SessionRequest request, StreamObserver<SessionResponse> responseObserver) {
+    public void session(SessionReq request, StreamObserver<SessionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12428,7 +13726,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateSession(UpdateSessionRequest request, StreamObserver<UpdateSessionResponse> responseObserver) {
+    public void updateSession(UpdateSessionReq request, StreamObserver<UpdateSessionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12473,7 +13771,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allThemes(AllThemesRequest request, StreamObserver<AllThemesStreamResponse> responseObserver) {
+    public void allThemes(AllThemesReq request, StreamObserver<AllThemesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12526,7 +13824,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createTheme(CreateThemeRequest request, StreamObserver<CreateThemeResponse> responseObserver) {
+    public void createTheme(CreateThemeReq request, StreamObserver<CreateThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12598,7 +13896,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchThemes(SearchThemesRequest request, StreamObserver<SearchThemesStreamResponse> responseObserver) {
+    public void searchThemes(SearchThemesReq request, StreamObserver<SearchThemesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12642,7 +13940,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void defaultTheme(DefaultThemeRequest request, StreamObserver<DefaultThemeResponse> responseObserver) {
+    public void defaultTheme(DefaultThemeReq request, StreamObserver<DefaultThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12687,7 +13985,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setDefaultTheme(SetDefaultThemeRequest request, StreamObserver<SetDefaultThemeResponse> responseObserver) {
+    public void setDefaultTheme(SetDefaultThemeReq request, StreamObserver<SetDefaultThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12731,7 +14029,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void activeThemes(ActiveThemesRequest request, StreamObserver<ActiveThemesStreamResponse> responseObserver) {
+    public void activeThemes(ActiveThemesReq request, StreamObserver<ActiveThemesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12775,7 +14073,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void themeOrDefault(ThemeOrDefaultRequest request, StreamObserver<ThemeOrDefaultResponse> responseObserver) {
+    public void themeOrDefault(ThemeOrDefaultReq request, StreamObserver<ThemeOrDefaultResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12816,7 +14114,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void validateTheme(ValidateThemeRequest request, StreamObserver<ValidateThemeResponse> responseObserver) {
+    public void validateTheme(ValidateThemeReq request, StreamObserver<ValidateThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12855,7 +14153,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void theme(ThemeRequest request, StreamObserver<ThemeResponse> responseObserver) {
+    public void theme(ThemeReq request, StreamObserver<ThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12892,7 +14190,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateTheme(UpdateThemeRequest request, StreamObserver<UpdateThemeResponse> responseObserver) {
+    public void updateTheme(UpdateThemeReq request, StreamObserver<UpdateThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12935,7 +14233,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteTheme(DeleteThemeRequest request, StreamObserver<DeleteThemeResponse> responseObserver) {
+    public void deleteTheme(DeleteThemeReq request, StreamObserver<DeleteThemeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -12969,11 +14267,73 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   //#region User: Manage Users
 
   /**
+   * ### Search email credentials
+   * 
+   * Returns all credentials_email records that match the given search criteria.
+   * 
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   * 
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   * 
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   * 
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   * 
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   * 
+   * Boolean search params accept only "true" and "false" as values.
+   * 
+   * 
+   */
+    @Override
+    public void searchCredentialsEmail(SearchCredentialsEmailReq request, StreamObserver<SearchCredentialsEmailStreamResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.get("/credentials_email/search", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        SearchCredentialsEmailResponse.Builder responseBuilder = SearchCredentialsEmailResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseBuilder.getResultList().forEach(entry -> {
+          SearchCredentialsEmailStreamResponse.Builder responseBuilder2 = SearchCredentialsEmailStreamResponse.newBuilder();
+          responseBuilder2.setResult(entry);
+          responseObserver.onNext(responseBuilder2.build());
+        });
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
    * 
    */
     @Override
-    public void me(MeRequest request, StreamObserver<MeResponse> responseObserver) {
+    public void me(MeReq request, StreamObserver<MeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13007,7 +14367,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allUsers(AllUsersRequest request, StreamObserver<AllUsersStreamResponse> responseObserver) {
+    public void allUsers(AllUsersReq request, StreamObserver<AllUsersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13045,7 +14405,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createUser(CreateUserRequest request, StreamObserver<CreateUserResponse> responseObserver) {
+    public void createUser(CreateUserReq request, StreamObserver<CreateUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13109,7 +14469,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchUsers(SearchUsersRequest request, StreamObserver<SearchUsersStreamResponse> responseObserver) {
+    public void searchUsers(SearchUsersReq request, StreamObserver<SearchUsersStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13152,7 +14512,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void searchUsersNames(SearchUsersNamesRequest request, StreamObserver<SearchUsersNamesStreamResponse> responseObserver) {
+    public void searchUsersNames(SearchUsersNamesReq request, StreamObserver<SearchUsersNamesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13194,7 +14554,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void user(UserRequest request, StreamObserver<UserResponse> responseObserver) {
+    public void user(UserReq request, StreamObserver<UserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13228,7 +14588,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateUser(UpdateUserRequest request, StreamObserver<UpdateUserResponse> responseObserver) {
+    public void updateUser(UpdateUserReq request, StreamObserver<UpdateUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13264,7 +14624,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteUser(DeleteUserRequest request, StreamObserver<DeleteUserResponse> responseObserver) {
+    public void deleteUser(DeleteUserReq request, StreamObserver<DeleteUserResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13297,7 +14657,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Get information about the user with a credential of given type with specific id.
    * 
    * This is used to do things like find users by their embed external_user_id. Or, find the user with
-   * a given api3 client_id, etc. The 'credential_type' matchs the 'type' name of the various credential
+   * a given api3 client_id, etc. The 'credential_type' matches the 'type' name of the various credential
    * types. It must be one of the values listed in the table below. The 'credential_id' is your unique Id
    * for the user and is specific to each type of credential.
    * 
@@ -13321,12 +14681,12 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * | embed            | external_user_id |
    * | looker_openid    | email            |
    * 
-   * NOTE: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
+   * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
    * 
    * 
    */
     @Override
-    public void userForCredential(UserForCredentialRequest request, StreamObserver<UserForCredentialResponse> responseObserver) {
+    public void userForCredential(UserForCredentialReq request, StreamObserver<UserForCredentialResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13359,7 +14719,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Email/password login information for the specified user.
    */
     @Override
-    public void userCredentialsEmail(UserCredentialsEmailRequest request, StreamObserver<UserCredentialsEmailResponse> responseObserver) {
+    public void userCredentialsEmail(UserCredentialsEmailReq request, StreamObserver<UserCredentialsEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13392,7 +14752,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Email/password login information for the specified user.
    */
     @Override
-    public void createUserCredentialsEmail(CreateUserCredentialsEmailRequest request, StreamObserver<CreateUserCredentialsEmailResponse> responseObserver) {
+    public void createUserCredentialsEmail(CreateUserCredentialsEmailReq request, StreamObserver<CreateUserCredentialsEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13425,7 +14785,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Email/password login information for the specified user.
    */
     @Override
-    public void updateUserCredentialsEmail(UpdateUserCredentialsEmailRequest request, StreamObserver<UpdateUserCredentialsEmailResponse> responseObserver) {
+    public void updateUserCredentialsEmail(UpdateUserCredentialsEmailReq request, StreamObserver<UpdateUserCredentialsEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13458,7 +14818,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Email/password login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsEmail(DeleteUserCredentialsEmailRequest request, StreamObserver<DeleteUserCredentialsEmailResponse> responseObserver) {
+    public void deleteUserCredentialsEmail(DeleteUserCredentialsEmailReq request, StreamObserver<DeleteUserCredentialsEmailResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13491,7 +14851,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Two-factor login information for the specified user.
    */
     @Override
-    public void userCredentialsTotp(UserCredentialsTotpRequest request, StreamObserver<UserCredentialsTotpResponse> responseObserver) {
+    public void userCredentialsTotp(UserCredentialsTotpReq request, StreamObserver<UserCredentialsTotpResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13524,7 +14884,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Two-factor login information for the specified user.
    */
     @Override
-    public void createUserCredentialsTotp(CreateUserCredentialsTotpRequest request, StreamObserver<CreateUserCredentialsTotpResponse> responseObserver) {
+    public void createUserCredentialsTotp(CreateUserCredentialsTotpReq request, StreamObserver<CreateUserCredentialsTotpResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13557,7 +14917,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Two-factor login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsTotp(DeleteUserCredentialsTotpRequest request, StreamObserver<DeleteUserCredentialsTotpResponse> responseObserver) {
+    public void deleteUserCredentialsTotp(DeleteUserCredentialsTotpReq request, StreamObserver<DeleteUserCredentialsTotpResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13590,7 +14950,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### LDAP login information for the specified user.
    */
     @Override
-    public void userCredentialsLdap(UserCredentialsLdapRequest request, StreamObserver<UserCredentialsLdapResponse> responseObserver) {
+    public void userCredentialsLdap(UserCredentialsLdapReq request, StreamObserver<UserCredentialsLdapResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13623,7 +14983,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### LDAP login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsLdap(DeleteUserCredentialsLdapRequest request, StreamObserver<DeleteUserCredentialsLdapResponse> responseObserver) {
+    public void deleteUserCredentialsLdap(DeleteUserCredentialsLdapReq request, StreamObserver<DeleteUserCredentialsLdapResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13656,7 +15016,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Google authentication login information for the specified user.
    */
     @Override
-    public void userCredentialsGoogle(UserCredentialsGoogleRequest request, StreamObserver<UserCredentialsGoogleResponse> responseObserver) {
+    public void userCredentialsGoogle(UserCredentialsGoogleReq request, StreamObserver<UserCredentialsGoogleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13689,7 +15049,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Google authentication login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsGoogle(DeleteUserCredentialsGoogleRequest request, StreamObserver<DeleteUserCredentialsGoogleResponse> responseObserver) {
+    public void deleteUserCredentialsGoogle(DeleteUserCredentialsGoogleReq request, StreamObserver<DeleteUserCredentialsGoogleResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13722,7 +15082,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Saml authentication login information for the specified user.
    */
     @Override
-    public void userCredentialsSaml(UserCredentialsSamlRequest request, StreamObserver<UserCredentialsSamlResponse> responseObserver) {
+    public void userCredentialsSaml(UserCredentialsSamlReq request, StreamObserver<UserCredentialsSamlResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13755,7 +15115,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Saml authentication login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsSaml(DeleteUserCredentialsSamlRequest request, StreamObserver<DeleteUserCredentialsSamlResponse> responseObserver) {
+    public void deleteUserCredentialsSaml(DeleteUserCredentialsSamlReq request, StreamObserver<DeleteUserCredentialsSamlResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13788,7 +15148,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    */
     @Override
-    public void userCredentialsOidc(UserCredentialsOidcRequest request, StreamObserver<UserCredentialsOidcResponse> responseObserver) {
+    public void userCredentialsOidc(UserCredentialsOidcReq request, StreamObserver<UserCredentialsOidcResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13821,7 +15181,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsOidc(DeleteUserCredentialsOidcRequest request, StreamObserver<DeleteUserCredentialsOidcResponse> responseObserver) {
+    public void deleteUserCredentialsOidc(DeleteUserCredentialsOidcReq request, StreamObserver<DeleteUserCredentialsOidcResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13854,7 +15214,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    */
     @Override
-    public void userCredentialsApi3(UserCredentialsApi3Request request, StreamObserver<UserCredentialsApi3Response> responseObserver) {
+    public void userCredentialsApi3(UserCredentialsApi3Req request, StreamObserver<UserCredentialsApi3Response> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13887,7 +15247,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    */
     @Override
-    public void deleteUserCredentialsApi3(DeleteUserCredentialsApi3Request request, StreamObserver<DeleteUserCredentialsApi3Response> responseObserver) {
+    public void deleteUserCredentialsApi3(DeleteUserCredentialsApi3Req request, StreamObserver<DeleteUserCredentialsApi3Response> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13920,7 +15280,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    */
     @Override
-    public void allUserCredentialsApi3s(AllUserCredentialsApi3sRequest request, StreamObserver<AllUserCredentialsApi3sStreamResponse> responseObserver) {
+    public void allUserCredentialsApi3s(AllUserCredentialsApi3sReq request, StreamObserver<AllUserCredentialsApi3sStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13957,7 +15317,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
    */
     @Override
-    public void createUserCredentialsApi3(CreateUserCredentialsApi3Request request, StreamObserver<CreateUserCredentialsApi3Response> responseObserver) {
+    public void createUserCredentialsApi3(CreateUserCredentialsApi3Req request, StreamObserver<CreateUserCredentialsApi3Response> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -13990,7 +15350,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Embed login information for the specified user.
    */
     @Override
-    public void userCredentialsEmbed(UserCredentialsEmbedRequest request, StreamObserver<UserCredentialsEmbedResponse> responseObserver) {
+    public void userCredentialsEmbed(UserCredentialsEmbedReq request, StreamObserver<UserCredentialsEmbedResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14023,7 +15383,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Embed login information for the specified user.
    */
     @Override
-    public void deleteUserCredentialsEmbed(DeleteUserCredentialsEmbedRequest request, StreamObserver<DeleteUserCredentialsEmbedResponse> responseObserver) {
+    public void deleteUserCredentialsEmbed(DeleteUserCredentialsEmbedReq request, StreamObserver<DeleteUserCredentialsEmbedResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14056,7 +15416,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Embed login information for the specified user.
    */
     @Override
-    public void allUserCredentialsEmbeds(AllUserCredentialsEmbedsRequest request, StreamObserver<AllUserCredentialsEmbedsStreamResponse> responseObserver) {
+    public void allUserCredentialsEmbeds(AllUserCredentialsEmbedsReq request, StreamObserver<AllUserCredentialsEmbedsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14093,7 +15453,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    */
     @Override
-    public void userCredentialsLookerOpenid(UserCredentialsLookerOpenidRequest request, StreamObserver<UserCredentialsLookerOpenidResponse> responseObserver) {
+    public void userCredentialsLookerOpenid(UserCredentialsLookerOpenidReq request, StreamObserver<UserCredentialsLookerOpenidResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14126,7 +15486,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    */
     @Override
-    public void deleteUserCredentialsLookerOpenid(DeleteUserCredentialsLookerOpenidRequest request, StreamObserver<DeleteUserCredentialsLookerOpenidResponse> responseObserver) {
+    public void deleteUserCredentialsLookerOpenid(DeleteUserCredentialsLookerOpenidReq request, StreamObserver<DeleteUserCredentialsLookerOpenidResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14159,7 +15519,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Web login session for the specified user.
    */
     @Override
-    public void userSession(UserSessionRequest request, StreamObserver<UserSessionResponse> responseObserver) {
+    public void userSession(UserSessionReq request, StreamObserver<UserSessionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14192,7 +15552,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Web login session for the specified user.
    */
     @Override
-    public void deleteUserSession(DeleteUserSessionRequest request, StreamObserver<DeleteUserSessionResponse> responseObserver) {
+    public void deleteUserSession(DeleteUserSessionReq request, StreamObserver<DeleteUserSessionResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14225,7 +15585,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * ### Web login session for the specified user.
    */
     @Override
-    public void allUserSessions(AllUserSessionsRequest request, StreamObserver<AllUserSessionsStreamResponse> responseObserver) {
+    public void allUserSessions(AllUserSessionsReq request, StreamObserver<AllUserSessionsStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14271,7 +15631,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createUserCredentialsEmailPasswordReset(CreateUserCredentialsEmailPasswordResetRequest request, StreamObserver<CreateUserCredentialsEmailPasswordResetResponse> responseObserver) {
+    public void createUserCredentialsEmailPasswordReset(CreateUserCredentialsEmailPasswordResetReq request, StreamObserver<CreateUserCredentialsEmailPasswordResetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14305,7 +15665,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void userRoles(UserRolesRequest request, StreamObserver<UserRolesStreamResponse> responseObserver) {
+    public void userRoles(UserRolesReq request, StreamObserver<UserRolesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14343,7 +15703,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setUserRoles(SetUserRolesRequest request, StreamObserver<SetUserRolesStreamResponse> responseObserver) {
+    public void setUserRoles(SetUserRolesReq request, StreamObserver<SetUserRolesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14396,7 +15756,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void userAttributeUserValues(UserAttributeUserValuesRequest request, StreamObserver<UserAttributeUserValuesStreamResponse> responseObserver) {
+    public void userAttributeUserValues(UserAttributeUserValuesReq request, StreamObserver<UserAttributeUserValuesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14436,7 +15796,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setUserAttributeUserValue(SetUserAttributeUserValueRequest request, StreamObserver<SetUserAttributeUserValueResponse> responseObserver) {
+    public void setUserAttributeUserValue(SetUserAttributeUserValueReq request, StreamObserver<SetUserAttributeUserValueResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14475,7 +15835,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteUserAttributeUserValue(DeleteUserAttributeUserValueRequest request, StreamObserver<DeleteUserAttributeUserValueResponse> responseObserver) {
+    public void deleteUserAttributeUserValue(DeleteUserAttributeUserValueReq request, StreamObserver<DeleteUserAttributeUserValueResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14515,7 +15875,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void sendUserCredentialsEmailPasswordReset(SendUserCredentialsEmailPasswordResetRequest request, StreamObserver<SendUserCredentialsEmailPasswordResetResponse> responseObserver) {
+    public void sendUserCredentialsEmailPasswordReset(SendUserCredentialsEmailPasswordResetReq request, StreamObserver<SendUserCredentialsEmailPasswordResetResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14544,6 +15904,79 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
   }
     
 
+  /**
+   * ### Change a disabled user's email addresses
+   * 
+   * Allows the admin to change the email addresses for all the user's
+   * associated credentials.  Will overwrite all associated email addresses with
+   * the value supplied in the 'email' body param.
+   * The user's 'is_disabled' status must be true.
+   * 
+   */
+    @Override
+    public void wipeoutUserEmails(WipeoutUserEmailsReq request, StreamObserver<WipeoutUserEmailsResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/users/{user_id}/update_emails", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        WipeoutUserEmailsResponse.Builder responseBuilder = WipeoutUserEmailsResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
+  /**
+   * Create an embed user from an external user ID
+   * 
+   */
+    @Override
+    public void createEmbedUser(CreateEmbedUserReq request, StreamObserver<CreateEmbedUserResponse> responseObserver) {
+    try {
+      String inputJson = JsonFormat
+        .printer()
+        .preservingProtoFieldNames()
+        .print(request);
+      LookerClientResponse lookerResponse = lookerClient.post("/users/embed_user", inputJson);
+      Status lookerStatus = lookerResponse.getStatus();
+      if (lookerStatus != null) {
+        responseObserver.onError(lookerStatus.asRuntimeException());
+      } else {
+        CreateEmbedUserResponse.Builder responseBuilder = CreateEmbedUserResponse.newBuilder();
+        String outputJson = lookerResponse.getJsonResponse();
+        if (outputJson != null) {
+          JsonFormat
+            .parser()
+            .ignoringUnknownFields()
+            .merge(outputJson, responseBuilder);
+        }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
+      }
+    } catch (InvalidProtocolBufferException e) {
+      LOGGER.error("invalid protobuf data", e);
+      responseObserver.onError(Status.INVALID_ARGUMENT.asRuntimeException());
+    }
+  }
+    
+
   //#endregion User: Manage Users
 
   //#region UserAttribute: Manage User Attributes
@@ -14553,7 +15986,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allUserAttributes(AllUserAttributesRequest request, StreamObserver<AllUserAttributesStreamResponse> responseObserver) {
+    public void allUserAttributes(AllUserAttributesReq request, StreamObserver<AllUserAttributesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14600,7 +16033,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void createUserAttribute(CreateUserAttributeRequest request, StreamObserver<CreateUserAttributeResponse> responseObserver) {
+    public void createUserAttribute(CreateUserAttributeReq request, StreamObserver<CreateUserAttributeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14634,7 +16067,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void userAttribute(UserAttributeRequest request, StreamObserver<UserAttributeResponse> responseObserver) {
+    public void userAttribute(UserAttributeReq request, StreamObserver<UserAttributeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14668,7 +16101,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void updateUserAttribute(UpdateUserAttributeRequest request, StreamObserver<UpdateUserAttributeResponse> responseObserver) {
+    public void updateUserAttribute(UpdateUserAttributeReq request, StreamObserver<UpdateUserAttributeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14702,7 +16135,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void deleteUserAttribute(DeleteUserAttributeRequest request, StreamObserver<DeleteUserAttributeResponse> responseObserver) {
+    public void deleteUserAttribute(DeleteUserAttributeReq request, StreamObserver<DeleteUserAttributeResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14742,7 +16175,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allUserAttributeGroupValues(AllUserAttributeGroupValuesRequest request, StreamObserver<AllUserAttributeGroupValuesStreamResponse> responseObserver) {
+    public void allUserAttributeGroupValues(AllUserAttributeGroupValuesReq request, StreamObserver<AllUserAttributeGroupValuesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14799,7 +16232,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void setUserAttributeGroupValues(SetUserAttributeGroupValuesRequest request, StreamObserver<SetUserAttributeGroupValuesStreamResponse> responseObserver) {
+    public void setUserAttributeGroupValues(SetUserAttributeGroupValuesReq request, StreamObserver<SetUserAttributeGroupValuesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14843,7 +16276,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void allWorkspaces(AllWorkspacesRequest request, StreamObserver<AllWorkspacesStreamResponse> responseObserver) {
+    public void allWorkspaces(AllWorkspacesReq request, StreamObserver<AllWorkspacesStreamResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()
@@ -14909,7 +16342,7 @@ public class LookerStreamingServiceImpl extends LookerStreamingServiceImplBase {
    * 
    */
     @Override
-    public void workspace(WorkspaceRequest request, StreamObserver<WorkspaceResponse> responseObserver) {
+    public void workspace(WorkspaceReq request, StreamObserver<WorkspaceResponse> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2020 Looker Data Sciences, Inc.
+ Copyright (c) 2021 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,14 +25,8 @@
  */
 
 import { CodeGen } from './codeGen'
-import {
-  IMethod,
-  IParameter,
-  IProperty,
-  IType,
-  titleCase,
-  camelCase,
-} from './sdkModels'
+import type { IMethod, IParameter, IProperty, IType } from './sdkModels'
+import { titleCase, camelCase } from './sdkModels'
 
 // eslint-disable @typescript-eslint/no-unused-vars
 
@@ -105,7 +99,7 @@ export class GrpcProxyGen extends CodeGen {
     const camelMethodName = camelCase(_method.operationId)
     return `${this.formatJavaDoc(_method.description)}
   @Override
-  public void ${camelMethodName}(${titleMethodName}Request request, StreamObserver<${titleMethodName}Response> responseObserver) {
+  public void ${camelMethodName}(${titleMethodName}Req request, StreamObserver<${titleMethodName}Response> responseObserver) {
     try {
       String inputJson = JsonFormat
           .printer()
@@ -153,7 +147,7 @@ export class GrpcProxyGen extends CodeGen {
       : `responseObserver.onNext(responseBuilder.build());`
     return `${this.formatJavaDoc(_method.description)}
     @Override
-    public void ${camelMethodName}(${titleMethodName}Request request, StreamObserver<${titleMethodName}${streamResponse}Response> responseObserver) {
+    public void ${camelMethodName}(${titleMethodName}Req request, StreamObserver<${titleMethodName}${streamResponse}Response> responseObserver) {
     try {
       String inputJson = JsonFormat
         .printer()

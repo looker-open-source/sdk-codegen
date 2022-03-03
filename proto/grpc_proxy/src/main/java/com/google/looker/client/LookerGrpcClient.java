@@ -3,9 +3,9 @@ package com.google.looker.client;
 import com.google.looker.common.BearerToken;
 import com.google.looker.common.Constants;
 import com.google.looker.grpc.services.AccessToken;
-import com.google.looker.grpc.services.LoginRequest;
+import com.google.looker.grpc.services.LoginReq;
 import com.google.looker.grpc.services.LoginResponse;
-import com.google.looker.grpc.services.LogoutRequest;
+import com.google.looker.grpc.services.LogoutReq;
 import com.google.looker.grpc.services.LookerServiceGrpc;
 import com.google.looker.grpc.services.LookerStreamingServiceGrpc;
 import com.google.looker.grpc.services.PingServiceGrpc;
@@ -117,7 +117,7 @@ public class LookerGrpcClient {
     lookerStreamingServiceStub = null;
     LookerServiceGrpc.LookerServiceBlockingStub stub = getLookerServiceBlockingStub();
     LoginResponse response = stub.login(
-        LoginRequest
+        LoginReq
             .newBuilder()
             .setClientId(System.getProperty(Constants.LOOKER_CLIENT_ID))
             .setClientSecret(System.getProperty(Constants.LOOKER_CLIENT_SECRET))
@@ -133,7 +133,7 @@ public class LookerGrpcClient {
       accessTokenResult = null;
       lookerServiceBlockingStub = null;
       stub.logout(
-          LogoutRequest
+          LogoutReq
               .newBuilder()
               .build()
       );

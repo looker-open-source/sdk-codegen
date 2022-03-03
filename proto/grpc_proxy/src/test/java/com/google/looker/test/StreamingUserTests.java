@@ -3,7 +3,7 @@ package com.google.looker.test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.looker.client.LookerGrpcClient;
-import com.google.looker.grpc.services.AllUsersRequest;
+import com.google.looker.grpc.services.AllUsersReq;
 import com.google.looker.grpc.services.AllUsersStreamResponse;
 import com.google.looker.grpc.services.LookerStreamingServiceGrpc;
 import com.google.looker.grpc.services.User;
@@ -61,7 +61,7 @@ public class StreamingUserTests {
       }
     };
     stub.allUsers(
-        AllUsersRequest.newBuilder().build(),
+        AllUsersReq.newBuilder().build(),
         responseObserver
     );
     latch.await(3, TimeUnit.SECONDS);
