@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v22.2.0...extension-sdk-react-v22.2.1) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+
 ## [22.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v22.0.0...extension-sdk-react-v22.2.0) (2022-02-18)
 
 
