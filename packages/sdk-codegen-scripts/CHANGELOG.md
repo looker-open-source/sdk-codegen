@@ -1,5 +1,19 @@
 # Changelog
 
+## [21.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.2.3...sdk-codegen-scripts-v21.3.0) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-codegen bumped from ^21.4.0 to ^21.5.0
+
 ### [21.2.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.2.2...sdk-codegen-scripts-v21.2.3) (2022-02-18)
 
 

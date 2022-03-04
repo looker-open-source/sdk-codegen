@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.1.0...sdk-codegen-all-v2.2.0) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+* python rtl optional config ApiSettings init parameter ([#996](https://www.github.com/looker-open-source/sdk-codegen/issues/996)) ([3ae42cd](https://www.github.com/looker-open-source/sdk-codegen/commit/3ae42cd97f974322b77d58941ac72b88be3f8b97))
+
+
+### Bug Fixes
+
+* remove python version upper bound ([#1015](https://www.github.com/looker-open-source/sdk-codegen/issues/1015)) ([b1650a1](https://www.github.com/looker-open-source/sdk-codegen/commit/b1650a1a8a56c52a7a06ca5c9cef02300af7289e))
+* url-parse dependabot issue ([#1014](https://www.github.com/looker-open-source/sdk-codegen/issues/1014)) ([b785225](https://www.github.com/looker-open-source/sdk-codegen/commit/b785225df35e0db9a0514ad92b0c823906e27827))
+
 ## [2.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.0.0...sdk-codegen-all-v2.1.0) (2022-02-18)
 
 

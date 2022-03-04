@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-sdk-react",
-  "version": "22.2.0",
+  "version": "22.2.1",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
