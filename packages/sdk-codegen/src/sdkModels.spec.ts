@@ -31,6 +31,7 @@ import type {
   IEnumType,
   IMethod,
   IMethodResponse,
+  IParameter,
   IType,
   KeyedCollection,
   SearchCriterionTerm,
@@ -42,6 +43,7 @@ import {
   camelCase,
   criteriaToSet,
   DelimArrayType,
+  describeParam,
   EnumType,
   firstCase,
   IntrinsicType,
@@ -454,7 +456,7 @@ describe('sdkModels', () => {
         ])
       })
 
-      it('WhitelabelConfiguration has no writer', () => {
+      it('WhitelabelConfiguration has a writer', () => {
         const type = apiTestModel.types.WhitelabelConfiguration
         expect(type).toBeDefined()
         const actual = apiTestModel.mayGetWriteableType(type)
@@ -521,6 +523,59 @@ describe('sdkModels', () => {
       })
     })
 
+    describe('deprecations', () => {
+      describe('describeParam', () => {
+        it('supports Highlander deprecation', () => {
+          const param = {
+            name: 'foo',
+            description: 'there can be only one deprecated parameter!',
+            deprecated: true,
+          } as IParameter
+          const actual = describeParam(param)
+          expect(actual).toEqual(param.description)
+        })
+        it('tags missing deprecations', () => {
+          const param = {
+            name: 'foo',
+            description: 'obsolete parameter',
+            deprecated: true,
+          } as IParameter
+          const actual = describeParam(param)
+          expect(actual).toEqual('(DEPRECATED) obsolete parameter')
+        })
+        it('does not tag undeprecated parameters', () => {
+          const param = {
+            name: 'foo',
+            description: 'obsolete parameter',
+            deprecated: false,
+          } as IParameter
+          const actual = describeParam(param)
+          expect(actual).toEqual(param.description)
+        })
+      })
+
+      it('has deprecated methods', () => {
+        const keys = Object.keys(apiTestModel.methods)
+        expect(keys).toContain('old_login')
+        const method = apiTestModel.methods.old_login
+        expect(method).toBeDefined()
+        expect(method.deprecated).toEqual(true)
+      })
+
+      it('has deprecated parameters', () => {
+        const method = apiTestModel.methods.old_login
+        const param = method.params.find((p) => p.name === 'old_cred')
+        expect(param).toBeDefined()
+        expect(param?.deprecated).toEqual(true)
+      })
+
+      it('has deprecated properties', () => {
+        const type = apiTestModel.types.SqlQueryCreate
+        const prop = type.properties.connection_id
+        expect(prop).toBeDefined()
+        expect(prop.deprecated).toEqual(true)
+      })
+    })
     describe('writeable logic', () => {
       it('CredentialsApi3', () => {
         const type = apiTestModel.types.CredentialsApi3
@@ -1043,7 +1098,7 @@ describe('sdkModels', () => {
 
         it('deprecated items', () => {
           const actual = apiTestModel.search('deprecated', statusCriteria)
-          expect(Object.entries(allMethods(actual.tags))).toHaveLength(7)
+          expect(Object.entries(allMethods(actual.tags))).toHaveLength(8)
           expect(Object.entries(actual.types)).toHaveLength(3)
         })
 
@@ -1056,7 +1111,8 @@ describe('sdkModels', () => {
 
         it('stable items', () => {
           const actual = apiTestModel.search('stable', statusCriteria)
-          expect(Object.entries(allMethods(actual.tags))).toHaveLength(154)
+          const methods = allMethods(actual.tags)
+          expect(Object.entries(methods)).toHaveLength(155)
           expect(Object.entries(actual.types)).toHaveLength(91)
         })
 

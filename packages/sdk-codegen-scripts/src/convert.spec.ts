@@ -374,7 +374,8 @@ const specFrag = `
   "type": "boolean",
   "readOnly": true,
   "description": "Is Hidden",
-  "x-looker-nullable": false
+  "x-looker-nullable": false,
+  "x-looker-deprecated": true,
 },
 "supported_formats": {
   "type": "array",
@@ -419,6 +420,8 @@ describe('spec conversion', () => {
     expect(actual).not.toContain('"x-looker-nullable": true')
     expect(actual).toContain('"enum": [')
     expect(actual).not.toContain('"x-looker-values": [')
+    expect(actual).toContain('"deprecated": true')
+    expect(actual).not.toContain('"x-looker-deprecated"')
   })
 
   it('collectionFormat to style', () => {

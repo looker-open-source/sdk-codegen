@@ -62,7 +62,7 @@ def init31(
     return methods31.Looker31SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1"),
         serialize.deserialize31,
-        serialize.serialize,
+        serialize.serialize31,
         transport,
         "3.1",
     )
@@ -82,7 +82,7 @@ def init40(
     return methods40.Looker40SDK(
         auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0"),
         serialize.deserialize40,
-        serialize.serialize,
+        serialize.serialize40,
         transport,
         "4.0",
     )

@@ -317,7 +317,7 @@ class OAuthSession(AuthSession):
         response = self.transport.request(
             transport.HttpMethod.POST,
             urllib.parse.urljoin(self.settings.base_url, "/api/token"),
-            body=self.serialize(grant_type),
+            body=self.serialize(api_model=grant_type),  # type: ignore
         )
         if not response.ok:
             raise error.SDKError(response.value.decode(encoding=response.encoding))

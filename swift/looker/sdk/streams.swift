@@ -2084,6 +2084,7 @@ open class LookerSDKStream: APIMethods {
      *
      * GET /custom_welcome_email -> CustomWelcomeEmail
      */
+    @available(*, deprecated)
     public func custom_welcome_email(
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
@@ -2096,6 +2097,7 @@ open class LookerSDKStream: APIMethods {
      *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
+    @available(*, deprecated)
     public func update_custom_welcome_email(
         /**
          * @param {CustomWelcomeEmail} body
@@ -2464,6 +2466,7 @@ open class LookerSDKStream: APIMethods {
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
+    @available(*, deprecated)
     public func whitelabel_configuration(
         /**
          * @param {String} fields Requested fields.
@@ -2481,6 +2484,7 @@ open class LookerSDKStream: APIMethods {
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
+    @available(*, deprecated)
     public func update_whitelabel_configuration(
         /**
          * @param {WriteWhitelabelConfiguration} body
@@ -3195,7 +3199,7 @@ open class LookerSDKStream: APIMethods {
      */
     public func create_content_metadata_access(
         /**
-         * @param {ContentMetaGroupUser} body
+         * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: ContentMetaGroupUser,
         /**
@@ -3220,7 +3224,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ content_metadata_access_id: String,
         /**
-         * @param {ContentMetaGroupUser} body
+         * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: ContentMetaGroupUser,
         options: ITransportSettings? = nil
@@ -3407,6 +3411,7 @@ open class LookerSDKStream: APIMethods {
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
      */
+    @available(*, deprecated)
     public func vector_thumbnail(
         /**
          * @param {String} type Either dashboard or look
@@ -5275,7 +5280,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ group_id: Int64,
         /**
-         * @param {GroupIdForGroupInclusion} body
+         * @param {GroupIdForGroupInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: GroupIdForGroupInclusion,
         options: ITransportSettings? = nil
@@ -5330,7 +5335,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ group_id: Int64,
         /**
-         * @param {GroupIdForGroupUserInclusion} body
+         * @param {GroupIdForGroupUserInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: GroupIdForGroupUserInclusion,
         options: ITransportSettings? = nil
@@ -5401,7 +5406,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ user_attribute_id: Int64,
         /**
-         * @param {UserAttributeGroupValue} body
+         * @param {UserAttributeGroupValue} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: UserAttributeGroupValue,
         options: ITransportSettings? = nil
@@ -6510,7 +6515,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ connection_name: String,
         /**
-         * @param {CreateCostEstimate} body
+         * @param {CreateCostEstimate} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         _ body: CreateCostEstimate,
         /**
@@ -10436,7 +10441,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ user_id: Int64,
         /**
-         * @param {CredentialsTotp} body
+         * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
         body: CredentialsTotp?,
         /**

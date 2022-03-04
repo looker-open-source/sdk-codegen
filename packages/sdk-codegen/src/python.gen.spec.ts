@@ -88,19 +88,15 @@ class LookerSDK(api_methods.APIMethods):
       const type = apiTestModel.types.LookmlModelExploreJoins
       gen.declareType(indent, type)
       expect(gen.modelsEpilogue('')).toEqual(`
-
-# The following cattrs structure hook registrations are a workaround
-# for https://github.com/Tinche/cattrs/pull/42 Once this issue is resolved
-# these calls will be removed.
-
 import functools  # noqa:E402
 
-forward_ref_structure_hook = functools.partial(sr.forward_ref_structure_hook, globals(), sr.converter)
-translate_keys_structure_hook = functools.partial(sr.translate_keys_structure_hook, sr.converter)
-sr.converter.register_structure_hook(
-    ForwardRef("LookmlModelExploreJoins"),  # type: ignore
-    forward_ref_structure_hook  # type:ignore
+forward_ref_structure_hook = functools.partial(
+    sr.forward_ref_structure_hook, globals(), sr.converter
 )
+sr.converter.register_structure_hook_func(
+    lambda t: t.__class__ is ForwardRef, forward_ref_structure_hook
+)
+translate_keys_structure_hook = functools.partial(sr.translate_keys_structure_hook, sr.converter)
 sr.converter.register_structure_hook(
     LookmlModelExploreJoins,  # type: ignore
     translate_keys_structure_hook  # type:ignore
@@ -371,6 +367,34 @@ def run_url_encoded_query(
       const actual = gen.methodSignature('', method)
       expect(actual).toEqual(expected)
     })
+  })
+
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const expected = `# Endpoint to test deprecation flags
+#
+# GET /old_login -> mdls.AccessToken
+def old_login(
+    self,
+    # (DEPRECATED) obsolete parameter
+    old_cred: Optional[str] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
+) -> mdls.AccessToken:
+    """Login"""
+    response = cast(
+        mdls.AccessToken,
+        self.get(
+            path="/old_login",
+            structure=mdls.AccessToken,
+            query_params={"old_cred": old_cred},
+            transport_options=transport_options
+        )
+    )
+    return response`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
   })
 
   describe('method body', () => {

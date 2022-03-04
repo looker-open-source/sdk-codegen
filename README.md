@@ -20,7 +20,7 @@ This repository contains:
 
 ## The parts of the Looker SDK
 
-We hope to help people who want use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
+We hope to help people who want to use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
 
 An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) describes the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
 
@@ -35,13 +35,13 @@ A Looker SDK has several parts:
 
 ## Multi-API support with Looker 7.2 and later
 
-Looker 7.2 introduced an **Experimental** version of API 4.0. Since that release, the SDKs now support multiple API versions in the same SDK package.
+Looker 7.2 introduced an **Experimental** version of API 4.0. Since that release, some SDKs now support multiple API versions in the same SDK package.
 
 For all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
 
 At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
 
-The class names representing these API versions are distinct, with version-named factories for creating initialized SDK objects.
+The class names representing these API versions are distinct, with version-named constructors for creating initialized SDK objects.
 
 These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
@@ -87,7 +87,7 @@ All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/w
 
 ## Using existing, pre-generated SDKs
 
-When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for by that platform. Currently, the [Python SDK](python) and the [TypeScript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
+When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for that platform. Currently, the [Python SDK](python) and the [TypeScript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
 
 For the other SDKs in this repository, you can copy and paste the source code into a module for your own project. Every SDK will eventually have a deployed package version.
 

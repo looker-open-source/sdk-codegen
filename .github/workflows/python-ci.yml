@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9.9
+          python-version: '3.10'
       - run: pip install -e .
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
@@ -59,13 +59,15 @@ jobs:
           - macos
           - windows
         python-version:
-          - '3.9.9'
+          - '3.10'
         include:
           - python-version: '3.6'
             os: ubuntu
           - python-version: '3.7'
             os: ubuntu
           - python-version: '3.8'
+            os: ubuntu
+          - python-version: '3.9'
             os: ubuntu
 
     steps:
@@ -185,7 +187,7 @@ jobs:
           pip install tox
 
       - name: Determine credentials version
-        # Prior to 21_18, each version had different credentials and a 
+        # Prior to 21_18, each version had different credentials and a
         # different secret. 21_20 and later all use the same credentials
         # as 21_18. The parse_version.sh script parses the version and
         # yields 21_12, 21_14, 21_16 etc for those versions but 21_18 for
@@ -229,7 +231,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: 3.9.9
+          python-version: '3.10'
       - name: Twine upload check
         run: |
           pip install wheel twine

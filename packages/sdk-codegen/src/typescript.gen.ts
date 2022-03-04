@@ -32,7 +32,7 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { EnumType, isSpecialName, strBody } from './sdkModels'
+import { describeParam, EnumType, isSpecialName, strBody } from './sdkModels'
 import type { CodeAssignment, IMappedType } from './codeGen'
 import { CodeGen, trimInputs, commentBlock } from './codeGen'
 
@@ -270,7 +270,11 @@ export class ${this.packageName}Stream extends APIMethods {
     if (!desc) {
       desc = this.impartial(param, mapped)
     }
-    return `@param ${param.name} ${desc}`
+
+    return `@param ${param.name} ${describeParam({
+      ...param,
+      ...{ description: desc },
+    })}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {

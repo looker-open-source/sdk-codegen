@@ -25,6 +25,7 @@
  */
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import { describeParam } from '@looker/sdk-codegen'
 import { screen, waitFor, fireEvent } from '@testing-library/react'
 
 import { api } from '../../test-data'
@@ -46,7 +47,7 @@ describe('DocParam', () => {
     fireEvent.mouseOver(arg)
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `${requiredParam.type.name} ${requiredParam.description}`
+        `${requiredParam.type.name} ${describeParam(requiredParam)}`
       )
     })
   })
