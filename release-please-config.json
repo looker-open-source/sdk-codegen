@@ -2,6 +2,7 @@
   "plugins": ["node-workspace"],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "release-as": "22.2.1",
   "packages": {
     ".": { "release-as": "" },
     "packages/api-explorer": { "release-as": "" },
@@ -19,6 +20,6 @@
     "packages/sdk-node": { },
     "packages/sdk-rtl": { "release-as": "" },
     "packages/wholly-sheet": { "release-as": "" },
-    "python": { "release-type": "python", "package-name": "looker_sdk", "release-as": "22.2.1" }
+    "python": { "release-type": "python", "package-name": "looker_sdk" }
   }
 }
