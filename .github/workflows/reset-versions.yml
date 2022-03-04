@@ -7,6 +7,7 @@ on:
 
 jobs:
   reset-vers:
+    if: startsWith(github.event.release.tag_name, 'sdk-codegen-all')
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
