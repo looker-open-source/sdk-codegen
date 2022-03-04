@@ -26,7 +26,6 @@ import enum
 import functools
 import json
 
-# ignoring "Module 'typing' has no attribute 'ForwardRef'"
 from typing import Optional, Sequence
 
 try:
@@ -38,6 +37,7 @@ import attr
 import cattr
 import pytest  # type: ignore
 
+from looker_sdk.rtl import hooks
 from looker_sdk.rtl import model as ml
 from looker_sdk.rtl import serialize as sr
 
@@ -95,6 +95,7 @@ class Model(ml.Model):
     list_model_no_refs1: Sequence["ModelNoRefs1"]
     opt_enum1: Optional["Enum1"] = None
     opt_model_no_refs1: Optional["ModelNoRefs1"] = None
+    list_opt_model_no_refs1: Optional[Sequence["ModelNoRefs1"]] = None
 
     # standard types
     id: Optional[int] = None
@@ -132,6 +133,7 @@ class Model(ml.Model):
         "list_model_no_refs1": Sequence["ModelNoRefs1"],
         "opt_enum1": Optional["Enum1"],
         "opt_model_no_refs1": Optional["ModelNoRefs1"],
+        "list_opt_model_no_refs1": Optional[Sequence["ModelNoRefs1"]],
         "id": Optional[int],
         "name": Optional[str],
         "datetime_field": Optional[datetime.datetime],
@@ -154,6 +156,7 @@ class Model(ml.Model):
         list_model_no_refs1: Sequence["ModelNoRefs1"],
         opt_enum1: Optional["Enum1"] = None,
         opt_model_no_refs1: Optional["ModelNoRefs1"] = None,
+        list_opt_model_no_refs1: Optional[Sequence["ModelNoRefs1"]] = None,
         id: Optional[int] = None,
         name: Optional[str] = None,
         datetime_field: Optional[datetime.datetime] = None,
@@ -176,6 +179,7 @@ class Model(ml.Model):
         self.list_model_no_refs1 = list_model_no_refs1
         self.opt_enum1 = opt_enum1
         self.opt_model_no_refs1 = opt_model_no_refs1
+        self.list_opt_model_no_refs1 = list_opt_model_no_refs1
         self.id = id
         self.name = name
         self.datetime_field = datetime_field
@@ -210,18 +214,23 @@ class ModelNoRefs2(ml.Model):
 
 
 converter = cattr.Converter()
-structure_hook = functools.partial(sr.forward_ref_structure_hook, globals(), converter)
 translate_keys_structure_hook = functools.partial(
     sr.translate_keys_structure_hook, converter
 )
-converter.register_structure_hook(ForwardRef("Model"), structure_hook)
-converter.register_structure_hook(ForwardRef("ChildModel"), structure_hook)
-converter.register_structure_hook(ForwardRef("Enum1"), structure_hook)
-converter.register_structure_hook(ForwardRef("Enum2"), structure_hook)
-converter.register_structure_hook(ForwardRef("ModelNoRefs1"), structure_hook)
-converter.register_structure_hook(ForwardRef("ModelNoRefs2"), structure_hook)
 converter.register_structure_hook(Model, translate_keys_structure_hook)
-converter.register_structure_hook(datetime.datetime, sr.datetime_structure_hook)
+converter.register_structure_hook(datetime.datetime, hooks.datetime_structure_hook)
+converter.register_unstructure_hook(datetime.datetime, hooks.datetime_unstructure_hook)
+unstructure_hook = functools.partial(hooks.unstructure_hook, converter)
+converter.register_unstructure_hook(Model, unstructure_hook)
+
+# only required for 3.6 for unittest but for some reason integration tests need it
+# for all python versions
+forward_ref_structure_hook = functools.partial(
+    sr.forward_ref_structure_hook, globals(), converter
+)
+converter.register_structure_hook_func(
+    lambda t: t.__class__ is ForwardRef, forward_ref_structure_hook
+)
 
 
 DATETIME_VALUE = datetime.datetime.fromtimestamp(1625246159, datetime.timezone.utc)
@@ -235,6 +244,7 @@ MODEL_DATA = {
     "list_model_no_refs1": [{"name1": "model_no_refs1_name"}],
     "opt_enum1": "entry1",
     "opt_model_no_refs1": {"name1": "model_no_refs1_name"},
+    "list_opt_model_no_refs1": [{"name1": "model_no_refs1_name"}],
     "id": 1,
     "name": "my-name",
     "datetime_field": DATETIME_VALUE_STR,
@@ -532,6 +542,7 @@ def test_deserialize_single() -> None:
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="25",
         datetime_field=DATETIME_VALUE,
@@ -557,6 +568,7 @@ def test_deserialize_list():
             list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
             opt_enum1=Enum1.entry1,
             opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+            list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
             id=1,
             name="my-name",
             datetime_field=DATETIME_VALUE,
@@ -582,6 +594,7 @@ def test_deserialize_partial():
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=None,
         opt_model_no_refs1=None,
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=None,
         name="my-name",
         datetime_field=DATETIME_VALUE,
@@ -608,6 +621,7 @@ def test_deserialize_with_null():
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=None,
         opt_model_no_refs1=None,
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=None,
         name="my-name",
         datetime_field=DATETIME_VALUE,
@@ -641,6 +655,7 @@ def test_serialize_single():
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="my-name",
         datetime_field=DATETIME_VALUE,
@@ -648,7 +663,7 @@ def test_serialize_single():
         finally_=[1, 2, 3],
     )
     expected = json.dumps(MODEL_DATA).encode("utf-8")
-    assert sr.serialize(model) == expected
+    assert sr.serialize(api_model=model, converter=converter) == expected
 
 
 def test_serialize_sequence():
@@ -661,6 +676,7 @@ def test_serialize_sequence():
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="my-name",
         datetime_field=DATETIME_VALUE,
@@ -668,7 +684,7 @@ def test_serialize_sequence():
         finally_=[1, 2, 3],
     )
     expected = json.dumps([MODEL_DATA, MODEL_DATA]).encode("utf-8")
-    assert sr.serialize([model, model]) == expected
+    assert sr.serialize(api_model=[model, model], converter=converter) == expected
 
 
 def test_serialize_partial():
@@ -691,7 +707,7 @@ def test_serialize_partial():
             "list_model_no_refs1": [{"name1": "model_no_refs1_name"}],
         }
     ).encode("utf-8")
-    assert sr.serialize(model) == expected
+    assert sr.serialize(api_model=model, converter=converter) == expected
 
 
 def test_serialize_explict_null():
@@ -724,7 +740,7 @@ def test_serialize_explict_null():
             "finally": None,
         }
     ).encode("utf-8")
-    assert sr.serialize(model) == expected
+    assert sr.serialize(api_model=model, converter=converter) == expected
 
 
 def test_safe_enum_deserialization():
@@ -740,6 +756,7 @@ def test_safe_enum_deserialization():
         list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="my-name",
         datetime_field=DATETIME_VALUE,

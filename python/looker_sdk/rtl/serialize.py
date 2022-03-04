@@ -38,7 +38,7 @@ from typing import (
 
 import cattr
 
-from looker_sdk.rtl import model
+from looker_sdk.rtl import model, hooks
 
 
 class DeserializeError(Exception):
@@ -75,32 +75,10 @@ def deserialize(
     return response
 
 
-converter31 = cattr.Converter()
-deserialize31 = functools.partial(deserialize, converter=converter31)
-converter40 = cattr.Converter()
-deserialize40 = functools.partial(deserialize, converter=converter40)
-
-
-def serialize(api_model: TModelOrSequence) -> bytes:
+def serialize(*, api_model: TModelOrSequence, converter: cattr.Converter) -> bytes:
     """Translate api_model into formdata encoded json bytes"""
-    data = cattr.unstructure(api_model)  # type: ignore
+    data = converter.unstructure(api_model)  # type: ignore
     return json.dumps(data).encode("utf-8")  # type: ignore
-
-
-def _tr_data_keys(data):
-    """Map top level json keys to model property names.
-
-    Currently this translates reserved python keywords like "from" => "from_"
-    """
-    for reserved in keyword.kwlist:
-        if reserved in data and isinstance(data, dict):
-            data[f"{reserved}_"] = data.pop(reserved)
-    return data
-
-
-def translate_keys_structure_hook(converter, data, model_type):
-    """Applied only to models.Model"""
-    return converter.structure_attrs_fromdict(_tr_data_keys(data), model_type)
 
 
 def forward_ref_structure_hook(context, converter, data, forward_ref):
@@ -112,7 +90,7 @@ def forward_ref_structure_hook(context, converter, data, forward_ref):
        partial func to register the hook. Once the issue is resolved we can
        remove "context" and the partial.
     """
-    data = _tr_data_keys(data)
+    data = hooks.tr_data_keys(data)
     actual_type = eval(forward_ref.__forward_arg__, context, locals())
     if issubclass(actual_type, enum.Enum):
         instance = converter.structure(data, actual_type)
@@ -124,51 +102,30 @@ def forward_ref_structure_hook(context, converter, data, forward_ref):
     return instance
 
 
-def unstructure_hook(api_model):
-    """cattr unstructure hook
-
-    Map reserved_ words in models to correct json field names.
-    Also handle stripping None fields from dict while setting
-    EXPLICIT_NULL fields to None so that we only send null
-    in the json for fields the caller set EXPLICIT_NULL on.
-    """
-    data = cattr.global_converter.unstructure_attrs_asdict(api_model)
-    for key, value in data.copy().items():
-        if value is None:
-            del data[key]
-        elif value == model.EXPLICIT_NULL:
-            data[key] = None
-        # bug here: in the unittests cattrs unstructures this correctly
-        # as an enum calling .value but in the integration tests we see
-        # it doesn't for WriteCreateQueryTask.result_format for some reason
-        # Haven't been able to debug it fully, so catching and processing
-        # it here.
-        elif isinstance(value, enum.Enum):
-            data[key] = value.value
-    for reserved in keyword.kwlist:
-        if f"{reserved}_" in data:
-            data[reserved] = data.pop(f"{reserved}_")
-    return data
+def translate_keys_structure_hook(converter, data, model_type):
+    """Applied only to models.Model"""
+    new_data = hooks.tr_data_keys(data)
+    ret = converter.structure_attrs_fromdict(new_data, model_type)
+    return ret
 
 
-DATETIME_FMT = "%Y-%m-%dT%H:%M:%S.%f%z"
-if sys.version_info < (3, 7):
-    from dateutil import parser
-
-    def datetime_structure_hook(
-        d: str, t: Type[datetime.datetime]
-    ) -> datetime.datetime:
-        return parser.isoparse(d)
-
-else:
-
-    def datetime_structure_hook(
-        d: str, t: Type[datetime.datetime]
-    ) -> datetime.datetime:
-        return datetime.datetime.strptime(d, DATETIME_FMT)
+converter31 = cattr.Converter()
+deserialize31 = functools.partial(deserialize, converter=converter31)
+serialize31 = functools.partial(serialize, converter=converter31)
+converter40 = cattr.Converter()
+deserialize40 = functools.partial(deserialize, converter=converter40)
+serialize40 = functools.partial(serialize, converter=converter40)
 
 
-converter31.register_structure_hook(datetime.datetime, datetime_structure_hook)
-converter40.register_structure_hook(datetime.datetime, datetime_structure_hook)
-cattr.register_unstructure_hook(model.Model, unstructure_hook)  # type: ignore
-cattr.register_unstructure_hook(datetime.datetime, lambda dt: dt.strftime(DATETIME_FMT))  # type: ignore
+converter31.register_structure_hook(datetime.datetime, hooks.datetime_structure_hook)
+converter40.register_structure_hook(datetime.datetime, hooks.datetime_structure_hook)
+unstructure_hook31 = functools.partial(hooks.unstructure_hook, converter31)  # type: ignore
+unstructure_hook40 = functools.partial(hooks.unstructure_hook, converter40)  # type: ignore
+converter31.register_unstructure_hook(model.Model, unstructure_hook31)  # type: ignore
+converter40.register_unstructure_hook(model.Model, unstructure_hook40)  # type: ignore
+converter31.register_unstructure_hook(
+    datetime.datetime, hooks.datetime_unstructure_hook  # type: ignore
+)
+converter40.register_unstructure_hook(
+    datetime.datetime, hooks.datetime_unstructure_hook  # type: ignore
+)
