@@ -1504,6 +1504,9 @@ func (l *LookerSDK) UpdateCloudStorageConfiguration(
 // ### Get the current status and content of custom welcome emails
 //
 // GET /custom_welcome_email -> CustomWelcomeEmail
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) CustomWelcomeEmail(
     options *rtl.ApiSettings) (CustomWelcomeEmail, error) {
     var result CustomWelcomeEmail
@@ -1515,6 +1518,9 @@ func (l *LookerSDK) CustomWelcomeEmail(
 // Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
 //
 // PATCH /custom_welcome_email -> CustomWelcomeEmail
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) UpdateCustomWelcomeEmail(
     body CustomWelcomeEmail,
     sendTestWelcomeEmail bool,
@@ -1804,6 +1810,9 @@ func (l *LookerSDK) ApiSpec(
 // ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
 //
 // GET /whitelabel_configuration -> WhitelabelConfiguration
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) WhitelabelConfiguration(
     fields string,
     options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
@@ -1816,6 +1825,9 @@ func (l *LookerSDK) WhitelabelConfiguration(
 // ### Update the whitelabel configuration
 //
 // PUT /whitelabel_configuration -> WhitelabelConfiguration
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) UpdateWhitelabelConfiguration(
     body WriteWhitelabelConfiguration,
     options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
@@ -2340,6 +2352,7 @@ func (l *LookerSDK) DeleteContentMetadataAccess(
 // GET /content_thumbnail/{type}/{resource_id} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
     options *rtl.ApiSettings) (string, error) {
     request.Type = url.PathEscape(request.Type)
@@ -2405,6 +2418,9 @@ func (l *LookerSDK) SearchContentViews(request RequestSearchContentViews,
 // reflect the actual data displayed in the respective visualizations.
 //
 // GET /vector_thumbnail/{type}/{resource_id} -> string
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) VectorThumbnail(
     type0 string,
     resourceId string,
@@ -3908,6 +3924,7 @@ func (l *LookerSDK) DeleteLook(
 // GET /looks/{look_id}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunLook(request RequestRunLook,
     options *rtl.ApiSettings) (string, error) {
     request.LookId = url.PathEscape(request.LookId)
@@ -4978,6 +4995,7 @@ func (l *LookerSDK) CreateQuery(
 // GET /queries/{query_id}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunQuery(request RequestRunQuery,
     options *rtl.ApiSettings) (string, error) {
     request.ResultFormat = url.PathEscape(request.ResultFormat)
@@ -5041,6 +5059,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 // POST /queries/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
     options *rtl.ApiSettings) (string, error) {
     request.ResultFormat = url.PathEscape(request.ResultFormat)
@@ -5106,6 +5125,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 // GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunUrlEncodedQuery(
     modelName string,
     viewName string,
@@ -5221,6 +5241,7 @@ func (l *LookerSDK) CreateSqlQuery(
 // POST /sql_queries/{slug}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunSqlQuery(
     slug string,
     resultFormat string,

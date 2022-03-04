@@ -352,8 +352,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # DELETE /logout -> str
     def logout(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Logout"""
         response = cast(
@@ -526,8 +525,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /ldap_config -> mdls.LDAPConfig
     def ldap_config(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.LDAPConfig:
         """Get LDAP Configuration"""
         response = cast(
@@ -946,8 +944,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /oidc_config -> mdls.OIDCConfig
     def oidc_config(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.OIDCConfig:
         """Get OIDC Configuration"""
         response = cast(
@@ -1054,8 +1051,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /password_config -> mdls.PasswordConfig
     def password_config(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.PasswordConfig:
         """Get Password Config"""
         response = cast(
@@ -1092,8 +1088,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # PUT /password_config/force_password_reset_at_next_login_for_all_users -> str
     def force_password_reset_at_next_login_for_all_users(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
         """Force password reset"""
         response = cast(
@@ -1121,8 +1116,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /saml_config -> mdls.SamlConfig
     def saml_config(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SamlConfig:
         """Get SAML Configuration"""
         response = cast(
@@ -1229,9 +1223,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def parse_saml_idp_metadata(
-        self,
-        body: str,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SamlMetadataParseResult:
         """Parse SAML IdP XML"""
         response = cast(
@@ -1251,9 +1243,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /fetch_and_parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def fetch_and_parse_saml_idp_metadata(
-        self,
-        body: str,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, body: str, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SamlMetadataParseResult:
         """Parse SAML IdP Url"""
         response = cast(
@@ -1271,8 +1261,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /session_config -> mdls.SessionConfig
     def session_config(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SessionConfig:
         """Get Session Config"""
         response = cast(
@@ -1401,8 +1390,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # PUT /support_access/disable -> mdls.SupportAccessStatus
     def disable_support_access(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SupportAccessStatus:
         """Disable Support Access"""
         response = cast(
@@ -1421,8 +1409,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /support_access/status -> mdls.SupportAccessStatus
     def support_access_status(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SupportAccessStatus:
         """Support Access Status"""
         response = cast(
@@ -2074,8 +2061,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /color_collections/default -> mdls.ColorCollection
     def default_color_collection(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ColorCollection:
         """Get Default Color Collection"""
         response = cast(
@@ -2305,8 +2291,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /cloud_storage -> mdls.BackupConfiguration
     def cloud_storage_configuration(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.BackupConfiguration:
         """Get Cloud Storage"""
         response = cast(
@@ -2343,8 +2328,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /custom_welcome_email -> mdls.CustomWelcomeEmail
     def custom_welcome_email(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.CustomWelcomeEmail:
         """Get Custom Welcome Email"""
         response = cast(
@@ -2388,7 +2372,7 @@ class Looker40SDK(api_methods.APIMethods):
         body: mdls.WelcomeEmailTest,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.WelcomeEmailTest:
-        """Send a test welcome email to the currently logged in user with the supplied content"""
+        """Send a test welcome email to the currently logged in user with the supplied content """
         response = cast(
             mdls.WelcomeEmailTest,
             self.put(
@@ -2404,8 +2388,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /digest_emails_enabled -> mdls.DigestEmails
     def digest_emails_enabled(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.DigestEmails:
         """Get Digest_emails"""
         response = cast(
@@ -2444,8 +2427,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # POST /digest_email_send -> mdls.DigestEmailSend
     def create_digest_email_send(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.DigestEmailSend:
         """Deliver digest email contents"""
         response = cast(
@@ -2464,8 +2446,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /public_egress_ip_addresses -> mdls.EgressIpAddresses
     def public_egress_ip_addresses(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.EgressIpAddresses:
         """Public Egress IP Addresses"""
         response = cast(
@@ -2482,8 +2463,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_content -> mdls.InternalHelpResourcesContent
     def internal_help_resources_content(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.InternalHelpResourcesContent:
         """Get Internal Help Resources Content"""
         response = cast(
@@ -2520,8 +2500,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /internal_help_resources_enabled -> mdls.InternalHelpResources
     def internal_help_resources(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.InternalHelpResources:
         """Get Internal Help Resources"""
         response = cast(
@@ -2558,8 +2537,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /legacy_features -> Sequence[mdls.LegacyFeature]
     def all_legacy_features(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.LegacyFeature]:
         """Get All Legacy Features"""
         response = cast(
@@ -2620,8 +2598,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /locales -> Sequence[mdls.Locale]
     def all_locales(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Locale]:
         """Get All Locales"""
         response = cast(
@@ -2638,8 +2615,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /mobile/settings -> mdls.MobileSettings
     def mobile_settings(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.MobileSettings:
         """Get Mobile_Settings"""
         response = cast(
@@ -2761,8 +2737,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /timezones -> Sequence[mdls.Timezone]
     def all_timezones(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Timezone]:
         """Get All Timezones"""
         response = cast(
@@ -3410,8 +3385,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /ssh_public_key -> mdls.SshPublicKey
     def ssh_public_key(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.SshPublicKey:
         """Get SSH Public Key"""
         response = cast(
@@ -3664,6 +3638,7 @@ class Looker40SDK(api_methods.APIMethods):
     # POST /content_metadata_access -> mdls.ContentMetaGroupUser
     def create_content_metadata_access(
         self,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.ContentMetaGroupUser,
         # Optionally sends notification email when granting access to a board.
         send_boards_notification_email: Optional[bool] = None,
@@ -3691,6 +3666,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of content metadata access
         content_metadata_access_id: str,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.ContentMetaGroupUser,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ContentMetaGroupUser:
@@ -4920,8 +4896,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /datagroups -> Sequence[mdls.Datagroup]
     def all_datagroups(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Datagroup]:
         """Get All Datagroups"""
         response = cast(
@@ -5840,6 +5815,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of group
         group_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.GroupIdForGroupInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.Group:
@@ -5896,6 +5872,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of group
         group_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.GroupIdForGroupUserInclusion,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.User:
@@ -5966,6 +5943,7 @@ class Looker40SDK(api_methods.APIMethods):
         group_id: int,
         # Id of user attribute
         user_attribute_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.UserAttributeGroupValue,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.UserAttributeGroupValue:
@@ -7112,6 +7090,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Name of connection
         connection_name: str,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: mdls.CreateCostEstimate,
         # Requested fields.
         fields: Optional[str] = None,
@@ -8648,8 +8627,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /running_queries -> Sequence[mdls.RunningQueries]
     def all_running_queries(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.RunningQueries]:
         """Get All Running Queries"""
         response = cast(
@@ -9157,8 +9135,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /permissions -> Sequence[mdls.Permission]
     def all_permissions(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Permission]:
         """Get All Permissions"""
         response = cast(
@@ -10195,8 +10172,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /session -> mdls.ApiSession
     def session(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ApiSession:
         """Get Session"""
         response = cast(
@@ -11190,6 +11166,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # id of user
         user_id: int,
+        # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: Optional[mdls.CredentialsTotp] = None,
         # Requested fields.
         fields: Optional[str] = None,
@@ -12150,8 +12127,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # GET /workspaces -> Sequence[mdls.Workspace]
     def all_workspaces(
-        self,
-        transport_options: Optional[transport.TransportOptions] = None,
+        self, transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Workspace]:
         """Get All Workspaces"""
         response = cast(

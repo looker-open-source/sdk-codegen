@@ -1798,6 +1798,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> custom_welcome_email(
     ITransportSettings? options = null)
 {  
@@ -1811,6 +1812,7 @@ namespace Looker.SDK.API40
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
   ///
   /// <param name="send_test_welcome_email">If true a test email with the content from the request will be sent to the current user after saving</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> update_custom_welcome_email(
     CustomWelcomeEmail body,
     bool? send_test_welcome_email = null,
@@ -2137,6 +2139,7 @@ namespace Looker.SDK.API40
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> whitelabel_configuration(
     string? fields = null,
     ITransportSettings? options = null)
@@ -2151,6 +2154,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
     WriteWhitelabelConfiguration body,
     ITransportSettings? options = null)
@@ -2930,6 +2934,7 @@ namespace Looker.SDK.API40
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> vector_thumbnail(
     string type,
     string resource_id,

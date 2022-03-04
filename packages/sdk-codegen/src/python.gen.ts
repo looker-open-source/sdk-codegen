@@ -32,7 +32,7 @@ import type {
   IProperty,
   IType,
 } from './sdkModels'
-import { EnumType, strBody } from './sdkModels'
+import { describeParam, EnumType, strBody } from './sdkModels'
 import type { IMappedType, CodeAssignment } from './codeGen'
 import { CodeGen, trimInputs } from './codeGen'
 
@@ -260,7 +260,7 @@ ${this.hooks.join('\n')}
     const mapped = this.typeMapMethods(type)
     const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`
     return (
-      this.commentHeader(indent, param.description) +
+      this.commentHeader(indent, describeParam(param)) +
       `${indent}${param.name}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     )

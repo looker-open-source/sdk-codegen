@@ -373,6 +373,34 @@ def run_url_encoded_query(
     })
   })
 
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const expected = `# Endpoint to test deprecation flags
+#
+# GET /old_login -> mdls.AccessToken
+def old_login(
+    self,
+    # (DEPRECATED) obsolete parameter
+    old_cred: Optional[str] = None,
+    transport_options: Optional[transport.TransportOptions] = None,
+) -> mdls.AccessToken:
+    """Login"""
+    response = cast(
+        mdls.AccessToken,
+        self.get(
+            path="/old_login",
+            structure=mdls.AccessToken,
+            query_params={"old_cred": old_cred},
+            transport_options=transport_options
+        )
+    )
+    return response`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
+  })
+
   describe('method body', () => {
     it('encodes string path params', () => {
       const method = apiTestModel.methods.run_url_encoded_query

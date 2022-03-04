@@ -1067,6 +1067,53 @@
         "x-looker-activity-type": "none"
       }
     },
+    "/old_login": {
+      "get": {
+        "tags": ["ApiAuth"],
+        "operationId": "old_login",
+        "summary": "Login",
+        "description": "Endpoint to test deprecation flags",
+        "parameters": [
+          {
+            "name": "old_cred",
+            "in": "query",
+            "description": "obsolete parameter",
+            "required": false,
+            "schema": { "type": "string" },
+            "deprecated": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Access token with metadata.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AccessToken" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        },
+        "x-looker-status": "undocumented",
+        "x-looker-activity-type": "none",
+        "deprecated": true
+      }
+    },
     "/login/{user_id}": {
       "post": {
         "tags": ["ApiAuth"],

@@ -34,7 +34,7 @@ import type {
   Arg,
   EnumValueType,
 } from './sdkModels'
-import { strBody, firstCase, EnumType } from './sdkModels'
+import { strBody, firstCase, EnumType, describeParam } from './sdkModels'
 
 // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 const reservedWords = new Set<string>([
@@ -260,8 +260,8 @@ namespace Looker.SDK.API${this.apiRef}
 
     headComment += this.returnComment(method)
     method.params.forEach((param) => (headComment += this.paramComment(param)))
-
-    return this.commentHeader(indent, headComment)
+    const dep = method.deprecated ? `${indent}[Obsolete("Deprecated")]\n` : ''
+    return this.commentHeader(indent, headComment) + dep
   }
 
   genericBits(method: IMethod) {
@@ -388,7 +388,7 @@ namespace Looker.SDK.API${this.apiRef}
 
   paramComment(param: IParameter) {
     return param.description
-      ? `\n<param name="${param.name}">${param.description}</param>`
+      ? `\n<param name="${param.name}">${describeParam(param)}</param>`
       : ''
   }
 
