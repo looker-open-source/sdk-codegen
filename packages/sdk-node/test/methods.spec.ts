@@ -754,7 +754,7 @@ describe('LookerNodeSDK', () => {
           const query = await sdk.ok(sdk.create_query(request))
           expect(query).toBeDefined()
           expect(query.id).toBeDefined()
-          expect(query.id).toBeGreaterThan(0)
+          expect(parseInt(query.id)).toBeGreaterThan(0)
           if (query && query.id) {
             const sql = await sdk.ok(
               sdk.run_query({ query_id: query.id, result_format: 'sql' })
