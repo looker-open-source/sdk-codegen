@@ -94,8 +94,10 @@ jobs:
           name: python-test-results
           path: python/results/
 
+  setup:
+    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
   integration:
-    needs: unit
+    needs: [unit,setup]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -109,11 +111,8 @@ jobs:
       matrix:
         os:
           - ubuntu
-        looker:
-          - '21_18'
-          - '21_20'
-          - '22_0'
-          - '22_2'
+        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
+
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
