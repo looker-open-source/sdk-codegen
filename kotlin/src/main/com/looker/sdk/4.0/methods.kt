@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 443 API methods
  */
 
 
@@ -1849,6 +1849,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /custom_welcome_email -> CustomWelcomeEmail
      */
+    @Deprecated(message = "Deprecated method")
     fun custom_welcome_email(
 
     ) : SDKResponse {
@@ -1864,6 +1865,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PATCH /custom_welcome_email -> CustomWelcomeEmail
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun update_custom_welcome_email(
         body: CustomWelcomeEmail,
         send_test_welcome_email: Boolean? = null
@@ -1924,6 +1926,20 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
     ) : SDKResponse {
         return this.post<DigestEmailSend>("/digest_email_send", mapOf())
+    }
+
+
+    /**
+     * ### Get Egress IP Addresses
+     *
+     * Returns the list of public egress IP Addresses for a hosted customer's instance
+     *
+     * GET /public_egress_ip_addresses -> EgressIpAddresses
+     */
+    fun public_egress_ip_addresses(
+
+    ) : SDKResponse {
+        return this.get<EgressIpAddresses>("/public_egress_ip_addresses", mapOf())
     }
 
 
@@ -2098,6 +2114,22 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Configure SMTP Settings
+     *   This API allows users to configure the SMTP settings on the Looker instance.
+     *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+     *
+     * @param {SmtpSettings} body
+     *
+     * POST /smtp_settings -> Void
+     */
+    fun set_smtp_settings(
+        body: SmtpSettings
+    ) : SDKResponse {
+        return this.post<Void>("/smtp_settings", mapOf(), body)
+    }
+
+
+    /**
      * ### Get current SMTP status.
      *
      * @param {String} fields Include only these fields in the response
@@ -2167,6 +2199,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun whitelabel_configuration(
         fields: String? = null
     ) : SDKResponse {
@@ -2182,6 +2215,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
+    @Deprecated(message = "Deprecated method")
     fun update_whitelabel_configuration(
         body: WriteWhitelabelConfiguration
     ) : SDKResponse {
@@ -2791,7 +2825,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Create content metadata access.
      *
-     * @param {ContentMetaGroupUser} body
+     * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {Boolean} send_boards_notification_email Optionally sends notification email when granting access to a board.
      *
      * POST /content_metadata_access -> ContentMetaGroupUser
@@ -2809,7 +2843,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Update type of access for content metadata.
      *
      * @param {String} content_metadata_access_id Id of content metadata access
-     * @param {ContentMetaGroupUser} body
+     * @param {ContentMetaGroupUser} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * PUT /content_metadata_access/{content_metadata_access_id} -> ContentMetaGroupUser
      */
@@ -2976,6 +3010,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
      */
+    @Deprecated(message = "Deprecated method")
     @JvmOverloads fun vector_thumbnail(
         type: String,
         resource_id: String,
@@ -3324,6 +3359,29 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         val path_dashboard_id = encodeParam(dashboard_id)
         return this.patch<Dashboard>("/dashboards/${path_dashboard_id}/move", 
             mapOf("folder_id" to folder_id))
+    }
+
+
+    /**
+     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     *
+     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     *
+     * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+     * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+     * ).
+     *
+     * Note that the created dashboard is not linked to any LookML Dashboard,
+     * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * @param {WriteDashboardLookml} body
+     *
+     * POST /dashboards/from_lookml -> DashboardLookml
+     */
+    fun create_dashboard_from_lookml(
+        body: WriteDashboardLookml
+    ) : SDKResponse {
+        return this.post<DashboardLookml>("/dashboards/from_lookml", mapOf(), body)
     }
 
 
@@ -3852,6 +3910,69 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         return this.get<DependencyGraph>("/derived_table/graph/view/${path_view}", 
             mapOf("models" to models,
                  "workspace" to workspace))
+    }
+
+
+    /**
+     * Enqueue materialization for a PDT with the given model name and view name
+     *
+     * @param {String} model_name The model of the PDT to start building.
+     * @param {String} view_name The view name of the PDT to start building.
+     * @param {String} force_rebuild Force rebuild of required dependent PDTs, even if they are already materialized.
+     * @param {String} force_full_incremental Force involved incremental PDTs to fully re-materialize.
+     * @param {String} workspace Workspace in which to materialize selected PDT ('dev' or default 'production').
+     * @param {String} source The source of this request.
+     *
+     * GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+     */
+    @JvmOverloads fun start_pdt_build(
+        model_name: String,
+        view_name: String,
+        force_rebuild: String? = null,
+        force_full_incremental: String? = null,
+        workspace: String? = null,
+        source: String? = null
+    ) : SDKResponse {
+        val path_model_name = encodeParam(model_name)
+        val path_view_name = encodeParam(view_name)
+        return this.get<MaterializePDT>("/derived_table/${path_model_name}/${path_view_name}/start", 
+            mapOf("force_rebuild" to force_rebuild,
+                 "force_full_incremental" to force_full_incremental,
+                 "workspace" to workspace,
+                 "source" to source))
+    }
+
+
+    /**
+     * Check status of PDT materialization
+     *
+     * @param {String} materialization_id The materialization id to check status for.
+     *
+     * GET /derived_table/{materialization_id}/status -> MaterializePDT
+     */
+    fun check_pdt_build(
+        materialization_id: String
+    ) : SDKResponse {
+        val path_materialization_id = encodeParam(materialization_id)
+        return this.get<MaterializePDT>("/derived_table/${path_materialization_id}/status", mapOf())
+    }
+
+
+    /**
+     * Stop a PDT materialization
+     *
+     * @param {String} materialization_id The materialization id to stop.
+     * @param {String} source The source of this request.
+     *
+     * GET /derived_table/{materialization_id}/stop -> MaterializePDT
+     */
+    @JvmOverloads fun stop_pdt_build(
+        materialization_id: String,
+        source: String? = null
+    ) : SDKResponse {
+        val path_materialization_id = encodeParam(materialization_id)
+        return this.get<MaterializePDT>("/derived_table/${path_materialization_id}/stop", 
+            mapOf("source" to source))
     }
 
     //endregion DerivedTable: View Derived Table graphs
@@ -4445,7 +4566,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Adds a new group to a group.
      *
      * @param {Long} group_id Id of group
-     * @param {GroupIdForGroupInclusion} body
+     * @param {GroupIdForGroupInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/groups -> Group
      */
@@ -4489,7 +4610,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Adds a new user to a group.
      *
      * @param {Long} group_id Id of group
-     * @param {GroupIdForGroupUserInclusion} body
+     * @param {GroupIdForGroupUserInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/users -> User
      */
@@ -4545,7 +4666,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {Long} group_id Id of group
      * @param {Long} user_attribute_id Id of user attribute
-     * @param {UserAttributeGroupValue} body
+     * @param {UserAttributeGroupValue} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
      */
@@ -5476,7 +5597,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * **Note**: If the connection's dialect has no support for cost estimates, an error will be returned
      *
      * @param {String} connection_name Name of connection
-     * @param {CreateCostEstimate} body
+     * @param {CreateCostEstimate} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {String} fields Requested fields.
      *
      * POST /connections/{connection_name}/cost_estimate -> CostEstimate
@@ -8864,7 +8985,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * ### Two-factor login information for the specified user.
      *
      * @param {Long} user_id id of user
-     * @param {CredentialsTotp} body
+     * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_totp -> CredentialsTotp

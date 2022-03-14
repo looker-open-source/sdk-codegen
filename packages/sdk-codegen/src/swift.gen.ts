@@ -33,6 +33,7 @@ import type {
   IType,
 } from './sdkModels'
 import {
+  describeParam,
   EnumType,
   mayQuote,
   strBody,
@@ -362,7 +363,7 @@ ${indent}}\n`
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
-    return `@param {${mapped.name}} ${param.name} ${param.description}`
+    return `@param {${mapped.name}} ${param.name} ${describeParam(param)}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -498,8 +499,10 @@ ${indent}}\n`
     } else if (method.responseIsBinary()) {
       headComment += `\n\n**Note**: Binary content is returned by this method.\n`
     }
+    const dep = method.deprecated ? `${indent}@available(*, deprecated)\n` : ''
     const header =
       this.commentHeader(indent, headComment) +
+      dep +
       `${indent}public func ${method.name}(`
 
     return (

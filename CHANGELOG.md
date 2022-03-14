@@ -1,5 +1,57 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.1.0...sdk-codegen-all-v2.2.0) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+* python rtl optional config ApiSettings init parameter ([#996](https://www.github.com/looker-open-source/sdk-codegen/issues/996)) ([3ae42cd](https://www.github.com/looker-open-source/sdk-codegen/commit/3ae42cd97f974322b77d58941ac72b88be3f8b97))
+
+
+### Bug Fixes
+
+* remove python version upper bound ([#1015](https://www.github.com/looker-open-source/sdk-codegen/issues/1015)) ([b1650a1](https://www.github.com/looker-open-source/sdk-codegen/commit/b1650a1a8a56c52a7a06ca5c9cef02300af7289e))
+* url-parse dependabot issue ([#1014](https://www.github.com/looker-open-source/sdk-codegen/issues/1014)) ([b785225](https://www.github.com/looker-open-source/sdk-codegen/commit/b785225df35e0db9a0514ad92b0c823906e27827))
+
+## [2.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.0.0...sdk-codegen-all-v2.1.0) (2022-02-18)
+
+
+### Features
+
+* Go SDK integration tests and CI ([#988](https://www.github.com/looker-open-source/sdk-codegen/issues/988)) ([fd7c979](https://www.github.com/looker-open-source/sdk-codegen/commit/fd7c979a43a87cee8df476f3a850dcff5f601781))
+* SDK for Looker 22_2 ([#966](https://www.github.com/looker-open-source/sdk-codegen/issues/966)) ([3ba5420](https://www.github.com/looker-open-source/sdk-codegen/commit/3ba5420c75d602692c1c8aa806648e2c2dd73cac))
+
+
+### Bug Fixes
+
+* Fixed incorrect VerifySSL setting implementation ([#989](https://www.github.com/looker-open-source/sdk-codegen/issues/989)) ([a4f1dec](https://www.github.com/looker-open-source/sdk-codegen/commit/a4f1dec40804280f54fd06d47dc760e37d37895f))
+* Update readme to link to update_prod_branches_to_main.py ([#971](https://www.github.com/looker-open-source/sdk-codegen/issues/971)) ([#986](https://www.github.com/looker-open-source/sdk-codegen/issues/986)) ([5bb2fdb](https://www.github.com/looker-open-source/sdk-codegen/commit/5bb2fdbb474e8201d4df6e031fe49c019fd608e8))
+
+## [2.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.21.1...sdk-codegen-all-v2.0.0) (2022-02-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* SDK support for 22.0
+
+### Features
+
+* Added 4.0 GA stable banner to api explorer ([#956](https://www.github.com/looker-open-source/sdk-codegen/issues/956)) ([c59b5d4](https://www.github.com/looker-open-source/sdk-codegen/commit/c59b5d4d14189329fd9d95b31d3801dd27bd1c08))
+* Added unit test CI for Go SDK changes ([#965](https://www.github.com/looker-open-source/sdk-codegen/issues/965)) ([47a52dd](https://www.github.com/looker-open-source/sdk-codegen/commit/47a52dddd61cf1264ad0ea02b17e763e510bbd6c))
+* fuzzy JSON value handling for the Swift SDK ([#961](https://www.github.com/looker-open-source/sdk-codegen/issues/961)) ([0b6b696](https://www.github.com/looker-open-source/sdk-codegen/commit/0b6b696742d67d1abc0cf69dfbf820f5a28d0f86))
+* Implemented Go SDK env var handling ([#975](https://www.github.com/looker-open-source/sdk-codegen/issues/975)) ([571a817](https://www.github.com/looker-open-source/sdk-codegen/commit/571a817c710db1fb395a46187f593d77d7260e60))
+* SDK build for 22.0. ([#959](https://www.github.com/looker-open-source/sdk-codegen/issues/959)) ([de651b3](https://www.github.com/looker-open-source/sdk-codegen/commit/de651b373978fd3689429c0cbdb364a2820fe211))
+* SDK support for 22.0 ([5f9930c](https://www.github.com/looker-open-source/sdk-codegen/commit/5f9930c0b0f7bde59f0b9b47f882ae1f3ff9e490))
+
+
+### Bug Fixes
+
+* clean up package dependencies ([#974](https://www.github.com/looker-open-source/sdk-codegen/issues/974)) ([49614f5](https://www.github.com/looker-open-source/sdk-codegen/commit/49614f5a19c7fe873e9ceed14d407d18864286f9))
+* Fix broken apix test because of 22.0 build ([#968](https://www.github.com/looker-open-source/sdk-codegen/issues/968)) ([45a9a69](https://www.github.com/looker-open-source/sdk-codegen/commit/45a9a6915be0fbcfdbd3ee6152a59d9d8728b3ca))
+* runtime error for API Explorer ([#973](https://www.github.com/looker-open-source/sdk-codegen/issues/973)) ([4823fcb](https://www.github.com/looker-open-source/sdk-codegen/commit/4823fcb56d38bde5ae2f80d02a946b5bd3eeb834))
+* Update go codegen to set object as interface{} ([#980](https://www.github.com/looker-open-source/sdk-codegen/issues/980)) ([007989d](https://www.github.com/looker-open-source/sdk-codegen/commit/007989d6c438fa42ec261f5b216f2d933b489742))
+
 ### [1.21.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.18.0...sdk-codegen-all-v1.21.1) (2022-01-27)
 
 

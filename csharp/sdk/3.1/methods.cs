@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 378 API methods
+/// 382 API methods
 
 #nullable enable
 using System;
@@ -864,6 +864,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>BackupConfiguration</c> Current Backup Configuration (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<BackupConfiguration, Exception>> backup_configuration(
     ITransportSettings? options = null)
 {  
@@ -876,6 +877,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_backup_configuration(
     WriteBackupConfiguration body,
     ITransportSettings? options = null)
@@ -1089,6 +1091,21 @@ namespace Looker.SDK.API31
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Locale[], Exception>(HttpMethod.Get, "/locales", null,null,options);
+  }
+
+  /// ### Configure SMTP Settings
+  ///   This API allows users to configure the SMTP settings on the Looker instance.
+  ///   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+  ///
+  /// POST /smtp_settings -> void
+  ///
+  /// <returns><c>void</c> Successfully updated SMTP settings ()</returns>
+  ///
+  public async Task<SdkResponse<string, Exception>> set_smtp_settings(
+    SmtpSettings body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Post, "/smtp_settings", null,body,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -1675,6 +1692,7 @@ namespace Looker.SDK.API31
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> vector_thumbnail(
     string type,
     string resource_id,
@@ -2491,6 +2509,69 @@ namespace Looker.SDK.API31
       { "workspace", workspace }},null,options);
   }
 
+  /// Enqueue materialization for a PDT with the given model name and view name
+  ///
+  /// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model_name">The model of the PDT to start building.</param>
+  /// <param name="view_name">The view name of the PDT to start building.</param>
+  /// <param name="force_rebuild">Force rebuild of required dependent PDTs, even if they are already materialized.</param>
+  /// <param name="force_full_incremental">Force involved incremental PDTs to fully re-materialize.</param>
+  /// <param name="workspace">Workspace in which to materialize selected PDT ('dev' or default 'production').</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> start_pdt_build(
+    string model_name,
+    string view_name,
+    string? force_rebuild = null,
+    string? force_full_incremental = null,
+    string? workspace = null,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      model_name = SdkUtils.EncodeParam(model_name);
+      view_name = SdkUtils.EncodeParam(view_name);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{model_name}/{view_name}/start", new Values {
+      { "force_rebuild", force_rebuild },
+      { "force_full_incremental", force_full_incremental },
+      { "workspace", workspace },
+      { "source", source }},null,options);
+  }
+
+  /// Check status of PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/status -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to check status for.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> check_pdt_build(
+    string materialization_id,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/status", null,null,options);
+  }
+
+  /// Stop a PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to stop.</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> stop_pdt_build(
+    string materialization_id,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/stop", new Values {
+      { "source", source }},null,options);
+  }
+
   #endregion DerivedTable: View Derived Table graphs
 
   #region Folder: Manage Folders
@@ -3072,6 +3153,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Homepage[]</c> Homepage (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage[], Exception>> all_homepages(
     string? fields = null,
     ITransportSettings? options = null)
@@ -3087,6 +3169,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Homepage</c> Homepage (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> create_homepage(
     WriteHomepage body,
     string? fields = null,
@@ -3136,6 +3219,7 @@ namespace Looker.SDK.API31
   /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="sorts">The fields to sort the results by.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage[], Exception>> search_homepages(
     string? title = null,
     string? created_at = null,
@@ -3176,6 +3260,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> homepage(
     long homepage_id,
     string? fields = null,
@@ -3193,6 +3278,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> update_homepage(
     long homepage_id,
     WriteHomepage body,
@@ -3210,6 +3296,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="homepage_id">Id of homepage</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage(
     long homepage_id,
     ITransportSettings? options = null)
@@ -3226,6 +3313,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="homepage_section_id">Filter to a specific homepage section</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem[], Exception>> all_homepage_items(
     string? fields = null,
     string? sorts = null,
@@ -3245,6 +3333,7 @@ namespace Looker.SDK.API31
   /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> create_homepage_item(
     WriteHomepageItem body,
     string? fields = null,
@@ -3262,6 +3351,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> homepage_item(
     long homepage_item_id,
     string? fields = null,
@@ -3279,6 +3369,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> update_homepage_item(
     long homepage_item_id,
     WriteHomepageItem body,
@@ -3296,6 +3387,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="homepage_item_id">Id of homepage_item</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_item(
     long homepage_item_id,
     ITransportSettings? options = null)
@@ -3311,6 +3403,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection[], Exception>> all_homepage_sections(
     string? fields = null,
     string? sorts = null,
@@ -3328,6 +3421,7 @@ namespace Looker.SDK.API31
   /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> create_homepage_section(
     WriteHomepageSection body,
     string? fields = null,
@@ -3345,6 +3439,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> homepage_section(
     long homepage_section_id,
     string? fields = null,
@@ -3362,6 +3457,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> update_homepage_section(
     long homepage_section_id,
     WriteHomepageSection body,
@@ -3379,6 +3475,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="homepage_section_id">Id of homepage_section</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_section(
     long homepage_section_id,
     ITransportSettings? options = null)
@@ -5344,6 +5441,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<RenderTask, Exception>> create_lookml_dashboard_render_task(
     string dashboard_id,
     string result_format,
@@ -6532,6 +6630,7 @@ namespace Looker.SDK.API31
   /// <param name="creator_id">Filter on spaces created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> search_spaces(
     string? fields = null,
     long? page = null,
@@ -6570,6 +6669,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> space(
     string space_id,
     string? fields = null,
@@ -6587,6 +6687,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Space</c> Space (application/json)</returns>
   ///
   /// <param name="space_id">Id of space</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> update_space(
     string space_id,
     UpdateSpace body,
@@ -6604,6 +6705,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="space_id">Id of space</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_space(
     string space_id,
     ITransportSettings? options = null)
@@ -6624,6 +6726,7 @@ namespace Looker.SDK.API31
   /// <returns><c>SpaceBase[]</c> Space (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<SpaceBase[], Exception>> all_spaces(
     string? fields = null,
     ITransportSettings? options = null)
@@ -6641,6 +6744,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Space</c> Space (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> create_space(
     CreateSpace body,
     ITransportSettings? options = null)
@@ -6659,6 +6763,7 @@ namespace Looker.SDK.API31
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_children(
     string space_id,
     string? fields = null,
@@ -6685,6 +6790,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="name">Match Space name.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_children_search(
     string space_id,
     string? fields = null,
@@ -6707,6 +6813,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> space_parent(
     string space_id,
     string? fields = null,
@@ -6725,6 +6832,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_ancestors(
     string space_id,
     string? fields = null,
@@ -6745,6 +6853,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<LookWithQuery[], Exception>> space_looks(
     string space_id,
     string? fields = null,
@@ -6763,6 +6872,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Dashboard[], Exception>> space_dashboards(
     string space_id,
     string? fields = null,

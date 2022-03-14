@@ -253,7 +253,7 @@ def oauth_session(config_file):
         settings=settings,
         transport=MockTransport.configure(settings),
         deserialize=serialize.deserialize31,
-        serialize=serialize.serialize,
+        serialize=serialize.serialize31,
         crypto=auth.CryptoHash(),
         version="4.0",
     )

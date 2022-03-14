@@ -269,6 +269,7 @@ export const swapXLookerTags = (spec: string) => {
   const swaps = [
     { pattern: /x-looker-nullable/gi, replacement: 'nullable' },
     { pattern: /x-looker-values/gi, replacement: 'enum' },
+    { pattern: /x-looker-deprecated/gi, replacement: 'deprecated' },
   ]
   swaps.forEach((swap) => {
     spec = spec.replace(swap.pattern, swap.replacement)

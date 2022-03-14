@@ -45,7 +45,7 @@ def api() -> api_methods.APIMethods:
     transport = requests_transport.RequestsTransport.configure(settings)
     auth = auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1")
     return api_methods.APIMethods(
-        auth, serialize.deserialize31, serialize.serialize, transport, "3.1"
+        auth, serialize.deserialize31, serialize.serialize31, transport, "3.1"
     )
 
 

@@ -700,6 +700,29 @@ async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, o
       expect(actual).toEqual(expected)
     })
 
+    it('deprecated method with deprecated params', () => {
+      const method = apiTestModel.methods.old_login
+      const arg = method.params[0]
+      expect(arg.deprecated).toEqual(true)
+      const expected = `/**
+ * Endpoint to test deprecation flags
+ *
+ * GET /old_login -> IAccessToken
+ *
+ * @deprecated
+ *
+ * @param old_cred (DEPRECATED) obsolete parameter
+ * @param options one-time API call overrides
+ *
+ */
+async old_login(
+  old_cred?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<IAccessToken, IError>> {
+  return this.get<IAccessToken, IError>('/old_login', {old_cred}, null, options)
+}`
+      const actual = gen.declareMethod(indent, method)
+      expect(actual).toEqual(expected)
+    })
+
     it('function with request body', () => {
       const method = apiTestModel.methods.create_dashboard_render_task
       const expected = `/**

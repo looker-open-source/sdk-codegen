@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 437 API methods
+/// 443 API methods
 
 #nullable enable
 using System;
@@ -1798,6 +1798,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> custom_welcome_email(
     ITransportSettings? options = null)
 {  
@@ -1811,6 +1812,7 @@ namespace Looker.SDK.API40
   /// <returns><c>CustomWelcomeEmail</c> Custom Welcome Email (application/json)</returns>
   ///
   /// <param name="send_test_welcome_email">If true a test email with the content from the request will be sent to the current user after saving</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<CustomWelcomeEmail, Exception>> update_custom_welcome_email(
     CustomWelcomeEmail body,
     bool? send_test_welcome_email = null,
@@ -1870,6 +1872,20 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<DigestEmailSend, Exception>(HttpMethod.Post, "/digest_email_send", null,null,options);
+  }
+
+  /// ### Get Egress IP Addresses
+  ///
+  /// Returns the list of public egress IP Addresses for a hosted customer's instance
+  ///
+  /// GET /public_egress_ip_addresses -> EgressIpAddresses
+  ///
+  /// <returns><c>EgressIpAddresses</c> Public Egress IP Addresses (application/json)</returns>
+  ///
+  public async Task<SdkResponse<EgressIpAddresses, Exception>> public_egress_ip_addresses(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EgressIpAddresses, Exception>(HttpMethod.Get, "/public_egress_ip_addresses", null,null,options);
   }
 
   /// ### Set the menu item name and content for internal help resources
@@ -2038,6 +2054,21 @@ namespace Looker.SDK.API40
       { "fields", fields }},body,options);
   }
 
+  /// ### Configure SMTP Settings
+  ///   This API allows users to configure the SMTP settings on the Looker instance.
+  ///   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+  ///
+  /// POST /smtp_settings -> void
+  ///
+  /// <returns><c>void</c> Successfully updated SMTP settings ()</returns>
+  ///
+  public async Task<SdkResponse<string, Exception>> set_smtp_settings(
+    SmtpSettings body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Post, "/smtp_settings", null,body,options);
+  }
+
   /// ### Get current SMTP status.
   ///
   /// GET /smtp_status -> SmtpStatus
@@ -2108,6 +2139,7 @@ namespace Looker.SDK.API40
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> whitelabel_configuration(
     string? fields = null,
     ITransportSettings? options = null)
@@ -2122,6 +2154,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
     WriteWhitelabelConfiguration body,
     ITransportSettings? options = null)
@@ -2901,6 +2934,7 @@ namespace Looker.SDK.API40
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> vector_thumbnail(
     string type,
     string resource_id,
@@ -3246,6 +3280,28 @@ namespace Looker.SDK.API40
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
     return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}/move", new Values {
       { "folder_id", folder_id }},null,options);
+  }
+
+  /// ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+  ///
+  /// This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+  ///
+  /// LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+  /// from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+  /// ).
+  ///
+  /// Note that the created dashboard is not linked to any LookML Dashboard,
+  /// i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+  ///
+  /// POST /dashboards/from_lookml -> DashboardLookml
+  ///
+  /// <returns><c>DashboardLookml</c> DashboardLookML (application/json)</returns>
+  ///
+  public async Task<SdkResponse<DashboardLookml, Exception>> create_dashboard_from_lookml(
+    WriteDashboardLookml body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Post, "/dashboards/from_lookml", null,body,options);
   }
 
   /// ### Copy an existing dashboard
@@ -3762,6 +3818,69 @@ namespace Looker.SDK.API40
     return await AuthRequest<DependencyGraph, Exception>(HttpMethod.Get, $"/derived_table/graph/view/{view}", new Values {
       { "models", models },
       { "workspace", workspace }},null,options);
+  }
+
+  /// Enqueue materialization for a PDT with the given model name and view name
+  ///
+  /// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model_name">The model of the PDT to start building.</param>
+  /// <param name="view_name">The view name of the PDT to start building.</param>
+  /// <param name="force_rebuild">Force rebuild of required dependent PDTs, even if they are already materialized.</param>
+  /// <param name="force_full_incremental">Force involved incremental PDTs to fully re-materialize.</param>
+  /// <param name="workspace">Workspace in which to materialize selected PDT ('dev' or default 'production').</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> start_pdt_build(
+    string model_name,
+    string view_name,
+    string? force_rebuild = null,
+    string? force_full_incremental = null,
+    string? workspace = null,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      model_name = SdkUtils.EncodeParam(model_name);
+      view_name = SdkUtils.EncodeParam(view_name);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{model_name}/{view_name}/start", new Values {
+      { "force_rebuild", force_rebuild },
+      { "force_full_incremental", force_full_incremental },
+      { "workspace", workspace },
+      { "source", source }},null,options);
+  }
+
+  /// Check status of PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/status -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to check status for.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> check_pdt_build(
+    string materialization_id,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/status", null,null,options);
+  }
+
+  /// Stop a PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to stop.</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> stop_pdt_build(
+    string materialization_id,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/stop", new Values {
+      { "source", source }},null,options);
   }
 
   #endregion DerivedTable: View Derived Table graphs

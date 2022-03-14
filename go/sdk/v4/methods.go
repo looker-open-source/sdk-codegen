@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-437 API methods
+443 API methods
 */
 
 
@@ -1504,6 +1504,9 @@ func (l *LookerSDK) UpdateCloudStorageConfiguration(
 // ### Get the current status and content of custom welcome emails
 //
 // GET /custom_welcome_email -> CustomWelcomeEmail
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) CustomWelcomeEmail(
     options *rtl.ApiSettings) (CustomWelcomeEmail, error) {
     var result CustomWelcomeEmail
@@ -1515,6 +1518,9 @@ func (l *LookerSDK) CustomWelcomeEmail(
 // Update custom welcome email setting and values. Optionally send a test email with the new content to the currently logged in user.
 //
 // PATCH /custom_welcome_email -> CustomWelcomeEmail
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) UpdateCustomWelcomeEmail(
     body CustomWelcomeEmail,
     sendTestWelcomeEmail bool,
@@ -1569,6 +1575,19 @@ func (l *LookerSDK) CreateDigestEmailSend(
     options *rtl.ApiSettings) (DigestEmailSend, error) {
     var result DigestEmailSend
     err := l.session.Do(&result, "POST", "/4.0", "/digest_email_send", nil, nil, options)
+    return result, err
+
+}
+
+// ### Get Egress IP Addresses
+//
+// Returns the list of public egress IP Addresses for a hosted customer's instance
+//
+// GET /public_egress_ip_addresses -> EgressIpAddresses
+func (l *LookerSDK) PublicEgressIpAddresses(
+    options *rtl.ApiSettings) (EgressIpAddresses, error) {
+    var result EgressIpAddresses
+    err := l.session.Do(&result, "GET", "/4.0", "/public_egress_ip_addresses", nil, nil, options)
     return result, err
 
 }
@@ -1722,6 +1741,19 @@ func (l *LookerSDK) SetSetting(
 
 }
 
+// ### Configure SMTP Settings
+//   This API allows users to configure the SMTP settings on the Looker instance.
+//   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+//
+// POST /smtp_settings -> Void
+func (l *LookerSDK) SetSmtpSettings(
+    body SmtpSettings,
+    options *rtl.ApiSettings) (error) {
+    err := l.session.Do(nil, "POST", "/4.0", "/smtp_settings", nil, body, options)
+    return err
+
+}
+
 // ### Get current SMTP status.
 //
 // GET /smtp_status -> SmtpStatus
@@ -1778,6 +1810,9 @@ func (l *LookerSDK) ApiSpec(
 // ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
 //
 // GET /whitelabel_configuration -> WhitelabelConfiguration
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) WhitelabelConfiguration(
     fields string,
     options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
@@ -1790,6 +1825,9 @@ func (l *LookerSDK) WhitelabelConfiguration(
 // ### Update the whitelabel configuration
 //
 // PUT /whitelabel_configuration -> WhitelabelConfiguration
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) UpdateWhitelabelConfiguration(
     body WriteWhitelabelConfiguration,
     options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
@@ -2314,6 +2352,7 @@ func (l *LookerSDK) DeleteContentMetadataAccess(
 // GET /content_thumbnail/{type}/{resource_id} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
     options *rtl.ApiSettings) (string, error) {
     request.Type = url.PathEscape(request.Type)
@@ -2379,6 +2418,9 @@ func (l *LookerSDK) SearchContentViews(request RequestSearchContentViews,
 // reflect the actual data displayed in the respective visualizations.
 //
 // GET /vector_thumbnail/{type}/{resource_id} -> string
+//
+// Deprecated: This method is deprecated.
+//
 func (l *LookerSDK) VectorThumbnail(
     type0 string,
     resourceId string,
@@ -2636,6 +2678,27 @@ func (l *LookerSDK) MoveDashboard(
     dashboardId = url.PathEscape(dashboardId)
     var result Dashboard
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/move", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
+    return result, err
+
+}
+
+// ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+//
+// This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+//
+// LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+// from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+// ).
+//
+// Note that the created dashboard is not linked to any LookML Dashboard,
+// i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+//
+// POST /dashboards/from_lookml -> DashboardLookml
+func (l *LookerSDK) CreateDashboardFromLookml(
+    body WriteDashboardLookml,
+    options *rtl.ApiSettings) (DashboardLookml, error) {
+    var result DashboardLookml
+    err := l.session.Do(&result, "POST", "/4.0", "/dashboards/from_lookml", nil, body, options)
     return result, err
 
 }
@@ -3038,6 +3101,46 @@ func (l *LookerSDK) GraphDerivedTablesForView(request RequestGraphDerivedTablesF
     request.View = url.PathEscape(request.View)
     var result DependencyGraph
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
+    return result, err
+
+}
+
+// Enqueue materialization for a PDT with the given model name and view name
+//
+// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+func (l *LookerSDK) StartPdtBuild(request RequestStartPdtBuild,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    request.ModelName = url.PathEscape(request.ModelName)
+    request.ViewName = url.PathEscape(request.ViewName)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/%v/start", request.ModelName, request.ViewName), map[string]interface{}{"force_rebuild": request.ForceRebuild, "force_full_incremental": request.ForceFullIncremental, "workspace": request.Workspace, "source": request.Source}, nil, options)
+    return result, err
+
+}
+
+// Check status of PDT materialization
+//
+// GET /derived_table/{materialization_id}/status -> MaterializePDT
+func (l *LookerSDK) CheckPdtBuild(
+    materializationId string,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    materializationId = url.PathEscape(materializationId)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/status", materializationId), nil, nil, options)
+    return result, err
+
+}
+
+// Stop a PDT materialization
+//
+// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+func (l *LookerSDK) StopPdtBuild(
+    materializationId string,
+    source string,
+    options *rtl.ApiSettings) (MaterializePDT, error) {
+    materializationId = url.PathEscape(materializationId)
+    var result MaterializePDT
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/stop", materializationId), map[string]interface{}{"source": source}, nil, options)
     return result, err
 
 }
@@ -3821,6 +3924,7 @@ func (l *LookerSDK) DeleteLook(
 // GET /looks/{look_id}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunLook(request RequestRunLook,
     options *rtl.ApiSettings) (string, error) {
     request.LookId = url.PathEscape(request.LookId)
@@ -4891,6 +4995,7 @@ func (l *LookerSDK) CreateQuery(
 // GET /queries/{query_id}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunQuery(request RequestRunQuery,
     options *rtl.ApiSettings) (string, error) {
     request.ResultFormat = url.PathEscape(request.ResultFormat)
@@ -4954,6 +5059,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 // POST /queries/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
     options *rtl.ApiSettings) (string, error) {
     request.ResultFormat = url.PathEscape(request.ResultFormat)
@@ -5019,6 +5125,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 // GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunUrlEncodedQuery(
     modelName string,
     viewName string,
@@ -5134,6 +5241,7 @@ func (l *LookerSDK) CreateSqlQuery(
 // POST /sql_queries/{slug}/run/{result_format} -> string
 //
 // **Note**: Binary content may be returned by this method.
+//
 func (l *LookerSDK) RunSqlQuery(
     slug string,
     resultFormat string,

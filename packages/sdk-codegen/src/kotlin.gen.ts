@@ -33,7 +33,7 @@ import type {
   IType,
   ArgValues,
 } from './sdkModels'
-import { EnumType, mayQuote } from './sdkModels'
+import { describeParam, EnumType, mayQuote } from './sdkModels'
 import type { IMappedType, CodeAssignment } from './codeGen'
 import { CodeGen, commentBlock, trimInputs } from './codeGen'
 
@@ -177,7 +177,7 @@ import java.util.*
   }
 
   paramComment(param: IParameter, mapped: IMappedType) {
-    return `@param {${mapped.name}} ${param.name} ${param.description}`
+    return `@param {${mapped.name}} ${param.name} ${describeParam(param)}`
   }
 
   declareParameter(indent: string, method: IMethod, param: IParameter) {
@@ -291,10 +291,18 @@ ${this.commentHeader(
   indent,
   this.methodHeaderComment(method, streamer)
 ).trimEnd()}
-${indent}${this.jvmOverloads(method)}fun ${method.name}(
+${this.deprecated(indent, method)}${indent}${this.jvmOverloads(method)}fun ${
+      method.name
+    }(
 ${params.join(this.paramDelimiter)}
 ${indent}) : SDKResponse {
 `
+  }
+
+  deprecated(indent: string, method: IMethod) {
+    return method.deprecated
+      ? `${indent}@Deprecated(message = "Deprecated method")\n`
+      : ''
   }
 
   jvmOverloads(method: IMethod) {

@@ -25,7 +25,7 @@
  */
 
 /**
- * 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
+ * 312 API models: 232 Spec, 0 Request, 59 Write, 21 Enum
  */
 
 
@@ -1465,10 +1465,12 @@ data class DashboardLayoutComponent (
 
 /**
  * @property dashboard_id Id of Dashboard (read-only)
- * @property lookml lookml of UDD (read-only)
+ * @property folder_id (Write-Only) Id of the folder
+ * @property lookml lookml of UDD
  */
 data class DashboardLookml (
     var dashboard_id: String? = null,
+    var folder_id: String? = null,
     var lookml: String? = null
 ) : Serializable
 
@@ -1614,6 +1616,8 @@ data class Datagroup (
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
  * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
+ * @property cost_estimate_enabled When true, query cost estimate will be displayed in explore.
+ * @property pdt_api_control_enabled PDT builds on this connection can be kicked off and cancelled via API.
  */
 data class DBConnection (
     var can: Map<String,Boolean>? = null,
@@ -1657,7 +1661,9 @@ data class DBConnection (
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: Long? = null,
-    var always_retry_failed_builds: Boolean? = null
+    var always_retry_failed_builds: Boolean? = null,
+    var cost_estimate_enabled: Boolean? = null,
+    var pdt_api_control_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -1859,6 +1865,13 @@ data class DiscretePalette (
     var label: String? = null,
     var type: String? = null,
     var colors: Array<String>? = null
+) : Serializable
+
+/**
+ * @property egress_ip_addresses Egress IP addresses (read-only)
+ */
+data class EgressIpAddresses (
+    var egress_ip_addresses: Array<String>? = null
 ) : Serializable
 
 /**
@@ -3409,6 +3422,15 @@ data class Manifest (
 ) : Serializable
 
 /**
+ * @property materialization_id The ID of the enqueued materialization task (read-only)
+ * @property resp_text Detailed response in text format (read-only)
+ */
+data class MaterializePDT (
+    var materialization_id: String? = null,
+    var resp_text: String? = null
+) : Serializable
+
+/**
  * @property field_name Field name to map onto in the merged results
  * @property source_field_name Field name from the source query
  */
@@ -4630,6 +4652,25 @@ data class SmtpNodeStatus (
 ) : Serializable
 
 /**
+ * @property address SMTP Server url
+ * @property from From e-mail address
+ * @property user_name User name
+ * @property password Password
+ * @property port SMTP Server's port
+ * @property enable_starttls_auto Is TLS encryption enabled?
+ * @property ssl_version TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+ */
+data class SmtpSettings (
+    var address: String? = null,
+    var from: String? = null,
+    var user_name: String? = null,
+    var password: String? = null,
+    var port: Long? = null,
+    var enable_starttls_auto: Boolean? = null,
+    var ssl_version: SslVersion? = null
+) : Serializable
+
+/**
  * @property is_valid Overall SMTP status of cluster (read-only)
  * @property node_count Total number of nodes in cluster (read-only)
  * @property node_status array of each node's status containing is_valid, message, hostname (read-only)
@@ -4755,6 +4796,15 @@ data class SshTunnel (
     var database_port: Long? = null,
     var status: String? = null
 ) : Serializable
+
+/**
+ * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+ */
+enum class SslVersion : Serializable {
+    TLSv1_1,
+    SSLv23,
+    TLSv1_2
+}
 
 /**
  * @property emails An array of emails to add to the Allowlist
@@ -5687,6 +5737,18 @@ data class WriteDashboardLayoutComponent (
 ) : Serializable
 
 /**
+ * Dynamic writeable type for DashboardLookml removes:
+ * dashboard_id
+ *
+ * @property folder_id (Write-Only) Id of the folder
+ * @property lookml lookml of UDD
+ */
+data class WriteDashboardLookml (
+    var folder_id: String? = null,
+    var lookml: String? = null
+) : Serializable
+
+/**
  * Dynamic writeable type for Datagroup removes:
  * can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
  *
@@ -5734,6 +5796,8 @@ data class WriteDatagroup (
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
  * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
+ * @property cost_estimate_enabled When true, query cost estimate will be displayed in explore.
+ * @property pdt_api_control_enabled PDT builds on this connection can be kicked off and cancelled via API.
  */
 data class WriteDBConnection (
     var name: String? = null,
@@ -5766,7 +5830,9 @@ data class WriteDBConnection (
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: Long? = null,
-    var always_retry_failed_builds: Boolean? = null
+    var always_retry_failed_builds: Boolean? = null,
+    var cost_estimate_enabled: Boolean? = null,
+    var pdt_api_control_enabled: Boolean? = null
 ) : Serializable
 
 /**

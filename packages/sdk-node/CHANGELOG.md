@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v22.0.0...sdk-node-v22.2.0) (2022-02-18)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.0.0 to ^22.2.0
+
+## [22.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.20.1...sdk-node-v22.0.0) (2022-02-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* SDK support for 22.0
+
+### Features
+
+* SDK support for 22.0 ([5f9930c](https://www.github.com/looker-open-source/sdk-codegen/commit/5f9930c0b0f7bde59f0b9b47f882ae1f3ff9e490))
+
 ### [21.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v21.20.0...sdk-node-v21.20.1) (2022-01-27)
 
 
