@@ -23,6 +23,14 @@
  SOFTWARE.
 
  */
+
+/**
+ * Constants
+ */
+export const BASE_URL = 'https://localhost:8080'
+export const v31Url = `${BASE_URL}/3.1`
+export const v40Url = `${BASE_URL}/4.0`
+
 /**
  * Reloads the page, waiting for for the DomContentLoaded event before resolving
  */

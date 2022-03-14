@@ -25,14 +25,13 @@
  */
 import '@testing-library/jest-dom'
 
-import { goToPage, pageReload } from './helpers'
+import { goToPage, pageReload, BASE_URL } from './helpers'
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
 
 jest.setTimeout(120000)
 
-const BASE_URL = 'https://localhost:8080'
 const v31 = `${BASE_URL}/3.1`
 const v40 = `${BASE_URL}/4.0`
 
