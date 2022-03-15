@@ -75,7 +75,7 @@ describe('example mining', () => {
     it('getRemoteHttpOrigin', () => {
       const actual = getRemoteHttpOrigin()
       expect(actual).toEqual(
-        'https://github.com/looker-open-source/sdk-codegen'
+        'https://github.com/looker-open-source/sdk-codegen.git'
       )
     })
   })
