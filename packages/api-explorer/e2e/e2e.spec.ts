@@ -38,6 +38,7 @@ const v40 = `${BASE_URL}/4.0`
 describe('API Explorer', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser()
+    await page.setDefaultNavigationTimeout(120000)
   })
 
   describe('general', () => {
@@ -47,10 +48,9 @@ describe('API Explorer', () => {
 
     it('renders a method page', async () => {
       await expect(page).toClick('h4', { text: 'Dashboard' })
-      await Promise.all([
-        page.waitForNavigation(),
-        expect(page).toClick('a', { text: 'Get All Dashboards' }),
-      ])
+      await page.waitForNavigation()
+      await expect(page).toClick('a', { text: 'Get All Dashboards' })
+      await page.waitForNavigation()
       await expect(page.url()).toEqual(
         `${v31}/methods/Dashboard/all_dashboards`
       )

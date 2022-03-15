@@ -59,6 +59,7 @@ const expectedPage1MethodsFrom31To40 = [
 describe('Diff Scene', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser()
+    await page.setDefaultNavigationTimeout(120000)
   })
   it('loads the default scene (/diff/3.1)', async () => {
     await goToPage(`${BASE_URL}/diff/3.1`)

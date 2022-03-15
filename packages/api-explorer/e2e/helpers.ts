@@ -45,7 +45,7 @@ export const pageReload = async (): Promise<void> => {
 export const goToPage = async (url: string): Promise<void> => {
   await page.goto(url, {
     waitUntil: ['domcontentloaded', 'networkidle0'],
-    timeout: 60000,
+    timeout: 120000,
   })
 }
 
