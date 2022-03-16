@@ -137,11 +137,26 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	defer res.Body.Close()
 
 	if res.StatusCode < 200 || res.StatusCode > 226 {
-		return fmt.Errorf("response error: %s", res.Status)
+		b, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+				return fmt.Errorf("response error. status=%s. error parsing error body", res.Status)
+		}
+
+		return fmt.Errorf("response error. status=%s. error=%s", res.Status, string(b))
 	}
 
-	extra.RegisterFuzzyDecoders()
-	err = json.NewDecoder(res.Body).Decode(&result)
+	// TODO: Make parsing content-type aware. Required change to go model generation to use interface{} for all union types. Github Issue: 
+	switch v := result.(type) {
+	case *string:
+			b, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+					return err
+			}
+			*v = string(b)
+	default:
+		extra.RegisterFuzzyDecoders()
+		return json.NewDecoder(res.Body).Decode(&result)
+	}
 
 	return nil
 }
