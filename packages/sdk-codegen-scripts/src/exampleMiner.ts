@@ -114,8 +114,8 @@ export const getAllFiles = (
           listOfFiles.push(fileName)
         }
       }
-    } catch (e: any) {
-      warn(`skipping ${file}: ${e}`)
+    } catch (_e: any) {
+      // warn(`skipping ${file}: ${e}`)
     }
   })
 

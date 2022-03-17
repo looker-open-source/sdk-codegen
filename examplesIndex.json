@@ -1,5 +1,5 @@
 {
-  "commitHash": "e572cc5b598d0414de980113d0be45a80cc59922",
+  "commitHash": "6654f37f120153217a1c04f1e03ed0f1ea5304d4",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen.git",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -648,12 +648,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 942
+            "line": 939
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 1123
+            "line": 1120
           }
         ],
         ".kt": [
@@ -1600,12 +1600,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 932
+            "line": 929
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 957
+            "line": 954
           }
         ],
         ".kt": [
@@ -2493,7 +2493,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 951
+            "line": 948
           }
         ],
         ".swift": [
@@ -2777,12 +2777,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1016
+            "line": 1013
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1024
+            "line": 1021
           }
         ]
       }
@@ -3602,7 +3602,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 960
+            "line": 957
           }
         ],
         ".py": [
@@ -9133,7 +9133,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1031
+            "line": 1028
           }
         ],
         ".py": [
@@ -9152,7 +9152,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1060
+            "line": 1057
           }
         ],
         ".py": [
