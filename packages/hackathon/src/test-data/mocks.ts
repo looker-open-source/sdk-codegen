@@ -49,16 +49,16 @@ export const noSheetData = {} as SheetData
 export const mockTabTable = {} as ITabTable
 
 export const mockUser = new Hacker(mockLookerSDK)
-mockUser.user = { id: 1, first_name: 'Ordinary', last_name: 'Joe' }
+mockUser.user = { id: '1', first_name: 'Ordinary', last_name: 'Joe' }
 mockUser.assignRights()
 
 export const mockStaff = new Hacker(mockLookerSDK)
-mockStaff.user = { id: 2, first_name: 'Looker', last_name: 'Staff' }
+mockStaff.user = { id: '2', first_name: 'Looker', last_name: 'Staff' }
 mockStaff.roles.add('staff')
 mockStaff.assignRights()
 
 export const mockJudge = new Hacker(mockLookerSDK)
-mockJudge.user = { id: 3, first_name: 'Looker', last_name: 'Judge' }
+mockJudge.user = { id: '3', first_name: 'Looker', last_name: 'Judge' }
 mockJudge.roles.add('judge')
 mockJudge.assignRights()
 
