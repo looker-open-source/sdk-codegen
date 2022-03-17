@@ -1060,7 +1060,6 @@ describe('LookerNodeSDK', () => {
               sdk.create_dashboard_element({
                 body_text: t.body_text,
                 dashboard_id: dashboard.id,
-                look: t.look,
                 look_id: t.look_id,
                 merge_result_id: t.merge_result_id,
                 note_display: t.note_display,
