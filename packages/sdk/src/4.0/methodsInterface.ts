@@ -25,7 +25,7 @@
  */
 
 /**
- * 443 API methods
+ * 438 API methods
  */
 
 import type {
@@ -51,7 +51,6 @@ import type {
   IBoardSection,
   IColorCollection,
   IColumnSearch,
-  ICommand,
   IConnectionFeatures,
   IContentFavorite,
   IContentMeta,
@@ -163,13 +162,13 @@ import type {
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateQueryTask,
   IRequestCreateUserCredentialsEmailPasswordReset,
   IRequestDeployRefToProduction,
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
-  IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
@@ -228,7 +227,6 @@ import type {
   ISupportAccessStatus,
   ITheme,
   ITimezone,
-  IUpdateCommand,
   IUpdateFolder,
   IUser,
   IUserAttribute,
@@ -248,7 +246,6 @@ import type {
   IWriteBoardItem,
   IWriteBoardSection,
   IWriteColorCollection,
-  IWriteCommand,
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
@@ -323,7 +320,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   get_alert(
-    alert_id: number,
+    alert_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert, IError>>
 
@@ -340,7 +337,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_alert(
-    alert_id: number,
+    alert_id: string,
     body: Partial<IWriteAlert>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert, IError | IValidationError>>
@@ -358,7 +355,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_alert_field(
-    alert_id: number,
+    alert_id: string,
     body: Partial<IAlertPatch>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert, IError | IValidationError>>
@@ -373,7 +370,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_alert(
-    alert_id: number,
+    alert_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
 
@@ -436,7 +433,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   enqueue_alert(
-    alert_id: number,
+    alert_id: string,
     force?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
@@ -512,7 +509,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   login_user(
-    user_id: number,
+    user_id: string,
     associative?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAccessToken, IError>>
@@ -559,7 +556,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_embed_secret(
-    embed_secret_id: number,
+    embed_secret_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -943,7 +940,7 @@ export interface ILooker40SDK extends IAPIMethods {
    */
   activate_app_user(
     client_guid: string,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError | IValidationError>>
@@ -970,7 +967,7 @@ export interface ILooker40SDK extends IAPIMethods {
    */
   deactivate_app_user(
     client_guid: string,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
@@ -1459,7 +1456,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   board(
-    board_id: number,
+    board_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoard, IError>>
@@ -1476,7 +1473,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_board(
-    board_id: number,
+    board_id: string,
     body: Partial<IWriteBoard>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -1492,7 +1489,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_board(
-    board_id: number,
+    board_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -1537,7 +1534,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   board_item(
-    board_item_id: number,
+    board_item_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardItem, IError>>
@@ -1554,7 +1551,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_board_item(
-    board_item_id: number,
+    board_item_id: string,
     body: Partial<IWriteBoardItem>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -1565,12 +1562,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /board_items/{board_item_id} -> string
    *
-   * @param board_item_id Id of board_item
+   * @param board_item_id Id of board item
    * @param options one-time API call overrides
    *
    */
   delete_board_item(
-    board_item_id: number,
+    board_item_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -1615,7 +1612,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   board_section(
-    board_section_id: number,
+    board_section_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardSection, IError>>
@@ -1632,7 +1629,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_board_section(
-    board_section_id: number,
+    board_section_id: string,
     body: Partial<IWriteBoardSection>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -1648,7 +1645,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_board_section(
-    board_section_id: number,
+    board_section_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -1834,73 +1831,6 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>
 
   //#endregion ColorCollection: Manage Color Collections
-
-  //#region Command: Manage Commands
-
-  /**
-   * ### Get All Commands.
-   *
-   * GET /commands -> ICommand[]
-   *
-   * @param request composed interface "IRequestGetAllCommands" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  get_all_commands(
-    request: IRequestGetAllCommands,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICommand[], IError>>
-
-  /**
-   * ### Create a new command.
-   * # Required fields: [:name, :linked_content_id, :linked_content_type]
-   * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-   * #
-   *
-   * POST /commands -> ICommand
-   *
-   * @param body Partial<IWriteCommand>
-   * @param options one-time API call overrides
-   *
-   */
-  create_command(
-    body: Partial<IWriteCommand>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICommand, IError | IValidationError>>
-
-  /**
-   * ### Update an existing custom command.
-   * # Optional fields: ['name', 'description']
-   * #
-   *
-   * PATCH /commands/{command_id} -> ICommand
-   *
-   * @param command_id ID of a command
-   * @param body Partial<IUpdateCommand>
-   * @param options one-time API call overrides
-   *
-   */
-  update_command(
-    command_id: number,
-    body: Partial<IUpdateCommand>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICommand, IError | IValidationError>>
-
-  /**
-   * ### Delete an existing custom command.
-   *
-   * DELETE /commands/{command_id} -> void
-   *
-   * @param command_id ID of a command
-   * @param options one-time API call overrides
-   *
-   */
-  delete_command(
-    command_id: number,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<void, IError>>
-
-  //#endregion Command: Manage Commands
 
   //#region Config: Manage General Configuration
 
@@ -2157,7 +2087,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - whitelabel_configuration
+   *  - privatelabel_configuration
    *  - custom_welcome_email
    *  - onboarding_enabled
    *
@@ -2179,7 +2109,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - whitelabel_configuration
+   *  - privatelabel_configuration
    *  - custom_welcome_email
    *  - onboarding_enabled
    *
@@ -2746,7 +2676,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_favorite(
-    content_favorite_id: number,
+    content_favorite_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentFavorite, IError>>
@@ -2761,7 +2691,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_content_favorite(
-    content_favorite_id: number,
+    content_favorite_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -2790,7 +2720,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_content_metadatas(
-    parent_id: number,
+    parent_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentMeta[], IError>>
@@ -2806,7 +2736,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_metadata(
-    content_metadata_id: number,
+    content_metadata_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentMeta, IError>>
@@ -2822,7 +2752,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_content_metadata(
-    content_metadata_id: number,
+    content_metadata_id: string,
     body: Partial<IWriteContentMeta>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentMeta, IError | IValidationError>>
@@ -2838,7 +2768,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_content_metadata_accesses(
-    content_metadata_id: number,
+    content_metadata_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentMetaGroupUser[], IError>>
@@ -2885,7 +2815,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_content_metadata_access(
-    content_metadata_access_id: number,
+    content_metadata_access_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -3015,8 +2945,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    *
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    *
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -3409,14 +3339,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /dashboard_elements -> IDashboardElement
    *
-   * @param body Partial<IWriteDashboardElement>
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   create_dashboard_element(
-    body: Partial<IWriteDashboardElement>,
-    fields?: string,
+    request: IRequestCreateDashboardElement,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>>
 
@@ -3688,7 +3616,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   datagroup(
-    datagroup_id: number,
+    datagroup_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDatagroup, IError>>
 
@@ -3703,7 +3631,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_datagroup(
-    datagroup_id: number,
+    datagroup_id: string,
     body: Partial<IWriteDatagroup>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDatagroup, IError | IValidationError>>
@@ -4136,7 +4064,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   group(
-    group_id: number,
+    group_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup, IError>>
@@ -4153,7 +4081,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_group(
-    group_id: number,
+    group_id: string,
     body: Partial<IWriteGroup>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -4169,7 +4097,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_group(
-    group_id: number,
+    group_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -4184,7 +4112,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_group_groups(
-    group_id: number,
+    group_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>
@@ -4200,7 +4128,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   add_group_group(
-    group_id: number,
+    group_id: string,
     body: Partial<IGroupIdForGroupInclusion>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup, IError>>
@@ -4230,7 +4158,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   add_group_user(
-    group_id: number,
+    group_id: string,
     body: Partial<IGroupIdForGroupUserInclusion>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser, IError>>
@@ -4246,8 +4174,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_group_user(
-    group_id: number,
-    user_id: number,
+    group_id: string,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
 
@@ -4262,8 +4190,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_group_from_group(
-    group_id: number,
-    deleting_group_id: number,
+    group_id: string,
+    deleting_group_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
 
@@ -4281,8 +4209,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_user_attribute_group_value(
-    group_id: number,
-    user_attribute_id: number,
+    group_id: string,
+    user_attribute_id: string,
     body: Partial<IUserAttributeGroupValue>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttributeGroupValue, IError | IValidationError>>
@@ -4298,8 +4226,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_user_attribute_group_value(
-    group_id: number,
-    user_attribute_id: number,
+    group_id: string,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
 
@@ -4362,13 +4290,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   integration_hub(
-    integration_hub_id: number,
+    integration_hub_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IIntegrationHub, IError>>
@@ -4380,14 +4308,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param body Partial<IWriteIntegrationHub>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   update_integration_hub(
-    integration_hub_id: number,
+    integration_hub_id: string,
     body: Partial<IWriteIntegrationHub>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -4403,7 +4331,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_integration_hub(
-    integration_hub_id: number,
+    integration_hub_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -4417,7 +4345,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   accept_integration_hub_legal_agreement(
-    integration_hub_id: number,
+    integration_hub_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>>
 
@@ -5767,7 +5695,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   query(
-    query_id: number,
+    query_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IQuery, IError>>
@@ -5956,11 +5884,11 @@ export interface ILooker40SDK extends IAPIMethods {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    *
@@ -6151,7 +6079,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   create_look_render_task(
-    look_id: number,
+    look_id: string,
     result_format: string,
     width: number,
     height: number,
@@ -6177,7 +6105,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   create_query_render_task(
-    query_id: number,
+    query_id: string,
     result_format: string,
     width: number,
     height: number,
@@ -6332,7 +6260,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   model_set(
-    model_set_id: number,
+    model_set_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IModelSet, IError>>
@@ -6348,7 +6276,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_model_set(
-    model_set_id: number,
+    model_set_id: string,
     body: Partial<IWriteModelSet>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IModelSet, IError | IValidationError>>
@@ -6363,7 +6291,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_model_set(
-    model_set_id: number,
+    model_set_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -6453,7 +6381,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   permission_set(
-    permission_set_id: number,
+    permission_set_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet, IError>>
@@ -6463,13 +6391,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
    *
-   * @param permission_set_id id of permission set
+   * @param permission_set_id Id of permission set
    * @param body Partial<IWritePermissionSet>
    * @param options one-time API call overrides
    *
    */
   update_permission_set(
-    permission_set_id: number,
+    permission_set_id: string,
     body: Partial<IWritePermissionSet>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet, IError | IValidationError>>
@@ -6484,7 +6412,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_permission_set(
-    permission_set_id: number,
+    permission_set_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -6629,7 +6557,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   role(
-    role_id: number,
+    role_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole, IError>>
 
@@ -6644,7 +6572,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_role(
-    role_id: number,
+    role_id: string,
     body: Partial<IWriteRole>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole, IError | IValidationError>>
@@ -6659,7 +6587,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_role(
-    role_id: number,
+    role_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -6674,7 +6602,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   role_groups(
-    role_id: number,
+    role_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>
@@ -6684,14 +6612,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
-   * @param role_id Id of Role
-   * @param body Partial<number[]>
+   * @param role_id id of role
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   set_role_groups(
-    role_id: number,
-    body: Partial<number[]>,
+    role_id: string,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError | IValidationError>>
 
@@ -6715,13 +6643,13 @@ export interface ILooker40SDK extends IAPIMethods {
    * PUT /roles/{role_id}/users -> IUser[]
    *
    * @param role_id id of role
-   * @param body Partial<number[]>
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   set_role_users(
-    role_id: number,
-    body: Partial<number[]>,
+    role_id: string,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError | IValidationError>>
 
@@ -6742,7 +6670,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   scheduled_plans_for_space(
-    space_id: number,
+    space_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError>>
@@ -6760,7 +6688,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   scheduled_plan(
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan, IError>>
@@ -6817,7 +6745,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_scheduled_plan(
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     body: Partial<IWriteScheduledPlan>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>>
@@ -6836,7 +6764,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_scheduled_plan(
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7114,7 +7042,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   scheduled_plan_run_once_by_id(
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     body?: Partial<IWriteScheduledPlan>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>>
@@ -7395,7 +7323,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   theme(
-    theme_id: number,
+    theme_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme, IError>>
@@ -7413,7 +7341,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_theme(
-    theme_id: number,
+    theme_id: string,
     body: Partial<IWriteTheme>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme, IError | IValidationError>>
@@ -7602,7 +7530,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   user(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser, IError>>
@@ -7619,7 +7547,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_user(
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteUser>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -7637,7 +7565,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_user(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7691,13 +7619,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_email(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmail, IError>>
@@ -7707,14 +7635,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   create_user_credentials_email(
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -7725,14 +7653,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   update_user_credentials_email(
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -7743,12 +7671,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_email -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_email(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7757,13 +7685,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_totp(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsTotp, IError>>
@@ -7773,14 +7701,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   create_user_credentials_totp(
-    user_id: number,
+    user_id: string,
     body?: Partial<ICredentialsTotp>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -7791,12 +7719,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_totp -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_totp(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7805,13 +7733,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_ldap(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsLDAP, IError>>
@@ -7821,12 +7749,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_ldap(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7835,13 +7763,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_google(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsGoogle, IError>>
@@ -7851,12 +7779,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_google -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_google(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7865,13 +7793,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_saml(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsSaml, IError>>
@@ -7881,12 +7809,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_saml(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7895,13 +7823,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_oidc(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsOIDC, IError>>
@@ -7911,12 +7839,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_oidc(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7932,8 +7860,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   user_credentials_api3(
-    user_id: number,
-    credentials_api3_id: number,
+    user_id: string,
+    credentials_api3_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsApi3, IError>>
@@ -7943,14 +7871,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_api3_id id of API 3 Credential
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API 3 Credential
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_api3(
-    user_id: number,
-    credentials_api3_id: number,
+    user_id: string,
+    credentials_api3_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -7959,13 +7887,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   all_user_credentials_api3s(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsApi3[], IError>>
@@ -7975,13 +7903,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   create_user_credentials_api3(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>>
@@ -7998,8 +7926,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   user_credentials_embed(
-    user_id: number,
-    credentials_embed_id: number,
+    user_id: string,
+    credentials_embed_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmbed, IError>>
@@ -8009,14 +7937,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_embed_id id of Embedding Credential
+   * @param user_id Id of user
+   * @param credentials_embed_id Id of Embedding Credential
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_embed(
-    user_id: number,
-    credentials_embed_id: number,
+    user_id: string,
+    credentials_embed_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -8025,13 +7953,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   all_user_credentials_embeds(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmbed[], IError>>
@@ -8041,13 +7969,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   user_credentials_looker_openid(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsLookerOpenid, IError>>
@@ -8057,12 +7985,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   delete_user_credentials_looker_openid(
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -8078,8 +8006,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   user_session(
-    user_id: number,
-    session_id: number,
+    user_id: string,
+    session_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISession, IError>>
@@ -8089,14 +8017,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
-   * @param user_id id of user
-   * @param session_id id of Web Login Session
+   * @param user_id Id of user
+   * @param session_id Id of Web Login Session
    * @param options one-time API call overrides
    *
    */
   delete_user_session(
-    user_id: number,
-    session_id: number,
+    user_id: string,
+    session_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -8105,13 +8033,13 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   all_user_sessions(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISession[], IError>>
@@ -8157,15 +8085,15 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * PUT /users/{user_id}/roles -> IRole[]
    *
-   * @param user_id id of user
-   * @param body Partial<number[]>
+   * @param user_id Id of user
+   * @param body Partial<string[]>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   set_user_roles(
-    user_id: number,
-    body: Partial<number[]>,
+    user_id: string,
+    body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>
@@ -8213,8 +8141,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   set_user_attribute_user_value(
-    user_id: number,
-    user_attribute_id: number,
+    user_id: string,
+    user_attribute_id: string,
     body: Partial<IWriteUserAttributeWithValue>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttributeWithValue, IError | IValidationError>>
@@ -8235,8 +8163,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_user_attribute_user_value(
-    user_id: number,
-    user_attribute_id: number,
+    user_id: string,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<void, IError>>
 
@@ -8257,7 +8185,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   send_user_credentials_email_password_reset(
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmail, IError>>
@@ -8279,7 +8207,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   wipeout_user_emails(
-    user_id: number,
+    user_id: string,
     body: Partial<IUserEmailOnly>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -8353,7 +8281,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   user_attribute(
-    user_attribute_id: number,
+    user_attribute_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute, IError>>
@@ -8370,7 +8298,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   update_user_attribute(
-    user_attribute_id: number,
+    user_attribute_id: string,
     body: Partial<IWriteUserAttribute>,
     fields?: string,
     options?: Partial<ITransportSettings>
@@ -8381,12 +8309,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * DELETE /user_attributes/{user_attribute_id} -> string
    *
-   * @param user_attribute_id Id of user_attribute
+   * @param user_attribute_id Id of user attribute
    * @param options one-time API call overrides
    *
    */
   delete_user_attribute(
-    user_attribute_id: number,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
 
@@ -8407,7 +8335,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_user_attribute_group_values(
-    user_attribute_id: number,
+    user_attribute_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttributeGroupValue[], IError>>
@@ -8442,7 +8370,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   set_user_attribute_group_values(
-    user_attribute_id: number,
+    user_attribute_id: string,
     body: Partial<IUserAttributeGroupValue[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttributeGroupValue[], IError | IValidationError>>

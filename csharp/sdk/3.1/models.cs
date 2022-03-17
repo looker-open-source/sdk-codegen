@@ -282,6 +282,8 @@ public class ContentValidationDashboardElement : SdkModel
   public string? title_text { get; set; } = null;
   /// <summary>Type</summary>
   public string? type { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
 }
 
 public class ContentValidationDashboardFilter : SdkModel
@@ -920,6 +922,8 @@ public class DashboardElement : SdkModel
   public string? type { get; set; } = null;
   /// <summary>Count of Alerts associated to a dashboard element (read-only)</summary>
   public long? alert_count { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
   /// <summary>Text tile title text as Html (read-only)</summary>
   public string? title_text_as_html { get; set; } = null;
   /// <summary>Text tile subtitle text as Html (read-only)</summary>
@@ -1097,7 +1101,7 @@ public class Datagroup : SdkModel
   /// <summary>UNIX timestamp at which this entry was created. (read-only)</summary>
   public long? created_at { get; set; } = null;
   /// <summary>Unique ID of the datagroup (read-only)</summary>
-  public string? id { get; set; } = null;
+  public long? id { get; set; } = null;
   /// <summary>Name of the model containing the datagroup. Unique when combined with name. (read-only)</summary>
   public string? model_name { get; set; } = null;
   /// <summary>Name of the datagroup. Unique when combined with model_name. (read-only)</summary>
@@ -1284,6 +1288,8 @@ public class Dialect : SdkModel
   public string? label { get; set; } = null;
   /// <summary>Whether the dialect supports query cost estimates (read-only)</summary>
   public bool? supports_cost_estimate { get; set; } = null;
+  /// <summary>How the dialect handles cost estimation (read-only)</summary>
+  public string? cost_estimate_style { get; set; } = null;
   /// <summary>PDT index columns (read-only)</summary>
   public string? persistent_table_indexes { get; set; } = null;
   /// <summary>PDT sortkey columns (read-only)</summary>
@@ -1638,7 +1644,7 @@ public class Homepage : SdkModel
   /// <summary>Sections of the homepage (read-only)</summary>
   public HomepageSection[]? homepage_sections { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public string? id { get; set; } = null;
+  public long? id { get; set; } = null;
   /// <summary>ids of the homepage sections in the order they should be displayed</summary>
   public long[]? section_order { get; set; } = null;
   /// <summary>Title of the homepage</summary>
@@ -1680,9 +1686,9 @@ public class HomepageItem : SdkModel
   /// <summary>Number of times content has been favorited, if present (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Associated Homepage Section</summary>
-  public string? homepage_section_id { get; set; } = null;
+  public long? homepage_section_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public string? id { get; set; } = null;
+  public long? id { get; set; } = null;
   /// <summary>The actual image_url for display (read-only)</summary>
   public string? image_url { get; set; } = null;
   /// <summary>The container folder name of the content (read-only)</summary>
@@ -1726,7 +1732,7 @@ public class HomepageSection : SdkModel
   /// <summary>Items in the homepage section (read-only)</summary>
   public HomepageItem[]? homepage_items { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public string? id { get; set; } = null;
+  public long? id { get; set; } = null;
   /// <summary>Is this a header section (has no items) (read-only)</summary>
   public bool? is_header { get; set; } = null;
   /// <summary>ids of the homepage items in the order they should be displayed</summary>
@@ -1738,7 +1744,7 @@ public class HomepageSection : SdkModel
   /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
   /// <summary>ids of the homepage items the user can see in the order they should be displayed (read-only)</summary>
-  public long[]? visible_item_order { get; set; } = null;
+  public string[]? visible_item_order { get; set; } = null;
 }
 
 public class ImportedProject : SdkModel
@@ -1773,7 +1779,7 @@ public class Integration : SdkModel
   public IntegrationParam[]? @params { get; set; } = null;
   /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
   public SupportedFormats[]? supported_formats { get; set; } = null;
-  /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)</summary>
+  /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)</summary>
   public SupportedActionTypes[]? supported_action_types { get; set; } = null;
   /// <summary>A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)</summary>
   public SupportedFormattings[]? supported_formattings { get; set; } = null;
@@ -3948,7 +3954,7 @@ public enum SslVersion
   TLSv1_2
 }
 
-/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
+/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
 public enum SupportedActionTypes
 {
   [EnumMember(Value = "cell")]
@@ -3956,7 +3962,9 @@ public enum SupportedActionTypes
   [EnumMember(Value = "query")]
   query,
   [EnumMember(Value = "dashboard")]
-  dashboard
+  dashboard,
+  [EnumMember(Value = "none")]
+  none
 }
 
 /// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
@@ -4670,6 +4678,8 @@ public class WriteDashboardElement : SdkModel
   public string? title_text { get; set; } = null;
   /// <summary>Type</summary>
   public string? type { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardFilter removes:
@@ -4894,7 +4904,7 @@ public class WriteHomepageItem : SdkModel
   /// <summary>Dashboard to base this item on</summary>
   public long? dashboard_id { get; set; } = null;
   /// <summary>Associated Homepage Section</summary>
-  public string? homepage_section_id { get; set; } = null;
+  public long? homepage_section_id { get; set; } = null;
   /// <summary>Look to base this item on</summary>
   public long? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>

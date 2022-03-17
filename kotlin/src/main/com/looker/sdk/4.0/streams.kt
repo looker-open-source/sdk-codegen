@@ -25,7 +25,7 @@
  */
 
 /**
- * 443 API methods
+ * 438 API methods
  */
 
 
@@ -86,12 +86,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get an alert by a given alert ID
      *
-     * @param {Long} alert_id ID of an alert
+     * @param {String} alert_id ID of an alert
      *
      * GET /alerts/{alert_id} -> ByteArray
      */
     fun get_alert(
-        alert_id: Long
+        alert_id: String
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
             return this.get<ByteArray>("/alerts/${path_alert_id}", mapOf())
@@ -103,13 +103,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * # Required fields: `owner_id`, `field`, `destinations`, `comparison_type`, `threshold`, `cron`
      * #
      *
-     * @param {Long} alert_id ID of an alert
+     * @param {String} alert_id ID of an alert
      * @param {WriteAlert} body
      *
      * PUT /alerts/{alert_id} -> ByteArray
      */
     fun update_alert(
-        alert_id: Long,
+        alert_id: String,
         body: WriteAlert
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
@@ -122,13 +122,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
      * #
      *
-     * @param {Long} alert_id ID of an alert
+     * @param {String} alert_id ID of an alert
      * @param {AlertPatch} body
      *
      * PATCH /alerts/{alert_id} -> ByteArray
      */
     fun update_alert_field(
-        alert_id: Long,
+        alert_id: String,
         body: AlertPatch
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
@@ -139,12 +139,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete an alert by a given alert ID
      *
-     * @param {Long} alert_id ID of an alert
+     * @param {String} alert_id ID of an alert
      *
      * DELETE /alerts/{alert_id} -> ByteArray
      */
     fun delete_alert(
-        alert_id: Long
+        alert_id: String
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
             return this.delete<ByteArray>("/alerts/${path_alert_id}", mapOf())
@@ -202,13 +202,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Enqueue an Alert by ID
      *
-     * @param {Long} alert_id ID of an alert
+     * @param {String} alert_id ID of an alert
      * @param {Boolean} force Whether to enqueue an alert again if its already running.
      *
      * POST /alerts/{alert_id}/enqueue -> ByteArray
      */
     @JvmOverloads fun enqueue_alert(
-        alert_id: Long,
+        alert_id: String,
         force: Boolean? = null
     ) : SDKResponse {
         val path_alert_id = encodeParam(alert_id)
@@ -284,13 +284,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * See 'login' for more detail on the access token and how to use it.
      *
-     * @param {Long} user_id Id of user.
+     * @param {String} user_id Id of user.
      * @param {Boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      *
      * POST /login/{user_id} -> ByteArray
      */
     @JvmOverloads fun login_user(
-        user_id: Long,
+        user_id: String,
         associative: Boolean? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -334,12 +334,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete an embed secret.
      *
-     * @param {Long} embed_secret_id Id of Embed Secret
+     * @param {String} embed_secret_id Id of Embed Secret
      *
      * DELETE /embed_config/secrets/{embed_secret_id} -> ByteArray
      */
     fun delete_embed_secret(
-        embed_secret_id: Long
+        embed_secret_id: String
     ) : SDKResponse {
         val path_embed_secret_id = encodeParam(embed_secret_id)
             return this.delete<ByteArray>("/embed_config/secrets/${path_embed_secret_id}", mapOf())
@@ -726,14 +726,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Activating a user for an app that the user is already activated with returns a success response.
      *
      * @param {String} client_guid The unique id of this application
-     * @param {Long} user_id The id of the user to enable use of this app
+     * @param {String} user_id The id of the user to enable use of this app
      * @param {String} fields Requested fields.
      *
      * POST /oauth_client_apps/{client_guid}/users/{user_id} -> ByteArray
      */
     @JvmOverloads fun activate_app_user(
         client_guid: String,
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_client_guid = encodeParam(client_guid)
@@ -756,14 +756,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * resource (app or user) does not exist or has already been deactivated.
      *
      * @param {String} client_guid The unique id of this application
-     * @param {Long} user_id The id of the user to enable use of this app
+     * @param {String} user_id The id of the user to enable use of this app
      * @param {String} fields Requested fields.
      *
      * DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> ByteArray
      */
     @JvmOverloads fun deactivate_app_user(
         client_guid: String,
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_client_guid = encodeParam(client_guid)
@@ -1158,8 +1158,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Search currently locked-out users.
      *
      * @param {String} fields Include only these fields in the response
-     * @param {Long} page Return only page N of paginated results
-     * @param {Long} per_page Return N rows of data per page
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {String} auth_type Auth type user is locked out for (email, ldap, totp, api)
      * @param {String} full_name Match name
@@ -1173,6 +1175,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
         auth_type: String? = null,
         full_name: String? = null,
@@ -1184,6 +1188,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts,
                      "auth_type" to auth_type,
                      "full_name" to full_name,
@@ -1276,8 +1282,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} favorited Return favorited boards when true.
      * @param {String} creator_id Filter on boards created by a particular user.
      * @param {String} sorts The fields to sort the results by
-     * @param {Long} page The page to return.
-     * @param {Long} per_page The number of items in the returned page.
+     * @param {Long} page The page to return. DEPRECATED. Use offset instead.
+     * @param {Long} per_page The number of items in the returned page. DEPRECATED. Use limit instead.
      * @param {Long} offset The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {Long} limit The maximum number of items to return. (used with offset and takes priority over page and per_page)
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
@@ -1319,13 +1325,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a board.
      *
-     * @param {Long} board_id Id of board
+     * @param {String} board_id Id of board
      * @param {String} fields Requested fields.
      *
      * GET /boards/{board_id} -> ByteArray
      */
     @JvmOverloads fun board(
-        board_id: Long,
+        board_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_board_id = encodeParam(board_id)
@@ -1337,14 +1343,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update a board definition.
      *
-     * @param {Long} board_id Id of board
+     * @param {String} board_id Id of board
      * @param {WriteBoard} body
      * @param {String} fields Requested fields.
      *
      * PATCH /boards/{board_id} -> ByteArray
      */
     @JvmOverloads fun update_board(
-        board_id: Long,
+        board_id: String,
         body: WriteBoard,
         fields: String? = null
     ) : SDKResponse {
@@ -1357,12 +1363,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a board.
      *
-     * @param {Long} board_id Id of board
+     * @param {String} board_id Id of board
      *
      * DELETE /boards/{board_id} -> ByteArray
      */
     fun delete_board(
-        board_id: Long
+        board_id: String
     ) : SDKResponse {
         val path_board_id = encodeParam(board_id)
             return this.delete<ByteArray>("/boards/${path_board_id}", mapOf())
@@ -1410,13 +1416,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a board item.
      *
-     * @param {Long} board_item_id Id of board item
+     * @param {String} board_item_id Id of board item
      * @param {String} fields Requested fields.
      *
      * GET /board_items/{board_item_id} -> ByteArray
      */
     @JvmOverloads fun board_item(
-        board_item_id: Long,
+        board_item_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_board_item_id = encodeParam(board_item_id)
@@ -1428,14 +1434,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update a board item definition.
      *
-     * @param {Long} board_item_id Id of board item
+     * @param {String} board_item_id Id of board item
      * @param {WriteBoardItem} body
      * @param {String} fields Requested fields.
      *
      * PATCH /board_items/{board_item_id} -> ByteArray
      */
     @JvmOverloads fun update_board_item(
-        board_item_id: Long,
+        board_item_id: String,
         body: WriteBoardItem,
         fields: String? = null
     ) : SDKResponse {
@@ -1448,12 +1454,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a board item.
      *
-     * @param {Long} board_item_id Id of board_item
+     * @param {String} board_item_id Id of board item
      *
      * DELETE /board_items/{board_item_id} -> ByteArray
      */
     fun delete_board_item(
-        board_item_id: Long
+        board_item_id: String
     ) : SDKResponse {
         val path_board_item_id = encodeParam(board_item_id)
             return this.delete<ByteArray>("/board_items/${path_board_item_id}", mapOf())
@@ -1498,13 +1504,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a board section.
      *
-     * @param {Long} board_section_id Id of board section
+     * @param {String} board_section_id Id of board section
      * @param {String} fields Requested fields.
      *
      * GET /board_sections/{board_section_id} -> ByteArray
      */
     @JvmOverloads fun board_section(
-        board_section_id: Long,
+        board_section_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_board_section_id = encodeParam(board_section_id)
@@ -1516,14 +1522,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update a board section definition.
      *
-     * @param {Long} board_section_id Id of board section
+     * @param {String} board_section_id Id of board section
      * @param {WriteBoardSection} body
      * @param {String} fields Requested fields.
      *
      * PATCH /board_sections/{board_section_id} -> ByteArray
      */
     @JvmOverloads fun update_board_section(
-        board_section_id: Long,
+        board_section_id: String,
         body: WriteBoardSection,
         fields: String? = null
     ) : SDKResponse {
@@ -1536,12 +1542,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a board section.
      *
-     * @param {Long} board_section_id Id of board section
+     * @param {String} board_section_id Id of board section
      *
      * DELETE /board_sections/{board_section_id} -> ByteArray
      */
     fun delete_board_section(
-        board_section_id: Long
+        board_section_id: String
     ) : SDKResponse {
         val path_board_section_id = encodeParam(board_section_id)
             return this.delete<ByteArray>("/board_sections/${path_board_section_id}", mapOf())
@@ -1737,82 +1743,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     }
 
     //endregion ColorCollection: Manage Color Collections
-
-    //region Command: Manage Commands
-
-
-    /**
-     * ### Get All Commands.
-     *
-     * @param {String} content_id Id of the associated content. This must be accompanied with content_type.
-     * @param {String} content_type Type of the associated content. This must be accompanied with content_id.
-     * @param {Long} limit Number of results to return.
-     *
-     * GET /commands -> ByteArray
-     */
-    @JvmOverloads fun get_all_commands(
-        content_id: String? = null,
-        content_type: String? = null,
-        limit: Long? = null
-    ) : SDKResponse {
-            return this.get<ByteArray>("/commands", 
-                mapOf("content_id" to content_id,
-                     "content_type" to content_type,
-                     "limit" to limit))
-    }
-
-
-    /**
-     * ### Create a new command.
-     * # Required fields: [:name, :linked_content_id, :linked_content_type]
-     * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-     * #
-     *
-     * @param {WriteCommand} body
-     *
-     * POST /commands -> ByteArray
-     */
-    fun create_command(
-        body: WriteCommand
-    ) : SDKResponse {
-            return this.post<ByteArray>("/commands", mapOf(), body)
-    }
-
-
-    /**
-     * ### Update an existing custom command.
-     * # Optional fields: ['name', 'description']
-     * #
-     *
-     * @param {Long} command_id ID of a command
-     * @param {UpdateCommand} body
-     *
-     * PATCH /commands/{command_id} -> ByteArray
-     */
-    fun update_command(
-        command_id: Long,
-        body: UpdateCommand
-    ) : SDKResponse {
-        val path_command_id = encodeParam(command_id)
-            return this.patch<ByteArray>("/commands/${path_command_id}", mapOf(), body)
-    }
-
-
-    /**
-     * ### Delete an existing custom command.
-     *
-     * @param {Long} command_id ID of a command
-     *
-     * DELETE /commands/{command_id} -> ByteArray
-     */
-    fun delete_command(
-        command_id: Long
-    ) : SDKResponse {
-        val path_command_id = encodeParam(command_id)
-            return this.delete<ByteArray>("/commands/${path_command_id}", mapOf())
-    }
-
-    //endregion Command: Manage Commands
 
     //region Config: Manage General Configuration
 
@@ -2069,7 +1999,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
-     *  - whitelabel_configuration
+     *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
      *
@@ -2092,7 +2022,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
-     *  - whitelabel_configuration
+     *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
      *
@@ -2661,7 +2591,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Boolean search params accept only "true" and "false" as values.
      *
-     * @param {Long} id Match content favorite id(s)
+     * @param {String} id Match content favorite id(s)
      * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
      * @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
      * @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
@@ -2676,7 +2606,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * GET /content_favorite/search -> ByteArray
      */
     @JvmOverloads fun search_content_favorites(
-        id: Long? = null,
+        id: String? = null,
         user_id: String? = null,
         content_metadata_id: String? = null,
         dashboard_id: String? = null,
@@ -2706,13 +2636,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get favorite content by its id
      *
-     * @param {Long} content_favorite_id Id of favorite content
+     * @param {String} content_favorite_id Id of favorite content
      * @param {String} fields Requested fields.
      *
      * GET /content_favorite/{content_favorite_id} -> ByteArray
      */
     @JvmOverloads fun content_favorite(
-        content_favorite_id: Long,
+        content_favorite_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_content_favorite_id = encodeParam(content_favorite_id)
@@ -2724,12 +2654,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete favorite content
      *
-     * @param {Long} content_favorite_id Id of favorite content
+     * @param {String} content_favorite_id Id of favorite content
      *
      * DELETE /content_favorite/{content_favorite_id} -> ByteArray
      */
     fun delete_content_favorite(
-        content_favorite_id: Long
+        content_favorite_id: String
     ) : SDKResponse {
         val path_content_favorite_id = encodeParam(content_favorite_id)
             return this.delete<ByteArray>("/content_favorite/${path_content_favorite_id}", mapOf())
@@ -2753,13 +2683,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all content metadata in a space.
      *
-     * @param {Long} parent_id Parent space of content.
+     * @param {String} parent_id Parent space of content.
      * @param {String} fields Requested fields.
      *
      * GET /content_metadata -> ByteArray
      */
     @JvmOverloads fun all_content_metadatas(
-        parent_id: Long,
+        parent_id: String,
         fields: String? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/content_metadata", 
@@ -2771,13 +2701,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about an individual content metadata record.
      *
-     * @param {Long} content_metadata_id Id of content metadata
+     * @param {String} content_metadata_id Id of content metadata
      * @param {String} fields Requested fields.
      *
      * GET /content_metadata/{content_metadata_id} -> ByteArray
      */
     @JvmOverloads fun content_metadata(
-        content_metadata_id: Long,
+        content_metadata_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_content_metadata_id = encodeParam(content_metadata_id)
@@ -2789,13 +2719,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Move a piece of content.
      *
-     * @param {Long} content_metadata_id Id of content metadata
+     * @param {String} content_metadata_id Id of content metadata
      * @param {WriteContentMeta} body
      *
      * PATCH /content_metadata/{content_metadata_id} -> ByteArray
      */
     fun update_content_metadata(
-        content_metadata_id: Long,
+        content_metadata_id: String,
         body: WriteContentMeta
     ) : SDKResponse {
         val path_content_metadata_id = encodeParam(content_metadata_id)
@@ -2806,13 +2736,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### All content metadata access records for a content metadata item.
      *
-     * @param {Long} content_metadata_id Id of content metadata
+     * @param {String} content_metadata_id Id of content metadata
      * @param {String} fields Requested fields.
      *
      * GET /content_metadata_access -> ByteArray
      */
     @JvmOverloads fun all_content_metadata_accesses(
-        content_metadata_id: Long,
+        content_metadata_id: String,
         fields: String? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/content_metadata_access", 
@@ -2858,12 +2788,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Remove content metadata access.
      *
-     * @param {Long} content_metadata_access_id Id of content metadata access
+     * @param {String} content_metadata_access_id Id of content metadata access
      *
      * DELETE /content_metadata_access/{content_metadata_access_id} -> ByteArray
      */
     fun delete_content_metadata_access(
-        content_metadata_access_id: Long
+        content_metadata_access_id: String
     ) : SDKResponse {
         val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
             return this.delete<ByteArray>("/content_metadata_access/${path_content_metadata_access_id}", mapOf())
@@ -3052,8 +2982,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Creates a new dashboard object and returns the details of the newly created dashboard.
      *
-     * `Title`, `user_id`, and `space_id` are all required fields.
-     * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+     * `Title` and `space_id` are required fields.
+     * `Space_id` must contain the id of an existing space.
      * A dashboard's `title` must be unique within the space in which it resides.
      *
      * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -3118,8 +3048,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} curate Exclude items that exist only in personal spaces other than the users
      * @param {String} last_viewed_at Select dashboards based on when they were last viewed
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
@@ -3436,8 +3366,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Boolean search params accept only "true" and "false" as values.
      *
-     * @param {Long} dashboard_id Select elements that refer to a given dashboard id
-     * @param {Long} look_id Select elements that refer to a given look id
+     * @param {String} dashboard_id Select elements that refer to a given dashboard id
+     * @param {String} look_id Select elements that refer to a given look id
      * @param {String} title Match the title of element
      * @param {Boolean} deleted Select soft-deleted dashboard elements
      * @param {String} fields Requested fields.
@@ -3447,8 +3377,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * GET /dashboard_elements/search -> ByteArray
      */
     @JvmOverloads fun search_dashboard_elements(
-        dashboard_id: Long? = null,
-        look_id: Long? = null,
+        dashboard_id: String? = null,
+        look_id: String? = null,
         title: String? = null,
         deleted: Boolean? = null,
         fields: String? = null,
@@ -3542,15 +3472,18 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {WriteDashboardElement} body
      * @param {String} fields Requested fields.
+     * @param {Boolean} apply_filters Apply relevant filters on dashboard to this tile
      *
      * POST /dashboard_elements -> ByteArray
      */
     @JvmOverloads fun create_dashboard_element(
         body: WriteDashboardElement,
-        fields: String? = null
+        fields: String? = null,
+        apply_filters: Boolean? = null
     ) : SDKResponse {
             return this.post<ByteArray>("/dashboard_elements", 
-                mapOf("fields" to fields), body)
+                mapOf("fields" to fields,
+                     "apply_filters" to apply_filters), body)
     }
 
 
@@ -3837,12 +3770,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a datagroup.
      *
-     * @param {Long} datagroup_id ID of datagroup.
+     * @param {String} datagroup_id ID of datagroup.
      *
      * GET /datagroups/{datagroup_id} -> ByteArray
      */
     fun datagroup(
-        datagroup_id: Long
+        datagroup_id: String
     ) : SDKResponse {
         val path_datagroup_id = encodeParam(datagroup_id)
             return this.get<ByteArray>("/datagroups/${path_datagroup_id}", mapOf())
@@ -3852,13 +3785,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update a datagroup using the specified params.
      *
-     * @param {Long} datagroup_id ID of datagroup.
+     * @param {String} datagroup_id ID of datagroup.
      * @param {WriteDatagroup} body
      *
      * PATCH /datagroups/{datagroup_id} -> ByteArray
      */
     fun update_datagroup(
-        datagroup_id: Long,
+        datagroup_id: String,
         body: WriteDatagroup
     ) : SDKResponse {
         val path_datagroup_id = encodeParam(datagroup_id)
@@ -3989,7 +3922,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      * @param {String} name Match Space title.
-     * @param {Long} id Match Space id
+     * @param {String} id Match Space id
      * @param {String} parent_id Filter on a children of a particular folder.
      * @param {String} creator_id Filter on folder created by a particular user.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
@@ -4005,7 +3938,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         name: String? = null,
-        id: Long? = null,
+        id: String? = null,
         parent_id: String? = null,
         creator_id: String? = null,
         filter_or: Boolean? = null,
@@ -4248,11 +4181,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all groups.
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
-     * @param {DelimArray<Long>} ids Optional of ids to get specific groups.
-     * @param {Long} content_metadata_id Id of content metadata to which groups must have access.
+     * @param {DelimArray<String>} ids Optional of ids to get specific groups.
+     * @param {String} content_metadata_id Id of content metadata to which groups must have access.
      * @param {Boolean} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
      *
      * GET /groups -> ByteArray
@@ -4261,15 +4196,19 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null,
-        ids: DelimArray<Long>? = null,
-        content_metadata_id: Long? = null,
+        ids: DelimArray<String>? = null,
+        content_metadata_id: String? = null,
         can_add_to_content_metadata: Boolean? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/groups", 
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts,
                      "ids" to ids,
                      "content_metadata_id" to content_metadata_id,
@@ -4325,7 +4264,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
-     * @param {Long} id Match group id.
+     * @param {String} id Match group id.
      * @param {String} name Match group name.
      * @param {String} external_group_id Match group external_group_id.
      * @param {Boolean} externally_managed Match group externally_managed.
@@ -4339,7 +4278,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
@@ -4390,7 +4329,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
-     * @param {Long} id Match group id.
+     * @param {String} id Match group id.
      * @param {String} name Match group name.
      * @param {String} external_group_id Match group external_group_id.
      * @param {Boolean} externally_managed Match group externally_managed.
@@ -4404,7 +4343,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
@@ -4456,7 +4395,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
-     * @param {Long} id Match group id.
+     * @param {String} id Match group id.
      * @param {String} name Match group name.
      * @param {String} external_group_id Match group external_group_id.
      * @param {Boolean} externally_managed Match group externally_managed.
@@ -4470,7 +4409,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         offset: Long? = null,
         sorts: String? = null,
         filter_or: Boolean? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         external_group_id: String? = null,
         externally_managed: Boolean? = null,
@@ -4493,13 +4432,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a group.
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {String} fields Requested fields.
      *
      * GET /groups/{group_id} -> ByteArray
      */
     @JvmOverloads fun group(
-        group_id: Long,
+        group_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4511,14 +4450,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Updates the a group (admin only).
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {WriteGroup} body
      * @param {String} fields Requested fields.
      *
      * PATCH /groups/{group_id} -> ByteArray
      */
     @JvmOverloads fun update_group(
-        group_id: Long,
+        group_id: String,
         body: WriteGroup,
         fields: String? = null
     ) : SDKResponse {
@@ -4531,12 +4470,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Deletes a group (admin only).
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      *
      * DELETE /groups/{group_id} -> ByteArray
      */
     fun delete_group(
-        group_id: Long
+        group_id: String
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
             return this.delete<ByteArray>("/groups/${path_group_id}", mapOf())
@@ -4546,13 +4485,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all the groups in a group
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {String} fields Requested fields.
      *
      * GET /groups/{group_id}/groups -> ByteArray
      */
     @JvmOverloads fun all_group_groups(
-        group_id: Long,
+        group_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4564,13 +4503,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Adds a new group to a group.
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {GroupIdForGroupInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/groups -> ByteArray
      */
     fun add_group_group(
-        group_id: Long,
+        group_id: String,
         body: GroupIdForGroupInclusion
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4581,19 +4520,23 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all the users directly included in a group.
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      *
      * GET /groups/{group_id}/users -> ByteArray
      */
     @JvmOverloads fun all_group_users(
-        group_id: Long,
+        group_id: String,
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4601,6 +4544,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts))
     }
 
@@ -4608,13 +4553,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Adds a new user to a group.
      *
-     * @param {Long} group_id Id of group
+     * @param {String} group_id Id of group
      * @param {GroupIdForGroupUserInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * POST /groups/{group_id}/users -> ByteArray
      */
     fun add_group_user(
-        group_id: Long,
+        group_id: String,
         body: GroupIdForGroupUserInclusion
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4625,14 +4570,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Removes a user from a group.
      *
-     * @param {Long} group_id Id of group
-     * @param {Long} user_id Id of user to remove from group
+     * @param {String} group_id Id of group
+     * @param {String} user_id Id of user to remove from group
      *
      * DELETE /groups/{group_id}/users/{user_id} -> ByteArray
      */
     fun delete_group_user(
-        group_id: Long,
-        user_id: Long
+        group_id: String,
+        user_id: String
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
         val path_user_id = encodeParam(user_id)
@@ -4643,14 +4588,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Removes a group from a group.
      *
-     * @param {Long} group_id Id of group
-     * @param {Long} deleting_group_id Id of group to delete
+     * @param {String} group_id Id of group
+     * @param {String} deleting_group_id Id of group to delete
      *
      * DELETE /groups/{group_id}/groups/{deleting_group_id} -> ByteArray
      */
     fun delete_group_from_group(
-        group_id: Long,
-        deleting_group_id: Long
+        group_id: String,
+        deleting_group_id: String
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
         val path_deleting_group_id = encodeParam(deleting_group_id)
@@ -4663,15 +4608,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * For information about how user attribute values are calculated, see [Set User Attribute Group Values](#!/UserAttribute/set_user_attribute_group_values).
      *
-     * @param {Long} group_id Id of group
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} group_id Id of group
+     * @param {String} user_attribute_id Id of user attribute
      * @param {UserAttributeGroupValue} body WARNING: no writeable properties found for POST, PUT, or PATCH
      *
      * PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> ByteArray
      */
     fun update_user_attribute_group_value(
-        group_id: Long,
-        user_attribute_id: Long,
+        group_id: String,
+        user_attribute_id: String,
         body: UserAttributeGroupValue
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
@@ -4683,14 +4628,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Remove a user attribute value from a group.
      *
-     * @param {Long} group_id Id of group
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} group_id Id of group
+     * @param {String} user_attribute_id Id of user attribute
      *
      * DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> ByteArray
      */
     fun delete_user_attribute_group_value(
-        group_id: Long,
-        user_attribute_id: Long
+        group_id: String,
+        user_attribute_id: String
     ) : SDKResponse {
         val path_group_id = encodeParam(group_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
@@ -4758,13 +4703,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a Integration Hub.
      *
-     * @param {Long} integration_hub_id Id of Integration Hub
+     * @param {String} integration_hub_id Id of integration_hub
      * @param {String} fields Requested fields.
      *
      * GET /integration_hubs/{integration_hub_id} -> ByteArray
      */
     @JvmOverloads fun integration_hub(
-        integration_hub_id: Long,
+        integration_hub_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_integration_hub_id = encodeParam(integration_hub_id)
@@ -4778,14 +4723,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * This API is rate limited to prevent it from being used for SSRF attacks
      *
-     * @param {Long} integration_hub_id Id of Integration Hub
+     * @param {String} integration_hub_id Id of integration_hub
      * @param {WriteIntegrationHub} body
      * @param {String} fields Requested fields.
      *
      * PATCH /integration_hubs/{integration_hub_id} -> ByteArray
      */
     @JvmOverloads fun update_integration_hub(
-        integration_hub_id: Long,
+        integration_hub_id: String,
         body: WriteIntegrationHub,
         fields: String? = null
     ) : SDKResponse {
@@ -4798,12 +4743,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a Integration Hub.
      *
-     * @param {Long} integration_hub_id Id of integration_hub
+     * @param {String} integration_hub_id Id of integration_hub
      *
      * DELETE /integration_hubs/{integration_hub_id} -> ByteArray
      */
     fun delete_integration_hub(
-        integration_hub_id: Long
+        integration_hub_id: String
     ) : SDKResponse {
         val path_integration_hub_id = encodeParam(integration_hub_id)
             return this.delete<ByteArray>("/integration_hubs/${path_integration_hub_id}", mapOf())
@@ -4813,12 +4758,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
      *
-     * @param {Long} integration_hub_id Id of integration_hub
+     * @param {String} integration_hub_id Id of integration_hub
      *
      * POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> ByteArray
      */
     fun accept_integration_hub_legal_agreement(
-        integration_hub_id: Long
+        integration_hub_id: String
     ) : SDKResponse {
         val path_integration_hub_id = encodeParam(integration_hub_id)
             return this.post<ByteArray>("/integration_hubs/${path_integration_hub_id}/accept_legal_agreement", mapOf())
@@ -4998,12 +4943,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} user_id Select looks created by a particular user.
      * @param {String} view_count Select looks with particular view_count value
      * @param {Boolean} deleted Select soft-deleted looks
-     * @param {Long} query_id Select looks that reference a particular query by query_id
+     * @param {String} query_id Select looks that reference a particular query by query_id
      * @param {Boolean} curate Exclude items that exist only in personal spaces other than the users
      * @param {String} last_viewed_at Select looks based on when they were last viewed
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
@@ -5020,7 +4965,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         user_id: String? = null,
         view_count: String? = null,
         deleted: Boolean? = null,
-        query_id: Long? = null,
+        query_id: String? = null,
         curate: Boolean? = null,
         last_viewed_at: String? = null,
         fields: String? = null,
@@ -6486,13 +6431,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * builds queries and visualizations and are not generally useful for API use. They are not required when
      * creating new queries and can usually just be ignored.
      *
-     * @param {Long} query_id Id of query
+     * @param {String} query_id Id of query
      * @param {String} fields Requested fields.
      *
      * GET /queries/{query_id} -> ByteArray
      */
     @JvmOverloads fun query(
-        query_id: Long,
+        query_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_query_id = encodeParam(query_id)
@@ -6582,7 +6527,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * | png | A PNG image of the visualization of the query
      * | jpg | A JPG image of the visualization of the query
      *
-     * @param {Long} query_id Id of query
+     * @param {String} query_id Id of query
      * @param {String} result_format Format of result
      * @param {Long} limit Row limit (may override the limit in the saved query).
      * @param {Boolean} apply_formatting Apply model-specified formatting to each result.
@@ -6603,7 +6548,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * **Note**: Binary content may be returned by this method.
      */
     @JvmOverloads fun run_query(
-        query_id: Long,
+        query_id: String,
         result_format: String,
         limit: Long? = null,
         apply_formatting: Boolean? = null,
@@ -6768,11 +6713,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ```ruby
      * query_params =
      * {
-     *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+     *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
      *   :"f[category.name]" => "socks",
-     *   :sorts => "products.count desc 0",
-     *   :limit => "500",
-     *   :query_timezone => "America/Los_Angeles"
+     *   sorts: "products.count desc 0",
+     *   limit: "500",
+     *   query_timezone: "America/Los_Angeles"
      * }
      * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
      *
@@ -6961,7 +6906,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
      *
-     * @param {Long} look_id Id of look to render
+     * @param {String} look_id Id of look to render
      * @param {String} result_format Output type: png, or jpg
      * @param {Long} width Output width in pixels
      * @param {Long} height Output height in pixels
@@ -6970,7 +6915,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * POST /render_tasks/looks/{look_id}/{result_format} -> ByteArray
      */
     @JvmOverloads fun create_look_render_task(
-        look_id: Long,
+        look_id: String,
         result_format: String,
         width: Long,
         height: Long,
@@ -6992,7 +6937,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * To check the status of a render task, pass the render_task.id to [Get Render Task](#!/RenderTask/get_render_task).
      * Once the render task is complete, you can download the resulting document or image using [Get Render Task Results](#!/RenderTask/get_render_task_results).
      *
-     * @param {Long} query_id Id of the query to render
+     * @param {String} query_id Id of the query to render
      * @param {String} result_format Output type: png or jpg
      * @param {Long} width Output width in pixels
      * @param {Long} height Output height in pixels
@@ -7001,7 +6946,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * POST /render_tasks/queries/{query_id}/{result_format} -> ByteArray
      */
     @JvmOverloads fun create_query_render_task(
-        query_id: Long,
+        query_id: String,
         result_format: String,
         width: Long,
         height: Long,
@@ -7176,7 +7121,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
-     * @param {Long} id Match model set id.
+     * @param {String} id Match model set id.
      * @param {String} name Match model set name.
      * @param {Boolean} all_access Match model sets by all_access status.
      * @param {Boolean} built_in Match model sets by built_in status.
@@ -7189,7 +7134,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         all_access: Boolean? = null,
         built_in: Boolean? = null,
@@ -7211,13 +7156,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about the model set with a specific id.
      *
-     * @param {Long} model_set_id Id of model set
+     * @param {String} model_set_id Id of model set
      * @param {String} fields Requested fields.
      *
      * GET /model_sets/{model_set_id} -> ByteArray
      */
     @JvmOverloads fun model_set(
-        model_set_id: Long,
+        model_set_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_model_set_id = encodeParam(model_set_id)
@@ -7229,13 +7174,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update information about the model set with a specific id.
      *
-     * @param {Long} model_set_id id of model set
+     * @param {String} model_set_id id of model set
      * @param {WriteModelSet} body
      *
      * PATCH /model_sets/{model_set_id} -> ByteArray
      */
     fun update_model_set(
-        model_set_id: Long,
+        model_set_id: String,
         body: WriteModelSet
     ) : SDKResponse {
         val path_model_set_id = encodeParam(model_set_id)
@@ -7246,12 +7191,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete the model set with a specific id.
      *
-     * @param {Long} model_set_id id of model set
+     * @param {String} model_set_id id of model set
      *
      * DELETE /model_sets/{model_set_id} -> ByteArray
      */
     fun delete_model_set(
-        model_set_id: Long
+        model_set_id: String
     ) : SDKResponse {
         val path_model_set_id = encodeParam(model_set_id)
             return this.delete<ByteArray>("/model_sets/${path_model_set_id}", mapOf())
@@ -7327,7 +7272,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
-     * @param {Long} id Match permission set id.
+     * @param {String} id Match permission set id.
      * @param {String} name Match permission set name.
      * @param {Boolean} all_access Match permission sets by all_access status.
      * @param {Boolean} built_in Match permission sets by built_in status.
@@ -7340,7 +7285,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         all_access: Boolean? = null,
         built_in: Boolean? = null,
@@ -7362,13 +7307,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about the permission set with a specific id.
      *
-     * @param {Long} permission_set_id Id of permission set
+     * @param {String} permission_set_id Id of permission set
      * @param {String} fields Requested fields.
      *
      * GET /permission_sets/{permission_set_id} -> ByteArray
      */
     @JvmOverloads fun permission_set(
-        permission_set_id: Long,
+        permission_set_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_permission_set_id = encodeParam(permission_set_id)
@@ -7380,13 +7325,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update information about the permission set with a specific id.
      *
-     * @param {Long} permission_set_id id of permission set
+     * @param {String} permission_set_id Id of permission set
      * @param {WritePermissionSet} body
      *
      * PATCH /permission_sets/{permission_set_id} -> ByteArray
      */
     fun update_permission_set(
-        permission_set_id: Long,
+        permission_set_id: String,
         body: WritePermissionSet
     ) : SDKResponse {
         val path_permission_set_id = encodeParam(permission_set_id)
@@ -7397,12 +7342,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete the permission set with a specific id.
      *
-     * @param {Long} permission_set_id Id of permission set
+     * @param {String} permission_set_id Id of permission set
      *
      * DELETE /permission_sets/{permission_set_id} -> ByteArray
      */
     fun delete_permission_set(
-        permission_set_id: Long
+        permission_set_id: String
     ) : SDKResponse {
         val path_permission_set_id = encodeParam(permission_set_id)
             return this.delete<ByteArray>("/permission_sets/${path_permission_set_id}", mapOf())
@@ -7442,13 +7387,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Get information about all roles.
      *
      * @param {String} fields Requested fields.
-     * @param {DelimArray<Long>} ids Optional list of ids to get specific roles.
+     * @param {DelimArray<String>} ids Optional list of ids to get specific roles.
      *
      * GET /roles -> ByteArray
      */
     @JvmOverloads fun all_roles(
         fields: String? = null,
-        ids: DelimArray<Long>? = null
+        ids: DelimArray<String>? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/roles", 
                 mapOf("fields" to fields,
@@ -7500,7 +7445,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
-     * @param {Long} id Match role id.
+     * @param {String} id Match role id.
      * @param {String} name Match role name.
      * @param {Boolean} built_in Match roles by built_in status.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
@@ -7512,7 +7457,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         built_in: Boolean? = null,
         filter_or: Boolean? = null
@@ -7560,7 +7505,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
-     * @param {Long} id Match role id.
+     * @param {String} id Match role id.
      * @param {String} name Match role name.
      * @param {Boolean} built_in Match roles by built_in status.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
@@ -7572,7 +7517,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         built_in: Boolean? = null,
         filter_or: Boolean? = null
@@ -7592,12 +7537,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about the role with a specific id.
      *
-     * @param {Long} role_id id of role
+     * @param {String} role_id id of role
      *
      * GET /roles/{role_id} -> ByteArray
      */
     fun role(
-        role_id: Long
+        role_id: String
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
             return this.get<ByteArray>("/roles/${path_role_id}", mapOf())
@@ -7607,13 +7552,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update information about the role with a specific id.
      *
-     * @param {Long} role_id id of role
+     * @param {String} role_id id of role
      * @param {WriteRole} body
      *
      * PATCH /roles/{role_id} -> ByteArray
      */
     fun update_role(
-        role_id: Long,
+        role_id: String,
         body: WriteRole
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
@@ -7624,12 +7569,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete the role with a specific id.
      *
-     * @param {Long} role_id id of role
+     * @param {String} role_id id of role
      *
      * DELETE /roles/{role_id} -> ByteArray
      */
     fun delete_role(
-        role_id: Long
+        role_id: String
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
             return this.delete<ByteArray>("/roles/${path_role_id}", mapOf())
@@ -7639,13 +7584,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all the groups with the role that has a specific id.
      *
-     * @param {Long} role_id id of role
+     * @param {String} role_id id of role
      * @param {String} fields Requested fields.
      *
      * GET /roles/{role_id}/groups -> ByteArray
      */
     @JvmOverloads fun role_groups(
-        role_id: Long,
+        role_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
@@ -7657,14 +7602,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Set all groups for a role, removing all existing group associations from that role.
      *
-     * @param {Long} role_id Id of Role
-     * @param {Array<Long>} body
+     * @param {String} role_id id of role
+     * @param {Array<String>} body
      *
      * PUT /roles/{role_id}/groups -> ByteArray
      */
     fun set_role_groups(
-        role_id: Long,
-        body: Array<Long>
+        role_id: String,
+        body: Array<String>
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
             return this.put<ByteArray>("/roles/${path_role_id}/groups", mapOf(), body)
@@ -7674,14 +7619,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about all the users with the role that has a specific id.
      *
-     * @param {Long} role_id id of user
+     * @param {String} role_id id of role
      * @param {String} fields Requested fields.
      * @param {Boolean} direct_association_only Get only users associated directly with the role: exclude those only associated through groups.
      *
      * GET /roles/{role_id}/users -> ByteArray
      */
     @JvmOverloads fun role_users(
-        role_id: Long,
+        role_id: String,
         fields: String? = null,
         direct_association_only: Boolean? = null
     ) : SDKResponse {
@@ -7695,14 +7640,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Set all the users of the role with a specific id.
      *
-     * @param {Long} role_id id of role
-     * @param {Array<Long>} body
+     * @param {String} role_id id of role
+     * @param {Array<String>} body
      *
      * PUT /roles/{role_id}/users -> ByteArray
      */
     fun set_role_users(
-        role_id: Long,
-        body: Array<Long>
+        role_id: String,
+        body: Array<String>
     ) : SDKResponse {
         val path_role_id = encodeParam(role_id)
             return this.put<ByteArray>("/roles/${path_role_id}/users", mapOf(), body)
@@ -7718,13 +7663,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns scheduled plans owned by the caller for a given space id.
      *
-     * @param {Long} space_id Space Id
+     * @param {String} space_id Space Id
      * @param {String} fields Requested fields.
      *
      * GET /scheduled_plans/space/{space_id} -> ByteArray
      */
     @JvmOverloads fun scheduled_plans_for_space(
-        space_id: Long,
+        space_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_space_id = encodeParam(space_id)
@@ -7738,13 +7683,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Admins can fetch information about other users' Scheduled Plans.
      *
-     * @param {Long} scheduled_plan_id Scheduled Plan Id
+     * @param {String} scheduled_plan_id Scheduled Plan Id
      * @param {String} fields Requested fields.
      *
      * GET /scheduled_plans/{scheduled_plan_id} -> ByteArray
      */
     @JvmOverloads fun scheduled_plan(
-        scheduled_plan_id: Long,
+        scheduled_plan_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
@@ -7797,13 +7742,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Valid formats vary by destination type and source object. `wysiwyg_pdf` is only valid for dashboards, for example.
      *
-     * @param {Long} scheduled_plan_id Scheduled Plan Id
+     * @param {String} scheduled_plan_id Scheduled Plan Id
      * @param {WriteScheduledPlan} body
      *
      * PATCH /scheduled_plans/{scheduled_plan_id} -> ByteArray
      */
     fun update_scheduled_plan(
-        scheduled_plan_id: Long,
+        scheduled_plan_id: String,
         body: WriteScheduledPlan
     ) : SDKResponse {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
@@ -7818,12 +7763,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Admins can delete other users' scheduled plans.
      * This delete cannot be undone.
      *
-     * @param {Long} scheduled_plan_id Scheduled Plan Id
+     * @param {String} scheduled_plan_id Scheduled Plan Id
      *
      * DELETE /scheduled_plans/{scheduled_plan_id} -> ByteArray
      */
     fun delete_scheduled_plan(
-        scheduled_plan_id: Long
+        scheduled_plan_id: String
     ) : SDKResponse {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
             return this.delete<ByteArray>("/scheduled_plans/${path_scheduled_plan_id}", mapOf())
@@ -7843,14 +7788,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
      *
-     * @param {Long} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
+     * @param {String} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
      * @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response
      * @param {Boolean} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
      *
      * GET /scheduled_plans -> ByteArray
      */
     @JvmOverloads fun all_scheduled_plans(
-        user_id: Long? = null,
+        user_id: String? = null,
         fields: String? = null,
         all_users: Boolean? = null
     ) : SDKResponse {
@@ -7995,16 +7940,16 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
      *
-     * @param {Long} look_id Look Id
-     * @param {Long} user_id User Id (default is requesting user if not specified)
+     * @param {String} look_id Look Id
+     * @param {String} user_id User Id (default is requesting user if not specified)
      * @param {String} fields Requested fields.
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the look
      *
      * GET /scheduled_plans/look/{look_id} -> ByteArray
      */
     @JvmOverloads fun scheduled_plans_for_look(
-        look_id: Long,
-        user_id: Long? = null,
+        look_id: String,
+        user_id: String? = null,
         fields: String? = null,
         all_users: Boolean? = null
     ) : SDKResponse {
@@ -8029,16 +7974,16 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
      *
-     * @param {Long} dashboard_id Dashboard Id
-     * @param {Long} user_id User Id (default is requesting user if not specified)
+     * @param {String} dashboard_id Dashboard Id
+     * @param {String} user_id User Id (default is requesting user if not specified)
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the dashboard
      * @param {String} fields Requested fields.
      *
      * GET /scheduled_plans/dashboard/{dashboard_id} -> ByteArray
      */
     @JvmOverloads fun scheduled_plans_for_dashboard(
-        dashboard_id: Long,
-        user_id: Long? = null,
+        dashboard_id: String,
+        user_id: String? = null,
         all_users: Boolean? = null,
         fields: String? = null
     ) : SDKResponse {
@@ -8064,7 +8009,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * The caller must have `see_schedules` permission to see other users' scheduled plans.
      *
      * @param {String} lookml_dashboard_id LookML Dashboard Id
-     * @param {Long} user_id User Id (default is requesting user if not specified)
+     * @param {String} user_id User Id (default is requesting user if not specified)
      * @param {String} fields Requested fields.
      * @param {Boolean} all_users Return scheduled plans belonging to all users for the dashboard
      *
@@ -8072,7 +8017,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      */
     @JvmOverloads fun scheduled_plans_for_lookml_dashboard(
         lookml_dashboard_id: String,
-        user_id: Long? = null,
+        user_id: String? = null,
         fields: String? = null,
         all_users: Boolean? = null
     ) : SDKResponse {
@@ -8133,13 +8078,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * This API is rate limited to prevent it from being used for relay spam or DoS attacks
      *
-     * @param {Long} scheduled_plan_id Id of schedule plan to copy and run
+     * @param {String} scheduled_plan_id Id of schedule plan to copy and run
      * @param {WriteScheduledPlan} body
      *
      * POST /scheduled_plans/{scheduled_plan_id}/run_once -> ByteArray
      */
     @JvmOverloads fun scheduled_plan_run_once_by_id(
-        scheduled_plan_id: Long,
+        scheduled_plan_id: String,
         body: WriteScheduledPlan? = null
     ) : SDKResponse {
         val path_scheduled_plan_id = encodeParam(scheduled_plan_id)
@@ -8291,7 +8236,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
-     * @param {Long} id Match theme id.
+     * @param {String} id Match theme id.
      * @param {String} name Match theme name.
      * @param {Date} begin_at Timestamp for activation.
      * @param {Date} end_at Timestamp for expiration.
@@ -8304,7 +8249,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * GET /themes/search -> ByteArray
      */
     @JvmOverloads fun search_themes(
-        id: Long? = null,
+        id: String? = null,
         name: String? = null,
         begin_at: Date? = null,
         end_at: Date? = null,
@@ -8452,13 +8397,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
-     * @param {Long} theme_id Id of theme
+     * @param {String} theme_id Id of theme
      * @param {String} fields Requested fields.
      *
      * GET /themes/{theme_id} -> ByteArray
      */
     @JvmOverloads fun theme(
-        theme_id: Long,
+        theme_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_theme_id = encodeParam(theme_id)
@@ -8472,13 +8417,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
-     * @param {Long} theme_id Id of theme
+     * @param {String} theme_id Id of theme
      * @param {WriteTheme} body
      *
      * PATCH /themes/{theme_id} -> ByteArray
      */
     fun update_theme(
-        theme_id: Long,
+        theme_id: String,
         body: WriteTheme
     ) : SDKResponse {
         val path_theme_id = encodeParam(theme_id)
@@ -8543,7 +8488,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
      * @param {String} sorts Fields to sort by.
-     * @param {Long} id Match credentials_email id.
+     * @param {String} id Match credentials_email id.
      * @param {String} email Match credentials_email email.
      * @param {String} emails Find credentials_email that match given emails.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression.
@@ -8555,7 +8500,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         email: String? = null,
         emails: String? = null,
         filter_or: Boolean? = null
@@ -8596,7 +8541,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
-     * @param {DelimArray<Long>} ids Optional list of ids to get specific users.
+     * @param {DelimArray<String>} ids Optional list of ids to get specific users.
      *
      * GET /users -> ByteArray
      */
@@ -8607,7 +8552,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        ids: DelimArray<Long>? = null
+        ids: DelimArray<String>? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/users", 
                 mapOf("fields" to fields,
@@ -8741,7 +8686,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by
-     * @param {Long} id Match User Id
+     * @param {String} id Match User Id
      * @param {String} first_name Match First name
      * @param {String} last_name Match Last name
      * @param {Boolean} verified_looker_employee Match Verified Looker employee
@@ -8758,7 +8703,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        id: Long? = null,
+        id: String? = null,
         first_name: String? = null,
         last_name: String? = null,
         verified_looker_employee: Boolean? = null,
@@ -8789,13 +8734,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
      * The user name and avatar url, but no sensitive information.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id} -> ByteArray
      */
     @JvmOverloads fun user(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -8807,14 +8752,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update information about the user with a specific id.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {WriteUser} body
      * @param {String} fields Requested fields.
      *
      * PATCH /users/{user_id} -> ByteArray
      */
     @JvmOverloads fun update_user(
-        user_id: Long,
+        user_id: String,
         body: WriteUser,
         fields: String? = null
     ) : SDKResponse {
@@ -8829,12 +8774,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **DANGER** this will delete the user and all looks and other information owned by the user.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id} -> ByteArray
      */
     fun delete_user(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}", mapOf())
@@ -8892,13 +8837,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_email -> ByteArray
      */
     @JvmOverloads fun user_credentials_email(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -8910,14 +8855,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {WriteCredentialsEmail} body
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_email -> ByteArray
      */
     @JvmOverloads fun create_user_credentials_email(
-        user_id: Long,
+        user_id: String,
         body: WriteCredentialsEmail,
         fields: String? = null
     ) : SDKResponse {
@@ -8930,14 +8875,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {WriteCredentialsEmail} body
      * @param {String} fields Requested fields.
      *
      * PATCH /users/{user_id}/credentials_email -> ByteArray
      */
     @JvmOverloads fun update_user_credentials_email(
-        user_id: Long,
+        user_id: String,
         body: WriteCredentialsEmail,
         fields: String? = null
     ) : SDKResponse {
@@ -8950,12 +8895,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_email -> ByteArray
      */
     fun delete_user_credentials_email(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_email", mapOf())
@@ -8965,13 +8910,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_totp -> ByteArray
      */
     @JvmOverloads fun user_credentials_totp(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -8983,14 +8928,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_totp -> ByteArray
      */
     @JvmOverloads fun create_user_credentials_totp(
-        user_id: Long,
+        user_id: String,
         body: CredentialsTotp? = null,
         fields: String? = null
     ) : SDKResponse {
@@ -9003,12 +8948,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_totp -> ByteArray
      */
     fun delete_user_credentials_totp(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_totp", mapOf())
@@ -9018,13 +8963,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### LDAP login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_ldap -> ByteArray
      */
     @JvmOverloads fun user_credentials_ldap(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9036,12 +8981,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### LDAP login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_ldap -> ByteArray
      */
     fun delete_user_credentials_ldap(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_ldap", mapOf())
@@ -9051,13 +8996,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Google authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_google -> ByteArray
      */
     @JvmOverloads fun user_credentials_google(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9069,12 +9014,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Google authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_google -> ByteArray
      */
     fun delete_user_credentials_google(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_google", mapOf())
@@ -9084,13 +9029,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Saml authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_saml -> ByteArray
      */
     @JvmOverloads fun user_credentials_saml(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9102,12 +9047,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Saml authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_saml -> ByteArray
      */
     fun delete_user_credentials_saml(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_saml", mapOf())
@@ -9117,13 +9062,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_oidc -> ByteArray
      */
     @JvmOverloads fun user_credentials_oidc(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9135,12 +9080,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_oidc -> ByteArray
      */
     fun delete_user_credentials_oidc(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_oidc", mapOf())
@@ -9150,15 +9095,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * @param {Long} user_id Id of user
-     * @param {Long} credentials_api3_id Id of API 3 Credential
+     * @param {String} user_id Id of user
+     * @param {String} credentials_api3_id Id of API 3 Credential
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
      */
     @JvmOverloads fun user_credentials_api3(
-        user_id: Long,
-        credentials_api3_id: Long,
+        user_id: String,
+        credentials_api3_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9171,14 +9116,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * @param {Long} user_id id of user
-     * @param {Long} credentials_api3_id id of API 3 Credential
+     * @param {String} user_id Id of user
+     * @param {String} credentials_api3_id Id of API 3 Credential
      *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
      */
     fun delete_user_credentials_api3(
-        user_id: Long,
-        credentials_api3_id: Long
+        user_id: String,
+        credentials_api3_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
         val path_credentials_api3_id = encodeParam(credentials_api3_id)
@@ -9189,13 +9134,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_api3 -> ByteArray
      */
     @JvmOverloads fun all_user_credentials_api3s(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9207,13 +9152,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_api3 -> ByteArray
      */
     @JvmOverloads fun create_user_credentials_api3(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9225,15 +9170,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * @param {Long} user_id Id of user
-     * @param {Long} credentials_embed_id Id of Embedding Credential
+     * @param {String} user_id Id of user
+     * @param {String} credentials_embed_id Id of Embedding Credential
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ByteArray
      */
     @JvmOverloads fun user_credentials_embed(
-        user_id: Long,
-        credentials_embed_id: Long,
+        user_id: String,
+        credentials_embed_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9246,14 +9191,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * @param {Long} user_id id of user
-     * @param {Long} credentials_embed_id id of Embedding Credential
+     * @param {String} user_id Id of user
+     * @param {String} credentials_embed_id Id of Embedding Credential
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> ByteArray
      */
     fun delete_user_credentials_embed(
-        user_id: Long,
-        credentials_embed_id: Long
+        user_id: String,
+        credentials_embed_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
         val path_credentials_embed_id = encodeParam(credentials_embed_id)
@@ -9264,13 +9209,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_embed -> ByteArray
      */
     @JvmOverloads fun all_user_credentials_embeds(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9282,13 +9227,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_looker_openid -> ByteArray
      */
     @JvmOverloads fun user_credentials_looker_openid(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9300,12 +9245,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_looker_openid -> ByteArray
      */
     fun delete_user_credentials_looker_openid(
-        user_id: Long
+        user_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
             return this.delete<ByteArray>("/users/${path_user_id}/credentials_looker_openid", mapOf())
@@ -9315,15 +9260,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Web login session for the specified user.
      *
-     * @param {Long} user_id Id of user
-     * @param {Long} session_id Id of Web Login Session
+     * @param {String} user_id Id of user
+     * @param {String} session_id Id of Web Login Session
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/sessions/{session_id} -> ByteArray
      */
     @JvmOverloads fun user_session(
-        user_id: Long,
-        session_id: Long,
+        user_id: String,
+        session_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9336,14 +9281,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Web login session for the specified user.
      *
-     * @param {Long} user_id id of user
-     * @param {Long} session_id id of Web Login Session
+     * @param {String} user_id Id of user
+     * @param {String} session_id Id of Web Login Session
      *
      * DELETE /users/{user_id}/sessions/{session_id} -> ByteArray
      */
     fun delete_user_session(
-        user_id: Long,
-        session_id: Long
+        user_id: String,
+        session_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
         val path_session_id = encodeParam(session_id)
@@ -9354,13 +9299,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Web login session for the specified user.
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/sessions -> ByteArray
      */
     @JvmOverloads fun all_user_sessions(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9380,14 +9325,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * The expire period is always 60 minutes when expires is enabled.
      * This method can be called with an empty body.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {Boolean} expires Expiring token.
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_email/password_reset -> ByteArray
      */
     @JvmOverloads fun create_user_credentials_email_password_reset(
-        user_id: Long,
+        user_id: String,
         expires: Boolean? = null,
         fields: String? = null
     ) : SDKResponse {
@@ -9401,14 +9346,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about roles of a given user
      *
-     * @param {Long} user_id id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      * @param {Boolean} direct_association_only Get only roles associated directly with the user: exclude those only associated through groups.
      *
      * GET /users/{user_id}/roles -> ByteArray
      */
     @JvmOverloads fun user_roles(
-        user_id: Long,
+        user_id: String,
         fields: String? = null,
         direct_association_only: Boolean? = null
     ) : SDKResponse {
@@ -9422,15 +9367,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Set roles of the user with a specific id.
      *
-     * @param {Long} user_id id of user
-     * @param {Array<Long>} body
+     * @param {String} user_id Id of user
+     * @param {Array<String>} body
      * @param {String} fields Requested fields.
      *
      * PUT /users/{user_id}/roles -> ByteArray
      */
     @JvmOverloads fun set_user_roles(
-        user_id: Long,
-        body: Array<Long>,
+        user_id: String,
+        body: Array<String>,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9457,18 +9402,18 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The value of all hidden user attributes will be blank.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
-     * @param {DelimArray<Long>} user_attribute_ids Specific user attributes to request. Omit or leave blank to request all user attributes.
+     * @param {DelimArray<String>} user_attribute_ids Specific user attributes to request. Omit or leave blank to request all user attributes.
      * @param {Boolean} all_values If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
      * @param {Boolean} include_unset If true, returns an empty record for each requested attribute that has no user, group, or default value.
      *
      * GET /users/{user_id}/attribute_values -> ByteArray
      */
     @JvmOverloads fun user_attribute_user_values(
-        user_id: Long,
+        user_id: String,
         fields: String? = null,
-        user_attribute_ids: DelimArray<Long>? = null,
+        user_attribute_ids: DelimArray<String>? = null,
         all_values: Boolean? = null,
         include_unset: Boolean? = null
     ) : SDKResponse {
@@ -9486,15 +9431,15 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Per-user user attribute values take precedence over group or default values.
      *
-     * @param {Long} user_id Id of user
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_id Id of user
+     * @param {String} user_attribute_id Id of user attribute
      * @param {WriteUserAttributeWithValue} body
      *
      * PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> ByteArray
      */
     fun set_user_attribute_user_value(
-        user_id: Long,
-        user_attribute_id: Long,
+        user_id: String,
+        user_attribute_id: String,
         body: WriteUserAttributeWithValue
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9511,14 +9456,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * value of the user attribute. See [Get User Attribute Values](#!/User/user_attribute_user_values) for more
      * information about how user attribute values are resolved.
      *
-     * @param {Long} user_id Id of user
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_id Id of user
+     * @param {String} user_attribute_id Id of user attribute
      *
      * DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> ByteArray
      */
     fun delete_user_attribute_user_value(
-        user_id: Long,
-        user_attribute_id: Long
+        user_id: String,
+        user_attribute_id: String
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
         val path_user_attribute_id = encodeParam(user_attribute_id)
@@ -9535,13 +9480,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Password reset URLs will expire in 60 minutes.
      * This method can be called with an empty body.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/credentials_email/send_password_reset -> ByteArray
      */
     @JvmOverloads fun send_user_credentials_email_password_reset(
-        user_id: Long,
+        user_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_id = encodeParam(user_id)
@@ -9558,14 +9503,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * the value supplied in the 'email' body param.
      * The user's 'is_disabled' status must be true.
      *
-     * @param {Long} user_id Id of user
+     * @param {String} user_id Id of user
      * @param {UserEmailOnly} body
      * @param {String} fields Requested fields.
      *
      * POST /users/{user_id}/update_emails -> ByteArray
      */
     @JvmOverloads fun wipeout_user_emails(
-        user_id: Long,
+        user_id: String,
         body: UserEmailOnly,
         fields: String? = null
     ) : SDKResponse {
@@ -9640,13 +9585,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get information about a user attribute.
      *
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_attribute_id Id of user attribute
      * @param {String} fields Requested fields.
      *
      * GET /user_attributes/{user_attribute_id} -> ByteArray
      */
     @JvmOverloads fun user_attribute(
-        user_attribute_id: Long,
+        user_attribute_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_attribute_id = encodeParam(user_attribute_id)
@@ -9658,14 +9603,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update a user attribute definition.
      *
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_attribute_id Id of user attribute
      * @param {WriteUserAttribute} body
      * @param {String} fields Requested fields.
      *
      * PATCH /user_attributes/{user_attribute_id} -> ByteArray
      */
     @JvmOverloads fun update_user_attribute(
-        user_attribute_id: Long,
+        user_attribute_id: String,
         body: WriteUserAttribute,
         fields: String? = null
     ) : SDKResponse {
@@ -9678,12 +9623,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a user attribute (admin only).
      *
-     * @param {Long} user_attribute_id Id of user_attribute
+     * @param {String} user_attribute_id Id of user attribute
      *
      * DELETE /user_attributes/{user_attribute_id} -> ByteArray
      */
     fun delete_user_attribute(
-        user_attribute_id: Long
+        user_attribute_id: String
     ) : SDKResponse {
         val path_user_attribute_id = encodeParam(user_attribute_id)
             return this.delete<ByteArray>("/user_attributes/${path_user_attribute_id}", mapOf())
@@ -9699,13 +9644,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Results will only include groups that the caller's user account has permission to see.
      *
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_attribute_id Id of user attribute
      * @param {String} fields Requested fields.
      *
      * GET /user_attributes/{user_attribute_id}/group_values -> ByteArray
      */
     @JvmOverloads fun all_user_attribute_group_values(
-        user_attribute_id: Long,
+        user_attribute_id: String,
         fields: String? = null
     ) : SDKResponse {
         val path_user_attribute_id = encodeParam(user_attribute_id)
@@ -9736,13 +9681,13 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *   To set a user attribute value for a single user, see [Set User Attribute User Value](#!/User/set_user_attribute_user_value).
      * To set a user attribute value for all members of a group, see [Set User Attribute Group Value](#!/Group/update_user_attribute_group_value).
      *
-     * @param {Long} user_attribute_id Id of user attribute
+     * @param {String} user_attribute_id Id of user attribute
      * @param {Array<UserAttributeGroupValue>} body
      *
      * POST /user_attributes/{user_attribute_id}/group_values -> ByteArray
      */
     fun set_user_attribute_group_values(
-        user_attribute_id: Long,
+        user_attribute_id: String,
         body: Array<UserAttributeGroupValue>
     ) : SDKResponse {
         val path_user_attribute_id = encodeParam(user_attribute_id)

@@ -157,11 +157,11 @@ class TestSmoke {
     fun testAllUsersWithIds() {
         prepUsers()
         val allUsers = sdk.ok<Array<User>>(sdk.all_users())
-        val userIds: Array<Long> = allUsers
+        val userIds: Array<String> = allUsers
             .map { u -> u.id!! }
             .take(2)
             .toTypedArray()
-        val ids = DelimArray<Long>(userIds)
+        val ids = DelimArray<String>(userIds)
         val users = sdk.ok<Array<User>>(sdk.all_users(ids = ids))
         assertEquals(2, users.size, "Should retrieve 2 users.")
         assertEquals(userIds[0], users[0].id)

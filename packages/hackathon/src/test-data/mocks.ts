@@ -63,7 +63,7 @@ mockJudge.roles.add('judge')
 mockJudge.assignRights()
 
 export const mockAdmin = new Hacker(mockLookerSDK)
-mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
+mockJudge.user = { id: '4', first_name: 'Looker', last_name: 'Admin' }
 mockAdmin.roles.add('admin')
 mockAdmin.assignRights()
 
@@ -76,14 +76,14 @@ mockAdmin.assignRights()
 // export const mockHackathonData = mockTabs.hackathons
 // export const mockProjectData = mockTabs.projects
 
-export const mockAHacker = (id: number): Hacker => {
+export const mockAHacker = (id: string): Hacker => {
   const result = new Hacker(mockLookerSDK)
   result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' }
   result.assignRights()
   return result
 }
 
-export const mockAJudge = (id: number): Hacker => {
+export const mockAJudge = (id: string): Hacker => {
   const result = mockAHacker(id)
   result.roles.add('judge')
   result.assignRights()

@@ -1734,8 +1734,8 @@ namespace Looker.SDK.API31
   ///
   /// Creates a new dashboard object and returns the details of the newly created dashboard.
   ///
-  /// `Title`, `user_id`, and `space_id` are all required fields.
-  /// `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+  /// `Title` and `space_id` are required fields.
+  /// `Space_id` must contain the id of an existing space.
   /// A dashboard's `title` must be unique within the space in which it resides.
   ///
   /// If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -1805,8 +1805,6 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
-  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
-  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   public async Task<SdkResponse<Dashboard[], Exception>> search_dashboards(
@@ -1825,8 +1823,6 @@ namespace Looker.SDK.API31
     string? fields = null,
     long? page = null,
     long? per_page = null,
-    long? limit = null,
-    long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
     ITransportSettings? options = null)
@@ -1847,8 +1843,6 @@ namespace Looker.SDK.API31
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
-      { "limit", limit },
-      { "offset", offset },
       { "sorts", sorts },
       { "filter_or", filter_or }},null,options);
   }
@@ -2150,13 +2144,16 @@ namespace Looker.SDK.API31
   /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  /// <param name="apply_filters">Apply relevant filters on dashboard to this tile</param>
   public async Task<SdkResponse<DashboardElement, Exception>> create_dashboard_element(
     WriteDashboardElement body,
     string? fields = null,
+    bool? apply_filters = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<DashboardElement, Exception>(HttpMethod.Post, "/dashboard_elements", new Values {
-      { "fields", fields }},body,options);
+      { "fields", fields },
+      { "apply_filters", apply_filters }},body,options);
   }
 
   /// ### Get information about the dashboard filters with a specific id.
@@ -2846,8 +2843,8 @@ namespace Looker.SDK.API31
   /// <returns><c>Group[]</c> Group (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional of ids to get specific groups.</param>
   /// <param name="content_metadata_id">Id of content metadata to which groups must have access.</param>
@@ -3042,8 +3039,8 @@ namespace Looker.SDK.API31
   ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   public async Task<SdkResponse<User[], Exception>> all_group_users(
     long group_id,
@@ -3386,7 +3383,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="homepage_item_id">Id of homepage_item</param>
+  /// <param name="homepage_item_id">Id of homepage item</param>
   [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_item(
     long homepage_item_id,
@@ -3474,7 +3471,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="homepage_section_id">Id of homepage_section</param>
+  /// <param name="homepage_section_id">Id of homepage section</param>
   [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_section(
     long homepage_section_id,
@@ -3541,7 +3538,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
   ///
-  /// <param name="integration_hub_id">Id of Integration Hub</param>
+  /// <param name="integration_hub_id">Id of integration_hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> integration_hub(
     long integration_hub_id,
@@ -3560,7 +3557,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
   ///
-  /// <param name="integration_hub_id">Id of Integration Hub</param>
+  /// <param name="integration_hub_id">Id of integration_hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> update_integration_hub(
     long integration_hub_id,
@@ -3778,8 +3775,6 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
-  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
-  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   public async Task<SdkResponse<Look[], Exception>> search_looks(
@@ -3796,8 +3791,6 @@ namespace Looker.SDK.API31
     string? fields = null,
     long? page = null,
     long? per_page = null,
-    long? limit = null,
-    long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
     ITransportSettings? options = null)
@@ -3816,8 +3809,6 @@ namespace Looker.SDK.API31
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
-      { "limit", limit },
-      { "offset", offset },
       { "sorts", sorts },
       { "filter_or", filter_or }},null,options);
   }
@@ -5227,11 +5218,11 @@ namespace Looker.SDK.API31
   /// ```ruby
   /// query_params =
   /// {
-  ///   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+  ///   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
   ///   :"f[category.name]" => "socks",
-  ///   :sorts => "products.count desc 0",
-  ///   :limit => "500",
-  ///   :query_timezone => "America/Los_Angeles"
+  ///   sorts: "products.count desc 0",
+  ///   limit: "500",
+  ///   query_timezone: "America/Los_Angeles"
   /// }
   /// response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
   ///
@@ -5719,7 +5710,7 @@ namespace Looker.SDK.API31
   ///
   /// DELETE /model_sets/{model_set_id} -> string
   ///
-  /// <returns><c>string</c> Model set succssfully deleted. (application/json)</returns>
+  /// <returns><c>string</c> Model set successfully deleted. (application/json)</returns>
   ///
   /// <param name="model_set_id">id of model set</param>
   public async Task<SdkResponse<string, Exception>> delete_model_set(
@@ -5852,7 +5843,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
   ///
-  /// <param name="permission_set_id">id of permission set</param>
+  /// <param name="permission_set_id">Id of permission set</param>
   public async Task<SdkResponse<PermissionSet, Exception>> update_permission_set(
     long permission_set_id,
     WritePermissionSet body,
@@ -6059,10 +6050,10 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
   ///
-  /// <param name="role_id">Id of Role</param>
+  /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<Group[], Exception>> set_role_groups(
     long role_id,
-    long[] body,
+    string[] body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Group[], Exception>(HttpMethod.Put, $"/roles/{role_id}/groups", null,body,options);
@@ -6074,7 +6065,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>User[]</c> Users with role. (application/json)</returns>
   ///
-  /// <param name="role_id">id of user</param>
+  /// <param name="role_id">id of role</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only users associated directly with the role: exclude those only associated through groups.</param>
   public async Task<SdkResponse<User[], Exception>> role_users(
@@ -6097,7 +6088,7 @@ namespace Looker.SDK.API31
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<User[], Exception>> set_role_users(
     long role_id,
-    long[] body,
+    string[] body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<User[], Exception>(HttpMethod.Put, $"/roles/{role_id}/users", null,body,options);
@@ -7498,7 +7489,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
     long user_id,
@@ -7515,7 +7506,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
     long user_id,
@@ -7533,7 +7524,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
     long user_id,
@@ -7551,7 +7542,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
     long user_id,
     ITransportSettings? options = null)
@@ -7565,7 +7556,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> user_credentials_totp(
     long user_id,
@@ -7582,7 +7573,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> create_user_credentials_totp(
     long user_id,
@@ -7600,7 +7591,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_totp(
     long user_id,
     ITransportSettings? options = null)
@@ -7614,7 +7605,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsLDAP</c> LDAP Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLDAP, Exception>> user_credentials_ldap(
     long user_id,
@@ -7631,7 +7622,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_ldap(
     long user_id,
     ITransportSettings? options = null)
@@ -7645,7 +7636,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsGoogle</c> Google Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsGoogle, Exception>> user_credentials_google(
     long user_id,
@@ -7662,7 +7653,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_google(
     long user_id,
     ITransportSettings? options = null)
@@ -7676,7 +7667,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsSaml</c> Saml Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsSaml, Exception>> user_credentials_saml(
     long user_id,
@@ -7693,7 +7684,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_saml(
     long user_id,
     ITransportSettings? options = null)
@@ -7707,7 +7698,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
     long user_id,
@@ -7724,7 +7715,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
     long user_id,
     ITransportSettings? options = null)
@@ -7757,8 +7748,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="credentials_api3_id">id of API 3 Credential</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="credentials_api3_id">Id of API 3 Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_api3(
     long user_id,
     long credentials_api3_id,
@@ -7773,7 +7764,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsApi3[]</c> API 3 Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3[], Exception>> all_user_credentials_api3s(
     long user_id,
@@ -7790,7 +7781,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3, Exception>> create_user_credentials_api3(
     long user_id,
@@ -7827,8 +7818,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="credentials_embed_id">id of Embedding Credential</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="credentials_embed_id">Id of Embedding Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_embed(
     long user_id,
     long credentials_embed_id,
@@ -7843,7 +7834,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmbed[]</c> Embedding Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmbed[], Exception>> all_user_credentials_embeds(
     long user_id,
@@ -7860,7 +7851,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsLookerOpenid</c> Looker OpenId Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLookerOpenid, Exception>> user_credentials_looker_openid(
     long user_id,
@@ -7877,7 +7868,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_looker_openid(
     long user_id,
     ITransportSettings? options = null)
@@ -7910,8 +7901,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="session_id">id of Web Login Session</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="session_id">Id of Web Login Session</param>
   public async Task<SdkResponse<string, Exception>> delete_user_session(
     long user_id,
     long session_id,
@@ -7926,7 +7917,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Session[]</c> Web Login Session (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Session[], Exception>> all_user_sessions(
     long user_id,
@@ -7971,7 +7962,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only roles associated directly with the user: exclude those only associated through groups.</param>
   public async Task<SdkResponse<Role[], Exception>> user_roles(
@@ -7991,11 +7982,11 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Role[], Exception>> set_user_roles(
     long user_id,
-    long[] body,
+    string[] body,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -8172,7 +8163,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_attribute_id">Id of user_attribute</param>
+  /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<string, Exception>> delete_user_attribute(
     long user_attribute_id,
     ITransportSettings? options = null)
