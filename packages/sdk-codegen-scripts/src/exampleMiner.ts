@@ -99,19 +99,23 @@ export const getAllFiles = (
   const files = fs.readdirSync(searchPath)
 
   files.forEach((file) => {
-    if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file, ignorePaths))
-        listOfFiles = getAllFiles(
-          searchPath + '/' + file,
-          listOfFiles,
-          filter,
-          ignorePaths
-        )
-    } else {
-      if (filter(file)) {
-        const fileName = path.join(searchPath, '/', file)
-        listOfFiles.push(fileName)
+    try {
+      if (fs.statSync(searchPath + '/' + file).isDirectory()) {
+        if (!skipFolder(file, ignorePaths))
+          listOfFiles = getAllFiles(
+            searchPath + '/' + file,
+            listOfFiles,
+            filter,
+            ignorePaths
+          )
+      } else {
+        if (filter(file)) {
+          const fileName = path.join(searchPath, '/', file)
+          listOfFiles.push(fileName)
+        }
       }
+    } catch (e: any) {
+      warn(`skipping ${file}: ${e}`)
     }
   })
 
@@ -129,7 +133,7 @@ export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
   filter: FileFilter = filterCodeFiles,
-  ignorePaths: string[] = ['node_modules', 'lib', 'dist']
+  ignorePaths: string[] = ['node_modules', 'lib', 'dist', 'bazel-bin']
 ) => {
   return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }

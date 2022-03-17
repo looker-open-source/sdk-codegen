@@ -1,6 +1,6 @@
 {
-  "commitHash": "d5b0c999727e6065723ac6becbb5c53e98550387",
-  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
+  "commitHash": "e572cc5b598d0414de980113d0be45a80cc59922",
+  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen.git",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
       "summary": "`codeGenerators.ts`",
@@ -701,7 +701,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 14,
-            "line": 5084
+            "line": 5103
           }
         ],
         ".kt": [
@@ -770,19 +770,19 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 13,
-            "line": 337
+            "line": 333
           }
         ],
         ".py": [
           {
             "sourceFile": "python/looker_sdk/sdk/api31/methods.py",
             "column": 17,
-            "line": 6670
+            "line": 6652
           },
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 17,
-            "line": 8535
+            "line": 8514
           }
         ],
         ".swift": [
@@ -818,7 +818,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 4,
-            "line": 6596
+            "line": 6617
           }
         ],
         ".kt": [
@@ -889,12 +889,12 @@
           {
             "sourceFile": "python/looker_sdk/sdk/api31/methods.py",
             "column": 7,
-            "line": 9386
+            "line": 9365
           },
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 7,
-            "line": 11025
+            "line": 11001
           }
         ],
         ".swift": [
@@ -2065,12 +2065,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 984
+            "line": 980
           },
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 995
+            "line": 991
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2289,7 +2289,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 911
+            "line": 907
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2546,7 +2546,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 970
+            "line": 966
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2670,12 +2670,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 919
+            "line": 915
           },
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 927
+            "line": 923
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -3223,7 +3223,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 946
+            "line": 942
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -8968,7 +8968,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 1031
+            "line": 1027
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -8990,7 +8990,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 1075
+            "line": 1071
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
