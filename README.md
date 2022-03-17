@@ -274,6 +274,7 @@ Environment variables can be used for any SDK runtime that supports reading envi
 - Python SDK
 - Swift SDK
 - Kotlin SDK
+- Go SDK
 
 The following table describes the environment variables. By default, the SDK "namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming environment variables.
 
