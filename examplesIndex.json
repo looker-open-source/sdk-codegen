@@ -1,6 +1,6 @@
 {
-  "commitHash": "d5b0c999727e6065723ac6becbb5c53e98550387",
-  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
+  "commitHash": "6654f37f120153217a1c04f1e03ed0f1ea5304d4",
+  "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen.git",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
       "summary": "`codeGenerators.ts`",
@@ -648,12 +648,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 942
+            "line": 939
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 1123
+            "line": 1120
           }
         ],
         ".kt": [
@@ -701,7 +701,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 14,
-            "line": 5084
+            "line": 5103
           }
         ],
         ".kt": [
@@ -770,19 +770,19 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 13,
-            "line": 337
+            "line": 333
           }
         ],
         ".py": [
           {
             "sourceFile": "python/looker_sdk/sdk/api31/methods.py",
             "column": 17,
-            "line": 6670
+            "line": 6652
           },
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 17,
-            "line": 8535
+            "line": 8514
           }
         ],
         ".swift": [
@@ -818,7 +818,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 4,
-            "line": 6596
+            "line": 6617
           }
         ],
         ".kt": [
@@ -889,12 +889,12 @@
           {
             "sourceFile": "python/looker_sdk/sdk/api31/methods.py",
             "column": 7,
-            "line": 9386
+            "line": 9365
           },
           {
             "sourceFile": "python/looker_sdk/sdk/api40/methods.py",
             "column": 7,
-            "line": 11025
+            "line": 11001
           }
         ],
         ".swift": [
@@ -1600,12 +1600,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 932
+            "line": 929
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 957
+            "line": 954
           }
         ],
         ".kt": [
@@ -2065,12 +2065,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 984
+            "line": 980
           },
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 995
+            "line": 991
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2289,7 +2289,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 911
+            "line": 907
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2493,7 +2493,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 951
+            "line": 948
           }
         ],
         ".swift": [
@@ -2546,7 +2546,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 970
+            "line": 966
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2670,12 +2670,12 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 919
+            "line": 915
           },
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 927
+            "line": 923
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -2777,12 +2777,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1016
+            "line": 1013
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1024
+            "line": 1021
           }
         ]
       }
@@ -3223,7 +3223,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 946
+            "line": 942
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -3602,7 +3602,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 960
+            "line": 957
           }
         ],
         ".py": [
@@ -8968,7 +8968,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 1031
+            "line": 1027
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -8990,7 +8990,7 @@
           {
             "sourceFile": "packages/sdk-codegen/src/python.gen.spec.ts",
             "column": 35,
-            "line": 1075
+            "line": 1071
           },
           {
             "sourceFile": "packages/sdk-codegen/src/typescript.gen.spec.ts",
@@ -9133,7 +9133,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1031
+            "line": 1028
           }
         ],
         ".py": [
@@ -9152,7 +9152,7 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1060
+            "line": 1057
           }
         ],
         ".py": [

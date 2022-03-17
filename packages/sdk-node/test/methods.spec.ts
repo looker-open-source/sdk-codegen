@@ -908,13 +908,10 @@ describe('LookerNodeSDK', () => {
   })
 
   describe('Dashboard endpoints', () => {
-    const getQueryId = (
-      qhash: { [id: string]: IQuery },
-      id: any
-    ): number | undefined => {
+    const getQueryId = (qhash: { [id: string]: IQuery }, id: any) => {
       if (!id) return id
       if (id.startsWith('#')) id = id.substr(1)
-      else return id ? parseInt(id, 10) : undefined
+      else return id
       const result = qhash[id]
       if (result) return result.id
       // default to first query. test data is bad
