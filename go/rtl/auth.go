@@ -145,7 +145,8 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return fmt.Errorf("response error. status=%s. error=%s", res.Status, string(b))
 	}
 
-	// TODO: Make parsing content-type aware. Required change to go model generation to use interface{} for all union types. Github Issue: 
+	// TODO: Make parsing content-type aware. Requires change to go model generation to use interface{} for all union types.
+	// Github Issue: https://github.com/looker-open-source/sdk-codegen/issues/1022
 	switch v := result.(type) {
 	case *string:
 			b, err := ioutil.ReadAll(res.Body)
