@@ -38,24 +38,27 @@ API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer nee
 
 
 def _settings(
-    config_file: str, section: Optional[str] = None
+    config_file: str,
+    env_prefix: str = constants.environment_prefix,
+    section: Optional[str] = None
 ) -> api_settings.ApiSettings:
     return api_settings.ApiSettings(
         filename=config_file,
         section=section,
         sdk_version=constants.sdk_version,
-        env_prefix=constants.environment_prefix,
+        env_prefix=env_prefix,
     )
 
 
 def init31(
     config_file: str = "looker.ini",
+    env_prefix: str = constants.environment_prefix,
     section: Optional[str] = None,
     config_settings: Optional[api_settings.ApiSettings] = None,
 ) -> methods31.Looker31SDK:
     """Default dependency configuration"""
     settings = (
-        _settings(config_file, section) if config_settings is None else config_settings
+        _settings(config_file, env_prefix, section) if config_settings is None else config_settings
     )
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
@@ -70,12 +73,13 @@ def init31(
 
 def init40(
     config_file: str = "looker.ini",
+    env_prefix: str = constants.environment_prefix,
     section: Optional[str] = None,
     config_settings: Optional[api_settings.ApiSettings] = None,
 ) -> methods40.Looker40SDK:
     """Default dependency configuration"""
     settings = (
-        _settings(config_file, section) if config_settings is None else config_settings
+        _settings(config_file, env_prefix, section) if config_settings is None else config_settings
     )
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
