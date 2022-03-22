@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API methods
+ * 382 API methods
  */
 
 import type {
@@ -109,6 +109,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IModelSet,
   IOIDCConfig,
@@ -134,6 +135,7 @@ import type {
   IRequestAllScheduledPlans,
   IRequestAllUsers,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateLookmlDashboardRenderTask,
   IRequestCreateQueryTask,
@@ -169,6 +171,7 @@ import type {
   IRequestSearchUsersNames,
   IRequestSpaceChildren,
   IRequestSpaceChildrenSearch,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -179,6 +182,7 @@ import type {
   IScheduledPlan,
   ISession,
   ISessionConfig,
+  ISmtpSettings,
   ISpace,
   ISpaceBase,
   ISqlQuery,
@@ -1282,6 +1286,22 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<ILocale[], IError>>
 
   /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *
+   * POST /smtp_settings -> void
+   *
+   * @param body Partial<ISmtpSettings>
+   * @param options one-time API call overrides
+   *
+   */
+  set_smtp_settings(
+    body: Partial<ISmtpSettings>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError | IValidationError>>
+
+  /**
    * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
    *
    * GET /timezones -> ITimezone[]
@@ -1809,8 +1829,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    *
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    *
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2135,14 +2155,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /dashboard_elements -> IDashboardElement
    *
-   * @param body Partial<IWriteDashboardElement>
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   create_dashboard_element(
-    body: Partial<IWriteDashboardElement>,
-    fields?: string,
+    request: IRequestCreateDashboardElement,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>>
 
@@ -2465,6 +2483,50 @@ export interface ILooker31SDK extends IAPIMethods {
     request: IRequestGraphDerivedTablesForView,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDependencyGraph, IError>>
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   *
+   * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+   *
+   * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  start_pdt_build(
+    request: IRequestStartPdtBuild,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Check status of PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to check status for.
+   * @param options one-time API call overrides
+   *
+   */
+  check_pdt_build(
+    materialization_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
+
+  /**
+   * Stop a PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+   *
+   * @param materialization_id The materialization id to stop.
+   * @param source The source of this request.
+   * @param options one-time API call overrides
+   *
+   */
+  stop_pdt_build(
+    materialization_id: string,
+    source?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IMaterializePDT, IError>>
 
   //#endregion DerivedTable: View Derived Table graphs
 
@@ -3118,7 +3180,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * @deprecated
    *
-   * @param homepage_item_id Id of homepage_item
+   * @param homepage_item_id Id of homepage item
    * @param options one-time API call overrides
    *
    */
@@ -3206,7 +3268,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * @deprecated
    *
-   * @param homepage_section_id Id of homepage_section
+   * @param homepage_section_id Id of homepage section
    * @param options one-time API call overrides
    *
    */
@@ -3270,7 +3332,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -3288,7 +3350,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param body Partial<IWriteIntegrationHub>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -4624,11 +4686,11 @@ export interface ILooker31SDK extends IAPIMethods {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    *
@@ -5127,7 +5189,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
    *
-   * @param permission_set_id id of permission set
+   * @param permission_set_id Id of permission set
    * @param body Partial<IWritePermissionSet>
    * @param options one-time API call overrides
    *
@@ -5310,14 +5372,14 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
-   * @param role_id Id of Role
-   * @param body Partial<number[]>
+   * @param role_id id of role
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   set_role_groups(
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError | IValidationError>>
 
@@ -5341,13 +5403,13 @@ export interface ILooker31SDK extends IAPIMethods {
    * PUT /roles/{role_id}/users -> IUser[]
    *
    * @param role_id id of role
-   * @param body Partial<number[]>
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   set_role_users(
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError | IValidationError>>
 
@@ -6527,7 +6589,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6543,7 +6605,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6561,7 +6623,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6579,7 +6641,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_email -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6593,7 +6655,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6609,7 +6671,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6627,7 +6689,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_totp -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6641,7 +6703,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6657,7 +6719,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6671,7 +6733,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6687,7 +6749,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_google -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6701,7 +6763,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6717,7 +6779,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6731,7 +6793,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6747,7 +6809,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6779,8 +6841,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_api3_id id of API 3 Credential
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API 3 Credential
    * @param options one-time API call overrides
    *
    */
@@ -6795,7 +6857,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6811,7 +6873,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6847,8 +6909,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_embed_id id of Embedding Credential
+   * @param user_id Id of user
+   * @param credentials_embed_id Id of Embedding Credential
    * @param options one-time API call overrides
    *
    */
@@ -6863,7 +6925,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6879,7 +6941,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6895,7 +6957,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -6927,8 +6989,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
-   * @param user_id id of user
-   * @param session_id id of Web Login Session
+   * @param user_id Id of user
+   * @param session_id Id of Web Login Session
    * @param options one-time API call overrides
    *
    */
@@ -6943,7 +7005,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6995,15 +7057,15 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * PUT /users/{user_id}/roles -> IRole[]
    *
-   * @param user_id id of user
-   * @param body Partial<number[]>
+   * @param user_id Id of user
+   * @param body Partial<string[]>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   set_user_roles(
     user_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>
@@ -7160,7 +7222,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * DELETE /user_attributes/{user_attribute_id} -> string
    *
-   * @param user_attribute_id Id of user_attribute
+   * @param user_attribute_id Id of user attribute
    * @param options one-time API call overrides
    *
    */

@@ -273,8 +273,8 @@ class OAuthSession(AuthSession):
         # would have prefered using setattr(self, required, ...) in loop above
         # but mypy can't follow it
         self.client_id = config_data["client_id"]
-        self.redirect_uri = config_data["redirect_uri"]
-        self.looker_url = config_data["looker_url"]
+        self.redirect_uri = config_data.get("redirect_uri", "")
+        self.looker_url = config_data.get("looker_url", "")
         self.code_verifier = ""
 
     def create_auth_code_request_url(self, scope: str, state: str) -> str:
@@ -317,7 +317,7 @@ class OAuthSession(AuthSession):
         response = self.transport.request(
             transport.HttpMethod.POST,
             urllib.parse.urljoin(self.settings.base_url, "/api/token"),
-            body=self.serialize(grant_type),
+            body=self.serialize(api_model=grant_type),  # type: ignore
         )
         if not response.ok:
             raise error.SDKError(response.value.decode(encoding=response.encoding))

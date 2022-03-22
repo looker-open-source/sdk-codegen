@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API methods
+ * 382 API methods
  */
 
 import type {
@@ -114,6 +114,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IModelSet,
   IOIDCConfig,
@@ -139,6 +140,7 @@ import type {
   IRequestAllScheduledPlans,
   IRequestAllUsers,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateLookmlDashboardRenderTask,
   IRequestCreateQueryTask,
@@ -174,6 +176,7 @@ import type {
   IRequestSearchUsersNames,
   IRequestSpaceChildren,
   IRequestSpaceChildrenSearch,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -184,6 +187,7 @@ import type {
   IScheduledPlan,
   ISession,
   ISessionConfig,
+  ISmtpSettings,
   ISpace,
   ISpaceBase,
   ISqlQuery,
@@ -1795,6 +1799,31 @@ export const all_locales = async (
 }
 
 /**
+ * ### Configure SMTP Settings
+ *   This API allows users to configure the SMTP settings on the Looker instance.
+ *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+ *
+ * POST /smtp_settings -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISmtpSettings>
+ * @param options one-time API call overrides
+ *
+ */
+export const set_smtp_settings = async (
+  sdk: IAPIMethods,
+  body: Partial<ISmtpSettings>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError | IValidationError>> => {
+  return sdk.post<void, IError | IValidationError>(
+    '/smtp_settings',
+    null,
+    body,
+    options
+  )
+}
+
+/**
  * ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
  *
  * GET /timezones -> ITimezone[]
@@ -2617,8 +2646,8 @@ export const all_dashboards = async (
  *
  * Creates a new dashboard object and returns the details of the newly created dashboard.
  *
- * `Title`, `user_id`, and `space_id` are all required fields.
- * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+ * `Title` and `space_id` are required fields.
+ * `Space_id` must contain the id of an existing space.
  * A dashboard's `title` must be unique within the space in which it resides.
  *
  * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2709,8 +2738,6 @@ export const search_dashboards = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
-      limit: request.limit,
-      offset: request.offset,
       sorts: request.sorts,
       filter_or: request.filter_or,
     },
@@ -3110,21 +3137,19 @@ export const dashboard_dashboard_elements = async (
  * POST /dashboard_elements -> IDashboardElement
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<IWriteDashboardElement>
- * @param fields Requested fields.
+ * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const create_dashboard_element = async (
   sdk: IAPIMethods,
-  body: Partial<IWriteDashboardElement>,
-  fields?: string,
+  request: IRequestCreateDashboardElement,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>> => {
   return sdk.post<IDashboardElement, IError | IValidationError>(
     '/dashboard_elements',
-    { fields },
-    body,
+    { fields: request.fields, apply_filters: request.apply_filters },
+    request.body,
     options
   )
 }
@@ -3636,6 +3661,86 @@ export const graph_derived_tables_for_view = async (
   return sdk.get<IDependencyGraph, IError>(
     `/derived_table/graph/view/${request.view}`,
     { models: request.models, workspace: request.workspace },
+    null,
+    options
+  )
+}
+
+/**
+ * Enqueue materialization for a PDT with the given model name and view name
+ *
+ * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const start_pdt_build = async (
+  sdk: IAPIMethods,
+  request: IRequestStartPdtBuild,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  request.model_name = encodeParam(request.model_name)
+  request.view_name = encodeParam(request.view_name)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${request.model_name}/${request.view_name}/start`,
+    {
+      force_rebuild: request.force_rebuild,
+      force_full_incremental: request.force_full_incremental,
+      workspace: request.workspace,
+      source: request.source,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * Check status of PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to check status for.
+ * @param options one-time API call overrides
+ *
+ */
+export const check_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/status`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * Stop a PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to stop.
+ * @param source The source of this request.
+ * @param options one-time API call overrides
+ *
+ */
+export const stop_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  source?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/stop`,
+    { source },
     null,
     options
   )
@@ -4674,7 +4779,7 @@ export const update_homepage_item = async (
  * @deprecated
  *
  * @param sdk IAPIMethods implementation
- * @param homepage_item_id Id of homepage_item
+ * @param homepage_item_id Id of homepage item
  * @param options one-time API call overrides
  *
  */
@@ -4807,7 +4912,7 @@ export const update_homepage_section = async (
  * @deprecated
  *
  * @param sdk IAPIMethods implementation
- * @param homepage_section_id Id of homepage_section
+ * @param homepage_section_id Id of homepage section
  * @param options one-time API call overrides
  *
  */
@@ -4907,7 +5012,7 @@ export const create_integration_hub = async (
  * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
  *
  * @param sdk IAPIMethods implementation
- * @param integration_hub_id Id of Integration Hub
+ * @param integration_hub_id Id of integration_hub
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -4934,7 +5039,7 @@ export const integration_hub = async (
  * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
  *
  * @param sdk IAPIMethods implementation
- * @param integration_hub_id Id of Integration Hub
+ * @param integration_hub_id Id of integration_hub
  * @param body Partial<IWriteIntegrationHub>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -5244,8 +5349,6 @@ export const search_looks = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
-      limit: request.limit,
-      offset: request.offset,
       sorts: request.sorts,
       filter_or: request.filter_or,
     },
@@ -6919,11 +7022,11 @@ export const run_inline_query = async (
  * ```ruby
  * query_params =
  * {
- *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+ *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
  *   :"f[category.name]" => "socks",
- *   :sorts => "products.count desc 0",
- *   :limit => "500",
- *   :query_timezone => "America/Los_Angeles"
+ *   sorts: "products.count desc 0",
+ *   limit: "500",
+ *   query_timezone: "America/Los_Angeles"
  * }
  * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
  *
@@ -7662,7 +7765,7 @@ export const permission_set = async (
  * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
  *
  * @param sdk IAPIMethods implementation
- * @param permission_set_id id of permission set
+ * @param permission_set_id Id of permission set
  * @param body Partial<IWritePermissionSet>
  * @param options one-time API call overrides
  *
@@ -7943,15 +8046,15 @@ export const role_groups = async (
  * PUT /roles/{role_id}/groups -> IGroup[]
  *
  * @param sdk IAPIMethods implementation
- * @param role_id Id of Role
- * @param body Partial<number[]>
+ * @param role_id id of role
+ * @param body Partial<string[]>
  * @param options one-time API call overrides
  *
  */
 export const set_role_groups = async (
   sdk: IAPIMethods,
   role_id: number,
-  body: Partial<number[]>,
+  body: Partial<string[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError | IValidationError>> => {
   return sdk.put<IGroup[], IError | IValidationError>(
@@ -7995,14 +8098,14 @@ export const role_users = async (
  *
  * @param sdk IAPIMethods implementation
  * @param role_id id of role
- * @param body Partial<number[]>
+ * @param body Partial<string[]>
  * @param options one-time API call overrides
  *
  */
 export const set_role_users = async (
   sdk: IAPIMethods,
   role_id: number,
-  body: Partial<number[]>,
+  body: Partial<string[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError | IValidationError>> => {
   return sdk.put<IUser[], IError | IValidationError>(
@@ -9642,7 +9745,7 @@ export const user_for_credential = async (
  * GET /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9667,7 +9770,7 @@ export const user_credentials_email = async (
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body Partial<IWriteCredentialsEmail>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -9694,7 +9797,7 @@ export const create_user_credentials_email = async (
  * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body Partial<IWriteCredentialsEmail>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -9721,7 +9824,7 @@ export const update_user_credentials_email = async (
  * DELETE /users/{user_id}/credentials_email -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -9744,7 +9847,7 @@ export const delete_user_credentials_email = async (
  * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9769,7 +9872,7 @@ export const user_credentials_totp = async (
  * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -9796,7 +9899,7 @@ export const create_user_credentials_totp = async (
  * DELETE /users/{user_id}/credentials_totp -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -9819,7 +9922,7 @@ export const delete_user_credentials_totp = async (
  * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9844,7 +9947,7 @@ export const user_credentials_ldap = async (
  * DELETE /users/{user_id}/credentials_ldap -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -9867,7 +9970,7 @@ export const delete_user_credentials_ldap = async (
  * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9892,7 +9995,7 @@ export const user_credentials_google = async (
  * DELETE /users/{user_id}/credentials_google -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -9915,7 +10018,7 @@ export const delete_user_credentials_google = async (
  * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9940,7 +10043,7 @@ export const user_credentials_saml = async (
  * DELETE /users/{user_id}/credentials_saml -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -9963,7 +10066,7 @@ export const delete_user_credentials_saml = async (
  * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -9988,7 +10091,7 @@ export const user_credentials_oidc = async (
  * DELETE /users/{user_id}/credentials_oidc -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -10038,8 +10141,8 @@ export const user_credentials_api3 = async (
  * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param credentials_api3_id id of API 3 Credential
+ * @param user_id Id of user
+ * @param credentials_api3_id Id of API 3 Credential
  * @param options one-time API call overrides
  *
  */
@@ -10063,7 +10166,7 @@ export const delete_user_credentials_api3 = async (
  * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10088,7 +10191,7 @@ export const all_user_credentials_api3s = async (
  * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -10142,8 +10245,8 @@ export const user_credentials_embed = async (
  * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param credentials_embed_id id of Embedding Credential
+ * @param user_id Id of user
+ * @param credentials_embed_id Id of Embedding Credential
  * @param options one-time API call overrides
  *
  */
@@ -10167,7 +10270,7 @@ export const delete_user_credentials_embed = async (
  * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10192,7 +10295,7 @@ export const all_user_credentials_embeds = async (
  * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10217,7 +10320,7 @@ export const user_credentials_looker_openid = async (
  * DELETE /users/{user_id}/credentials_looker_openid -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
@@ -10267,8 +10370,8 @@ export const user_session = async (
  * DELETE /users/{user_id}/sessions/{session_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param session_id id of Web Login Session
+ * @param user_id Id of user
+ * @param session_id Id of Web Login Session
  * @param options one-time API call overrides
  *
  */
@@ -10292,7 +10395,7 @@ export const delete_user_session = async (
  * GET /users/{user_id}/sessions -> ISession[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10374,8 +10477,8 @@ export const user_roles = async (
  * PUT /users/{user_id}/roles -> IRole[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param body Partial<number[]>
+ * @param user_id Id of user
+ * @param body Partial<string[]>
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
@@ -10383,7 +10486,7 @@ export const user_roles = async (
 export const set_user_roles = async (
   sdk: IAPIMethods,
   user_id: number,
-  body: Partial<number[]>,
+  body: Partial<string[]>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
@@ -10616,7 +10719,7 @@ export const update_user_attribute = async (
  * DELETE /user_attributes/{user_attribute_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_attribute_id Id of user_attribute
+ * @param user_attribute_id Id of user attribute
  * @param options one-time API call overrides
  *
  */

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.4.0...sdk-codegen-v21.5.0) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+
+
+### Bug Fixes
+
+* remove python version upper bound ([#1015](https://www.github.com/looker-open-source/sdk-codegen/issues/1015)) ([b1650a1](https://www.github.com/looker-open-source/sdk-codegen/commit/b1650a1a8a56c52a7a06ca5c9cef02300af7289e))
+
 ## [21.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.3.1...sdk-codegen-v21.4.0) (2022-02-14)
 
 

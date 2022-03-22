@@ -32,6 +32,7 @@ NAME = "looker_sdk"
 VERSION = version["__version__"]
 REQUIRES = [
     "requests >= 2.22",
+    "typing-extensions >= 4.1.1",
     # Python 3.6
     "attrs >= 18.2.0;python_version<'3.7'",
     "cattrs < 1.1.0;python_version<'3.7'",
@@ -39,7 +40,6 @@ REQUIRES = [
     # Python 3.7+
     "attrs >= 20.1.0;python_version>='3.7'",
     "cattrs >= 1.3;python_version>='3.7'",
-    "typing-extensions;python_version<'3.8'",
 ]
 
 
@@ -55,7 +55,7 @@ setup(
     package_data={"looker_sdk": ["py.typed", "looker_sdk/looker-sample.ini"]},
     packages=find_packages(),
     # restrict python to <=3.9.9 due to https://github.com/looker-open-source/sdk-codegen/issues/944
-    python_requires=">=3.6, <=3.9.9",
+    python_requires=">=3.6",
     url="https://pypi.python.org/pypi/looker_sdk",
     version=VERSION,
 )

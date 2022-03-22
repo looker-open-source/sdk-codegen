@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 438 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -54,7 +54,6 @@ import type {
   IBoardSection,
   IColorCollection,
   IColumnSearch,
-  ICommand,
   IConnectionFeatures,
   IContentFavorite,
   IContentMeta,
@@ -97,6 +96,7 @@ import type {
   IDialectInfo,
   IDigestEmails,
   IDigestEmailSend,
+  IEgressIpAddresses,
   IEmbedParams,
   IEmbedSecret,
   IEmbedSsoParams,
@@ -128,6 +128,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IMobileSettings,
   IModel,
@@ -163,13 +164,13 @@ import type {
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateQueryTask,
   IRequestCreateUserCredentialsEmailPasswordReset,
   IRequestDeployRefToProduction,
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
-  IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
@@ -199,6 +200,7 @@ import type {
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
   IRequestSearchUsersNames,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -214,6 +216,7 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpSettings,
   ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
@@ -226,7 +229,6 @@ import type {
   ISupportAccessStatus,
   ITheme,
   ITimezone,
-  IUpdateCommand,
   IUpdateFolder,
   IUser,
   IUserAttribute,
@@ -246,7 +248,6 @@ import type {
   IWriteBoardItem,
   IWriteBoardSection,
   IWriteColorCollection,
-  IWriteCommand,
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
@@ -256,6 +257,7 @@ import type {
   IWriteDashboardFilter,
   IWriteDashboardLayout,
   IWriteDashboardLayoutComponent,
+  IWriteDashboardLookml,
   IWriteDatagroup,
   IWriteDBConnection,
   IWriteEmbedSecret,
@@ -354,9 +356,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async get_alert(
     callback: (readable: Readable) => Promise<IAlert>,
-    alert_id: number,
+    alert_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    alert_id = encodeParam(alert_id)
     return this.authStream<IAlert>(
       callback,
       'GET',
@@ -382,10 +385,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_alert(
     callback: (readable: Readable) => Promise<IAlert>,
-    alert_id: number,
+    alert_id: string,
     body: Partial<IWriteAlert>,
     options?: Partial<ITransportSettings>
   ) {
+    alert_id = encodeParam(alert_id)
     return this.authStream<IAlert>(
       callback,
       'PUT',
@@ -411,10 +415,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_alert_field(
     callback: (readable: Readable) => Promise<IAlert>,
-    alert_id: number,
+    alert_id: string,
     body: Partial<IAlertPatch>,
     options?: Partial<ITransportSettings>
   ) {
+    alert_id = encodeParam(alert_id)
     return this.authStream<IAlert>(
       callback,
       'PATCH',
@@ -437,9 +442,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_alert(
     callback: (readable: Readable) => Promise<void>,
-    alert_id: number,
+    alert_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    alert_id = encodeParam(alert_id)
     return this.authStream<void>(
       callback,
       'DELETE',
@@ -522,10 +528,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async enqueue_alert(
     callback: (readable: Readable) => Promise<void>,
-    alert_id: number,
+    alert_id: string,
     force?: boolean,
     options?: Partial<ITransportSettings>
   ) {
+    alert_id = encodeParam(alert_id)
     return this.authStream<void>(
       callback,
       'POST',
@@ -620,10 +627,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async login_user(
     callback: (readable: Readable) => Promise<IAccessToken>,
-    user_id: number,
+    user_id: string,
     associative?: boolean,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<IAccessToken>(
       callback,
       'POST',
@@ -700,9 +708,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_embed_secret(
     callback: (readable: Readable) => Promise<string>,
-    embed_secret_id: number,
+    embed_secret_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    embed_secret_id = encodeParam(embed_secret_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -1254,11 +1263,12 @@ export class Looker40SDKStream extends APIMethods {
   async activate_app_user(
     callback: (readable: Readable) => Promise<string>,
     client_guid: string,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'POST',
@@ -1293,11 +1303,12 @@ export class Looker40SDKStream extends APIMethods {
   async deactivate_app_user(
     callback: (readable: Readable) => Promise<string>,
     client_guid: string,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
     client_guid = encodeParam(client_guid)
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -1974,6 +1985,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         auth_type: request.auth_type,
         full_name: request.full_name,
@@ -2141,10 +2154,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async board(
     callback: (readable: Readable) => Promise<IBoard>,
-    board_id: number,
+    board_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_id = encodeParam(board_id)
     return this.authStream<IBoard>(
       callback,
       'GET',
@@ -2169,11 +2183,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_board(
     callback: (readable: Readable) => Promise<IBoard>,
-    board_id: number,
+    board_id: string,
     body: Partial<IWriteBoard>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_id = encodeParam(board_id)
     return this.authStream<IBoard>(
       callback,
       'PATCH',
@@ -2196,9 +2211,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_board(
     callback: (readable: Readable) => Promise<string>,
-    board_id: number,
+    board_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_id = encodeParam(board_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -2278,10 +2294,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async board_item(
     callback: (readable: Readable) => Promise<IBoardItem>,
-    board_item_id: number,
+    board_item_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_item_id = encodeParam(board_item_id)
     return this.authStream<IBoardItem>(
       callback,
       'GET',
@@ -2306,11 +2323,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_board_item(
     callback: (readable: Readable) => Promise<IBoardItem>,
-    board_item_id: number,
+    board_item_id: string,
     body: Partial<IWriteBoardItem>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_item_id = encodeParam(board_item_id)
     return this.authStream<IBoardItem>(
       callback,
       'PATCH',
@@ -2327,15 +2345,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /board_items/{board_item_id} -> string
    *
    * @param callback streaming output function
-   * @param board_item_id Id of board_item
+   * @param board_item_id Id of board item
    * @param options one-time API call overrides
    *
    */
   async delete_board_item(
     callback: (readable: Readable) => Promise<string>,
-    board_item_id: number,
+    board_item_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_item_id = encodeParam(board_item_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -2411,10 +2430,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async board_section(
     callback: (readable: Readable) => Promise<IBoardSection>,
-    board_section_id: number,
+    board_section_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_section_id = encodeParam(board_section_id)
     return this.authStream<IBoardSection>(
       callback,
       'GET',
@@ -2439,11 +2459,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_board_section(
     callback: (readable: Readable) => Promise<IBoardSection>,
-    board_section_id: number,
+    board_section_id: string,
     body: Partial<IWriteBoardSection>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_section_id = encodeParam(board_section_id)
     return this.authStream<IBoardSection>(
       callback,
       'PATCH',
@@ -2466,9 +2487,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_board_section(
     callback: (readable: Readable) => Promise<string>,
-    board_section_id: number,
+    board_section_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    board_section_id = encodeParam(board_section_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -2764,121 +2786,6 @@ export class Looker40SDKStream extends APIMethods {
 
   //#endregion ColorCollection: Manage Color Collections
 
-  //#region Command: Manage Commands
-
-  /**
-   * ### Get All Commands.
-   *
-   * GET /commands -> ICommand[]
-   *
-   * @param callback streaming output function
-   * @param request composed interface "IRequestGetAllCommands" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  async get_all_commands(
-    callback: (readable: Readable) => Promise<ICommand[]>,
-    request: IRequestGetAllCommands,
-    options?: Partial<ITransportSettings>
-  ) {
-    return this.authStream<ICommand[]>(
-      callback,
-      'GET',
-      '/commands',
-      {
-        content_id: request.content_id,
-        content_type: request.content_type,
-        limit: request.limit,
-      },
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Create a new command.
-   * # Required fields: [:name, :linked_content_id, :linked_content_type]
-   * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-   * #
-   *
-   * POST /commands -> ICommand
-   *
-   * @param callback streaming output function
-   * @param body Partial<IWriteCommand>
-   * @param options one-time API call overrides
-   *
-   */
-  async create_command(
-    callback: (readable: Readable) => Promise<ICommand>,
-    body: Partial<IWriteCommand>,
-    options?: Partial<ITransportSettings>
-  ) {
-    return this.authStream<ICommand>(
-      callback,
-      'POST',
-      '/commands',
-      null,
-      body,
-      options
-    )
-  }
-
-  /**
-   * ### Update an existing custom command.
-   * # Optional fields: ['name', 'description']
-   * #
-   *
-   * PATCH /commands/{command_id} -> ICommand
-   *
-   * @param callback streaming output function
-   * @param command_id ID of a command
-   * @param body Partial<IUpdateCommand>
-   * @param options one-time API call overrides
-   *
-   */
-  async update_command(
-    callback: (readable: Readable) => Promise<ICommand>,
-    command_id: number,
-    body: Partial<IUpdateCommand>,
-    options?: Partial<ITransportSettings>
-  ) {
-    return this.authStream<ICommand>(
-      callback,
-      'PATCH',
-      `/commands/${command_id}`,
-      null,
-      body,
-      options
-    )
-  }
-
-  /**
-   * ### Delete an existing custom command.
-   *
-   * DELETE /commands/{command_id} -> void
-   *
-   * @param callback streaming output function
-   * @param command_id ID of a command
-   * @param options one-time API call overrides
-   *
-   */
-  async delete_command(
-    callback: (readable: Readable) => Promise<void>,
-    command_id: number,
-    options?: Partial<ITransportSettings>
-  ) {
-    return this.authStream<void>(
-      callback,
-      'DELETE',
-      `/commands/${command_id}`,
-      null,
-      null,
-      options
-    )
-  }
-
-  //#endregion Command: Manage Commands
-
   //#region Config: Manage General Configuration
 
   /**
@@ -3075,6 +2982,31 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'POST',
       '/digest_email_send',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get Egress IP Addresses
+   *
+   * Returns the list of public egress IP Addresses for a hosted customer's instance
+   *
+   * GET /public_egress_ip_addresses -> IEgressIpAddresses
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async public_egress_ip_addresses(
+    callback: (readable: Readable) => Promise<IEgressIpAddresses>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IEgressIpAddresses>(
+      callback,
+      'GET',
+      '/public_egress_ip_addresses',
       null,
       null,
       options
@@ -3307,7 +3239,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - whitelabel_configuration
+   *  - privatelabel_configuration
    *  - custom_welcome_email
    *  - onboarding_enabled
    *
@@ -3340,7 +3272,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - whitelabel_configuration
+   *  - privatelabel_configuration
    *  - custom_welcome_email
    *  - onboarding_enabled
    *
@@ -3365,6 +3297,33 @@ export class Looker40SDKStream extends APIMethods {
       'PATCH',
       '/setting',
       { fields },
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Configure SMTP Settings
+   *   This API allows users to configure the SMTP settings on the Looker instance.
+   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *
+   * POST /smtp_settings -> void
+   *
+   * @param callback streaming output function
+   * @param body Partial<ISmtpSettings>
+   * @param options one-time API call overrides
+   *
+   */
+  async set_smtp_settings(
+    callback: (readable: Readable) => Promise<void>,
+    body: Partial<ISmtpSettings>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<void>(
+      callback,
+      'POST',
+      '/smtp_settings',
+      null,
       body,
       options
     )
@@ -4281,10 +4240,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async content_favorite(
     callback: (readable: Readable) => Promise<IContentFavorite>,
-    content_favorite_id: number,
+    content_favorite_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    content_favorite_id = encodeParam(content_favorite_id)
     return this.authStream<IContentFavorite>(
       callback,
       'GET',
@@ -4307,9 +4267,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_content_favorite(
     callback: (readable: Readable) => Promise<string>,
-    content_favorite_id: number,
+    content_favorite_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    content_favorite_id = encodeParam(content_favorite_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -4358,7 +4319,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_content_metadatas(
     callback: (readable: Readable) => Promise<IContentMeta[]>,
-    parent_id: number,
+    parent_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
@@ -4385,10 +4346,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async content_metadata(
     callback: (readable: Readable) => Promise<IContentMeta>,
-    content_metadata_id: number,
+    content_metadata_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    content_metadata_id = encodeParam(content_metadata_id)
     return this.authStream<IContentMeta>(
       callback,
       'GET',
@@ -4412,10 +4374,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_content_metadata(
     callback: (readable: Readable) => Promise<IContentMeta>,
-    content_metadata_id: number,
+    content_metadata_id: string,
     body: Partial<IWriteContentMeta>,
     options?: Partial<ITransportSettings>
   ) {
+    content_metadata_id = encodeParam(content_metadata_id)
     return this.authStream<IContentMeta>(
       callback,
       'PATCH',
@@ -4439,7 +4402,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_content_metadata_accesses(
     callback: (readable: Readable) => Promise<IContentMetaGroupUser[]>,
-    content_metadata_id: number,
+    content_metadata_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
@@ -4520,9 +4483,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_content_metadata_access(
     callback: (readable: Readable) => Promise<string>,
-    content_metadata_access_id: number,
+    content_metadata_access_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    content_metadata_access_id = encodeParam(content_metadata_access_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -4737,8 +4701,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    *
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    *
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -5118,6 +5082,40 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+   *
+   * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+   *
+   * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+   * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+   * ).
+   *
+   * Note that the created dashboard is not linked to any LookML Dashboard,
+   * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+   *
+   * POST /dashboards/from_lookml -> IDashboardLookml
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteDashboardLookml>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_dashboard_from_lookml(
+    callback: (readable: Readable) => Promise<IDashboardLookml>,
+    body: Partial<IWriteDashboardLookml>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IDashboardLookml>(
+      callback,
+      'POST',
+      '/dashboards/from_lookml',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
    * ### Copy an existing dashboard
    *
    * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -5327,23 +5325,21 @@ export class Looker40SDKStream extends APIMethods {
    * POST /dashboard_elements -> IDashboardElement
    *
    * @param callback streaming output function
-   * @param body Partial<IWriteDashboardElement>
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async create_dashboard_element(
     callback: (readable: Readable) => Promise<IDashboardElement>,
-    body: Partial<IWriteDashboardElement>,
-    fields?: string,
+    request: IRequestCreateDashboardElement,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardElement>(
       callback,
       'POST',
       '/dashboard_elements',
-      { fields },
-      body,
+      { fields: request.fields, apply_filters: request.apply_filters },
+      request.body,
       options
     )
   }
@@ -5805,9 +5801,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async datagroup(
     callback: (readable: Readable) => Promise<IDatagroup>,
-    datagroup_id: number,
+    datagroup_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    datagroup_id = encodeParam(datagroup_id)
     return this.authStream<IDatagroup>(
       callback,
       'GET',
@@ -5831,10 +5828,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_datagroup(
     callback: (readable: Readable) => Promise<IDatagroup>,
-    datagroup_id: number,
+    datagroup_id: string,
     body: Partial<IWriteDatagroup>,
     options?: Partial<ITransportSettings>
   ) {
+    datagroup_id = encodeParam(datagroup_id)
     return this.authStream<IDatagroup>(
       callback,
       'PATCH',
@@ -5896,6 +5894,92 @@ export class Looker40SDKStream extends APIMethods {
       'GET',
       `/derived_table/graph/view/${request.view}`,
       { models: request.models, workspace: request.workspace },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Enqueue materialization for a PDT with the given model name and view name
+   *
+   * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async start_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    request: IRequestStartPdtBuild,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.model_name = encodeParam(request.model_name)
+    request.view_name = encodeParam(request.view_name)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${request.model_name}/${request.view_name}/start`,
+      {
+        force_rebuild: request.force_rebuild,
+        force_full_incremental: request.force_full_incremental,
+        workspace: request.workspace,
+        source: request.source,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Check status of PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param materialization_id The materialization id to check status for.
+   * @param options one-time API call overrides
+   *
+   */
+  async check_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    materialization_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    materialization_id = encodeParam(materialization_id)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${materialization_id}/status`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * Stop a PDT materialization
+   *
+   * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+   *
+   * @param callback streaming output function
+   * @param materialization_id The materialization id to stop.
+   * @param source The source of this request.
+   * @param options one-time API call overrides
+   *
+   */
+  async stop_pdt_build(
+    callback: (readable: Readable) => Promise<IMaterializePDT>,
+    materialization_id: string,
+    source?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    materialization_id = encodeParam(materialization_id)
+    return this.authStream<IMaterializePDT>(
+      callback,
+      'GET',
+      `/derived_table/${materialization_id}/stop`,
+      { source },
       null,
       options
     )
@@ -6282,6 +6366,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
         ids: request.ids,
         content_metadata_id: request.content_metadata_id,
@@ -6510,10 +6596,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async group(
     callback: (readable: Readable) => Promise<IGroup>,
-    group_id: number,
+    group_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<IGroup>(
       callback,
       'GET',
@@ -6538,11 +6625,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_group(
     callback: (readable: Readable) => Promise<IGroup>,
-    group_id: number,
+    group_id: string,
     body: Partial<IWriteGroup>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<IGroup>(
       callback,
       'PATCH',
@@ -6565,9 +6653,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_group(
     callback: (readable: Readable) => Promise<string>,
-    group_id: number,
+    group_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -6591,10 +6680,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_group_groups(
     callback: (readable: Readable) => Promise<IGroup[]>,
-    group_id: number,
+    group_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<IGroup[]>(
       callback,
       'GET',
@@ -6618,10 +6708,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async add_group_group(
     callback: (readable: Readable) => Promise<IGroup>,
-    group_id: number,
+    group_id: string,
     body: Partial<IGroupIdForGroupInclusion>,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<IGroup>(
       callback,
       'POST',
@@ -6647,6 +6738,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestAllGroupUsers,
     options?: Partial<ITransportSettings>
   ) {
+    request.group_id = encodeParam(request.group_id)
     return this.authStream<IUser[]>(
       callback,
       'GET',
@@ -6655,6 +6747,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
       },
       null,
@@ -6675,10 +6769,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async add_group_user(
     callback: (readable: Readable) => Promise<IUser>,
-    group_id: number,
+    group_id: string,
     body: Partial<IGroupIdForGroupUserInclusion>,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
     return this.authStream<IUser>(
       callback,
       'POST',
@@ -6702,10 +6797,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_group_user(
     callback: (readable: Readable) => Promise<void>,
-    group_id: number,
-    user_id: number,
+    group_id: string,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
+    user_id = encodeParam(user_id)
     return this.authStream<void>(
       callback,
       'DELETE',
@@ -6729,10 +6826,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_group_from_group(
     callback: (readable: Readable) => Promise<void>,
-    group_id: number,
-    deleting_group_id: number,
+    group_id: string,
+    deleting_group_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
+    deleting_group_id = encodeParam(deleting_group_id)
     return this.authStream<void>(
       callback,
       'DELETE',
@@ -6759,11 +6858,13 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_user_attribute_group_value(
     callback: (readable: Readable) => Promise<IUserAttributeGroupValue>,
-    group_id: number,
-    user_attribute_id: number,
+    group_id: string,
+    user_attribute_id: string,
     body: Partial<IUserAttributeGroupValue>,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttributeGroupValue>(
       callback,
       'PATCH',
@@ -6787,10 +6888,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_user_attribute_group_value(
     callback: (readable: Readable) => Promise<void>,
-    group_id: number,
-    user_attribute_id: number,
+    group_id: string,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    group_id = encodeParam(group_id)
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<void>(
       callback,
       'DELETE',
@@ -6894,17 +6997,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
    * @param callback streaming output function
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async integration_hub(
     callback: (readable: Readable) => Promise<IIntegrationHub>,
-    integration_hub_id: number,
+    integration_hub_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    integration_hub_id = encodeParam(integration_hub_id)
     return this.authStream<IIntegrationHub>(
       callback,
       'GET',
@@ -6923,7 +7027,7 @@ export class Looker40SDKStream extends APIMethods {
    * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
    * @param callback streaming output function
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param body Partial<IWriteIntegrationHub>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6931,11 +7035,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_integration_hub(
     callback: (readable: Readable) => Promise<IIntegrationHub>,
-    integration_hub_id: number,
+    integration_hub_id: string,
     body: Partial<IWriteIntegrationHub>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    integration_hub_id = encodeParam(integration_hub_id)
     return this.authStream<IIntegrationHub>(
       callback,
       'PATCH',
@@ -6958,9 +7063,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_integration_hub(
     callback: (readable: Readable) => Promise<string>,
-    integration_hub_id: number,
+    integration_hub_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    integration_hub_id = encodeParam(integration_hub_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -6983,9 +7089,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async accept_integration_hub_legal_agreement(
     callback: (readable: Readable) => Promise<IIntegrationHub>,
-    integration_hub_id: number,
+    integration_hub_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    integration_hub_id = encodeParam(integration_hub_id)
     return this.authStream<IIntegrationHub>(
       callback,
       'POST',
@@ -9185,10 +9292,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async query(
     callback: (readable: Readable) => Promise<IQuery>,
-    query_id: number,
+    query_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    query_id = encodeParam(query_id)
     return this.authStream<IQuery>(
       callback,
       'GET',
@@ -9315,6 +9423,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRunQuery,
     options?: Partial<ITransportSettings>
   ) {
+    request.query_id = encodeParam(request.query_id)
     request.result_format = encodeParam(request.result_format)
     return this.authStream<string>(
       callback,
@@ -9457,11 +9566,11 @@ export class Looker40SDKStream extends APIMethods {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    *
@@ -9750,13 +9859,14 @@ export class Looker40SDKStream extends APIMethods {
    */
   async create_look_render_task(
     callback: (readable: Readable) => Promise<IRenderTask>,
-    look_id: number,
+    look_id: string,
     result_format: string,
     width: number,
     height: number,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    look_id = encodeParam(look_id)
     result_format = encodeParam(result_format)
     return this.authStream<IRenderTask>(
       callback,
@@ -9788,13 +9898,14 @@ export class Looker40SDKStream extends APIMethods {
    */
   async create_query_render_task(
     callback: (readable: Readable) => Promise<IRenderTask>,
-    query_id: number,
+    query_id: string,
     result_format: string,
     width: number,
     height: number,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    query_id = encodeParam(query_id)
     result_format = encodeParam(result_format)
     return this.authStream<IRenderTask>(
       callback,
@@ -10033,10 +10144,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async model_set(
     callback: (readable: Readable) => Promise<IModelSet>,
-    model_set_id: number,
+    model_set_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    model_set_id = encodeParam(model_set_id)
     return this.authStream<IModelSet>(
       callback,
       'GET',
@@ -10060,10 +10172,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_model_set(
     callback: (readable: Readable) => Promise<IModelSet>,
-    model_set_id: number,
+    model_set_id: string,
     body: Partial<IWriteModelSet>,
     options?: Partial<ITransportSettings>
   ) {
+    model_set_id = encodeParam(model_set_id)
     return this.authStream<IModelSet>(
       callback,
       'PATCH',
@@ -10086,9 +10199,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_model_set(
     callback: (readable: Readable) => Promise<string>,
-    model_set_id: number,
+    model_set_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    model_set_id = encodeParam(model_set_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -10241,10 +10355,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async permission_set(
     callback: (readable: Readable) => Promise<IPermissionSet>,
-    permission_set_id: number,
+    permission_set_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    permission_set_id = encodeParam(permission_set_id)
     return this.authStream<IPermissionSet>(
       callback,
       'GET',
@@ -10261,17 +10376,18 @@ export class Looker40SDKStream extends APIMethods {
    * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
    *
    * @param callback streaming output function
-   * @param permission_set_id id of permission set
+   * @param permission_set_id Id of permission set
    * @param body Partial<IWritePermissionSet>
    * @param options one-time API call overrides
    *
    */
   async update_permission_set(
     callback: (readable: Readable) => Promise<IPermissionSet>,
-    permission_set_id: number,
+    permission_set_id: string,
     body: Partial<IWritePermissionSet>,
     options?: Partial<ITransportSettings>
   ) {
+    permission_set_id = encodeParam(permission_set_id)
     return this.authStream<IPermissionSet>(
       callback,
       'PATCH',
@@ -10294,9 +10410,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_permission_set(
     callback: (readable: Readable) => Promise<string>,
-    permission_set_id: number,
+    permission_set_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    permission_set_id = encodeParam(permission_set_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -10534,9 +10651,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async role(
     callback: (readable: Readable) => Promise<IRole>,
-    role_id: number,
+    role_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<IRole>(
       callback,
       'GET',
@@ -10560,10 +10678,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_role(
     callback: (readable: Readable) => Promise<IRole>,
-    role_id: number,
+    role_id: string,
     body: Partial<IWriteRole>,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<IRole>(
       callback,
       'PATCH',
@@ -10586,9 +10705,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_role(
     callback: (readable: Readable) => Promise<string>,
-    role_id: number,
+    role_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -10612,10 +10732,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async role_groups(
     callback: (readable: Readable) => Promise<IGroup[]>,
-    role_id: number,
+    role_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<IGroup[]>(
       callback,
       'GET',
@@ -10632,17 +10753,18 @@ export class Looker40SDKStream extends APIMethods {
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
    * @param callback streaming output function
-   * @param role_id Id of Role
-   * @param body Partial<number[]>
+   * @param role_id id of role
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_groups(
     callback: (readable: Readable) => Promise<IGroup[]>,
-    role_id: number,
-    body: Partial<number[]>,
+    role_id: string,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<IGroup[]>(
       callback,
       'PUT',
@@ -10668,6 +10790,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestRoleUsers,
     options?: Partial<ITransportSettings>
   ) {
+    request.role_id = encodeParam(request.role_id)
     return this.authStream<IUser[]>(
       callback,
       'GET',
@@ -10688,16 +10811,17 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param role_id id of role
-   * @param body Partial<number[]>
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_users(
     callback: (readable: Readable) => Promise<IUser[]>,
-    role_id: number,
-    body: Partial<number[]>,
+    role_id: string,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ) {
+    role_id = encodeParam(role_id)
     return this.authStream<IUser[]>(
       callback,
       'PUT',
@@ -10727,10 +10851,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async scheduled_plans_for_space(
     callback: (readable: Readable) => Promise<IScheduledPlan[]>,
-    space_id: number,
+    space_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    space_id = encodeParam(space_id)
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
@@ -10756,10 +10881,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async scheduled_plan(
     callback: (readable: Readable) => Promise<IScheduledPlan>,
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    scheduled_plan_id = encodeParam(scheduled_plan_id)
     return this.authStream<IScheduledPlan>(
       callback,
       'GET',
@@ -10824,10 +10950,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_scheduled_plan(
     callback: (readable: Readable) => Promise<IScheduledPlan>,
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     body: Partial<IWriteScheduledPlan>,
     options?: Partial<ITransportSettings>
   ) {
+    scheduled_plan_id = encodeParam(scheduled_plan_id)
     return this.authStream<IScheduledPlan>(
       callback,
       'PATCH',
@@ -10854,9 +10981,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_scheduled_plan(
     callback: (readable: Readable) => Promise<string>,
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    scheduled_plan_id = encodeParam(scheduled_plan_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -11074,6 +11202,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestScheduledPlansForLook,
     options?: Partial<ITransportSettings>
   ) {
+    request.look_id = encodeParam(request.look_id)
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
@@ -11113,6 +11242,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestScheduledPlansForDashboard,
     options?: Partial<ITransportSettings>
   ) {
+    request.dashboard_id = encodeParam(request.dashboard_id)
     return this.authStream<IScheduledPlan[]>(
       callback,
       'GET',
@@ -11226,10 +11356,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async scheduled_plan_run_once_by_id(
     callback: (readable: Readable) => Promise<IScheduledPlan>,
-    scheduled_plan_id: number,
+    scheduled_plan_id: string,
     body?: Partial<IWriteScheduledPlan>,
     options?: Partial<ITransportSettings>
   ) {
+    scheduled_plan_id = encodeParam(scheduled_plan_id)
     return this.authStream<IScheduledPlan>(
       callback,
       'POST',
@@ -11638,10 +11769,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async theme(
     callback: (readable: Readable) => Promise<ITheme>,
-    theme_id: number,
+    theme_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    theme_id = encodeParam(theme_id)
     return this.authStream<ITheme>(
       callback,
       'GET',
@@ -11667,10 +11799,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_theme(
     callback: (readable: Readable) => Promise<ITheme>,
-    theme_id: number,
+    theme_id: string,
     body: Partial<IWriteTheme>,
     options?: Partial<ITransportSettings>
   ) {
+    theme_id = encodeParam(theme_id)
     return this.authStream<ITheme>(
       callback,
       'PATCH',
@@ -11993,10 +12126,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async user(
     callback: (readable: Readable) => Promise<IUser>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<IUser>(
       callback,
       'GET',
@@ -12021,11 +12155,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_user(
     callback: (readable: Readable) => Promise<IUser>,
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteUser>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<IUser>(
       callback,
       'PATCH',
@@ -12050,9 +12185,10 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_user(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12127,17 +12263,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_email(
     callback: (readable: Readable) => Promise<ICredentialsEmail>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsEmail>(
       callback,
       'GET',
@@ -12154,7 +12291,7 @@ export class Looker40SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -12162,11 +12299,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async create_user_credentials_email(
     callback: (readable: Readable) => Promise<ICredentialsEmail>,
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsEmail>(
       callback,
       'POST',
@@ -12183,7 +12321,7 @@ export class Looker40SDKStream extends APIMethods {
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -12191,11 +12329,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_user_credentials_email(
     callback: (readable: Readable) => Promise<ICredentialsEmail>,
-    user_id: number,
+    user_id: string,
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsEmail>(
       callback,
       'PATCH',
@@ -12212,15 +12351,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_email -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_email(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12237,17 +12377,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_totp(
     callback: (readable: Readable) => Promise<ICredentialsTotp>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsTotp>(
       callback,
       'GET',
@@ -12264,7 +12405,7 @@ export class Looker40SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -12272,11 +12413,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async create_user_credentials_totp(
     callback: (readable: Readable) => Promise<ICredentialsTotp>,
-    user_id: number,
+    user_id: string,
     body?: Partial<ICredentialsTotp>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsTotp>(
       callback,
       'POST',
@@ -12293,15 +12435,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_totp -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_totp(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12318,17 +12461,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_ldap(
     callback: (readable: Readable) => Promise<ICredentialsLDAP>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsLDAP>(
       callback,
       'GET',
@@ -12345,15 +12489,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_ldap(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12370,17 +12515,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_google(
     callback: (readable: Readable) => Promise<ICredentialsGoogle>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsGoogle>(
       callback,
       'GET',
@@ -12397,15 +12543,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_google -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_google(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12422,17 +12569,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_saml(
     callback: (readable: Readable) => Promise<ICredentialsSaml>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsSaml>(
       callback,
       'GET',
@@ -12449,15 +12597,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_saml -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_saml(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12474,17 +12623,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_oidc(
     callback: (readable: Readable) => Promise<ICredentialsOIDC>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsOIDC>(
       callback,
       'GET',
@@ -12501,15 +12651,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_oidc(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12534,11 +12685,13 @@ export class Looker40SDKStream extends APIMethods {
    */
   async user_credentials_api3(
     callback: (readable: Readable) => Promise<ICredentialsApi3>,
-    user_id: number,
-    credentials_api3_id: number,
+    user_id: string,
+    credentials_api3_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    credentials_api3_id = encodeParam(credentials_api3_id)
     return this.authStream<ICredentialsApi3>(
       callback,
       'GET',
@@ -12555,17 +12708,19 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param credentials_api3_id id of API 3 Credential
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API 3 Credential
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_api3(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
-    credentials_api3_id: number,
+    user_id: string,
+    credentials_api3_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    credentials_api3_id = encodeParam(credentials_api3_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12582,17 +12737,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async all_user_credentials_api3s(
     callback: (readable: Readable) => Promise<ICredentialsApi3[]>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsApi3[]>(
       callback,
       'GET',
@@ -12609,17 +12765,18 @@ export class Looker40SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async create_user_credentials_api3(
     callback: (readable: Readable) => Promise<ICreateCredentialsApi3>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICreateCredentialsApi3>(
       callback,
       'POST',
@@ -12644,11 +12801,13 @@ export class Looker40SDKStream extends APIMethods {
    */
   async user_credentials_embed(
     callback: (readable: Readable) => Promise<ICredentialsEmbed>,
-    user_id: number,
-    credentials_embed_id: number,
+    user_id: string,
+    credentials_embed_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    credentials_embed_id = encodeParam(credentials_embed_id)
     return this.authStream<ICredentialsEmbed>(
       callback,
       'GET',
@@ -12665,17 +12824,19 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param credentials_embed_id id of Embedding Credential
+   * @param user_id Id of user
+   * @param credentials_embed_id Id of Embedding Credential
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_embed(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
-    credentials_embed_id: number,
+    user_id: string,
+    credentials_embed_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    credentials_embed_id = encodeParam(credentials_embed_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12692,17 +12853,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async all_user_credentials_embeds(
     callback: (readable: Readable) => Promise<ICredentialsEmbed[]>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsEmbed[]>(
       callback,
       'GET',
@@ -12719,17 +12881,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async user_credentials_looker_openid(
     callback: (readable: Readable) => Promise<ICredentialsLookerOpenid>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsLookerOpenid>(
       callback,
       'GET',
@@ -12746,15 +12909,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
   async delete_user_credentials_looker_openid(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
+    user_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12779,11 +12943,13 @@ export class Looker40SDKStream extends APIMethods {
    */
   async user_session(
     callback: (readable: Readable) => Promise<ISession>,
-    user_id: number,
-    session_id: number,
+    user_id: string,
+    session_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    session_id = encodeParam(session_id)
     return this.authStream<ISession>(
       callback,
       'GET',
@@ -12800,17 +12966,19 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param session_id id of Web Login Session
+   * @param user_id Id of user
+   * @param session_id Id of Web Login Session
    * @param options one-time API call overrides
    *
    */
   async delete_user_session(
     callback: (readable: Readable) => Promise<string>,
-    user_id: number,
-    session_id: number,
+    user_id: string,
+    session_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    session_id = encodeParam(session_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -12827,17 +12995,18 @@ export class Looker40SDKStream extends APIMethods {
    * GET /users/{user_id}/sessions -> ISession[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async all_user_sessions(
     callback: (readable: Readable) => Promise<ISession[]>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ISession[]>(
       callback,
       'GET',
@@ -12871,6 +13040,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestCreateUserCredentialsEmailPasswordReset,
     options?: Partial<ITransportSettings>
   ) {
+    request.user_id = encodeParam(request.user_id)
     return this.authStream<ICredentialsEmail>(
       callback,
       'POST',
@@ -12896,6 +13066,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestUserRoles,
     options?: Partial<ITransportSettings>
   ) {
+    request.user_id = encodeParam(request.user_id)
     return this.authStream<IRole[]>(
       callback,
       'GET',
@@ -12915,19 +13086,20 @@ export class Looker40SDKStream extends APIMethods {
    * PUT /users/{user_id}/roles -> IRole[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param body Partial<number[]>
+   * @param user_id Id of user
+   * @param body Partial<string[]>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async set_user_roles(
     callback: (readable: Readable) => Promise<IRole[]>,
-    user_id: number,
-    body: Partial<number[]>,
+    user_id: string,
+    body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<IRole[]>(
       callback,
       'PUT',
@@ -12968,6 +13140,7 @@ export class Looker40SDKStream extends APIMethods {
     request: IRequestUserAttributeUserValues,
     options?: Partial<ITransportSettings>
   ) {
+    request.user_id = encodeParam(request.user_id)
     return this.authStream<IUserAttributeWithValue[]>(
       callback,
       'GET',
@@ -12999,11 +13172,13 @@ export class Looker40SDKStream extends APIMethods {
    */
   async set_user_attribute_user_value(
     callback: (readable: Readable) => Promise<IUserAttributeWithValue>,
-    user_id: number,
-    user_attribute_id: number,
+    user_id: string,
+    user_attribute_id: string,
     body: Partial<IWriteUserAttributeWithValue>,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttributeWithValue>(
       callback,
       'PATCH',
@@ -13032,10 +13207,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async delete_user_attribute_user_value(
     callback: (readable: Readable) => Promise<void>,
-    user_id: number,
-    user_attribute_id: number,
+    user_id: string,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<void>(
       callback,
       'DELETE',
@@ -13065,10 +13242,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async send_user_credentials_email_password_reset(
     callback: (readable: Readable) => Promise<ICredentialsEmail>,
-    user_id: number,
+    user_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<ICredentialsEmail>(
       callback,
       'POST',
@@ -13098,11 +13276,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async wipeout_user_emails(
     callback: (readable: Readable) => Promise<IUser>,
-    user_id: number,
+    user_id: string,
     body: Partial<IUserEmailOnly>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_id = encodeParam(user_id)
     return this.authStream<IUser>(
       callback,
       'POST',
@@ -13216,10 +13395,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async user_attribute(
     callback: (readable: Readable) => Promise<IUserAttribute>,
-    user_attribute_id: number,
+    user_attribute_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttribute>(
       callback,
       'GET',
@@ -13244,11 +13424,12 @@ export class Looker40SDKStream extends APIMethods {
    */
   async update_user_attribute(
     callback: (readable: Readable) => Promise<IUserAttribute>,
-    user_attribute_id: number,
+    user_attribute_id: string,
     body: Partial<IWriteUserAttribute>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttribute>(
       callback,
       'PATCH',
@@ -13265,15 +13446,16 @@ export class Looker40SDKStream extends APIMethods {
    * DELETE /user_attributes/{user_attribute_id} -> string
    *
    * @param callback streaming output function
-   * @param user_attribute_id Id of user_attribute
+   * @param user_attribute_id Id of user attribute
    * @param options one-time API call overrides
    *
    */
   async delete_user_attribute(
     callback: (readable: Readable) => Promise<string>,
-    user_attribute_id: number,
+    user_attribute_id: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<string>(
       callback,
       'DELETE',
@@ -13303,10 +13485,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_user_attribute_group_values(
     callback: (readable: Readable) => Promise<IUserAttributeGroupValue[]>,
-    user_attribute_id: number,
+    user_attribute_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
       'GET',
@@ -13349,10 +13532,11 @@ export class Looker40SDKStream extends APIMethods {
    */
   async set_user_attribute_group_values(
     callback: (readable: Readable) => Promise<IUserAttributeGroupValue[]>,
-    user_attribute_id: number,
+    user_attribute_id: string,
     body: Partial<IUserAttributeGroupValue[]>,
     options?: Partial<ITransportSettings>
   ) {
+    user_attribute_id = encodeParam(user_attribute_id)
     return this.authStream<IUserAttributeGroupValue[]>(
       callback,
       'POST',

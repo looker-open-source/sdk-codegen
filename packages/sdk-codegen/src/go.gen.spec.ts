@@ -68,6 +68,28 @@ bar
     })
   })
 
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const expected = `// Endpoint to test deprecation flags
+//
+// GET /old_login -> AccessToken
+//
+// Deprecated: This method is deprecated.
+//
+func (l *LookerSDK) OldLogin(
+  oldCred string,
+  options *rtl.ApiSettings) (AccessToken, error) {
+  var result AccessToken
+  err := l.session.Do(&result, "GET", "", "/old_login", map[string]interface{}{"old_cred": oldCred}, nil, options)
+  return result, err
+
+}`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
+  })
+
   describe('types', () => {
     it('enum type', () => {
       const type = apiTestModel.types.PermissionType as IEnumType

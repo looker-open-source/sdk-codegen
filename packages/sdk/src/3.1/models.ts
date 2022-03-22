@@ -25,7 +25,7 @@
  */
 
 /**
- * 303 API models: 188 Spec, 48 Request, 51 Write, 16 Enum
+ * 308 API models: 190 Spec, 50 Request, 51 Write, 17 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -420,6 +420,10 @@ export interface IContentValidationDashboardElement {
    * Type
    */
   type?: string | null
+  /**
+   * JSON with all the properties required for rich editor and buttons elements
+   */
+  rich_content_json?: string | null
 }
 
 export interface IContentValidationDashboardFilter {
@@ -1166,7 +1170,7 @@ export interface IDashboard {
   /**
    * Timezone in which the Dashboard will run by default.
    */
-  query_timezone?: string | null
+  query_timezone?: string
   /**
    * Is Read-only (read-only)
    */
@@ -1204,7 +1208,7 @@ export interface IDashboard {
   /**
    * Background color
    */
-  background_color?: string | null
+  background_color?: string
   /**
    * Time that the Dashboard was created. (read-only)
    */
@@ -1300,19 +1304,19 @@ export interface IDashboard {
   /**
    * Color of text on text tiles
    */
-  text_tile_text_color?: string | null
+  text_tile_text_color?: string
   /**
    * Tile background color
    */
-  tile_background_color?: string | null
+  tile_background_color?: string
   /**
    * Tile text color
    */
-  tile_text_color?: string | null
+  tile_text_color?: string
   /**
    * Title color
    */
-  title_color?: string | null
+  title_color?: string
   /**
    * Number of times viewed in the Looker web UI (read-only)
    */
@@ -1391,7 +1395,7 @@ export interface IDashboardBase {
   /**
    * Timezone in which the Dashboard will run by default. (read-only)
    */
-  query_timezone?: string | null
+  query_timezone?: string
   /**
    * Is Read-only (read-only)
    */
@@ -1520,6 +1524,10 @@ export interface IDashboardElement {
    * Count of Alerts associated to a dashboard element (read-only)
    */
   alert_count?: number | null
+  /**
+   * JSON with all the properties required for rich editor and buttons elements
+   */
+  rich_content_json?: string | null
   /**
    * Text tile title text as Html (read-only)
    */
@@ -1697,7 +1705,11 @@ export interface IDashboardLookml {
    */
   dashboard_id?: string | null
   /**
-   * lookml of UDD (read-only)
+   * (Write-Only) Id of the folder
+   */
+  folder_id?: string | null
+  /**
+   * lookml of UDD
    */
   lookml?: string | null
 }
@@ -1814,7 +1826,7 @@ export interface IDatagroup {
   /**
    * Unique ID of the datagroup (read-only)
    */
-  id?: string
+  id?: number
   /**
    * Name of the model containing the datagroup. Unique when combined with name. (read-only)
    */
@@ -2133,6 +2145,10 @@ export interface IDialect {
    * Whether the dialect supports query cost estimates (read-only)
    */
   supports_cost_estimate?: boolean
+  /**
+   * How the dialect handles cost estimation (read-only)
+   */
+  cost_estimate_style?: string | null
   /**
    * PDT index columns (read-only)
    */
@@ -2578,7 +2594,7 @@ export interface IGitBranch {
   /**
    * UNIX timestamp at which this branch was last committed. (read-only)
    */
-  commit_at?: number | null
+  commit_at?: number
   /**
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
@@ -2733,7 +2749,7 @@ export interface IHomepage {
   /**
    * Unique Id (read-only)
    */
-  id?: string
+  id?: number
   /**
    * ids of the homepage sections in the order they should be displayed
    */
@@ -2812,11 +2828,11 @@ export interface IHomepageItem {
   /**
    * Associated Homepage Section
    */
-  homepage_section_id?: string | null
+  homepage_section_id?: number | null
   /**
    * Unique Id (read-only)
    */
-  id?: string
+  id?: number
   /**
    * The actual image_url for display (read-only)
    */
@@ -2899,7 +2915,7 @@ export interface IHomepageSection {
   /**
    * Unique Id (read-only)
    */
-  id?: string
+  id?: number
   /**
    * Is this a header section (has no items) (read-only)
    */
@@ -2923,7 +2939,7 @@ export interface IHomepageSection {
   /**
    * ids of the homepage items the user can see in the order they should be displayed (read-only)
    */
-  visible_item_order?: number[] | null
+  visible_item_order?: string[] | null
 }
 
 export interface IImportedProject {
@@ -2983,7 +2999,7 @@ export interface IIntegration {
    */
   supported_formats?: SupportedFormats[]
   /**
-   * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
+   * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)
    */
   supported_action_types?: SupportedActionTypes[]
   /**
@@ -4747,6 +4763,17 @@ export interface IManifest {
   localization_settings?: ILocalizationSettings
 }
 
+export interface IMaterializePDT {
+  /**
+   * The ID of the enqueued materialization task (read-only)
+   */
+  materialization_id?: string
+  /**
+   * Detailed response in text format (read-only)
+   */
+  resp_text?: string | null
+}
+
 export interface IMergeFields {
   /**
    * Field name to map onto in the merged results
@@ -5450,19 +5477,19 @@ export interface IQuery {
   /**
    * Pivots
    */
-  pivots?: string[] | null
+  pivots?: string[]
   /**
    * Fill Fields
    */
-  fill_fields?: string[] | null
+  fill_fields?: string[]
   /**
    * Filters
    */
-  filters?: IDictionary<string> | null
+  filters?: IDictionary<string>
   /**
    * Filter Expression
    */
-  filter_expression?: string | null
+  filter_expression?: string
   /**
    * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
    */
@@ -5470,11 +5497,11 @@ export interface IQuery {
   /**
    * Limit
    */
-  limit?: string | null
+  limit?: string
   /**
    * Column Limit
    */
-  column_limit?: string | null
+  column_limit?: string
   /**
    * Total
    */
@@ -5482,11 +5509,11 @@ export interface IQuery {
   /**
    * Raw Total
    */
-  row_total?: string | null
+  row_total?: string
   /**
    * Fields on which to run subtotals
    */
-  subtotals?: string[] | null
+  subtotals?: string[]
   /**
    * Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
    */
@@ -5498,7 +5525,7 @@ export interface IQuery {
   /**
    * Visible UI Sections
    */
-  visible_ui_sections?: string | null
+  visible_ui_sections?: string
   /**
    * Slug (read-only)
    */
@@ -5506,7 +5533,7 @@ export interface IQuery {
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string | null
+  dynamic_fields?: string
   /**
    * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
    */
@@ -5526,7 +5553,7 @@ export interface IQuery {
   /**
    * Query Timezone
    */
-  query_timezone?: string | null
+  query_timezone?: string
   /**
    * Has Table Calculations (read-only)
    */
@@ -5534,7 +5561,7 @@ export interface IQuery {
   /**
    * (DEPRECATED) Runtime (Deprecated)
    */
-  runtime?: number | null
+  runtime?: number
 }
 
 export interface IQueryTask {
@@ -5758,11 +5785,11 @@ export interface IRequestAllGroups {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -5796,11 +5823,11 @@ export interface IRequestAllGroupUsers {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -5941,6 +5968,24 @@ export interface IRequestContentThumbnail {
    * The height of the image if format is supplied
    */
   height?: number | null
+}
+
+/**
+ * Dynamically generated request type for create_dashboard_element
+ */
+export interface IRequestCreateDashboardElement {
+  /**
+   * body parameter for dynamically created request type
+   */
+  body: IWriteDashboardElement
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Apply relevant filters on dashboard to this tile
+   */
+  apply_filters?: boolean | null
 }
 
 /**
@@ -6220,7 +6265,7 @@ export interface IRequestLogin {
  */
 export interface IRequestRoleUsers {
   /**
-   * id of user
+   * id of role
    */
   role_id: number
   /**
@@ -6732,14 +6777,6 @@ export interface IRequestSearchDashboards {
    */
   per_page?: number | null
   /**
-   * Number of results to return. (used with offset and takes priority over page and per_page)
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
-   */
-  offset?: number | null
-  /**
    * One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
    */
   sorts?: string | null
@@ -6909,14 +6946,6 @@ export interface IRequestSearchLooks {
    * Results per page.
    */
   per_page?: number | null
-  /**
-   * Number of results to return. (used with offset and takes priority over page and per_page)
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
-   */
-  offset?: number | null
   /**
    * One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
    */
@@ -7306,6 +7335,36 @@ export interface IRequestSpaceChildrenSearch {
 }
 
 /**
+ * Dynamically generated request type for start_pdt_build
+ */
+export interface IRequestStartPdtBuild {
+  /**
+   * The model of the PDT to start building.
+   */
+  model_name: string
+  /**
+   * The view name of the PDT to start building.
+   */
+  view_name: string
+  /**
+   * Force rebuild of required dependent PDTs, even if they are already materialized.
+   */
+  force_rebuild?: string | null
+  /**
+   * Force involved incremental PDTs to fully re-materialize.
+   */
+  force_full_incremental?: string | null
+  /**
+   * Workspace in which to materialize selected PDT ('dev' or default 'production').
+   */
+  workspace?: string | null
+  /**
+   * The source of this request.
+   */
+  source?: string | null
+}
+
+/**
  * Dynamically generated request type for tag_ref
  */
 export interface IRequestTagRef {
@@ -7362,7 +7421,7 @@ export interface IRequestUserAttributeUserValues {
  */
 export interface IRequestUserRoles {
   /**
-   * id of user
+   * Id of user
    */
   user_id: number
   /**
@@ -8088,6 +8147,37 @@ export interface ISessionConfig {
   track_session_location?: boolean
 }
 
+export interface ISmtpSettings {
+  /**
+   * SMTP Server url
+   */
+  address?: string
+  /**
+   * From e-mail address
+   */
+  from?: string
+  /**
+   * User name
+   */
+  user_name?: string
+  /**
+   * Password
+   */
+  password?: string
+  /**
+   * SMTP Server's port
+   */
+  port?: number
+  /**
+   * Is TLS encryption enabled?
+   */
+  enable_starttls_auto?: boolean
+  /**
+   * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+   */
+  ssl_version?: SslVersion | null
+}
+
 export interface ISnippet {
   /**
    * Name of the snippet (read-only)
@@ -8326,12 +8416,22 @@ export interface ISqlQueryCreate {
 }
 
 /**
- * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
+ * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+ */
+export enum SslVersion {
+  TLSv1_1 = 'TLSv1_1',
+  SSLv23 = 'SSLv23',
+  TLSv1_2 = 'TLSv1_2',
+}
+
+/**
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
  */
 export enum SupportedActionTypes {
   cell = 'cell',
   query = 'query',
   dashboard = 'dashboard',
+  none = 'none',
 }
 
 /**
@@ -8687,7 +8787,7 @@ export interface IUserAttribute {
   /**
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
-  hidden_value_domain_whitelist?: string | null
+  hidden_value_domain_whitelist?: string
 }
 
 /**
@@ -8783,7 +8883,7 @@ export interface IUserAttributeWithValue {
   /**
    * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
    */
-  hidden_value_domain_whitelist?: string | null
+  hidden_value_domain_whitelist?: string
 }
 
 export interface IUserIdOnly {
@@ -9247,7 +9347,7 @@ export interface IWriteDashboard {
   /**
    * Timezone in which the Dashboard will run by default.
    */
-  query_timezone?: string | null
+  query_timezone?: string
   /**
    * Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
    */
@@ -9281,7 +9381,7 @@ export interface IWriteDashboard {
   /**
    * Background color
    */
-  background_color?: string | null
+  background_color?: string
   /**
    * Enables crossfiltering in dashboards - only available in dashboards-next (beta)
    */
@@ -9321,19 +9421,19 @@ export interface IWriteDashboard {
   /**
    * Color of text on text tiles
    */
-  text_tile_text_color?: string | null
+  text_tile_text_color?: string
   /**
    * Tile background color
    */
-  tile_background_color?: string | null
+  tile_background_color?: string
   /**
    * Tile text color
    */
-  tile_text_color?: string | null
+  tile_text_color?: string
   /**
    * Title color
    */
-  title_color?: string | null
+  title_color?: string
   appearance?: IDashboardAppearance | null
 }
 
@@ -9434,6 +9534,10 @@ export interface IWriteDashboardElement {
    * Type
    */
   type?: string | null
+  /**
+   * JSON with all the properties required for rich editor and buttons elements
+   */
+  rich_content_json?: string | null
 }
 
 /**
@@ -9823,7 +9927,7 @@ export interface IWriteHomepageItem {
   /**
    * Associated Homepage Section
    */
-  homepage_section_id?: string | null
+  homepage_section_id?: number | null
   /**
    * Look to base this item on
    */
@@ -10468,7 +10572,7 @@ export interface IWriteQuery {
   /**
    * Filter Expression
    */
-  filter_expression?: string | null
+  filter_expression?: string
   /**
    * Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
    */
@@ -10476,11 +10580,11 @@ export interface IWriteQuery {
   /**
    * Limit
    */
-  limit?: string | null
+  limit?: string
   /**
    * Column Limit
    */
-  column_limit?: string | null
+  column_limit?: string
   /**
    * Total
    */
@@ -10488,7 +10592,7 @@ export interface IWriteQuery {
   /**
    * Raw Total
    */
-  row_total?: string | null
+  row_total?: string
   /**
    * Fields on which to run subtotals
    */
@@ -10504,11 +10608,11 @@ export interface IWriteQuery {
   /**
    * Visible UI Sections
    */
-  visible_ui_sections?: string | null
+  visible_ui_sections?: string
   /**
    * Dynamic Fields
    */
-  dynamic_fields?: string | null
+  dynamic_fields?: string
   /**
    * Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
    */
@@ -10516,11 +10620,11 @@ export interface IWriteQuery {
   /**
    * Query Timezone
    */
-  query_timezone?: string | null
+  query_timezone?: string
   /**
    * (DEPRECATED) Runtime (Deprecated)
    */
-  runtime?: number | null
+  runtime?: number
 }
 
 /**
@@ -10939,7 +11043,7 @@ export interface IWriteUserAttribute {
   /**
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
-  hidden_value_domain_whitelist?: string | null
+  hidden_value_domain_whitelist?: string
 }
 
 /**

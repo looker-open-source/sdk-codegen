@@ -147,7 +147,7 @@ class APIMethods:
         if isinstance(body, str):
             serialized = body.encode("utf-8")
         elif isinstance(body, (list, dict, model.Model)):
-            serialized = self.serialize(body)
+            serialized = self.serialize(api_model=body)  # type: ignore
         else:
             serialized = None
         return serialized

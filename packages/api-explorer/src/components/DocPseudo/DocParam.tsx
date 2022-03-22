@@ -27,13 +27,14 @@ import type { FC } from 'react'
 import React from 'react'
 import type { IParameter } from '@looker/sdk-codegen'
 import { Tooltip } from '@looker/components'
+import { describeParam } from '@looker/sdk-codegen'
 
 export interface DocArgProps {
   parameter: IParameter
 }
 
 export const DocParam: FC<DocArgProps> = ({ parameter }) => (
-  <Tooltip content={`${parameter.type.name} ${parameter.description}`}>
+  <Tooltip content={`${parameter.type.name} ${describeParam(parameter)}`}>
     <span>{parameter.required ? parameter.name : `[${parameter.name}]`}</span>
   </Tooltip>
 )

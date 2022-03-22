@@ -31,8 +31,7 @@ cattrs = ">=1.3"
 python-dateutil = "*"
 
 [requires]
-# pin python at 3.9.9 due to https://github.com/looker-open-source/sdk-codegen/issues/944
-python_full_version = "3.9.9"
+python_full_version = "3.10"
 
 [pipenv]
 # for `black`

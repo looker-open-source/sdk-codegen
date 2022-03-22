@@ -81,7 +81,7 @@ export interface IHacker extends IHackerProps {
  * The User object from the sheet is used to avoid rights issues getting all users as a normal Hacker
  */
 export class Hacker implements IHacker {
-  user: ILookerUser = { id: 0, first_name: 'Unknown', last_name: 'user!' }
+  user: ILookerUser = { id: '0', first_name: 'Unknown', last_name: 'user!' }
   roles = new Set<UserRole>(['user'])
   permissions = new Set<UserPermission>()
   locale = ''
@@ -113,9 +113,7 @@ export class Hacker implements IHacker {
 
   protected async getRoles(sdk: Looker40SDK, userId: string): Promise<void> {
     try {
-      const roles = await sdk.ok(
-        sdk.user_roles({ user_id: parseInt(userId, 10) })
-      )
+      const roles = await sdk.ok(sdk.user_roles({ user_id: userId }))
       this.staffRole = roles.find((r: IRole) =>
         r.name?.match(/hackathon staff/i)
       )

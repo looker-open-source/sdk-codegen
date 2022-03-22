@@ -25,7 +25,7 @@
  */
 
 /**
- * 437 API methods
+ * 438 API methods
  */
 
 import type {
@@ -56,7 +56,6 @@ import type {
   IBoardSection,
   IColorCollection,
   IColumnSearch,
-  ICommand,
   IConnectionFeatures,
   IContentFavorite,
   IContentMeta,
@@ -99,6 +98,7 @@ import type {
   IDialectInfo,
   IDigestEmails,
   IDigestEmailSend,
+  IEgressIpAddresses,
   IEmbedParams,
   IEmbedSecret,
   IEmbedSsoParams,
@@ -131,6 +131,7 @@ import type {
   ILookmlTestResult,
   ILookWithQuery,
   IManifest,
+  IMaterializePDT,
   IMergeQuery,
   IMobileSettings,
   IModel,
@@ -166,13 +167,13 @@ import type {
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateQueryTask,
   IRequestCreateUserCredentialsEmailPasswordReset,
   IRequestDeployRefToProduction,
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
-  IRequestGetAllCommands,
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
@@ -202,6 +203,7 @@ import type {
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
   IRequestSearchUsersNames,
+  IRequestStartPdtBuild,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -217,6 +219,7 @@ import type {
   ISession,
   ISessionConfig,
   ISetting,
+  ISmtpSettings,
   ISmtpStatus,
   ISqlQuery,
   ISqlQueryCreate,
@@ -229,7 +232,6 @@ import type {
   ISupportAccessStatus,
   ITheme,
   ITimezone,
-  IUpdateCommand,
   IUpdateFolder,
   IUser,
   IUserAttribute,
@@ -249,7 +251,6 @@ import type {
   IWriteBoardItem,
   IWriteBoardSection,
   IWriteColorCollection,
-  IWriteCommand,
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
@@ -259,6 +260,7 @@ import type {
   IWriteDashboardFilter,
   IWriteDashboardLayout,
   IWriteDashboardLayoutComponent,
+  IWriteDashboardLookml,
   IWriteDatagroup,
   IWriteDBConnection,
   IWriteEmbedSecret,
@@ -352,9 +354,10 @@ export const search_alerts = async (
  */
 export const get_alert = async (
   sdk: IAPIMethods,
-  alert_id: number,
+  alert_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert, IError>> => {
+  alert_id = encodeParam(alert_id)
   return sdk.get<IAlert, IError>(`/alerts/${alert_id}`, null, null, options)
 }
 
@@ -373,10 +376,11 @@ export const get_alert = async (
  */
 export const update_alert = async (
   sdk: IAPIMethods,
-  alert_id: number,
+  alert_id: string,
   body: Partial<IWriteAlert>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  alert_id = encodeParam(alert_id)
   return sdk.put<IAlert, IError | IValidationError>(
     `/alerts/${alert_id}`,
     null,
@@ -400,10 +404,11 @@ export const update_alert = async (
  */
 export const update_alert_field = async (
   sdk: IAPIMethods,
-  alert_id: number,
+  alert_id: string,
   body: Partial<IAlertPatch>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert, IError | IValidationError>> => {
+  alert_id = encodeParam(alert_id)
   return sdk.patch<IAlert, IError | IValidationError>(
     `/alerts/${alert_id}`,
     null,
@@ -424,9 +429,10 @@ export const update_alert_field = async (
  */
 export const delete_alert = async (
   sdk: IAPIMethods,
-  alert_id: number,
+  alert_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  alert_id = encodeParam(alert_id)
   return sdk.delete<void, IError>(`/alerts/${alert_id}`, null, null, options)
 }
 
@@ -500,10 +506,11 @@ export const create_alert = async (
  */
 export const enqueue_alert = async (
   sdk: IAPIMethods,
-  alert_id: number,
+  alert_id: string,
   force?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  alert_id = encodeParam(alert_id)
   return sdk.post<void, IError>(
     `/alerts/${alert_id}/enqueue`,
     { force },
@@ -594,10 +601,11 @@ export const login = async (
  */
 export const login_user = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   associative?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAccessToken, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<IAccessToken, IError>(
     `/login/${user_id}`,
     { associative },
@@ -663,9 +671,10 @@ export const create_embed_secret = async (
  */
 export const delete_embed_secret = async (
   sdk: IAPIMethods,
-  embed_secret_id: number,
+  embed_secret_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  embed_secret_id = encodeParam(embed_secret_id)
   return sdk.delete<string, IError>(
     `/embed_config/secrets/${embed_secret_id}`,
     null,
@@ -1182,11 +1191,12 @@ export const invalidate_tokens = async (
 export const activate_app_user = async (
   sdk: IAPIMethods,
   client_guid: string,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
   client_guid = encodeParam(client_guid)
+  user_id = encodeParam(user_id)
   return sdk.post<string, IError | IValidationError>(
     `/oauth_client_apps/${client_guid}/users/${user_id}`,
     { fields },
@@ -1219,11 +1229,12 @@ export const activate_app_user = async (
 export const deactivate_app_user = async (
   sdk: IAPIMethods,
   client_guid: string,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
   client_guid = encodeParam(client_guid)
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/oauth_client_apps/${client_guid}/users/${user_id}`,
     { fields },
@@ -1835,6 +1846,8 @@ export const search_user_login_lockouts = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       auth_type: request.auth_type,
       full_name: request.full_name,
@@ -1989,10 +2002,11 @@ export const search_boards = async (
  */
 export const board = async (
   sdk: IAPIMethods,
-  board_id: number,
+  board_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoard, IError>> => {
+  board_id = encodeParam(board_id)
   return sdk.get<IBoard, IError>(
     `/boards/${board_id}`,
     { fields },
@@ -2015,11 +2029,12 @@ export const board = async (
  */
 export const update_board = async (
   sdk: IAPIMethods,
-  board_id: number,
+  board_id: string,
   body: Partial<IWriteBoard>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoard, IError | IValidationError>> => {
+  board_id = encodeParam(board_id)
   return sdk.patch<IBoard, IError | IValidationError>(
     `/boards/${board_id}`,
     { fields },
@@ -2040,9 +2055,10 @@ export const update_board = async (
  */
 export const delete_board = async (
   sdk: IAPIMethods,
-  board_id: number,
+  board_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  board_id = encodeParam(board_id)
   return sdk.delete<string, IError>(`/boards/${board_id}`, null, null, options)
 }
 
@@ -2111,10 +2127,11 @@ export const create_board_item = async (
  */
 export const board_item = async (
   sdk: IAPIMethods,
-  board_item_id: number,
+  board_item_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardItem, IError>> => {
+  board_item_id = encodeParam(board_item_id)
   return sdk.get<IBoardItem, IError>(
     `/board_items/${board_item_id}`,
     { fields },
@@ -2137,11 +2154,12 @@ export const board_item = async (
  */
 export const update_board_item = async (
   sdk: IAPIMethods,
-  board_item_id: number,
+  board_item_id: string,
   body: Partial<IWriteBoardItem>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardItem, IError | IValidationError>> => {
+  board_item_id = encodeParam(board_item_id)
   return sdk.patch<IBoardItem, IError | IValidationError>(
     `/board_items/${board_item_id}`,
     { fields },
@@ -2156,15 +2174,16 @@ export const update_board_item = async (
  * DELETE /board_items/{board_item_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param board_item_id Id of board_item
+ * @param board_item_id Id of board item
  * @param options one-time API call overrides
  *
  */
 export const delete_board_item = async (
   sdk: IAPIMethods,
-  board_item_id: number,
+  board_item_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  board_item_id = encodeParam(board_item_id)
   return sdk.delete<string, IError>(
     `/board_items/${board_item_id}`,
     null,
@@ -2234,10 +2253,11 @@ export const create_board_section = async (
  */
 export const board_section = async (
   sdk: IAPIMethods,
-  board_section_id: number,
+  board_section_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardSection, IError>> => {
+  board_section_id = encodeParam(board_section_id)
   return sdk.get<IBoardSection, IError>(
     `/board_sections/${board_section_id}`,
     { fields },
@@ -2260,11 +2280,12 @@ export const board_section = async (
  */
 export const update_board_section = async (
   sdk: IAPIMethods,
-  board_section_id: number,
+  board_section_id: string,
   body: Partial<IWriteBoardSection>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardSection, IError | IValidationError>> => {
+  board_section_id = encodeParam(board_section_id)
   return sdk.patch<IBoardSection, IError | IValidationError>(
     `/board_sections/${board_section_id}`,
     { fields },
@@ -2285,9 +2306,10 @@ export const update_board_section = async (
  */
 export const delete_board_section = async (
   sdk: IAPIMethods,
-  board_section_id: number,
+  board_section_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  board_section_id = encodeParam(board_section_id)
   return sdk.delete<string, IError>(
     `/board_sections/${board_section_id}`,
     null,
@@ -2563,113 +2585,6 @@ export const delete_color_collection = async (
 
 //#endregion ColorCollection: Manage Color Collections
 
-//#region Command: Manage Commands
-
-/**
- * ### Get All Commands.
- *
- * GET /commands -> ICommand[]
- *
- * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestGetAllCommands" for complex method parameters
- * @param options one-time API call overrides
- *
- */
-export const get_all_commands = async (
-  sdk: IAPIMethods,
-  request: IRequestGetAllCommands,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICommand[], IError>> => {
-  return sdk.get<ICommand[], IError>(
-    '/commands',
-    {
-      content_id: request.content_id,
-      content_type: request.content_type,
-      limit: request.limit,
-    },
-    null,
-    options
-  )
-}
-
-/**
- * ### Create a new command.
- * # Required fields: [:name, :linked_content_id, :linked_content_type]
- * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
- * #
- *
- * POST /commands -> ICommand
- *
- * @param sdk IAPIMethods implementation
- * @param body Partial<IWriteCommand>
- * @param options one-time API call overrides
- *
- */
-export const create_command = async (
-  sdk: IAPIMethods,
-  body: Partial<IWriteCommand>,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICommand, IError | IValidationError>> => {
-  return sdk.post<ICommand, IError | IValidationError>(
-    '/commands',
-    null,
-    body,
-    options
-  )
-}
-
-/**
- * ### Update an existing custom command.
- * # Optional fields: ['name', 'description']
- * #
- *
- * PATCH /commands/{command_id} -> ICommand
- *
- * @param sdk IAPIMethods implementation
- * @param command_id ID of a command
- * @param body Partial<IUpdateCommand>
- * @param options one-time API call overrides
- *
- */
-export const update_command = async (
-  sdk: IAPIMethods,
-  command_id: number,
-  body: Partial<IUpdateCommand>,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICommand, IError | IValidationError>> => {
-  return sdk.patch<ICommand, IError | IValidationError>(
-    `/commands/${command_id}`,
-    null,
-    body,
-    options
-  )
-}
-
-/**
- * ### Delete an existing custom command.
- *
- * DELETE /commands/{command_id} -> void
- *
- * @param sdk IAPIMethods implementation
- * @param command_id ID of a command
- * @param options one-time API call overrides
- *
- */
-export const delete_command = async (
-  sdk: IAPIMethods,
-  command_id: number,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<void, IError>> => {
-  return sdk.delete<void, IError>(
-    `/commands/${command_id}`,
-    null,
-    null,
-    options
-  )
-}
-
-//#endregion Command: Manage Commands
-
 //#region Config: Manage General Configuration
 
 /**
@@ -2850,6 +2765,29 @@ export const create_digest_email_send = async (
 ): Promise<SDKResponse<IDigestEmailSend, IError>> => {
   return sdk.post<IDigestEmailSend, IError>(
     '/digest_email_send',
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get Egress IP Addresses
+ *
+ * Returns the list of public egress IP Addresses for a hosted customer's instance
+ *
+ * GET /public_egress_ip_addresses -> IEgressIpAddresses
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const public_egress_ip_addresses = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IEgressIpAddresses, IError>> => {
+  return sdk.get<IEgressIpAddresses, IError>(
+    '/public_egress_ip_addresses',
     null,
     null,
     options
@@ -3061,7 +2999,7 @@ export const mobile_settings = async (
  *  - extension_framework_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - whitelabel_configuration
+ *  - privatelabel_configuration
  *  - custom_welcome_email
  *  - onboarding_enabled
  *
@@ -3092,7 +3030,7 @@ export const get_setting = async (
  *  - extension_framework_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - whitelabel_configuration
+ *  - privatelabel_configuration
  *  - custom_welcome_email
  *  - onboarding_enabled
  *
@@ -3115,6 +3053,31 @@ export const set_setting = async (
   return sdk.patch<ISetting, IError | IValidationError>(
     '/setting',
     { fields },
+    body,
+    options
+  )
+}
+
+/**
+ * ### Configure SMTP Settings
+ *   This API allows users to configure the SMTP settings on the Looker instance.
+ *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+ *
+ * POST /smtp_settings -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<ISmtpSettings>
+ * @param options one-time API call overrides
+ *
+ */
+export const set_smtp_settings = async (
+  sdk: IAPIMethods,
+  body: Partial<ISmtpSettings>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError | IValidationError>> => {
+  return sdk.post<void, IError | IValidationError>(
+    '/smtp_settings',
+    null,
     body,
     options
   )
@@ -3954,10 +3917,11 @@ export const search_content_favorites = async (
  */
 export const content_favorite = async (
   sdk: IAPIMethods,
-  content_favorite_id: number,
+  content_favorite_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentFavorite, IError>> => {
+  content_favorite_id = encodeParam(content_favorite_id)
   return sdk.get<IContentFavorite, IError>(
     `/content_favorite/${content_favorite_id}`,
     { fields },
@@ -3978,9 +3942,10 @@ export const content_favorite = async (
  */
 export const delete_content_favorite = async (
   sdk: IAPIMethods,
-  content_favorite_id: number,
+  content_favorite_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  content_favorite_id = encodeParam(content_favorite_id)
   return sdk.delete<string, IError>(
     `/content_favorite/${content_favorite_id}`,
     null,
@@ -4025,7 +3990,7 @@ export const create_content_favorite = async (
  */
 export const all_content_metadatas = async (
   sdk: IAPIMethods,
-  parent_id: number,
+  parent_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta[], IError>> => {
@@ -4050,10 +4015,11 @@ export const all_content_metadatas = async (
  */
 export const content_metadata = async (
   sdk: IAPIMethods,
-  content_metadata_id: number,
+  content_metadata_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta, IError>> => {
+  content_metadata_id = encodeParam(content_metadata_id)
   return sdk.get<IContentMeta, IError>(
     `/content_metadata/${content_metadata_id}`,
     { fields },
@@ -4075,10 +4041,11 @@ export const content_metadata = async (
  */
 export const update_content_metadata = async (
   sdk: IAPIMethods,
-  content_metadata_id: number,
+  content_metadata_id: string,
   body: Partial<IWriteContentMeta>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMeta, IError | IValidationError>> => {
+  content_metadata_id = encodeParam(content_metadata_id)
   return sdk.patch<IContentMeta, IError | IValidationError>(
     `/content_metadata/${content_metadata_id}`,
     null,
@@ -4100,7 +4067,7 @@ export const update_content_metadata = async (
  */
 export const all_content_metadata_accesses = async (
   sdk: IAPIMethods,
-  content_metadata_id: number,
+  content_metadata_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentMetaGroupUser[], IError>> => {
@@ -4175,9 +4142,10 @@ export const update_content_metadata_access = async (
  */
 export const delete_content_metadata_access = async (
   sdk: IAPIMethods,
-  content_metadata_access_id: number,
+  content_metadata_access_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  content_metadata_access_id = encodeParam(content_metadata_access_id)
   return sdk.delete<string, IError>(
     `/content_metadata_access/${content_metadata_access_id}`,
     null,
@@ -4380,8 +4348,8 @@ export const all_dashboards = async (
  *
  * Creates a new dashboard object and returns the details of the newly created dashboard.
  *
- * `Title`, `user_id`, and `space_id` are all required fields.
- * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+ * `Title` and `space_id` are required fields.
+ * `Space_id` must contain the id of an existing space.
  * A dashboard's `title` must be unique within the space in which it resides.
  *
  * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -4741,6 +4709,38 @@ export const move_dashboard = async (
 }
 
 /**
+ * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+ *
+ * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+ *
+ * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
+ * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
+ * ).
+ *
+ * Note that the created dashboard is not linked to any LookML Dashboard,
+ * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+ *
+ * POST /dashboards/from_lookml -> IDashboardLookml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteDashboardLookml>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_dashboard_from_lookml = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteDashboardLookml>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDashboardLookml, IError | IValidationError>> => {
+  return sdk.post<IDashboardLookml, IError | IValidationError>(
+    '/dashboards/from_lookml',
+    null,
+    body,
+    options
+  )
+}
+
+/**
  * ### Copy an existing dashboard
  *
  * Creates a copy of an existing dashboard, in a specified folder, and returns the copied dashboard.
@@ -4938,21 +4938,19 @@ export const dashboard_dashboard_elements = async (
  * POST /dashboard_elements -> IDashboardElement
  *
  * @param sdk IAPIMethods implementation
- * @param body Partial<IWriteDashboardElement>
- * @param fields Requested fields.
+ * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const create_dashboard_element = async (
   sdk: IAPIMethods,
-  body: Partial<IWriteDashboardElement>,
-  fields?: string,
+  request: IRequestCreateDashboardElement,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>> => {
   return sdk.post<IDashboardElement, IError | IValidationError>(
     '/dashboard_elements',
-    { fields },
-    body,
+    { fields: request.fields, apply_filters: request.apply_filters },
+    request.body,
     options
   )
 }
@@ -5379,9 +5377,10 @@ export const all_datagroups = async (
  */
 export const datagroup = async (
   sdk: IAPIMethods,
-  datagroup_id: number,
+  datagroup_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDatagroup, IError>> => {
+  datagroup_id = encodeParam(datagroup_id)
   return sdk.get<IDatagroup, IError>(
     `/datagroups/${datagroup_id}`,
     null,
@@ -5403,10 +5402,11 @@ export const datagroup = async (
  */
 export const update_datagroup = async (
   sdk: IAPIMethods,
-  datagroup_id: number,
+  datagroup_id: string,
   body: Partial<IWriteDatagroup>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDatagroup, IError | IValidationError>> => {
+  datagroup_id = encodeParam(datagroup_id)
   return sdk.patch<IDatagroup, IError | IValidationError>(
     `/datagroups/${datagroup_id}`,
     null,
@@ -5462,6 +5462,86 @@ export const graph_derived_tables_for_view = async (
   return sdk.get<IDependencyGraph, IError>(
     `/derived_table/graph/view/${request.view}`,
     { models: request.models, workspace: request.workspace },
+    null,
+    options
+  )
+}
+
+/**
+ * Enqueue materialization for a PDT with the given model name and view name
+ *
+ * GET /derived_table/{model_name}/{view_name}/start -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestStartPdtBuild" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const start_pdt_build = async (
+  sdk: IAPIMethods,
+  request: IRequestStartPdtBuild,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  request.model_name = encodeParam(request.model_name)
+  request.view_name = encodeParam(request.view_name)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${request.model_name}/${request.view_name}/start`,
+    {
+      force_rebuild: request.force_rebuild,
+      force_full_incremental: request.force_full_incremental,
+      workspace: request.workspace,
+      source: request.source,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * Check status of PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/status -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to check status for.
+ * @param options one-time API call overrides
+ *
+ */
+export const check_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/status`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * Stop a PDT materialization
+ *
+ * GET /derived_table/{materialization_id}/stop -> IMaterializePDT
+ *
+ * @param sdk IAPIMethods implementation
+ * @param materialization_id The materialization id to stop.
+ * @param source The source of this request.
+ * @param options one-time API call overrides
+ *
+ */
+export const stop_pdt_build = async (
+  sdk: IAPIMethods,
+  materialization_id: string,
+  source?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IMaterializePDT, IError>> => {
+  materialization_id = encodeParam(materialization_id)
+  return sdk.get<IMaterializePDT, IError>(
+    `/derived_table/${materialization_id}/stop`,
+    { source },
     null,
     options
   )
@@ -5817,6 +5897,8 @@ export const all_groups = async (
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
       ids: request.ids,
       content_metadata_id: request.content_metadata_id,
@@ -6037,10 +6119,11 @@ export const search_groups_with_hierarchy = async (
  */
 export const group = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError>> => {
+  group_id = encodeParam(group_id)
   return sdk.get<IGroup, IError>(
     `/groups/${group_id}`,
     { fields },
@@ -6063,11 +6146,12 @@ export const group = async (
  */
 export const update_group = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   body: Partial<IWriteGroup>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError | IValidationError>> => {
+  group_id = encodeParam(group_id)
   return sdk.patch<IGroup, IError | IValidationError>(
     `/groups/${group_id}`,
     { fields },
@@ -6088,9 +6172,10 @@ export const update_group = async (
  */
 export const delete_group = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  group_id = encodeParam(group_id)
   return sdk.delete<string, IError>(`/groups/${group_id}`, null, null, options)
 }
 
@@ -6107,10 +6192,11 @@ export const delete_group = async (
  */
 export const all_group_groups = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
+  group_id = encodeParam(group_id)
   return sdk.get<IGroup[], IError>(
     `/groups/${group_id}/groups`,
     { fields },
@@ -6132,10 +6218,11 @@ export const all_group_groups = async (
  */
 export const add_group_group = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   body: Partial<IGroupIdForGroupInclusion>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup, IError>> => {
+  group_id = encodeParam(group_id)
   return sdk.post<IGroup, IError>(
     `/groups/${group_id}/groups`,
     null,
@@ -6159,12 +6246,15 @@ export const all_group_users = async (
   request: IRequestAllGroupUsers,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
+  request.group_id = encodeParam(request.group_id)
   return sdk.get<IUser[], IError>(
     `/groups/${request.group_id}/users`,
     {
       fields: request.fields,
       page: request.page,
       per_page: request.per_page,
+      limit: request.limit,
+      offset: request.offset,
       sorts: request.sorts,
     },
     null,
@@ -6185,10 +6275,11 @@ export const all_group_users = async (
  */
 export const add_group_user = async (
   sdk: IAPIMethods,
-  group_id: number,
+  group_id: string,
   body: Partial<IGroupIdForGroupUserInclusion>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
+  group_id = encodeParam(group_id)
   return sdk.post<IUser, IError>(
     `/groups/${group_id}/users`,
     null,
@@ -6210,10 +6301,12 @@ export const add_group_user = async (
  */
 export const delete_group_user = async (
   sdk: IAPIMethods,
-  group_id: number,
-  user_id: number,
+  group_id: string,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  group_id = encodeParam(group_id)
+  user_id = encodeParam(user_id)
   return sdk.delete<void, IError>(
     `/groups/${group_id}/users/${user_id}`,
     null,
@@ -6235,10 +6328,12 @@ export const delete_group_user = async (
  */
 export const delete_group_from_group = async (
   sdk: IAPIMethods,
-  group_id: number,
-  deleting_group_id: number,
+  group_id: string,
+  deleting_group_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  group_id = encodeParam(group_id)
+  deleting_group_id = encodeParam(deleting_group_id)
   return sdk.delete<void, IError>(
     `/groups/${group_id}/groups/${deleting_group_id}`,
     null,
@@ -6263,13 +6358,15 @@ export const delete_group_from_group = async (
  */
 export const update_user_attribute_group_value = async (
   sdk: IAPIMethods,
-  group_id: number,
-  user_attribute_id: number,
+  group_id: string,
+  user_attribute_id: string,
   body: Partial<IUserAttributeGroupValue>,
   options?: Partial<ITransportSettings>
 ): Promise<
   SDKResponse<IUserAttributeGroupValue, IError | IValidationError>
 > => {
+  group_id = encodeParam(group_id)
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.patch<IUserAttributeGroupValue, IError | IValidationError>(
     `/groups/${group_id}/attribute_values/${user_attribute_id}`,
     null,
@@ -6291,10 +6388,12 @@ export const update_user_attribute_group_value = async (
  */
 export const delete_user_attribute_group_value = async (
   sdk: IAPIMethods,
-  group_id: number,
-  user_attribute_id: number,
+  group_id: string,
+  user_attribute_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  group_id = encodeParam(group_id)
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.delete<void, IError>(
     `/groups/${group_id}/attribute_values/${user_attribute_id}`,
     null,
@@ -6390,17 +6489,18 @@ export const create_integration_hub = async (
  * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
  *
  * @param sdk IAPIMethods implementation
- * @param integration_hub_id Id of Integration Hub
+ * @param integration_hub_id Id of integration_hub
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const integration_hub = async (
   sdk: IAPIMethods,
-  integration_hub_id: number,
+  integration_hub_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError>> => {
+  integration_hub_id = encodeParam(integration_hub_id)
   return sdk.get<IIntegrationHub, IError>(
     `/integration_hubs/${integration_hub_id}`,
     { fields },
@@ -6417,7 +6517,7 @@ export const integration_hub = async (
  * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
  *
  * @param sdk IAPIMethods implementation
- * @param integration_hub_id Id of Integration Hub
+ * @param integration_hub_id Id of integration_hub
  * @param body Partial<IWriteIntegrationHub>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -6425,11 +6525,12 @@ export const integration_hub = async (
  */
 export const update_integration_hub = async (
   sdk: IAPIMethods,
-  integration_hub_id: number,
+  integration_hub_id: string,
   body: Partial<IWriteIntegrationHub>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>> => {
+  integration_hub_id = encodeParam(integration_hub_id)
   return sdk.patch<IIntegrationHub, IError | IValidationError>(
     `/integration_hubs/${integration_hub_id}`,
     { fields },
@@ -6450,9 +6551,10 @@ export const update_integration_hub = async (
  */
 export const delete_integration_hub = async (
   sdk: IAPIMethods,
-  integration_hub_id: number,
+  integration_hub_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  integration_hub_id = encodeParam(integration_hub_id)
   return sdk.delete<string, IError>(
     `/integration_hubs/${integration_hub_id}`,
     null,
@@ -6473,9 +6575,10 @@ export const delete_integration_hub = async (
  */
 export const accept_integration_hub_legal_agreement = async (
   sdk: IAPIMethods,
-  integration_hub_id: number,
+  integration_hub_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegrationHub, IError | IValidationError>> => {
+  integration_hub_id = encodeParam(integration_hub_id)
   return sdk.post<IIntegrationHub, IError | IValidationError>(
     `/integration_hubs/${integration_hub_id}/accept_legal_agreement`,
     null,
@@ -8521,10 +8624,11 @@ export const query_task_results = async (
  */
 export const query = async (
   sdk: IAPIMethods,
-  query_id: number,
+  query_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IQuery, IError>> => {
+  query_id = encodeParam(query_id)
   return sdk.get<IQuery, IError>(
     `/queries/${query_id}`,
     { fields },
@@ -8645,6 +8749,7 @@ export const run_query = async (
   request: IRequestRunQuery,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError | IValidationError>> => {
+  request.query_id = encodeParam(request.query_id)
   request.result_format = encodeParam(request.result_format)
   return sdk.get<string, IError | IValidationError>(
     `/queries/${request.query_id}/run/${request.result_format}`,
@@ -8783,11 +8888,11 @@ export const run_inline_query = async (
  * ```ruby
  * query_params =
  * {
- *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+ *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
  *   :"f[category.name]" => "socks",
- *   :sorts => "products.count desc 0",
- *   :limit => "500",
- *   :query_timezone => "America/Los_Angeles"
+ *   sorts: "products.count desc 0",
+ *   limit: "500",
+ *   query_timezone: "America/Los_Angeles"
  * }
  * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
  *
@@ -9055,13 +9160,14 @@ export const run_sql_query = async (
  */
 export const create_look_render_task = async (
   sdk: IAPIMethods,
-  look_id: number,
+  look_id: string,
   result_format: string,
   width: number,
   height: number,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
+  look_id = encodeParam(look_id)
   result_format = encodeParam(result_format)
   return sdk.post<IRenderTask, IError | IValidationError>(
     `/render_tasks/looks/${look_id}/${result_format}`,
@@ -9091,13 +9197,14 @@ export const create_look_render_task = async (
  */
 export const create_query_render_task = async (
   sdk: IAPIMethods,
-  query_id: number,
+  query_id: string,
   result_format: string,
   width: number,
   height: number,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRenderTask, IError | IValidationError>> => {
+  query_id = encodeParam(query_id)
   result_format = encodeParam(result_format)
   return sdk.post<IRenderTask, IError | IValidationError>(
     `/render_tasks/queries/${query_id}/${result_format}`,
@@ -9324,10 +9431,11 @@ export const search_model_sets = async (
  */
 export const model_set = async (
   sdk: IAPIMethods,
-  model_set_id: number,
+  model_set_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet, IError>> => {
+  model_set_id = encodeParam(model_set_id)
   return sdk.get<IModelSet, IError>(
     `/model_sets/${model_set_id}`,
     { fields },
@@ -9349,10 +9457,11 @@ export const model_set = async (
  */
 export const update_model_set = async (
   sdk: IAPIMethods,
-  model_set_id: number,
+  model_set_id: string,
   body: Partial<IWriteModelSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet, IError | IValidationError>> => {
+  model_set_id = encodeParam(model_set_id)
   return sdk.patch<IModelSet, IError | IValidationError>(
     `/model_sets/${model_set_id}`,
     null,
@@ -9373,9 +9482,10 @@ export const update_model_set = async (
  */
 export const delete_model_set = async (
   sdk: IAPIMethods,
-  model_set_id: number,
+  model_set_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  model_set_id = encodeParam(model_set_id)
   return sdk.delete<string, IError>(
     `/model_sets/${model_set_id}`,
     null,
@@ -9508,10 +9618,11 @@ export const search_permission_sets = async (
  */
 export const permission_set = async (
   sdk: IAPIMethods,
-  permission_set_id: number,
+  permission_set_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet, IError>> => {
+  permission_set_id = encodeParam(permission_set_id)
   return sdk.get<IPermissionSet, IError>(
     `/permission_sets/${permission_set_id}`,
     { fields },
@@ -9526,17 +9637,18 @@ export const permission_set = async (
  * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
  *
  * @param sdk IAPIMethods implementation
- * @param permission_set_id id of permission set
+ * @param permission_set_id Id of permission set
  * @param body Partial<IWritePermissionSet>
  * @param options one-time API call overrides
  *
  */
 export const update_permission_set = async (
   sdk: IAPIMethods,
-  permission_set_id: number,
+  permission_set_id: string,
   body: Partial<IWritePermissionSet>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet, IError | IValidationError>> => {
+  permission_set_id = encodeParam(permission_set_id)
   return sdk.patch<IPermissionSet, IError | IValidationError>(
     `/permission_sets/${permission_set_id}`,
     null,
@@ -9557,9 +9669,10 @@ export const update_permission_set = async (
  */
 export const delete_permission_set = async (
   sdk: IAPIMethods,
-  permission_set_id: number,
+  permission_set_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  permission_set_id = encodeParam(permission_set_id)
   return sdk.delete<string, IError>(
     `/permission_sets/${permission_set_id}`,
     null,
@@ -9783,9 +9896,10 @@ export const search_roles_with_user_count = async (
  */
 export const role = async (
   sdk: IAPIMethods,
-  role_id: number,
+  role_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole, IError>> => {
+  role_id = encodeParam(role_id)
   return sdk.get<IRole, IError>(`/roles/${role_id}`, null, null, options)
 }
 
@@ -9802,10 +9916,11 @@ export const role = async (
  */
 export const update_role = async (
   sdk: IAPIMethods,
-  role_id: number,
+  role_id: string,
   body: Partial<IWriteRole>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole, IError | IValidationError>> => {
+  role_id = encodeParam(role_id)
   return sdk.patch<IRole, IError | IValidationError>(
     `/roles/${role_id}`,
     null,
@@ -9826,9 +9941,10 @@ export const update_role = async (
  */
 export const delete_role = async (
   sdk: IAPIMethods,
-  role_id: number,
+  role_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  role_id = encodeParam(role_id)
   return sdk.delete<string, IError>(`/roles/${role_id}`, null, null, options)
 }
 
@@ -9845,10 +9961,11 @@ export const delete_role = async (
  */
 export const role_groups = async (
   sdk: IAPIMethods,
-  role_id: number,
+  role_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
+  role_id = encodeParam(role_id)
   return sdk.get<IGroup[], IError>(
     `/roles/${role_id}/groups`,
     { fields },
@@ -9863,17 +9980,18 @@ export const role_groups = async (
  * PUT /roles/{role_id}/groups -> IGroup[]
  *
  * @param sdk IAPIMethods implementation
- * @param role_id Id of Role
- * @param body Partial<number[]>
+ * @param role_id id of role
+ * @param body Partial<string[]>
  * @param options one-time API call overrides
  *
  */
 export const set_role_groups = async (
   sdk: IAPIMethods,
-  role_id: number,
-  body: Partial<number[]>,
+  role_id: string,
+  body: Partial<string[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError | IValidationError>> => {
+  role_id = encodeParam(role_id)
   return sdk.put<IGroup[], IError | IValidationError>(
     `/roles/${role_id}/groups`,
     null,
@@ -9897,6 +10015,7 @@ export const role_users = async (
   request: IRequestRoleUsers,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
+  request.role_id = encodeParam(request.role_id)
   return sdk.get<IUser[], IError>(
     `/roles/${request.role_id}/users`,
     {
@@ -9915,16 +10034,17 @@ export const role_users = async (
  *
  * @param sdk IAPIMethods implementation
  * @param role_id id of role
- * @param body Partial<number[]>
+ * @param body Partial<string[]>
  * @param options one-time API call overrides
  *
  */
 export const set_role_users = async (
   sdk: IAPIMethods,
-  role_id: number,
-  body: Partial<number[]>,
+  role_id: string,
+  body: Partial<string[]>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError | IValidationError>> => {
+  role_id = encodeParam(role_id)
   return sdk.put<IUser[], IError | IValidationError>(
     `/roles/${role_id}/users`,
     null,
@@ -9952,10 +10072,11 @@ export const set_role_users = async (
  */
 export const scheduled_plans_for_space = async (
   sdk: IAPIMethods,
-  space_id: number,
+  space_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError>> => {
+  space_id = encodeParam(space_id)
   return sdk.get<IScheduledPlan[], IError>(
     `/scheduled_plans/space/${space_id}`,
     { fields },
@@ -9979,10 +10100,11 @@ export const scheduled_plans_for_space = async (
  */
 export const scheduled_plan = async (
   sdk: IAPIMethods,
-  scheduled_plan_id: number,
+  scheduled_plan_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError>> => {
+  scheduled_plan_id = encodeParam(scheduled_plan_id)
   return sdk.get<IScheduledPlan, IError>(
     `/scheduled_plans/${scheduled_plan_id}`,
     { fields },
@@ -10045,10 +10167,11 @@ export const scheduled_plan = async (
  */
 export const update_scheduled_plan = async (
   sdk: IAPIMethods,
-  scheduled_plan_id: number,
+  scheduled_plan_id: string,
   body: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
+  scheduled_plan_id = encodeParam(scheduled_plan_id)
   return sdk.patch<IScheduledPlan, IError | IValidationError>(
     `/scheduled_plans/${scheduled_plan_id}`,
     null,
@@ -10073,9 +10196,10 @@ export const update_scheduled_plan = async (
  */
 export const delete_scheduled_plan = async (
   sdk: IAPIMethods,
-  scheduled_plan_id: number,
+  scheduled_plan_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  scheduled_plan_id = encodeParam(scheduled_plan_id)
   return sdk.delete<string, IError>(
     `/scheduled_plans/${scheduled_plan_id}`,
     null,
@@ -10285,6 +10409,7 @@ export const scheduled_plans_for_look = async (
   request: IRequestScheduledPlansForLook,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError>> => {
+  request.look_id = encodeParam(request.look_id)
   return sdk.get<IScheduledPlan[], IError>(
     `/scheduled_plans/look/${request.look_id}`,
     {
@@ -10322,6 +10447,7 @@ export const scheduled_plans_for_dashboard = async (
   request: IRequestScheduledPlansForDashboard,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError>> => {
+  request.dashboard_id = encodeParam(request.dashboard_id)
   return sdk.get<IScheduledPlan[], IError>(
     `/scheduled_plans/dashboard/${request.dashboard_id}`,
     {
@@ -10431,10 +10557,11 @@ export const scheduled_plans_for_lookml_dashboard = async (
  */
 export const scheduled_plan_run_once_by_id = async (
   sdk: IAPIMethods,
-  scheduled_plan_id: number,
+  scheduled_plan_id: string,
   body?: Partial<IWriteScheduledPlan>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>> => {
+  scheduled_plan_id = encodeParam(scheduled_plan_id)
   return sdk.post<IScheduledPlan, IError | IValidationError>(
     `/scheduled_plans/${scheduled_plan_id}/run_once`,
     null,
@@ -10806,10 +10933,11 @@ export const validate_theme = async (
  */
 export const theme = async (
   sdk: IAPIMethods,
-  theme_id: number,
+  theme_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError>> => {
+  theme_id = encodeParam(theme_id)
   return sdk.get<ITheme, IError>(
     `/themes/${theme_id}`,
     { fields },
@@ -10833,10 +10961,11 @@ export const theme = async (
  */
 export const update_theme = async (
   sdk: IAPIMethods,
-  theme_id: number,
+  theme_id: string,
   body: Partial<IWriteTheme>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme, IError | IValidationError>> => {
+  theme_id = encodeParam(theme_id)
   return sdk.patch<ITheme, IError | IValidationError>(
     `/themes/${theme_id}`,
     null,
@@ -11133,10 +11262,11 @@ export const search_users_names = async (
  */
 export const user = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<IUser, IError>(`/users/${user_id}`, { fields }, null, options)
 }
 
@@ -11154,11 +11284,12 @@ export const user = async (
  */
 export const update_user = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   body: Partial<IWriteUser>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.patch<IUser, IError | IValidationError>(
     `/users/${user_id}`,
     { fields },
@@ -11181,9 +11312,10 @@ export const update_user = async (
  */
 export const delete_user = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(`/users/${user_id}`, null, null, options)
 }
 
@@ -11249,17 +11381,18 @@ export const user_for_credential = async (
  * GET /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_email = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsEmail, IError>(
     `/users/${user_id}/credentials_email`,
     { fields },
@@ -11274,7 +11407,7 @@ export const user_credentials_email = async (
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body Partial<IWriteCredentialsEmail>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -11282,11 +11415,12 @@ export const user_credentials_email = async (
  */
 export const create_user_credentials_email = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   body: Partial<IWriteCredentialsEmail>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<ICredentialsEmail, IError | IValidationError>(
     `/users/${user_id}/credentials_email`,
     { fields },
@@ -11301,7 +11435,7 @@ export const create_user_credentials_email = async (
  * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body Partial<IWriteCredentialsEmail>
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -11309,11 +11443,12 @@ export const create_user_credentials_email = async (
  */
 export const update_user_credentials_email = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   body: Partial<IWriteCredentialsEmail>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.patch<ICredentialsEmail, IError | IValidationError>(
     `/users/${user_id}/credentials_email`,
     { fields },
@@ -11328,15 +11463,16 @@ export const update_user_credentials_email = async (
  * DELETE /users/{user_id}/credentials_email -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_email = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_email`,
     null,
@@ -11351,17 +11487,18 @@ export const delete_user_credentials_email = async (
  * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_totp = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsTotp, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsTotp, IError>(
     `/users/${user_id}/credentials_totp`,
     { fields },
@@ -11376,7 +11513,7 @@ export const user_credentials_totp = async (
  * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
  * @param fields Requested fields.
  * @param options one-time API call overrides
@@ -11384,11 +11521,12 @@ export const user_credentials_totp = async (
  */
 export const create_user_credentials_totp = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   body?: Partial<ICredentialsTotp>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<ICredentialsTotp, IError | IValidationError>(
     `/users/${user_id}/credentials_totp`,
     { fields },
@@ -11403,15 +11541,16 @@ export const create_user_credentials_totp = async (
  * DELETE /users/{user_id}/credentials_totp -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_totp = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_totp`,
     null,
@@ -11426,17 +11565,18 @@ export const delete_user_credentials_totp = async (
  * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_ldap = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsLDAP, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsLDAP, IError>(
     `/users/${user_id}/credentials_ldap`,
     { fields },
@@ -11451,15 +11591,16 @@ export const user_credentials_ldap = async (
  * DELETE /users/{user_id}/credentials_ldap -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_ldap = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_ldap`,
     null,
@@ -11474,17 +11615,18 @@ export const delete_user_credentials_ldap = async (
  * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_google = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsGoogle, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsGoogle, IError>(
     `/users/${user_id}/credentials_google`,
     { fields },
@@ -11499,15 +11641,16 @@ export const user_credentials_google = async (
  * DELETE /users/{user_id}/credentials_google -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_google = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_google`,
     null,
@@ -11522,17 +11665,18 @@ export const delete_user_credentials_google = async (
  * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_saml = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsSaml, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsSaml, IError>(
     `/users/${user_id}/credentials_saml`,
     { fields },
@@ -11547,15 +11691,16 @@ export const user_credentials_saml = async (
  * DELETE /users/{user_id}/credentials_saml -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_saml = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_saml`,
     null,
@@ -11570,17 +11715,18 @@ export const delete_user_credentials_saml = async (
  * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_oidc = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsOIDC, IError>(
     `/users/${user_id}/credentials_oidc`,
     { fields },
@@ -11595,15 +11741,16 @@ export const user_credentials_oidc = async (
  * DELETE /users/{user_id}/credentials_oidc -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_oidc = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_oidc`,
     null,
@@ -11626,11 +11773,13 @@ export const delete_user_credentials_oidc = async (
  */
 export const user_credentials_api3 = async (
   sdk: IAPIMethods,
-  user_id: number,
-  credentials_api3_id: number,
+  user_id: string,
+  credentials_api3_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsApi3, IError>> => {
+  user_id = encodeParam(user_id)
+  credentials_api3_id = encodeParam(credentials_api3_id)
   return sdk.get<ICredentialsApi3, IError>(
     `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
     { fields },
@@ -11645,17 +11794,19 @@ export const user_credentials_api3 = async (
  * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param credentials_api3_id id of API 3 Credential
+ * @param user_id Id of user
+ * @param credentials_api3_id Id of API 3 Credential
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_api3 = async (
   sdk: IAPIMethods,
-  user_id: number,
-  credentials_api3_id: number,
+  user_id: string,
+  credentials_api3_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
+  credentials_api3_id = encodeParam(credentials_api3_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
     null,
@@ -11670,17 +11821,18 @@ export const delete_user_credentials_api3 = async (
  * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const all_user_credentials_api3s = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsApi3[], IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsApi3[], IError>(
     `/users/${user_id}/credentials_api3`,
     { fields },
@@ -11695,17 +11847,18 @@ export const all_user_credentials_api3s = async (
  * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const create_user_credentials_api3 = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICreateCredentialsApi3, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<ICreateCredentialsApi3, IError | IValidationError>(
     `/users/${user_id}/credentials_api3`,
     { fields },
@@ -11728,11 +11881,13 @@ export const create_user_credentials_api3 = async (
  */
 export const user_credentials_embed = async (
   sdk: IAPIMethods,
-  user_id: number,
-  credentials_embed_id: number,
+  user_id: string,
+  credentials_embed_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmbed, IError>> => {
+  user_id = encodeParam(user_id)
+  credentials_embed_id = encodeParam(credentials_embed_id)
   return sdk.get<ICredentialsEmbed, IError>(
     `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
     { fields },
@@ -11747,17 +11902,19 @@ export const user_credentials_embed = async (
  * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param credentials_embed_id id of Embedding Credential
+ * @param user_id Id of user
+ * @param credentials_embed_id Id of Embedding Credential
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_embed = async (
   sdk: IAPIMethods,
-  user_id: number,
-  credentials_embed_id: number,
+  user_id: string,
+  credentials_embed_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
+  credentials_embed_id = encodeParam(credentials_embed_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_embed/${credentials_embed_id}`,
     null,
@@ -11772,17 +11929,18 @@ export const delete_user_credentials_embed = async (
  * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const all_user_credentials_embeds = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmbed[], IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsEmbed[], IError>(
     `/users/${user_id}/credentials_embed`,
     { fields },
@@ -11797,17 +11955,18 @@ export const all_user_credentials_embeds = async (
  * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const user_credentials_looker_openid = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsLookerOpenid, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ICredentialsLookerOpenid, IError>(
     `/users/${user_id}/credentials_looker_openid`,
     { fields },
@@ -11822,15 +11981,16 @@ export const user_credentials_looker_openid = async (
  * DELETE /users/{user_id}/credentials_looker_openid -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param options one-time API call overrides
  *
  */
 export const delete_user_credentials_looker_openid = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_looker_openid`,
     null,
@@ -11853,11 +12013,13 @@ export const delete_user_credentials_looker_openid = async (
  */
 export const user_session = async (
   sdk: IAPIMethods,
-  user_id: number,
-  session_id: number,
+  user_id: string,
+  session_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISession, IError>> => {
+  user_id = encodeParam(user_id)
+  session_id = encodeParam(session_id)
   return sdk.get<ISession, IError>(
     `/users/${user_id}/sessions/${session_id}`,
     { fields },
@@ -11872,17 +12034,19 @@ export const user_session = async (
  * DELETE /users/{user_id}/sessions/{session_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param session_id id of Web Login Session
+ * @param user_id Id of user
+ * @param session_id Id of Web Login Session
  * @param options one-time API call overrides
  *
  */
 export const delete_user_session = async (
   sdk: IAPIMethods,
-  user_id: number,
-  session_id: number,
+  user_id: string,
+  session_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id)
+  session_id = encodeParam(session_id)
   return sdk.delete<string, IError>(
     `/users/${user_id}/sessions/${session_id}`,
     null,
@@ -11897,17 +12061,18 @@ export const delete_user_session = async (
  * GET /users/{user_id}/sessions -> ISession[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
+ * @param user_id Id of user
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const all_user_sessions = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ISession[], IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.get<ISession[], IError>(
     `/users/${user_id}/sessions`,
     { fields },
@@ -11939,6 +12104,7 @@ export const create_user_credentials_email_password_reset = async (
   request: IRequestCreateUserCredentialsEmailPasswordReset,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  request.user_id = encodeParam(request.user_id)
   return sdk.post<ICredentialsEmail, IError>(
     `/users/${request.user_id}/credentials_email/password_reset`,
     { expires: request.expires, fields: request.fields },
@@ -11962,6 +12128,7 @@ export const user_roles = async (
   request: IRequestUserRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
+  request.user_id = encodeParam(request.user_id)
   return sdk.get<IRole[], IError>(
     `/users/${request.user_id}/roles`,
     {
@@ -11979,19 +12146,20 @@ export const user_roles = async (
  * PUT /users/{user_id}/roles -> IRole[]
  *
  * @param sdk IAPIMethods implementation
- * @param user_id id of user
- * @param body Partial<number[]>
+ * @param user_id Id of user
+ * @param body Partial<string[]>
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 export const set_user_roles = async (
   sdk: IAPIMethods,
-  user_id: number,
-  body: Partial<number[]>,
+  user_id: string,
+  body: Partial<string[]>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.put<IRole[], IError>(
     `/users/${user_id}/roles`,
     { fields },
@@ -12030,6 +12198,7 @@ export const user_attribute_user_values = async (
   request: IRequestUserAttributeUserValues,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttributeWithValue[], IError>> => {
+  request.user_id = encodeParam(request.user_id)
   return sdk.get<IUserAttributeWithValue[], IError>(
     `/users/${request.user_id}/attribute_values`,
     {
@@ -12059,11 +12228,13 @@ export const user_attribute_user_values = async (
  */
 export const set_user_attribute_user_value = async (
   sdk: IAPIMethods,
-  user_id: number,
-  user_attribute_id: number,
+  user_id: string,
+  user_attribute_id: string,
   body: Partial<IWriteUserAttributeWithValue>,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttributeWithValue, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.patch<IUserAttributeWithValue, IError | IValidationError>(
     `/users/${user_id}/attribute_values/${user_attribute_id}`,
     null,
@@ -12090,10 +12261,12 @@ export const set_user_attribute_user_value = async (
  */
 export const delete_user_attribute_user_value = async (
   sdk: IAPIMethods,
-  user_id: number,
-  user_attribute_id: number,
+  user_id: string,
+  user_attribute_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<void, IError>> => {
+  user_id = encodeParam(user_id)
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.delete<void, IError>(
     `/users/${user_id}/attribute_values/${user_attribute_id}`,
     null,
@@ -12121,10 +12294,11 @@ export const delete_user_attribute_user_value = async (
  */
 export const send_user_credentials_email_password_reset = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<ICredentialsEmail, IError>(
     `/users/${user_id}/credentials_email/send_password_reset`,
     { fields },
@@ -12152,11 +12326,12 @@ export const send_user_credentials_email_password_reset = async (
  */
 export const wipeout_user_emails = async (
   sdk: IAPIMethods,
-  user_id: number,
+  user_id: string,
   body: Partial<IUserEmailOnly>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser, IError | IValidationError>> => {
+  user_id = encodeParam(user_id)
   return sdk.post<IUser, IError | IValidationError>(
     `/users/${user_id}/update_emails`,
     { fields },
@@ -12257,10 +12432,11 @@ export const create_user_attribute = async (
  */
 export const user_attribute = async (
   sdk: IAPIMethods,
-  user_attribute_id: number,
+  user_attribute_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute, IError>> => {
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.get<IUserAttribute, IError>(
     `/user_attributes/${user_attribute_id}`,
     { fields },
@@ -12283,11 +12459,12 @@ export const user_attribute = async (
  */
 export const update_user_attribute = async (
   sdk: IAPIMethods,
-  user_attribute_id: number,
+  user_attribute_id: string,
   body: Partial<IWriteUserAttribute>,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute, IError | IValidationError>> => {
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.patch<IUserAttribute, IError | IValidationError>(
     `/user_attributes/${user_attribute_id}`,
     { fields },
@@ -12302,15 +12479,16 @@ export const update_user_attribute = async (
  * DELETE /user_attributes/{user_attribute_id} -> string
  *
  * @param sdk IAPIMethods implementation
- * @param user_attribute_id Id of user_attribute
+ * @param user_attribute_id Id of user attribute
  * @param options one-time API call overrides
  *
  */
 export const delete_user_attribute = async (
   sdk: IAPIMethods,
-  user_attribute_id: number,
+  user_attribute_id: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<string, IError>> => {
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.delete<string, IError>(
     `/user_attributes/${user_attribute_id}`,
     null,
@@ -12338,10 +12516,11 @@ export const delete_user_attribute = async (
  */
 export const all_user_attribute_group_values = async (
   sdk: IAPIMethods,
-  user_attribute_id: number,
+  user_attribute_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttributeGroupValue[], IError>> => {
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.get<IUserAttributeGroupValue[], IError>(
     `/user_attributes/${user_attribute_id}/group_values`,
     { fields },
@@ -12382,12 +12561,13 @@ export const all_user_attribute_group_values = async (
  */
 export const set_user_attribute_group_values = async (
   sdk: IAPIMethods,
-  user_attribute_id: number,
+  user_attribute_id: string,
   body: Partial<IUserAttributeGroupValue[]>,
   options?: Partial<ITransportSettings>
 ): Promise<
   SDKResponse<IUserAttributeGroupValue[], IError | IValidationError>
 > => {
+  user_attribute_id = encodeParam(user_attribute_id)
   return sdk.post<IUserAttributeGroupValue[], IError | IValidationError>(
     `/user_attributes/${user_attribute_id}/group_values`,
     null,

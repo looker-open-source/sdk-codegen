@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.1.0...sdk-codegen-all-v2.2.0) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+* python rtl optional config ApiSettings init parameter ([#996](https://www.github.com/looker-open-source/sdk-codegen/issues/996)) ([3ae42cd](https://www.github.com/looker-open-source/sdk-codegen/commit/3ae42cd97f974322b77d58941ac72b88be3f8b97))
+
+
+### Bug Fixes
+
+* remove python version upper bound ([#1015](https://www.github.com/looker-open-source/sdk-codegen/issues/1015)) ([b1650a1](https://www.github.com/looker-open-source/sdk-codegen/commit/b1650a1a8a56c52a7a06ca5c9cef02300af7289e))
+* url-parse dependabot issue ([#1014](https://www.github.com/looker-open-source/sdk-codegen/issues/1014)) ([b785225](https://www.github.com/looker-open-source/sdk-codegen/commit/b785225df35e0db9a0514ad92b0c823906e27827))
+
+## [2.1.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.0.0...sdk-codegen-all-v2.1.0) (2022-02-18)
+
+
+### Features
+
+* Go SDK integration tests and CI ([#988](https://www.github.com/looker-open-source/sdk-codegen/issues/988)) ([fd7c979](https://www.github.com/looker-open-source/sdk-codegen/commit/fd7c979a43a87cee8df476f3a850dcff5f601781))
+* SDK for Looker 22_2 ([#966](https://www.github.com/looker-open-source/sdk-codegen/issues/966)) ([3ba5420](https://www.github.com/looker-open-source/sdk-codegen/commit/3ba5420c75d602692c1c8aa806648e2c2dd73cac))
+
+
+### Bug Fixes
+
+* Fixed incorrect VerifySSL setting implementation ([#989](https://www.github.com/looker-open-source/sdk-codegen/issues/989)) ([a4f1dec](https://www.github.com/looker-open-source/sdk-codegen/commit/a4f1dec40804280f54fd06d47dc760e37d37895f))
+* Update readme to link to update_prod_branches_to_main.py ([#971](https://www.github.com/looker-open-source/sdk-codegen/issues/971)) ([#986](https://www.github.com/looker-open-source/sdk-codegen/issues/986)) ([5bb2fdb](https://www.github.com/looker-open-source/sdk-codegen/commit/5bb2fdbb474e8201d4df6e031fe49c019fd608e8))
+
 ## [2.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v1.21.1...sdk-codegen-all-v2.0.0) (2022-02-14)
 
 

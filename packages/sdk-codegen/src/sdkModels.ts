@@ -207,6 +207,7 @@ export interface IParameter extends ITypedSymbol {
   location: MethodParameterLocation
   required: boolean
   description: string
+  deprecated: boolean
 
   asProperty(): IProperty
 
@@ -217,6 +218,20 @@ export interface IParameter extends ITypedSymbol {
   asHashString(): string
 
   doEncode(): boolean
+}
+
+/**
+ * Add generational annotations to a parameter description, like (DEPRECATED)
+ * @param param to describe
+ */
+export const describeParam = (param: IParameter) => {
+  let desc = param.description || param.type?.description
+  if (param.deprecated) {
+    if (!param.description.match(/deprecated/gi)) {
+      desc = `(DEPRECATED) ${desc}`
+    }
+  }
+  return desc
 }
 
 export type KeyedCollection<T> = Record<string, T>
@@ -753,19 +768,18 @@ interface ISchemadSymbol extends ITypedSymbol {
 class SchemadSymbol extends Symbol implements ISchemadSymbol {
   schema: OAS.SchemaObject
   description: string
+  deprecated = false
 
   constructor(name: string, type: IType, schema: OAS.SchemaObject, owner = '') {
     super(name, type, owner)
     this.schema = schema
-    this.description = this.schema.description || ''
+    this.description = schema.description || type.description || ''
+    this.deprecated =
+      schema.deprecated || schema['x-looker-deprecated'] || false
   }
 
   get status(): string {
     return this.schema['x-looker-status'] || ''
-  }
-
-  get deprecated(): boolean {
-    return this.schema.deprecated || this.schema['x-looker-deprecated'] || false
   }
 
   get deprecation(): string {
@@ -849,19 +863,20 @@ export class Parameter extends SchemadSymbol implements IParameter {
     owner = ''
   ) {
     super(param.name || '', type, type.schema, owner)
-    this.description = param.description || ''
+    this.description = param.description || type.description || ''
     if ('in' in param) {
       this.location = param.in
     } else {
       this.location = (param as Partial<IParameter>).location || strBody
     }
+    this.deprecated = param.deprecated || this.deprecated
     // TODO deal with the required value being the names of the columns that are required
     this.required = param.required || false
   }
 
   asSchemaObject() {
     return {
-      deprecated: false,
+      deprecated: this.deprecated,
       description: this.description,
 
       nullable: !this.required,

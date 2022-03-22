@@ -24,28 +24,41 @@
 """
 
 import collections
+import datetime
 import enum
+import functools
 import keyword
-from typing import Any, cast, Iterable, Sequence, Optional, TypeVar
+from typing import Any, Iterable, Optional, Sequence, TypeVar, cast
+
+import cattr
+
+from looker_sdk.rtl import hooks
 
 try:
     from typing import ForwardRef  # type: ignore
 except ImportError:
     from typing import _ForwardRef as ForwardRef  # type: ignore
 
-import cattr
-
 
 EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
 
 
 class Model:
-    """Base model for all generated models.
-    """
+    """Base model for all generated models."""
+
+    def _get_converter(self):
+        if not hasattr(self, "_converter"):
+            converter = cattr.Converter()
+            converter.register_unstructure_hook(
+                datetime.datetime, hooks.datetime_unstructure_hook
+            )
+            uh = functools.partial(hooks.unstructure_hook, converter)
+            converter.register_unstructure_hook(Model, uh)  # type: ignore
+            self._converter = converter
+        return self._converter
 
     def _key_to_attr(self, key):
-        """Appends the trailing _ to python reserved words.
-        """
+        """Appends the trailing _ to python reserved words."""
         if key[-1] == "_":
             raise KeyError(key)
         if key in keyword.kwlist:
@@ -95,7 +108,7 @@ class Model:
                     raise ValueError(err(value))
                 value = enum_member
             elif issubclass(actual_type, Model):
-                value = cattr.structure(value, actual_type)
+                value = self._get_converter().structure(value, actual_type)
 
         return setattr(self, key, value)
 
@@ -104,22 +117,22 @@ class Model:
         setattr(self, self._key_to_attr(key), None)
 
     def __iter__(self):
-        return iter(cattr.unstructure(self))
+        return iter(self._get_converter().unstructure(self))
 
     def __len__(self):
-        return len(cattr.unstructure(self))
+        return len(self._get_converter().unstructure(self))
 
     def __contains__(self, key):
-        return key in cattr.unstructure(self)
+        return key in self._get_converter().unstructure(self)
 
     def keys(self):
-        return cattr.unstructure(self).keys()
+        return self._get_converter().unstructure(self).keys()
 
     def items(self):
-        return cattr.unstructure(self).items()
+        return self._get_converter().unstructure(self).items()
 
     def values(self):
-        return cattr.unstructure(self).values()
+        return self._get_converter().unstructure(self).values()
 
     def get(self, key, default=None):
         try:

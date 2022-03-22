@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 378 API methods
+/// 382 API methods
 
 #nullable enable
 using System;
@@ -864,6 +864,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>BackupConfiguration</c> Current Backup Configuration (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<BackupConfiguration, Exception>> backup_configuration(
     ITransportSettings? options = null)
 {  
@@ -876,6 +877,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>BackupConfiguration</c> New state for specified model set. (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<BackupConfiguration, Exception>> update_backup_configuration(
     WriteBackupConfiguration body,
     ITransportSettings? options = null)
@@ -1089,6 +1091,21 @@ namespace Looker.SDK.API31
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Locale[], Exception>(HttpMethod.Get, "/locales", null,null,options);
+  }
+
+  /// ### Configure SMTP Settings
+  ///   This API allows users to configure the SMTP settings on the Looker instance.
+  ///   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+  ///
+  /// POST /smtp_settings -> void
+  ///
+  /// <returns><c>void</c> Successfully updated SMTP settings ()</returns>
+  ///
+  public async Task<SdkResponse<string, Exception>> set_smtp_settings(
+    SmtpSettings body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Post, "/smtp_settings", null,body,options);
   }
 
   /// ### Get a list of timezones that Looker supports (e.g. useful for scheduling tasks).
@@ -1675,6 +1692,7 @@ namespace Looker.SDK.API31
   /// <param name="type">Either dashboard or look</param>
   /// <param name="resource_id">ID of the dashboard or look to render</param>
   /// <param name="reload">Whether or not to refresh the rendered image with the latest content</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> vector_thumbnail(
     string type,
     string resource_id,
@@ -1716,8 +1734,8 @@ namespace Looker.SDK.API31
   ///
   /// Creates a new dashboard object and returns the details of the newly created dashboard.
   ///
-  /// `Title`, `user_id`, and `space_id` are all required fields.
-  /// `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+  /// `Title` and `space_id` are required fields.
+  /// `Space_id` must contain the id of an existing space.
   /// A dashboard's `title` must be unique within the space in which it resides.
   ///
   /// If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -1787,8 +1805,6 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
-  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
-  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   public async Task<SdkResponse<Dashboard[], Exception>> search_dashboards(
@@ -1807,8 +1823,6 @@ namespace Looker.SDK.API31
     string? fields = null,
     long? page = null,
     long? per_page = null,
-    long? limit = null,
-    long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
     ITransportSettings? options = null)
@@ -1829,8 +1843,6 @@ namespace Looker.SDK.API31
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
-      { "limit", limit },
-      { "offset", offset },
       { "sorts", sorts },
       { "filter_or", filter_or }},null,options);
   }
@@ -2132,13 +2144,16 @@ namespace Looker.SDK.API31
   /// <returns><c>DashboardElement</c> DashboardElement (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  /// <param name="apply_filters">Apply relevant filters on dashboard to this tile</param>
   public async Task<SdkResponse<DashboardElement, Exception>> create_dashboard_element(
     WriteDashboardElement body,
     string? fields = null,
+    bool? apply_filters = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<DashboardElement, Exception>(HttpMethod.Post, "/dashboard_elements", new Values {
-      { "fields", fields }},body,options);
+      { "fields", fields },
+      { "apply_filters", apply_filters }},body,options);
   }
 
   /// ### Get information about the dashboard filters with a specific id.
@@ -2491,6 +2506,69 @@ namespace Looker.SDK.API31
       { "workspace", workspace }},null,options);
   }
 
+  /// Enqueue materialization for a PDT with the given model name and view name
+  ///
+  /// GET /derived_table/{model_name}/{view_name}/start -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="model_name">The model of the PDT to start building.</param>
+  /// <param name="view_name">The view name of the PDT to start building.</param>
+  /// <param name="force_rebuild">Force rebuild of required dependent PDTs, even if they are already materialized.</param>
+  /// <param name="force_full_incremental">Force involved incremental PDTs to fully re-materialize.</param>
+  /// <param name="workspace">Workspace in which to materialize selected PDT ('dev' or default 'production').</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> start_pdt_build(
+    string model_name,
+    string view_name,
+    string? force_rebuild = null,
+    string? force_full_incremental = null,
+    string? workspace = null,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      model_name = SdkUtils.EncodeParam(model_name);
+      view_name = SdkUtils.EncodeParam(view_name);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{model_name}/{view_name}/start", new Values {
+      { "force_rebuild", force_rebuild },
+      { "force_full_incremental", force_full_incremental },
+      { "workspace", workspace },
+      { "source", source }},null,options);
+  }
+
+  /// Check status of PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/status -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to check status for.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> check_pdt_build(
+    string materialization_id,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/status", null,null,options);
+  }
+
+  /// Stop a PDT materialization
+  ///
+  /// GET /derived_table/{materialization_id}/stop -> MaterializePDT
+  ///
+  /// <returns><c>MaterializePDT</c> Derived Table (application/json)</returns>
+  ///
+  /// <param name="materialization_id">The materialization id to stop.</param>
+  /// <param name="source">The source of this request.</param>
+  public async Task<SdkResponse<MaterializePDT, Exception>> stop_pdt_build(
+    string materialization_id,
+    string? source = null,
+    ITransportSettings? options = null)
+{  
+      materialization_id = SdkUtils.EncodeParam(materialization_id);
+    return await AuthRequest<MaterializePDT, Exception>(HttpMethod.Get, $"/derived_table/{materialization_id}/stop", new Values {
+      { "source", source }},null,options);
+  }
+
   #endregion DerivedTable: View Derived Table graphs
 
   #region Folder: Manage Folders
@@ -2765,8 +2843,8 @@ namespace Looker.SDK.API31
   /// <returns><c>Group[]</c> Group (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="ids">Optional of ids to get specific groups.</param>
   /// <param name="content_metadata_id">Id of content metadata to which groups must have access.</param>
@@ -2961,8 +3039,8 @@ namespace Looker.SDK.API31
   ///
   /// <param name="group_id">Id of group</param>
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">Return only page N of paginated results</param>
+  /// <param name="per_page">Return N rows of data per page</param>
   /// <param name="sorts">Fields to sort by.</param>
   public async Task<SdkResponse<User[], Exception>> all_group_users(
     long group_id,
@@ -3072,6 +3150,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Homepage[]</c> Homepage (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage[], Exception>> all_homepages(
     string? fields = null,
     ITransportSettings? options = null)
@@ -3087,6 +3166,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Homepage</c> Homepage (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> create_homepage(
     WriteHomepage body,
     string? fields = null,
@@ -3136,6 +3216,7 @@ namespace Looker.SDK.API31
   /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="sorts">The fields to sort the results by.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage[], Exception>> search_homepages(
     string? title = null,
     string? created_at = null,
@@ -3176,6 +3257,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> homepage(
     long homepage_id,
     string? fields = null,
@@ -3193,6 +3275,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_id">Id of homepage</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Homepage, Exception>> update_homepage(
     long homepage_id,
     WriteHomepage body,
@@ -3210,6 +3293,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="homepage_id">Id of homepage</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage(
     long homepage_id,
     ITransportSettings? options = null)
@@ -3226,6 +3310,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="homepage_section_id">Filter to a specific homepage section</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem[], Exception>> all_homepage_items(
     string? fields = null,
     string? sorts = null,
@@ -3245,6 +3330,7 @@ namespace Looker.SDK.API31
   /// <returns><c>HomepageItem</c> Homepage Item (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> create_homepage_item(
     WriteHomepageItem body,
     string? fields = null,
@@ -3262,6 +3348,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> homepage_item(
     long homepage_item_id,
     string? fields = null,
@@ -3279,6 +3366,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_item_id">Id of homepage item</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageItem, Exception>> update_homepage_item(
     long homepage_item_id,
     WriteHomepageItem body,
@@ -3295,7 +3383,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="homepage_item_id">Id of homepage_item</param>
+  /// <param name="homepage_item_id">Id of homepage item</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_item(
     long homepage_item_id,
     ITransportSettings? options = null)
@@ -3311,6 +3400,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection[], Exception>> all_homepage_sections(
     string? fields = null,
     string? sorts = null,
@@ -3328,6 +3418,7 @@ namespace Looker.SDK.API31
   /// <returns><c>HomepageSection</c> Homepage section (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> create_homepage_section(
     WriteHomepageSection body,
     string? fields = null,
@@ -3345,6 +3436,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> homepage_section(
     long homepage_section_id,
     string? fields = null,
@@ -3362,6 +3454,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="homepage_section_id">Id of homepage section</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<HomepageSection, Exception>> update_homepage_section(
     long homepage_section_id,
     WriteHomepageSection body,
@@ -3378,7 +3471,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="homepage_section_id">Id of homepage_section</param>
+  /// <param name="homepage_section_id">Id of homepage section</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_homepage_section(
     long homepage_section_id,
     ITransportSettings? options = null)
@@ -3444,7 +3538,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
   ///
-  /// <param name="integration_hub_id">Id of Integration Hub</param>
+  /// <param name="integration_hub_id">Id of integration_hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> integration_hub(
     long integration_hub_id,
@@ -3463,7 +3557,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>IntegrationHub</c> Integration Hub (application/json)</returns>
   ///
-  /// <param name="integration_hub_id">Id of Integration Hub</param>
+  /// <param name="integration_hub_id">Id of integration_hub</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<IntegrationHub, Exception>> update_integration_hub(
     long integration_hub_id,
@@ -3681,8 +3775,6 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
-  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
-  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   public async Task<SdkResponse<Look[], Exception>> search_looks(
@@ -3699,8 +3791,6 @@ namespace Looker.SDK.API31
     string? fields = null,
     long? page = null,
     long? per_page = null,
-    long? limit = null,
-    long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
     ITransportSettings? options = null)
@@ -3719,8 +3809,6 @@ namespace Looker.SDK.API31
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
-      { "limit", limit },
-      { "offset", offset },
       { "sorts", sorts },
       { "filter_or", filter_or }},null,options);
   }
@@ -5130,11 +5218,11 @@ namespace Looker.SDK.API31
   /// ```ruby
   /// query_params =
   /// {
-  ///   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+  ///   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
   ///   :"f[category.name]" => "socks",
-  ///   :sorts => "products.count desc 0",
-  ///   :limit => "500",
-  ///   :query_timezone => "America/Los_Angeles"
+  ///   sorts: "products.count desc 0",
+  ///   limit: "500",
+  ///   query_timezone: "America/Los_Angeles"
   /// }
   /// response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
   ///
@@ -5344,6 +5432,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<RenderTask, Exception>> create_lookml_dashboard_render_task(
     string dashboard_id,
     string result_format,
@@ -5621,7 +5710,7 @@ namespace Looker.SDK.API31
   ///
   /// DELETE /model_sets/{model_set_id} -> string
   ///
-  /// <returns><c>string</c> Model set succssfully deleted. (application/json)</returns>
+  /// <returns><c>string</c> Model set successfully deleted. (application/json)</returns>
   ///
   /// <param name="model_set_id">id of model set</param>
   public async Task<SdkResponse<string, Exception>> delete_model_set(
@@ -5754,7 +5843,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>PermissionSet</c> Permission Set (application/json)</returns>
   ///
-  /// <param name="permission_set_id">id of permission set</param>
+  /// <param name="permission_set_id">Id of permission set</param>
   public async Task<SdkResponse<PermissionSet, Exception>> update_permission_set(
     long permission_set_id,
     WritePermissionSet body,
@@ -5961,10 +6050,10 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Group[]</c> Groups with role. (application/json)</returns>
   ///
-  /// <param name="role_id">Id of Role</param>
+  /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<Group[], Exception>> set_role_groups(
     long role_id,
-    long[] body,
+    string[] body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Group[], Exception>(HttpMethod.Put, $"/roles/{role_id}/groups", null,body,options);
@@ -5976,7 +6065,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>User[]</c> Users with role. (application/json)</returns>
   ///
-  /// <param name="role_id">id of user</param>
+  /// <param name="role_id">id of role</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only users associated directly with the role: exclude those only associated through groups.</param>
   public async Task<SdkResponse<User[], Exception>> role_users(
@@ -5999,7 +6088,7 @@ namespace Looker.SDK.API31
   /// <param name="role_id">id of role</param>
   public async Task<SdkResponse<User[], Exception>> set_role_users(
     long role_id,
-    long[] body,
+    string[] body,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<User[], Exception>(HttpMethod.Put, $"/roles/{role_id}/users", null,body,options);
@@ -6532,6 +6621,7 @@ namespace Looker.SDK.API31
   /// <param name="creator_id">Filter on spaces created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> search_spaces(
     string? fields = null,
     long? page = null,
@@ -6570,6 +6660,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> space(
     string space_id,
     string? fields = null,
@@ -6587,6 +6678,7 @@ namespace Looker.SDK.API31
   /// <returns><c>Space</c> Space (application/json)</returns>
   ///
   /// <param name="space_id">Id of space</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> update_space(
     string space_id,
     UpdateSpace body,
@@ -6604,6 +6696,7 @@ namespace Looker.SDK.API31
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
   /// <param name="space_id">Id of space</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<string, Exception>> delete_space(
     string space_id,
     ITransportSettings? options = null)
@@ -6624,6 +6717,7 @@ namespace Looker.SDK.API31
   /// <returns><c>SpaceBase[]</c> Space (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<SpaceBase[], Exception>> all_spaces(
     string? fields = null,
     ITransportSettings? options = null)
@@ -6641,6 +6735,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Space</c> Space (application/json)</returns>
   ///
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> create_space(
     CreateSpace body,
     ITransportSettings? options = null)
@@ -6659,6 +6754,7 @@ namespace Looker.SDK.API31
   /// <param name="page">Requested page.</param>
   /// <param name="per_page">Results per page.</param>
   /// <param name="sorts">Fields to sort by.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_children(
     string space_id,
     string? fields = null,
@@ -6685,6 +6781,7 @@ namespace Looker.SDK.API31
   /// <param name="fields">Requested fields.</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="name">Match Space name.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_children_search(
     string space_id,
     string? fields = null,
@@ -6707,6 +6804,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space, Exception>> space_parent(
     string space_id,
     string? fields = null,
@@ -6725,6 +6823,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> space_ancestors(
     string space_id,
     string? fields = null,
@@ -6745,6 +6844,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<LookWithQuery[], Exception>> space_looks(
     string space_id,
     string? fields = null,
@@ -6763,6 +6863,7 @@ namespace Looker.SDK.API31
   ///
   /// <param name="space_id">Id of space</param>
   /// <param name="fields">Requested fields.</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Dashboard[], Exception>> space_dashboards(
     string space_id,
     string? fields = null,
@@ -7388,7 +7489,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> user_credentials_email(
     long user_id,
@@ -7405,7 +7506,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> create_user_credentials_email(
     long user_id,
@@ -7423,7 +7524,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmail, Exception>> update_user_credentials_email(
     long user_id,
@@ -7441,7 +7542,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_email(
     long user_id,
     ITransportSettings? options = null)
@@ -7455,7 +7556,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> user_credentials_totp(
     long user_id,
@@ -7472,7 +7573,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsTotp</c> Two-Factor Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsTotp, Exception>> create_user_credentials_totp(
     long user_id,
@@ -7490,7 +7591,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_totp(
     long user_id,
     ITransportSettings? options = null)
@@ -7504,7 +7605,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsLDAP</c> LDAP Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLDAP, Exception>> user_credentials_ldap(
     long user_id,
@@ -7521,7 +7622,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_ldap(
     long user_id,
     ITransportSettings? options = null)
@@ -7535,7 +7636,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsGoogle</c> Google Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsGoogle, Exception>> user_credentials_google(
     long user_id,
@@ -7552,7 +7653,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_google(
     long user_id,
     ITransportSettings? options = null)
@@ -7566,7 +7667,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsSaml</c> Saml Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsSaml, Exception>> user_credentials_saml(
     long user_id,
@@ -7583,7 +7684,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_saml(
     long user_id,
     ITransportSettings? options = null)
@@ -7597,7 +7698,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
     long user_id,
@@ -7614,7 +7715,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
     long user_id,
     ITransportSettings? options = null)
@@ -7647,8 +7748,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="credentials_api3_id">id of API 3 Credential</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="credentials_api3_id">Id of API 3 Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_api3(
     long user_id,
     long credentials_api3_id,
@@ -7663,7 +7764,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsApi3[]</c> API 3 Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3[], Exception>> all_user_credentials_api3s(
     long user_id,
@@ -7680,7 +7781,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsApi3</c> API 3 Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsApi3, Exception>> create_user_credentials_api3(
     long user_id,
@@ -7717,8 +7818,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="credentials_embed_id">id of Embedding Credential</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="credentials_embed_id">Id of Embedding Credential</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_embed(
     long user_id,
     long credentials_embed_id,
@@ -7733,7 +7834,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsEmbed[]</c> Embedding Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsEmbed[], Exception>> all_user_credentials_embeds(
     long user_id,
@@ -7750,7 +7851,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>CredentialsLookerOpenid</c> Looker OpenId Credential (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<CredentialsLookerOpenid, Exception>> user_credentials_looker_openid(
     long user_id,
@@ -7767,7 +7868,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   public async Task<SdkResponse<string, Exception>> delete_user_credentials_looker_openid(
     long user_id,
     ITransportSettings? options = null)
@@ -7800,8 +7901,8 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
-  /// <param name="session_id">id of Web Login Session</param>
+  /// <param name="user_id">Id of user</param>
+  /// <param name="session_id">Id of Web Login Session</param>
   public async Task<SdkResponse<string, Exception>> delete_user_session(
     long user_id,
     long session_id,
@@ -7816,7 +7917,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Session[]</c> Web Login Session (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Session[], Exception>> all_user_sessions(
     long user_id,
@@ -7861,7 +7962,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="direct_association_only">Get only roles associated directly with the user: exclude those only associated through groups.</param>
   public async Task<SdkResponse<Role[], Exception>> user_roles(
@@ -7881,11 +7982,11 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>Role[]</c> Roles of user. (application/json)</returns>
   ///
-  /// <param name="user_id">id of user</param>
+  /// <param name="user_id">Id of user</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Role[], Exception>> set_user_roles(
     long user_id,
-    long[] body,
+    string[] body,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -8062,7 +8163,7 @@ namespace Looker.SDK.API31
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
   ///
-  /// <param name="user_attribute_id">Id of user_attribute</param>
+  /// <param name="user_attribute_id">Id of user attribute</param>
   public async Task<SdkResponse<string, Exception>> delete_user_attribute(
     long user_attribute_id,
     ITransportSettings? options = null)

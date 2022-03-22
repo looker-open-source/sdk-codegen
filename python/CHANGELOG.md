@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.2.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v22.2.0...looker_sdk-v22.2.1) (2022-03-04)
+
+
+### Features
+
+* generate code deprecation tags ([#1006](https://www.github.com/looker-open-source/sdk-codegen/issues/1006)) ([afd4b66](https://www.github.com/looker-open-source/sdk-codegen/commit/afd4b66ffbd11cdacd19fe1353c9e5bf381fe932))
+* python rtl optional config ApiSettings init parameter ([#996](https://www.github.com/looker-open-source/sdk-codegen/issues/996)) ([3ae42cd](https://www.github.com/looker-open-source/sdk-codegen/commit/3ae42cd97f974322b77d58941ac72b88be3f8b97))
+
+
+### Bug Fixes
+
+* remove python version upper bound ([#1015](https://www.github.com/looker-open-source/sdk-codegen/issues/1015)) ([b1650a1](https://www.github.com/looker-open-source/sdk-codegen/commit/b1650a1a8a56c52a7a06ca5c9cef02300af7289e))
+
+## [22.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v22.0.0...looker_sdk-v22.2.0) (2022-02-18)
+
+
+### Features
+
+* SDK for Looker 22_2 ([#966](https://www.github.com/looker-open-source/sdk-codegen/issues/966)) ([3ba5420](https://www.github.com/looker-open-source/sdk-codegen/commit/3ba5420c75d602692c1c8aa806648e2c2dd73cac))
+
 ## [22.0.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v21.20.0...looker_sdk-v22.0.0) (2022-02-14)
 
 

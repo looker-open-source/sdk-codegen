@@ -100,6 +100,30 @@ data class HyphenType (
     })
   })
 
+  it('deprecated method with deprecated params', () => {
+    const method = apiTestModel.methods.old_login
+    const arg = method.params[0]
+    expect(arg.deprecated).toEqual(true)
+    const space = ' '
+    const expected = `
+/**
+ * Endpoint to test deprecation flags
+ *
+ * @param {String} old_cred (DEPRECATED) obsolete parameter
+ *
+ * GET /old_login -> AccessToken
+ */
+@Deprecated(message = "Deprecated method")
+@JvmOverloads fun old_login(
+    old_cred: String? = null
+) : SDKResponse {
+    return this.get<AccessToken>("/old_login",${space}
+        mapOf("old_cred" to old_cred))
+}`
+    const actual = gen.declareMethod(indent, method)
+    expect(actual).toEqual(expected)
+  })
+
   describe('makeTheCall', () => {
     const fields = 'id,user_id,title,description'
     it('handles no params', () => {

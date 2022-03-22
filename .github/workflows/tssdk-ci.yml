@@ -105,8 +105,10 @@ jobs:
           name: tssdk-test-results
           path: results/tssdk
 
+  setup:
+    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
   integration:
-    needs: unit
+    needs: [unit,setup]
     name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk
@@ -117,10 +119,7 @@ jobs:
         node-version: [12.x]
         os:
           - ubuntu
-        looker:
-          - '21_18'
-          - '21_20'
-          - '22_0'
+        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
     steps:
       - name: Repo Checkout

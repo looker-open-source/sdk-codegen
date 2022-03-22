@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 307 API models: 229 Spec, 0 Request, 58 Write, 20 Enum
+/// 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -63,7 +63,7 @@ public class Alert : SdkModel
   /// <summary>An optional, user-defined title for the alert</summary>
   public string? custom_title { get; set; } = null;
   /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
-  public long? dashboard_element_id { get; set; } = null;
+  public string? dashboard_element_id { get; set; } = null;
   /// <summary>An optional description for the alert. This supplements the title</summary>
   public string? description { get; set; } = null;
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
@@ -74,7 +74,7 @@ public class Alert : SdkModel
   /// <summary>Whether or not the alert is followable (read-only)</summary>
   public bool? followable { get; set; } = null;
   /// <summary>ID of the alert (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Whether or not the alert is disabled</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>Reason for disabling alert</summary>
@@ -93,7 +93,7 @@ public class Alert : SdkModel
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
   public string? lookml_link_id { get; set; } = null;
   /// <summary>User id of alert owner</summary>
-  public long owner_id { get; set; }
+  public string owner_id { get; set; } = "";
   /// <summary>Alert owner's display name (read-only)</summary>
   public string? owner_display_name { get; set; } = null;
   /// <summary>Value of the alert threshold</summary>
@@ -157,7 +157,7 @@ public class AlertFieldFilter : SdkModel
 public class AlertPatch : SdkModel
 {
   /// <summary>New owner ID of the alert</summary>
-  public long? owner_id { get; set; } = null;
+  public string? owner_id { get; set; } = null;
   /// <summary>Set alert enabled or disabled</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>The reason this alert is disabled</summary>
@@ -184,7 +184,7 @@ public class ApiSession : SdkModel
   /// <summary>The id of active workspace for this session</summary>
   public string? workspace_id { get; set; } = null;
   /// <summary>The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)</summary>
-  public long? sudo_user_id { get; set; } = null;
+  public string? sudo_user_id { get; set; } = null;
 }
 
 public class ApiVersion : SdkModel
@@ -235,7 +235,7 @@ public class Board : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of associated content_metadata record (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Date of board creation (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Date of board deletion</summary>
@@ -245,15 +245,15 @@ public class Board : SdkModel
   /// <summary>Sections of the board (read-only)</summary>
   public BoardSection[]? board_sections { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>ids of the board sections in the order they should be displayed</summary>
-  public long[]? section_order { get; set; } = null;
+  public string[]? section_order { get; set; } = null;
   /// <summary>Title of the board</summary>
   public string? title { get; set; } = null;
   /// <summary>Date of last board update (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
   /// <summary>User id of board creator (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Whether the board is the primary homepage or not (read-only)</summary>
   public bool? primary_homepage { get; set; } = null;
 }
@@ -265,9 +265,9 @@ public class BoardItem : SdkModel
   /// <summary>Name of user who created the content this item is based on (read-only)</summary>
   public string? content_created_by { get; set; } = null;
   /// <summary>Content favorite id associated with the item this content is based on (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Content metadata id associated with the item this content is based on (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
   /// <summary>Custom description entered by the user, if present</summary>
@@ -277,15 +277,15 @@ public class BoardItem : SdkModel
   /// <summary>Custom url entered by the user, if present</summary>
   public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>The actual description for display (read-only)</summary>
   public string? description { get; set; } = null;
   /// <summary>Number of times content has been favorited, if present (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Associated Board Section</summary>
-  public long? board_section_id { get; set; } = null;
+  public string? board_section_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>The actual image_url for display (read-only)</summary>
   public string? image_url { get; set; } = null;
   /// <summary>The container folder name of the content (read-only)</summary>
@@ -300,8 +300,20 @@ public class BoardItem : SdkModel
   public string? title { get; set; } = null;
   /// <summary>Relative url for the associated content (read-only)</summary>
   public string? url { get; set; } = null;
+  /// <summary>Whether the custom description should be used instead of the content description, if the item is associated with content</summary>
+  public bool? use_custom_description { get; set; } = null;
+  /// <summary>Whether the custom title should be used instead of the content title, if the item is associated with content</summary>
+  public bool? use_custom_title { get; set; } = null;
+  /// <summary>Whether the custom url should be used instead of the content url, if the item is associated with content</summary>
+  public bool? use_custom_url { get; set; } = null;
   /// <summary>Number of times content has been viewed, if present (read-only)</summary>
   public long? view_count { get; set; } = null;
+  /// <summary>(Write-Only) base64 encoded image data</summary>
+  public string? custom_image_data_base64 { get; set; } = null;
+  /// <summary>Custom image_url entered by the user, if present (read-only)</summary>
+  public string? custom_image_url { get; set; } = null;
+  /// <summary>Whether the custom image should be used instead of the content image, if the item is associated with content</summary>
+  public bool? use_custom_image { get; set; } = null;
 }
 
 public class BoardSection : SdkModel
@@ -315,15 +327,15 @@ public class BoardSection : SdkModel
   /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
   /// <summary>Id reference to parent board</summary>
-  public long? board_id { get; set; } = null;
+  public string? board_id { get; set; } = null;
   /// <summary>Items in the board section (read-only)</summary>
   public BoardItem[]? board_items { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>ids of the board items in the order they should be displayed</summary>
-  public long[]? item_order { get; set; } = null;
+  public string[]? item_order { get; set; } = null;
   /// <summary>ids of the homepage items the user can see in the order they should be displayed (read-only)</summary>
-  public long[]? visible_item_order { get; set; } = null;
+  public string[]? visible_item_order { get; set; } = null;
   /// <summary>Name of row</summary>
   public string? title { get; set; } = null;
   /// <summary>Time at which this section was last updated. (read-only)</summary>
@@ -375,23 +387,6 @@ public class ColumnSearch : SdkModel
   public string? column_name { get; set; } = null;
   /// <summary>Column data type (read-only)</summary>
   public string? data_type { get; set; } = null;
-}
-
-public class Command : SdkModel
-{
-  /// <summary>Id of the command record (read-only)</summary>
-  public long? id { get; set; } = null;
-  /// <summary>Id of the command author (read-only)</summary>
-  public long? author_id { get; set; } = null;
-  /// <summary>Name of the command</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Description of the command</summary>
-  public string? description { get; set; } = null;
-  /// <summary>Id of the content associated with the command</summary>
-  public string? linked_content_id { get; set; } = null;
-  /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public LinkedContentType? linked_content_type { get; set; }
 }
 
 /// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
@@ -454,19 +449,19 @@ public class ConnectionFeatures : SdkModel
 public class ContentFavorite : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>User Id which owns this ContentFavorite</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Id of a look (read-only)</summary>
   public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard (read-only)</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   public LookBasic? look { get; set; }
   public DashboardBase? dashboard { get; set; }
   /// <summary>Id of a board (read-only)</summary>
-  public long? board_id { get; set; } = null;
+  public string? board_id { get; set; } = null;
 }
 
 public class ContentMeta : SdkModel
@@ -474,11 +469,11 @@ public class ContentMeta : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name or title of underlying content (read-only)</summary>
   public string? name { get; set; } = null;
   /// <summary>Id of Parent Content (read-only)</summary>
-  public long? parent_id { get; set; } = null;
+  public string? parent_id { get; set; } = null;
   /// <summary>Id of associated dashboard when content_type is "dashboard" (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
   /// <summary>Id of associated look when content_type is "look" (read-only)</summary>
@@ -490,7 +485,7 @@ public class ContentMeta : SdkModel
   /// <summary>Whether content inherits its access levels from parent</summary>
   public bool? inherits { get; set; } = null;
   /// <summary>Id of Inherited Content (read-only)</summary>
-  public long? inheriting_id { get; set; } = null;
+  public string? inheriting_id { get; set; } = null;
   /// <summary>Content Slug (read-only)</summary>
   public string? slug { get; set; } = null;
 }
@@ -508,9 +503,9 @@ public class ContentMetaGroupUser : SdkModel
   [JsonConverter(typeof(StringEnumConverter))]
   public PermissionType? permission_type { get; set; }
   /// <summary>ID of associated group (read-only)</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
   /// <summary>ID of associated user (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
 }
 
 public class ContentValidation : SdkModel
@@ -536,7 +531,7 @@ public class ContentValidation : SdkModel
 public class ContentValidationAlert : SdkModel
 {
   /// <summary>ID of the alert</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>ID of the LookML dashboard associated with the alert</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
@@ -577,7 +572,7 @@ public class ContentValidationDashboardElement : SdkModel
   /// <summary>Note Text as Html (read-only)</summary>
   public string? note_text_as_html { get; set; } = null;
   /// <summary>Id Of Query</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
   /// <summary>Title of dashboard element</summary>
@@ -588,6 +583,8 @@ public class ContentValidationDashboardElement : SdkModel
   public string? title_text { get; set; } = null;
   /// <summary>Type</summary>
   public string? type { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
 }
 
 public class ContentValidationDashboardFilter : SdkModel
@@ -670,7 +667,7 @@ public class ContentValidationScheduledPlan : SdkModel
   /// <summary>Id of a look</summary>
   public string? look_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
 }
 
 public class ContentValidatorError : SdkModel
@@ -694,19 +691,19 @@ public class ContentView : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Id of viewed Look (read-only)</summary>
   public string? look_id { get; set; } = null;
   /// <summary>Id of the viewed Dashboard (read-only)</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>Name or title of underlying content (read-only)</summary>
   public string? title { get; set; } = null;
   /// <summary>Content metadata id of the Look or Dashboard (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Id of user content was viewed by (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Id of group content was viewed by (read-only)</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
   /// <summary>Number of times piece of content was viewed (read-only)</summary>
   public long? view_count { get; set; } = null;
   /// <summary>Number of times piece of content was favorited (read-only)</summary>
@@ -753,7 +750,7 @@ public class CreateCredentialsApi3 : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>API key client_id (read-only)</summary>
   public string? client_id { get; set; } = null;
   /// <summary>Timestamp for the creation of this credential (read-only)</summary>
@@ -836,9 +833,9 @@ public class CreateOAuthApplicationUserStateRequest : SdkModel
 public class CreateOAuthApplicationUserStateResponse : SdkModel
 {
   /// <summary>User Id (read-only)</summary>
-  public long user_id { get; set; }
+  public string user_id { get; set; } = "";
   /// <summary>OAuth Application ID (read-only)</summary>
-  public long oauth_application_id { get; set; }
+  public string oauth_application_id { get; set; } = "";
 }
 
 public class CreateQueryTask : SdkModel
@@ -846,7 +843,7 @@ public class CreateQueryTask : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
-  public long query_id { get; set; }
+  public string query_id { get; set; } = "";
   /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
@@ -865,7 +862,7 @@ public class CredentialsApi3 : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>API key client_id (read-only)</summary>
   public string? client_id { get; set; } = null;
   /// <summary>Timestamp for the creation of this credential (read-only)</summary>
@@ -937,7 +934,7 @@ public class CredentialsEmbed : SdkModel
   /// <summary>Embedder's unique id for the user (read-only)</summary>
   public string? external_user_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>Timestamp for most recent login using credential (read-only)</summary>
@@ -1088,9 +1085,9 @@ public class Dashboard : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Content Favorite Id (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
   /// <summary>Is Hidden</summary>
@@ -1110,7 +1107,7 @@ public class Dashboard : SdkModel
   /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
   /// <summary>Id of User (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Slug</summary>
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
@@ -1134,7 +1131,7 @@ public class Dashboard : SdkModel
   /// <summary>Time that the Dashboard was 'soft' deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
   /// <summary>Id of User that 'soft' deleted the dashboard. (read-only)</summary>
-  public long? deleter_id { get; set; } = null;
+  public string? deleter_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)</summary>
   public string? edit_uri { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
@@ -1148,7 +1145,7 @@ public class Dashboard : SdkModel
   /// <summary>Time that the Dashboard was most recently updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
   /// <summary>Id of User that most recently updated the dashboard. (read-only)</summary>
-  public long? last_updater_id { get; set; } = null;
+  public string? last_updater_id { get; set; } = null;
   /// <summary>Name of User that most recently updated the dashboard. (read-only)</summary>
   public string? last_updater_name { get; set; } = null;
   /// <summary>Name of User that created the dashboard. (read-only)</summary>
@@ -1209,9 +1206,9 @@ public class DashboardBase : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Content Favorite Id (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Description (read-only)</summary>
   public string? description { get; set; } = null;
   /// <summary>Is Hidden (read-only)</summary>
@@ -1231,7 +1228,7 @@ public class DashboardBase : SdkModel
   /// <summary>Dashboard Title (read-only)</summary>
   public string? title { get; set; } = null;
   /// <summary>Id of User (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Slug (read-only)</summary>
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)</summary>
@@ -1269,14 +1266,14 @@ public class DashboardElement : SdkModel
   public string? note_text_as_html { get; set; } = null;
   public Query? query { get; set; }
   /// <summary>Id Of Query</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
   /// <summary>Refresh Interval as integer (read-only)</summary>
   public long? refresh_interval_to_i { get; set; } = null;
   public ResultMakerWithIdVisConfigAndDynamicFields? result_maker { get; set; }
   /// <summary>ID of the ResultMakerLookup entry.</summary>
-  public long? result_maker_id { get; set; } = null;
+  public string? result_maker_id { get; set; } = null;
   /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
   /// <summary>Title of dashboard element</summary>
@@ -1289,6 +1286,8 @@ public class DashboardElement : SdkModel
   public string? type { get; set; } = null;
   /// <summary>Count of Alerts associated to a dashboard element (read-only)</summary>
   public long? alert_count { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
   /// <summary>Text tile title text as Html (read-only)</summary>
   public string? title_text_as_html { get; set; } = null;
   /// <summary>Text tile subtitle text as Html (read-only)</summary>
@@ -1387,7 +1386,9 @@ public class DashboardLookml : SdkModel
 {
   /// <summary>Id of Dashboard (read-only)</summary>
   public string? dashboard_id { get; set; } = null;
-  /// <summary>lookml of UDD (read-only)</summary>
+  /// <summary>(Write-Only) Id of the folder</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>lookml of UDD</summary>
   public string? lookml { get; set; } = null;
 }
 
@@ -1464,7 +1465,7 @@ public class Datagroup : SdkModel
   /// <summary>UNIX timestamp at which this entry was created. (read-only)</summary>
   public long? created_at { get; set; } = null;
   /// <summary>Unique ID of the datagroup (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of the model containing the datagroup. Unique when combined with name. (read-only)</summary>
   public string? model_name { get; set; } = null;
   /// <summary>Name of the datagroup. Unique when combined with model_name. (read-only)</summary>
@@ -1562,9 +1563,13 @@ public class DBConnection : SdkModel
   /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
-  public long? oauth_application_id { get; set; } = null;
+  public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>When true, query cost estimate will be displayed in explore.</summary>
+  public bool? cost_estimate_enabled { get; set; } = null;
+  /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
+  public bool? pdt_api_control_enabled { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -1629,7 +1634,7 @@ public class DelegateOauthTest : SdkModel
   /// <summary>The ID of the installation target. For Slack, this would be workspace id. (read-only)</summary>
   public string? installation_target_id { get; set; } = null;
   /// <summary>Installation ID (read-only)</summary>
-  public long? installation_id { get; set; } = null;
+  public string? installation_id { get; set; } = null;
   /// <summary>Whether or not the test was successful (read-only)</summary>
   public bool? success { get; set; } = null;
 }
@@ -1670,6 +1675,8 @@ public class Dialect : SdkModel
   public string? label { get; set; } = null;
   /// <summary>Whether the dialect supports query cost estimates (read-only)</summary>
   public bool? supports_cost_estimate { get; set; } = null;
+  /// <summary>How the dialect handles cost estimation (read-only)</summary>
+  public string? cost_estimate_style { get; set; } = null;
   /// <summary>PDT index columns (read-only)</summary>
   public string? persistent_table_indexes { get; set; } = null;
   /// <summary>PDT sortkey columns (read-only)</summary>
@@ -1759,6 +1766,12 @@ public class DiscretePalette : SdkModel
   public string[]? colors { get; set; } = null;
 }
 
+public class EgressIpAddresses : SdkModel
+{
+  /// <summary>Egress IP addresses (read-only)</summary>
+  public string[]? egress_ip_addresses { get; set; } = null;
+}
+
 public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
@@ -1778,11 +1791,11 @@ public class EmbedSecret : SdkModel
   /// <summary>Is this secret currently enabled</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Secret for use with SSO embedding (read-only)</summary>
   public string? secret { get; set; } = null;
   /// <summary>Id of user who created this secret (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
 }
 
 public class EmbedSsoParams : SdkModel
@@ -1806,13 +1819,13 @@ public class EmbedSsoParams : SdkModel
   /// <summary>List of model names that the embed user may access</summary>
   public string[]? models { get; set; } = null;
   /// <summary>List of Looker group ids in which to enroll the embed user</summary>
-  public long[]? group_ids { get; set; } = null;
+  public string[]? group_ids { get; set; } = null;
   /// <summary>A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.</summary>
   public string? external_group_id { get; set; } = null;
   /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
   public StringDictionary<object>? user_attributes { get; set; } = null;
   /// <summary>Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.</summary>
-  public long? secret_id { get; set; } = null;
+  public string? secret_id { get; set; } = null;
 }
 
 public class EmbedUrlResponse : SdkModel
@@ -1834,7 +1847,7 @@ public class ExternalOauthApplication : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>ID of this OAuth Application (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>The name of this application.  For Snowflake connections, this should be the name of the host database.</summary>
   public string? name { get; set; } = null;
   /// <summary>The OAuth Client ID for this application</summary>
@@ -1865,11 +1878,11 @@ public class Folder : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Time the space was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>User Id of Creator (read-only)</summary>
-  public long? creator_id { get; set; } = null;
+  public string? creator_id { get; set; } = null;
   /// <summary>Children Count (read-only)</summary>
   public long? child_count { get; set; } = null;
   /// <summary>Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)</summary>
@@ -1905,11 +1918,11 @@ public class FolderBase : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Time the folder was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>User Id of Creator (read-only)</summary>
-  public long? creator_id { get; set; } = null;
+  public string? creator_id { get; set; } = null;
   /// <summary>Children Count (read-only)</summary>
   public long? child_count { get; set; } = null;
   /// <summary>Embedder's Id if this folder was autogenerated as an embedding shared folder via 'external_group_id' in an SSO embed login (read-only)</summary>
@@ -2026,7 +2039,7 @@ public class Group : SdkModel
   /// <summary>Group membership controlled outside of Looker (read-only)</summary>
   public bool? externally_managed { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>New users are added to this group by default (read-only)</summary>
   public bool? include_by_default { get; set; } = null;
   /// <summary>Name of group</summary>
@@ -2048,7 +2061,7 @@ public class GroupHierarchy : SdkModel
   /// <summary>Group membership controlled outside of Looker (read-only)</summary>
   public bool? externally_managed { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>New users are added to this group by default (read-only)</summary>
   public bool? include_by_default { get; set; } = null;
   /// <summary>Name of group</summary>
@@ -2056,23 +2069,23 @@ public class GroupHierarchy : SdkModel
   /// <summary>Number of users included in this group (read-only)</summary>
   public long? user_count { get; set; } = null;
   /// <summary>IDs of parents of this group (read-only)</summary>
-  public long[]? parent_group_ids { get; set; } = null;
+  public string[]? parent_group_ids { get; set; } = null;
   /// <summary>Role IDs assigned to group (read-only)</summary>
-  public long[]? role_ids { get; set; } = null;
+  public string[]? role_ids { get; set; } = null;
 }
 
 /// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class GroupIdForGroupInclusion : SdkModel
 {
   /// <summary>Id of group (read-only)</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
 }
 
 /// WARNING: no writeable properties found for POST, PUT, or PATCH
 public class GroupIdForGroupUserInclusion : SdkModel
 {
   /// <summary>Id of user (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
 }
 
 public class GroupSearch : SdkModel
@@ -2088,7 +2101,7 @@ public class GroupSearch : SdkModel
   /// <summary>Group membership controlled outside of Looker (read-only)</summary>
   public bool? externally_managed { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>New users are added to this group by default (read-only)</summary>
   public bool? include_by_default { get; set; } = null;
   /// <summary>Name of group</summary>
@@ -2106,9 +2119,9 @@ public class HomepageItem : SdkModel
   /// <summary>Name of user who created the content this item is based on (read-only)</summary>
   public string? content_created_by { get; set; } = null;
   /// <summary>Content favorite id associated with the item this content is based on (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Content metadata id associated with the item this content is based on (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Last time the content that this item is based on was updated (read-only)</summary>
   public string? content_updated_at { get; set; } = null;
   /// <summary>Custom description entered by the user, if present</summary>
@@ -2122,15 +2135,15 @@ public class HomepageItem : SdkModel
   /// <summary>Custom url entered by the user, if present</summary>
   public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>The actual description for display (read-only)</summary>
   public string? description { get; set; } = null;
   /// <summary>Number of times content has been favorited, if present (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Associated Homepage Section</summary>
-  public long? homepage_section_id { get; set; } = null;
+  public string? homepage_section_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>The actual image_url for display (read-only)</summary>
   public string? image_url { get; set; } = null;
   /// <summary>The container folder name of the content (read-only)</summary>
@@ -2170,15 +2183,15 @@ public class HomepageSection : SdkModel
   /// <summary>A URL pointing to a page showing further information about the content in the section. (read-only)</summary>
   public string? detail_url { get; set; } = null;
   /// <summary>Id reference to parent homepage</summary>
-  public long? homepage_id { get; set; } = null;
+  public string? homepage_id { get; set; } = null;
   /// <summary>Items in the homepage section (read-only)</summary>
   public HomepageItem[]? homepage_items { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Is this a header section (has no items) (read-only)</summary>
   public bool? is_header { get; set; } = null;
   /// <summary>ids of the homepage items in the order they should be displayed</summary>
-  public long[]? item_order { get; set; } = null;
+  public string[]? item_order { get; set; } = null;
   /// <summary>Name of row</summary>
   public string? title { get; set; } = null;
   /// <summary>Time at which this section was last updated. (read-only)</summary>
@@ -2186,7 +2199,7 @@ public class HomepageSection : SdkModel
   /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
   /// <summary>ids of the homepage items the user can see in the order they should be displayed (read-only)</summary>
-  public long[]? visible_item_order { get; set; } = null;
+  public string[]? visible_item_order { get; set; } = null;
 }
 
 public class ImportedProject : SdkModel
@@ -2208,7 +2221,7 @@ public class Integration : SdkModel
   /// <summary>ID of the integration. (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>ID of the integration hub. (read-only)</summary>
-  public long? integration_hub_id { get; set; } = null;
+  public string? integration_hub_id { get; set; } = null;
   /// <summary>Label for the integration. (read-only)</summary>
   public string? label { get; set; } = null;
   /// <summary>Description of the integration. (read-only)</summary>
@@ -2219,7 +2232,7 @@ public class Integration : SdkModel
   public IntegrationParam[]? @params { get; set; } = null;
   /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
   public SupportedFormats[]? supported_formats { get; set; } = null;
-  /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)</summary>
+  /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)</summary>
   public SupportedActionTypes[]? supported_action_types { get; set; } = null;
   /// <summary>A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)</summary>
   public SupportedFormattings[]? supported_formattings { get; set; } = null;
@@ -2236,7 +2249,7 @@ public class Integration : SdkModel
   /// <summary>Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)</summary>
   public bool? delegate_oauth { get; set; } = null;
   /// <summary>Whether the integration is available to users.</summary>
-  public long[]? installed_delegate_oauth_targets { get; set; } = null;
+  public string[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
 public class IntegrationHub : SdkModel
@@ -2244,7 +2257,7 @@ public class IntegrationHub : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>ID of the hub. (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>URL of the hub.</summary>
   public string? url { get; set; } = null;
   /// <summary>Label of the hub. (read-only)</summary>
@@ -2355,11 +2368,11 @@ public class LDAPConfig : SdkModel
   /// <summary>Do not verify peer when using TLS</summary>
   public bool? connection_tls_no_verify { get; set; } = null;
   /// <summary>(Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Read-only) Groups that will be applied to new users the first time they login via LDAP (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
   /// <summary>(Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>(Read-only) Roles that will be applied to new users the first time they login via LDAP (read-only)</summary>
   public Role[]? default_new_user_roles { get; set; } = null;
   /// <summary>Enable/Disable LDAP authentication for the server</summary>
@@ -2452,9 +2465,9 @@ public class LDAPConfigTestResult : SdkModel
 public class LDAPGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in LDAP (read-only)</summary>
@@ -2468,15 +2481,15 @@ public class LDAPGroupRead : SdkModel
 public class LDAPGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in LDAP</summary>
   public string? name { get; set; } = null;
   /// <summary>Looker Role Ids</summary>
-  public long[]? role_ids { get; set; } = null;
+  public string[]? role_ids { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -2524,7 +2537,7 @@ public class LDAPUserAttributeWrite : SdkModel
   /// <summary>Required to be in LDAP assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
   /// <summary>Looker User Attribute Ids</summary>
-  public long[]? user_attribute_ids { get; set; } = null;
+  public string[]? user_attribute_ids { get; set; } = null;
   /// <summary>Link to ldap config (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -2559,15 +2572,6 @@ public class LegacyFeature : SdkModel
   public bool? has_disabled_on_upgrade { get; set; } = null;
 }
 
-/// Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
-public enum LinkedContentType
-{
-  [EnumMember(Value = "dashboard")]
-  dashboard,
-  [EnumMember(Value = "lookml_dashboard")]
-  lookml_dashboard
-}
-
 public class Locale : SdkModel
 {
   /// <summary>Code for Locale (read-only)</summary>
@@ -2591,15 +2595,15 @@ public class Look : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Favorite Id (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
@@ -2607,7 +2611,7 @@ public class Look : SdkModel
   /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
   /// <summary>Id of User that deleted the look. (read-only)</summary>
-  public long? deleter_id { get; set; } = null;
+  public string? deleter_id { get; set; } = null;
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
   /// <summary>Embed Url (read-only)</summary>
@@ -2625,7 +2629,7 @@ public class Look : SdkModel
   /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Id of User that last updated the look. (read-only)</summary>
-  public long? last_updater_id { get; set; } = null;
+  public string? last_updater_id { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
@@ -2636,7 +2640,7 @@ public class Look : SdkModel
   /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
   /// <summary>Query Id</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
@@ -2653,13 +2657,13 @@ public class LookBasic : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Look Title (read-only)</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
 }
 
 public class LookmlModel : SdkModel
@@ -3102,15 +3106,15 @@ public class LookWithDashboards : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Favorite Id (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
@@ -3118,7 +3122,7 @@ public class LookWithDashboards : SdkModel
   /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
   /// <summary>Id of User that deleted the look. (read-only)</summary>
-  public long? deleter_id { get; set; } = null;
+  public string? deleter_id { get; set; } = null;
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
   /// <summary>Embed Url (read-only)</summary>
@@ -3136,7 +3140,7 @@ public class LookWithDashboards : SdkModel
   /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Id of User that last updated the look. (read-only)</summary>
-  public long? last_updater_id { get; set; } = null;
+  public string? last_updater_id { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
@@ -3147,7 +3151,7 @@ public class LookWithDashboards : SdkModel
   /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
   /// <summary>Query Id</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
@@ -3166,15 +3170,15 @@ public class LookWithQuery : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of content metadata (read-only)</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Favorite Id (read-only)</summary>
-  public long? content_favorite_id { get; set; } = null;
+  public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
@@ -3182,7 +3186,7 @@ public class LookWithQuery : SdkModel
   /// <summary>Time that the Look was deleted. (read-only)</summary>
   public DateTime? deleted_at { get; set; } = null;
   /// <summary>Id of User that deleted the look. (read-only)</summary>
-  public long? deleter_id { get; set; } = null;
+  public string? deleter_id { get; set; } = null;
   /// <summary>Description</summary>
   public string? description { get; set; } = null;
   /// <summary>Embed Url (read-only)</summary>
@@ -3200,7 +3204,7 @@ public class LookWithQuery : SdkModel
   /// <summary>Time that the Look was last accessed by any user (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Id of User that last updated the look. (read-only)</summary>
-  public long? last_updater_id { get; set; } = null;
+  public string? last_updater_id { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
   public DateTime? last_viewed_at { get; set; } = null;
   public LookModel? model { get; set; }
@@ -3211,7 +3215,7 @@ public class LookWithQuery : SdkModel
   /// <summary>Public Url (read-only)</summary>
   public string? public_url { get; set; } = null;
   /// <summary>Query Id</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Short Url (read-only)</summary>
   public string? short_url { get; set; } = null;
   public FolderBase? folder { get; set; }
@@ -3237,6 +3241,14 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
+public class MaterializePDT : SdkModel
+{
+  /// <summary>The ID of the enqueued materialization task (read-only)</summary>
+  public string? materialization_id { get; set; } = null;
+  /// <summary>Detailed response in text format (read-only)</summary>
+  public string? resp_text { get; set; } = null;
+}
+
 public class MergeFields : SdkModel
 {
   /// <summary>Field name to map onto in the merged results</summary>
@@ -3258,7 +3270,7 @@ public class MergeQuery : SdkModel
   /// <summary>Pivots</summary>
   public string[]? pivots { get; set; } = null;
   /// <summary>Unique to get results (read-only)</summary>
-  public long? result_maker_id { get; set; } = null;
+  public string? result_maker_id { get; set; } = null;
   /// <summary>Sorts</summary>
   public string[]? sorts { get; set; } = null;
   /// <summary>Source Queries defining the results to be merged.</summary>
@@ -3276,7 +3288,7 @@ public class MergeQuerySourceQuery : SdkModel
   /// <summary>Display name</summary>
   public string? name { get; set; } = null;
   /// <summary>Id of the query to merge</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
 }
 
 public class MobileSettings : SdkModel
@@ -3332,7 +3344,7 @@ public class ModelSet : SdkModel
   /// <summary> (read-only)</summary>
   public bool? built_in { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   public string[]? models { get; set; } = null;
   /// <summary>Name of ModelSet</summary>
   public string? name { get; set; } = null;
@@ -3388,7 +3400,7 @@ public class OauthClientApp : SdkModel
   /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
   /// <summary>All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)</summary>
   public DateTime? tokens_invalid_before { get; set; } = null;
   /// <summary>All users who have been activated to use this app (read-only)</summary>
@@ -3408,11 +3420,11 @@ public class OIDCConfig : SdkModel
   /// <summary>OpenID Provider Authorization Url</summary>
   public string? authorization_endpoint { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Read-only) Groups that will be applied to new users the first time they login via OIDC (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>(Read-only) Roles that will be applied to new users the first time they login via OIDC (read-only)</summary>
   public Role[]? default_new_user_roles { get; set; } = null;
   /// <summary>Enable/Disable OIDC authentication for the server</summary>
@@ -3430,7 +3442,7 @@ public class OIDCConfig : SdkModel
   /// <summary>When this config was last modified (read-only)</summary>
   public DateTime? modified_at { get; set; } = null;
   /// <summary>User id of user who last modified this config (read-only)</summary>
-  public long? modified_by { get; set; } = null;
+  public string? modified_by { get; set; } = null;
   /// <summary>Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
   public string? new_user_migration_types { get; set; } = null;
   /// <summary>Array of scopes to request.</summary>
@@ -3468,9 +3480,9 @@ public class OIDCConfig : SdkModel
 public class OIDCGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in OIDC (read-only)</summary>
@@ -3482,15 +3494,15 @@ public class OIDCGroupRead : SdkModel
 public class OIDCGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in OIDC</summary>
   public string? name { get; set; } = null;
   /// <summary>Looker Role Ids</summary>
-  public long[]? role_ids { get; set; } = null;
+  public string[]? role_ids { get; set; } = null;
 }
 
 public class OIDCUserAttributeRead : SdkModel
@@ -3510,7 +3522,7 @@ public class OIDCUserAttributeWrite : SdkModel
   /// <summary>Required to be in OIDC assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
   /// <summary>Looker User Attribute Ids</summary>
-  public long[]? user_attribute_ids { get; set; } = null;
+  public string[]? user_attribute_ids { get; set; } = null;
 }
 
 public class PasswordConfig : SdkModel
@@ -3548,7 +3560,7 @@ public class PermissionSet : SdkModel
   /// <summary> (read-only)</summary>
   public bool? built_in { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of PermissionSet</summary>
   public string? name { get; set; } = null;
   public string[]? permissions { get; set; } = null;
@@ -3563,6 +3575,40 @@ public enum PermissionType
   view,
   [EnumMember(Value = "edit")]
   edit
+}
+
+public class PrivatelabelConfiguration : SdkModel
+{
+  /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
+  public string? logo_file { get; set; } = null;
+  /// <summary>Logo image url (read-only) (read-only)</summary>
+  public string? logo_url { get; set; } = null;
+  /// <summary>Custom favicon image. Expected base64 encoded data (write-only)</summary>
+  public string? favicon_file { get; set; } = null;
+  /// <summary>Favicon image url (read-only) (read-only)</summary>
+  public string? favicon_url { get; set; } = null;
+  /// <summary>Default page title</summary>
+  public string? default_title { get; set; } = null;
+  /// <summary>Boolean to toggle showing help menus</summary>
+  public bool? show_help_menu { get; set; } = null;
+  /// <summary>Boolean to toggle showing docs</summary>
+  public bool? show_docs { get; set; } = null;
+  /// <summary>Boolean to toggle showing email subscription options.</summary>
+  public bool? show_email_sub_options { get; set; } = null;
+  /// <summary>Boolean to toggle mentions of Looker in emails</summary>
+  public bool? allow_looker_mentions { get; set; } = null;
+  /// <summary>Boolean to toggle links to Looker in emails</summary>
+  public bool? allow_looker_links { get; set; } = null;
+  /// <summary>Allow subject line and email heading customization in customized emails”</summary>
+  public bool? custom_welcome_email_advanced { get; set; } = null;
+  /// <summary>Remove the word Looker from appearing in the account setup page</summary>
+  public bool? setup_mentions { get; set; } = null;
+  /// <summary>Remove Looker logo from Alerts</summary>
+  public bool? alerts_logo { get; set; } = null;
+  /// <summary>Remove Looker links from Alerts</summary>
+  public bool? alerts_links { get; set; } = null;
+  /// <summary>Remove Looker mentions in home folder page when you don’t have any items saved</summary>
+  public bool? folders_mentions { get; set; } = null;
 }
 
 public class Project : SdkModel
@@ -3727,7 +3773,7 @@ public class Query : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Model</summary>
   public string model { get; set; } = "";
   /// <summary>Explore Name</summary>
@@ -3785,7 +3831,7 @@ public class QueryTask : SdkModel
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Id of query</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   public Query? query { get; set; }
   /// <summary>whether or not to generate links in the query response.</summary>
   public bool? generate_links { get; set; } = null;
@@ -3828,7 +3874,7 @@ public class RenderTask : SdkModel
   /// <summary>Filter values to apply to the dashboard queries, in URL query format (read-only)</summary>
   public string? dashboard_filters { get; set; } = null;
   /// <summary>Id of dashboard to render (read-only)</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>Dashboard layout style: single_column or tiled (read-only)</summary>
   public string? dashboard_style { get; set; } = null;
   /// <summary>Date/Time render task was completed (read-only)</summary>
@@ -3842,7 +3888,7 @@ public class RenderTask : SdkModel
   /// <summary>Id of lookml dashboard to render (read-only)</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Id of query to render (read-only)</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Id of dashboard element to render: UDD dashboard element would be numeric and LookML dashboard element would be model_name::dashboard_title::lookml_link_id (read-only)</summary>
   public string? dashboard_element_id { get; set; } = null;
   /// <summary>Number of seconds elapsed running queries (read-only)</summary>
@@ -3858,7 +3904,7 @@ public class RenderTask : SdkModel
   /// <summary>Additional information about the current status (read-only)</summary>
   public string? status_detail { get; set; } = null;
   /// <summary>The user account permissions in which the render task will execute (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Output width in pixels (read-only)</summary>
   public long? width { get; set; } = null;
 }
@@ -3931,7 +3977,7 @@ public class ResultMakerFilterablesListen : SdkModel
 public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 {
   /// <summary>Unique Id. (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>JSON string of dynamic field information. (read-only)</summary>
   public string? dynamic_fields { get; set; } = null;
   /// <summary>array of items that can be filtered and information about them. (read-only)</summary>
@@ -3943,7 +3989,7 @@ public class ResultMakerWithIdVisConfigAndDynamicFields : SdkModel
   /// <summary>Total of the constituent Look, Query, or Merge Query (read-only)</summary>
   public bool? total { get; set; } = null;
   /// <summary>ID of query if this is a query. (read-only)</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>ID of SQL Query if this is a SQL Runner Query (read-only)</summary>
   public string? sql_query_id { get; set; } = null;
   public Query? query { get; set; }
@@ -3956,15 +4002,15 @@ public class Role : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
   public PermissionSet? permission_set { get; set; }
   /// <summary>(Write-Only) Id of permission set</summary>
-  public long? permission_set_id { get; set; } = null;
+  public string? permission_set_id { get; set; } = null;
   public ModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
-  public long? model_set_id { get; set; } = null;
+  public string? model_set_id { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
   /// <summary>Link to get list of users with this role (read-only)</summary>
@@ -3976,15 +4022,15 @@ public class RoleSearch : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of Role</summary>
   public string? name { get; set; } = null;
   public PermissionSet? permission_set { get; set; }
   /// <summary>(Write-Only) Id of permission set</summary>
-  public long? permission_set_id { get; set; } = null;
+  public string? permission_set_id { get; set; } = null;
   public ModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
-  public long? model_set_id { get; set; } = null;
+  public string? model_set_id { get; set; } = null;
   /// <summary>Count of users with this role (read-only)</summary>
   public long? user_count { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -3998,7 +4044,7 @@ public class RunningQueries : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   public UserPublic? user { get; set; }
   public Query? query { get; set; }
   public SqlQuery? sql_query { get; set; }
@@ -4072,9 +4118,9 @@ public class SamlConfig : SdkModel
   /// <summary>(Read-only) Groups that will be applied to new users the first time they login via Saml (read-only)</summary>
   public Group[]? default_new_user_groups { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>Set user roles in Looker based on groups from Saml</summary>
   public bool? set_roles_from_groups { get; set; } = null;
   /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
@@ -4108,9 +4154,9 @@ public class SamlConfig : SdkModel
 public class SamlGroupRead : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker (read-only)</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in Saml (read-only)</summary>
@@ -4124,15 +4170,15 @@ public class SamlGroupRead : SdkModel
 public class SamlGroupWrite : SdkModel
 {
   /// <summary>Unique Id</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Unique Id of group in Looker (read-only)</summary>
-  public long? looker_group_id { get; set; } = null;
+  public string? looker_group_id { get; set; } = null;
   /// <summary>Name of group in Looker</summary>
   public string? looker_group_name { get; set; } = null;
   /// <summary>Name of group in Saml</summary>
   public string? name { get; set; } = null;
   /// <summary>Looker Role Ids</summary>
-  public long[]? role_ids { get; set; } = null;
+  public string[]? role_ids { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -4168,7 +4214,7 @@ public class SamlUserAttributeWrite : SdkModel
   /// <summary>Required to be in Saml assertion for login to be allowed to succeed</summary>
   public bool? required { get; set; } = null;
   /// <summary>Looker User Attribute Ids</summary>
-  public long[]? user_attribute_ids { get; set; } = null;
+  public string[]? user_attribute_ids { get; set; } = null;
   /// <summary>Link to saml config (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -4178,7 +4224,7 @@ public class ScheduledPlan : SdkModel
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
   /// <summary>User Id which owns this scheduled plan</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Whether schedule is run as recipient (only applicable for email recipients)</summary>
   public bool? run_as_recipient { get; set; } = null;
   /// <summary>Whether the ScheduledPlan is enabled</summary>
@@ -4186,7 +4232,7 @@ public class ScheduledPlan : SdkModel
   /// <summary>Id of a look</summary>
   public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Query string to run look or dashboard with</summary>
@@ -4228,7 +4274,7 @@ public class ScheduledPlan : SdkModel
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Date and time when ScheduledPlan was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Date and time when ScheduledPlan was last updated (read-only)</summary>
@@ -4247,9 +4293,9 @@ public class ScheduledPlan : SdkModel
 public class ScheduledPlanDestination : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Id of a scheduled plan you own</summary>
-  public long? scheduled_plan_id { get; set; } = null;
+  public string? scheduled_plan_id { get; set; } = null;
   /// <summary>The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"</summary>
   public string? format { get; set; } = null;
   /// <summary>Are values formatted? (containing currency symbols, digit separators, etc.</summary>
@@ -4345,7 +4391,7 @@ public class Session : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>IP address of user when this session was initiated (read-only)</summary>
   public string? ip_address { get; set; } = null;
   /// <summary>User's browser type (read-only)</summary>
@@ -4365,7 +4411,7 @@ public class Session : SdkModel
   /// <summary>Number of times this session was extended (read-only)</summary>
   public long? extended_count { get; set; } = null;
   /// <summary>Actual user in the case when this session represents one user sudo'ing as another (read-only)</summary>
-  public long? sudo_user_id { get; set; } = null;
+  public string? sudo_user_id { get; set; } = null;
   /// <summary>Time when this session was initiated (read-only)</summary>
   public string? created_at { get; set; } = null;
   /// <summary>Time when this session will expire (read-only)</summary>
@@ -4398,7 +4444,7 @@ public class Setting : SdkModel
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
-  public WhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public PrivatelabelConfiguration? privatelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
@@ -4412,6 +4458,25 @@ public class SmtpNodeStatus : SdkModel
   public string? message { get; set; } = null;
   /// <summary>Host name of node (read-only)</summary>
   public string? hostname { get; set; } = null;
+}
+
+public class SmtpSettings : SdkModel
+{
+  /// <summary>SMTP Server url</summary>
+  public string? address { get; set; } = null;
+  /// <summary>From e-mail address</summary>
+  public string? from { get; set; } = null;
+  /// <summary>User name</summary>
+  public string? user_name { get; set; } = null;
+  /// <summary>Password</summary>
+  public string? password { get; set; } = null;
+  /// <summary>SMTP Server's port</summary>
+  public long? port { get; set; } = null;
+  /// <summary>Is TLS encryption enabled?</summary>
+  public bool? enable_starttls_auto { get; set; } = null;
+  /// <summary>TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SslVersion? ssl_version { get; set; }
 }
 
 public class SmtpStatus : SdkModel
@@ -4461,7 +4526,7 @@ public class SqlQuery : SdkModel
   /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
   /// <summary>ID of the ResultMakerLookup entry.</summary>
-  public long? result_maker_id { get; set; } = null;
+  public string? result_maker_id { get; set; } = null;
 }
 
 public class SqlQueryCreate : SdkModel
@@ -4532,6 +4597,17 @@ public class SshTunnel : SdkModel
   public string? status { get; set; } = null;
 }
 
+/// TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
+public enum SslVersion
+{
+  [EnumMember(Value = "TLSv1_1")]
+  TLSv1_1,
+  [EnumMember(Value = "SSLv23")]
+  SSLv23,
+  [EnumMember(Value = "TLSv1_2")]
+  TLSv1_2
+}
+
 public class SupportAccessAddEntries : SdkModel
 {
   /// <summary>An array of emails to add to the Allowlist</summary>
@@ -4568,7 +4644,7 @@ public class SupportAccessStatus : SdkModel
   public DateTime? open_until { get; set; } = null;
 }
 
-/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
+/// A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
 public enum SupportedActionTypes
 {
   [EnumMember(Value = "cell")]
@@ -4576,7 +4652,9 @@ public enum SupportedActionTypes
   [EnumMember(Value = "query")]
   query,
   [EnumMember(Value = "dashboard")]
-  dashboard
+  dashboard,
+  [EnumMember(Value = "none")]
+  none
 }
 
 /// A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
@@ -4646,7 +4724,7 @@ public class Theme : SdkModel
   /// <summary>Timestamp for when this theme expires. Null=never</summary>
   public DateTime? end_at { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of theme. Can only be alphanumeric and underscores.</summary>
   public string? name { get; set; } = null;
   public ThemeSettings? settings { get; set; }
@@ -4700,14 +4778,6 @@ public class Timezone : SdkModel
   public string? group { get; set; } = null;
 }
 
-public class UpdateCommand : SdkModel
-{
-  /// <summary>Name of the command</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Description of the command</summary>
-  public string? description { get; set; } = null;
-}
-
 public class UpdateFolder : SdkModel
 {
   /// <summary>Unique Name</summary>
@@ -4739,16 +4809,16 @@ public class User : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>EMail address (read-only)</summary>
   public string? email { get; set; } = null;
-  /// <summary>(Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)</summary>
-  public long? embed_group_space_id { get; set; } = null;
+  /// <summary>(DEPRECATED) (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)</summary>
+  public string? embed_group_space_id { get; set; } = null;
   /// <summary>First name</summary>
   public string? first_name { get; set; } = null;
   /// <summary>Array of ids of the groups for this user (read-only)</summary>
-  public long[]? group_ids { get; set; } = null;
+  public string[]? group_ids { get; set; } = null;
   /// <summary>ID string for user's home folder</summary>
   public string? home_folder_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Account has been disabled</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>Last name</summary>
@@ -4760,11 +4830,11 @@ public class User : SdkModel
   /// <summary>User's dev workspace has been checked for presence of applicable production projects</summary>
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>ID of user's personal folder (read-only)</summary>
-  public long? personal_folder_id { get; set; } = null;
+  public string? personal_folder_id { get; set; } = null;
   /// <summary>User is identified as an employee of Looker (read-only)</summary>
   public bool? presumed_looker_employee { get; set; } = null;
   /// <summary>Array of ids of the roles for this user (read-only)</summary>
-  public long[]? role_ids { get; set; } = null;
+  public string[]? role_ids { get; set; } = null;
   /// <summary>Active sessions (read-only)</summary>
   public Session[]? sessions { get; set; } = null;
   /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
@@ -4779,6 +4849,8 @@ public class User : SdkModel
   public bool? allow_normal_group_membership { get; set; } = null;
   /// <summary>User can inherit roles from a normal Looker group. (read-only)</summary>
   public bool? allow_roles_from_normal_groups { get; set; } = null;
+  /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
+  public string? embed_group_folder_id { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -4788,7 +4860,7 @@ public class UserAttribute : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Name of user attribute</summary>
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
@@ -4840,11 +4912,11 @@ public class UserAttributeGroupValue : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id of this group-attribute relation (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Id of group (read-only)</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
   /// <summary>Id of user attribute (read-only)</summary>
-  public long? user_attribute_id { get; set; } = null;
+  public string? user_attribute_id { get; set; } = null;
   /// <summary>If true, the "value" field will be null, because the attribute settings block access to this value (read-only)</summary>
   public bool? value_is_hidden { get; set; } = null;
   /// <summary>Precedence for resolving value for user (read-only)</summary>
@@ -4866,13 +4938,13 @@ public class UserAttributeWithValue : SdkModel
   /// <summary>Value of attribute for user</summary>
   public string? value { get; set; } = null;
   /// <summary>Id of User (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Can the user set this value (read-only)</summary>
   public bool? user_can_edit { get; set; } = null;
   /// <summary>If true, the "value" field will be null, because the attribute settings block access to this value (read-only)</summary>
   public bool? value_is_hidden { get; set; } = null;
   /// <summary>Id of User Attribute (read-only)</summary>
-  public long? user_attribute_id { get; set; } = null;
+  public string? user_attribute_id { get; set; } = null;
   /// <summary>How user got this value for this attribute (read-only)</summary>
   public string? source { get; set; } = null;
   /// <summary>If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)</summary>
@@ -4896,7 +4968,7 @@ public class UserLoginLockout : SdkModel
   /// <summary>IP address of most recent failed attempt (read-only)</summary>
   public string? ip { get; set; } = null;
   /// <summary>User ID (read-only)</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Remote ID of user if using LDAP (read-only)</summary>
   public string? remote_id { get; set; } = null;
   /// <summary>User's name (read-only)</summary>
@@ -4914,7 +4986,7 @@ public class UserPublic : SdkModel
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>First Name (read-only)</summary>
   public string? first_name { get; set; } = null;
   /// <summary>Last Name (read-only)</summary>
@@ -4981,7 +5053,7 @@ public class WelcomeEmailTest : SdkModel
 public class WhitelabelConfiguration : SdkModel
 {
   /// <summary>Unique Id (read-only)</summary>
-  public long? id { get; set; } = null;
+  public string? id { get; set; } = null;
   /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
   public string? logo_file { get; set; } = null;
   /// <summary>Logo image url (read-only) (read-only)</summary>
@@ -5038,7 +5110,7 @@ public class WriteAlert : SdkModel
   /// <summary>An optional, user-defined title for the alert</summary>
   public string? custom_title { get; set; } = null;
   /// <summary>ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)</summary>
-  public long? dashboard_element_id { get; set; } = null;
+  public string? dashboard_element_id { get; set; } = null;
   /// <summary>An optional description for the alert. This supplements the title</summary>
   public string? description { get; set; } = null;
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
@@ -5060,7 +5132,7 @@ public class WriteAlert : SdkModel
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
   public string? lookml_link_id { get; set; } = null;
   /// <summary>User id of alert owner</summary>
-  public long owner_id { get; set; }
+  public string owner_id { get; set; } = "";
   /// <summary>Value of the alert threshold</summary>
   public double threshold { get; set; }
   public AlertConditionState? time_series_condition_state { get; set; }
@@ -5099,13 +5171,13 @@ public class WriteBoard : SdkModel
   /// <summary>Description of the board</summary>
   public string? description { get; set; } = null;
   /// <summary>ids of the board sections in the order they should be displayed</summary>
-  public long[]? section_order { get; set; } = null;
+  public string[]? section_order { get; set; } = null;
   /// <summary>Title of the board</summary>
   public string? title { get; set; } = null;
 }
 
 /// Dynamic writeable type for BoardItem removes:
-/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
+/// can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count, custom_image_url
 public class WriteBoardItem : SdkModel
 {
   /// <summary>Custom description entered by the user, if present</summary>
@@ -5115,15 +5187,25 @@ public class WriteBoardItem : SdkModel
   /// <summary>Custom url entered by the user, if present</summary>
   public string? custom_url { get; set; } = null;
   /// <summary>Dashboard to base this item on</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>Associated Board Section</summary>
-  public long? board_section_id { get; set; } = null;
+  public string? board_section_id { get; set; } = null;
   /// <summary>Look to base this item on</summary>
   public string? look_id { get; set; } = null;
   /// <summary>LookML Dashboard to base this item on</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>An arbitrary integer representing the sort order within the section</summary>
   public long? order { get; set; } = null;
+  /// <summary>Whether the custom description should be used instead of the content description, if the item is associated with content</summary>
+  public bool? use_custom_description { get; set; } = null;
+  /// <summary>Whether the custom title should be used instead of the content title, if the item is associated with content</summary>
+  public bool? use_custom_title { get; set; } = null;
+  /// <summary>Whether the custom url should be used instead of the content url, if the item is associated with content</summary>
+  public bool? use_custom_url { get; set; } = null;
+  /// <summary>(Write-Only) base64 encoded image data</summary>
+  public string? custom_image_data_base64 { get; set; } = null;
+  /// <summary>Whether the custom image should be used instead of the content image, if the item is associated with content</summary>
+  public bool? use_custom_image { get; set; } = null;
 }
 
 /// Dynamic writeable type for BoardSection removes:
@@ -5135,9 +5217,9 @@ public class WriteBoardSection : SdkModel
   /// <summary>Description of the content found in this section.</summary>
   public string? description { get; set; } = null;
   /// <summary>Id reference to parent board</summary>
-  public long? board_id { get; set; } = null;
+  public string? board_id { get; set; } = null;
   /// <summary>ids of the board items in the order they should be displayed</summary>
-  public long[]? item_order { get; set; } = null;
+  public string[]? item_order { get; set; } = null;
   /// <summary>Name of row</summary>
   public string? title { get; set; } = null;
 }
@@ -5156,29 +5238,14 @@ public class WriteColorCollection : SdkModel
   public ContinuousPalette[]? divergingPalettes { get; set; } = null;
 }
 
-/// Dynamic writeable type for Command removes:
-/// id, author_id
-public class WriteCommand : SdkModel
-{
-  /// <summary>Name of the command</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Description of the command</summary>
-  public string? description { get; set; } = null;
-  /// <summary>Id of the content associated with the command</summary>
-  public string? linked_content_id { get; set; } = null;
-  /// <summary>Name of the command Valid values are: "dashboard", "lookml_dashboard".</summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public LinkedContentType? linked_content_type { get; set; }
-}
-
 /// Dynamic writeable type for ContentFavorite removes:
 /// id, look_id, dashboard_id, board_id
 public class WriteContentFavorite : SdkModel
 {
   /// <summary>User Id which owns this ContentFavorite</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Id associated with this ContentFavorite</summary>
-  public long? content_metadata_id { get; set; } = null;
+  public string? content_metadata_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for LookBasic removes:
   /// can, content_metadata_id, id, title
@@ -5236,7 +5303,7 @@ public class WriteCreateDashboardFilter : SdkModel
 public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
-  public long query_id { get; set; }
+  public string query_id { get; set; } = "";
   /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
@@ -5354,7 +5421,7 @@ public class WriteDashboardElement : SdkModel
   /// </summary>
   public WriteQuery? query { get; set; }
   /// <summary>Id Of Query</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
   /// <summary>
@@ -5363,7 +5430,7 @@ public class WriteDashboardElement : SdkModel
   /// </summary>
   public WriteResultMakerWithIdVisConfigAndDynamicFields? result_maker { get; set; }
   /// <summary>ID of the ResultMakerLookup entry.</summary>
-  public long? result_maker_id { get; set; } = null;
+  public string? result_maker_id { get; set; } = null;
   /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
   /// <summary>Title of dashboard element</summary>
@@ -5374,6 +5441,8 @@ public class WriteDashboardElement : SdkModel
   public string? title_text { get; set; } = null;
   /// <summary>Type</summary>
   public string? type { get; set; } = null;
+  /// <summary>JSON with all the properties required for rich editor and buttons elements</summary>
+  public string? rich_content_json { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardFilter removes:
@@ -5438,6 +5507,16 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? width { get; set; } = null;
   /// <summary>Height</summary>
   public long? height { get; set; } = null;
+}
+
+/// Dynamic writeable type for DashboardLookml removes:
+/// dashboard_id
+public class WriteDashboardLookml : SdkModel
+{
+  /// <summary>(Write-Only) Id of the folder</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>lookml of UDD</summary>
+  public string? lookml { get; set; } = null;
 }
 
 /// Dynamic writeable type for Datagroup removes:
@@ -5516,9 +5595,13 @@ public class WriteDBConnection : SdkModel
   /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>An External OAuth Application to use for authenticating to the database</summary>
-  public long? oauth_application_id { get; set; } = null;
+  public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>When true, query cost estimate will be displayed in explore.</summary>
+  public bool? cost_estimate_enabled { get; set; } = null;
+  /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
+  public bool? pdt_api_control_enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -5612,7 +5695,7 @@ public class WriteIntegration : SdkModel
   /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
   /// <summary>Whether the integration is available to users.</summary>
-  public long[]? installed_delegate_oauth_targets { get; set; } = null;
+  public string[]? installed_delegate_oauth_targets { get; set; } = null;
 }
 
 /// Dynamic writeable type for IntegrationHub removes:
@@ -5664,9 +5747,9 @@ public class WriteLDAPConfig : SdkModel
   /// <summary>Do not verify peer when using TLS</summary>
   public bool? connection_tls_no_verify { get; set; } = null;
   /// <summary>(Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>Enable/Disable LDAP authentication for the server</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.</summary>
@@ -5730,7 +5813,7 @@ public class WriteLegacyFeature : SdkModel
 public class WriteLookBasic : SdkModel
 {
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for LookmlModel removes:
@@ -5754,7 +5837,7 @@ public class WriteLookWithQuery : SdkModel
   /// <summary>Look Title</summary>
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
   /// <summary>Description</summary>
@@ -5764,7 +5847,7 @@ public class WriteLookWithQuery : SdkModel
   /// <summary>Is Public</summary>
   public bool? @public { get; set; } = null;
   /// <summary>Query Id</summary>
-  public long? query_id { get; set; } = null;
+  public string? query_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for FolderBase removes:
   /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
@@ -5821,7 +5904,7 @@ public class WriteOauthClientApp : SdkModel
   /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
-  public long? group_id { get; set; } = null;
+  public string? group_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for OIDCConfig removes:
@@ -5837,9 +5920,9 @@ public class WriteOIDCConfig : SdkModel
   /// <summary>OpenID Provider Authorization Url</summary>
   public string? authorization_endpoint { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>Enable/Disable OIDC authentication for the server</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
@@ -5899,6 +5982,38 @@ public class WritePermissionSet : SdkModel
   /// <summary>Name of PermissionSet</summary>
   public string? name { get; set; } = null;
   public string[]? permissions { get; set; } = null;
+}
+
+/// Dynamic writeable type for PrivatelabelConfiguration removes:
+/// logo_url, favicon_url
+public class WritePrivatelabelConfiguration : SdkModel
+{
+  /// <summary>Customer logo image. Expected base64 encoded data (write-only)</summary>
+  public string? logo_file { get; set; } = null;
+  /// <summary>Custom favicon image. Expected base64 encoded data (write-only)</summary>
+  public string? favicon_file { get; set; } = null;
+  /// <summary>Default page title</summary>
+  public string? default_title { get; set; } = null;
+  /// <summary>Boolean to toggle showing help menus</summary>
+  public bool? show_help_menu { get; set; } = null;
+  /// <summary>Boolean to toggle showing docs</summary>
+  public bool? show_docs { get; set; } = null;
+  /// <summary>Boolean to toggle showing email subscription options.</summary>
+  public bool? show_email_sub_options { get; set; } = null;
+  /// <summary>Boolean to toggle mentions of Looker in emails</summary>
+  public bool? allow_looker_mentions { get; set; } = null;
+  /// <summary>Boolean to toggle links to Looker in emails</summary>
+  public bool? allow_looker_links { get; set; } = null;
+  /// <summary>Allow subject line and email heading customization in customized emails”</summary>
+  public bool? custom_welcome_email_advanced { get; set; } = null;
+  /// <summary>Remove the word Looker from appearing in the account setup page</summary>
+  public bool? setup_mentions { get; set; } = null;
+  /// <summary>Remove Looker logo from Alerts</summary>
+  public bool? alerts_logo { get; set; } = null;
+  /// <summary>Remove Looker links from Alerts</summary>
+  public bool? alerts_links { get; set; } = null;
+  /// <summary>Remove Looker mentions in home folder page when you don’t have any items saved</summary>
+  public bool? folders_mentions { get; set; } = null;
 }
 
 /// Dynamic writeable type for Project removes:
@@ -6023,14 +6138,14 @@ public class WriteRole : SdkModel
   /// </summary>
   public WritePermissionSet? permission_set { get; set; }
   /// <summary>(Write-Only) Id of permission set</summary>
-  public long? permission_set_id { get; set; } = null;
+  public string? permission_set_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for ModelSet removes:
   /// can, all_access, built_in, id, url
   /// </summary>
   public WriteModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
-  public long? model_set_id { get; set; } = null;
+  public string? model_set_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for SamlConfig removes:
@@ -6060,9 +6175,9 @@ public class WriteSamlConfig : SdkModel
   /// <summary>Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.</summary>
   public bool? alternate_email_login_allowed { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml</summary>
-  public long[]? default_new_user_role_ids { get; set; } = null;
+  public string[]? default_new_user_role_ids { get; set; } = null;
   /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml</summary>
-  public long[]? default_new_user_group_ids { get; set; } = null;
+  public string[]? default_new_user_group_ids { get; set; } = null;
   /// <summary>Set user roles in Looker based on groups from Saml</summary>
   public bool? set_roles_from_groups { get; set; } = null;
   /// <summary>Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'</summary>
@@ -6094,7 +6209,7 @@ public class WriteScheduledPlan : SdkModel
   /// <summary>Name of this scheduled plan</summary>
   public string? name { get; set; } = null;
   /// <summary>User Id which owns this scheduled plan</summary>
-  public long? user_id { get; set; } = null;
+  public string? user_id { get; set; } = null;
   /// <summary>Whether schedule is run as recipient (only applicable for email recipients)</summary>
   public bool? run_as_recipient { get; set; } = null;
   /// <summary>Whether the ScheduledPlan is enabled</summary>
@@ -6102,7 +6217,7 @@ public class WriteScheduledPlan : SdkModel
   /// <summary>Id of a look</summary>
   public string? look_id { get; set; } = null;
   /// <summary>Id of a dashboard</summary>
-  public long? dashboard_id { get; set; } = null;
+  public string? dashboard_id { get; set; } = null;
   /// <summary>Id of a LookML dashboard</summary>
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>Query string to run look or dashboard with</summary>
@@ -6171,10 +6286,10 @@ public class WriteSetting : SdkModel
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
   /// <summary>
-  /// Dynamic writeable type for WhitelabelConfiguration removes:
-  /// id, logo_url, favicon_url
+  /// Dynamic writeable type for PrivatelabelConfiguration removes:
+  /// logo_url, favicon_url
   /// </summary>
-  public WriteWhitelabelConfiguration? whitelabel_configuration { get; set; }
+  public WritePrivatelabelConfiguration? privatelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
@@ -6220,7 +6335,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
 public class WriteUser : SdkModel
 {
   /// <summary>
