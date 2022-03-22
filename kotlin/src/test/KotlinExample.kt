@@ -33,7 +33,7 @@ class KotlinExample {
             throw Error("No query found on ${tile.title}.")
         }
         try {
-            val queryId = tile.query_id!!.toLong()
+            val queryId = tile.query_id!!
             val task = sdk.ok<RenderTask>(sdk.create_query_render_task(queryId, format, 640, 480))
 
             if (task.id == null) {

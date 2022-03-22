@@ -59,6 +59,21 @@ different versions of python. Mac users should use
 
     brew install pyenv
 
+Linux users should use
+
+.. code-block:: bash
+
+    curl https://pyenv.run | bash
+
+Put this in your shell configuration script:
+
+.. code-block:: bash
+
+    export PATH=$PATH:$HOME/.pyenv/bin
+    eval "$(pyenv init --path)"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+
 Follow the **remaining steps 3 - 5** of
 https://github.com/pyenv/pyenv#basic-github-checkout otherwise your python3.8
 installation may break.

@@ -136,7 +136,7 @@ class TestMethods {
         val section = sdk.ok<BoardSection>(
             sdk.create_board_section(
                 WriteBoardSection(
-                    board_id = board.id!!.toLong(),
+                    board_id = board.id!!,
                     description = "SDK section"
                 )
             )
@@ -281,7 +281,7 @@ class TestMethods {
 
     @Test
     fun testAllDataGroups() {
-        listGetter<Datagroup, Long, Datagroup>(
+        listGetter<Datagroup, String, Datagroup>(
             { sdk.all_datagroups() },
             { item -> item.id!! },
             { id, _ -> sdk.datagroup(id) }
@@ -315,7 +315,7 @@ class TestMethods {
 
     @Test
     fun testAllGroups() {
-        listGetter<Group, Long, Group>(
+        listGetter<Group, String, Group>(
             { sdk.all_groups() },
             { item -> item.id!! },
             { id, fields -> sdk.group(id, fields) }
@@ -325,9 +325,9 @@ class TestMethods {
     @Test
     fun testAllBoardItems() {
         prepBoard()
-        listGetter<BoardItem, Long, BoardItem>(
+        listGetter<BoardItem, String, BoardItem>(
             { sdk.all_board_items() },
-            { item -> item.id!!.toLong() },
+            { item -> item.id!!},
             { id, fields -> sdk.board_item(id, fields) }
         )
     }
@@ -342,9 +342,9 @@ class TestMethods {
     @Test
     fun testAllBoards() {
         prepBoard()
-        listGetter<Board, Long, Board>(
+        listGetter<Board, String, Board>(
             { sdk.all_boards() },
-            { item -> item.id!!.toLong() },
+            { item -> item.id!!},
             { id, fields -> sdk.board(id, fields) }
         )
     }
@@ -352,18 +352,18 @@ class TestMethods {
     @Test
     fun testAllBoardSections() {
         prepBoard()
-        listGetter<BoardSection, Long, BoardSection>(
+        listGetter<BoardSection, String, BoardSection>(
             { sdk.all_board_sections() },
-            { item -> item.id!!.toLong() },
+            { item -> item.id!!},
             { id, fields -> sdk.board_section(id, fields) }
         )
     }
 
     @Test
     fun testAllIntegrationHubs() {
-        listGetter<IntegrationHub, Long, IntegrationHub>(
+        listGetter<IntegrationHub, String, IntegrationHub>(
             { sdk.all_integration_hubs() },
-            { item -> item.id!!.toLong() },
+            { item -> item.id!!},
             { id, fields -> sdk.integration_hub(id, fields) }
         )
     }
@@ -413,7 +413,7 @@ class TestMethods {
 
     @Test
     fun testAllModelSets() {
-        testAll<ModelSet, Long, ModelSet>(
+        testAll<ModelSet, String, ModelSet>(
             { sdk.all_model_sets() },
             { item -> item.id!! },
             { id, fields -> sdk.model_set(id, fields) }
@@ -422,7 +422,7 @@ class TestMethods {
 
     @Test
     fun testAllPermissionSets() {
-        testAll<PermissionSet, Long, PermissionSet>(
+        testAll<PermissionSet, String, PermissionSet>(
             { sdk.all_permission_sets() },
             { item -> item.id!! },
             { id, fields -> sdk.permission_set(id, fields) }
@@ -446,7 +446,7 @@ class TestMethods {
 
     @Test
     fun testAllRoles() {
-        testAll<Role, Long, Role>(
+        testAll<Role, String, Role>(
             { sdk.all_roles() },
             { item -> item.id!! },
             { id, _ -> sdk.role(id) }
@@ -476,7 +476,7 @@ class TestMethods {
     //    @Test
     fun testAllSchedulePlans() {
         prepScheduledPlan()
-        testAll<ScheduledPlan, Long, ScheduledPlan>(
+        testAll<ScheduledPlan, String, ScheduledPlan>(
             { sdk.all_scheduled_plans() },
             { item -> item.id!! },
             { id, fields -> sdk.scheduled_plan(id, fields) }
@@ -486,7 +486,7 @@ class TestMethods {
 
     @Test
     fun testAllThemes() {
-        testAll<Theme, Long, Theme>(
+        testAll<Theme, String, Theme>(
             { sdk.all_themes() },
             { item -> item.id!! },
             { id, fields -> sdk.theme(id, fields) }
@@ -501,7 +501,7 @@ class TestMethods {
 
     @Test
     fun testAllUserAttributes() {
-        testAll<UserAttribute, Long, UserAttribute>(
+        testAll<UserAttribute, String, UserAttribute>(
             { sdk.all_user_attributes() },
             { item -> item.id!! },
             { id, fields -> sdk.user_attribute(id, fields) }
@@ -518,7 +518,7 @@ class TestMethods {
 
     @Test
     fun testAllUsers() {
-        testAll<User, Long, User>(
+        testAll<User, String, User>(
             { sdk.all_users() },
             { item -> item.id!! },
             { id, fields -> sdk.user(id, fields) }

@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-443 API methods
+438 API methods
 */
 
 
@@ -68,8 +68,9 @@ func (l *LookerSDK) SearchAlerts(request RequestSearchAlerts,
 //
 // GET /alerts/{alert_id} -> Alert
 func (l *LookerSDK) GetAlert(
-    alertId int64,
+    alertId string,
     options *rtl.ApiSettings) (Alert, error) {
+    alertId = url.PathEscape(alertId)
     var result Alert
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
     return result, err
@@ -82,9 +83,10 @@ func (l *LookerSDK) GetAlert(
 //
 // PUT /alerts/{alert_id} -> Alert
 func (l *LookerSDK) UpdateAlert(
-    alertId int64,
+    alertId string,
     body WriteAlert,
     options *rtl.ApiSettings) (Alert, error) {
+    alertId = url.PathEscape(alertId)
     var result Alert
     err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
     return result, err
@@ -97,9 +99,10 @@ func (l *LookerSDK) UpdateAlert(
 //
 // PATCH /alerts/{alert_id} -> Alert
 func (l *LookerSDK) UpdateAlertField(
-    alertId int64,
+    alertId string,
     body AlertPatch,
     options *rtl.ApiSettings) (Alert, error) {
+    alertId = url.PathEscape(alertId)
     var result Alert
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
     return result, err
@@ -110,8 +113,9 @@ func (l *LookerSDK) UpdateAlertField(
 //
 // DELETE /alerts/{alert_id} -> Void
 func (l *LookerSDK) DeleteAlert(
-    alertId int64,
+    alertId string,
     options *rtl.ApiSettings) (error) {
+    alertId = url.PathEscape(alertId)
     err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
     return err
 
@@ -167,9 +171,10 @@ func (l *LookerSDK) CreateAlert(
 //
 // POST /alerts/{alert_id}/enqueue -> Void
 func (l *LookerSDK) EnqueueAlert(
-    alertId int64,
+    alertId string,
     force bool,
     options *rtl.ApiSettings) (error) {
+    alertId = url.PathEscape(alertId)
     err := l.session.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/enqueue", alertId), map[string]interface{}{"force": force}, nil, options)
     return err
 
@@ -236,9 +241,10 @@ func (l *LookerSDK) Login(request RequestLogin,
 //
 // POST /login/{user_id} -> AccessToken
 func (l *LookerSDK) LoginUser(
-    userId int64,
+    userId string,
     associative bool,
     options *rtl.ApiSettings) (AccessToken, error) {
+    userId = url.PathEscape(userId)
     var result AccessToken
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/login/%v", userId), map[string]interface{}{"associative": associative}, nil, options)
     return result, err
@@ -278,8 +284,9 @@ func (l *LookerSDK) CreateEmbedSecret(
 //
 // DELETE /embed_config/secrets/{embed_secret_id} -> string
 func (l *LookerSDK) DeleteEmbedSecret(
-    embedSecretId int64,
+    embedSecretId string,
     options *rtl.ApiSettings) (string, error) {
+    embedSecretId = url.PathEscape(embedSecretId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed_config/secrets/%v", embedSecretId), nil, nil, options)
     return result, err
@@ -631,10 +638,11 @@ func (l *LookerSDK) InvalidateTokens(
 // POST /oauth_client_apps/{client_guid}/users/{user_id} -> string
 func (l *LookerSDK) ActivateAppUser(
     clientGuid string,
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (string, error) {
     clientGuid = url.PathEscape(clientGuid)
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -655,10 +663,11 @@ func (l *LookerSDK) ActivateAppUser(
 // DELETE /oauth_client_apps/{client_guid}/users/{user_id} -> string
 func (l *LookerSDK) DeactivateAppUser(
     clientGuid string,
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (string, error) {
     clientGuid = url.PathEscape(clientGuid)
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -1009,7 +1018,7 @@ func (l *LookerSDK) AllUserLoginLockouts(
 func (l *LookerSDK) SearchUserLoginLockouts(request RequestSearchUserLoginLockouts,
     options *rtl.ApiSettings) ([]UserLoginLockout, error) {
     var result []UserLoginLockout
-    err := l.session.Do(&result, "GET", "/4.0", "/user_login_lockouts/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts, "auth_type": request.AuthType, "full_name": request.FullName, "email": request.Email, "remote_id": request.RemoteId, "filter_or": request.FilterOr}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/user_login_lockouts/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "auth_type": request.AuthType, "full_name": request.FullName, "email": request.Email, "remote_id": request.RemoteId, "filter_or": request.FilterOr}, nil, options)
     return result, err
 
 }
@@ -1092,9 +1101,10 @@ func (l *LookerSDK) SearchBoards(request RequestSearchBoards,
 //
 // GET /boards/{board_id} -> Board
 func (l *LookerSDK) Board(
-    boardId int64,
+    boardId string,
     fields string,
     options *rtl.ApiSettings) (Board, error) {
+    boardId = url.PathEscape(boardId)
     var result Board
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -1105,10 +1115,11 @@ func (l *LookerSDK) Board(
 //
 // PATCH /boards/{board_id} -> Board
 func (l *LookerSDK) UpdateBoard(
-    boardId int64,
+    boardId string,
     body WriteBoard,
     fields string,
     options *rtl.ApiSettings) (Board, error) {
+    boardId = url.PathEscape(boardId)
     var result Board
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -1119,8 +1130,9 @@ func (l *LookerSDK) UpdateBoard(
 //
 // DELETE /boards/{board_id} -> string
 func (l *LookerSDK) DeleteBoard(
-    boardId int64,
+    boardId string,
     options *rtl.ApiSettings) (string, error) {
+    boardId = url.PathEscape(boardId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/boards/%v", boardId), nil, nil, options)
     return result, err
@@ -1155,9 +1167,10 @@ func (l *LookerSDK) CreateBoardItem(
 //
 // GET /board_items/{board_item_id} -> BoardItem
 func (l *LookerSDK) BoardItem(
-    boardItemId int64,
+    boardItemId string,
     fields string,
     options *rtl.ApiSettings) (BoardItem, error) {
+    boardItemId = url.PathEscape(boardItemId)
     var result BoardItem
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -1168,10 +1181,11 @@ func (l *LookerSDK) BoardItem(
 //
 // PATCH /board_items/{board_item_id} -> BoardItem
 func (l *LookerSDK) UpdateBoardItem(
-    boardItemId int64,
+    boardItemId string,
     body WriteBoardItem,
     fields string,
     options *rtl.ApiSettings) (BoardItem, error) {
+    boardItemId = url.PathEscape(boardItemId)
     var result BoardItem
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -1182,8 +1196,9 @@ func (l *LookerSDK) UpdateBoardItem(
 //
 // DELETE /board_items/{board_item_id} -> string
 func (l *LookerSDK) DeleteBoardItem(
-    boardItemId int64,
+    boardItemId string,
     options *rtl.ApiSettings) (string, error) {
+    boardItemId = url.PathEscape(boardItemId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), nil, nil, options)
     return result, err
@@ -1218,9 +1233,10 @@ func (l *LookerSDK) CreateBoardSection(
 //
 // GET /board_sections/{board_section_id} -> BoardSection
 func (l *LookerSDK) BoardSection(
-    boardSectionId int64,
+    boardSectionId string,
     fields string,
     options *rtl.ApiSettings) (BoardSection, error) {
+    boardSectionId = url.PathEscape(boardSectionId)
     var result BoardSection
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -1231,10 +1247,11 @@ func (l *LookerSDK) BoardSection(
 //
 // PATCH /board_sections/{board_section_id} -> BoardSection
 func (l *LookerSDK) UpdateBoardSection(
-    boardSectionId int64,
+    boardSectionId string,
     body WriteBoardSection,
     fields string,
     options *rtl.ApiSettings) (BoardSection, error) {
+    boardSectionId = url.PathEscape(boardSectionId)
     var result BoardSection
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -1245,8 +1262,9 @@ func (l *LookerSDK) UpdateBoardSection(
 //
 // DELETE /board_sections/{board_section_id} -> string
 func (l *LookerSDK) DeleteBoardSection(
-    boardSectionId int64,
+    boardSectionId string,
     options *rtl.ApiSettings) (string, error) {
+    boardSectionId = url.PathEscape(boardSectionId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), nil, nil, options)
     return result, err
@@ -1419,62 +1437,6 @@ func (l *LookerSDK) DeleteColorCollection(
 }
 
   // endregion ColorCollection: Manage Color Collections
-
-  // region Command: Manage Commands
-
-// ### Get All Commands.
-//
-// GET /commands -> []Command
-func (l *LookerSDK) GetAllCommands(request RequestGetAllCommands,
-    options *rtl.ApiSettings) ([]Command, error) {
-    var result []Command
-    err := l.session.Do(&result, "GET", "/4.0", "/commands", map[string]interface{}{"content_id": request.ContentId, "content_type": request.ContentType, "limit": request.Limit}, nil, options)
-    return result, err
-
-}
-
-// ### Create a new command.
-// # Required fields: [:name, :linked_content_id, :linked_content_type]
-// # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-// #
-//
-// POST /commands -> Command
-func (l *LookerSDK) CreateCommand(
-    body WriteCommand,
-    options *rtl.ApiSettings) (Command, error) {
-    var result Command
-    err := l.session.Do(&result, "POST", "/4.0", "/commands", nil, body, options)
-    return result, err
-
-}
-
-// ### Update an existing custom command.
-// # Optional fields: ['name', 'description']
-// #
-//
-// PATCH /commands/{command_id} -> Command
-func (l *LookerSDK) UpdateCommand(
-    commandId int64,
-    body UpdateCommand,
-    options *rtl.ApiSettings) (Command, error) {
-    var result Command
-    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/commands/%v", commandId), nil, body, options)
-    return result, err
-
-}
-
-// ### Delete an existing custom command.
-//
-// DELETE /commands/{command_id} -> Void
-func (l *LookerSDK) DeleteCommand(
-    commandId int64,
-    options *rtl.ApiSettings) (error) {
-    err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/commands/%v", commandId), nil, nil, options)
-    return err
-
-}
-
-  // endregion Command: Manage Commands
 
   // region Config: Manage General Configuration
 
@@ -1704,7 +1666,7 @@ func (l *LookerSDK) MobileSettings(
 //  - extension_framework_enabled
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
-//  - whitelabel_configuration
+//  - privatelabel_configuration
 //  - custom_welcome_email
 //  - onboarding_enabled
 //
@@ -1724,7 +1686,7 @@ func (l *LookerSDK) GetSetting(
 //  - extension_framework_enabled
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
-//  - whitelabel_configuration
+//  - privatelabel_configuration
 //  - custom_welcome_email
 //  - onboarding_enabled
 //
@@ -2220,9 +2182,10 @@ func (l *LookerSDK) SearchContentFavorites(request RequestSearchContentFavorites
 //
 // GET /content_favorite/{content_favorite_id} -> ContentFavorite
 func (l *LookerSDK) ContentFavorite(
-    contentFavoriteId int64,
+    contentFavoriteId string,
     fields string,
     options *rtl.ApiSettings) (ContentFavorite, error) {
+    contentFavoriteId = url.PathEscape(contentFavoriteId)
     var result ContentFavorite
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -2233,8 +2196,9 @@ func (l *LookerSDK) ContentFavorite(
 //
 // DELETE /content_favorite/{content_favorite_id} -> string
 func (l *LookerSDK) DeleteContentFavorite(
-    contentFavoriteId int64,
+    contentFavoriteId string,
     options *rtl.ApiSettings) (string, error) {
+    contentFavoriteId = url.PathEscape(contentFavoriteId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), nil, nil, options)
     return result, err
@@ -2257,7 +2221,7 @@ func (l *LookerSDK) CreateContentFavorite(
 //
 // GET /content_metadata -> []ContentMeta
 func (l *LookerSDK) AllContentMetadatas(
-    parentId int64,
+    parentId string,
     fields string,
     options *rtl.ApiSettings) ([]ContentMeta, error) {
     var result []ContentMeta
@@ -2270,9 +2234,10 @@ func (l *LookerSDK) AllContentMetadatas(
 //
 // GET /content_metadata/{content_metadata_id} -> ContentMeta
 func (l *LookerSDK) ContentMetadata(
-    contentMetadataId int64,
+    contentMetadataId string,
     fields string,
     options *rtl.ApiSettings) (ContentMeta, error) {
+    contentMetadataId = url.PathEscape(contentMetadataId)
     var result ContentMeta
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -2283,9 +2248,10 @@ func (l *LookerSDK) ContentMetadata(
 //
 // PATCH /content_metadata/{content_metadata_id} -> ContentMeta
 func (l *LookerSDK) UpdateContentMetadata(
-    contentMetadataId int64,
+    contentMetadataId string,
     body WriteContentMeta,
     options *rtl.ApiSettings) (ContentMeta, error) {
+    contentMetadataId = url.PathEscape(contentMetadataId)
     var result ContentMeta
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), nil, body, options)
     return result, err
@@ -2296,7 +2262,7 @@ func (l *LookerSDK) UpdateContentMetadata(
 //
 // GET /content_metadata_access -> []ContentMetaGroupUser
 func (l *LookerSDK) AllContentMetadataAccesses(
-    contentMetadataId int64,
+    contentMetadataId string,
     fields string,
     options *rtl.ApiSettings) ([]ContentMetaGroupUser, error) {
     var result []ContentMetaGroupUser
@@ -2336,8 +2302,9 @@ func (l *LookerSDK) UpdateContentMetadataAccess(
 //
 // DELETE /content_metadata_access/{content_metadata_access_id} -> string
 func (l *LookerSDK) DeleteContentMetadataAccess(
-    contentMetadataAccessId int64,
+    contentMetadataAccessId string,
     options *rtl.ApiSettings) (string, error) {
+    contentMetadataAccessId = url.PathEscape(contentMetadataAccessId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_metadata_access/%v", contentMetadataAccessId), nil, nil, options)
     return result, err
@@ -2460,8 +2427,8 @@ func (l *LookerSDK) AllDashboards(
 //
 // Creates a new dashboard object and returns the details of the newly created dashboard.
 //
-// `Title`, `user_id`, and `space_id` are all required fields.
-// `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+// `Title` and `space_id` are required fields.
+// `Space_id` must contain the id of an existing space.
 // A dashboard's `title` must be unique within the space in which it resides.
 //
 // If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2818,12 +2785,10 @@ func (l *LookerSDK) DashboardDashboardElements(
 // ### Create a dashboard element on the dashboard with a specific id.
 //
 // POST /dashboard_elements -> DashboardElement
-func (l *LookerSDK) CreateDashboardElement(
-    body WriteDashboardElement,
-    fields string,
+func (l *LookerSDK) CreateDashboardElement(request RequestCreateDashboardElement,
     options *rtl.ApiSettings) (DashboardElement, error) {
     var result DashboardElement
-    err := l.session.Do(&result, "POST", "/4.0", "/dashboard_elements", map[string]interface{}{"fields": fields}, body, options)
+    err := l.session.Do(&result, "POST", "/4.0", "/dashboard_elements", map[string]interface{}{"fields": request.Fields, "apply_filters": request.ApplyFilters}, request.Body, options)
     return result, err
 
 }
@@ -3056,8 +3021,9 @@ func (l *LookerSDK) AllDatagroups(
 //
 // GET /datagroups/{datagroup_id} -> Datagroup
 func (l *LookerSDK) Datagroup(
-    datagroupId int64,
+    datagroupId string,
     options *rtl.ApiSettings) (Datagroup, error) {
+    datagroupId = url.PathEscape(datagroupId)
     var result Datagroup
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, nil, options)
     return result, err
@@ -3068,9 +3034,10 @@ func (l *LookerSDK) Datagroup(
 //
 // PATCH /datagroups/{datagroup_id} -> Datagroup
 func (l *LookerSDK) UpdateDatagroup(
-    datagroupId int64,
+    datagroupId string,
     body WriteDatagroup,
     options *rtl.ApiSettings) (Datagroup, error) {
+    datagroupId = url.PathEscape(datagroupId)
     var result Datagroup
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, body, options)
     return result, err
@@ -3326,7 +3293,7 @@ func (l *LookerSDK) FolderDashboards(
 func (l *LookerSDK) AllGroups(request RequestAllGroups,
     options *rtl.ApiSettings) ([]Group, error) {
     var result []Group
-    err := l.session.Do(&result, "GET", "/4.0", "/groups", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts, "ids": request.Ids, "content_metadata_id": request.ContentMetadataId, "can_add_to_content_metadata": request.CanAddToContentMetadata}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", "/groups", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids, "content_metadata_id": request.ContentMetadataId, "can_add_to_content_metadata": request.CanAddToContentMetadata}, nil, options)
     return result, err
 
 }
@@ -3451,9 +3418,10 @@ func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
 //
 // GET /groups/{group_id} -> Group
 func (l *LookerSDK) Group(
-    groupId int64,
+    groupId string,
     fields string,
     options *rtl.ApiSettings) (Group, error) {
+    groupId = url.PathEscape(groupId)
     var result Group
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -3464,10 +3432,11 @@ func (l *LookerSDK) Group(
 //
 // PATCH /groups/{group_id} -> Group
 func (l *LookerSDK) UpdateGroup(
-    groupId int64,
+    groupId string,
     body WriteGroup,
     fields string,
     options *rtl.ApiSettings) (Group, error) {
+    groupId = url.PathEscape(groupId)
     var result Group
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -3478,8 +3447,9 @@ func (l *LookerSDK) UpdateGroup(
 //
 // DELETE /groups/{group_id} -> string
 func (l *LookerSDK) DeleteGroup(
-    groupId int64,
+    groupId string,
     options *rtl.ApiSettings) (string, error) {
+    groupId = url.PathEscape(groupId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/groups/%v", groupId), nil, nil, options)
     return result, err
@@ -3490,9 +3460,10 @@ func (l *LookerSDK) DeleteGroup(
 //
 // GET /groups/{group_id}/groups -> []Group
 func (l *LookerSDK) AllGroupGroups(
-    groupId int64,
+    groupId string,
     fields string,
     options *rtl.ApiSettings) ([]Group, error) {
+    groupId = url.PathEscape(groupId)
     var result []Group
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -3503,9 +3474,10 @@ func (l *LookerSDK) AllGroupGroups(
 //
 // POST /groups/{group_id}/groups -> Group
 func (l *LookerSDK) AddGroupGroup(
-    groupId int64,
+    groupId string,
     body GroupIdForGroupInclusion,
     options *rtl.ApiSettings) (Group, error) {
+    groupId = url.PathEscape(groupId)
     var result Group
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), nil, body, options)
     return result, err
@@ -3517,8 +3489,9 @@ func (l *LookerSDK) AddGroupGroup(
 // GET /groups/{group_id}/users -> []User
 func (l *LookerSDK) AllGroupUsers(request RequestAllGroupUsers,
     options *rtl.ApiSettings) ([]User, error) {
+    request.GroupId = url.PathEscape(request.GroupId)
     var result []User
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/users", request.GroupId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/users", request.GroupId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
     return result, err
 
 }
@@ -3527,9 +3500,10 @@ func (l *LookerSDK) AllGroupUsers(request RequestAllGroupUsers,
 //
 // POST /groups/{group_id}/users -> User
 func (l *LookerSDK) AddGroupUser(
-    groupId int64,
+    groupId string,
     body GroupIdForGroupUserInclusion,
     options *rtl.ApiSettings) (User, error) {
+    groupId = url.PathEscape(groupId)
     var result User
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/users", groupId), nil, body, options)
     return result, err
@@ -3540,9 +3514,11 @@ func (l *LookerSDK) AddGroupUser(
 //
 // DELETE /groups/{group_id}/users/{user_id} -> Void
 func (l *LookerSDK) DeleteGroupUser(
-    groupId int64,
-    userId int64,
+    groupId string,
+    userId string,
     options *rtl.ApiSettings) (error) {
+    groupId = url.PathEscape(groupId)
+    userId = url.PathEscape(userId)
     err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/users/%v", groupId, userId), nil, nil, options)
     return err
 
@@ -3552,9 +3528,11 @@ func (l *LookerSDK) DeleteGroupUser(
 //
 // DELETE /groups/{group_id}/groups/{deleting_group_id} -> Void
 func (l *LookerSDK) DeleteGroupFromGroup(
-    groupId int64,
-    deletingGroupId int64,
+    groupId string,
+    deletingGroupId string,
     options *rtl.ApiSettings) (error) {
+    groupId = url.PathEscape(groupId)
+    deletingGroupId = url.PathEscape(deletingGroupId)
     err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/groups/%v", groupId, deletingGroupId), nil, nil, options)
     return err
 
@@ -3566,10 +3544,12 @@ func (l *LookerSDK) DeleteGroupFromGroup(
 //
 // PATCH /groups/{group_id}/attribute_values/{user_attribute_id} -> UserAttributeGroupValue
 func (l *LookerSDK) UpdateUserAttributeGroupValue(
-    groupId int64,
-    userAttributeId int64,
+    groupId string,
+    userAttributeId string,
     body UserAttributeGroupValue,
     options *rtl.ApiSettings) (UserAttributeGroupValue, error) {
+    groupId = url.PathEscape(groupId)
+    userAttributeId = url.PathEscape(userAttributeId)
     var result UserAttributeGroupValue
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, body, options)
     return result, err
@@ -3580,9 +3560,11 @@ func (l *LookerSDK) UpdateUserAttributeGroupValue(
 //
 // DELETE /groups/{group_id}/attribute_values/{user_attribute_id} -> Void
 func (l *LookerSDK) DeleteUserAttributeGroupValue(
-    groupId int64,
-    userAttributeId int64,
+    groupId string,
+    userAttributeId string,
     options *rtl.ApiSettings) (error) {
+    groupId = url.PathEscape(groupId)
+    userAttributeId = url.PathEscape(userAttributeId)
     err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, nil, options)
     return err
 
@@ -3639,9 +3621,10 @@ func (l *LookerSDK) CreateIntegrationHub(
 //
 // GET /integration_hubs/{integration_hub_id} -> IntegrationHub
 func (l *LookerSDK) IntegrationHub(
-    integrationHubId int64,
+    integrationHubId string,
     fields string,
     options *rtl.ApiSettings) (IntegrationHub, error) {
+    integrationHubId = url.PathEscape(integrationHubId)
     var result IntegrationHub
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -3654,10 +3637,11 @@ func (l *LookerSDK) IntegrationHub(
 //
 // PATCH /integration_hubs/{integration_hub_id} -> IntegrationHub
 func (l *LookerSDK) UpdateIntegrationHub(
-    integrationHubId int64,
+    integrationHubId string,
     body WriteIntegrationHub,
     fields string,
     options *rtl.ApiSettings) (IntegrationHub, error) {
+    integrationHubId = url.PathEscape(integrationHubId)
     var result IntegrationHub
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -3668,8 +3652,9 @@ func (l *LookerSDK) UpdateIntegrationHub(
 //
 // DELETE /integration_hubs/{integration_hub_id} -> string
 func (l *LookerSDK) DeleteIntegrationHub(
-    integrationHubId int64,
+    integrationHubId string,
     options *rtl.ApiSettings) (string, error) {
+    integrationHubId = url.PathEscape(integrationHubId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), nil, nil, options)
     return result, err
@@ -3680,8 +3665,9 @@ func (l *LookerSDK) DeleteIntegrationHub(
 //
 // POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
 func (l *LookerSDK) AcceptIntegrationHubLegalAgreement(
-    integrationHubId int64,
+    integrationHubId string,
     options *rtl.ApiSettings) (IntegrationHub, error) {
+    integrationHubId = url.PathEscape(integrationHubId)
     var result IntegrationHub
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/integration_hubs/%v/accept_legal_agreement", integrationHubId), nil, nil, options)
     return result, err
@@ -4911,9 +4897,10 @@ func (l *LookerSDK) QueryTaskResults(
 //
 // GET /queries/{query_id} -> Query
 func (l *LookerSDK) Query(
-    queryId int64,
+    queryId string,
     fields string,
     options *rtl.ApiSettings) (Query, error) {
+    queryId = url.PathEscape(queryId)
     var result Query
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v", queryId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -4998,6 +4985,7 @@ func (l *LookerSDK) CreateQuery(
 //
 func (l *LookerSDK) RunQuery(request RequestRunQuery,
     options *rtl.ApiSettings) (string, error) {
+    request.QueryId = url.PathEscape(request.QueryId)
     request.ResultFormat = url.PathEscape(request.ResultFormat)
     var result string
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source}, nil, options)
@@ -5094,11 +5082,11 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 // ```ruby
 // query_params =
 // {
-//   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+//   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
 //   :"f[category.name]" => "socks",
-//   :sorts => "products.count desc 0",
-//   :limit => "500",
-//   :query_timezone => "America/Los_Angeles"
+//   sorts: "products.count desc 0",
+//   limit: "500",
+//   query_timezone: "America/Los_Angeles"
 // }
 // response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
 //
@@ -5267,12 +5255,13 @@ func (l *LookerSDK) RunSqlQuery(
 //
 // POST /render_tasks/looks/{look_id}/{result_format} -> RenderTask
 func (l *LookerSDK) CreateLookRenderTask(
-    lookId int64,
+    lookId string,
     resultFormat string,
     width int64,
     height int64,
     fields string,
     options *rtl.ApiSettings) (RenderTask, error) {
+    lookId = url.PathEscape(lookId)
     resultFormat = url.PathEscape(resultFormat)
     var result RenderTask
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/looks/%v/%v", lookId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
@@ -5288,12 +5277,13 @@ func (l *LookerSDK) CreateLookRenderTask(
 //
 // POST /render_tasks/queries/{query_id}/{result_format} -> RenderTask
 func (l *LookerSDK) CreateQueryRenderTask(
-    queryId int64,
+    queryId string,
     resultFormat string,
     width int64,
     height int64,
     fields string,
     options *rtl.ApiSettings) (RenderTask, error) {
+    queryId = url.PathEscape(queryId)
     resultFormat = url.PathEscape(resultFormat)
     var result RenderTask
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/queries/%v/%v", queryId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
@@ -5430,9 +5420,10 @@ func (l *LookerSDK) SearchModelSets(request RequestSearchModelSets,
 //
 // GET /model_sets/{model_set_id} -> ModelSet
 func (l *LookerSDK) ModelSet(
-    modelSetId int64,
+    modelSetId string,
     fields string,
     options *rtl.ApiSettings) (ModelSet, error) {
+    modelSetId = url.PathEscape(modelSetId)
     var result ModelSet
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -5443,9 +5434,10 @@ func (l *LookerSDK) ModelSet(
 //
 // PATCH /model_sets/{model_set_id} -> ModelSet
 func (l *LookerSDK) UpdateModelSet(
-    modelSetId int64,
+    modelSetId string,
     body WriteModelSet,
     options *rtl.ApiSettings) (ModelSet, error) {
+    modelSetId = url.PathEscape(modelSetId)
     var result ModelSet
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, body, options)
     return result, err
@@ -5456,8 +5448,9 @@ func (l *LookerSDK) UpdateModelSet(
 //
 // DELETE /model_sets/{model_set_id} -> string
 func (l *LookerSDK) DeleteModelSet(
-    modelSetId int64,
+    modelSetId string,
     options *rtl.ApiSettings) (string, error) {
+    modelSetId = url.PathEscape(modelSetId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, nil, options)
     return result, err
@@ -5535,9 +5528,10 @@ func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
 //
 // GET /permission_sets/{permission_set_id} -> PermissionSet
 func (l *LookerSDK) PermissionSet(
-    permissionSetId int64,
+    permissionSetId string,
     fields string,
     options *rtl.ApiSettings) (PermissionSet, error) {
+    permissionSetId = url.PathEscape(permissionSetId)
     var result PermissionSet
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -5548,9 +5542,10 @@ func (l *LookerSDK) PermissionSet(
 //
 // PATCH /permission_sets/{permission_set_id} -> PermissionSet
 func (l *LookerSDK) UpdatePermissionSet(
-    permissionSetId int64,
+    permissionSetId string,
     body WritePermissionSet,
     options *rtl.ApiSettings) (PermissionSet, error) {
+    permissionSetId = url.PathEscape(permissionSetId)
     var result PermissionSet
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, body, options)
     return result, err
@@ -5561,8 +5556,9 @@ func (l *LookerSDK) UpdatePermissionSet(
 //
 // DELETE /permission_sets/{permission_set_id} -> string
 func (l *LookerSDK) DeletePermissionSet(
-    permissionSetId int64,
+    permissionSetId string,
     options *rtl.ApiSettings) (string, error) {
+    permissionSetId = url.PathEscape(permissionSetId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, nil, options)
     return result, err
@@ -5689,8 +5685,9 @@ func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
 //
 // GET /roles/{role_id} -> Role
 func (l *LookerSDK) Role(
-    roleId int64,
+    roleId string,
     options *rtl.ApiSettings) (Role, error) {
+    roleId = url.PathEscape(roleId)
     var result Role
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
     return result, err
@@ -5701,9 +5698,10 @@ func (l *LookerSDK) Role(
 //
 // PATCH /roles/{role_id} -> Role
 func (l *LookerSDK) UpdateRole(
-    roleId int64,
+    roleId string,
     body WriteRole,
     options *rtl.ApiSettings) (Role, error) {
+    roleId = url.PathEscape(roleId)
     var result Role
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, body, options)
     return result, err
@@ -5714,8 +5712,9 @@ func (l *LookerSDK) UpdateRole(
 //
 // DELETE /roles/{role_id} -> string
 func (l *LookerSDK) DeleteRole(
-    roleId int64,
+    roleId string,
     options *rtl.ApiSettings) (string, error) {
+    roleId = url.PathEscape(roleId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
     return result, err
@@ -5726,9 +5725,10 @@ func (l *LookerSDK) DeleteRole(
 //
 // GET /roles/{role_id}/groups -> []Group
 func (l *LookerSDK) RoleGroups(
-    roleId int64,
+    roleId string,
     fields string,
     options *rtl.ApiSettings) ([]Group, error) {
+    roleId = url.PathEscape(roleId)
     var result []Group
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -5739,9 +5739,10 @@ func (l *LookerSDK) RoleGroups(
 //
 // PUT /roles/{role_id}/groups -> []Group
 func (l *LookerSDK) SetRoleGroups(
-    roleId int64,
-    body []int64,
+    roleId string,
+    body []string,
     options *rtl.ApiSettings) ([]Group, error) {
+    roleId = url.PathEscape(roleId)
     var result []Group
     err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), nil, body, options)
     return result, err
@@ -5753,6 +5754,7 @@ func (l *LookerSDK) SetRoleGroups(
 // GET /roles/{role_id}/users -> []User
 func (l *LookerSDK) RoleUsers(request RequestRoleUsers,
     options *rtl.ApiSettings) ([]User, error) {
+    request.RoleId = url.PathEscape(request.RoleId)
     var result []User
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/users", request.RoleId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
     return result, err
@@ -5763,9 +5765,10 @@ func (l *LookerSDK) RoleUsers(request RequestRoleUsers,
 //
 // PUT /roles/{role_id}/users -> []User
 func (l *LookerSDK) SetRoleUsers(
-    roleId int64,
-    body []int64,
+    roleId string,
+    body []string,
     options *rtl.ApiSettings) ([]User, error) {
+    roleId = url.PathEscape(roleId)
     var result []User
     err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/users", roleId), nil, body, options)
     return result, err
@@ -5782,9 +5785,10 @@ func (l *LookerSDK) SetRoleUsers(
 //
 // GET /scheduled_plans/space/{space_id} -> []ScheduledPlan
 func (l *LookerSDK) ScheduledPlansForSpace(
-    spaceId int64,
+    spaceId string,
     fields string,
     options *rtl.ApiSettings) ([]ScheduledPlan, error) {
+    spaceId = url.PathEscape(spaceId)
     var result []ScheduledPlan
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/space/%v", spaceId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -5797,9 +5801,10 @@ func (l *LookerSDK) ScheduledPlansForSpace(
 //
 // GET /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
 func (l *LookerSDK) ScheduledPlan(
-    scheduledPlanId int64,
+    scheduledPlanId string,
     fields string,
     options *rtl.ApiSettings) (ScheduledPlan, error) {
+    scheduledPlanId = url.PathEscape(scheduledPlanId)
     var result ScheduledPlan
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -5851,9 +5856,10 @@ func (l *LookerSDK) ScheduledPlan(
 //
 // PATCH /scheduled_plans/{scheduled_plan_id} -> ScheduledPlan
 func (l *LookerSDK) UpdateScheduledPlan(
-    scheduledPlanId int64,
+    scheduledPlanId string,
     body WriteScheduledPlan,
     options *rtl.ApiSettings) (ScheduledPlan, error) {
+    scheduledPlanId = url.PathEscape(scheduledPlanId)
     var result ScheduledPlan
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, body, options)
     return result, err
@@ -5868,8 +5874,9 @@ func (l *LookerSDK) UpdateScheduledPlan(
 //
 // DELETE /scheduled_plans/{scheduled_plan_id} -> string
 func (l *LookerSDK) DeleteScheduledPlan(
-    scheduledPlanId int64,
+    scheduledPlanId string,
     options *rtl.ApiSettings) (string, error) {
+    scheduledPlanId = url.PathEscape(scheduledPlanId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, nil, options)
     return result, err
@@ -6029,6 +6036,7 @@ func (l *LookerSDK) ScheduledPlanRunOnce(
 // GET /scheduled_plans/look/{look_id} -> []ScheduledPlan
 func (l *LookerSDK) ScheduledPlansForLook(request RequestScheduledPlansForLook,
     options *rtl.ApiSettings) ([]ScheduledPlan, error) {
+    request.LookId = url.PathEscape(request.LookId)
     var result []ScheduledPlan
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/look/%v", request.LookId), map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
     return result, err
@@ -6050,6 +6058,7 @@ func (l *LookerSDK) ScheduledPlansForLook(request RequestScheduledPlansForLook,
 // GET /scheduled_plans/dashboard/{dashboard_id} -> []ScheduledPlan
 func (l *LookerSDK) ScheduledPlansForDashboard(request RequestScheduledPlansForDashboard,
     options *rtl.ApiSettings) ([]ScheduledPlan, error) {
+    request.DashboardId = url.PathEscape(request.DashboardId)
     var result []ScheduledPlan
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/dashboard/%v", request.DashboardId), map[string]interface{}{"user_id": request.UserId, "all_users": request.AllUsers, "fields": request.Fields}, nil, options)
     return result, err
@@ -6128,9 +6137,10 @@ func (l *LookerSDK) ScheduledPlansForLookmlDashboard(request RequestScheduledPla
 //
 // POST /scheduled_plans/{scheduled_plan_id}/run_once -> ScheduledPlan
 func (l *LookerSDK) ScheduledPlanRunOnceById(
-    scheduledPlanId int64,
+    scheduledPlanId string,
     body WriteScheduledPlan,
     options *rtl.ApiSettings) (ScheduledPlan, error) {
+    scheduledPlanId = url.PathEscape(scheduledPlanId)
     var result ScheduledPlan
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/scheduled_plans/%v/run_once", scheduledPlanId), nil, body, options)
     return result, err
@@ -6384,9 +6394,10 @@ func (l *LookerSDK) ValidateTheme(
 //
 // GET /themes/{theme_id} -> Theme
 func (l *LookerSDK) Theme(
-    themeId int64,
+    themeId string,
     fields string,
     options *rtl.ApiSettings) (Theme, error) {
+    themeId = url.PathEscape(themeId)
     var result Theme
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/themes/%v", themeId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6399,9 +6410,10 @@ func (l *LookerSDK) Theme(
 //
 // PATCH /themes/{theme_id} -> Theme
 func (l *LookerSDK) UpdateTheme(
-    themeId int64,
+    themeId string,
     body WriteTheme,
     options *rtl.ApiSettings) (Theme, error) {
+    themeId = url.PathEscape(themeId)
     var result Theme
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/themes/%v", themeId), nil, body, options)
     return result, err
@@ -6568,9 +6580,10 @@ func (l *LookerSDK) SearchUsersNames(request RequestSearchUsersNames,
 //
 // GET /users/{user_id} -> User
 func (l *LookerSDK) User(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (User, error) {
+    userId = url.PathEscape(userId)
     var result User
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6581,10 +6594,11 @@ func (l *LookerSDK) User(
 //
 // PATCH /users/{user_id} -> User
 func (l *LookerSDK) UpdateUser(
-    userId int64,
+    userId string,
     body WriteUser,
     fields string,
     options *rtl.ApiSettings) (User, error) {
+    userId = url.PathEscape(userId)
     var result User
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -6597,8 +6611,9 @@ func (l *LookerSDK) UpdateUser(
 //
 // DELETE /users/{user_id} -> string
 func (l *LookerSDK) DeleteUser(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v", userId), nil, nil, options)
     return result, err
@@ -6652,9 +6667,10 @@ func (l *LookerSDK) UserForCredential(
 //
 // GET /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) UserCredentialsEmail(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsEmail, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsEmail
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6665,10 +6681,11 @@ func (l *LookerSDK) UserCredentialsEmail(
 //
 // POST /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) CreateUserCredentialsEmail(
-    userId int64,
+    userId string,
     body WriteCredentialsEmail,
     fields string,
     options *rtl.ApiSettings) (CredentialsEmail, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsEmail
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -6679,10 +6696,11 @@ func (l *LookerSDK) CreateUserCredentialsEmail(
 //
 // PATCH /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) UpdateUserCredentialsEmail(
-    userId int64,
+    userId string,
     body WriteCredentialsEmail,
     fields string,
     options *rtl.ApiSettings) (CredentialsEmail, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsEmail
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -6693,8 +6711,9 @@ func (l *LookerSDK) UpdateUserCredentialsEmail(
 //
 // DELETE /users/{user_id}/credentials_email -> string
 func (l *LookerSDK) DeleteUserCredentialsEmail(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), nil, nil, options)
     return result, err
@@ -6705,9 +6724,10 @@ func (l *LookerSDK) DeleteUserCredentialsEmail(
 //
 // GET /users/{user_id}/credentials_totp -> CredentialsTotp
 func (l *LookerSDK) UserCredentialsTotp(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsTotp, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsTotp
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6718,10 +6738,11 @@ func (l *LookerSDK) UserCredentialsTotp(
 //
 // POST /users/{user_id}/credentials_totp -> CredentialsTotp
 func (l *LookerSDK) CreateUserCredentialsTotp(
-    userId int64,
+    userId string,
     body CredentialsTotp,
     fields string,
     options *rtl.ApiSettings) (CredentialsTotp, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsTotp
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -6732,8 +6753,9 @@ func (l *LookerSDK) CreateUserCredentialsTotp(
 //
 // DELETE /users/{user_id}/credentials_totp -> string
 func (l *LookerSDK) DeleteUserCredentialsTotp(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), nil, nil, options)
     return result, err
@@ -6744,9 +6766,10 @@ func (l *LookerSDK) DeleteUserCredentialsTotp(
 //
 // GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
 func (l *LookerSDK) UserCredentialsLdap(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsLDAP, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsLDAP
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6757,8 +6780,9 @@ func (l *LookerSDK) UserCredentialsLdap(
 //
 // DELETE /users/{user_id}/credentials_ldap -> string
 func (l *LookerSDK) DeleteUserCredentialsLdap(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), nil, nil, options)
     return result, err
@@ -6769,9 +6793,10 @@ func (l *LookerSDK) DeleteUserCredentialsLdap(
 //
 // GET /users/{user_id}/credentials_google -> CredentialsGoogle
 func (l *LookerSDK) UserCredentialsGoogle(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsGoogle, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsGoogle
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6782,8 +6807,9 @@ func (l *LookerSDK) UserCredentialsGoogle(
 //
 // DELETE /users/{user_id}/credentials_google -> string
 func (l *LookerSDK) DeleteUserCredentialsGoogle(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), nil, nil, options)
     return result, err
@@ -6794,9 +6820,10 @@ func (l *LookerSDK) DeleteUserCredentialsGoogle(
 //
 // GET /users/{user_id}/credentials_saml -> CredentialsSaml
 func (l *LookerSDK) UserCredentialsSaml(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsSaml, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsSaml
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6807,8 +6834,9 @@ func (l *LookerSDK) UserCredentialsSaml(
 //
 // DELETE /users/{user_id}/credentials_saml -> string
 func (l *LookerSDK) DeleteUserCredentialsSaml(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), nil, nil, options)
     return result, err
@@ -6819,9 +6847,10 @@ func (l *LookerSDK) DeleteUserCredentialsSaml(
 //
 // GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
 func (l *LookerSDK) UserCredentialsOidc(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsOIDC, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsOIDC
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6832,8 +6861,9 @@ func (l *LookerSDK) UserCredentialsOidc(
 //
 // DELETE /users/{user_id}/credentials_oidc -> string
 func (l *LookerSDK) DeleteUserCredentialsOidc(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), nil, nil, options)
     return result, err
@@ -6844,10 +6874,12 @@ func (l *LookerSDK) DeleteUserCredentialsOidc(
 //
 // GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
 func (l *LookerSDK) UserCredentialsApi3(
-    userId int64,
-    credentialsApi3Id int64,
+    userId string,
+    credentialsApi3Id string,
     fields string,
     options *rtl.ApiSettings) (CredentialsApi3, error) {
+    userId = url.PathEscape(userId)
+    credentialsApi3Id = url.PathEscape(credentialsApi3Id)
     var result CredentialsApi3
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6858,9 +6890,11 @@ func (l *LookerSDK) UserCredentialsApi3(
 //
 // DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsApi3(
-    userId int64,
-    credentialsApi3Id int64,
+    userId string,
+    credentialsApi3Id string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
+    credentialsApi3Id = url.PathEscape(credentialsApi3Id)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), nil, nil, options)
     return result, err
@@ -6871,9 +6905,10 @@ func (l *LookerSDK) DeleteUserCredentialsApi3(
 //
 // GET /users/{user_id}/credentials_api3 -> []CredentialsApi3
 func (l *LookerSDK) AllUserCredentialsApi3s(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) ([]CredentialsApi3, error) {
+    userId = url.PathEscape(userId)
     var result []CredentialsApi3
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6884,9 +6919,10 @@ func (l *LookerSDK) AllUserCredentialsApi3s(
 //
 // POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
 func (l *LookerSDK) CreateUserCredentialsApi3(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CreateCredentialsApi3, error) {
+    userId = url.PathEscape(userId)
     var result CreateCredentialsApi3
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6897,10 +6933,12 @@ func (l *LookerSDK) CreateUserCredentialsApi3(
 //
 // GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
 func (l *LookerSDK) UserCredentialsEmbed(
-    userId int64,
-    credentialsEmbedId int64,
+    userId string,
+    credentialsEmbedId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsEmbed, error) {
+    userId = url.PathEscape(userId)
+    credentialsEmbedId = url.PathEscape(credentialsEmbedId)
     var result CredentialsEmbed
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6911,9 +6949,11 @@ func (l *LookerSDK) UserCredentialsEmbed(
 //
 // DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsEmbed(
-    userId int64,
-    credentialsEmbedId int64,
+    userId string,
+    credentialsEmbedId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
+    credentialsEmbedId = url.PathEscape(credentialsEmbedId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), nil, nil, options)
     return result, err
@@ -6924,9 +6964,10 @@ func (l *LookerSDK) DeleteUserCredentialsEmbed(
 //
 // GET /users/{user_id}/credentials_embed -> []CredentialsEmbed
 func (l *LookerSDK) AllUserCredentialsEmbeds(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) ([]CredentialsEmbed, error) {
+    userId = url.PathEscape(userId)
     var result []CredentialsEmbed
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6937,9 +6978,10 @@ func (l *LookerSDK) AllUserCredentialsEmbeds(
 //
 // GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
 func (l *LookerSDK) UserCredentialsLookerOpenid(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsLookerOpenid, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsLookerOpenid
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6950,8 +6992,9 @@ func (l *LookerSDK) UserCredentialsLookerOpenid(
 //
 // DELETE /users/{user_id}/credentials_looker_openid -> string
 func (l *LookerSDK) DeleteUserCredentialsLookerOpenid(
-    userId int64,
+    userId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), nil, nil, options)
     return result, err
@@ -6962,10 +7005,12 @@ func (l *LookerSDK) DeleteUserCredentialsLookerOpenid(
 //
 // GET /users/{user_id}/sessions/{session_id} -> Session
 func (l *LookerSDK) UserSession(
-    userId int64,
-    sessionId int64,
+    userId string,
+    sessionId string,
     fields string,
     options *rtl.ApiSettings) (Session, error) {
+    userId = url.PathEscape(userId)
+    sessionId = url.PathEscape(sessionId)
     var result Session
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -6976,9 +7021,11 @@ func (l *LookerSDK) UserSession(
 //
 // DELETE /users/{user_id}/sessions/{session_id} -> string
 func (l *LookerSDK) DeleteUserSession(
-    userId int64,
-    sessionId int64,
+    userId string,
+    sessionId string,
     options *rtl.ApiSettings) (string, error) {
+    userId = url.PathEscape(userId)
+    sessionId = url.PathEscape(sessionId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), nil, nil, options)
     return result, err
@@ -6989,9 +7036,10 @@ func (l *LookerSDK) DeleteUserSession(
 //
 // GET /users/{user_id}/sessions -> []Session
 func (l *LookerSDK) AllUserSessions(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) ([]Session, error) {
+    userId = url.PathEscape(userId)
     var result []Session
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -7011,6 +7059,7 @@ func (l *LookerSDK) AllUserSessions(
 // POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
 func (l *LookerSDK) CreateUserCredentialsEmailPasswordReset(request RequestCreateUserCredentialsEmailPasswordReset,
     options *rtl.ApiSettings) (CredentialsEmail, error) {
+    request.UserId = url.PathEscape(request.UserId)
     var result CredentialsEmail
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/password_reset", request.UserId), map[string]interface{}{"expires": request.Expires, "fields": request.Fields}, nil, options)
     return result, err
@@ -7022,6 +7071,7 @@ func (l *LookerSDK) CreateUserCredentialsEmailPasswordReset(request RequestCreat
 // GET /users/{user_id}/roles -> []Role
 func (l *LookerSDK) UserRoles(request RequestUserRoles,
     options *rtl.ApiSettings) ([]Role, error) {
+    request.UserId = url.PathEscape(request.UserId)
     var result []Role
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/roles", request.UserId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
     return result, err
@@ -7032,10 +7082,11 @@ func (l *LookerSDK) UserRoles(request RequestUserRoles,
 //
 // PUT /users/{user_id}/roles -> []Role
 func (l *LookerSDK) SetUserRoles(
-    userId int64,
-    body []int64,
+    userId string,
+    body []string,
     fields string,
     options *rtl.ApiSettings) ([]Role, error) {
+    userId = url.PathEscape(userId)
     var result []Role
     err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/users/%v/roles", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -7062,6 +7113,7 @@ func (l *LookerSDK) SetUserRoles(
 // GET /users/{user_id}/attribute_values -> []UserAttributeWithValue
 func (l *LookerSDK) UserAttributeUserValues(request RequestUserAttributeUserValues,
     options *rtl.ApiSettings) ([]UserAttributeWithValue, error) {
+    request.UserId = url.PathEscape(request.UserId)
     var result []UserAttributeWithValue
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/attribute_values", request.UserId), map[string]interface{}{"fields": request.Fields, "user_attribute_ids": request.UserAttributeIds, "all_values": request.AllValues, "include_unset": request.IncludeUnset}, nil, options)
     return result, err
@@ -7074,10 +7126,12 @@ func (l *LookerSDK) UserAttributeUserValues(request RequestUserAttributeUserValu
 //
 // PATCH /users/{user_id}/attribute_values/{user_attribute_id} -> UserAttributeWithValue
 func (l *LookerSDK) SetUserAttributeUserValue(
-    userId int64,
-    userAttributeId int64,
+    userId string,
+    userAttributeId string,
     body WriteUserAttributeWithValue,
     options *rtl.ApiSettings) (UserAttributeWithValue, error) {
+    userId = url.PathEscape(userId)
+    userAttributeId = url.PathEscape(userAttributeId)
     var result UserAttributeWithValue
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, body, options)
     return result, err
@@ -7093,9 +7147,11 @@ func (l *LookerSDK) SetUserAttributeUserValue(
 //
 // DELETE /users/{user_id}/attribute_values/{user_attribute_id} -> Void
 func (l *LookerSDK) DeleteUserAttributeUserValue(
-    userId int64,
-    userAttributeId int64,
+    userId string,
+    userAttributeId string,
     options *rtl.ApiSettings) (error) {
+    userId = url.PathEscape(userId)
+    userAttributeId = url.PathEscape(userAttributeId)
     err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, nil, options)
     return err
 
@@ -7111,9 +7167,10 @@ func (l *LookerSDK) DeleteUserAttributeUserValue(
 //
 // POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
 func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
-    userId int64,
+    userId string,
     fields string,
     options *rtl.ApiSettings) (CredentialsEmail, error) {
+    userId = url.PathEscape(userId)
     var result CredentialsEmail
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/send_password_reset", userId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -7129,10 +7186,11 @@ func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
 //
 // POST /users/{user_id}/update_emails -> User
 func (l *LookerSDK) WipeoutUserEmails(
-    userId int64,
+    userId string,
     body UserEmailOnly,
     fields string,
     options *rtl.ApiSettings) (User, error) {
+    userId = url.PathEscape(userId)
     var result User
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/update_emails", userId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -7192,9 +7250,10 @@ func (l *LookerSDK) CreateUserAttribute(
 //
 // GET /user_attributes/{user_attribute_id} -> UserAttribute
 func (l *LookerSDK) UserAttribute(
-    userAttributeId int64,
+    userAttributeId string,
     fields string,
     options *rtl.ApiSettings) (UserAttribute, error) {
+    userAttributeId = url.PathEscape(userAttributeId)
     var result UserAttribute
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -7205,10 +7264,11 @@ func (l *LookerSDK) UserAttribute(
 //
 // PATCH /user_attributes/{user_attribute_id} -> UserAttribute
 func (l *LookerSDK) UpdateUserAttribute(
-    userAttributeId int64,
+    userAttributeId string,
     body WriteUserAttribute,
     fields string,
     options *rtl.ApiSettings) (UserAttribute, error) {
+    userAttributeId = url.PathEscape(userAttributeId)
     var result UserAttribute
     err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, body, options)
     return result, err
@@ -7219,8 +7279,9 @@ func (l *LookerSDK) UpdateUserAttribute(
 //
 // DELETE /user_attributes/{user_attribute_id} -> string
 func (l *LookerSDK) DeleteUserAttribute(
-    userAttributeId int64,
+    userAttributeId string,
     options *rtl.ApiSettings) (string, error) {
+    userAttributeId = url.PathEscape(userAttributeId)
     var result string
     err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), nil, nil, options)
     return result, err
@@ -7237,9 +7298,10 @@ func (l *LookerSDK) DeleteUserAttribute(
 //
 // GET /user_attributes/{user_attribute_id}/group_values -> []UserAttributeGroupValue
 func (l *LookerSDK) AllUserAttributeGroupValues(
-    userAttributeId int64,
+    userAttributeId string,
     fields string,
     options *rtl.ApiSettings) ([]UserAttributeGroupValue, error) {
+    userAttributeId = url.PathEscape(userAttributeId)
     var result []UserAttributeGroupValue
     err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
     return result, err
@@ -7269,9 +7331,10 @@ func (l *LookerSDK) AllUserAttributeGroupValues(
 //
 // POST /user_attributes/{user_attribute_id}/group_values -> []UserAttributeGroupValue
 func (l *LookerSDK) SetUserAttributeGroupValues(
-    userAttributeId int64,
+    userAttributeId string,
     body []UserAttributeGroupValue,
     options *rtl.ApiSettings) ([]UserAttributeGroupValue, error) {
+    userAttributeId = url.PathEscape(userAttributeId)
     var result []UserAttributeGroupValue
     err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), nil, body, options)
     return result, err
