@@ -33,6 +33,7 @@ import type {
   IUser,
   IWriteQuery,
   IDashboard,
+  IRequestCreateDashboardElement,
 } from '@looker/sdk'
 import {
   Looker40SDK as LookerSDK,
@@ -559,9 +560,7 @@ describe('LookerNodeSDK', () => {
           })
         )
         expect(searched.length).toEqual(users.length)
-        const ids: DelimArray<number> = new DelimArray<number>(
-          searched.map((u) => u.id!)
-        )
+        const ids = new DelimArray<string>(searched.map((u) => u.id!))
         const all = await sdk.ok(sdk.all_users({ ids }))
         expect(all.length).toEqual(users.length)
         await sdk.authSession.logout()
@@ -628,7 +627,7 @@ describe('LookerNodeSDK', () => {
   describe('Types with enums', () => {
     it('CreateQueryTask serializes and deserializes', () => {
       let task: ICreateQueryTask = {
-        query_id: 1,
+        query_id: '1',
         result_format: ResultFormat.inline_json,
         dashboard_id: '1',
         source: 'local',
@@ -637,7 +636,7 @@ describe('LookerNodeSDK', () => {
       let actual: ICreateQueryTask = JSON.parse(json)
       expect(actual).toEqual(task)
       task = {
-        query_id: 1,
+        query_id: '1',
         result_format: 'inline_json' as ResultFormat,
         dashboard_id: '1',
         source: 'local',
@@ -1053,11 +1052,10 @@ describe('LookerNodeSDK', () => {
           }
 
           for (const t of d.tiles) {
-            const tile = await sdk.ok(
-              sdk.create_dashboard_element({
+            const request: IRequestCreateDashboardElement = {
+              body: {
                 body_text: t.body_text,
                 dashboard_id: dashboard.id,
-                look: t.look,
                 look_id: t.look_id,
                 merge_result_id: t.merge_result_id,
                 note_display: t.note_display,
@@ -1074,8 +1072,9 @@ describe('LookerNodeSDK', () => {
                 title_hidden: t.title_hidden,
                 title_text: t.title_text,
                 type: t.type,
-              })
-            )
+              },
+            }
+            const tile = await sdk.ok(sdk.create_dashboard_element(request))
             expect(tile).toBeDefined()
             expect(tile.dashboard_id).toEqual(dashboard.id)
             expect(tile.title).toEqual(t.title)

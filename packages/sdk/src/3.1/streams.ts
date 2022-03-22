@@ -137,6 +137,7 @@ import type {
   IRequestAllScheduledPlans,
   IRequestAllUsers,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateLookmlDashboardRenderTask,
   IRequestCreateQueryTask,
@@ -2853,8 +2854,8 @@ export class Looker31SDKStream extends APIMethods {
    *
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    *
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    *
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2949,8 +2950,6 @@ export class Looker31SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
-        limit: request.limit,
-        offset: request.offset,
         sorts: request.sorts,
         filter_or: request.filter_or,
       },
@@ -3374,23 +3373,21 @@ export class Looker31SDKStream extends APIMethods {
    * POST /dashboard_elements -> IDashboardElement
    *
    * @param callback streaming output function
-   * @param body Partial<IWriteDashboardElement>
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async create_dashboard_element(
     callback: (readable: Readable) => Promise<IDashboardElement>,
-    body: Partial<IWriteDashboardElement>,
-    fields?: string,
+    request: IRequestCreateDashboardElement,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardElement>(
       callback,
       'POST',
       '/dashboard_elements',
-      { fields },
-      body,
+      { fields: request.fields, apply_filters: request.apply_filters },
+      request.body,
       options
     )
   }
@@ -5154,7 +5151,7 @@ export class Looker31SDKStream extends APIMethods {
    * @deprecated
    *
    * @param callback streaming output function
-   * @param homepage_item_id Id of homepage_item
+   * @param homepage_item_id Id of homepage item
    * @param options one-time API call overrides
    *
    */
@@ -5297,7 +5294,7 @@ export class Looker31SDKStream extends APIMethods {
    * @deprecated
    *
    * @param callback streaming output function
-   * @param homepage_section_id Id of homepage_section
+   * @param homepage_section_id Id of homepage section
    * @param options one-time API call overrides
    *
    */
@@ -5405,7 +5402,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
    * @param callback streaming output function
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -5434,7 +5431,7 @@ export class Looker31SDKStream extends APIMethods {
    * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
    * @param callback streaming output function
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param body Partial<IWriteIntegrationHub>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -5774,8 +5771,6 @@ export class Looker31SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
-        limit: request.limit,
-        offset: request.offset,
         sorts: request.sorts,
         filter_or: request.filter_or,
       },
@@ -7558,11 +7553,11 @@ export class Looker31SDKStream extends APIMethods {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    *
@@ -8362,7 +8357,7 @@ export class Looker31SDKStream extends APIMethods {
    * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
    *
    * @param callback streaming output function
-   * @param permission_set_id id of permission set
+   * @param permission_set_id Id of permission set
    * @param body Partial<IWritePermissionSet>
    * @param options one-time API call overrides
    *
@@ -8675,15 +8670,15 @@ export class Looker31SDKStream extends APIMethods {
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
    * @param callback streaming output function
-   * @param role_id Id of Role
-   * @param body Partial<number[]>
+   * @param role_id id of role
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_groups(
     callback: (readable: Readable) => Promise<IGroup[]>,
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
@@ -8731,14 +8726,14 @@ export class Looker31SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param role_id id of role
-   * @param body Partial<number[]>
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_users(
     callback: (readable: Readable) => Promise<IUser[]>,
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
@@ -10515,7 +10510,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10542,7 +10537,7 @@ export class Looker31SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -10571,7 +10566,7 @@ export class Looker31SDKStream extends APIMethods {
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -10600,7 +10595,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_email -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10625,7 +10620,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10652,7 +10647,7 @@ export class Looker31SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -10681,7 +10676,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_totp -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10706,7 +10701,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10733,7 +10728,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10758,7 +10753,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10785,7 +10780,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_google -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10810,7 +10805,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10837,7 +10832,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_saml -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10862,7 +10857,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10889,7 +10884,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -10943,8 +10938,8 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param credentials_api3_id id of API 3 Credential
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API 3 Credential
    * @param options one-time API call overrides
    *
    */
@@ -10970,7 +10965,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -10997,7 +10992,7 @@ export class Looker31SDKStream extends APIMethods {
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -11055,8 +11050,8 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param credentials_embed_id id of Embedding Credential
+   * @param user_id Id of user
+   * @param credentials_embed_id Id of Embedding Credential
    * @param options one-time API call overrides
    *
    */
@@ -11082,7 +11077,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11109,7 +11104,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11136,7 +11131,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -11190,8 +11185,8 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param session_id id of Web Login Session
+   * @param user_id Id of user
+   * @param session_id Id of Web Login Session
    * @param options one-time API call overrides
    *
    */
@@ -11217,7 +11212,7 @@ export class Looker31SDKStream extends APIMethods {
    * GET /users/{user_id}/sessions -> ISession[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11305,8 +11300,8 @@ export class Looker31SDKStream extends APIMethods {
    * PUT /users/{user_id}/roles -> IRole[]
    *
    * @param callback streaming output function
-   * @param user_id id of user
-   * @param body Partial<number[]>
+   * @param user_id Id of user
+   * @param body Partial<string[]>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -11314,7 +11309,7 @@ export class Looker31SDKStream extends APIMethods {
   async set_user_roles(
     callback: (readable: Readable) => Promise<IRole[]>,
     user_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
@@ -11563,7 +11558,7 @@ export class Looker31SDKStream extends APIMethods {
    * DELETE /user_attributes/{user_attribute_id} -> string
    *
    * @param callback streaming output function
-   * @param user_attribute_id Id of user_attribute
+   * @param user_attribute_id Id of user attribute
    * @param options one-time API call overrides
    *
    */

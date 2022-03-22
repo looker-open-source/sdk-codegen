@@ -25,7 +25,7 @@
  */
 
 /**
- * 312 API models: 232 Spec, 0 Request, 59 Write, 21 Enum
+ * 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
  */
 
 
@@ -141,13 +141,13 @@ public struct Alert: SDKModel {
         set { _custom_title = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_element_id: AnyInt?
+    private var _dashboard_element_id: AnyString?
     /**
      * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
      */
-    public var dashboard_element_id: Int64? {
+    public var dashboard_element_id: String? {
         get { _dashboard_element_id?.value }
-        set { _dashboard_element_id = newValue.map(AnyInt.init) }
+        set { _dashboard_element_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -176,13 +176,13 @@ public struct Alert: SDKModel {
      */
     public var followable: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * ID of the alert (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -245,13 +245,13 @@ public struct Alert: SDKModel {
         set { _lookml_link_id = newValue.map(AnyString.init) }
     }
 
-    private var _owner_id: AnyInt
+    private var _owner_id: AnyString
     /**
      * User id of alert owner
      */
-    public var owner_id: Int64 {
+    public var owner_id: String {
         get { _owner_id.value }
-        set { _owner_id = AnyInt.init(newValue) }
+        set { _owner_id = AnyString.init(newValue) }
     }
 
     private var _owner_display_name: AnyString?
@@ -270,18 +270,18 @@ public struct Alert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: Int64? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
         self._custom_title = custom_title.map(AnyString.init)
-        self._dashboard_element_id = dashboard_element_id.map(AnyInt.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.destinations = destinations
         self.field = field
         self.followed = followed
         self.followable = followable
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.is_disabled = is_disabled
         self._disabled_reason = disabled_reason.map(AnyString.init)
         self.is_public = is_public
@@ -290,13 +290,13 @@ public struct Alert: SDKModel {
         self._investigative_content_title = investigative_content_title.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
-        self._owner_id = AnyInt.init(owner_id)
+        self._owner_id = AnyString.init(owner_id)
         self._owner_display_name = owner_display_name.map(AnyString.init)
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: Int64? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: Int64, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, destinations: destinations, field: field, followed: followed, followable: followable, id: id, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, investigative_content_title: investigative_content_title, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, owner_display_name: owner_display_name, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
@@ -536,13 +536,13 @@ public struct AlertPatch: SDKModel {
         case is_public
         case threshold
     }
-    private var _owner_id: AnyInt?
+    private var _owner_id: AnyString?
     /**
      * New owner ID of the alert
      */
-    public var owner_id: Int64? {
+    public var owner_id: String? {
         get { _owner_id?.value }
-        set { _owner_id = newValue.map(AnyInt.init) }
+        set { _owner_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -569,8 +569,8 @@ public struct AlertPatch: SDKModel {
      */
     public var threshold: Double?
 
-    public init(owner_id: Int64? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, threshold: Double? = nil) {
-        self._owner_id = owner_id.map(AnyInt.init)
+    public init(owner_id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, threshold: Double? = nil) {
+        self._owner_id = owner_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self._disabled_reason = disabled_reason.map(AnyString.init)
         self.is_public = is_public
@@ -608,19 +608,19 @@ public struct ApiSession: SDKModel {
         set { _workspace_id = newValue.map(AnyString.init) }
     }
 
-    private var _sudo_user_id: AnyInt?
+    private var _sudo_user_id: AnyString?
     /**
      * The id of the actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
-    public var sudo_user_id: Int64? {
+    public var sudo_user_id: String? {
         get { _sudo_user_id?.value }
-        set { _sudo_user_id = newValue.map(AnyInt.init) }
+        set { _sudo_user_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, workspace_id: String? = nil, sudo_user_id: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, workspace_id: String? = nil, sudo_user_id: String? = nil) {
         self.can = can
         self._workspace_id = workspace_id.map(AnyString.init)
-        self._sudo_user_id = sudo_user_id.map(AnyInt.init)
+        self._sudo_user_id = sudo_user_id.map(AnyString.init)
     }
 
 }
@@ -834,13 +834,13 @@ public struct Board: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of associated content_metadata record (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -867,22 +867,22 @@ public struct Board: SDKModel {
      */
     public var board_sections: [BoardSection]?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _section_order: [AnyInt]?
+    private var _section_order: [AnyString]?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    public var section_order: [Int64]? {
+    public var section_order: [String]? {
         get { if let v = _section_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil } }
+        set { if let v = newValue { _section_order = v.map { AnyString.init($0) } } else { _section_order = nil } }
     }
 
     private var _title: AnyString?
@@ -899,13 +899,13 @@ public struct Board: SDKModel {
      */
     public var updated_at: Date?
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User id of board creator (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -913,18 +913,18 @@ public struct Board: SDKModel {
      */
     public var primary_homepage: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, deleted_at: Date? = nil, description: String? = nil, board_sections: [BoardSection]? = nil, id: Int64? = nil, section_order: [Int64]? = nil, title: String? = nil, updated_at: Date? = nil, user_id: Int64? = nil, primary_homepage: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, created_at: Date? = nil, deleted_at: Date? = nil, description: String? = nil, board_sections: [BoardSection]? = nil, id: String? = nil, section_order: [String]? = nil, title: String? = nil, updated_at: Date? = nil, user_id: String? = nil, primary_homepage: Bool? = nil) {
         self.can = can
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.created_at = created_at
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
         self.board_sections = board_sections
-        self._id = id.map(AnyInt.init)
-        if let v = section_order { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil }
+        self._id = id.map(AnyString.init)
+        if let v = section_order { _section_order = v.map { AnyString.init($0) } } else { _section_order = nil }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self.primary_homepage = primary_homepage
     }
 
@@ -953,7 +953,13 @@ public struct BoardItem: SDKModel {
         case _order = "order"
         case _title = "title"
         case _url = "url"
+        case use_custom_description
+        case use_custom_title
+        case use_custom_url
         case _view_count = "view_count"
+        case _custom_image_data_base64 = "custom_image_data_base64"
+        case _custom_image_url = "custom_image_url"
+        case use_custom_image
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -969,22 +975,22 @@ public struct BoardItem: SDKModel {
         set { _content_created_by = newValue.map(AnyString.init) }
     }
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content favorite id associated with the item this content is based on (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Content metadata id associated with the item this content is based on (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _content_updated_at: AnyString?
@@ -1023,13 +1029,13 @@ public struct BoardItem: SDKModel {
         set { _custom_url = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Dashboard to base this item on
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -1050,22 +1056,22 @@ public struct BoardItem: SDKModel {
         set { _favorite_count = newValue.map(AnyInt.init) }
     }
 
-    private var _board_section_id: AnyInt?
+    private var _board_section_id: AnyString?
     /**
      * Associated Board Section
      */
-    public var board_section_id: Int64? {
+    public var board_section_id: String? {
         get { _board_section_id?.value }
-        set { _board_section_id = newValue.map(AnyInt.init) }
+        set { _board_section_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _image_url: AnyString?
@@ -1131,6 +1137,21 @@ public struct BoardItem: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Whether the custom description should be used instead of the content description, if the item is associated with content
+     */
+    public var use_custom_description: Bool?
+
+    /**
+     * Whether the custom title should be used instead of the content title, if the item is associated with content
+     */
+    public var use_custom_title: Bool?
+
+    /**
+     * Whether the custom url should be used instead of the content url, if the item is associated with content
+     */
+    public var use_custom_url: Bool?
+
     private var _view_count: AnyInt?
     /**
      * Number of times content has been viewed, if present (read-only)
@@ -1140,20 +1161,43 @@ public struct BoardItem: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, view_count: Int64? = nil) {
+    private var _custom_image_data_base64: AnyString?
+    /**
+     * (Write-Only) base64 encoded image data
+     */
+    public var custom_image_data_base64: String? {
+        get { _custom_image_data_base64?.value }
+        set { _custom_image_data_base64 = newValue.map(AnyString.init) }
+    }
+
+    private var _custom_image_url: AnyString?
+    /**
+     * Custom image_url entered by the user, if present (read-only)
+     */
+    public var custom_image_url: String? {
+        get { _custom_image_url?.value }
+        set { _custom_image_url = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the custom image should be used instead of the content image, if the item is associated with content
+     */
+    public var use_custom_image: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: String? = nil, description: String? = nil, favorite_count: Int64? = nil, board_section_id: String? = nil, id: String? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, title: String? = nil, url: String? = nil, use_custom_description: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, view_count: Int64? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, use_custom_image: Bool? = nil) {
         self.can = can
         self._content_created_by = content_created_by.map(AnyString.init)
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._content_updated_at = content_updated_at.map(AnyString.init)
         self._custom_description = custom_description.map(AnyString.init)
         self._custom_title = custom_title.map(AnyString.init)
         self._custom_url = custom_url.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._favorite_count = favorite_count.map(AnyInt.init)
-        self._board_section_id = board_section_id.map(AnyInt.init)
-        self._id = id.map(AnyInt.init)
+        self._board_section_id = board_section_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self._image_url = image_url.map(AnyString.init)
         self._location = location.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
@@ -1161,7 +1205,13 @@ public struct BoardItem: SDKModel {
         self._order = order.map(AnyInt.init)
         self._title = title.map(AnyString.init)
         self._url = url.map(AnyString.init)
+        self.use_custom_description = use_custom_description
+        self.use_custom_title = use_custom_title
+        self.use_custom_url = use_custom_url
         self._view_count = view_count.map(AnyInt.init)
+        self._custom_image_data_base64 = custom_image_data_base64.map(AnyString.init)
+        self._custom_image_url = custom_image_url.map(AnyString.init)
+        self.use_custom_image = use_custom_image
     }
 
 }
@@ -1205,13 +1255,13 @@ public struct BoardSection: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
-    private var _board_id: AnyInt?
+    private var _board_id: AnyString?
     /**
      * Id reference to parent board
      */
-    public var board_id: Int64? {
+    public var board_id: String? {
         get { _board_id?.value }
-        set { _board_id = newValue.map(AnyInt.init) }
+        set { _board_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -1219,31 +1269,31 @@ public struct BoardSection: SDKModel {
      */
     public var board_items: [BoardItem]?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _item_order: [AnyInt]?
+    private var _item_order: [AnyString]?
     /**
      * ids of the board items in the order they should be displayed
      */
-    public var item_order: [Int64]? {
+    public var item_order: [String]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil } }
     }
 
-    private var _visible_item_order: [AnyInt]?
+    private var _visible_item_order: [AnyString]?
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
-    public var visible_item_order: [Int64]? {
+    public var visible_item_order: [String]? {
         get { if let v = _visible_item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyString.init($0) } } else { _visible_item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -1260,16 +1310,16 @@ public struct BoardSection: SDKModel {
      */
     public var updated_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, description: String? = nil, board_id: Int64? = nil, board_items: [BoardItem]? = nil, id: Int64? = nil, item_order: [Int64]? = nil, visible_item_order: [Int64]? = nil, title: String? = nil, updated_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, description: String? = nil, board_id: String? = nil, board_items: [BoardItem]? = nil, id: String? = nil, item_order: [String]? = nil, visible_item_order: [String]? = nil, title: String? = nil, updated_at: Date? = nil) {
         self.can = can
         self.created_at = created_at
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
-        self._board_id = board_id.map(AnyInt.init)
+        self._board_id = board_id.map(AnyString.init)
         self.board_items = board_items
-        self._id = id.map(AnyInt.init)
-        if let v = item_order { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil }
-        if let v = visible_item_order { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil }
+        self._id = id.map(AnyString.init)
+        if let v = item_order { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil }
+        if let v = visible_item_order { _visible_item_order = v.map { AnyString.init($0) } } else { _visible_item_order = nil }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
     }
@@ -1418,77 +1468,6 @@ public struct ColumnSearch: SDKModel {
         self._table_name = table_name.map(AnyString.init)
         self._column_name = column_name.map(AnyString.init)
         self._data_type = data_type.map(AnyString.init)
-    }
-
-}
-
-public struct Command: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _id = "id"
-        case _author_id = "author_id"
-        case _name = "name"
-        case _description = "description"
-        case _linked_content_id = "linked_content_id"
-        case linked_content_type
-    }
-    private var _id: AnyInt?
-    /**
-     * Id of the command record (read-only)
-     */
-    public var id: Int64? {
-        get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
-    }
-
-    private var _author_id: AnyInt?
-    /**
-     * Id of the command author (read-only)
-     */
-    public var author_id: Int64? {
-        get { _author_id?.value }
-        set { _author_id = newValue.map(AnyInt.init) }
-    }
-
-    private var _name: AnyString?
-    /**
-     * Name of the command
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    private var _description: AnyString?
-    /**
-     * Description of the command
-     */
-    public var description: String? {
-        get { _description?.value }
-        set { _description = newValue.map(AnyString.init) }
-    }
-
-    private var _linked_content_id: AnyString?
-    /**
-     * Id of the content associated with the command
-     */
-    public var linked_content_id: String? {
-        get { _linked_content_id?.value }
-        set { _linked_content_id = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Name of the command Valid values are: "dashboard", "lookml_dashboard".
-     */
-    public var linked_content_type: LinkedContentType?
-
-    public init(id: Int64? = nil, author_id: Int64? = nil, name: String? = nil, description: String? = nil, linked_content_id: String? = nil, linked_content_type: LinkedContentType? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._author_id = author_id.map(AnyInt.init)
-        self._name = name.map(AnyString.init)
-        self._description = description.map(AnyString.init)
-        self._linked_content_id = linked_content_id.map(AnyString.init)
-        self.linked_content_type = linked_content_type
     }
 
 }
@@ -1644,31 +1623,31 @@ public struct ContentFavorite: SDKModel {
         case dashboard
         case _board_id = "board_id"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id which owns this ContentFavorite
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _look_id: AnyString?
@@ -1680,37 +1659,37 @@ public struct ContentFavorite: SDKModel {
         set { _look_id = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Id of a dashboard (read-only)
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     public var look: LookBasic?
 
     public var dashboard: DashboardBase?
 
-    private var _board_id: AnyInt?
+    private var _board_id: AnyString?
     /**
      * Id of a board (read-only)
      */
-    public var board_id: Int64? {
+    public var board_id: String? {
         get { _board_id?.value }
-        set { _board_id = newValue.map(AnyInt.init) }
+        set { _board_id = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, user_id: Int64? = nil, content_metadata_id: Int64? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, look: LookBasic? = nil, dashboard: DashboardBase? = nil, board_id: Int64? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._user_id = user_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+    public init(id: String? = nil, user_id: String? = nil, content_metadata_id: String? = nil, look_id: String? = nil, dashboard_id: String? = nil, look: LookBasic? = nil, dashboard: DashboardBase? = nil, board_id: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look = look
         self.dashboard = dashboard
-        self._board_id = board_id.map(AnyInt.init)
+        self._board_id = board_id.map(AnyString.init)
     }
 
 }
@@ -1735,13 +1714,13 @@ public struct ContentMeta: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -1753,13 +1732,13 @@ public struct ContentMeta: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _parent_id: AnyInt?
+    private var _parent_id: AnyString?
     /**
      * Id of Parent Content (read-only)
      */
-    public var parent_id: Int64? {
+    public var parent_id: String? {
         get { _parent_id?.value }
-        set { _parent_id = newValue.map(AnyInt.init) }
+        set { _parent_id = newValue.map(AnyString.init) }
     }
 
     private var _dashboard_id: AnyString?
@@ -1803,13 +1782,13 @@ public struct ContentMeta: SDKModel {
      */
     public var inherits: Bool?
 
-    private var _inheriting_id: AnyInt?
+    private var _inheriting_id: AnyString?
     /**
      * Id of Inherited Content (read-only)
      */
-    public var inheriting_id: Int64? {
+    public var inheriting_id: String? {
         get { _inheriting_id?.value }
-        set { _inheriting_id = newValue.map(AnyInt.init) }
+        set { _inheriting_id = newValue.map(AnyString.init) }
     }
 
     private var _slug: AnyString?
@@ -1821,17 +1800,17 @@ public struct ContentMeta: SDKModel {
         set { _slug = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, parent_id: Int64? = nil, dashboard_id: String? = nil, look_id: String? = nil, folder_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: Int64? = nil, slug: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, parent_id: String? = nil, dashboard_id: String? = nil, look_id: String? = nil, folder_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: String? = nil, slug: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        self._parent_id = parent_id.map(AnyInt.init)
+        self._parent_id = parent_id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
         self._folder_id = folder_id.map(AnyString.init)
         self._content_type = content_type.map(AnyString.init)
         self.inherits = inherits
-        self._inheriting_id = inheriting_id.map(AnyInt.init)
+        self._inheriting_id = inheriting_id.map(AnyString.init)
         self._slug = slug.map(AnyString.init)
     }
 
@@ -1878,31 +1857,31 @@ public struct ContentMetaGroupUser: SDKModel {
      */
     public var permission_type: PermissionType?
 
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * ID of associated group (read-only)
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * ID of associated user (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_metadata_id: String? = nil, permission_type: PermissionType? = nil, group_id: Int64? = nil, user_id: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_metadata_id: String? = nil, permission_type: PermissionType? = nil, group_id: String? = nil, user_id: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.permission_type = permission_type
-        self._group_id = group_id.map(AnyInt.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._group_id = group_id.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -2004,13 +1983,13 @@ public struct ContentValidationAlert: SDKModel {
         case _lookml_link_id = "lookml_link_id"
         case _custom_title = "custom_title"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * ID of the alert
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _lookml_dashboard_id: AnyString?
@@ -2040,8 +2019,8 @@ public struct ContentValidationAlert: SDKModel {
         set { _custom_title = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, custom_title: String? = nil) {
-        self._id = id.map(AnyInt.init)
+    public init(id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, custom_title: String? = nil) {
+        self._id = id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self._custom_title = custom_title.map(AnyString.init)
@@ -2123,6 +2102,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         case title_hidden
         case _title_text = "title_text"
         case _type = "type"
+        case _rich_content_json = "rich_content_json"
     }
     private var _body_text: AnyString?
     /**
@@ -2196,13 +2176,13 @@ public struct ContentValidationDashboardElement: SDKModel {
         set { _note_text_as_html = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id Of Query
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _subtitle_text: AnyString?
@@ -2246,7 +2226,16 @@ public struct ContentValidationDashboardElement: SDKModel {
         set { _type = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
+    private var _rich_content_json: AnyString?
+    /**
+     * JSON with all the properties required for rich editor and buttons elements
+     */
+    public var rich_content_json: String? {
+        get { _rich_content_json?.value }
+        set { _rich_content_json = newValue.map(AnyString.init) }
+    }
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -2255,12 +2244,13 @@ public struct ContentValidationDashboardElement: SDKModel {
         self._note_state = note_state.map(AnyString.init)
         self._note_text = note_text.map(AnyString.init)
         self._note_text_as_html = note_text_as_html.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._subtitle_text = subtitle_text.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self.title_hidden = title_hidden
         self._title_text = title_text.map(AnyString.init)
         self._type = type.map(AnyString.init)
+        self._rich_content_json = rich_content_json.map(AnyString.init)
     }
 
 }
@@ -2612,19 +2602,19 @@ public struct ContentValidationScheduledPlan: SDKModel {
         set { _look_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, look_id: String? = nil, id: Int64? = nil) {
+    public init(name: String? = nil, look_id: String? = nil, id: String? = nil) {
         self._name = name.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
     }
 
 }
@@ -2709,13 +2699,13 @@ public struct ContentView: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _look_id: AnyString?
@@ -2727,13 +2717,13 @@ public struct ContentView: SDKModel {
         set { _look_id = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Id of the viewed Dashboard (read-only)
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _title: AnyString?
@@ -2745,31 +2735,31 @@ public struct ContentView: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Content metadata id of the Look or Dashboard (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of user content was viewed by (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * Id of group content was viewed by (read-only)
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
     private var _view_count: AnyInt?
@@ -2808,15 +2798,15 @@ public struct ContentView: SDKModel {
         set { _start_of_week_date = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, title: String? = nil, content_metadata_id: Int64? = nil, user_id: Int64? = nil, group_id: Int64? = nil, view_count: Int64? = nil, favorite_count: Int64? = nil, last_viewed_at: String? = nil, start_of_week_date: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, look_id: String? = nil, dashboard_id: String? = nil, title: String? = nil, content_metadata_id: String? = nil, user_id: String? = nil, group_id: String? = nil, view_count: Int64? = nil, favorite_count: Int64? = nil, last_viewed_at: String? = nil, start_of_week_date: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
-        self._user_id = user_id.map(AnyInt.init)
-        self._group_id = group_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._group_id = group_id.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
         self._favorite_count = favorite_count.map(AnyInt.init)
         self._last_viewed_at = last_viewed_at.map(AnyString.init)
@@ -2963,13 +2953,13 @@ public struct CreateCredentialsApi3: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _client_id: AnyString?
@@ -3022,9 +3012,9 @@ public struct CreateCredentialsApi3: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, client_secret: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, client_secret: String? = nil, url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.is_disabled = is_disabled
@@ -3343,30 +3333,30 @@ public struct CreateOAuthApplicationUserStateResponse: SDKModel {
         case _user_id = "user_id"
         case _oauth_application_id = "oauth_application_id"
     }
-    private var _user_id: AnyInt
+    private var _user_id: AnyString
     /**
      * User Id (read-only)
      */
-    public var user_id: Int64 {
+    public var user_id: String {
         get { _user_id.value }
-        set { _user_id = AnyInt.init(newValue) }
+        set { _user_id = AnyString.init(newValue) }
     }
 
-    private var _oauth_application_id: AnyInt
+    private var _oauth_application_id: AnyString
     /**
      * OAuth Application ID (read-only)
      */
-    public var oauth_application_id: Int64 {
+    public var oauth_application_id: String {
         get { _oauth_application_id.value }
-        set { _oauth_application_id = AnyInt.init(newValue) }
+        set { _oauth_application_id = AnyString.init(newValue) }
     }
 
-    public init(user_id: Int64, oauth_application_id: Int64) {
-        self._user_id = AnyInt.init(user_id)
-        self._oauth_application_id = AnyInt.init(oauth_application_id)
+    public init(user_id: String, oauth_application_id: String) {
+        self._user_id = AnyString.init(user_id)
+        self._oauth_application_id = AnyString.init(oauth_application_id)
     }
 
-    public init(_ user_id: Int64, _ oauth_application_id: Int64) {
+    public init(_ user_id: String, _ oauth_application_id: String) {
         self.init(user_id: user_id, oauth_application_id: oauth_application_id)
     }
 
@@ -3388,13 +3378,13 @@ public struct CreateQueryTask: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _query_id: AnyInt
+    private var _query_id: AnyString
     /**
      * Id of query to run
      */
-    public var query_id: Int64 {
+    public var query_id: String {
         get { _query_id.value }
-        set { _query_id = AnyInt.init(newValue) }
+        set { _query_id = AnyString.init(newValue) }
     }
 
     /**
@@ -3434,9 +3424,9 @@ public struct CreateQueryTask: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, query_id: String, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.can = can
-        self._query_id = AnyInt.init(query_id)
+        self._query_id = AnyString.init(query_id)
         self.result_format = result_format
         self._source = source.map(AnyString.init)
         self.deferred = deferred
@@ -3444,7 +3434,7 @@ public struct CreateQueryTask: SDKModel {
         self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
-    public init(can: StringDictionary<Bool>? = nil, _ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, _ query_id: String, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.init(can: can, query_id: query_id, result_format: result_format, source: source, deferred: deferred, look_id: look_id, dashboard_id: dashboard_id)
     }
 
@@ -3466,13 +3456,13 @@ public struct CredentialsApi3: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _client_id: AnyString?
@@ -3516,9 +3506,9 @@ public struct CredentialsApi3: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.is_disabled = is_disabled
@@ -3787,13 +3777,13 @@ public struct CredentialsEmbed: SDKModel {
         set { _external_user_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -3828,12 +3818,12 @@ public struct CredentialsEmbed: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, external_group_id: String? = nil, external_user_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, type: String? = nil, url: String? = nil) {
         self.can = can
         self._created_at = created_at.map(AnyString.init)
         self._external_group_id = external_group_id.map(AnyString.init)
         self._external_user_id = external_user_id.map(AnyString.init)
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.is_disabled = is_disabled
         self._logged_in_at = logged_in_at.map(AnyString.init)
         self._type = type.map(AnyString.init)
@@ -4491,22 +4481,22 @@ public struct Dashboard: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content Favorite Id (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -4577,13 +4567,13 @@ public struct Dashboard: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of User (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     private var _slug: AnyString?
@@ -4653,13 +4643,13 @@ public struct Dashboard: SDKModel {
      */
     public var deleted_at: Date?
 
-    private var _deleter_id: AnyInt?
+    private var _deleter_id: AnyString?
     /**
      * Id of User that 'soft' deleted the dashboard. (read-only)
      */
-    public var deleter_id: Int64? {
+    public var deleter_id: String? {
         get { _deleter_id?.value }
-        set { _deleter_id = newValue.map(AnyInt.init) }
+        set { _deleter_id = newValue.map(AnyString.init) }
     }
 
     private var _edit_uri: AnyString?
@@ -4700,13 +4690,13 @@ public struct Dashboard: SDKModel {
      */
     public var updated_at: Date?
 
-    private var _last_updater_id: AnyInt?
+    private var _last_updater_id: AnyString?
     /**
      * Id of User that most recently updated the dashboard. (read-only)
      */
-    public var last_updater_id: Int64? {
+    public var last_updater_id: String? {
         get { _last_updater_id?.value }
-        set { _last_updater_id = newValue.map(AnyInt.init) }
+        set { _last_updater_id = newValue.map(AnyString.init) }
     }
 
     private var _last_updater_name: AnyString?
@@ -4820,10 +4810,10 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: Int64? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._id = id.map(AnyString.init)
@@ -4834,7 +4824,7 @@ public struct Dashboard: SDKModel {
         self._refresh_interval_to_i = refresh_interval_to_i.map(AnyInt.init)
         self.folder = folder
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self._slug = slug.map(AnyString.init)
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
         self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
@@ -4846,14 +4836,14 @@ public struct Dashboard: SDKModel {
         self.dashboard_layouts = dashboard_layouts
         self.deleted = deleted
         self.deleted_at = deleted_at
-        self._deleter_id = deleter_id.map(AnyInt.init)
+        self._deleter_id = deleter_id.map(AnyString.init)
         self._edit_uri = edit_uri.map(AnyString.init)
         self._favorite_count = favorite_count.map(AnyInt.init)
         self.filters_bar_collapsed = filters_bar_collapsed
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.updated_at = updated_at
-        self._last_updater_id = last_updater_id.map(AnyInt.init)
+        self._last_updater_id = last_updater_id.map(AnyString.init)
         self._last_updater_name = last_updater_name.map(AnyString.init)
         self._user_name = user_name.map(AnyString.init)
         self._load_configuration = load_configuration.map(AnyString.init)
@@ -5010,22 +5000,22 @@ public struct DashboardBase: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content Favorite Id (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -5096,13 +5086,13 @@ public struct DashboardBase: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of User (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     private var _slug: AnyString?
@@ -5123,10 +5113,10 @@ public struct DashboardBase: SDKModel {
         set { _preferred_viewer = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: Int64? = nil, slug: String? = nil, preferred_viewer: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil) {
         self.can = can
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._id = id.map(AnyString.init)
@@ -5137,7 +5127,7 @@ public struct DashboardBase: SDKModel {
         self._refresh_interval_to_i = refresh_interval_to_i.map(AnyInt.init)
         self.folder = folder
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self._slug = slug.map(AnyString.init)
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
     }
@@ -5173,6 +5163,7 @@ public struct DashboardElement: SDKModel {
         case _title_text = "title_text"
         case _type = "type"
         case _alert_count = "alert_count"
+        case _rich_content_json = "rich_content_json"
         case _title_text_as_html = "title_text_as_html"
         case _subtitle_text_as_html = "subtitle_text_as_html"
     }
@@ -5293,13 +5284,13 @@ public struct DashboardElement: SDKModel {
 
     public var query: Query?
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id Of Query
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _refresh_interval: AnyString?
@@ -5322,13 +5313,13 @@ public struct DashboardElement: SDKModel {
 
     public var result_maker: ResultMakerWithIdVisConfigAndDynamicFields?
 
-    private var _result_maker_id: AnyInt?
+    private var _result_maker_id: AnyString?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    public var result_maker_id: Int64? {
+    public var result_maker_id: String? {
         get { _result_maker_id?.value }
-        set { _result_maker_id = newValue.map(AnyInt.init) }
+        set { _result_maker_id = newValue.map(AnyString.init) }
     }
 
     private var _subtitle_text: AnyString?
@@ -5381,6 +5372,15 @@ public struct DashboardElement: SDKModel {
         set { _alert_count = newValue.map(AnyInt.init) }
     }
 
+    private var _rich_content_json: AnyString?
+    /**
+     * JSON with all the properties required for rich editor and buttons elements
+     */
+    public var rich_content_json: String? {
+        get { _rich_content_json?.value }
+        set { _rich_content_json = newValue.map(AnyString.init) }
+    }
+
     private var _title_text_as_html: AnyString?
     /**
      * Text tile title text as Html (read-only)
@@ -5399,7 +5399,7 @@ public struct DashboardElement: SDKModel {
         set { _subtitle_text_as_html = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
@@ -5415,17 +5415,18 @@ public struct DashboardElement: SDKModel {
         self._note_text = note_text.map(AnyString.init)
         self._note_text_as_html = note_text_as_html.map(AnyString.init)
         self.query = query
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._refresh_interval = refresh_interval.map(AnyString.init)
         self._refresh_interval_to_i = refresh_interval_to_i.map(AnyInt.init)
         self.result_maker = result_maker
-        self._result_maker_id = result_maker_id.map(AnyInt.init)
+        self._result_maker_id = result_maker_id.map(AnyString.init)
         self._subtitle_text = subtitle_text.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self.title_hidden = title_hidden
         self._title_text = title_text.map(AnyString.init)
         self._type = type.map(AnyString.init)
         self._alert_count = alert_count.map(AnyInt.init)
+        self._rich_content_json = rich_content_json.map(AnyString.init)
         self._title_text_as_html = title_text_as_html.map(AnyString.init)
         self._subtitle_text_as_html = subtitle_text_as_html.map(AnyString.init)
     }
@@ -6139,13 +6140,13 @@ public struct Datagroup: SDKModel {
         set { _created_at = newValue.map(AnyInt.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique ID of the datagroup (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _model_name: AnyString?
@@ -6211,10 +6212,10 @@ public struct Datagroup: SDKModel {
         set { _triggered_at = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: Int64? = nil, id: Int64? = nil, model_name: String? = nil, name: String? = nil, stale_before: Int64? = nil, trigger_check_at: Int64? = nil, trigger_error: String? = nil, trigger_value: String? = nil, triggered_at: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: Int64? = nil, id: String? = nil, model_name: String? = nil, name: String? = nil, stale_before: Int64? = nil, trigger_check_at: Int64? = nil, trigger_error: String? = nil, trigger_value: String? = nil, triggered_at: Int64? = nil) {
         self.can = can
         self._created_at = created_at.map(AnyInt.init)
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._model_name = model_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._stale_before = stale_before.map(AnyInt.init)
@@ -6572,13 +6573,13 @@ public struct DBConnection: SDKModel {
      */
     public var disable_context_comment: Bool?
 
-    private var _oauth_application_id: AnyInt?
+    private var _oauth_application_id: AnyString?
     /**
      * An External OAuth Application to use for authenticating to the database
      */
-    public var oauth_application_id: Int64? {
+    public var oauth_application_id: String? {
         get { _oauth_application_id?.value }
-        set { _oauth_application_id = newValue.map(AnyInt.init) }
+        set { _oauth_application_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -6596,7 +6597,7 @@ public struct DBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -6637,7 +6638,7 @@ public struct DBConnection: SDKModel {
         self._tunnel_id = tunnel_id.map(AnyString.init)
         self._pdt_concurrency = pdt_concurrency.map(AnyInt.init)
         self.disable_context_comment = disable_context_comment
-        self._oauth_application_id = oauth_application_id.map(AnyInt.init)
+        self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
@@ -6913,13 +6914,13 @@ public struct DelegateOauthTest: SDKModel {
         set { _installation_target_id = newValue.map(AnyString.init) }
     }
 
-    private var _installation_id: AnyInt?
+    private var _installation_id: AnyString?
     /**
      * Installation ID (read-only)
      */
-    public var installation_id: Int64? {
+    public var installation_id: String? {
         get { _installation_id?.value }
-        set { _installation_id = newValue.map(AnyInt.init) }
+        set { _installation_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -6927,10 +6928,10 @@ public struct DelegateOauthTest: SDKModel {
      */
     public var success: Bool?
 
-    public init(name: String? = nil, installation_target_id: String? = nil, installation_id: Int64? = nil, success: Bool? = nil) {
+    public init(name: String? = nil, installation_target_id: String? = nil, installation_id: String? = nil, success: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._installation_target_id = installation_target_id.map(AnyString.init)
-        self._installation_id = installation_id.map(AnyInt.init)
+        self._installation_id = installation_id.map(AnyString.init)
         self.success = success
     }
 
@@ -6980,6 +6981,7 @@ public struct Dialect: SDKModel {
         case _name = "name"
         case _label = "label"
         case supports_cost_estimate
+        case _cost_estimate_style = "cost_estimate_style"
         case _persistent_table_indexes = "persistent_table_indexes"
         case _persistent_table_sortkeys = "persistent_table_sortkeys"
         case _persistent_table_distkey = "persistent_table_distkey"
@@ -7013,6 +7015,15 @@ public struct Dialect: SDKModel {
      * Whether the dialect supports query cost estimates (read-only)
      */
     public var supports_cost_estimate: Bool?
+
+    private var _cost_estimate_style: AnyString?
+    /**
+     * How the dialect handles cost estimation (read-only)
+     */
+    public var cost_estimate_style: String? {
+        get { _cost_estimate_style?.value }
+        set { _cost_estimate_style = newValue.map(AnyString.init) }
+    }
 
     private var _persistent_table_indexes: AnyString?
     /**
@@ -7080,10 +7091,11 @@ public struct Dialect: SDKModel {
      */
     public var has_ssl_support: Bool?
 
-    public init(name: String? = nil, label: String? = nil, supports_cost_estimate: Bool? = nil, persistent_table_indexes: String? = nil, persistent_table_sortkeys: String? = nil, persistent_table_distkey: String? = nil, supports_streaming: Bool? = nil, automatically_run_sql_runner_snippets: Bool? = nil, connection_tests: [String]? = nil, supports_inducer: Bool? = nil, supports_multiple_databases: Bool? = nil, supports_persistent_derived_tables: Bool? = nil, has_ssl_support: Bool? = nil) {
+    public init(name: String? = nil, label: String? = nil, supports_cost_estimate: Bool? = nil, cost_estimate_style: String? = nil, persistent_table_indexes: String? = nil, persistent_table_sortkeys: String? = nil, persistent_table_distkey: String? = nil, supports_streaming: Bool? = nil, automatically_run_sql_runner_snippets: Bool? = nil, connection_tests: [String]? = nil, supports_inducer: Bool? = nil, supports_multiple_databases: Bool? = nil, supports_persistent_derived_tables: Bool? = nil, has_ssl_support: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self.supports_cost_estimate = supports_cost_estimate
+        self._cost_estimate_style = cost_estimate_style.map(AnyString.init)
         self._persistent_table_indexes = persistent_table_indexes.map(AnyString.init)
         self._persistent_table_sortkeys = persistent_table_sortkeys.map(AnyString.init)
         self._persistent_table_distkey = persistent_table_distkey.map(AnyString.init)
@@ -7418,13 +7430,13 @@ public struct EmbedSecret: SDKModel {
      */
     public var enabled: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _secret: AnyString?
@@ -7436,22 +7448,22 @@ public struct EmbedSecret: SDKModel {
         set { _secret = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of user who created this secret (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: Int64? = nil, secret: String? = nil, user_id: Int64? = nil) {
+    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: String? = nil, secret: String? = nil, user_id: String? = nil) {
         self._algorithm = algorithm.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.enabled = enabled
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._secret = secret.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -7550,13 +7562,13 @@ public struct EmbedSsoParams: SDKModel {
         set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
     }
 
-    private var _group_ids: [AnyInt]?
+    private var _group_ids: [AnyString]?
     /**
      * List of Looker group ids in which to enroll the embed user
      */
-    public var group_ids: [Int64]? {
+    public var group_ids: [String]? {
         get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil } }
     }
 
     private var _external_group_id: AnyString?
@@ -7573,16 +7585,16 @@ public struct EmbedSsoParams: SDKModel {
      */
     public var user_attributes: StringDictionary<AnyCodable>?
 
-    private var _secret_id: AnyInt?
+    private var _secret_id: AnyString?
     /**
      * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
      */
-    public var secret_id: Int64? {
+    public var secret_id: String? {
         get { _secret_id?.value }
-        set { _secret_id = newValue.map(AnyInt.init) }
+        set { _secret_id = newValue.map(AnyString.init) }
     }
 
-    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
         self._target_url = AnyString.init(target_url)
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
@@ -7592,13 +7604,13 @@ public struct EmbedSsoParams: SDKModel {
         self._user_timezone = user_timezone.map(AnyString.init)
         if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
         if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
-        if let v = group_ids { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil }
+        if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
-        self._secret_id = secret_id.map(AnyInt.init)
+        self._secret_id = secret_id.map(AnyString.init)
     }
 
-    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [Int64]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: Int64? = nil) {
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id)
     }
 
@@ -7675,13 +7687,13 @@ public struct ExternalOauthApplication: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * ID of this OAuth Application (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -7725,9 +7737,9 @@ public struct ExternalOauthApplication: SDKModel {
      */
     public var created_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil, created_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil, created_at: Date? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._client_secret = client_secret.map(AnyString.init)
@@ -7794,13 +7806,13 @@ public struct Folder: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -7808,13 +7820,13 @@ public struct Folder: SDKModel {
      */
     public var created_at: Date?
 
-    private var _creator_id: AnyInt?
+    private var _creator_id: AnyString?
     /**
      * User Id of Creator (read-only)
      */
-    public var creator_id: Int64? {
+    public var creator_id: String? {
         get { _creator_id?.value }
-        set { _creator_id = newValue.map(AnyInt.init) }
+        set { _creator_id = newValue.map(AnyString.init) }
     }
 
     private var _child_count: AnyInt?
@@ -7885,13 +7897,13 @@ public struct Folder: SDKModel {
      */
     public var looks: [LookWithDashboards]?
 
-    public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
+    public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: String? = nil, created_at: Date? = nil, creator_id: String? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
         self._name = AnyString.init(name)
         self._parent_id = parent_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.created_at = created_at
-        self._creator_id = creator_id.map(AnyInt.init)
+        self._creator_id = creator_id.map(AnyString.init)
         self._child_count = child_count.map(AnyInt.init)
         self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
@@ -7906,7 +7918,7 @@ public struct Folder: SDKModel {
         self.looks = looks
     }
 
-    public init(_ name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
+    public init(_ name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: String? = nil, created_at: Date? = nil, creator_id: String? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil, dashboards: [DashboardBase]? = nil, looks: [LookWithDashboards]? = nil) {
         self.init(name: name, parent_id: parent_id, id: id, content_metadata_id: content_metadata_id, created_at: created_at, creator_id: creator_id, child_count: child_count, external_id: external_id, is_embed: is_embed, is_embed_shared_root: is_embed_shared_root, is_embed_users_root: is_embed_users_root, is_personal: is_personal, is_personal_descendant: is_personal_descendant, is_shared_root: is_shared_root, is_users_root: is_users_root, can: can, dashboards: dashboards, looks: looks)
     }
 
@@ -7959,13 +7971,13 @@ public struct FolderBase: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -7973,13 +7985,13 @@ public struct FolderBase: SDKModel {
      */
     public var created_at: Date?
 
-    private var _creator_id: AnyInt?
+    private var _creator_id: AnyString?
     /**
      * User Id of Creator (read-only)
      */
-    public var creator_id: Int64? {
+    public var creator_id: String? {
         get { _creator_id?.value }
-        set { _creator_id = newValue.map(AnyInt.init) }
+        set { _creator_id = newValue.map(AnyString.init) }
     }
 
     private var _child_count: AnyInt?
@@ -8040,13 +8052,13 @@ public struct FolderBase: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: String? = nil, created_at: Date? = nil, creator_id: String? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
         self._name = AnyString.init(name)
         self._parent_id = parent_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.created_at = created_at
-        self._creator_id = creator_id.map(AnyInt.init)
+        self._creator_id = creator_id.map(AnyString.init)
         self._child_count = child_count.map(AnyInt.init)
         self._external_id = external_id.map(AnyString.init)
         self.is_embed = is_embed
@@ -8059,7 +8071,7 @@ public struct FolderBase: SDKModel {
         self.can = can
     }
 
-    public init(_ name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: Int64? = nil, created_at: Date? = nil, creator_id: Int64? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(_ name: String, parent_id: String? = nil, id: String? = nil, content_metadata_id: String? = nil, created_at: Date? = nil, creator_id: String? = nil, child_count: Int64? = nil, external_id: String? = nil, is_embed: Bool? = nil, is_embed_shared_root: Bool? = nil, is_embed_users_root: Bool? = nil, is_personal: Bool? = nil, is_personal_descendant: Bool? = nil, is_shared_root: Bool? = nil, is_users_root: Bool? = nil, can: StringDictionary<Bool>? = nil) {
         self.init(name: name, parent_id: parent_id, id: id, content_metadata_id: content_metadata_id, created_at: created_at, creator_id: creator_id, child_count: child_count, external_id: external_id, is_embed: is_embed, is_embed_shared_root: is_embed_shared_root, is_embed_users_root: is_embed_users_root, is_personal: is_personal, is_personal_descendant: is_personal_descendant, is_shared_root: is_shared_root, is_users_root: is_users_root, can: can)
     }
 
@@ -8419,13 +8431,13 @@ public struct LkGroup: SDKModel {
      */
     public var externally_managed: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -8451,13 +8463,13 @@ public struct LkGroup: SDKModel {
         set { _user_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: Int64? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: String? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil) {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
         self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.include_by_default = include_by_default
         self._name = name.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
@@ -8509,13 +8521,13 @@ public struct GroupHierarchy: SDKModel {
      */
     public var externally_managed: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -8541,36 +8553,36 @@ public struct GroupHierarchy: SDKModel {
         set { _user_count = newValue.map(AnyInt.init) }
     }
 
-    private var _parent_group_ids: [AnyInt]?
+    private var _parent_group_ids: [AnyString]?
     /**
      * IDs of parents of this group (read-only)
      */
-    public var parent_group_ids: [Int64]? {
+    public var parent_group_ids: [String]? {
         get { if let v = _parent_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _parent_group_ids = v.map { AnyInt.init($0) } } else { _parent_group_ids = nil } }
+        set { if let v = newValue { _parent_group_ids = v.map { AnyString.init($0) } } else { _parent_group_ids = nil } }
     }
 
-    private var _role_ids: [AnyInt]?
+    private var _role_ids: [AnyString]?
     /**
      * Role IDs assigned to group (read-only)
      */
-    public var role_ids: [Int64]? {
+    public var role_ids: [String]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: Int64? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, parent_group_ids: [Int64]? = nil, role_ids: [Int64]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: String? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, parent_group_ids: [String]? = nil, role_ids: [String]? = nil) {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
         self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.include_by_default = include_by_default
         self._name = name.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
-        if let v = parent_group_ids { _parent_group_ids = v.map { AnyInt.init($0) } } else { _parent_group_ids = nil }
-        if let v = role_ids { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil }
+        if let v = parent_group_ids { _parent_group_ids = v.map { AnyString.init($0) } } else { _parent_group_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
     }
 
 }
@@ -8583,17 +8595,17 @@ public struct GroupIdForGroupInclusion: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _group_id = "group_id"
     }
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * Id of group (read-only)
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
-    public init(group_id: Int64? = nil) {
-        self._group_id = group_id.map(AnyInt.init)
+    public init(group_id: String? = nil) {
+        self._group_id = group_id.map(AnyString.init)
     }
 
 }
@@ -8606,17 +8618,17 @@ public struct GroupIdForGroupUserInclusion: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _user_id = "user_id"
     }
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of user (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(user_id: Int64? = nil) {
-        self._user_id = user_id.map(AnyInt.init)
+    public init(user_id: String? = nil) {
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -8664,13 +8676,13 @@ public struct GroupSearch: SDKModel {
      */
     public var externally_managed: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -8701,13 +8713,13 @@ public struct GroupSearch: SDKModel {
      */
     public var roles: [Role]?
 
-    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: Int64? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, roles: [Role]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, can_add_to_content_metadata: Bool? = nil, contains_current_user: Bool? = nil, external_group_id: String? = nil, externally_managed: Bool? = nil, id: String? = nil, include_by_default: Bool? = nil, name: String? = nil, user_count: Int64? = nil, roles: [Role]? = nil) {
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
         self._external_group_id = external_group_id.map(AnyString.init)
         self.externally_managed = externally_managed
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.include_by_default = include_by_default
         self._name = name.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
@@ -8762,22 +8774,22 @@ public struct HomepageItem: SDKModel {
         set { _content_created_by = newValue.map(AnyString.init) }
     }
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content favorite id associated with the item this content is based on (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Content metadata id associated with the item this content is based on (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _content_updated_at: AnyString?
@@ -8834,13 +8846,13 @@ public struct HomepageItem: SDKModel {
         set { _custom_url = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Dashboard to base this item on
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -8861,22 +8873,22 @@ public struct HomepageItem: SDKModel {
         set { _favorite_count = newValue.map(AnyInt.init) }
     }
 
-    private var _homepage_section_id: AnyInt?
+    private var _homepage_section_id: AnyString?
     /**
      * Associated Homepage Section
      */
-    public var homepage_section_id: Int64? {
+    public var homepage_section_id: String? {
         get { _homepage_section_id?.value }
-        set { _homepage_section_id = newValue.map(AnyInt.init) }
+        set { _homepage_section_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _image_url: AnyString?
@@ -8976,22 +8988,22 @@ public struct HomepageItem: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: Int64? = nil, content_metadata_id: Int64? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, description: String? = nil, favorite_count: Int64? = nil, homepage_section_id: Int64? = nil, id: Int64? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, section_fetch_time: Float? = nil, title: String? = nil, url: String? = nil, use_custom_description: Bool? = nil, use_custom_image: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_created_by: String? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, content_updated_at: String? = nil, custom_description: String? = nil, custom_image_data_base64: String? = nil, custom_image_url: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: String? = nil, description: String? = nil, favorite_count: Int64? = nil, homepage_section_id: String? = nil, id: String? = nil, image_url: String? = nil, location: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, section_fetch_time: Float? = nil, title: String? = nil, url: String? = nil, use_custom_description: Bool? = nil, use_custom_image: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, view_count: Int64? = nil) {
         self.can = can
         self._content_created_by = content_created_by.map(AnyString.init)
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._content_updated_at = content_updated_at.map(AnyString.init)
         self._custom_description = custom_description.map(AnyString.init)
         self._custom_image_data_base64 = custom_image_data_base64.map(AnyString.init)
         self._custom_image_url = custom_image_url.map(AnyString.init)
         self._custom_title = custom_title.map(AnyString.init)
         self._custom_url = custom_url.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._favorite_count = favorite_count.map(AnyInt.init)
-        self._homepage_section_id = homepage_section_id.map(AnyInt.init)
-        self._id = id.map(AnyInt.init)
+        self._homepage_section_id = homepage_section_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self._image_url = image_url.map(AnyString.init)
         self._location = location.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
@@ -9050,13 +9062,13 @@ public struct HomepageSection: SDKModel {
         set { _detail_url = newValue.map(AnyString.init) }
     }
 
-    private var _homepage_id: AnyInt?
+    private var _homepage_id: AnyString?
     /**
      * Id reference to parent homepage
      */
-    public var homepage_id: Int64? {
+    public var homepage_id: String? {
         get { _homepage_id?.value }
-        set { _homepage_id = newValue.map(AnyInt.init) }
+        set { _homepage_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -9064,13 +9076,13 @@ public struct HomepageSection: SDKModel {
      */
     public var homepage_items: [HomepageItem]?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -9078,13 +9090,13 @@ public struct HomepageSection: SDKModel {
      */
     public var is_header: Bool?
 
-    private var _item_order: [AnyInt]?
+    private var _item_order: [AnyString]?
     /**
      * ids of the homepage items in the order they should be displayed
      */
-    public var item_order: [Int64]? {
+    public var item_order: [String]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -9110,29 +9122,29 @@ public struct HomepageSection: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
-    private var _visible_item_order: [AnyInt]?
+    private var _visible_item_order: [AnyString]?
     /**
      * ids of the homepage items the user can see in the order they should be displayed (read-only)
      */
-    public var visible_item_order: [Int64]? {
+    public var visible_item_order: [String]? {
         get { if let v = _visible_item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil } }
+        set { if let v = newValue { _visible_item_order = v.map { AnyString.init($0) } } else { _visible_item_order = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, detail_url: String? = nil, homepage_id: Int64? = nil, homepage_items: [HomepageItem]? = nil, id: Int64? = nil, is_header: Bool? = nil, item_order: [Int64]? = nil, title: String? = nil, updated_at: Date? = nil, description: String? = nil, visible_item_order: [Int64]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: Date? = nil, deleted_at: Date? = nil, detail_url: String? = nil, homepage_id: String? = nil, homepage_items: [HomepageItem]? = nil, id: String? = nil, is_header: Bool? = nil, item_order: [String]? = nil, title: String? = nil, updated_at: Date? = nil, description: String? = nil, visible_item_order: [String]? = nil) {
         self.can = can
         self.created_at = created_at
         self.deleted_at = deleted_at
         self._detail_url = detail_url.map(AnyString.init)
-        self._homepage_id = homepage_id.map(AnyInt.init)
+        self._homepage_id = homepage_id.map(AnyString.init)
         self.homepage_items = homepage_items
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.is_header = is_header
-        if let v = item_order { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil }
+        if let v = item_order { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil }
         self._title = title.map(AnyString.init)
         self.updated_at = updated_at
         self._description = description.map(AnyString.init)
-        if let v = visible_item_order { _visible_item_order = v.map { AnyInt.init($0) } } else { _visible_item_order = nil }
+        if let v = visible_item_order { _visible_item_order = v.map { AnyString.init($0) } } else { _visible_item_order = nil }
     }
 
 }
@@ -9221,13 +9233,13 @@ public struct Integration: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _integration_hub_id: AnyInt?
+    private var _integration_hub_id: AnyString?
     /**
      * ID of the integration hub. (read-only)
      */
-    public var integration_hub_id: Int64? {
+    public var integration_hub_id: String? {
         get { _integration_hub_id?.value }
-        set { _integration_hub_id = newValue.map(AnyInt.init) }
+        set { _integration_hub_id = newValue.map(AnyString.init) }
     }
 
     private var _label: AnyString?
@@ -9264,7 +9276,7 @@ public struct Integration: SDKModel {
     public var supported_formats: [SupportedFormats]?
 
     /**
-     * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
+     * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)
      */
     public var supported_action_types: [SupportedActionTypes]?
 
@@ -9307,19 +9319,19 @@ public struct Integration: SDKModel {
      */
     public var delegate_oauth: Bool?
 
-    private var _installed_delegate_oauth_targets: [AnyInt]?
+    private var _installed_delegate_oauth_targets: [AnyString]?
     /**
      * Whether the integration is available to users.
      */
-    public var installed_delegate_oauth_targets: [Int64]? {
+    public var installed_delegate_oauth_targets: [String]? {
         get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: Int64? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: String? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [String]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
-        self._integration_hub_id = integration_hub_id.map(AnyInt.init)
+        self._integration_hub_id = integration_hub_id.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.enabled = enabled
@@ -9333,7 +9345,7 @@ public struct Integration: SDKModel {
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
         self.delegate_oauth = delegate_oauth
-        if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil }
+        if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil }
     }
 
 }
@@ -9358,13 +9370,13 @@ public struct IntegrationHub: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * ID of the hub. (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _url: AnyString?
@@ -9432,9 +9444,9 @@ public struct IntegrationHub: SDKModel {
         set { _legal_agreement_text = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, url: String? = nil, label: String? = nil, official: Bool? = nil, fetch_error_message: String? = nil, authorization_token: String? = nil, has_authorization_token: Bool? = nil, legal_agreement_signed: Bool? = nil, legal_agreement_required: Bool? = nil, legal_agreement_text: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, url: String? = nil, label: String? = nil, official: Bool? = nil, fetch_error_message: String? = nil, authorization_token: String? = nil, has_authorization_token: Bool? = nil, legal_agreement_signed: Bool? = nil, legal_agreement_required: Bool? = nil, legal_agreement_text: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._url = url.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self.official = official
@@ -9798,13 +9810,13 @@ public struct LDAPConfig: SDKModel {
      */
     public var connection_tls_no_verify: Bool?
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -9812,13 +9824,13 @@ public struct LDAPConfig: SDKModel {
      */
     public var default_new_user_groups: [LkGroup]?
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -10048,7 +10060,7 @@ public struct LDAPConfig: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups: [LDAPGroupRead]? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, has_auth_password: Bool? = nil, merge_new_users_by_email: Bool? = nil, modified_at: String? = nil, modified_by: String? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes: [LDAPUserAttributeRead]? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [String]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups: [LDAPGroupRead]? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, has_auth_password: Bool? = nil, merge_new_users_by_email: Bool? = nil, modified_at: String? = nil, modified_by: String? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes: [LDAPUserAttributeRead]? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self._auth_password = auth_password.map(AnyString.init)
@@ -10058,9 +10070,9 @@ public struct LDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
         self.default_new_user_groups = default_new_user_groups
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.force_no_page = force_no_page
@@ -10212,22 +10224,22 @@ public struct LDAPGroupRead: SDKModel {
         case roles
         case _url = "url"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -10262,9 +10274,9 @@ public struct LDAPGroupRead: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.roles = roles
@@ -10283,22 +10295,22 @@ public struct LDAPGroupWrite: SDKModel {
         case _role_ids = "role_ids"
         case _url = "url"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -10319,13 +10331,13 @@ public struct LDAPGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _role_ids: [AnyInt]?
+    private var _role_ids: [AnyString]?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]? {
+    public var role_ids: [String]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -10337,12 +10349,12 @@ public struct LDAPGroupWrite: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: String? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [String]? = nil, url: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        if let v = role_ids { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -10530,13 +10542,13 @@ public struct LDAPUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
-    private var _user_attribute_ids: [AnyInt]?
+    private var _user_attribute_ids: [AnyString]?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]? {
+    public var user_attribute_ids: [String]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -10548,10 +10560,10 @@ public struct LDAPUserAttributeWrite: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [String]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil }
+        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -10685,14 +10697,6 @@ public struct LegacyFeature: SDKModel {
 
 }
 
-/**
- * Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
- */
-public enum LinkedContentType: String, Codable {
-    case dashboard = "dashboard"
-    case lookml_dashboard = "lookml_dashboard"
-}
-
 public struct LkLocale: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -10805,13 +10809,13 @@ public struct Look: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _id: AnyString?
@@ -10832,22 +10836,22 @@ public struct Look: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content Favorite Id (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -10865,13 +10869,13 @@ public struct Look: SDKModel {
      */
     public var deleted_at: Date?
 
-    private var _deleter_id: AnyInt?
+    private var _deleter_id: AnyString?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    public var deleter_id: Int64? {
+    public var deleter_id: String? {
         get { _deleter_id?.value }
-        set { _deleter_id = newValue.map(AnyInt.init) }
+        set { _deleter_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -10938,13 +10942,13 @@ public struct Look: SDKModel {
      */
     public var last_accessed_at: Date?
 
-    private var _last_updater_id: AnyInt?
+    private var _last_updater_id: AnyString?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    public var last_updater_id: Int64? {
+    public var last_updater_id: String? {
         get { _last_updater_id?.value }
-        set { _last_updater_id = newValue.map(AnyInt.init) }
+        set { _last_updater_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -10977,13 +10981,13 @@ public struct Look: SDKModel {
         set { _public_url = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Query Id
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _short_url: AnyString?
@@ -11020,17 +11024,17 @@ public struct Look: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil) {
         self.can = can
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self.created_at = created_at
         self.deleted = deleted
         self.deleted_at = deleted_at
-        self._deleter_id = deleter_id.map(AnyInt.init)
+        self._deleter_id = deleter_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._embed_url = embed_url.map(AnyString.init)
         self._excel_file_url = excel_file_url.map(AnyString.init)
@@ -11039,13 +11043,13 @@ public struct Look: SDKModel {
         self._image_embed_url = image_embed_url.map(AnyString.init)
         self.is_run_on_load = is_run_on_load
         self.last_accessed_at = last_accessed_at
-        self._last_updater_id = last_updater_id.map(AnyInt.init)
+        self._last_updater_id = last_updater_id.map(AnyString.init)
         self.last_viewed_at = last_viewed_at
         self.model = model
         self.`public` = `public`
         self._public_slug = public_slug.map(AnyString.init)
         self._public_url = public_url.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._short_url = short_url.map(AnyString.init)
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
@@ -11069,22 +11073,22 @@ public struct LookBasic: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _title: AnyString?
@@ -11096,21 +11100,21 @@ public struct LookBasic: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: Int64? = nil, title: String? = nil, user_id: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil) {
         self.can = can
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
-        self._id = id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
+        self._id = id.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -12978,13 +12982,13 @@ public struct LookWithDashboards: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _id: AnyString?
@@ -13005,22 +13009,22 @@ public struct LookWithDashboards: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content Favorite Id (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -13038,13 +13042,13 @@ public struct LookWithDashboards: SDKModel {
      */
     public var deleted_at: Date?
 
-    private var _deleter_id: AnyInt?
+    private var _deleter_id: AnyString?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    public var deleter_id: Int64? {
+    public var deleter_id: String? {
         get { _deleter_id?.value }
-        set { _deleter_id = newValue.map(AnyInt.init) }
+        set { _deleter_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -13111,13 +13115,13 @@ public struct LookWithDashboards: SDKModel {
      */
     public var last_accessed_at: Date?
 
-    private var _last_updater_id: AnyInt?
+    private var _last_updater_id: AnyString?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    public var last_updater_id: Int64? {
+    public var last_updater_id: String? {
         get { _last_updater_id?.value }
-        set { _last_updater_id = newValue.map(AnyInt.init) }
+        set { _last_updater_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -13150,13 +13154,13 @@ public struct LookWithDashboards: SDKModel {
         set { _public_url = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Query Id
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _short_url: AnyString?
@@ -13198,17 +13202,17 @@ public struct LookWithDashboards: SDKModel {
      */
     public var dashboards: [DashboardBase]?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
         self.can = can
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self.created_at = created_at
         self.deleted = deleted
         self.deleted_at = deleted_at
-        self._deleter_id = deleter_id.map(AnyInt.init)
+        self._deleter_id = deleter_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._embed_url = embed_url.map(AnyString.init)
         self._excel_file_url = excel_file_url.map(AnyString.init)
@@ -13217,13 +13221,13 @@ public struct LookWithDashboards: SDKModel {
         self._image_embed_url = image_embed_url.map(AnyString.init)
         self.is_run_on_load = is_run_on_load
         self.last_accessed_at = last_accessed_at
-        self._last_updater_id = last_updater_id.map(AnyInt.init)
+        self._last_updater_id = last_updater_id.map(AnyString.init)
         self.last_viewed_at = last_viewed_at
         self.model = model
         self.`public` = `public`
         self._public_slug = public_slug.map(AnyString.init)
         self._public_url = public_url.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._short_url = short_url.map(AnyString.init)
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
@@ -13275,13 +13279,13 @@ public struct LookWithQuery: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Id of content metadata (read-only)
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     private var _id: AnyString?
@@ -13302,22 +13306,22 @@ public struct LookWithQuery: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_favorite_id: AnyInt?
+    private var _content_favorite_id: AnyString?
     /**
      * Content Favorite Id (read-only)
      */
-    public var content_favorite_id: Int64? {
+    public var content_favorite_id: String? {
         get { _content_favorite_id?.value }
-        set { _content_favorite_id = newValue.map(AnyInt.init) }
+        set { _content_favorite_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -13335,13 +13339,13 @@ public struct LookWithQuery: SDKModel {
      */
     public var deleted_at: Date?
 
-    private var _deleter_id: AnyInt?
+    private var _deleter_id: AnyString?
     /**
      * Id of User that deleted the look. (read-only)
      */
-    public var deleter_id: Int64? {
+    public var deleter_id: String? {
         get { _deleter_id?.value }
-        set { _deleter_id = newValue.map(AnyInt.init) }
+        set { _deleter_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -13408,13 +13412,13 @@ public struct LookWithQuery: SDKModel {
      */
     public var last_accessed_at: Date?
 
-    private var _last_updater_id: AnyInt?
+    private var _last_updater_id: AnyString?
     /**
      * Id of User that last updated the look. (read-only)
      */
-    public var last_updater_id: Int64? {
+    public var last_updater_id: String? {
         get { _last_updater_id?.value }
-        set { _last_updater_id = newValue.map(AnyInt.init) }
+        set { _last_updater_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -13447,13 +13451,13 @@ public struct LookWithQuery: SDKModel {
         set { _public_url = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Query Id
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _short_url: AnyString?
@@ -13501,17 +13505,17 @@ public struct LookWithQuery: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: Int64? = nil, id: String? = nil, title: String? = nil, user_id: Int64? = nil, content_favorite_id: Int64? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: Int64? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: Int64? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: Int64? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
         self.can = can
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
-        self._content_favorite_id = content_favorite_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self.created_at = created_at
         self.deleted = deleted
         self.deleted_at = deleted_at
-        self._deleter_id = deleter_id.map(AnyInt.init)
+        self._deleter_id = deleter_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._embed_url = embed_url.map(AnyString.init)
         self._excel_file_url = excel_file_url.map(AnyString.init)
@@ -13520,13 +13524,13 @@ public struct LookWithQuery: SDKModel {
         self._image_embed_url = image_embed_url.map(AnyString.init)
         self.is_run_on_load = is_run_on_load
         self.last_accessed_at = last_accessed_at
-        self._last_updater_id = last_updater_id.map(AnyInt.init)
+        self._last_updater_id = last_updater_id.map(AnyString.init)
         self.last_viewed_at = last_viewed_at
         self.model = model
         self.`public` = `public`
         self._public_slug = public_slug.map(AnyString.init)
         self._public_url = public_url.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._short_url = short_url.map(AnyString.init)
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
@@ -13693,13 +13697,13 @@ public struct MergeQuery: SDKModel {
         set { if let v = newValue { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil } }
     }
 
-    private var _result_maker_id: AnyInt?
+    private var _result_maker_id: AnyString?
     /**
      * Unique to get results (read-only)
      */
-    public var result_maker_id: Int64? {
+    public var result_maker_id: String? {
         get { _result_maker_id?.value }
-        set { _result_maker_id = newValue.map(AnyInt.init) }
+        set { _result_maker_id = newValue.map(AnyString.init) }
     }
 
     private var _sorts: [AnyString]?
@@ -13726,13 +13730,13 @@ public struct MergeQuery: SDKModel {
      */
     public var vis_config: StringDictionary<AnyCodable>?
 
-    public init(can: StringDictionary<Bool>? = nil, column_limit: String? = nil, dynamic_fields: String? = nil, id: String? = nil, pivots: [String]? = nil, result_maker_id: Int64? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, column_limit: String? = nil, dynamic_fields: String? = nil, id: String? = nil, pivots: [String]? = nil, result_maker_id: String? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self.can = can
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self._id = id.map(AnyString.init)
         if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
-        self._result_maker_id = result_maker_id.map(AnyInt.init)
+        self._result_maker_id = result_maker_id.map(AnyString.init)
         if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self.source_queries = source_queries
         self.total = total
@@ -13762,19 +13766,19 @@ public struct MergeQuerySourceQuery: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id of the query to merge
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
-    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: Int64? = nil) {
+    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: String? = nil) {
         self.merge_fields = merge_fields
         self._name = name.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
     }
 
 }
@@ -13962,13 +13966,13 @@ public struct ModelSet: SDKModel {
      */
     public var built_in: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _models: [AnyString]?
@@ -13995,11 +13999,11 @@ public struct ModelSet: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, models: [String]? = nil, name: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: String? = nil, models: [String]? = nil, name: String? = nil, url: String? = nil) {
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
         self._name = name.map(AnyString.init)
         self._url = url.map(AnyString.init)
@@ -14113,13 +14117,13 @@ public struct OauthClientApp: SDKModel {
      */
     public var enabled: Bool?
 
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -14132,14 +14136,14 @@ public struct OauthClientApp: SDKModel {
      */
     public var activated_users: [UserPublic]?
 
-    public init(can: StringDictionary<Bool>? = nil, client_guid: String? = nil, redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: Int64? = nil, tokens_invalid_before: Date? = nil, activated_users: [UserPublic]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, client_guid: String? = nil, redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: String? = nil, tokens_invalid_before: Date? = nil, activated_users: [UserPublic]? = nil) {
         self.can = can
         self._client_guid = client_guid.map(AnyString.init)
         self._redirect_uri = redirect_uri.map(AnyString.init)
         self._display_name = display_name.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.enabled = enabled
-        self._group_id = group_id.map(AnyInt.init)
+        self._group_id = group_id.map(AnyString.init)
         self.tokens_invalid_before = tokens_invalid_before
         self.activated_users = activated_users
     }
@@ -14216,13 +14220,13 @@ public struct OIDCConfig: SDKModel {
         set { _authorization_endpoint = newValue.map(AnyString.init) }
     }
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -14230,13 +14234,13 @@ public struct OIDCConfig: SDKModel {
      */
     public var default_new_user_groups: [LkGroup]?
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -14291,13 +14295,13 @@ public struct OIDCConfig: SDKModel {
      */
     public var modified_at: Date?
 
-    private var _modified_by: AnyInt?
+    private var _modified_by: AnyString?
     /**
      * User id of user who last modified this config (read-only)
      */
-    public var modified_by: Int64? {
+    public var modified_by: String? {
         get { _modified_by?.value }
-        set { _modified_by = newValue.map(AnyInt.init) }
+        set { _modified_by = newValue.map(AnyString.init) }
     }
 
     private var _new_user_migration_types: AnyString?
@@ -14420,15 +14424,15 @@ public struct OIDCConfig: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, groups: [OIDCGroupRead]? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, modified_at: Date? = nil, modified_by: Int64? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, test_slug: String? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes: [OIDCUserAttributeRead]? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [String]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_roles: [Role]? = nil, enabled: Bool? = nil, groups: [OIDCGroupRead]? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, modified_at: Date? = nil, modified_by: String? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, test_slug: String? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes: [OIDCUserAttributeRead]? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
         self.default_new_user_groups = default_new_user_groups
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
         self.default_new_user_roles = default_new_user_roles
         self.enabled = enabled
         self.groups = groups
@@ -14437,7 +14441,7 @@ public struct OIDCConfig: SDKModel {
         self._identifier = identifier.map(AnyString.init)
         self._issuer = issuer.map(AnyString.init)
         self.modified_at = modified_at
-        self._modified_by = modified_by.map(AnyInt.init)
+        self._modified_by = modified_by.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
         if let v = scopes { _scopes = v.map { AnyString.init($0) } } else { _scopes = nil }
         self._secret = secret.map(AnyString.init)
@@ -14467,22 +14471,22 @@ public struct OIDCGroupRead: SDKModel {
         case _name = "name"
         case roles
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -14508,9 +14512,9 @@ public struct OIDCGroupRead: SDKModel {
      */
     public var roles: [Role]?
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.roles = roles
@@ -14527,22 +14531,22 @@ public struct OIDCGroupWrite: SDKModel {
         case _name = "name"
         case _role_ids = "role_ids"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -14563,21 +14567,21 @@ public struct OIDCGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _role_ids: [AnyInt]?
+    private var _role_ids: [AnyString]?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]? {
+    public var role_ids: [String]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
     }
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [String]? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        if let v = role_ids { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
     }
 
 }
@@ -14637,19 +14641,19 @@ public struct OIDCUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
-    private var _user_attribute_ids: [AnyInt]?
+    private var _user_attribute_ids: [AnyString]?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]? {
+    public var user_attribute_ids: [String]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil } }
     }
 
-    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [String]? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil }
+        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil }
     }
 
 }
@@ -14777,13 +14781,13 @@ public struct PermissionSet: SDKModel {
      */
     public var built_in: Bool?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -14810,11 +14814,11 @@ public struct PermissionSet: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: Int64? = nil, name: String? = nil, permissions: [String]? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, all_access: Bool? = nil, built_in: Bool? = nil, id: String? = nil, name: String? = nil, permissions: [String]? = nil, url: String? = nil) {
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
         self._url = url.map(AnyString.init)
@@ -14828,6 +14832,140 @@ public struct PermissionSet: SDKModel {
 public enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
+}
+
+public struct PrivatelabelConfiguration: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _logo_file = "logo_file"
+        case _logo_url = "logo_url"
+        case _favicon_file = "favicon_file"
+        case _favicon_url = "favicon_url"
+        case _default_title = "default_title"
+        case show_help_menu
+        case show_docs
+        case show_email_sub_options
+        case allow_looker_mentions
+        case allow_looker_links
+        case custom_welcome_email_advanced
+        case setup_mentions
+        case alerts_logo
+        case alerts_links
+        case folders_mentions
+    }
+    private var _logo_file: AnyString?
+    /**
+     * Customer logo image. Expected base64 encoded data (write-only)
+     */
+    public var logo_file: String? {
+        get { _logo_file?.value }
+        set { _logo_file = newValue.map(AnyString.init) }
+    }
+
+    private var _logo_url: AnyString?
+    /**
+     * Logo image url (read-only) (read-only)
+     */
+    public var logo_url: String? {
+        get { _logo_url?.value }
+        set { _logo_url = newValue.map(AnyString.init) }
+    }
+
+    private var _favicon_file: AnyString?
+    /**
+     * Custom favicon image. Expected base64 encoded data (write-only)
+     */
+    public var favicon_file: String? {
+        get { _favicon_file?.value }
+        set { _favicon_file = newValue.map(AnyString.init) }
+    }
+
+    private var _favicon_url: AnyString?
+    /**
+     * Favicon image url (read-only) (read-only)
+     */
+    public var favicon_url: String? {
+        get { _favicon_url?.value }
+        set { _favicon_url = newValue.map(AnyString.init) }
+    }
+
+    private var _default_title: AnyString?
+    /**
+     * Default page title
+     */
+    public var default_title: String? {
+        get { _default_title?.value }
+        set { _default_title = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Boolean to toggle showing help menus
+     */
+    public var show_help_menu: Bool?
+
+    /**
+     * Boolean to toggle showing docs
+     */
+    public var show_docs: Bool?
+
+    /**
+     * Boolean to toggle showing email subscription options.
+     */
+    public var show_email_sub_options: Bool?
+
+    /**
+     * Boolean to toggle mentions of Looker in emails
+     */
+    public var allow_looker_mentions: Bool?
+
+    /**
+     * Boolean to toggle links to Looker in emails
+     */
+    public var allow_looker_links: Bool?
+
+    /**
+     * Allow subject line and email heading customization in customized emails”
+     */
+    public var custom_welcome_email_advanced: Bool?
+
+    /**
+     * Remove the word Looker from appearing in the account setup page
+     */
+    public var setup_mentions: Bool?
+
+    /**
+     * Remove Looker logo from Alerts
+     */
+    public var alerts_logo: Bool?
+
+    /**
+     * Remove Looker links from Alerts
+     */
+    public var alerts_links: Bool?
+
+    /**
+     * Remove Looker mentions in home folder page when you don’t have any items saved
+     */
+    public var folders_mentions: Bool?
+
+    public init(logo_file: String? = nil, logo_url: String? = nil, favicon_file: String? = nil, favicon_url: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
+        self._logo_file = logo_file.map(AnyString.init)
+        self._logo_url = logo_url.map(AnyString.init)
+        self._favicon_file = favicon_file.map(AnyString.init)
+        self._favicon_url = favicon_url.map(AnyString.init)
+        self._default_title = default_title.map(AnyString.init)
+        self.show_help_menu = show_help_menu
+        self.show_docs = show_docs
+        self.show_email_sub_options = show_email_sub_options
+        self.allow_looker_mentions = allow_looker_mentions
+        self.allow_looker_links = allow_looker_links
+        self.custom_welcome_email_advanced = custom_welcome_email_advanced
+        self.setup_mentions = setup_mentions
+        self.alerts_logo = alerts_logo
+        self.alerts_links = alerts_links
+        self.folders_mentions = folders_mentions
+    }
+
 }
 
 public struct Project: SDKModel {
@@ -15491,13 +15629,13 @@ public struct Query: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _model: AnyString
@@ -15696,9 +15834,9 @@ public struct Query: SDKModel {
      */
     public var has_table_calculations: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, model: String, view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, model: String, view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._model = AnyString.init(model)
         self._view = AnyString.init(view)
         if let v = fields { _fields = v.map { AnyString.init($0) } } else { _fields = nil }
@@ -15725,7 +15863,7 @@ public struct Query: SDKModel {
         self.has_table_calculations = has_table_calculations
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, _ model: String, _ view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ model: String, _ view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
         self.init(can: can, id: id, model: model, view: view, fields: fields, pivots: pivots, fill_fields: fill_fields, filters: filters, filter_expression: filter_expression, sorts: sorts, limit: limit, column_limit: column_limit, total: total, row_total: row_total, subtotals: subtotals, vis_config: vis_config, filter_config: filter_config, visible_ui_sections: visible_ui_sections, slug: slug, dynamic_fields: dynamic_fields, client_id: client_id, share_url: share_url, expanded_share_url: expanded_share_url, url: url, query_timezone: query_timezone, has_table_calculations: has_table_calculations)
     }
 
@@ -15768,13 +15906,13 @@ public struct QueryTask: SDKModel {
         set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id of query
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     public var query: Query?
@@ -15886,10 +16024,10 @@ public struct QueryTask: SDKModel {
         set { _result_format = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: Int64? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: String? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, query_id: String? = nil, query: Query? = nil, generate_links: Bool? = nil, force_production: Bool? = nil, path_prefix: String? = nil, cache: Bool? = nil, server_table_calcs: Bool? = nil, cache_only: Bool? = nil, cache_key: String? = nil, status: String? = nil, source: String? = nil, runtime: Float? = nil, rebuild_pdts: Bool? = nil, result_source: String? = nil, look_id: String? = nil, dashboard_id: String? = nil, result_format: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self.query = query
         self.generate_links = generate_links
         self.force_production = force_production
@@ -15957,13 +16095,13 @@ public struct RenderTask: SDKModel {
         set { _dashboard_filters = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Id of dashboard to render (read-only)
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _dashboard_style: AnyString?
@@ -16020,13 +16158,13 @@ public struct RenderTask: SDKModel {
         set { _lookml_dashboard_id = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id of query to render (read-only)
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _dashboard_element_id: AnyString?
@@ -16080,13 +16218,13 @@ public struct RenderTask: SDKModel {
         set { _status_detail = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * The user account permissions in which the render task will execute (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     private var _width: AnyInt?
@@ -16098,18 +16236,18 @@ public struct RenderTask: SDKModel {
         set { _width = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, dashboard_filters: String? = nil, dashboard_id: Int64? = nil, dashboard_style: String? = nil, finalized_at: String? = nil, height: Int64? = nil, id: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, query_id: Int64? = nil, dashboard_element_id: String? = nil, query_runtime: Double? = nil, render_runtime: Double? = nil, result_format: String? = nil, runtime: Double? = nil, status: String? = nil, status_detail: String? = nil, user_id: Int64? = nil, width: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, dashboard_filters: String? = nil, dashboard_id: String? = nil, dashboard_style: String? = nil, finalized_at: String? = nil, height: Int64? = nil, id: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, query_id: String? = nil, dashboard_element_id: String? = nil, query_runtime: Double? = nil, render_runtime: Double? = nil, result_format: String? = nil, runtime: Double? = nil, status: String? = nil, status_detail: String? = nil, user_id: String? = nil, width: Int64? = nil) {
         self.can = can
         self._created_at = created_at.map(AnyString.init)
         self._dashboard_filters = dashboard_filters.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._dashboard_style = dashboard_style.map(AnyString.init)
         self._finalized_at = finalized_at.map(AnyString.init)
         self._height = height.map(AnyInt.init)
         self._id = id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self.query_runtime = query_runtime
         self.render_runtime = render_runtime
@@ -16117,7 +16255,7 @@ public struct RenderTask: SDKModel {
         self.runtime = runtime
         self._status = status.map(AnyString.init)
         self._status_detail = status_detail.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self._width = width.map(AnyInt.init)
     }
 
@@ -16322,13 +16460,13 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
         case query
         case vis_config
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id. (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _dynamic_fields: AnyString?
@@ -16368,13 +16506,13 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      */
     public var total: Bool?
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * ID of query if this is a query. (read-only)
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _sql_query_id: AnyString?
@@ -16393,14 +16531,14 @@ public struct ResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
      */
     public var vis_config: StringDictionary<AnyCodable>?
 
-    public init(id: Int64? = nil, dynamic_fields: String? = nil, filterables: [ResultMakerFilterables]? = nil, sorts: [String]? = nil, merge_result_id: String? = nil, total: Bool? = nil, query_id: Int64? = nil, sql_query_id: String? = nil, query: Query? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
-        self._id = id.map(AnyInt.init)
+    public init(id: String? = nil, dynamic_fields: String? = nil, filterables: [ResultMakerFilterables]? = nil, sorts: [String]? = nil, merge_result_id: String? = nil, total: Bool? = nil, query_id: String? = nil, sql_query_id: String? = nil, query: Query? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
+        self._id = id.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         self.filterables = filterables
         if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self._merge_result_id = merge_result_id.map(AnyString.init)
         self.total = total
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._sql_query_id = sql_query_id.map(AnyString.init)
         self.query = query
         self.vis_config = vis_config
@@ -16426,13 +16564,13 @@ public struct Role: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -16446,24 +16584,24 @@ public struct Role: SDKModel {
 
     public var permission_set: PermissionSet?
 
-    private var _permission_set_id: AnyInt?
+    private var _permission_set_id: AnyString?
     /**
      * (Write-Only) Id of permission set
      */
-    public var permission_set_id: Int64? {
+    public var permission_set_id: String? {
         get { _permission_set_id?.value }
-        set { _permission_set_id = newValue.map(AnyInt.init) }
+        set { _permission_set_id = newValue.map(AnyString.init) }
     }
 
     public var model_set: ModelSet?
 
-    private var _model_set_id: AnyInt?
+    private var _model_set_id: AnyString?
     /**
      * (Write-Only) Id of model set
      */
-    public var model_set_id: Int64? {
+    public var model_set_id: String? {
         get { _model_set_id?.value }
-        set { _model_set_id = newValue.map(AnyInt.init) }
+        set { _model_set_id = newValue.map(AnyString.init) }
     }
 
     private var _url: AnyString?
@@ -16484,14 +16622,14 @@ public struct Role: SDKModel {
         set { _users_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, url: String? = nil, users_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, url: String? = nil, users_url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.permission_set = permission_set
-        self._permission_set_id = permission_set_id.map(AnyInt.init)
+        self._permission_set_id = permission_set_id.map(AnyString.init)
         self.model_set = model_set
-        self._model_set_id = model_set_id.map(AnyInt.init)
+        self._model_set_id = model_set_id.map(AnyString.init)
         self._url = url.map(AnyString.init)
         self._users_url = users_url.map(AnyString.init)
     }
@@ -16517,13 +16655,13 @@ public struct RoleSearch: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -16537,24 +16675,24 @@ public struct RoleSearch: SDKModel {
 
     public var permission_set: PermissionSet?
 
-    private var _permission_set_id: AnyInt?
+    private var _permission_set_id: AnyString?
     /**
      * (Write-Only) Id of permission set
      */
-    public var permission_set_id: Int64? {
+    public var permission_set_id: String? {
         get { _permission_set_id?.value }
-        set { _permission_set_id = newValue.map(AnyInt.init) }
+        set { _permission_set_id = newValue.map(AnyString.init) }
     }
 
     public var model_set: ModelSet?
 
-    private var _model_set_id: AnyInt?
+    private var _model_set_id: AnyString?
     /**
      * (Write-Only) Id of model set
      */
-    public var model_set_id: Int64? {
+    public var model_set_id: String? {
         get { _model_set_id?.value }
-        set { _model_set_id = newValue.map(AnyInt.init) }
+        set { _model_set_id = newValue.map(AnyString.init) }
     }
 
     private var _user_count: AnyInt?
@@ -16584,14 +16722,14 @@ public struct RoleSearch: SDKModel {
         set { _users_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: Int64? = nil, model_set: ModelSet? = nil, model_set_id: Int64? = nil, user_count: Int64? = nil, url: String? = nil, users_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, user_count: Int64? = nil, url: String? = nil, users_url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.permission_set = permission_set
-        self._permission_set_id = permission_set_id.map(AnyInt.init)
+        self._permission_set_id = permission_set_id.map(AnyString.init)
         self.model_set = model_set
-        self._model_set_id = model_set_id.map(AnyInt.init)
+        self._model_set_id = model_set_id.map(AnyString.init)
         self._user_count = user_count.map(AnyInt.init)
         self._url = url.map(AnyString.init)
         self._users_url = users_url.map(AnyString.init)
@@ -16629,13 +16767,13 @@ public struct RunningQueries: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     public var user: UserPublic?
@@ -16777,9 +16915,9 @@ public struct RunningQueries: SDKModel {
         set { _sql = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, user: UserPublic? = nil, query: Query? = nil, sql_query: SqlQuery? = nil, look: LookBasic? = nil, created_at: String? = nil, completed_at: String? = nil, query_id: String? = nil, source: String? = nil, node_id: String? = nil, slug: String? = nil, query_task_id: String? = nil, cache_key: String? = nil, connection_name: String? = nil, dialect: String? = nil, connection_id: String? = nil, message: String? = nil, status: String? = nil, runtime: Double? = nil, sql: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, user: UserPublic? = nil, query: Query? = nil, sql_query: SqlQuery? = nil, look: LookBasic? = nil, created_at: String? = nil, completed_at: String? = nil, query_id: String? = nil, source: String? = nil, node_id: String? = nil, slug: String? = nil, query_task_id: String? = nil, cache_key: String? = nil, connection_name: String? = nil, dialect: String? = nil, connection_id: String? = nil, message: String? = nil, status: String? = nil, runtime: Double? = nil, sql: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.user = user
         self.query = query
         self.sql_query = sql_query
@@ -16973,22 +17111,22 @@ public struct SamlConfig: SDKModel {
      */
     public var default_new_user_groups: [LkGroup]?
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -17077,7 +17215,7 @@ public struct SamlConfig: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_group_ids: [Int64]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.enabled = enabled
         self._idp_cert = idp_cert.map(AnyString.init)
@@ -17095,8 +17233,8 @@ public struct SamlConfig: SDKModel {
         self._modified_by = modified_by.map(AnyString.init)
         self.default_new_user_roles = default_new_user_roles
         self.default_new_user_groups = default_new_user_groups
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups = groups
@@ -17125,22 +17263,22 @@ public struct SamlGroupRead: SDKModel {
         case roles
         case _url = "url"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -17175,9 +17313,9 @@ public struct SamlGroupRead: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil, url: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.roles = roles
@@ -17196,22 +17334,22 @@ public struct SamlGroupWrite: SDKModel {
         case _role_ids = "role_ids"
         case _url = "url"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _looker_group_id: AnyInt?
+    private var _looker_group_id: AnyString?
     /**
      * Unique Id of group in Looker (read-only)
      */
-    public var looker_group_id: Int64? {
+    public var looker_group_id: String? {
         get { _looker_group_id?.value }
-        set { _looker_group_id = newValue.map(AnyInt.init) }
+        set { _looker_group_id = newValue.map(AnyString.init) }
     }
 
     private var _looker_group_name: AnyString?
@@ -17232,13 +17370,13 @@ public struct SamlGroupWrite: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _role_ids: [AnyInt]?
+    private var _role_ids: [AnyString]?
     /**
      * Looker Role Ids
      */
-    public var role_ids: [Int64]? {
+    public var role_ids: [String]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -17250,12 +17388,12 @@ public struct SamlGroupWrite: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, looker_group_id: Int64? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [Int64]? = nil, url: String? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._looker_group_id = looker_group_id.map(AnyInt.init)
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [String]? = nil, url: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
         self._looker_group_name = looker_group_name.map(AnyString.init)
         self._name = name.map(AnyString.init)
-        if let v = role_ids { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -17377,13 +17515,13 @@ public struct SamlUserAttributeWrite: SDKModel {
      */
     public var required: Bool?
 
-    private var _user_attribute_ids: [AnyInt]?
+    private var _user_attribute_ids: [AnyString]?
     /**
      * Looker User Attribute Ids
      */
-    public var user_attribute_ids: [Int64]? {
+    public var user_attribute_ids: [String]? {
         get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil } }
     }
 
     private var _url: AnyString?
@@ -17395,10 +17533,10 @@ public struct SamlUserAttributeWrite: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [Int64]? = nil, url: String? = nil) {
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [String]? = nil, url: String? = nil) {
         self._name = name.map(AnyString.init)
         self.required = required
-        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyInt.init($0) } } else { _user_attribute_ids = nil }
+        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil }
         self._url = url.map(AnyString.init)
     }
 
@@ -17451,13 +17589,13 @@ public struct ScheduledPlan: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id which owns this scheduled plan
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -17479,13 +17617,13 @@ public struct ScheduledPlan: SDKModel {
         set { _look_id = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Id of a dashboard
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _lookml_dashboard_id: AnyString?
@@ -17628,13 +17766,13 @@ public struct ScheduledPlan: SDKModel {
         set { _inline_table_width = newValue.map(AnyInt.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -17673,13 +17811,13 @@ public struct ScheduledPlan: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, id: Int64? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
         self._name = name.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
         self.enabled = enabled
         self._look_id = look_id.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._filters_string = filters_string.map(AnyString.init)
         self._dashboard_filters = dashboard_filters.map(AnyString.init)
@@ -17700,7 +17838,7 @@ public struct ScheduledPlan: SDKModel {
         self._color_theme = color_theme.map(AnyString.init)
         self.long_tables = long_tables
         self._inline_table_width = inline_table_width.map(AnyInt.init)
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.created_at = created_at
         self.updated_at = updated_at
         self._title = title.map(AnyString.init)
@@ -17727,22 +17865,22 @@ public struct ScheduledPlanDestination: SDKModel {
         case _secret_parameters = "secret_parameters"
         case _message = "message"
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _scheduled_plan_id: AnyInt?
+    private var _scheduled_plan_id: AnyString?
     /**
      * Id of a scheduled plan you own
      */
-    public var scheduled_plan_id: Int64? {
+    public var scheduled_plan_id: String? {
         get { _scheduled_plan_id?.value }
-        set { _scheduled_plan_id = newValue.map(AnyInt.init) }
+        set { _scheduled_plan_id = newValue.map(AnyString.init) }
     }
 
     private var _format: AnyString?
@@ -17814,9 +17952,9 @@ public struct ScheduledPlanDestination: SDKModel {
         set { _message = newValue.map(AnyString.init) }
     }
 
-    public init(id: Int64? = nil, scheduled_plan_id: Int64? = nil, format: String? = nil, apply_formatting: Bool? = nil, apply_vis: Bool? = nil, address: String? = nil, looker_recipient: Bool? = nil, type: String? = nil, parameters: String? = nil, secret_parameters: String? = nil, message: String? = nil) {
-        self._id = id.map(AnyInt.init)
-        self._scheduled_plan_id = scheduled_plan_id.map(AnyInt.init)
+    public init(id: String? = nil, scheduled_plan_id: String? = nil, format: String? = nil, apply_formatting: Bool? = nil, apply_vis: Bool? = nil, address: String? = nil, looker_recipient: Bool? = nil, type: String? = nil, parameters: String? = nil, secret_parameters: String? = nil, message: String? = nil) {
+        self._id = id.map(AnyString.init)
+        self._scheduled_plan_id = scheduled_plan_id.map(AnyString.init)
         self._format = format.map(AnyString.init)
         self.apply_formatting = apply_formatting
         self.apply_vis = apply_vis
@@ -18146,13 +18284,13 @@ public struct Session: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _ip_address: AnyString?
@@ -18236,13 +18374,13 @@ public struct Session: SDKModel {
         set { _extended_count = newValue.map(AnyInt.init) }
     }
 
-    private var _sudo_user_id: AnyInt?
+    private var _sudo_user_id: AnyString?
     /**
      * Actual user in the case when this session represents one user sudo'ing as another (read-only)
      */
-    public var sudo_user_id: Int64? {
+    public var sudo_user_id: String? {
         get { _sudo_user_id?.value }
-        set { _sudo_user_id = newValue.map(AnyInt.init) }
+        set { _sudo_user_id = newValue.map(AnyString.init) }
     }
 
     private var _created_at: AnyString?
@@ -18272,9 +18410,9 @@ public struct Session: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, ip_address: String? = nil, browser: String? = nil, operating_system: String? = nil, city: String? = nil, state: String? = nil, country: String? = nil, credentials_type: String? = nil, extended_at: String? = nil, extended_count: Int64? = nil, sudo_user_id: Int64? = nil, created_at: String? = nil, expires_at: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ip_address: String? = nil, browser: String? = nil, operating_system: String? = nil, city: String? = nil, state: String? = nil, country: String? = nil, credentials_type: String? = nil, extended_at: String? = nil, extended_count: Int64? = nil, sudo_user_id: String? = nil, created_at: String? = nil, expires_at: String? = nil, url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._ip_address = ip_address.map(AnyString.init)
         self._browser = browser.map(AnyString.init)
         self._operating_system = operating_system.map(AnyString.init)
@@ -18284,7 +18422,7 @@ public struct Session: SDKModel {
         self._credentials_type = credentials_type.map(AnyString.init)
         self._extended_at = extended_at.map(AnyString.init)
         self._extended_count = extended_count.map(AnyInt.init)
-        self._sudo_user_id = sudo_user_id.map(AnyInt.init)
+        self._sudo_user_id = sudo_user_id.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self._expires_at = expires_at.map(AnyString.init)
         self._url = url.map(AnyString.init)
@@ -18363,7 +18501,7 @@ public struct Setting: SDKModel {
      */
     public var marketplace_enabled: Bool?
 
-    public var whitelabel_configuration: WhitelabelConfiguration?
+    public var privatelabel_configuration: PrivatelabelConfiguration?
 
     public var custom_welcome_email: CustomWelcomeEmail?
 
@@ -18372,11 +18510,11 @@ public struct Setting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
-        self.whitelabel_configuration = whitelabel_configuration
+        self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
     }
@@ -18680,16 +18818,16 @@ public struct SqlQuery: SDKModel {
      */
     public var vis_config: StringDictionary<AnyCodable>?
 
-    private var _result_maker_id: AnyInt?
+    private var _result_maker_id: AnyString?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    public var result_maker_id: Int64? {
+    public var result_maker_id: String? {
         get { _result_maker_id?.value }
-        set { _result_maker_id = newValue.map(AnyInt.init) }
+        set { _result_maker_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, slug: String? = nil, last_runtime: Float? = nil, run_count: Int64? = nil, browser_limit: Int64? = nil, sql: String? = nil, last_run_at: String? = nil, connection: DBConnectionBase? = nil, model_name: String? = nil, creator: UserPublic? = nil, explore_url: String? = nil, plaintext: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil, result_maker_id: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, slug: String? = nil, last_runtime: Float? = nil, run_count: Int64? = nil, browser_limit: Int64? = nil, sql: String? = nil, last_run_at: String? = nil, connection: DBConnectionBase? = nil, model_name: String? = nil, creator: UserPublic? = nil, explore_url: String? = nil, plaintext: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil, result_maker_id: String? = nil) {
         self.can = can
         self._slug = slug.map(AnyString.init)
         self.last_runtime = last_runtime
@@ -18703,7 +18841,7 @@ public struct SqlQuery: SDKModel {
         self._explore_url = explore_url.map(AnyString.init)
         self.plaintext = plaintext
         self.vis_config = vis_config
-        self._result_maker_id = result_maker_id.map(AnyInt.init)
+        self._result_maker_id = result_maker_id.map(AnyString.init)
     }
 
 }
@@ -19169,12 +19307,13 @@ public struct SupportAccessStatus: SDKModel {
 }
 
 /**
- * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
  */
 public enum SupportedActionTypes: String, Codable {
     case cell = "cell"
     case query = "query"
     case dashboard = "dashboard"
+    case none = "none"
 }
 
 /**
@@ -19245,13 +19384,13 @@ public struct Theme: SDKModel {
      */
     public var end_at: Date?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString?
@@ -19265,11 +19404,11 @@ public struct Theme: SDKModel {
 
     public var settings: ThemeSettings?
 
-    public init(can: StringDictionary<Bool>? = nil, begin_at: Date? = nil, end_at: Date? = nil, id: Int64? = nil, name: String? = nil, settings: ThemeSettings? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, begin_at: Date? = nil, end_at: Date? = nil, id: String? = nil, name: String? = nil, settings: ThemeSettings? = nil) {
         self.can = can
         self.begin_at = begin_at
         self.end_at = end_at
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.settings = settings
     }
@@ -19502,37 +19641,6 @@ public struct Timezone: SDKModel {
 
 }
 
-public struct UpdateCommand: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case _description = "description"
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the command
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    private var _description: AnyString?
-    /**
-     * Description of the command
-     */
-    public var description: String? {
-        get { _description?.value }
-        set { _description = newValue.map(AnyString.init) }
-    }
-
-    public init(name: String? = nil, description: String? = nil) {
-        self._name = name.map(AnyString.init)
-        self._description = description.map(AnyString.init)
-    }
-
-}
-
 public struct UpdateFolder: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -19601,6 +19709,7 @@ public struct User: SDKModel {
         case allow_direct_roles
         case allow_normal_group_membership
         case allow_roles_from_normal_groups
+        case _embed_group_folder_id = "embed_group_folder_id"
         case _url = "url"
     }
     /**
@@ -19668,13 +19777,13 @@ public struct User: SDKModel {
         set { _email = newValue.map(AnyString.init) }
     }
 
-    private var _embed_group_space_id: AnyInt?
+    private var _embed_group_space_id: AnyString?
     /**
-     * (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
+     * (DEPRECATED) (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
      */
-    public var embed_group_space_id: Int64? {
+    public var embed_group_space_id: String? {
         get { _embed_group_space_id?.value }
-        set { _embed_group_space_id = newValue.map(AnyInt.init) }
+        set { _embed_group_space_id = newValue.map(AnyString.init) }
     }
 
     private var _first_name: AnyString?
@@ -19686,13 +19795,13 @@ public struct User: SDKModel {
         set { _first_name = newValue.map(AnyString.init) }
     }
 
-    private var _group_ids: [AnyInt]?
+    private var _group_ids: [AnyString]?
     /**
      * Array of ids of the groups for this user (read-only)
      */
-    public var group_ids: [Int64]? {
+    public var group_ids: [String]? {
         get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil } }
     }
 
     private var _home_folder_id: AnyString?
@@ -19704,13 +19813,13 @@ public struct User: SDKModel {
         set { _home_folder_id = newValue.map(AnyString.init) }
     }
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -19750,13 +19859,13 @@ public struct User: SDKModel {
      */
     public var models_dir_validated: Bool?
 
-    private var _personal_folder_id: AnyInt?
+    private var _personal_folder_id: AnyString?
     /**
      * ID of user's personal folder (read-only)
      */
-    public var personal_folder_id: Int64? {
+    public var personal_folder_id: String? {
         get { _personal_folder_id?.value }
-        set { _personal_folder_id = newValue.map(AnyInt.init) }
+        set { _personal_folder_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -19764,13 +19873,13 @@ public struct User: SDKModel {
      */
     public var presumed_looker_employee: Bool?
 
-    private var _role_ids: [AnyInt]?
+    private var _role_ids: [AnyString]?
     /**
      * Array of ids of the roles for this user (read-only)
      */
-    public var role_ids: [Int64]? {
+    public var role_ids: [String]? {
         get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
     }
 
     /**
@@ -19808,6 +19917,15 @@ public struct User: SDKModel {
      */
     public var allow_roles_from_normal_groups: Bool?
 
+    private var _embed_group_folder_id: AnyString?
+    /**
+     * (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
+     */
+    public var embed_group_folder_id: String? {
+        get { _embed_group_folder_id?.value }
+        set { _embed_group_folder_id = newValue.map(AnyString.init) }
+    }
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -19817,7 +19935,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: Int64? = nil, first_name: String? = nil, group_ids: [Int64]? = nil, home_folder_id: String? = nil, id: Int64? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: Int64? = nil, presumed_looker_employee: Bool? = nil, role_ids: [Int64]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -19832,19 +19950,19 @@ public struct User: SDKModel {
         self.credentials_totp = credentials_totp
         self._display_name = display_name.map(AnyString.init)
         self._email = email.map(AnyString.init)
-        self._embed_group_space_id = embed_group_space_id.map(AnyInt.init)
+        self._embed_group_space_id = embed_group_space_id.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
-        if let v = group_ids { _group_ids = v.map { AnyInt.init($0) } } else { _group_ids = nil }
+        if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
         self._home_folder_id = home_folder_id.map(AnyString.init)
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self.is_disabled = is_disabled
         self._last_name = last_name.map(AnyString.init)
         self._locale = locale.map(AnyString.init)
         if let v = looker_versions { _looker_versions = v.map { AnyString.init($0) } } else { _looker_versions = nil }
         self.models_dir_validated = models_dir_validated
-        self._personal_folder_id = personal_folder_id.map(AnyInt.init)
+        self._personal_folder_id = personal_folder_id.map(AnyString.init)
         self.presumed_looker_employee = presumed_looker_employee
-        if let v = role_ids { _role_ids = v.map { AnyInt.init($0) } } else { _role_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
         self.sessions = sessions
         self.ui_state = ui_state
         self.verified_looker_employee = verified_looker_employee
@@ -19852,6 +19970,7 @@ public struct User: SDKModel {
         self.allow_direct_roles = allow_direct_roles
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
+        self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
 
@@ -19878,13 +19997,13 @@ public struct UserAttribute: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _name: AnyString
@@ -19957,9 +20076,9 @@ public struct UserAttribute: SDKModel {
         set { _hidden_value_domain_whitelist = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, name: String, label: String, type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String, label: String, type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._name = AnyString.init(name)
         self._label = AnyString.init(label)
         self._type = AnyString.init(type)
@@ -19972,7 +20091,7 @@ public struct UserAttribute: SDKModel {
         self._hidden_value_domain_whitelist = hidden_value_domain_whitelist.map(AnyString.init)
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, _ name: String, _ label: String, _ type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ name: String, _ label: String, _ type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
         self.init(can: can, id: id, name: name, label: label, type: type, default_value: default_value, is_system: is_system, is_permanent: is_permanent, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist)
     }
 
@@ -20012,31 +20131,31 @@ public struct UserAttributeGroupValue: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id of this group-attribute relation (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * Id of group (read-only)
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
-    private var _user_attribute_id: AnyInt?
+    private var _user_attribute_id: AnyString?
     /**
      * Id of user attribute (read-only)
      */
-    public var user_attribute_id: Int64? {
+    public var user_attribute_id: String? {
         get { _user_attribute_id?.value }
-        set { _user_attribute_id = newValue.map(AnyInt.init) }
+        set { _user_attribute_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -20062,11 +20181,11 @@ public struct UserAttributeGroupValue: SDKModel {
         set { _value = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, group_id: Int64? = nil, user_attribute_id: Int64? = nil, value_is_hidden: Bool? = nil, rank: Int64? = nil, value: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, group_id: String? = nil, user_attribute_id: String? = nil, value_is_hidden: Bool? = nil, rank: Int64? = nil, value: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
-        self._group_id = group_id.map(AnyInt.init)
-        self._user_attribute_id = user_attribute_id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
+        self._group_id = group_id.map(AnyString.init)
+        self._user_attribute_id = user_attribute_id.map(AnyString.init)
         self.value_is_hidden = value_is_hidden
         self._rank = rank.map(AnyInt.init)
         self._value = value.map(AnyString.init)
@@ -20130,13 +20249,13 @@ public struct UserAttributeWithValue: SDKModel {
         set { _value = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * Id of User (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -20149,13 +20268,13 @@ public struct UserAttributeWithValue: SDKModel {
      */
     public var value_is_hidden: Bool?
 
-    private var _user_attribute_id: AnyInt?
+    private var _user_attribute_id: AnyString?
     /**
      * Id of User Attribute (read-only)
      */
-    public var user_attribute_id: Int64? {
+    public var user_attribute_id: String? {
         get { _user_attribute_id?.value }
-        set { _user_attribute_id = newValue.map(AnyInt.init) }
+        set { _user_attribute_id = newValue.map(AnyString.init) }
     }
 
     private var _source: AnyString?
@@ -20176,16 +20295,16 @@ public struct UserAttributeWithValue: SDKModel {
         set { _hidden_value_domain_whitelist = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, label: String? = nil, rank: Int64? = nil, value: String? = nil, user_id: Int64? = nil, user_can_edit: Bool? = nil, value_is_hidden: Bool? = nil, user_attribute_id: Int64? = nil, source: String? = nil, hidden_value_domain_whitelist: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, label: String? = nil, rank: Int64? = nil, value: String? = nil, user_id: String? = nil, user_can_edit: Bool? = nil, value_is_hidden: Bool? = nil, user_attribute_id: String? = nil, source: String? = nil, hidden_value_domain_whitelist: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._rank = rank.map(AnyInt.init)
         self._value = value.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self.user_can_edit = user_can_edit
         self.value_is_hidden = value_is_hidden
-        self._user_attribute_id = user_attribute_id.map(AnyInt.init)
+        self._user_attribute_id = user_attribute_id.map(AnyString.init)
         self._source = source.map(AnyString.init)
         self._hidden_value_domain_whitelist = hidden_value_domain_whitelist.map(AnyString.init)
     }
@@ -20262,13 +20381,13 @@ public struct UserLoginLockout: SDKModel {
         set { _ip = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User ID (read-only)
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     private var _remote_id: AnyString?
@@ -20312,12 +20431,12 @@ public struct UserLoginLockout: SDKModel {
      */
     public var lockout_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, key: String? = nil, auth_type: String? = nil, ip: String? = nil, user_id: Int64? = nil, remote_id: String? = nil, full_name: String? = nil, email: String? = nil, fail_count: Int64? = nil, lockout_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, key: String? = nil, auth_type: String? = nil, ip: String? = nil, user_id: String? = nil, remote_id: String? = nil, full_name: String? = nil, email: String? = nil, fail_count: Int64? = nil, lockout_at: Date? = nil) {
         self.can = can
         self._key = key.map(AnyString.init)
         self._auth_type = auth_type.map(AnyString.init)
         self._ip = ip.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self._remote_id = remote_id.map(AnyString.init)
         self._full_name = full_name.map(AnyString.init)
         self._email = email.map(AnyString.init)
@@ -20343,13 +20462,13 @@ public struct UserPublic: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _first_name: AnyString?
@@ -20397,9 +20516,9 @@ public struct UserPublic: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: String? = nil, url: String? = nil) {
         self.can = can
-        self._id = id.map(AnyInt.init)
+        self._id = id.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
         self._last_name = last_name.map(AnyString.init)
         self._display_name = display_name.map(AnyString.init)
@@ -20583,13 +20702,13 @@ public struct WhitelabelConfiguration: SDKModel {
         case alerts_links
         case folders_mentions
     }
-    private var _id: AnyInt?
+    private var _id: AnyString?
     /**
      * Unique Id (read-only)
      */
-    public var id: Int64? {
+    public var id: String? {
         get { _id?.value }
-        set { _id = newValue.map(AnyInt.init) }
+        set { _id = newValue.map(AnyString.init) }
     }
 
     private var _logo_file: AnyString?
@@ -20687,8 +20806,8 @@ public struct WhitelabelConfiguration: SDKModel {
      */
     public var folders_mentions: Bool?
 
-    public init(id: Int64? = nil, logo_file: String? = nil, logo_url: String? = nil, favicon_file: String? = nil, favicon_url: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
-        self._id = id.map(AnyInt.init)
+    public init(id: String? = nil, logo_file: String? = nil, logo_url: String? = nil, favicon_file: String? = nil, favicon_url: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
+        self._id = id.map(AnyString.init)
         self._logo_file = logo_file.map(AnyString.init)
         self._logo_url = logo_url.map(AnyString.init)
         self._favicon_file = favicon_file.map(AnyString.init)
@@ -20796,13 +20915,13 @@ public struct WriteAlert: SDKModel {
         set { _custom_title = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_element_id: AnyInt?
+    private var _dashboard_element_id: AnyString?
     /**
      * ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
      */
-    public var dashboard_element_id: Int64? {
+    public var dashboard_element_id: String? {
         get { _dashboard_element_id?.value }
-        set { _dashboard_element_id = newValue.map(AnyInt.init) }
+        set { _dashboard_element_id = newValue.map(AnyString.init) }
     }
 
     private var _description: AnyString?
@@ -20872,13 +20991,13 @@ public struct WriteAlert: SDKModel {
         set { _lookml_link_id = newValue.map(AnyString.init) }
     }
 
-    private var _owner_id: AnyInt
+    private var _owner_id: AnyString
     /**
      * User id of alert owner
      */
-    public var owner_id: Int64 {
+    public var owner_id: String {
         get { _owner_id.value }
-        set { _owner_id = AnyInt.init(newValue) }
+        set { _owner_id = AnyString.init(newValue) }
     }
 
     /**
@@ -20888,12 +21007,12 @@ public struct WriteAlert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: Int64, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
         self._custom_title = custom_title.map(AnyString.init)
-        self._dashboard_element_id = dashboard_element_id.map(AnyInt.init)
+        self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.destinations = destinations
         self.field = field
@@ -20904,12 +21023,12 @@ public struct WriteAlert: SDKModel {
         self._investigative_content_id = investigative_content_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
-        self._owner_id = AnyInt.init(owner_id)
+        self._owner_id = AnyString.init(owner_id)
         self.threshold = threshold
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_title: String? = nil, dashboard_element_id: Int64? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: Int64, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, destinations: destinations, field: field, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
@@ -21033,13 +21152,13 @@ public struct WriteBoard: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
-    private var _section_order: [AnyInt]?
+    private var _section_order: [AnyString]?
     /**
      * ids of the board sections in the order they should be displayed
      */
-    public var section_order: [Int64]? {
+    public var section_order: [String]? {
         get { if let v = _section_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil } }
+        set { if let v = newValue { _section_order = v.map { AnyString.init($0) } } else { _section_order = nil } }
     }
 
     private var _title: AnyString?
@@ -21051,10 +21170,10 @@ public struct WriteBoard: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    public init(deleted_at: Date? = nil, description: String? = nil, section_order: [Int64]? = nil, title: String? = nil) {
+    public init(deleted_at: Date? = nil, description: String? = nil, section_order: [String]? = nil, title: String? = nil) {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
-        if let v = section_order { _section_order = v.map { AnyInt.init($0) } } else { _section_order = nil }
+        if let v = section_order { _section_order = v.map { AnyString.init($0) } } else { _section_order = nil }
         self._title = title.map(AnyString.init)
     }
 
@@ -21062,7 +21181,7 @@ public struct WriteBoard: SDKModel {
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count, custom_image_url
  */
 public struct WriteBoardItem: SDKModel {
 
@@ -21075,6 +21194,11 @@ public struct WriteBoardItem: SDKModel {
         case _look_id = "look_id"
         case _lookml_dashboard_id = "lookml_dashboard_id"
         case _order = "order"
+        case use_custom_description
+        case use_custom_title
+        case use_custom_url
+        case _custom_image_data_base64 = "custom_image_data_base64"
+        case use_custom_image
     }
     private var _custom_description: AnyString?
     /**
@@ -21103,22 +21227,22 @@ public struct WriteBoardItem: SDKModel {
         set { _custom_url = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Dashboard to base this item on
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
-    private var _board_section_id: AnyInt?
+    private var _board_section_id: AnyString?
     /**
      * Associated Board Section
      */
-    public var board_section_id: Int64? {
+    public var board_section_id: String? {
         get { _board_section_id?.value }
-        set { _board_section_id = newValue.map(AnyInt.init) }
+        set { _board_section_id = newValue.map(AnyString.init) }
     }
 
     private var _look_id: AnyString?
@@ -21148,15 +21272,49 @@ public struct WriteBoardItem: SDKModel {
         set { _order = newValue.map(AnyInt.init) }
     }
 
-    public init(custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: Int64? = nil, board_section_id: Int64? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil) {
+    /**
+     * Whether the custom description should be used instead of the content description, if the item is associated with content
+     */
+    public var use_custom_description: Bool?
+
+    /**
+     * Whether the custom title should be used instead of the content title, if the item is associated with content
+     */
+    public var use_custom_title: Bool?
+
+    /**
+     * Whether the custom url should be used instead of the content url, if the item is associated with content
+     */
+    public var use_custom_url: Bool?
+
+    private var _custom_image_data_base64: AnyString?
+    /**
+     * (Write-Only) base64 encoded image data
+     */
+    public var custom_image_data_base64: String? {
+        get { _custom_image_data_base64?.value }
+        set { _custom_image_data_base64 = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the custom image should be used instead of the content image, if the item is associated with content
+     */
+    public var use_custom_image: Bool?
+
+    public init(custom_description: String? = nil, custom_title: String? = nil, custom_url: String? = nil, dashboard_id: String? = nil, board_section_id: String? = nil, look_id: String? = nil, lookml_dashboard_id: String? = nil, order: Int64? = nil, use_custom_description: Bool? = nil, use_custom_title: Bool? = nil, use_custom_url: Bool? = nil, custom_image_data_base64: String? = nil, use_custom_image: Bool? = nil) {
         self._custom_description = custom_description.map(AnyString.init)
         self._custom_title = custom_title.map(AnyString.init)
         self._custom_url = custom_url.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
-        self._board_section_id = board_section_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._board_section_id = board_section_id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._order = order.map(AnyInt.init)
+        self.use_custom_description = use_custom_description
+        self.use_custom_title = use_custom_title
+        self.use_custom_url = use_custom_url
+        self._custom_image_data_base64 = custom_image_data_base64.map(AnyString.init)
+        self.use_custom_image = use_custom_image
     }
 
 }
@@ -21188,22 +21346,22 @@ public struct WriteBoardSection: SDKModel {
         set { _description = newValue.map(AnyString.init) }
     }
 
-    private var _board_id: AnyInt?
+    private var _board_id: AnyString?
     /**
      * Id reference to parent board
      */
-    public var board_id: Int64? {
+    public var board_id: String? {
         get { _board_id?.value }
-        set { _board_id = newValue.map(AnyInt.init) }
+        set { _board_id = newValue.map(AnyString.init) }
     }
 
-    private var _item_order: [AnyInt]?
+    private var _item_order: [AnyString]?
     /**
      * ids of the board items in the order they should be displayed
      */
-    public var item_order: [Int64]? {
+    public var item_order: [String]? {
         get { if let v = _item_order { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil } }
+        set { if let v = newValue { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil } }
     }
 
     private var _title: AnyString?
@@ -21215,11 +21373,11 @@ public struct WriteBoardSection: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    public init(deleted_at: Date? = nil, description: String? = nil, board_id: Int64? = nil, item_order: [Int64]? = nil, title: String? = nil) {
+    public init(deleted_at: Date? = nil, description: String? = nil, board_id: String? = nil, item_order: [String]? = nil, title: String? = nil) {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
-        self._board_id = board_id.map(AnyInt.init)
-        if let v = item_order { _item_order = v.map { AnyInt.init($0) } } else { _item_order = nil }
+        self._board_id = board_id.map(AnyString.init)
+        if let v = item_order { _item_order = v.map { AnyString.init($0) } } else { _item_order = nil }
         self._title = title.map(AnyString.init)
     }
 
@@ -21271,59 +21429,6 @@ public struct WriteColorCollection: SDKModel {
 }
 
 /**
- * Dynamic writeable type for Command removes:
- * id, author_id
- */
-public struct WriteCommand: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _name = "name"
-        case _description = "description"
-        case _linked_content_id = "linked_content_id"
-        case linked_content_type
-    }
-    private var _name: AnyString?
-    /**
-     * Name of the command
-     */
-    public var name: String? {
-        get { _name?.value }
-        set { _name = newValue.map(AnyString.init) }
-    }
-
-    private var _description: AnyString?
-    /**
-     * Description of the command
-     */
-    public var description: String? {
-        get { _description?.value }
-        set { _description = newValue.map(AnyString.init) }
-    }
-
-    private var _linked_content_id: AnyString?
-    /**
-     * Id of the content associated with the command
-     */
-    public var linked_content_id: String? {
-        get { _linked_content_id?.value }
-        set { _linked_content_id = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Name of the command Valid values are: "dashboard", "lookml_dashboard".
-     */
-    public var linked_content_type: LinkedContentType?
-
-    public init(name: String? = nil, description: String? = nil, linked_content_id: String? = nil, linked_content_type: LinkedContentType? = nil) {
-        self._name = name.map(AnyString.init)
-        self._description = description.map(AnyString.init)
-        self._linked_content_id = linked_content_id.map(AnyString.init)
-        self.linked_content_type = linked_content_type
-    }
-
-}
-
-/**
  * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, board_id
  */
@@ -21335,22 +21440,22 @@ public struct WriteContentFavorite: SDKModel {
         case look
         case dashboard
     }
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id which owns this ContentFavorite
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    private var _content_metadata_id: AnyInt?
+    private var _content_metadata_id: AnyString?
     /**
      * Content Metadata Id associated with this ContentFavorite
      */
-    public var content_metadata_id: Int64? {
+    public var content_metadata_id: String? {
         get { _content_metadata_id?.value }
-        set { _content_metadata_id = newValue.map(AnyInt.init) }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -21365,9 +21470,9 @@ public struct WriteContentFavorite: SDKModel {
      */
     public var dashboard: WriteDashboardBase?
 
-    public init(user_id: Int64? = nil, content_metadata_id: Int64? = nil, look: WriteLookBasic? = nil, dashboard: WriteDashboardBase? = nil) {
-        self._user_id = user_id.map(AnyInt.init)
-        self._content_metadata_id = content_metadata_id.map(AnyInt.init)
+    public init(user_id: String? = nil, content_metadata_id: String? = nil, look: WriteLookBasic? = nil, dashboard: WriteDashboardBase? = nil) {
+        self._user_id = user_id.map(AnyString.init)
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.look = look
         self.dashboard = dashboard
     }
@@ -21552,13 +21657,13 @@ public struct WriteCreateQueryTask: SDKModel {
         case _look_id = "look_id"
         case _dashboard_id = "dashboard_id"
     }
-    private var _query_id: AnyInt
+    private var _query_id: AnyString
     /**
      * Id of query to run
      */
-    public var query_id: Int64 {
+    public var query_id: String {
         get { _query_id.value }
-        set { _query_id = AnyInt.init(newValue) }
+        set { _query_id = AnyString.init(newValue) }
     }
 
     /**
@@ -21598,8 +21703,8 @@ public struct WriteCreateQueryTask: SDKModel {
         set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
-    public init(query_id: Int64, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
-        self._query_id = AnyInt.init(query_id)
+    public init(query_id: String, result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
+        self._query_id = AnyString.init(query_id)
         self.result_format = result_format
         self._source = source.map(AnyString.init)
         self.deferred = deferred
@@ -21607,7 +21712,7 @@ public struct WriteCreateQueryTask: SDKModel {
         self._dashboard_id = dashboard_id.map(AnyString.init)
     }
 
-    public init(_ query_id: Int64, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
+    public init(_ query_id: String, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.init(query_id: query_id, result_format: result_format, source: source, deferred: deferred, look_id: look_id, dashboard_id: dashboard_id)
     }
 
@@ -21914,6 +22019,7 @@ public struct WriteDashboardElement: SDKModel {
         case title_hidden
         case _title_text = "title_text"
         case _type = "type"
+        case _rich_content_json = "rich_content_json"
     }
     private var _body_text: AnyString?
     /**
@@ -21990,13 +22096,13 @@ public struct WriteDashboardElement: SDKModel {
      */
     public var query: WriteQuery?
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Id Of Query
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _refresh_interval: AnyString?
@@ -22014,13 +22120,13 @@ public struct WriteDashboardElement: SDKModel {
      */
     public var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields?
 
-    private var _result_maker_id: AnyInt?
+    private var _result_maker_id: AnyString?
     /**
      * ID of the ResultMakerLookup entry.
      */
-    public var result_maker_id: Int64? {
+    public var result_maker_id: String? {
         get { _result_maker_id?.value }
-        set { _result_maker_id = newValue.map(AnyInt.init) }
+        set { _result_maker_id = newValue.map(AnyString.init) }
     }
 
     private var _subtitle_text: AnyString?
@@ -22064,7 +22170,16 @@ public struct WriteDashboardElement: SDKModel {
         set { _type = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: Int64? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: Int64? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil) {
+    private var _rich_content_json: AnyString?
+    /**
+     * JSON with all the properties required for rich editor and buttons elements
+     */
+    public var rich_content_json: String? {
+        get { _rich_content_json?.value }
+        set { _rich_content_json = newValue.map(AnyString.init) }
+    }
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look = look
@@ -22074,15 +22189,16 @@ public struct WriteDashboardElement: SDKModel {
         self._note_state = note_state.map(AnyString.init)
         self._note_text = note_text.map(AnyString.init)
         self.query = query
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._refresh_interval = refresh_interval.map(AnyString.init)
         self.result_maker = result_maker
-        self._result_maker_id = result_maker_id.map(AnyInt.init)
+        self._result_maker_id = result_maker_id.map(AnyString.init)
         self._subtitle_text = subtitle_text.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self.title_hidden = title_hidden
         self._title_text = title_text.map(AnyString.init)
         self._type = type.map(AnyString.init)
+        self._rich_content_json = rich_content_json.map(AnyString.init)
     }
 
 }
@@ -22708,13 +22824,13 @@ public struct WriteDBConnection: SDKModel {
      */
     public var disable_context_comment: Bool?
 
-    private var _oauth_application_id: AnyInt?
+    private var _oauth_application_id: AnyString?
     /**
      * An External OAuth Application to use for authenticating to the database
      */
-    public var oauth_application_id: Int64? {
+    public var oauth_application_id: String? {
         get { _oauth_application_id?.value }
-        set { _oauth_application_id = newValue.map(AnyInt.init) }
+        set { _oauth_application_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -22732,7 +22848,7 @@ public struct WriteDBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: Int64? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -22762,7 +22878,7 @@ public struct WriteDBConnection: SDKModel {
         self._tunnel_id = tunnel_id.map(AnyString.init)
         self._pdt_concurrency = pdt_concurrency.map(AnyInt.init)
         self.disable_context_comment = disable_context_comment
-        self._oauth_application_id = oauth_application_id.map(AnyInt.init)
+        self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
@@ -23118,19 +23234,19 @@ public struct WriteIntegration: SDKModel {
      */
     public var params: [IntegrationParam]?
 
-    private var _installed_delegate_oauth_targets: [AnyInt]?
+    private var _installed_delegate_oauth_targets: [AnyString]?
     /**
      * Whether the integration is available to users.
      */
-    public var installed_delegate_oauth_targets: [Int64]? {
+    public var installed_delegate_oauth_targets: [String]? {
         get { if let v = _installed_delegate_oauth_targets { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil } }
+        set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
-    public init(enabled: Bool? = nil, params: [IntegrationParam]? = nil, installed_delegate_oauth_targets: [Int64]? = nil) {
+    public init(enabled: Bool? = nil, params: [IntegrationParam]? = nil, installed_delegate_oauth_targets: [String]? = nil) {
         self.enabled = enabled
         self.params = params
-        if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyInt.init($0) } } else { _installed_delegate_oauth_targets = nil }
+        if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil }
     }
 
 }
@@ -23319,22 +23435,22 @@ public struct WriteLDAPConfig: SDKModel {
      */
     public var connection_tls_no_verify: Bool?
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -23517,7 +23633,7 @@ public struct WriteLDAPConfig: SDKModel {
      */
     public var allow_direct_roles: Bool?
 
-    public init(alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_role_ids: [Int64]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, merge_new_users_by_email: Bool? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
+    public init(alternate_email_login_allowed: Bool? = nil, auth_password: String? = nil, auth_requires_role: Bool? = nil, auth_username: String? = nil, connection_host: String? = nil, connection_port: String? = nil, connection_tls: Bool? = nil, connection_tls_no_verify: Bool? = nil, default_new_user_group_ids: [String]? = nil, default_new_user_role_ids: [String]? = nil, enabled: Bool? = nil, force_no_page: Bool? = nil, groups_base_dn: String? = nil, groups_finder_type: String? = nil, groups_member_attribute: String? = nil, groups_objectclasses: String? = nil, groups_user_attribute: String? = nil, groups_with_role_ids: [LDAPGroupWrite]? = nil, merge_new_users_by_email: Bool? = nil, set_roles_from_groups: Bool? = nil, test_ldap_password: String? = nil, test_ldap_user: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attribute_map_ldap_id: String? = nil, user_attributes_with_ids: [LDAPUserAttributeWrite]? = nil, user_bind_base_dn: String? = nil, user_custom_filter: String? = nil, user_id_attribute_names: String? = nil, user_objectclass: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self._auth_password = auth_password.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
@@ -23526,8 +23642,8 @@ public struct WriteLDAPConfig: SDKModel {
         self._connection_port = connection_port.map(AnyString.init)
         self.connection_tls = connection_tls
         self.connection_tls_no_verify = connection_tls_no_verify
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
         self.enabled = enabled
         self.force_no_page = force_no_page
         self._groups_base_dn = groups_base_dn.map(AnyString.init)
@@ -23581,17 +23697,17 @@ public struct WriteLookBasic: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _user_id = "user_id"
     }
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(user_id: Int64? = nil) {
-        self._user_id = user_id.map(AnyInt.init)
+    public init(user_id: String? = nil) {
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -23676,13 +23792,13 @@ public struct WriteLookWithQuery: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -23709,13 +23825,13 @@ public struct WriteLookWithQuery: SDKModel {
      */
     public var `public`: Bool?
 
-    private var _query_id: AnyInt?
+    private var _query_id: AnyString?
     /**
      * Query Id
      */
-    public var query_id: Int64? {
+    public var query_id: String? {
         get { _query_id?.value }
-        set { _query_id = newValue.map(AnyInt.init) }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -23739,14 +23855,14 @@ public struct WriteLookWithQuery: SDKModel {
      */
     public var query: WriteQuery?
 
-    public init(title: String? = nil, user_id: Int64? = nil, deleted: Bool? = nil, description: String? = nil, is_run_on_load: Bool? = nil, `public`: Bool? = nil, query_id: Int64? = nil, folder: WriteFolderBase? = nil, folder_id: String? = nil, query: WriteQuery? = nil) {
+    public init(title: String? = nil, user_id: String? = nil, deleted: Bool? = nil, description: String? = nil, is_run_on_load: Bool? = nil, `public`: Bool? = nil, query_id: String? = nil, folder: WriteFolderBase? = nil, folder_id: String? = nil, query: WriteQuery? = nil) {
         self._title = title.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self.deleted = deleted
         self._description = description.map(AnyString.init)
         self.is_run_on_load = is_run_on_load
         self.`public` = `public`
-        self._query_id = query_id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
         self.query = query
@@ -23909,21 +24025,21 @@ public struct WriteOauthClientApp: SDKModel {
      */
     public var enabled: Bool?
 
-    private var _group_id: AnyInt?
+    private var _group_id: AnyString?
     /**
      * If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
      */
-    public var group_id: Int64? {
+    public var group_id: String? {
         get { _group_id?.value }
-        set { _group_id = newValue.map(AnyInt.init) }
+        set { _group_id = newValue.map(AnyString.init) }
     }
 
-    public init(redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: Int64? = nil) {
+    public init(redirect_uri: String? = nil, display_name: String? = nil, description: String? = nil, enabled: Bool? = nil, group_id: String? = nil) {
         self._redirect_uri = redirect_uri.map(AnyString.init)
         self._display_name = display_name.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.enabled = enabled
-        self._group_id = group_id.map(AnyInt.init)
+        self._group_id = group_id.map(AnyString.init)
     }
 
 }
@@ -23988,22 +24104,22 @@ public struct WriteOIDCConfig: SDKModel {
         set { _authorization_endpoint = newValue.map(AnyString.init) }
     }
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
     /**
@@ -24140,13 +24256,13 @@ public struct WriteOIDCConfig: SDKModel {
      */
     public var allow_direct_roles: Bool?
 
-    public init(alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [Int64]? = nil, default_new_user_role_ids: [Int64]? = nil, enabled: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
+    public init(alternate_email_login_allowed: Bool? = nil, audience: String? = nil, auth_requires_role: Bool? = nil, authorization_endpoint: String? = nil, default_new_user_group_ids: [String]? = nil, default_new_user_role_ids: [String]? = nil, enabled: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [OIDCGroupWrite]? = nil, identifier: String? = nil, issuer: String? = nil, new_user_migration_types: String? = nil, scopes: [String]? = nil, secret: String? = nil, set_roles_from_groups: Bool? = nil, token_endpoint: String? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, user_attributes_with_ids: [OIDCUserAttributeWrite]? = nil, userinfo_endpoint: String? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self._audience = audience.map(AnyString.init)
         self.auth_requires_role = auth_requires_role
         self._authorization_endpoint = authorization_endpoint.map(AnyString.init)
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
         self.enabled = enabled
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids
@@ -24242,6 +24358,122 @@ public struct WritePermissionSet: SDKModel {
     public init(name: String? = nil, permissions: [String]? = nil) {
         self._name = name.map(AnyString.init)
         if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
+    }
+
+}
+
+/**
+ * Dynamic writeable type for PrivatelabelConfiguration removes:
+ * logo_url, favicon_url
+ */
+public struct WritePrivatelabelConfiguration: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _logo_file = "logo_file"
+        case _favicon_file = "favicon_file"
+        case _default_title = "default_title"
+        case show_help_menu
+        case show_docs
+        case show_email_sub_options
+        case allow_looker_mentions
+        case allow_looker_links
+        case custom_welcome_email_advanced
+        case setup_mentions
+        case alerts_logo
+        case alerts_links
+        case folders_mentions
+    }
+    private var _logo_file: AnyString?
+    /**
+     * Customer logo image. Expected base64 encoded data (write-only)
+     */
+    public var logo_file: String? {
+        get { _logo_file?.value }
+        set { _logo_file = newValue.map(AnyString.init) }
+    }
+
+    private var _favicon_file: AnyString?
+    /**
+     * Custom favicon image. Expected base64 encoded data (write-only)
+     */
+    public var favicon_file: String? {
+        get { _favicon_file?.value }
+        set { _favicon_file = newValue.map(AnyString.init) }
+    }
+
+    private var _default_title: AnyString?
+    /**
+     * Default page title
+     */
+    public var default_title: String? {
+        get { _default_title?.value }
+        set { _default_title = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Boolean to toggle showing help menus
+     */
+    public var show_help_menu: Bool?
+
+    /**
+     * Boolean to toggle showing docs
+     */
+    public var show_docs: Bool?
+
+    /**
+     * Boolean to toggle showing email subscription options.
+     */
+    public var show_email_sub_options: Bool?
+
+    /**
+     * Boolean to toggle mentions of Looker in emails
+     */
+    public var allow_looker_mentions: Bool?
+
+    /**
+     * Boolean to toggle links to Looker in emails
+     */
+    public var allow_looker_links: Bool?
+
+    /**
+     * Allow subject line and email heading customization in customized emails”
+     */
+    public var custom_welcome_email_advanced: Bool?
+
+    /**
+     * Remove the word Looker from appearing in the account setup page
+     */
+    public var setup_mentions: Bool?
+
+    /**
+     * Remove Looker logo from Alerts
+     */
+    public var alerts_logo: Bool?
+
+    /**
+     * Remove Looker links from Alerts
+     */
+    public var alerts_links: Bool?
+
+    /**
+     * Remove Looker mentions in home folder page when you don’t have any items saved
+     */
+    public var folders_mentions: Bool?
+
+    public init(logo_file: String? = nil, favicon_file: String? = nil, default_title: String? = nil, show_help_menu: Bool? = nil, show_docs: Bool? = nil, show_email_sub_options: Bool? = nil, allow_looker_mentions: Bool? = nil, allow_looker_links: Bool? = nil, custom_welcome_email_advanced: Bool? = nil, setup_mentions: Bool? = nil, alerts_logo: Bool? = nil, alerts_links: Bool? = nil, folders_mentions: Bool? = nil) {
+        self._logo_file = logo_file.map(AnyString.init)
+        self._favicon_file = favicon_file.map(AnyString.init)
+        self._default_title = default_title.map(AnyString.init)
+        self.show_help_menu = show_help_menu
+        self.show_docs = show_docs
+        self.show_email_sub_options = show_email_sub_options
+        self.allow_looker_mentions = allow_looker_mentions
+        self.allow_looker_links = allow_looker_links
+        self.custom_welcome_email_advanced = custom_welcome_email_advanced
+        self.setup_mentions = setup_mentions
+        self.alerts_logo = alerts_logo
+        self.alerts_links = alerts_links
+        self.folders_mentions = folders_mentions
     }
 
 }
@@ -24734,13 +24966,13 @@ public struct WriteRole: SDKModel {
      */
     public var permission_set: WritePermissionSet?
 
-    private var _permission_set_id: AnyInt?
+    private var _permission_set_id: AnyString?
     /**
      * (Write-Only) Id of permission set
      */
-    public var permission_set_id: Int64? {
+    public var permission_set_id: String? {
         get { _permission_set_id?.value }
-        set { _permission_set_id = newValue.map(AnyInt.init) }
+        set { _permission_set_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -24749,21 +24981,21 @@ public struct WriteRole: SDKModel {
      */
     public var model_set: WriteModelSet?
 
-    private var _model_set_id: AnyInt?
+    private var _model_set_id: AnyString?
     /**
      * (Write-Only) Id of model set
      */
-    public var model_set_id: Int64? {
+    public var model_set_id: String? {
         get { _model_set_id?.value }
-        set { _model_set_id = newValue.map(AnyInt.init) }
+        set { _model_set_id = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, permission_set: WritePermissionSet? = nil, permission_set_id: Int64? = nil, model_set: WriteModelSet? = nil, model_set_id: Int64? = nil) {
+    public init(name: String? = nil, permission_set: WritePermissionSet? = nil, permission_set_id: String? = nil, model_set: WriteModelSet? = nil, model_set_id: String? = nil) {
         self._name = name.map(AnyString.init)
         self.permission_set = permission_set
-        self._permission_set_id = permission_set_id.map(AnyInt.init)
+        self._permission_set_id = permission_set_id.map(AnyString.init)
         self.model_set = model_set
-        self._model_set_id = model_set_id.map(AnyInt.init)
+        self._model_set_id = model_set_id.map(AnyString.init)
     }
 
 }
@@ -24891,22 +25123,22 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var alternate_email_login_allowed: Bool?
 
-    private var _default_new_user_role_ids: [AnyInt]?
+    private var _default_new_user_role_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_role_ids: [Int64]? {
+    public var default_new_user_role_ids: [String]? {
         get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
     }
 
-    private var _default_new_user_group_ids: [AnyInt]?
+    private var _default_new_user_group_ids: [AnyString]?
     /**
      * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
      */
-    public var default_new_user_group_ids: [Int64]? {
+    public var default_new_user_group_ids: [String]? {
         get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
     }
 
     /**
@@ -24976,7 +25208,7 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var allow_direct_roles: Bool?
 
-    public init(enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, default_new_user_role_ids: [Int64]? = nil, default_new_user_group_ids: [Int64]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
+    public init(enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
         self.enabled = enabled
         self._idp_cert = idp_cert.map(AnyString.init)
         self._idp_url = idp_url.map(AnyString.init)
@@ -24988,8 +25220,8 @@ public struct WriteSamlConfig: SDKModel {
         self._user_attribute_map_last_name = user_attribute_map_last_name.map(AnyString.init)
         self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
         self.alternate_email_login_allowed = alternate_email_login_allowed
-        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyInt.init($0) } } else { _default_new_user_role_ids = nil }
-        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyInt.init($0) } } else { _default_new_user_group_ids = nil }
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
         self.set_roles_from_groups = set_roles_from_groups
         self._groups_attribute = groups_attribute.map(AnyString.init)
         self.groups_with_role_ids = groups_with_role_ids
@@ -25048,13 +25280,13 @@ public struct WriteScheduledPlan: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _user_id: AnyInt?
+    private var _user_id: AnyString?
     /**
      * User Id which owns this scheduled plan
      */
-    public var user_id: Int64? {
+    public var user_id: String? {
         get { _user_id?.value }
-        set { _user_id = newValue.map(AnyInt.init) }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     /**
@@ -25076,13 +25308,13 @@ public struct WriteScheduledPlan: SDKModel {
         set { _look_id = newValue.map(AnyString.init) }
     }
 
-    private var _dashboard_id: AnyInt?
+    private var _dashboard_id: AnyString?
     /**
      * Id of a dashboard
      */
-    public var dashboard_id: Int64? {
+    public var dashboard_id: String? {
         get { _dashboard_id?.value }
-        set { _dashboard_id = newValue.map(AnyInt.init) }
+        set { _dashboard_id = newValue.map(AnyString.init) }
     }
 
     private var _lookml_dashboard_id: AnyString?
@@ -25225,13 +25457,13 @@ public struct WriteScheduledPlan: SDKModel {
         set { _inline_table_width = newValue.map(AnyInt.init) }
     }
 
-    public init(name: String? = nil, user_id: Int64? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: Int64? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil) {
         self._name = name.map(AnyString.init)
-        self._user_id = user_id.map(AnyInt.init)
+        self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
         self.enabled = enabled
         self._look_id = look_id.map(AnyString.init)
-        self._dashboard_id = dashboard_id.map(AnyInt.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
         self._lookml_dashboard_id = lookml_dashboard_id.map(AnyString.init)
         self._filters_string = filters_string.map(AnyString.init)
         self._dashboard_filters = dashboard_filters.map(AnyString.init)
@@ -25328,10 +25560,10 @@ public struct WriteSetting: SDKModel {
     public var marketplace_enabled: Bool?
 
     /**
-     * Dynamic writeable type for WhitelabelConfiguration removes:
-     * id, logo_url, favicon_url
+     * Dynamic writeable type for PrivatelabelConfiguration removes:
+     * logo_url, favicon_url
      */
-    public var whitelabel_configuration: WriteWhitelabelConfiguration?
+    public var privatelabel_configuration: WritePrivatelabelConfiguration?
 
     public var custom_welcome_email: CustomWelcomeEmail?
 
@@ -25340,11 +25572,11 @@ public struct WriteSetting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, whitelabel_configuration: WriteWhitelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
-        self.whitelabel_configuration = whitelabel_configuration
+        self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
     }
@@ -25498,7 +25730,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
  */
 public struct WriteUser: SDKModel {
 
