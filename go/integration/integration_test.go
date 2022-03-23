@@ -6,6 +6,7 @@ import (
 	"testing"
 	"strings"
 	"fmt"
+	"net/http"
 
 	"github.com/looker-open-source/sdk-codegen/go/rtl"
 	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
@@ -504,14 +505,16 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			for _, testTile := range testDashboard.Tiles {
-				tile, err := sdk.CreateDashboardElement(v4.WriteDashboardElement{
-					BodyText: testTile.BodyText,
-					Type: testTile.Type,
-					TitleText: testTile.TitleText,
-					Title: testTile.Title,
-					SubtitleText: testTile.SubtitleText,
-					QueryId: query.Id,
-				},"", nil)
+				tile, err := sdk.CreateDashboardElement(v4.RequestCreateDashboardElement{
+					Body:	v4.WriteDashboardElement{
+								BodyText: testTile.BodyText,
+								Type: testTile.Type,
+								TitleText: testTile.TitleText,
+								Title: testTile.Title,
+								SubtitleText: testTile.SubtitleText,
+								QueryId: query.Id,
+					},
+				}, nil)
 
 				if err != nil {
 					t.Errorf("CreateDashboardElement() failed. error=%v", err)
@@ -546,6 +549,74 @@ func TestIntegrationGoSDK(t *testing.T) {
 			if err == nil {
 				t.Errorf("Dashboard() should have failed after delete. Expected error, got nil error")
 			}
+		}
+	})
+
+	t.Run("Download PNG and SVG", func(t *testing.T) {
+		var searchLimit int64 = 1
+		looks, err := sdk.SearchLooks(v4.RequestSearchLooks{
+			Limit: &searchLimit,
+		}, nil)
+
+		if err != nil {
+			t.Errorf("SearchLooks() failed. error=%v", err)
+		}
+
+		var id string
+		var contentType string
+
+		if len(looks) > 0 {
+			id = *looks[0].Id
+			contentType = "look"
+		} else {
+			dashboards, err := sdk.SearchDashboards(v4.RequestSearchDashboards{
+				Limit: &searchLimit,
+			}, nil)
+
+			if err != nil {
+				t.Errorf("SearchDashboards() failed. error=%v", err)
+			}
+
+			if len(dashboards) > 0 {
+				id = *dashboards[0].Id
+				contentType = "dashboard"
+			} else {
+				t.Errorf("No Dashboard or Look available to test PNG and SVG download")
+			}
+		}
+
+		format := "png"
+
+		image, err := sdk.ContentThumbnail(v4.RequestContentThumbnail{
+			ResourceId: id,
+			Type: contentType,
+			Format: &format,
+		}, nil)
+
+		if err != nil {
+			t.Errorf("ContentThumbnail() with png format failed. error=%v", err)
+		}
+
+		mimeType := http.DetectContentType([]byte(image))
+		if mimeType != "image/png" {
+			t.Errorf("ContentThumbnail() result is not image/png mime type, got mime type: %v", mimeType)
+		}
+
+		format = "svg"
+
+		image, err = sdk.ContentThumbnail(v4.RequestContentThumbnail{
+			ResourceId: id,
+			Type: contentType,
+			Format: &format,
+		}, nil)
+
+		if err != nil {
+			t.Errorf("ContentThumbnail() with svg format failed. error=%v", err)
+		}
+
+		mimeType = http.DetectContentType([]byte(image))
+		if !strings.HasPrefix(mimeType, "text/xml") {
+			t.Errorf("ContentThumbnail() result is not image/svg mime type, got mime type: %v", mimeType)
 		}
 	})
 }
