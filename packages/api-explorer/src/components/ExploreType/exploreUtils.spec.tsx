@@ -62,7 +62,8 @@ describe('exploreUtils', () => {
       icon: <FieldString />,
       title: 'string',
     })
-    expect(typeIcon(props.id.type)).toEqual({
+    const intProp = api.types.ColorStop.properties.offset
+    expect(typeIcon(intProp.type)).toEqual({
       icon: <Tag />,
       title: 'int64',
     })
