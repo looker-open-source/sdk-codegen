@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.2.0...sdk-codegen-all-v2.3.0) (2022-03-23)
+
+
+### Features
+
+* Looker 22.4 API updates ([#1024](https://www.github.com/looker-open-source/sdk-codegen/issues/1024)) ([19bdd61](https://www.github.com/looker-open-source/sdk-codegen/commit/19bdd612366a44bb74d793544df0f9d4babfb099))
+
+
+### Bug Fixes
+
+* declaration miner (internal utility) ([#1025](https://www.github.com/looker-open-source/sdk-codegen/issues/1025)) ([9b987b2](https://www.github.com/looker-open-source/sdk-codegen/commit/9b987b2c2f24e4a43d6ff25921c5f46804b7702a))
+* Make Go SDK parse response by result type ([#1021](https://www.github.com/looker-open-source/sdk-codegen/issues/1021)) ([c1675ab](https://www.github.com/looker-open-source/sdk-codegen/commit/c1675abb20593467b210decc212902e0110db270))
+
 ## [2.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.1.0...sdk-codegen-all-v2.2.0) (2022-03-04)
 
 
