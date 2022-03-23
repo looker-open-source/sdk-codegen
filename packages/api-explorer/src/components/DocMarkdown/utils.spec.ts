@@ -57,15 +57,15 @@ describe('DocMarkdown utils', () => {
       expect(result).toEqual('/3.1/methods/Dashboard/create_dashboard')
     })
     test('removes mark tags and transforms url', () => {
-      const url = 'https://looker.com/docs/r/api/<mark>authorization</mark>'
+      const url = 'https://docs.looker.com/r/api/<mark>authorization</mark>'
       const result = transformURL('3.1', url)
-      expect(result).toEqual('https://looker.com/docs/r/api/authorization')
+      expect(result).toEqual('https://docs.looker.com/r/api/authorization')
     })
     test('removes escaped mark tags and transforms url', () => {
       const url =
-        'https://looker.com/docs/r/api/%3Cmark%3Eauthorization%3Cmark%3E'
+        'https://docs.looker.com/r/api/%3Cmark%3Eauthorization%3Cmark%3E'
       const result = transformURL('3.1', url)
-      expect(result).toEqual('https://looker.com/docs/r/api/authorization')
+      expect(result).toEqual('https://docs.looker.com/r/api/authorization')
     })
   })
 })
