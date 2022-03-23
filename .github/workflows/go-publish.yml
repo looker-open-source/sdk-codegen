@@ -1,0 +1,40 @@
+name: Publish Go module to Go proxy
+on:
+  release:
+    types: published
+
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'commit/tag/branch to release from'
+        required: true
+
+defaults:
+  run:
+    shell: bash
+    working-directory: go/
+
+jobs:
+  publish:
+    if: >
+      (github.event.inputs) ||
+      (startsWith(github.event.release.tag_name, 'go') &&
+      !github.event.release.draft &&
+      !github.event.release.prerelease)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name || github.event.inputs.ref }}
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18'
+
+      # Assumes tag_name is "go/vX.X.X" and splits off "go/""
+      # `go list` only accepts version as "vX.X.X"
+      - name: Publish https://go.dev/doc/modules/publishing
+        run: |
+          version=$(echo ${{github.event.release.tag_name}} | cut -d/ -f2)
+          GOPROXY=proxy.golang.org go list -m github.com/looker-open-source/sdk-codegen/go@$version

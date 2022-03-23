@@ -15,5 +15,6 @@
   "packages/sdk-node": "22.2.0",
   "packages/sdk-rtl": "21.3.1",
   "packages/wholly-sheet": "0.5.25",
-  "python": "22.2.1"
+  "python": "22.2.1",
+  "go": "0.0.1"
 }
