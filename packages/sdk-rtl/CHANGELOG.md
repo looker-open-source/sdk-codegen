@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [21.3.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.3.1...sdk-rtl-v21.3.2) (2022-03-24)
+
+
+### Bug Fixes
+
+* **sdk-rtl/src/delimArray:** Fixed issue with single element number array ([#927](https://github.com/looker-open-source/sdk-codegen/issues/927)) ([6e94d73](https://github.com/looker-open-source/sdk-codegen/commit/6e94d73f88fb6c2f3138818967f4e8cb49ff89e6))
+
 ### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.2.0...sdk-rtl-v21.3.1) (2022-01-27)
 
 

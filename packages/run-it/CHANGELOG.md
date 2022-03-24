@@ -1,5 +1,14 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.19 to ^0.1.20
+    * @looker/extension-utils bumped from ^0.1.6 to ^0.1.7
+    * @looker/sdk bumped from ^22.2.0 to ^22.4.0
+    * @looker/sdk-codegen bumped from ^21.5.0 to ^21.5.1
+
 ### [0.9.29](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.28...run-it-v0.9.29) (2022-03-04)
 
 
