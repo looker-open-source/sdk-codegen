@@ -20,7 +20,6 @@
     "packages/sdk-node": { },
     "packages/sdk-rtl": { "release-as": "" },
     "packages/wholly-sheet": { "release-as": "" },
-    "python": { "release-type": "python", "package-name": "looker_sdk" },
-    "go": { "release-as": "", "release-type": "go", "package-name": "go", "tag-separator": "/" }
+    "python": { "release-type": "python", "package-name": "looker_sdk" }
   }
 }
