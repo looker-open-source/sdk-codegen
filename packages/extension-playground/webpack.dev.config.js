@@ -24,12 +24,16 @@
 
  */
 
+const { merge } = require('webpack-merge')
 const base = require('../../webpack.base.config')(__dirname)
+const browser = require('../../webpack.browser.config')()
 
-module.exports = {
-  ...base,
+module.exports = merge(base, browser, {
+  mode: 'development',
   devServer: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     publicPath: '/dist/',
     headers: {
       'Access-Control-Allow-Origin': '*',
@@ -38,5 +42,4 @@ module.exports = {
         'X-Requested-With, content-type, Authorization',
     },
   },
-  devtool: 'inline-source-map',
-}
+})

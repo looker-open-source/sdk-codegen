@@ -27,6 +27,7 @@
 import isEqual from 'lodash/isEqual'
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
+import type { VisualizationData } from '@looker/extension-sdk'
 import { connectExtensionHost } from '@looker/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
@@ -77,6 +78,13 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
     }
   }
 
+  const updateVisualizationData = (visualizationData: VisualizationData) => {
+    updateContextData({
+      ...contextData,
+      visualizationData,
+    })
+  }
+
   React.useEffect(() => {
     const initialize = async () => {
       try {
@@ -85,6 +93,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
           requiredLookerVersion,
           hostChangedRoute,
           chattyTimeout,
+          vizualizationDataReceivedCallback: updateVisualizationData,
         })
         connectedCallback(extensionHost)
         setInitializing(false)

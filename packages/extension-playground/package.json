@@ -9,13 +9,14 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "analyze": "export ANALYZE_MODE=static && yarn bundle",
     "bundle": "tsc && webpack --config webpack.prod.config.js",
-    "develop": "webpack-dev-server --hot --disable-host-check --port 8080 --config webpack.dev.config.js",
-    "watch": "yarn lerna exec --scope @looker/extension-playground --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "develop": "webpack serve --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js",
+    "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^21.4.1",
-    "@looker/extension-sdk-react": "^21.4.1",
+    "@looker/extension-sdk": "^22.4.0",
+    "@looker/extension-sdk-react": "22.4.0",
     "@looker/sdk": "^22.0.0",
     "@looker/sdk-codegen": "^21.3.2",
     "@looker/components": "^2.8.1",
@@ -23,16 +24,19 @@
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",
+    "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5",
-    "react-hot-loader": "^4.12.20",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@types/redux": "^3.6.0"
+    "@types/lodash": "^4.14.178",
+    "@types/redux": "^3.6.0",
+    "webpack-bundle-analyzer": "^4.2.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
   }
 }

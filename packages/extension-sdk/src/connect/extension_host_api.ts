@@ -26,6 +26,11 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
+import type {
+  VizualizationDataReceivedCallback,
+  VisualizationData,
+  VisualizationUpdatedRequest,
+} from '../visualization/types'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
   ExtensionInitializationResponse,
@@ -52,15 +57,22 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private chattyHost: ChattyHostConnection
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
+  private vizualizationDataReceivedCallback?: VizualizationDataReceivedCallback
+
   private contextData?: string
 
   constructor(configuration: ExtensionHostApiConfiguration) {
     this._configuration = configuration
-    const { chattyHost, setInitialRoute, hostChangedRoute } =
-      this._configuration
+    const {
+      chattyHost,
+      setInitialRoute,
+      hostChangedRoute,
+      vizualizationDataReceivedCallback,
+    } = this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
+    this.vizualizationDataReceivedCallback = vizualizationDataReceivedCallback
   }
 
   get lookerHostData() {
@@ -78,6 +90,11 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
           if (route) {
             this.hostChangedRoute(route, routeState)
           }
+        }
+        return undefined
+      case ExtensionNotificationType.VISUALIZATION_DATA:
+        if (this.vizualizationDataReceivedCallback) {
+          this.vizualizationDataReceivedCallback(payload as VisualizationData)
         }
         return undefined
       case ExtensionNotificationType.INITIALIZE: {
@@ -456,6 +473,13 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         authParameters,
       },
     })
+  }
+
+  async visualizationUpdated(payload: VisualizationUpdatedRequest) {
+    return this.sendAndReceive(
+      ExtensionRequestType.VISUALIZATION_UPDATED,
+      payload
+    )
   }
 
   private async sendAndReceive(type: string, payload?: any): Promise<any> {

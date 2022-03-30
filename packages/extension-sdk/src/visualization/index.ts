@@ -23,13 +23,4 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Looker40SDK } from '@looker/sdk'
-import { ExtensionProvider2 } from '@looker/extension-sdk-react'
-import { Playground } from './Playground'
-
-export const App = () => (
-  <ExtensionProvider2 type={Looker40SDK}>
-    <Playground />
-  </ExtensionProvider2>
-)
+export * from './types'
