@@ -23,13 +23,25 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Looker40SDK } from '@looker/sdk'
-import { ExtensionProvider2 } from '@looker/extension-sdk-react'
-import { Playground } from './Playground'
+export interface VisConfig {
+  // TODO
+}
 
-export const App = () => (
-  <ExtensionProvider2 type={Looker40SDK}>
-    <Playground />
-  </ExtensionProvider2>
-)
+export interface QueryResponse {
+  // TODO
+}
+
+export interface VisualizationData {
+  visConfig: VisConfig
+  queryResponse: QueryResponse
+}
+
+export type VizualizationDataReceivedCallback = (
+  visualizationData: VisualizationData
+) => void
+
+export interface VisualizationUpdatedRequest {}
+
+export type VisualizationUpdatedCallback = (
+  payload: VisualizationUpdatedRequest
+) => Promise<boolean>

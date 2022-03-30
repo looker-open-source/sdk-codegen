@@ -24,7 +24,11 @@
 
  */
 
-import type { ExtensionHostApi, ExtensionSDK } from '@looker/extension-sdk'
+import type {
+  ExtensionHostApi,
+  ExtensionSDK,
+  VisualizationData,
+} from '@looker/extension-sdk'
 
 /**
  * Base extension context
@@ -49,6 +53,10 @@ export interface BaseExtensionContextData {
    * Current route state
    */
   routeState?: any
+  /**
+   * Visualization data.
+   */
+  visualizationData?: VisualizationData
 }
 
 export interface RouteData {

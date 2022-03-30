@@ -25,6 +25,10 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
+import type {
+  VizualizationDataReceivedCallback,
+  VisualizationUpdatedRequest,
+} from '../visualization/types'
 
 /**
  * Extension event used for chatty communication
@@ -113,6 +117,10 @@ export enum ExtensionRequestType {
    * extensions running under /extensions
    */
   SPARTAN_LOGOUT = 'SPARTAN_LOGOUT',
+  /**
+   * Visualization updated
+   */
+  VISUALIZATION_UPDATED = 'VISUALIZATION_UPDATED',
 }
 
 /**
@@ -235,6 +243,10 @@ export enum ExtensionNotificationType {
    * communication
    */
   INITIALIZE = 'INITIALIZE',
+  /**
+   * Visualization data
+   */
+  VISUALIZATION_DATA = 'VISUALIZATION_DATA',
 }
 
 /**
@@ -364,6 +376,10 @@ export interface ExtensionHostConfiguration {
    * Set to -1 for no timeout.
    */
   chattyTimeout?: number
+  /**
+   * Callback called when visualization data received
+   */
+  vizualizationDataReceivedCallback?: VizualizationDataReceivedCallback
 }
 
 export interface ExtensionHostApiConfiguration
@@ -716,4 +732,9 @@ export interface ExtensionSDK {
    * Log user out of Looker. Only works when running under /spartan
    */
   spartanLogout(): void
+
+  /**
+   * Indicate that visualization has been updated
+   */
+  visualizationUpdated(payload: VisualizationUpdatedRequest): Promise<boolean>
 }

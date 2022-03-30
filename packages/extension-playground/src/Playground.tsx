@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ComponentsProvider, Space, Text } from '@looker/components'
+import React, { useContext, useRef, useEffect } from 'react'
+import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import { ExtensionContext2 } from '@looker/extension-sdk-react'
 
 /**
  * Playground for testing extension SDK functionality.
@@ -32,13 +33,31 @@ import { ComponentsProvider, Space, Text } from '@looker/components'
  * away at anytime. Keep this simple.
  */
 export const Playground: React.FC = () => {
+  const visDataRef = useRef(null)
+  const { visualizationData, extensionSDK } = useContext(ExtensionContext2)
+
+  console.log({ visDataRef, visualizationData })
+
+  useEffect(() => {
+    console.log('>>>>>> listening to visDataRef')
+    if (visDataRef.current) {
+      console.log('vis data rendered')
+      extensionSDK.visualizationUpdated({})
+    }
+  }, [visDataRef.current, extensionSDK, visualizationData])
+
   return (
     <ComponentsProvider>
-      <Space p="xxxxxlarge" width="100%" height="50vh" around>
+      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
         <Text p="xxxxxlarge" fontSize="xxxxxlarge">
           Welcome to the Playground
         </Text>
-      </Space>
+        {visualizationData && (
+          <pre ref={visDataRef}>
+            {JSON.stringify(visualizationData, null, 2)}
+          </pre>
+        )}
+      </SpaceVertical>
     </ComponentsProvider>
   )
 }
