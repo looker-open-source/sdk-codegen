@@ -118,9 +118,9 @@ export enum ExtensionRequestType {
    */
   SPARTAN_LOGOUT = 'SPARTAN_LOGOUT',
   /**
-   * Visualization updated
+   * Extension rendered
    */
-  VISUALIZATION_UPDATED = 'VISUALIZATION_UPDATED',
+  RENDERED = 'RENDERED',
 }
 
 /**
@@ -734,7 +734,7 @@ export interface ExtensionSDK {
   spartanLogout(): void
 
   /**
-   * Indicate that visualization has been updated
+   * Indicate that an extension has been rendered
    */
-  visualizationUpdated(payload: VisualizationUpdatedRequest): Promise<boolean>
+  rendered(): Promise<boolean>
 }

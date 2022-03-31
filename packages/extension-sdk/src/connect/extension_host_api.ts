@@ -475,11 +475,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
-  async visualizationUpdated(payload: VisualizationUpdatedRequest) {
-    return this.sendAndReceive(
-      ExtensionRequestType.VISUALIZATION_UPDATED,
-      payload
-    )
+  async rendered() {
+    return this.sendAndReceive(ExtensionRequestType.RENDERED, {})
   }
 
   private async sendAndReceive(type: string, payload?: any): Promise<any> {

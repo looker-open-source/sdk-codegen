@@ -42,7 +42,7 @@ export const Playground: React.FC = () => {
     console.log('>>>>>> listening to visDataRef')
     if (visDataRef.current) {
       console.log('vis data rendered')
-      extensionSDK.visualizationUpdated({})
+      extensionSDK.rendered()
     }
   }, [visDataRef.current, extensionSDK, visualizationData])
 
