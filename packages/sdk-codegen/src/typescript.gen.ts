@@ -571,6 +571,32 @@ export class ${this.packageName}Stream extends APIMethods {
     return `{${hash.join(this.argDelimiter)}}`
   }
 
+  private queryArgGroup(
+    _indent: string,
+    params: IParameter[],
+    prefix?: string
+  ) {
+    if (!params || params.length === 0) return this.nullStr
+    const hash: string[] = []
+    for (const param of params) {
+      const arg: Arg = param.name
+      const reserved = this.reserve(arg)
+      if (prefix) {
+        const argFullName = this.accessor(arg, prefix)
+        hash.push(
+          `${reserved}: ${
+            param.type.name === 'object'
+              ? `JSON.stringify(${argFullName})`
+              : argFullName
+          }`
+        )
+      } else {
+        hash.push(reserved)
+      }
+    }
+    return `{${hash.join(this.argDelimiter)}}`
+  }
+
   /**
    * Determine the type of accessor needed for the symbol name
    *
@@ -631,7 +657,7 @@ export class ${this.packageName}Stream extends APIMethods {
     )
     result = this.argFill(
       result,
-      this.argGroup(indent, method.queryArgs, request)
+      this.queryArgGroup(indent, method.queryParams, request)
     )
     return result
   }
