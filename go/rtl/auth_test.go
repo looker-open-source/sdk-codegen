@@ -321,6 +321,151 @@ func TestAuthSession_Do(t *testing.T) {
 			t.Error("fields of mixed types were not unmarshaled correctly into the right types")
 		}
 	})
+
+	t.Run("Do() parses response as string type if result is string type", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api" + apiVersion + "/login", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			s, _ := json.Marshal(AccessToken{
+				ExpiresIn: maxTime,
+			})
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprint(w, "a response")
+		})
+
+		s := &AuthSession{
+			Config: ApiSettings{
+				BaseUrl: server.URL,
+				ApiVersion:  apiVersion,
+			},
+		}
+
+		var result string
+
+		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() failed. error=%v", err)
+		}
+
+		if result != "a response" {
+			t.Error("Do() failed to parse response as string")
+		}
+	})
+
+	t.Run("Do() json decodes response as map[string]interface{} type if result is interface{} type", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api" + apiVersion + "/login", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			s, _ := json.Marshal(AccessToken{
+				ExpiresIn: maxTime,
+			})
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			originalStruct := struct {
+				Field float64 `json:"field"`
+			}{
+				Field: 10,
+			}
+			s, _ := json.Marshal(originalStruct)
+			fmt.Fprint(w, string(s))
+		})
+
+		s := &AuthSession{
+			Config: ApiSettings{
+				BaseUrl: server.URL,
+				ApiVersion:  apiVersion,
+			},
+		}
+
+		var result interface{}
+		var expectedField float64 = 10
+
+		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() failed. error=%v", err)
+		}
+
+		if result.(map[string]interface{})["field"] != expectedField {
+			t.Error("Do() failed to json decode response")
+		}
+	})
+
+	t.Run("Do() json decodes response as struct type if result is struct type", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api" + apiVersion + "/login", func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			s, _ := json.Marshal(AccessToken{
+				ExpiresIn: maxTime,
+			})
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			originalStruct := struct {
+				Field1 int64 `json:"field1"`
+				Field2 string `json:"field2"`
+			}{
+				Field1: 10,
+				Field2: "a value",
+			}
+			s, _ := json.Marshal(originalStruct)
+			fmt.Fprint(w, string(s))
+		})
+
+		s := &AuthSession{
+			Config: ApiSettings{
+				BaseUrl: server.URL,
+				ApiVersion:  apiVersion,
+			},
+		}
+
+		type expectedStructType struct {
+			Field1 *int64 `json:"field1"`
+			Field2 *string `json:"field2"`
+		}
+
+		var field1 int64 = 10
+		field2 := "a value"
+
+		expectedStruct := expectedStructType{
+			Field1: &field1,
+			Field2: &field2,
+		}
+
+		var result expectedStructType
+
+		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() failed. error=%v", err)
+		}
+
+		if !reflect.DeepEqual(result, expectedStruct) {
+			t.Error("Do() failed to json decode response properly")
+		}
+	})
 }
 
 func TestSetQuery(t *testing.T) {
