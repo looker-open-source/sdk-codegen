@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"sync"
 	"time"
 
 	json "github.com/json-iterator/go"
@@ -21,6 +22,8 @@ type AccessToken struct {
 	ExpiresIn   int32  `json:"expires_in"`
 	ExpireTime  time.Time
 }
+
+var mutex = sync.Mutex{}
 
 func (t AccessToken) IsExpired() bool {
 	return t.ExpireTime.IsZero() || time.Now().After(t.ExpireTime)
@@ -155,9 +158,12 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 			}
 			*v = string(b)
 	default:
+		mutex.Lock()
 		extra.RegisterFuzzyDecoders()
+		mutex.Unlock()
 		return json.NewDecoder(res.Body).Decode(&result)
 	}
+
 
 	return nil
 }
