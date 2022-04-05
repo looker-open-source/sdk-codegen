@@ -545,6 +545,13 @@ describe('typescript generator', () => {
       const args = gen.httpArgs('', method).trim()
       expect(args).toEqual('null, body, options')
     })
+    it('model_fieldname_suggestions', () => {
+      const method = apiTestModel.methods.model_fieldname_suggestions
+      const args = gen.httpArgs('', method).trim()
+      expect(args).toEqual(
+        '{ term: request.term, filters: JSON.stringify(request.filters) }, null, options'
+      )
+    })
   })
 
   describe('method signature', () => {
