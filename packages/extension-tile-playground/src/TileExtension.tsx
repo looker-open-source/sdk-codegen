@@ -23,22 +23,29 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import React, { useContext } from 'react'
+import { ComponentsProvider, MessageBar } from '@looker/components'
+import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { MountPoint } from '@looker/extension-sdk'
+import { DashboardVisualization } from './DashboardVisualization'
+import { DashboardTile } from './DashboardTile'
 
-/**
- * Playground for testing extension SDK functionality.
- * Changes are not expected to be kept and may be thrown
- * away at anytime. Keep this simple.
- */
-export const Playground: React.FC = () => {
+export const TileExtension: React.FC = () => {
+  const { extensionSDK } = useContext(ExtensionContext2)
+  const { lookerHostData } = extensionSDK
   return (
     <ComponentsProvider>
-      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-          Welcome to the Playground
-        </Text>
-      </SpaceVertical>
+      {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
+        <DashboardVisualization />
+      )}
+      {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
+        <DashboardTile />
+      )}
+      {lookerHostData?.mountPoint === MountPoint.standalone && (
+        <MessageBar intent="critical">
+          This extension must be mounted in a dashboard.
+        </MessageBar>
+      )}
     </ComponentsProvider>
   )
 }

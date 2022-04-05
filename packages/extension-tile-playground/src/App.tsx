@@ -24,21 +24,12 @@
 
  */
 import React from 'react'
-import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import { Looker40SDK } from '@looker/sdk'
+import { ExtensionProvider2 } from '@looker/extension-sdk-react'
+import { TileExtension } from './TileExtension'
 
-/**
- * Playground for testing extension SDK functionality.
- * Changes are not expected to be kept and may be thrown
- * away at anytime. Keep this simple.
- */
-export const Playground: React.FC = () => {
-  return (
-    <ComponentsProvider>
-      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-          Welcome to the Playground
-        </Text>
-      </SpaceVertical>
-    </ComponentsProvider>
-  )
-}
+export const App = () => (
+  <ExtensionProvider2 type={Looker40SDK}>
+    <TileExtension />
+  </ExtensionProvider2>
+)

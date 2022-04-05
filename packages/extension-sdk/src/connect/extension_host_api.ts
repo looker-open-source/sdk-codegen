@@ -26,11 +26,7 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
-import type {
-  VizualizationDataReceivedCallback,
-  VisualizationData,
-  VisualizationUpdatedRequest,
-} from '../visualization/types'
+import type { VizualizationDataReceivedCallback } from '../visualization/types'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
   ExtensionInitializationResponse,
@@ -41,12 +37,12 @@ import type {
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
-  RouteChangeData,
 } from './types'
 import {
   ExtensionEvent,
   ExtensionNotificationType,
   ExtensionRequestType,
+  MountPoint,
 } from './types'
 
 export const EXTENSION_SDK_VERSION = '0.10.5'
@@ -80,43 +76,50 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   }
 
   handleNotification(
-    message?: ExtensionNotification
+    message: ExtensionNotification
   ): ExtensionInitializationResponse | undefined {
-    const { type, payload } = message || {}
+    const { type } = message
     switch (type) {
-      case ExtensionNotificationType.ROUTE_CHANGED:
+      case ExtensionNotificationType.ROUTE_CHANGED: {
+        const { payload } = message
         if (this.hostChangedRoute && payload) {
-          const { route, routeState } = payload as RouteChangeData
+          const { route, routeState } = payload
           if (route) {
             this.hostChangedRoute(route, routeState)
           }
         }
         return undefined
-      case ExtensionNotificationType.VISUALIZATION_DATA:
+      }
+      case ExtensionNotificationType.VISUALIZATION_DATA: {
+        const { payload } = message
         if (this.vizualizationDataReceivedCallback) {
-          this.vizualizationDataReceivedCallback(payload as VisualizationData)
+          this.vizualizationDataReceivedCallback(payload)
         }
         return undefined
+      }
       case ExtensionNotificationType.INITIALIZE: {
-        this._lookerHostData = payload as LookerHostData
-        if (this._lookerHostData) {
-          this.contextData = this._lookerHostData.contextData
+        const { payload } = message
+        const lookerHostData = payload || {}
+        if (!lookerHostData.mountPoint) {
+          lookerHostData.mountPoint = MountPoint.standalone
         }
+        this._lookerHostData = lookerHostData
+        this.contextData = lookerHostData.contextData
         let errorMessage
         if (
           this._configuration.requiredLookerVersion &&
-          this._lookerHostData &&
-          this._lookerHostData.lookerVersion
+          lookerHostData.lookerVersion
         ) {
           errorMessage = this.verifyLookerVersion(
             this._configuration.requiredLookerVersion
           )
           if (errorMessage) {
+            // eslint-disable-next-line no-console
             console.error(errorMessage)
           }
         }
         if (this.setInitialRoute && payload) {
-          const { route, routeState } = payload as LookerHostData
+          const { route, routeState } = payload
           if (route) {
             this.setInitialRoute(route, routeState)
           }
@@ -127,6 +130,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         }
       }
       default:
+        // eslint-disable-next-line no-console
         console.error('Unrecognized extension notification', message)
         throw new Error(`Unrecognized extension notification type ${type}`)
     }
@@ -375,6 +379,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         error: error && error.toString ? error.toString() : error,
       })
     } else {
+      // eslint-disable-next-line no-console
       console.error(
         'Unhandled error but Looker host connection not established',
         errorEvent

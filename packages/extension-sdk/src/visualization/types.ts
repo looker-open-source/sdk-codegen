@@ -23,25 +23,32 @@
  SOFTWARE.
 
  */
+
+/**
+ * <code>Looker >=22.8</code>
+ */
 export interface VisConfig {
   // TODO
 }
 
+/**
+ * <code>Looker >=22.8</code>
+ */
 export interface QueryResponse {
   // TODO
 }
 
+/**
+ * <code>Looker >=22.8</code>
+ */
 export interface VisualizationData {
   visConfig: VisConfig
   queryResponse: QueryResponse
 }
 
+/**
+ * <code>Looker >=22.8</code>
+ */
 export type VizualizationDataReceivedCallback = (
   visualizationData: VisualizationData
 ) => void
-
-export interface VisualizationUpdatedRequest {}
-
-export type VisualizationUpdatedCallback = (
-  payload: VisualizationUpdatedRequest
-) => Promise<boolean>

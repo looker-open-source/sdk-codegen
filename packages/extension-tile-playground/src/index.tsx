@@ -24,21 +24,11 @@
 
  */
 import React from 'react'
-import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import ReactDOM from 'react-dom'
+import { App } from './App'
 
-/**
- * Playground for testing extension SDK functionality.
- * Changes are not expected to be kept and may be thrown
- * away at anytime. Keep this simple.
- */
-export const Playground: React.FC = () => {
-  return (
-    <ComponentsProvider>
-      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-          Welcome to the Playground
-        </Text>
-      </SpaceVertical>
-    </ComponentsProvider>
-  )
-}
+window.addEventListener('DOMContentLoaded', (_) => {
+  const root = document.createElement('div')
+  document.body.appendChild(root)
+  ReactDOM.render(<App />, root)
+})

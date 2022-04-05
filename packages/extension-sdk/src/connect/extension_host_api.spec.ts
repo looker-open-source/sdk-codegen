@@ -29,7 +29,8 @@ import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,
 } from './extension_host_api'
-import { ExtensionNotificationType, ApiVersion } from './types'
+import { ExtensionNotificationType, ApiVersion, MountPoint } from './types'
+import type { ExtensionInitializeMessage } from './types'
 
 describe('extension_host_api tests', () => {
   let chattyHost: ChattyHostConnection
@@ -69,7 +70,6 @@ describe('extension_host_api tests', () => {
       chattyHost,
       initializedCallback,
     })
-
     const resp = hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
@@ -77,6 +77,7 @@ describe('extension_host_api tests', () => {
         extensionId: 'ks::ks',
         route: '/sandbox',
         hostUrl: 'https://self-signed.looker.com:9999',
+        mountPoint: MountPoint.standalone,
         ...initMessage,
       },
     })
@@ -94,19 +95,21 @@ describe('extension_host_api tests', () => {
     })
     const response = api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
-    })
+    } as ExtensionInitializeMessage)
     expect(response?.errorMessage).toBeUndefined()
-    expect(api.lookerHostData).toEqual(undefined)
+    expect(api.lookerHostData).toEqual({ mountPoint: 'standalone' })
   })
 
   it('handles initialize notification with data', () => {
     const setInitialRoute = jest.fn()
     const initializedCallback = jest.fn()
     const lookerHostData = {
+      extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
       lookerVersion: '6.25.00004168',
       hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.standalone,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -131,10 +134,12 @@ describe('extension_host_api tests', () => {
     const initializedCallback = jest.fn()
     const hostChangedRoute = jest.fn()
     const lookerHostData = {
+      extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
       lookerVersion: '7.6.0',
       hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.standalone,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -159,6 +164,41 @@ describe('extension_host_api tests', () => {
     })
   })
 
+  it('handles visualization data notification', () => {
+    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn()
+    const hostChangedRoute = jest.fn()
+    const vizualizationDataReceivedCallback = jest.fn()
+    const lookerHostData = {
+      extensionId: 'a::b',
+      route: '/sandbox',
+      routeState: { hello: 'world' },
+      lookerVersion: '7.6.0',
+      hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.dashboardVisualization,
+    }
+    const api = new ExtensionHostApiImpl({
+      chattyHost,
+      initializedCallback,
+      setInitialRoute,
+      hostChangedRoute,
+      vizualizationDataReceivedCallback,
+      requiredLookerVersion: '>=7.6.0',
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.INITIALIZE,
+      payload: lookerHostData,
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.VISUALIZATION_DATA,
+      payload: { visConfig: {}, queryResponse: {} },
+    })
+    expect(vizualizationDataReceivedCallback).toHaveBeenCalledWith({
+      visConfig: {},
+      queryResponse: {},
+    })
+  })
+
   it('provides error when looker version not high enough', () => {
     const initializedCallback = jest.fn()
     const lookerHostData = {
@@ -174,7 +214,7 @@ describe('extension_host_api tests', () => {
     const resp = api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: lookerHostData,
-    })
+    } as ExtensionInitializeMessage)
     expect(resp?.errorMessage).toEqual(
       'Extension requires Looker version >=7.0.0, got 6.25.0'
     )

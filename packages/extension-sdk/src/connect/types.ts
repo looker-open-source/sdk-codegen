@@ -27,7 +27,7 @@
 import type { ChattyHostConnection } from '@looker/chatty'
 import type {
   VizualizationDataReceivedCallback,
-  VisualizationUpdatedRequest,
+  VisualizationData,
 } from '../visualization/types'
 
 /**
@@ -250,6 +250,42 @@ export enum ExtensionNotificationType {
 }
 
 /**
+ * Extension initialize message. Will be received once
+ * when the extension is first instantiated
+ */
+export interface ExtensionInitializeMessage {
+  type: ExtensionNotificationType.INITIALIZE
+  payload: LookerHostData
+}
+
+/**
+ * Route changed message. Received when the host route changes.
+ * This happens when the user clicks the browser backward or
+ * forward button.
+ */
+export interface ExtensionRouteChangedMessage {
+  type: ExtensionNotificationType.ROUTE_CHANGED
+  payload: RouteChangeData
+}
+
+/**
+ * Visualization data. Only received by extensions visualizations.
+ * <code>Looker >=22.8</code>
+ */
+export interface ExtensionVisualizationDataMessage {
+  type: ExtensionNotificationType.VISUALIZATION_DATA
+  payload: VisualizationData
+}
+
+/**
+ * Extension notification
+ */
+export type ExtensionNotification =
+  | ExtensionInitializeMessage
+  | ExtensionRouteChangedMessage
+  | ExtensionVisualizationDataMessage
+
+/**
  * Route change data
  */
 export interface RouteChangeData {
@@ -274,8 +310,19 @@ export type HostType = 'standard' | 'embed' | 'spartan'
 /**
  * Extension mount type.
  * Fullscreen mount.
+ * @deprecated <code>Looker >=22.8</code>. Use MountPoint (fullscreen is equivalent of standalone)
  */
-export type MountType = 'fullscreen'
+export type MountType = 'fullscreen' | undefined
+
+/**
+ * Extension mount point
+ * <code>Looker >=22.8</code>
+ */
+export enum MountPoint {
+  standalone = 'standalone',
+  dashboardVisualization = 'dashboard-visualization',
+  dashboardTile = 'dashboard-tile',
+}
 
 /**
  * Initialization data. Looker host data.
@@ -318,17 +365,14 @@ export interface LookerHostData {
    */
   mountType?: MountType
   /**
+   * Extension mount point.
+   * <code>Looker >=22.8</code>
+   */
+  mountPoint: MountPoint
+  /**
    * Extension context data
    */
   contextData?: string
-}
-
-/**
- * Extension notification
- */
-export interface ExtensionNotification {
-  type: ExtensionNotificationType
-  payload?: LookerHostData | RouteChangeData | undefined
 }
 
 /**
@@ -734,7 +778,8 @@ export interface ExtensionSDK {
   spartanLogout(): void
 
   /**
-   * Indicate that an extension has been rendered
+   * Indicate that an extension has been rendered.
+   * <code>Looker >=22.8</code>
    */
   rendered(): Promise<boolean>
 }

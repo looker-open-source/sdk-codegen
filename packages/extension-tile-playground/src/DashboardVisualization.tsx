@@ -23,22 +23,28 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import React, { useContext, useRef, useEffect } from 'react'
+import { SpaceVertical, Text } from '@looker/components'
+import { ExtensionContext2 } from '@looker/extension-sdk-react'
 
-/**
- * Playground for testing extension SDK functionality.
- * Changes are not expected to be kept and may be thrown
- * away at anytime. Keep this simple.
- */
-export const Playground: React.FC = () => {
+export const DashboardVisualization: React.FC = () => {
+  const renderRef = useRef(null)
+  const { visualizationData, extensionSDK } = useContext(ExtensionContext2)
+
+  useEffect(() => {
+    if (renderRef.current) {
+      extensionSDK.rendered()
+    }
+  }, [renderRef.current, extensionSDK, visualizationData])
+
   return (
-    <ComponentsProvider>
-      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-          Welcome to the Playground
-        </Text>
-      </SpaceVertical>
-    </ComponentsProvider>
+    <SpaceVertical p="xxxxxlarge" width="100%" height="100vh">
+      <Text p="xxxxxlarge" fontSize="xxxxxlarge">
+        Dashboard Visualization
+      </Text>
+      {visualizationData && (
+        <pre ref={renderRef}>{JSON.stringify(visualizationData, null, 2)}</pre>
+      )}
+    </SpaceVertical>
   )
 }

@@ -23,22 +23,13 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+const { merge } = require('webpack-merge')
+const base = require('../../webpack.base.config')(__dirname)
+const browser = require('../../webpack.browser.config')()
 
-/**
- * Playground for testing extension SDK functionality.
- * Changes are not expected to be kept and may be thrown
- * away at anytime. Keep this simple.
- */
-export const Playground: React.FC = () => {
-  return (
-    <ComponentsProvider>
-      <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-          Welcome to the Playground
-        </Text>
-      </SpaceVertical>
-    </ComponentsProvider>
-  )
-}
+module.exports = merge(base, browser, {
+  mode: 'production',
+  optimization: {
+    chunkIds: 'named',
+  },
+})
