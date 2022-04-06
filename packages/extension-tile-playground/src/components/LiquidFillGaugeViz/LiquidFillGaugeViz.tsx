@@ -23,13 +23,31 @@
  SOFTWARE.
 
  */
+import React, { useEffect, useRef } from 'react'
+import styled from 'styled-components'
+import {
+  createSvg,
+  liquidFillGauge,
+  defaultConfig,
+} from './liquid_fill_gauge.js'
 
-export * from './connect/connect_extension_host'
-export * from './connect/global_listener'
-export * from './connect/types'
-export * from './sdk/extension_sdk'
-export * from './sdk/extension_sdk_31'
-export * from './sdk/extension_sdk_40'
-export * from './sdk/sdk_connection'
-export * from './visualization/types'
-export * from './util/logger'
+export const LiquidFillGaugeViz: React.FC = () => {
+  const ctrRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (ctrRef.current) {
+      const element = ctrRef.current as any
+      const svg = createSvg(element)
+      liquidFillGauge(svg, '69', defaultConfig, null)
+    }
+  }, [ctrRef.current])
+
+  return <VizContainer ref={ctrRef}></VizContainer>
+}
+
+const VizContainer = styled.div`
+   {
+    width: 400px;
+    height: 400px;
+  }
+`

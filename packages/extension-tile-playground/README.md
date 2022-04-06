@@ -3,7 +3,7 @@
 ## Purpose
 
 The extension tile playground is a simple extension that allows changes to the extension SDKs to be
-quickly prototyped and tested in daashboard mount points. Do not save prototyping to this repo as this
+quickly prototyped and tested in dashboard mount points. Do not save prototyping to this repo as this
 extension should remain simple. Instead, demos of extension SDK changes should be added to the
 [extension examples repo](https://github.com/looker-open-source/extension-examples).
 

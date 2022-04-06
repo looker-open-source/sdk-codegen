@@ -23,13 +23,12 @@
  SOFTWARE.
 
  */
+export const logError = (message?: any, ...optionalParams: any[]) => {
+  // eslint-disable-next-line no-console
+  console.error(message, optionalParams)
+}
 
-export * from './connect/connect_extension_host'
-export * from './connect/global_listener'
-export * from './connect/types'
-export * from './sdk/extension_sdk'
-export * from './sdk/extension_sdk_31'
-export * from './sdk/extension_sdk_40'
-export * from './sdk/sdk_connection'
-export * from './visualization/types'
-export * from './util/logger'
+export const logWarn = (message?: any, ...optionalParams: any[]) => {
+  // eslint-disable-next-line no-console
+  console.warn(message, optionalParams)
+}

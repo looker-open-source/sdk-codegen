@@ -27,8 +27,8 @@ import React, { useContext } from 'react'
 import { ComponentsProvider, MessageBar } from '@looker/components'
 import { ExtensionContext2 } from '@looker/extension-sdk-react'
 import { MountPoint } from '@looker/extension-sdk'
-import { DashboardVisualization } from './DashboardVisualization'
-import { DashboardTile } from './DashboardTile'
+import { VisualizationTile } from './components/VisualizationTile/VisualizationTile'
+import { DashboardTile } from './components/DashboardTile/DashboardTile'
 
 export const TileExtension: React.FC = () => {
   const { extensionSDK } = useContext(ExtensionContext2)
@@ -36,7 +36,7 @@ export const TileExtension: React.FC = () => {
   return (
     <ComponentsProvider>
       {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
-        <DashboardVisualization />
+        <VisualizationTile />
       )}
       {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
         <DashboardTile />

@@ -26,8 +26,9 @@
 import React, { useContext, useRef, useEffect } from 'react'
 import { SpaceVertical, Text } from '@looker/components'
 import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
 
-export const DashboardVisualization: React.FC = () => {
+export const VisualizationTile: React.FC = () => {
   const renderRef = useRef(null)
   const { visualizationData, extensionSDK } = useContext(ExtensionContext2)
 
@@ -40,8 +41,9 @@ export const DashboardVisualization: React.FC = () => {
   return (
     <SpaceVertical p="xxxxxlarge" width="100%" height="100vh">
       <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-        Dashboard Visualization
+        Visualization Tile
       </Text>
+      <LiquidFillGaugeViz />
       {visualizationData && (
         <pre ref={renderRef}>{JSON.stringify(visualizationData, null, 2)}</pre>
       )}

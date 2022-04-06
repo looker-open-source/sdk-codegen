@@ -27,28 +27,70 @@
 /**
  * <code>Looker >=22.8</code>
  */
-export interface VisConfig {
-  // TODO
-}
-
-/**
- * <code>Looker >=22.8</code>
- */
-export interface QueryResponse {
-  // TODO
-}
+export type VizualizationDataReceivedCallback = (
+  visualizationData: VisualizationData
+) => void
 
 /**
  * <code>Looker >=22.8</code>
  */
 export interface VisualizationData {
   visConfig: VisConfig
-  queryResponse: QueryResponse
+  queryResponse: VisQueryResponse
 }
 
 /**
+ * Visualization configuration
+ *
  * <code>Looker >=22.8</code>
  */
-export type VizualizationDataReceivedCallback = (
-  visualizationData: VisualizationData
-) => void
+export interface VisConfig {
+  [key: string]: VisConfigValue
+}
+
+export type VisConfigValue = any
+
+/**
+ * Query response data
+ * <code>Looker >=22.8</code>
+ */
+export interface VisQueryResponse {
+  [key: string]: any
+  data: VisData
+  fields: {
+    [key: string]: any[]
+  }
+  pivots: Pivot[]
+}
+
+export interface Row {
+  [fieldName: string]: PivotCell | Cell
+}
+
+export type VisData = Row[]
+
+export interface Pivot {
+  key: string
+  is_total: boolean
+  data: { [key: string]: string }
+  metadata: { [key: string]: { [key: string]: string } }
+}
+
+export interface PivotCell {
+  [pivotKey: string]: Cell
+}
+
+export interface Cell {
+  [key: string]: any
+  value: any
+  rendered?: string
+  html?: string
+  links?: Link[]
+}
+
+export interface Link {
+  label: string
+  type: string
+  type_label: string
+  url: string
+}

@@ -27,6 +27,7 @@
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
 import type { VizualizationDataReceivedCallback } from '../visualization/types'
+import { logError } from '../util'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
   ExtensionInitializationResponse,
@@ -114,8 +115,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
             this._configuration.requiredLookerVersion
           )
           if (errorMessage) {
-            // eslint-disable-next-line no-console
-            console.error(errorMessage)
+            logError(errorMessage)
           }
         }
         if (this.setInitialRoute && payload) {
@@ -130,8 +130,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         }
       }
       default:
-        // eslint-disable-next-line no-console
-        console.error('Unrecognized extension notification', message)
+        logError('Unrecognized extension notification', message)
         throw new Error(`Unrecognized extension notification type ${type}`)
     }
   }
@@ -380,7 +379,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       })
     } else {
       // eslint-disable-next-line no-console
-      console.error(
+      logError(
         'Unhandled error but Looker host connection not established',
         errorEvent
       )
