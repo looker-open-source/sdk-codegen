@@ -380,7 +380,9 @@ export function encodeParam(value: any) {
   if (value instanceof Date) {
     value = value.toISOString()
   }
-  let encoded = value.toString()
+  // check for object type to prevent "[object Object]" as the value.toString()
+  let encoded =
+    typeof value === 'object' ? JSON.stringify(value) : value.toString()
 
   // decodeURIComponent throws URIError if there is a % character
   // without it being part of an encoded

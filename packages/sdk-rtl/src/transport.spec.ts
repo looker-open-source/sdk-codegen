@@ -61,5 +61,8 @@ describe('Transport', () => {
     expect(encodeParam('foo/bar')).toEqual('foo%2Fbar')
     expect(encodeParam(true)).toEqual('true')
     expect(encodeParam(2.3)).toEqual('2.3')
+    expect(encodeParam({ created_date: 'this year to second' })).toEqual(
+      '{"created_date":"this year to second"}'
+    )
   })
 })
