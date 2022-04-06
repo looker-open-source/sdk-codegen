@@ -28,6 +28,7 @@ import type { Agent } from 'https'
 import type { Headers } from 'request'
 import type { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
+import { DelimArray } from './delimArray'
 
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
@@ -379,6 +380,8 @@ export type Values = { [key: string]: any } | null | undefined
 export function encodeParam(value: any) {
   if (value instanceof Date) {
     value = value.toISOString()
+  } else if (value instanceof DelimArray) {
+    value = value.toString()
   }
   // check for object type to prevent "[object Object]" as the value.toString()
   let encoded =

@@ -26,6 +26,7 @@
 
 import { TestConfig } from './testUtils'
 import { encodeParam, ResponseMode, responseMode } from './transport'
+import { DelimArray } from './delimArray'
 
 const config = TestConfig()
 const binaryTypes = config.testData.content_types.binary as [string]
@@ -56,6 +57,8 @@ describe('Transport', () => {
 
   it('encodeParam', () => {
     const today = new Date('01 January 2020 14:48 UTC')
+    const ra = new DelimArray([1, 2, 3])
+    expect(encodeParam(ra)).toEqual('1%2C2%2C3')
     expect(encodeParam(today)).toEqual('2020-01-01T14%3A48%3A00.000Z')
     expect(encodeParam('foo%2Fbar')).toEqual('foo%2Fbar')
     expect(encodeParam('foo/bar')).toEqual('foo%2Fbar')
