@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v22.4.0...sdk-node-v22.4.1) (2022-04-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.4.0 to ^22.4.1
+
 ## [22.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v22.2.0...sdk-node-v22.4.0) (2022-03-24)
 
 
