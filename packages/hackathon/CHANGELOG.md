@@ -1,5 +1,19 @@
 # Changelog
 
+### [22.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.4.0...hackathon-v22.4.1) (2022-04-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.19 to ^0.1.20
+    * @looker/extension-sdk bumped from ^22.4.0 to ^22.4.1
+    * @looker/extension-sdk-react bumped from ^22.4.0 to ^22.4.1
+    * @looker/extension-utils bumped from ^0.1.7 to ^0.1.8
+    * @looker/sdk bumped from ^22.4.0 to ^22.4.1
+    * @looker/wholly-sheet bumped from ^0.5.26 to ^0.5.27
+
 ## [22.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.2.1...hackathon-v22.4.0) (2022-03-24)
 
 
