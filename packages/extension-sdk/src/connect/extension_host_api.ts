@@ -378,7 +378,6 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         error: error && error.toString ? error.toString() : error,
       })
     } else {
-      // eslint-disable-next-line no-console
       logError(
         'Unhandled error but Looker host connection not established',
         errorEvent
