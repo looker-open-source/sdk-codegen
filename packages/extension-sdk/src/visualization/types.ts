@@ -27,7 +27,7 @@
 /**
  * <code>Looker >=22.8</code>
  */
-export type VizualizationDataReceivedCallback = (
+export type VisualizationDataReceivedCallback = (
   visualizationData: VisualizationData
 ) => void
 

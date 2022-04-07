@@ -27,7 +27,7 @@
 import { connectExtensionHost } from './connect_extension_host'
 import * as globalListener from './global_listener'
 import type { ExtensionNotification } from './types'
-import { ExtensionNotificationType } from './types'
+import { ExtensionNotificationType, MountPoint } from './types'
 
 let channel: any
 class MockMessageChannel {
@@ -101,6 +101,7 @@ describe('connect_extension_host tests', () => {
         hostType: 'standard',
         mountType: 'fullscreen',
         extensionId: 'a::b',
+        mountPoint: MountPoint.standalone,
       },
     })
   })
@@ -133,6 +134,7 @@ describe('connect_extension_host tests', () => {
         hostType: 'standard',
         mountType: 'fullscreen',
         extensionId: 'a::b',
+        mountPoint: MountPoint.standalone,
       },
     })
   })
@@ -162,6 +164,7 @@ describe('connect_extension_host tests', () => {
         hostType: 'standard',
         mountType: 'fullscreen',
         extensionId: 'a::b',
+        mountPoint: MountPoint.standalone,
       },
     })
   })

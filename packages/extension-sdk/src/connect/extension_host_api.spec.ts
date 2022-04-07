@@ -25,6 +25,7 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
+import type { VisQueryResponse } from '../visualization/types'
 import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,
@@ -168,7 +169,7 @@ describe('extension_host_api tests', () => {
     const setInitialRoute = jest.fn()
     const initializedCallback = jest.fn()
     const hostChangedRoute = jest.fn()
-    const vizualizationDataReceivedCallback = jest.fn()
+    const visualizationDataReceivedCallback = jest.fn()
     const lookerHostData = {
       extensionId: 'a::b',
       route: '/sandbox',
@@ -182,7 +183,7 @@ describe('extension_host_api tests', () => {
       initializedCallback,
       setInitialRoute,
       hostChangedRoute,
-      vizualizationDataReceivedCallback,
+      visualizationDataReceivedCallback,
       requiredLookerVersion: '>=7.6.0',
     })
     api.handleNotification({
@@ -191,9 +192,9 @@ describe('extension_host_api tests', () => {
     })
     api.handleNotification({
       type: ExtensionNotificationType.VISUALIZATION_DATA,
-      payload: { visConfig: {}, queryResponse: {} },
+      payload: { visConfig: {}, queryResponse: {} as VisQueryResponse },
     })
-    expect(vizualizationDataReceivedCallback).toHaveBeenCalledWith({
+    expect(visualizationDataReceivedCallback).toHaveBeenCalledWith({
       visConfig: {},
       queryResponse: {},
     })

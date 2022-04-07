@@ -93,7 +93,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
           requiredLookerVersion,
           hostChangedRoute,
           chattyTimeout,
-          vizualizationDataReceivedCallback: updateVisualizationData,
+          visualizationDataReceivedCallback: updateVisualizationData,
         })
         connectedCallback(extensionHost)
         setInitializing(false)

@@ -26,7 +26,7 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
-import type { VizualizationDataReceivedCallback } from '../visualization/types'
+import type { VisualizationDataReceivedCallback } from '../visualization/types'
 import { logError } from '../util'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
@@ -54,7 +54,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private chattyHost: ChattyHostConnection
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
-  private vizualizationDataReceivedCallback?: VizualizationDataReceivedCallback
+  private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
 
   private contextData?: string
 
@@ -64,12 +64,12 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       chattyHost,
       setInitialRoute,
       hostChangedRoute,
-      vizualizationDataReceivedCallback,
+      visualizationDataReceivedCallback,
     } = this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
-    this.vizualizationDataReceivedCallback = vizualizationDataReceivedCallback
+    this.visualizationDataReceivedCallback = visualizationDataReceivedCallback
   }
 
   get lookerHostData() {
@@ -93,8 +93,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       }
       case ExtensionNotificationType.VISUALIZATION_DATA: {
         const { payload } = message
-        if (this.vizualizationDataReceivedCallback) {
-          this.vizualizationDataReceivedCallback(payload)
+        if (this.visualizationDataReceivedCallback) {
+          this.visualizationDataReceivedCallback(payload)
         }
         return undefined
       }

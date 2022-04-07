@@ -26,8 +26,8 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import type { Looker31SDK } from '@looker/sdk'
+import { MountPoint, ExtensionNotificationType } from '../connect/types'
 import { ExtensionHostApiImpl } from '../connect/extension_host_api'
-import { ExtensionNotificationType } from '../connect/types'
 import { LookerExtensionSDK } from './extension_sdk'
 import { LookerExtensionSDK31 } from './extension_sdk_31'
 import { LookerExtensionSDK40 } from './extension_sdk_40'
@@ -91,8 +91,10 @@ describe('extension_sdk tests', () => {
     hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionId: 'a::b',
         route: '/sandbox',
         lookerVersion: '6.25.0',
+        mountPoint: MountPoint.standalone,
       },
     })
 

@@ -26,7 +26,7 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import type {
-  VizualizationDataReceivedCallback,
+  VisualizationDataReceivedCallback,
   VisualizationData,
 } from '../visualization/types'
 
@@ -423,7 +423,7 @@ export interface ExtensionHostConfiguration {
   /**
    * Callback called when visualization data received
    */
-  vizualizationDataReceivedCallback?: VizualizationDataReceivedCallback
+  visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
 }
 
 export interface ExtensionHostApiConfiguration
