@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
