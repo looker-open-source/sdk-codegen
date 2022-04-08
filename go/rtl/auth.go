@@ -161,7 +161,6 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 			}
 			*v = string(b)
 	default:
-		extra.RegisterFuzzyDecoders()
 		return json.NewDecoder(res.Body).Decode(&result)
 	}
 
