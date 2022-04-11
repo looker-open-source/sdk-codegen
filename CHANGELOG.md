@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.3.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.1...sdk-codegen-all-v2.3.2) (2022-04-07)
+
+
+### Bug Fixes
+
+* encodeParam doc tweak to republish ([#1050](https://www.github.com/looker-open-source/sdk-codegen/issues/1050)) ([512bc81](https://www.github.com/looker-open-source/sdk-codegen/commit/512bc81865a9f5cbf8fafb83f41dfc2e8629ff3b))
+
 ### [2.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.0...sdk-codegen-all-v2.3.1) (2022-04-07)
 
 

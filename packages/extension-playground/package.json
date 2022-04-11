@@ -15,8 +15,8 @@
     "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^22.4.1",
-    "@looker/extension-sdk-react": "22.4.1",
+    "@looker/extension-sdk": "^21.4.2",
+    "@looker/extension-sdk-react": "^21.4.2",
     "@looker/sdk": "^22.0.0",
     "@looker/sdk-codegen": "^21.3.2",
     "@looker/components": "^2.8.1",

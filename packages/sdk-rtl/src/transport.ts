@@ -374,6 +374,9 @@ export type Values = { [key: string]: any } | null | undefined
 
 /**
  * Encode parameter if not already encoded
+ *
+ * Note: this includes recognition of Date, DelimArray, and default objects for special handling
+ *
  * @param value value of parameter
  * @returns URI encoded value
  */
