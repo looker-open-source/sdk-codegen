@@ -290,7 +290,6 @@ export class ${this.packageName}Stream extends APIMethods {
     }
     return (
       `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
-      // eslint-disable-next-line no-nested-ternary
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }

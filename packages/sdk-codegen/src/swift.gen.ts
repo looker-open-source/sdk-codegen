@@ -297,7 +297,6 @@ import Foundation
   }
 
   getSpecialHandling(property: IProperty) {
-    // eslint-disable-next-line no-nested-ternary
     return this.useAnyString(property)
       ? 'AnyString'
       : this.useAnyInt(property)
@@ -332,7 +331,6 @@ import Foundation
       const ra = typeOfType(property.type) === TypeOfType.Array
       const privy = this.reserve('_' + property.name)
       const bump = this.bumper(indent)
-      // eslint-disable-next-line no-nested-ternary
       const setter = property.required
         ? ra
           ? `${privy} = newValue.map { ${specialHandling}.init($0) }`
@@ -340,7 +338,6 @@ import Foundation
         : ra
         ? `if let v = newValue { ${privy} = v.map { ${specialHandling}.init($0) } } else { ${privy} = nil }`
         : `${privy} = newValue.map(${specialHandling}.init)`
-      // eslint-disable-next-line no-nested-ternary
       const getter = property.required
         ? ra
           ? `${privy}.map { $0.value }`
@@ -388,7 +385,6 @@ ${indent}}\n`
     return (
       this.commentHeader(indent, this.paramComment(param, mapped)) +
       `${indent}${line}${this.reserve(param.name)}: ${mapped.name}${pOpt}` +
-      // eslint-disable-next-line no-nested-ternary
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }
