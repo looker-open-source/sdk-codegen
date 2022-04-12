@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,40 @@
  SOFTWARE.
 
  */
+import { ExtensionRequestType } from '../types'
+import type { ExtensionHostApiImpl } from '../extension_host_api'
+import type {
+  TileSDK,
+  TileError,
+  DrillMenuOptions,
+  TriggerConfig,
+  CrossfilterOptions,
+} from './types'
 
-export * from './visualization/types'
-export * from './tile/types'
-export * from './types'
-export * from './connect_extension_host'
-export { getExtensionSDK } from './global_listener'
+export class TileSDKImpl implements TileSDK {
+  hostApi: ExtensionHostApiImpl
+
+  constructor(hostApi: ExtensionHostApiImpl) {
+    this.hostApi = hostApi
+  }
+
+  addErrors(...errors: TileError[]) {
+    this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, errors)
+  }
+
+  clearErrors(group?: string) {
+    this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, group)
+  }
+
+  trigger(message: string, config: TriggerConfig[]) {
+    this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, { message, config })
+  }
+
+  openDrillMenu(options: DrillMenuOptions) {
+    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, options)
+  }
+
+  toggleCrossFilter(options: CrossfilterOptions) {
+    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, options)
+  }
+}

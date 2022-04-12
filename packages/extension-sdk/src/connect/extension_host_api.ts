@@ -26,12 +26,14 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
+import { logError } from '../util'
 import type {
   VisualizationDataReceivedCallback,
   VisualizationSDK,
-} from '../visualization/types'
-import { VisualizationSDKImpl } from '../visualization/visualization_sdk'
-import { logError } from '../util'
+} from './visualization'
+import { VisualizationSDKImpl } from './visualization/visualization_sdk'
+import type { TileSDK } from './tile'
+import { TileSDKImpl } from './tile/tile_sdk'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
   ExtensionInitializationResponse,
@@ -60,6 +62,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private hostChangedRoute?: (route: string, routeState?: any) => void
   private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
   private _visualizationSDK?: VisualizationSDK
+  private _tileSDK?: TileSDK
 
   private contextData?: string
 
@@ -78,10 +81,17 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   }
 
   get visualizationSDK(): VisualizationSDK | undefined {
-    if (this.visualizationDataReceivedCallback && !this._visualizationSDK) {
+    if (!this._visualizationSDK) {
       this._visualizationSDK = new VisualizationSDKImpl(this)
     }
     return this._visualizationSDK
+  }
+
+  get tileSDK(): TileSDK | undefined {
+    if (!this._tileSDK) {
+      this._tileSDK = new TileSDKImpl(this)
+    }
+    return this._tileSDK
   }
 
   get lookerHostData() {
@@ -105,8 +115,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       }
       case ExtensionNotificationType.VISUALIZATION_DATA: {
         const { payload } = message
+        ;(this.visualizationSDK as VisualizationSDK).updateVisData(payload)
         if (this.visualizationDataReceivedCallback) {
-          ;(this.visualizationSDK as VisualizationSDK).updateVisData(payload)
           this.visualizationDataReceivedCallback(payload)
         }
         return undefined

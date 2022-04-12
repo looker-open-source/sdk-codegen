@@ -29,7 +29,7 @@ import type {
   VisualizationDataReceivedCallback,
   RawVisualizationData,
   VisualizationSDK,
-} from '../visualization/types'
+} from './visualization'
 
 /**
  * Extension event used for chatty communication
@@ -125,7 +125,27 @@ export enum ExtensionRequestType {
   /**
    * Visualization configuration data
    */
-  DEFAULT_VIS_CONFIG = 'DEFAULT_VIS_CONFIG',
+  VIS_DEFAULT_CONFIG = 'VIS_DEFAULT_CONFIG',
+  /**
+   * Tile add error messages
+   */
+  TILE_ADD_ERRORS = 'TILE_ADD_ERRORS',
+  /**
+   * Tile clear error messages
+   */
+  TILE_CLEAR_ERRORS = 'TILE_CLEAR_ERRORS',
+  /**
+   * Tile trigger
+   */
+  TILE_TRIGGER = 'TILE_TRIGGER',
+  /**
+   * Tile open drill menu
+   */
+  TILE_OPEN_DRILL_MENU = 'TILE_OPEN_DRILL_MENU',
+  /**
+   * Tile toggle cross filter
+   */
+  TILE_TOGGLE_CROSS_FILTER = 'TILE_TOGGLE_CROSS_FILTER',
 }
 
 /**

@@ -25,7 +25,7 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
-import type { RawVisQueryResponse } from '../visualization/types'
+import type { RawVisQueryResponse } from './visualization/types'
 import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,

@@ -24,8 +24,9 @@
 
  */
 
-import type { ExtensionHostApiImpl } from '../connect/extension_host_api'
-import { ExtensionRequestType } from '../connect/types'
+import type { ExtensionHostApiImpl } from '../extension_host_api'
+import { ExtensionRequestType } from '../types'
+import type { Row } from '../tile'
 import type {
   VisualizationSDK,
   RawVisualizationData,
@@ -37,7 +38,6 @@ import type {
   TableCalculation,
   PivotConfig,
   RawVisQueryResponse,
-  Row,
 } from './types'
 
 const defaultRawVizData: RawVisualizationData = {
@@ -150,8 +150,8 @@ export class VisualizationSDKImpl implements VisualizationSDK {
     throw new Error('not implemented')
   }
 
-  sendDefaultConfig(options: RawVisConfig): void {
-    this.hostApi.send(ExtensionRequestType.DEFAULT_VIS_CONFIG, options)
+  configureVisualization(options: RawVisConfig): void {
+    this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, options)
   }
 
   getVisConfig(): VisualizationConfig {

@@ -24,6 +24,8 @@
 
  */
 
+import type { Row } from '../tile'
+
 /**
  * Callback that is invoked when visualization data is received
  * <code>Looker >=22.8</code>
@@ -66,10 +68,6 @@ export interface RawVisQueryResponse {
   pivots: RawPivotConfig[]
 }
 
-export interface Row {
-  [fieldName: string]: PivotCell | Cell
-}
-
 export type RawVisData = Row[]
 
 export interface RawPivotConfig {
@@ -77,25 +75,6 @@ export interface RawPivotConfig {
   is_total: boolean
   data: { [key: string]: string }
   metadata: { [key: string]: { [key: string]: string } }
-}
-
-export interface PivotCell {
-  [pivotKey: string]: Cell
-}
-
-export interface Cell {
-  [key: string]: any
-  value: any
-  rendered?: string
-  html?: string
-  links?: Link[]
-}
-
-export interface Link {
-  label: string
-  type: string
-  type_label: string
-  url: string
 }
 
 export interface Measure extends RawVisConfig {
@@ -144,7 +123,7 @@ export interface VisualizationSDK {
    */
   visualizedInExplore: boolean
   updateVisData: (rawVisData: RawVisualizationData) => void
-  sendDefaultConfig: (options: RawVisConfig) => void
+  configureVisualization: (options: RawVisConfig) => void
   getVisConfig: () => VisualizationConfig
   getQueryResponse: () => QueryResponse
 }

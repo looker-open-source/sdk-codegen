@@ -42,7 +42,7 @@ export const VisualizationTile: React.FC = () => {
 
   useEffect(() => {
     if (visualizationSDK) {
-      visualizationSDK.sendDefaultConfig(liquidFillDefaultConfig)
+      visualizationSDK.configureVisualization(liquidFillDefaultConfig)
     }
   }, [visualizationSDK])
 
