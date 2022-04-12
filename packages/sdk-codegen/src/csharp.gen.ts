@@ -207,6 +207,7 @@ namespace Looker.SDK.API${this.apiRef}
     const mapped = this.typeMap(type)
     const arg = this.reserve(param.name)
     const pOpt = param.required ? '' : '?'
+    // eslint-disable-next-line no-nested-ternary
     const defaulting = param.required
       ? ''
       : mapped.optional
