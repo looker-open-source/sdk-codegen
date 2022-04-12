@@ -164,6 +164,7 @@
       "@typescript-eslint/no-empty-interface": "off",
       "import/default": "off",
       "sort-keys": "off",
+      "no-nested-ternary": "off",
       "spaced-comment": [
         "error",
         "always",
