@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -290,6 +290,7 @@ export class ${this.packageName}Stream extends APIMethods {
     }
     return (
       `${indent}${this.reserve(param.name)}${pOpt}: ${mapped.name}` +
+      // eslint-disable-next-line no-nested-ternary
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }

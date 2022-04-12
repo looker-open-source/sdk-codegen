@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -207,6 +207,7 @@ namespace Looker.SDK.API${this.apiRef}
     const mapped = this.typeMap(type)
     const arg = this.reserve(param.name)
     const pOpt = param.required ? '' : '?'
+    // eslint-disable-next-line no-nested-ternary
     const defaulting = param.required
       ? ''
       : mapped.optional

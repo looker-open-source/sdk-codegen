@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,7 @@ const getHeaders = (response: ResponseContent): HeaderTable => {
 
 const getBodySize = (response: ResponseContent): string => {
   const size =
+    // eslint-disable-next-line no-nested-ternary
     !response || !response.body
       ? 0
       : response?.body instanceof Blob
