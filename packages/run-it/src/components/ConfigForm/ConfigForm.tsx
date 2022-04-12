@@ -259,6 +259,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     await adaptor.login()
   }
 
+  /* eslint-disable */
   return (
     <SpaceVertical gap="u2">
       <RunItHeading>{title}</RunItHeading>
@@ -372,4 +373,5 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       </CollapserCard>
     </SpaceVertical>
   )
+  /* eslint-enable */
 }

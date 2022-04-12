@@ -55,6 +55,7 @@ const getHeaders = (response: ResponseContent): HeaderTable => {
 
 const getBodySize = (response: ResponseContent): string => {
   const size =
+    // eslint-disable-next-line no-nested-ternary
     !response || !response.body
       ? 0
       : response?.body instanceof Blob

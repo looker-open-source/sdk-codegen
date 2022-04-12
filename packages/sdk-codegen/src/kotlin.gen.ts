@@ -188,6 +188,7 @@ import java.util.*
     }
     return (
       `${indent}${param.name}: ${mapped.name}${pOpt}` +
+      // eslint-disable-next-line no-nested-ternary
       (param.required ? '' : mapped.default ? ` = ${mapped.default}` : '')
     )
   }

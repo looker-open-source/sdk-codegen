@@ -225,5 +225,6 @@ const AsideBorder = styled(Aside)<{
   headless: boolean
 }>`
   width: ${({ isOpen, headless }) =>
+    // eslint-disable-next-line no-nested-ternary
     isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
 `
