@@ -127,6 +127,7 @@ export const RequestForm: FC<RequestFormProps> = ({
     safeSetMessage('')
   }
 
+  /* eslint-disable */
   return (
     <Form onSubmit={handleSubmit}>
       {validationMessage && (
@@ -180,4 +181,5 @@ export const RequestForm: FC<RequestFormProps> = ({
       </Fieldset>
     </Form>
   )
+  /* eslint-enable */
 }
