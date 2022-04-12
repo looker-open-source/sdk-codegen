@@ -57,6 +57,7 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
       return {
         ...previousState,
         extensionSDK: extensionHost,
+        visualizationSDK: extensionHost.visualizationSDK,
       }
     })
   }
@@ -70,7 +71,7 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
   }
 
   return (
-    <ExtensionContextBase.Provider value={extensionData!}>
+    <ExtensionContextBase.Provider value={extensionData}>
       <ExtensionConnector
         {...props}
         contextData={extensionData}

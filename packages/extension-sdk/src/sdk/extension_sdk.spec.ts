@@ -95,6 +95,7 @@ describe('extension_sdk tests', () => {
         route: '/sandbox',
         lookerVersion: '6.25.0',
         mountPoint: MountPoint.standalone,
+        pdfRendering: false,
       },
     })
 

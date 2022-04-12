@@ -23,29 +23,46 @@
  SOFTWARE.
 
  */
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { SpaceVertical, Text } from '@looker/components'
 import { ExtensionContext2 } from '@looker/extension-sdk-react'
 import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
+import { liquidFillDefaultConfig, getValueAndFormat } from './util/liquid_fill'
 
 export const VisualizationTile: React.FC = () => {
-  const renderRef = useRef(null)
-  const { visualizationData, extensionSDK } = useContext(ExtensionContext2)
+  const { visualizationData, visualizationSDK, extensionSDK } =
+    useContext(ExtensionContext2)
+
+  const { value, valueFormat } = useMemo(() => {
+    if (visualizationData && visualizationSDK) {
+      return getValueAndFormat(visualizationSDK)
+    }
+    return { value: undefined, valueFormat: null }
+  }, [visualizationData, visualizationSDK])
 
   useEffect(() => {
-    if (renderRef.current) {
+    if (visualizationSDK) {
+      visualizationSDK.sendDefaultConfig(liquidFillDefaultConfig)
+    }
+  }, [visualizationSDK])
+
+  const renderComplete = useCallback(() => {
+    if (visualizationData) {
       extensionSDK.rendered()
     }
-  }, [renderRef.current, extensionSDK, visualizationData])
+  }, [extensionSDK, visualizationData])
 
   return (
     <SpaceVertical p="xxxxxlarge" width="100%" height="100vh">
       <Text p="xxxxxlarge" fontSize="xxxxxlarge">
         Visualization Tile
       </Text>
-      <LiquidFillGaugeViz />
-      {visualizationData && (
-        <pre ref={renderRef}>{JSON.stringify(visualizationData, null, 2)}</pre>
+      {value && (
+        <LiquidFillGaugeViz
+          value={value}
+          renderComplete={renderComplete}
+          valueFormat={valueFormat}
+        />
       )}
     </SpaceVertical>
   )

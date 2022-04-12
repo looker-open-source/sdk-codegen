@@ -27,7 +27,8 @@
 import type {
   ExtensionHostApi,
   ExtensionSDK,
-  VisualizationData,
+  RawVisualizationData,
+  VisualizationSDK,
 } from '@looker/extension-sdk'
 
 /**
@@ -56,7 +57,11 @@ export interface BaseExtensionContextData {
   /**
    * Visualization data.
    */
-  visualizationData?: VisualizationData
+  visualizationData?: RawVisualizationData
+  /**
+   * Visualization api.
+   */
+  visualizationSDK?: VisualizationSDK
 }
 
 export interface RouteData {

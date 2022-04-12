@@ -64,10 +64,22 @@ following steps:
    ```sh
    yarn && yarn build
    ```
-1. in `packages/extension-tile-playground`:
+1. Either
+
+   in `packages/extension-tile-playground`:
+
    ```sh
    yarn develop
    ```
+
+   Or
+
+   in the root of `sdk-codegen`:
+
+   ```sh
+   yarn dev:tile
+   ```
+
 1. Add the following dashboards to your `thelook` project
 
 ```

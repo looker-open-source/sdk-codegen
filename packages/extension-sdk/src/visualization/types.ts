@@ -25,51 +25,54 @@
  */
 
 /**
+ * Callback that is invoked when visualization data is received
  * <code>Looker >=22.8</code>
  */
 export type VisualizationDataReceivedCallback = (
-  visualizationData: VisualizationData
+  visualizationData: RawVisualizationData
 ) => void
 
 /**
+ * Raw visualization data. Basic typing for configuration data
+ * and query data.
  * <code>Looker >=22.8</code>
  */
-export interface VisualizationData {
-  visConfig: VisConfig
-  queryResponse: VisQueryResponse
+export interface RawVisualizationData {
+  visConfig: RawVisConfig
+  queryResponse: RawVisQueryResponse
 }
 
 /**
- * Visualization configuration
- *
+ * Visualization configuration. Configuration data set in the
+ * explore.
  * <code>Looker >=22.8</code>
  */
-export interface VisConfig {
-  [key: string]: VisConfigValue
+export interface RawVisConfig {
+  [key: string]: RawVisConfigValue
 }
 
-export type VisConfigValue = any
+export type RawVisConfigValue = any
 
 /**
  * Query response data
  * <code>Looker >=22.8</code>
  */
-export interface VisQueryResponse {
+export interface RawVisQueryResponse {
   [key: string]: any
-  data: VisData
+  data: RawVisData
   fields: {
     [key: string]: any[]
   }
-  pivots: Pivot[]
+  pivots: RawPivotConfig[]
 }
 
 export interface Row {
   [fieldName: string]: PivotCell | Cell
 }
 
-export type VisData = Row[]
+export type RawVisData = Row[]
 
-export interface Pivot {
+export interface RawPivotConfig {
   key: string
   is_total: boolean
   data: { [key: string]: string }
@@ -93,4 +96,55 @@ export interface Link {
   type: string
   type_label: string
   url: string
+}
+
+export interface Measure extends RawVisConfig {
+  // TODO flesh out detail
+}
+
+export interface Dimension extends RawVisConfig {
+  // TODO flesh out detail
+  [key: string]: any
+}
+
+export interface TableCalculation {
+  // TODO flesh out detail
+}
+
+export interface PivotConfig extends RawPivotConfig {
+  // TODO flesh out detail
+}
+
+export interface VisualizationConfig {
+  getRaw: () => RawVisConfig
+  getQueryFieldMeasures: () => Measure[]
+  getQueryFieldDimensions: () => Dimension[]
+  getQueryFieldTableCalculations: () => TableCalculation[]
+  getQueryFieldPivots: () => PivotConfig[]
+}
+
+export interface QueryResponse {
+  getRaw: () => RawVisQueryResponse
+  getFieldMeasures: () => Measure[]
+  getFieldDimensions: () => Dimension[]
+  getFieldTableCalculations: () => TableCalculation[]
+  getFieldPivots: () => PivotConfig[]
+  getFieldMeasureLike: () => Measure[]
+  getFieldDimensionLike: () => Dimension[]
+  getData: () => Row[]
+}
+
+export interface VisualizationSDK {
+  /**
+   * Return true if tile is being rendered in PDF.
+   */
+  visualizedInPdf: boolean
+  /**
+   * Return true if an explore is being used.
+   */
+  visualizedInExplore: boolean
+  updateVisData: (rawVisData: RawVisualizationData) => void
+  sendDefaultConfig: (options: RawVisConfig) => void
+  getVisConfig: () => VisualizationConfig
+  getQueryResponse: () => QueryResponse
 }

@@ -31,16 +31,32 @@ import {
   defaultConfig,
 } from './liquid_fill_gauge.js'
 
-export const LiquidFillGaugeViz: React.FC = () => {
+export interface LiquidFillGaugeVizProps {
+  renderComplete?: () => void
+  value: any
+  valueFormat?: any
+  config?: any
+}
+
+export const LiquidFillGaugeViz: React.FC<LiquidFillGaugeVizProps> = ({
+  renderComplete = () => {
+    // default noop
+  },
+  value,
+  valueFormat = null,
+  config = {},
+}) => {
   const ctrRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (ctrRef.current) {
       const element = ctrRef.current as any
       const svg = createSvg(element)
-      liquidFillGauge(svg, '69', defaultConfig, null)
+      const cfg = { ...defaultConfig, config }
+      liquidFillGauge(svg, value, cfg, valueFormat)
+      renderComplete()
     }
-  }, [ctrRef.current])
+  }, [renderComplete, value, valueFormat, config])
 
   return <VizContainer ref={ctrRef}></VizContainer>
 }

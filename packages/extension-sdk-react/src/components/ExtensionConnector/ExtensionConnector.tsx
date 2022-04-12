@@ -27,7 +27,7 @@
 import isEqual from 'lodash/isEqual'
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type { VisualizationData } from '@looker/extension-sdk'
+import type { RawVisualizationData } from '@looker/extension-sdk'
 import { connectExtensionHost } from '@looker/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
@@ -78,7 +78,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
     }
   }
 
-  const updateVisualizationData = (visualizationData: VisualizationData) => {
+  const updateVisualizationData = (visualizationData: RawVisualizationData) => {
     updateContextData({
       ...contextData,
       visualizationData,

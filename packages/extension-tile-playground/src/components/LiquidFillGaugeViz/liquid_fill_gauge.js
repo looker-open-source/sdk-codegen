@@ -15,7 +15,7 @@
  * 4. renamed liquidfillgauge to liquidFillGauge
  * 5. Added createSvg function to simplify d3 usage.
  */
-import { SSF } from 'ssf'
+import SSF from 'ssf'
 import * as d3 from 'd3'
 
 const defaultConfig = {

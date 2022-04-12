@@ -79,6 +79,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
         ...previousState,
         extensionSDK: extensionHost,
         coreSDK,
+        visualizationSDK: extensionHost.visualizationSDK,
       }
     })
   }
@@ -97,7 +98,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
   }
 
   return (
-    <ExtensionContext2.Provider value={extensionData!}>
+    <ExtensionContext2.Provider value={extensionData}>
       <ExtensionConnector
         {...rest}
         contextData={extensionData}

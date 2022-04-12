@@ -70,6 +70,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
         coreSDK: core31SDK,
         core31SDK,
         core40SDK,
+        visualizationSDK: extensionHost.visualizationSDK,
       }
     })
   }
@@ -89,7 +90,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   }
 
   return (
-    <ExtensionContext.Provider value={extensionData!}>
+    <ExtensionContext.Provider value={extensionData}>
       <ExtensionConnector
         {...props}
         contextData={extensionData}

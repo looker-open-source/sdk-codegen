@@ -26,7 +26,11 @@
 
 import type { ChattyHostConnection } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
-import type { VisualizationDataReceivedCallback } from '../visualization/types'
+import type {
+  VisualizationDataReceivedCallback,
+  VisualizationSDK,
+} from '../visualization/types'
+import { VisualizationSDKImpl } from '../visualization/visualization_sdk'
 import { logError } from '../util'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
@@ -55,6 +59,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
   private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+  private _visualizationSDK?: VisualizationSDK
 
   private contextData?: string
 
@@ -70,6 +75,13 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
     this.visualizationDataReceivedCallback = visualizationDataReceivedCallback
+  }
+
+  get visualizationSDK(): VisualizationSDK | undefined {
+    if (this.visualizationDataReceivedCallback && !this._visualizationSDK) {
+      this._visualizationSDK = new VisualizationSDKImpl(this)
+    }
+    return this._visualizationSDK
   }
 
   get lookerHostData() {
@@ -94,6 +106,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       case ExtensionNotificationType.VISUALIZATION_DATA: {
         const { payload } = message
         if (this.visualizationDataReceivedCallback) {
+          ;(this.visualizationSDK as VisualizationSDK).updateVisData(payload)
           this.visualizationDataReceivedCallback(payload)
         }
         return undefined
@@ -143,7 +156,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     if (!keyName.match(/^[A-Za-z0-9_.]+$/)) {
       throw new Error('Unsupported characters in key name')
     }
-    return `{{${this._lookerHostData!.extensionId.replace(
+    return `{{${(this._lookerHostData as LookerHostData).extensionId.replace(
       /::|-/g,
       '_'
     )}_${keyName}}}`
@@ -482,7 +495,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     return this.sendAndReceive(ExtensionRequestType.RENDERED, {})
   }
 
-  private async sendAndReceive(type: string, payload?: any): Promise<any> {
+  async sendAndReceive(type: string, payload?: any): Promise<any> {
     if (!this._lookerHostData) {
       return Promise.reject(new Error('Looker host connection not established'))
     }
@@ -494,7 +507,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       .then((values) => values[0])
   }
 
-  private send(type: string, payload?: any) {
+  send(type: string, payload?: any) {
     if (!this._lookerHostData) {
       throw new Error('Looker host connection not established')
     }

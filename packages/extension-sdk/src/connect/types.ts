@@ -27,7 +27,8 @@
 import type { ChattyHostConnection } from '@looker/chatty'
 import type {
   VisualizationDataReceivedCallback,
-  VisualizationData,
+  RawVisualizationData,
+  VisualizationSDK,
 } from '../visualization/types'
 
 /**
@@ -121,6 +122,10 @@ export enum ExtensionRequestType {
    * Extension rendered
    */
   RENDERED = 'RENDERED',
+  /**
+   * Visualization configuration data
+   */
+  DEFAULT_VIS_CONFIG = 'DEFAULT_VIS_CONFIG',
 }
 
 /**
@@ -274,7 +279,7 @@ export interface ExtensionRouteChangedMessage {
  */
 export interface ExtensionVisualizationDataMessage {
   type: ExtensionNotificationType.VISUALIZATION_DATA
-  payload: VisualizationData
+  payload: RawVisualizationData
 }
 
 /**
@@ -373,6 +378,11 @@ export interface LookerHostData {
    * Extension context data
    */
   contextData?: string
+  /**
+   * Rendering in a PDF
+   * <code>Looker >=22.8</code>
+   */
+  pdfRendering: boolean
 }
 
 /**
@@ -782,4 +792,9 @@ export interface ExtensionSDK {
    * <code>Looker >=22.8</code>
    */
   rendered(): Promise<boolean>
+
+  /**
+   * Visualization API.
+   */
+  visualizationSDK?: VisualizationSDK
 }

@@ -102,6 +102,7 @@ describe('connect_extension_host tests', () => {
         mountType: 'fullscreen',
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
+        pdfRendering: false,
       },
     })
   })
@@ -135,6 +136,7 @@ describe('connect_extension_host tests', () => {
         mountType: 'fullscreen',
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
+        pdfRendering: false,
       },
     })
   })
@@ -165,6 +167,7 @@ describe('connect_extension_host tests', () => {
         mountType: 'fullscreen',
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
+        pdfRendering: false,
       },
     })
   })
