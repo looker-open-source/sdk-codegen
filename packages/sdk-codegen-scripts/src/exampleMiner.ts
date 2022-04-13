@@ -170,6 +170,13 @@ export const getRemoteHttpOrigin = () => {
   return `https://github.com/${match[1]}`
 }
 
+/** Permalink paths should not have the `.git` ending for a repo */
+export const getPermalinkRoot = () => {
+  let root = getRemoteHttpOrigin()
+  if (root.endsWith('.git')) root = root.substr(0, root.length - 4)
+  return root
+}
+
 export class CodeMiner implements IFileMine {
   static ignoreOps = new Set<string>(['ok', 'init31', 'init40'])
   ignoreCall(call: ISDKCall): boolean {
@@ -314,7 +321,7 @@ export class ExampleMiner {
   summaries: Summaries = {}
   nuggets: Nuggets = {}
   commitHash: string = getCommitHash()
-  remoteOrigin: string = getRemoteHttpOrigin()
+  remoteOrigin: string = getPermalinkRoot()
 
   constructor(public readonly sourcePath: string) {
     this.execute(sourcePath)
