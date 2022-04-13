@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 export interface Pivot {
   key: string
   is_total: boolean

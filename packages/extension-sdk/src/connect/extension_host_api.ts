@@ -501,8 +501,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
-  async rendered() {
-    return this.sendAndReceive(ExtensionRequestType.RENDERED, {})
+  rendered() {
+    this.send(ExtensionRequestType.RENDERED, {})
   }
 
   async sendAndReceive(type: string, payload?: any): Promise<any> {

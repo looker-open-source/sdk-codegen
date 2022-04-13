@@ -146,6 +146,14 @@ export enum ExtensionRequestType {
    * Tile toggle cross filter
    */
   TILE_TOGGLE_CROSS_FILTER = 'TILE_TOGGLE_CROSS_FILTER',
+  /**
+   * Tile run queries. Indicates to a dashboard that a query should be run
+   */
+  TILE_RUN_QUERIES = 'TILE_RUN_QUERIES',
+  /**
+   * Tile run queries. Indicates to a dashboard that a query should be run
+   */
+  TILE_UPDATE_FILTER = 'TILE_UPDATE_FILTER',
 }
 
 /**
@@ -818,7 +826,7 @@ export interface ExtensionSDK {
    * Indicate that an extension has been rendered.
    * <code>Looker >=22.8</code>
    */
-  rendered(): Promise<boolean>
+  rendered(): void
 
   /**
    * Visualization API.

@@ -143,7 +143,7 @@ export class VisualizationSDKImpl implements VisualizationSDK {
   }
 
   configureVisualization(options: RawVisConfig): void {
-    this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, options)
+    this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options })
   }
 
   getVisConfig(): VisualizationConfig {

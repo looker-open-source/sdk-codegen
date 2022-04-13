@@ -41,11 +41,11 @@ export class TileSDKImpl implements TileSDK {
   }
 
   addErrors(...errors: TileError[]) {
-    this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, errors)
+    this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, { errors })
   }
 
   clearErrors(group?: string) {
-    this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, group)
+    this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
   }
 
   trigger(message: string, config: TriggerConfig[]) {
@@ -53,10 +53,12 @@ export class TileSDKImpl implements TileSDK {
   }
 
   openDrillMenu(options: DrillMenuOptions) {
-    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, options)
+    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, { options })
   }
 
   toggleCrossFilter(options: CrossfilterOptions) {
-    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, options)
+    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
+      options,
+    })
   }
 }
