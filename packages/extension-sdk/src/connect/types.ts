@@ -399,10 +399,17 @@ export interface LookerHostData {
    */
   contextData?: string
   /**
-   * Rendering in a PDF
+   * The extension is rendering to a PDF or image.
    * <code>Looker >=22.8</code>
    */
-  pdfRendering: boolean
+  isRendering?: boolean
+  /**
+   * The extension container is edit mode. Applicable to
+   * extensions running in dashboards or configuring
+   * explore extension visualizations.
+   * <code>Looker >=22.8</code>
+   */
+  isEditing?: boolean
 }
 
 /**

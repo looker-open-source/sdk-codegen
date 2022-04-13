@@ -142,14 +142,6 @@ export class VisualizationSDKImpl implements VisualizationSDK {
     }
   }
 
-  get visualizedInPdf(): boolean {
-    return this.hostApi.lookerHostData?.pdfRendering || false
-  }
-
-  get visualizedInExplore(): boolean {
-    throw new Error('not implemented')
-  }
-
   configureVisualization(options: RawVisConfig): void {
     this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, options)
   }

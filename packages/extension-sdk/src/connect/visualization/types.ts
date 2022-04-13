@@ -114,14 +114,6 @@ export interface QueryResponse {
 }
 
 export interface VisualizationSDK {
-  /**
-   * Return true if tile is being rendered in PDF.
-   */
-  visualizedInPdf: boolean
-  /**
-   * Return true if an explore is being used.
-   */
-  visualizedInExplore: boolean
   updateVisData: (rawVisData: RawVisualizationData) => void
   configureVisualization: (options: RawVisConfig) => void
   getVisConfig: () => VisualizationConfig

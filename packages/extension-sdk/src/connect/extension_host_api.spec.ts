@@ -79,7 +79,6 @@ describe('extension_host_api tests', () => {
         route: '/sandbox',
         hostUrl: 'https://self-signed.looker.com:9999',
         mountPoint: MountPoint.standalone,
-        pdfRendering: false,
         ...initMessage,
       },
     })
@@ -112,7 +111,6 @@ describe('extension_host_api tests', () => {
       lookerVersion: '6.25.00004168',
       hostUrl: 'https://self-signed.looker.com:9999',
       mountPoint: MountPoint.standalone,
-      pdfRendering: false,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -143,7 +141,6 @@ describe('extension_host_api tests', () => {
       lookerVersion: '7.6.0',
       hostUrl: 'https://self-signed.looker.com:9999',
       mountPoint: MountPoint.standalone,
-      pdfRendering: false,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -180,7 +177,6 @@ describe('extension_host_api tests', () => {
       lookerVersion: '7.6.0',
       hostUrl: 'https://self-signed.looker.com:9999',
       mountPoint: MountPoint.dashboardVisualization,
-      pdfRendering: false,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
