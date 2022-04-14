@@ -35,6 +35,7 @@ import {
   getRemoteHttpOrigin,
   MarkdownMiner,
   ExampleMiner,
+  getPermalinkRoot,
 } from './exampleMiner'
 
 describe('example mining', () => {
@@ -77,6 +78,12 @@ describe('example mining', () => {
       expect(
         actual.startsWith('https://github.com/looker-open-source/sdk-codegen')
       ).toEqual(true)
+    })
+    it('getPermalinkRoot', () => {
+      const actual = getPermalinkRoot()
+      expect(actual).toEqual(
+        'https://github.com/looker-open-source/sdk-codegen'
+      )
     })
   })
 
