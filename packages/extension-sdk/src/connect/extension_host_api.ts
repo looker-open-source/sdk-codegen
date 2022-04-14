@@ -501,8 +501,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
-  rendered() {
-    this.send(ExtensionRequestType.RENDERED, {})
+  rendered(failureMessage?: string) {
+    this.send(ExtensionRequestType.RENDERED, { failureMessage })
   }
 
   async sendAndReceive(type: string, payload?: any): Promise<any> {

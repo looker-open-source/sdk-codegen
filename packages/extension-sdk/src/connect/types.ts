@@ -826,7 +826,7 @@ export interface ExtensionSDK {
    * Indicate that an extension has been rendered.
    * <code>Looker >=22.8</code>
    */
-  rendered(): void
+  rendered(failureMessage?: string): void
 
   /**
    * Visualization API.
