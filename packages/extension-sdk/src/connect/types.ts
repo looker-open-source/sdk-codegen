@@ -147,13 +147,21 @@ export enum ExtensionRequestType {
    */
   TILE_TOGGLE_CROSS_FILTER = 'TILE_TOGGLE_CROSS_FILTER',
   /**
-   * Tile run queries. Indicates to a dashboard that a query should be run
+   * Tile run dashboard. Indicates that the dashboard queries should be run.
    */
-  TILE_RUN_QUERIES = 'TILE_RUN_QUERIES',
+  TILE_RUN_DASHBOARD = 'TILE_RUN_DASHBOARD',
   /**
-   * Tile run queries. Indicates to a dashboard that a query should be run
+   * Tile stop dashboard. Indicates to a dashboard that a queries should be stopped
    */
-  TILE_UPDATE_FILTER = 'TILE_UPDATE_FILTER',
+  TILE_STOP_DASHBOARD = 'TILE_STOP_DASHBOARD',
+  /**
+   * Tile update filters. Update the filters of the dashboard.
+   */
+  TILE_UPDATE_FILTERS = 'TILE_UPDATE_FILTERS',
+  /**
+   * Open schedule dialog.
+   */
+  TILE_OPEN_SCHEDULE_DIALOG = 'TILE_OPEN_SCHEDULE_DIALOG',
 }
 
 /**

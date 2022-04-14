@@ -76,10 +76,18 @@ export type TriggerConfig = any
 // TODO build out type
 export type DrillMenuOptions = any
 
+export interface Filters {
+  [key: string]: string
+}
+
 export interface TileSDK {
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void
   trigger: (message: string, config: TriggerConfig[]) => void
   openDrillMenu: (options: DrillMenuOptions) => void
   toggleCrossFilter: (options: CrossfilterOptions) => void
+  runDashboard: () => void
+  stopDashboard: () => void
+  updateFilters: (filters: Filters) => void
+  openScheduleDialog: () => Promise<void>
 }

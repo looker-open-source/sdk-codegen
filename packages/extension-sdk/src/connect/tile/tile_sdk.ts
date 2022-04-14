@@ -31,6 +31,7 @@ import type {
   DrillMenuOptions,
   TriggerConfig,
   CrossfilterOptions,
+  Filters,
 } from './types'
 
 export class TileSDKImpl implements TileSDK {
@@ -60,5 +61,26 @@ export class TileSDKImpl implements TileSDK {
     this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
       options,
     })
+  }
+
+  runDashboard() {
+    this.hostApi.send(ExtensionRequestType.TILE_RUN_DASHBOARD, {})
+  }
+
+  stopDashboard() {
+    this.hostApi.send(ExtensionRequestType.TILE_STOP_DASHBOARD, {})
+  }
+
+  updateFilters(filters: Filters) {
+    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
+      filters,
+    })
+  }
+
+  openScheduleDialog() {
+    return this.hostApi.sendAndReceive(
+      ExtensionRequestType.TILE_OPEN_SCHEDULE_DIALOG,
+      {}
+    )
   }
 }
