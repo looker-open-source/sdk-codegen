@@ -80,6 +80,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
         extensionSDK: extensionHost,
         coreSDK,
         visualizationSDK: extensionHost.visualizationSDK,
+        tileSDK: extensionHost.tileSDK,
       }
     })
   }

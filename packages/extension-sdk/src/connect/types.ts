@@ -30,6 +30,11 @@ import type {
   RawVisualizationData,
   VisualizationSDK,
 } from './visualization'
+import type {
+  TileHostChangedCallback,
+  TileHostChangeDetail,
+  TileSDK,
+} from './tile'
 
 /**
  * Extension event used for chatty communication
@@ -288,6 +293,10 @@ export enum ExtensionNotificationType {
    * Visualization data
    */
   VISUALIZATION_DATA = 'VISUALIZATION_DATA',
+  /**
+   * Tile host data changed
+   */
+  TILE_HOST_CHANGED = 'TILE_HOST_CHANGED',
 }
 
 /**
@@ -319,12 +328,22 @@ export interface ExtensionVisualizationDataMessage {
 }
 
 /**
+ * Tile Host Data Changed notificaction
+ * <code>Looker >=22.8</code>
+ */
+export interface TileHostChangedMessage {
+  type: ExtensionNotificationType.TILE_HOST_CHANGED
+  payload: TileHostChangeDetail
+}
+
+/**
  * Extension notification
  */
 export type ExtensionNotification =
   | ExtensionInitializeMessage
   | ExtensionRouteChangedMessage
   | ExtensionVisualizationDataMessage
+  | TileHostChangedMessage
 
 /**
  * Route change data
@@ -419,13 +438,6 @@ export interface LookerHostData {
    * <code>Looker >=22.8</code>
    */
   isRendering?: boolean
-  /**
-   * The extension container is edit mode. Applicable to
-   * extensions running in dashboards or configuring
-   * explore extension visualizations.
-   * <code>Looker >=22.8</code>
-   */
-  isEditing?: boolean
 }
 
 /**
@@ -477,6 +489,11 @@ export interface ExtensionHostConfiguration {
    * Callback called when visualization data received
    */
   visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+
+  /**
+   * Callback called when the host is updated
+   */
+  tileHostChangedCallback?: TileHostChangedCallback
 }
 
 export interface ExtensionHostApiConfiguration
@@ -840,4 +857,9 @@ export interface ExtensionSDK {
    * Visualization API.
    */
   visualizationSDK?: VisualizationSDK
+
+  /**
+   * Tile API.
+   */
+  tileSDK?: TileSDK
 }

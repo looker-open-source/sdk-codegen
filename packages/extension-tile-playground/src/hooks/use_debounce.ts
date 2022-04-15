@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,44 +23,17 @@
  SOFTWARE.
 
  */
-import React, { useEffect, useRef } from 'react'
-import { Span } from '@looker/components'
-import {
-  createSvg,
-  liquidFillGauge,
-  defaultConfig,
-} from './liquid_fill_gauge.js'
+import { useEffect, useState } from 'react'
 
-export interface LiquidFillGaugeVizProps {
-  renderComplete?: () => void
-  value: any
-  valueFormat?: any
-  config?: any
-  width: number | string
-  height: number | string
-}
-
-export const LiquidFillGaugeViz: React.FC<LiquidFillGaugeVizProps> = ({
-  renderComplete = () => {
-    // default noop
-  },
-  value,
-  valueFormat = null,
-  config = {},
-  height,
-  width,
-}) => {
-  const ctrRef = useRef<HTMLDivElement | null>(null)
-
+export const useDebounce = <T>(value: T, delay: number): T => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
   useEffect(() => {
-    if (ctrRef.current) {
-      const element = ctrRef.current as any
-      const svg = createSvg(element)
-      const cfg = { ...defaultConfig, config }
-      liquidFillGauge(svg, value, cfg, valueFormat)
-      renderComplete()
+    const handler = setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+    return () => {
+      clearTimeout(handler)
     }
-  }, [renderComplete, value, valueFormat, config])
-
-  return <Span style={{ width, height }} ref={ctrRef}></Span>
+  }, [value, delay])
+  return debouncedValue
 }

@@ -32,6 +32,7 @@ import {
 } from './extension_host_api'
 import { ExtensionNotificationType, ApiVersion, MountPoint } from './types'
 import type { ExtensionInitializeMessage } from './types'
+import { TileHostChangeType } from './tile'
 
 describe('extension_host_api tests', () => {
   let chattyHost: ChattyHostConnection
@@ -197,6 +198,40 @@ describe('extension_host_api tests', () => {
     expect(visualizationDataReceivedCallback).toHaveBeenCalledWith({
       visConfig: {},
       queryResponse: {},
+    })
+  })
+
+  it('handles tile host data notification', () => {
+    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn()
+    const hostChangedRoute = jest.fn()
+    const tileHostChangedCallback = jest.fn()
+    const lookerHostData = {
+      extensionId: 'a::b',
+      route: '/sandbox',
+      routeState: { hello: 'world' },
+      lookerVersion: '7.6.0',
+      hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.dashboardVisualization,
+    }
+    const api = new ExtensionHostApiImpl({
+      chattyHost,
+      initializedCallback,
+      setInitialRoute,
+      hostChangedRoute,
+      tileHostChangedCallback,
+      requiredLookerVersion: '>=7.6.0',
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.INITIALIZE,
+      payload: lookerHostData,
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.TILE_HOST_CHANGED,
+      payload: { changeType: TileHostChangeType.DASHBOARD_RUN_START },
+    })
+    expect(tileHostChangedCallback).toHaveBeenCalledWith({
+      changeType: 'DASHBOARD_RUN_START',
     })
   })
 

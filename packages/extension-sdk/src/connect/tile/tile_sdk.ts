@@ -32,13 +32,54 @@ import type {
   TriggerConfig,
   CrossfilterOptions,
   Filters,
+  TileHostData,
+  TileHostChangeDetail,
 } from './types'
+import { TileHostChangeType, DashboardRunState } from './types'
 
+const defaultHostData: TileHostData = {
+  isEditing: false,
+  dashboardRunState: DashboardRunState.UNKNOWN,
+  filters: {},
+}
 export class TileSDKImpl implements TileSDK {
   hostApi: ExtensionHostApiImpl
+  tileHostData: TileHostData
 
   constructor(hostApi: ExtensionHostApiImpl) {
     this.hostApi = hostApi
+    this.tileHostData = { ...defaultHostData }
+  }
+
+  tileHostDataChanged(changeDetail: TileHostChangeDetail) {
+    switch (changeDetail.changeType) {
+      case TileHostChangeType.START_EDITING: {
+        this.tileHostData.isEditing = true
+        break
+      }
+      case TileHostChangeType.STOP_EDITING: {
+        this.tileHostData.isEditing = true
+        break
+      }
+      case TileHostChangeType.DASHBOARD_LOADED: {
+        this.tileHostData.dashboardRunState = DashboardRunState.LOADED
+        break
+      }
+      case TileHostChangeType.DASHBOARD_RUN_START: {
+        this.tileHostData.dashboardRunState = DashboardRunState.RUNNING
+        break
+      }
+      case TileHostChangeType.DASHBOARD_RUN_COMPLETE: {
+        this.tileHostData.dashboardRunState = DashboardRunState.COMPLETE
+        break
+      }
+      case TileHostChangeType.DASHBOARD_FILTERS_CHANGED: {
+        this.tileHostData.filters = changeDetail.filters || {}
+        this.tileHostData.isCrossFiltersEnabled =
+          changeDetail.isCrossFiltersEnabled || false
+        break
+      }
+    }
   }
 
   addErrors(...errors: TileError[]) {

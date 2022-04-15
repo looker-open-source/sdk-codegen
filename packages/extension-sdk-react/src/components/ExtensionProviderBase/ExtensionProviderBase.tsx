@@ -58,6 +58,7 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
         ...previousState,
         extensionSDK: extensionHost,
         visualizationSDK: extensionHost.visualizationSDK,
+        tileSDK: extensionHost.tileSDK,
       }
     })
   }

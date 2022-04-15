@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,44 +23,26 @@
  SOFTWARE.
 
  */
-import React, { useEffect, useRef } from 'react'
-import { Span } from '@looker/components'
-import {
-  createSvg,
-  liquidFillGauge,
-  defaultConfig,
-} from './liquid_fill_gauge.js'
-
-export interface LiquidFillGaugeVizProps {
-  renderComplete?: () => void
-  value: any
-  valueFormat?: any
-  config?: any
-  width: number | string
-  height: number | string
-}
-
-export const LiquidFillGaugeViz: React.FC<LiquidFillGaugeVizProps> = ({
-  renderComplete = () => {
-    // default noop
-  },
-  value,
-  valueFormat = null,
-  config = {},
-  height,
-  width,
-}) => {
-  const ctrRef = useRef<HTMLDivElement | null>(null)
-
+import { useEffect, useState } from 'react'
+import { useDebounce } from './use_debounce'
+// originally from: https://usehooks.com/useWindowSize/
+// modified to add debounce
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  })
+  const debouncedWindowSize = useDebounce(windowSize, 1000)
   useEffect(() => {
-    if (ctrRef.current) {
-      const element = ctrRef.current as any
-      const svg = createSvg(element)
-      const cfg = { ...defaultConfig, config }
-      liquidFillGauge(svg, value, cfg, valueFormat)
-      renderComplete()
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
     }
-  }, [renderComplete, value, valueFormat, config])
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
-  return <Span style={{ width, height }} ref={ctrRef}></Span>
+  return debouncedWindowSize
 }

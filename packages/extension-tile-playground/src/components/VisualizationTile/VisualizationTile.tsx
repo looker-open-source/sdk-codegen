@@ -26,10 +26,13 @@
 import React, { useContext, useEffect, useCallback, useMemo } from 'react'
 import { SpaceVertical, Text } from '@looker/components'
 import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { useWindowSize } from '../../hooks/use_window_size'
 import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
 import { liquidFillDefaultConfig, getValueAndFormat } from './util/liquid_fill'
 
 export const VisualizationTile: React.FC = () => {
+  const { height, width } = useWindowSize()
+  const vizSize = Math.min(height, width) - 200
   const { visualizationData, visualizationSDK, extensionSDK } =
     useContext(ExtensionContext2)
 
@@ -53,12 +56,14 @@ export const VisualizationTile: React.FC = () => {
   }, [extensionSDK, visualizationData])
 
   return (
-    <SpaceVertical p="xxxxxlarge" width="100%" height="100vh">
+    <SpaceVertical p="xxxxxlarge" width="100%" align="center">
       <Text p="xxxxxlarge" fontSize="xxxxxlarge">
         Visualization Tile
       </Text>
       {value && (
         <LiquidFillGaugeViz
+          width={vizSize}
+          height={vizSize}
           value={value}
           renderComplete={renderComplete}
           valueFormat={valueFormat}

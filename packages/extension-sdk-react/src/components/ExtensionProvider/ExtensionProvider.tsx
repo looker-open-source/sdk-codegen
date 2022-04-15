@@ -71,6 +71,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
         core31SDK,
         core40SDK,
         visualizationSDK: extensionHost.visualizationSDK,
+        tileSDK: extensionHost.tileSDK,
       }
     })
   }

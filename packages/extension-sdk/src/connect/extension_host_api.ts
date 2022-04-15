@@ -32,7 +32,7 @@ import type {
   VisualizationSDK,
 } from './visualization'
 import { VisualizationSDKImpl } from './visualization/visualization_sdk'
-import type { TileSDK } from './tile'
+import type { TileHostChangedCallback, TileSDK } from './tile'
 import { TileSDKImpl } from './tile/tile_sdk'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
@@ -61,6 +61,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
   private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+  private tileHostChangedCallback?: TileHostChangedCallback
   private _visualizationSDK?: VisualizationSDK
   private _tileSDK?: TileSDK
 
@@ -73,21 +74,23 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       setInitialRoute,
       hostChangedRoute,
       visualizationDataReceivedCallback,
+      tileHostChangedCallback,
     } = this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
     this.visualizationDataReceivedCallback = visualizationDataReceivedCallback
+    this.tileHostChangedCallback = tileHostChangedCallback
   }
 
-  get visualizationSDK(): VisualizationSDK | undefined {
+  get visualizationSDK(): VisualizationSDK {
     if (!this._visualizationSDK) {
       this._visualizationSDK = new VisualizationSDKImpl(this)
     }
     return this._visualizationSDK
   }
 
-  get tileSDK(): TileSDK | undefined {
+  get tileSDK(): TileSDK {
     if (!this._tileSDK) {
       this._tileSDK = new TileSDKImpl(this)
     }
@@ -115,9 +118,17 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       }
       case ExtensionNotificationType.VISUALIZATION_DATA: {
         const { payload } = message
-        ;(this.visualizationSDK as VisualizationSDK).updateVisData(payload)
+        this.visualizationSDK.updateVisData(payload)
         if (this.visualizationDataReceivedCallback) {
           this.visualizationDataReceivedCallback(payload)
+        }
+        return undefined
+      }
+      case ExtensionNotificationType.TILE_HOST_CHANGED: {
+        const { payload } = message
+        this.tileSDK.tileHostDataChanged(payload)
+        if (this.tileHostChangedCallback) {
+          this.tileHostChangedCallback(payload)
         }
         return undefined
       }

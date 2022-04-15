@@ -28,6 +28,8 @@ import type {
   ExtensionHostApi,
   ExtensionSDK,
   RawVisualizationData,
+  TileHostData,
+  TileSDK,
   VisualizationSDK,
 } from '@looker/extension-sdk'
 
@@ -62,6 +64,14 @@ export interface BaseExtensionContextData {
    * Visualization api.
    */
   visualizationSDK?: VisualizationSDK
+  /**
+   * Tile host data
+   */
+  tileHostData?: TileHostData
+  /**
+   * Tile api.
+   */
+  tileSDK?: TileSDK
 }
 
 export interface RouteData {

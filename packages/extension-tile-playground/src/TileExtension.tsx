@@ -33,6 +33,7 @@ import { DashboardTile } from './components/DashboardTile/DashboardTile'
 export const TileExtension: React.FC = () => {
   const { extensionSDK } = useContext(ExtensionContext2)
   const { lookerHostData } = extensionSDK
+
   return (
     <ComponentsProvider>
       {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
