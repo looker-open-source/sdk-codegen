@@ -856,10 +856,10 @@ export interface ExtensionSDK {
   /**
    * Visualization API.
    */
-  visualizationSDK?: VisualizationSDK
+  visualizationSDK: VisualizationSDK
 
   /**
    * Tile API.
    */
-  tileSDK?: TileSDK
+  tileSDK: TileSDK
 }

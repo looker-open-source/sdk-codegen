@@ -53,12 +53,17 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
   )
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
+    const { visualizationSDK, tileSDK } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: BaseExtensionContextData) => {
       return {
         ...previousState,
         extensionSDK: extensionHost,
-        visualizationSDK: extensionHost.visualizationSDK,
-        tileSDK: extensionHost.tileSDK,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
       }
     })
   }

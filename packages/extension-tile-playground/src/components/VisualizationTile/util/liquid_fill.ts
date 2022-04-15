@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,21 +31,20 @@ export const getValueAndFormat = (
   visualizationSDK: VisualizationSDK
 ): { value: any; valueFormat: any } => {
   // TODO add error checking
-
   const visConfig = {
     ...defaultConfig,
-    ...visualizationSDK.getVisConfig().getRaw(),
+    ...visualizationSDK.visConfig,
   } as RawVisConfig
 
-  const queryResponse = visualizationSDK.getQueryResponse()
-  const data = queryResponse.getData()
+  const queryResponse = visualizationSDK.queryResponse
+  const { data } = queryResponse
 
-  const datumField = queryResponse.getFieldMeasureLike()[0]
+  const datumField = queryResponse.fieldMeasureLike[0]
   const valueFormat = visConfig.displayPercent ? null : datumField.value_format
   const datum = data[0][datumField.name]
   let value = datum.value
 
-  const compareField = queryResponse.getFieldMeasureLike()[1]
+  const compareField = queryResponse.fieldMeasureLike[1]
   if (compareField && visConfig.showComparison) {
     const compareDatum = data[0][compareField.name]
     visConfig.maxValue = compareDatum.value

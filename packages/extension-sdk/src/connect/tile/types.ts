@@ -117,7 +117,7 @@ export interface Filters {
 }
 
 export interface TileSDK {
-  tileHostData?: TileHostData
+  tileHostData: TileHostData
   tileHostDataChanged: (changeDetail: TileHostDataChangedDetail) => void
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void

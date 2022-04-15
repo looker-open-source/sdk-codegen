@@ -63,15 +63,15 @@ export interface BaseExtensionContextData {
   /**
    * Visualization api.
    */
-  visualizationSDK?: VisualizationSDK
+  visualizationSDK: VisualizationSDK
   /**
    * Tile host data
    */
-  tileHostData?: TileHostData
+  tileHostData: TileHostData
   /**
    * Tile api.
    */
-  tileSDK?: TileSDK
+  tileSDK: TileSDK
 }
 
 export interface RouteData {

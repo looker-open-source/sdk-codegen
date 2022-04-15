@@ -63,6 +63,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     // Provide global access for use by redux if needed
     registerCore31SDK(core31SDK)
     registerCore40SDK(core40SDK)
+    const { visualizationSDK, tileSDK } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: ExtensionContextData) => {
       return {
         ...previousState,
@@ -70,8 +73,10 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
         coreSDK: core31SDK,
         core31SDK,
         core40SDK,
-        visualizationSDK: extensionHost.visualizationSDK,
-        tileSDK: extensionHost.tileSDK,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
       }
     })
   }

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -95,27 +95,26 @@ export interface PivotConfig extends RawPivotConfig {
 }
 
 export interface VisualizationConfig {
-  getRaw: () => RawVisConfig
-  getQueryFieldMeasures: () => Measure[]
-  getQueryFieldDimensions: () => Dimension[]
-  getQueryFieldTableCalculations: () => TableCalculation[]
-  getQueryFieldPivots: () => PivotConfig[]
+  queryFieldMeasures: Measure[]
+  queryFieldDimensions: Dimension[]
+  queryFieldTableCalculations: TableCalculation[]
+  queryFieldPivots: PivotConfig[]
 }
 
 export interface QueryResponse {
-  getRaw: () => RawVisQueryResponse
-  getFieldMeasures: () => Measure[]
-  getFieldDimensions: () => Dimension[]
-  getFieldTableCalculations: () => TableCalculation[]
-  getFieldPivots: () => PivotConfig[]
-  getFieldMeasureLike: () => Measure[]
-  getFieldDimensionLike: () => Dimension[]
-  getData: () => Row[]
+  data: Row[]
+  fieldMeasures: Measure[]
+  fieldDimensions: Dimension[]
+  fieldTableCalculations: TableCalculation[]
+  fieldPivots: PivotConfig[]
+  fieldMeasureLike: Measure[]
+  fieldDimensionLike: Dimension[]
 }
 
 export interface VisualizationSDK {
+  visualizationData?: RawVisualizationData
+  visConfig: VisualizationConfig
+  queryResponse: QueryResponse
   updateVisData: (rawVisData: RawVisualizationData) => void
   configureVisualization: (options: RawVisConfig) => void
-  getVisConfig: () => VisualizationConfig
-  getQueryResponse: () => QueryResponse
 }
