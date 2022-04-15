@@ -29,7 +29,7 @@ import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import type {
   RawVisualizationData,
-  TileHostChangeDetail,
+  TileHostDataChangedDetail,
 } from '@looker/extension-sdk'
 import { connectExtensionHost } from '@looker/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
@@ -81,14 +81,18 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
     }
   }
 
-  const updateVisualizationData = (visualizationData: RawVisualizationData) => {
+  const visualizationDataReceivedCallback = (
+    visualizationData: RawVisualizationData
+  ) => {
     updateContextData({
       ...contextData,
       visualizationData,
     })
   }
 
-  const tileHostDataChanged = (changeDetail: TileHostChangeDetail) => {
+  const tileHostDataChangedCallback = (
+    changeDetail: TileHostDataChangedDetail
+  ) => {
     if (contextData.tileSDK) {
       const { tileSDK } = contextData
       tileSDK.tileHostDataChanged(changeDetail)
@@ -107,8 +111,8 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
           requiredLookerVersion,
           hostChangedRoute,
           chattyTimeout,
-          visualizationDataReceivedCallback: updateVisualizationData,
-          tileHostChangedCallback: tileHostDataChanged,
+          visualizationDataReceivedCallback,
+          tileHostDataChangedCallback,
         })
         connectedCallback(extensionHost)
         setInitializing(false)

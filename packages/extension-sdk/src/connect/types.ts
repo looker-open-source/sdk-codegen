@@ -31,8 +31,8 @@ import type {
   VisualizationSDK,
 } from './visualization'
 import type {
-  TileHostChangedCallback,
-  TileHostChangeDetail,
+  TileHostDataChangedCallback,
+  TileHostDataChangedDetail,
   TileSDK,
 } from './tile'
 
@@ -296,7 +296,7 @@ export enum ExtensionNotificationType {
   /**
    * Tile host data changed
    */
-  TILE_HOST_CHANGED = 'TILE_HOST_CHANGED',
+  TILE_HOST_DATA_CHANGED = 'TILE_HOST_DATA_CHANGED',
 }
 
 /**
@@ -331,9 +331,9 @@ export interface ExtensionVisualizationDataMessage {
  * Tile Host Data Changed notificaction
  * <code>Looker >=22.8</code>
  */
-export interface TileHostChangedMessage {
-  type: ExtensionNotificationType.TILE_HOST_CHANGED
-  payload: TileHostChangeDetail
+export interface TileHostDataChangedMessage {
+  type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED
+  payload: TileHostDataChangedDetail
 }
 
 /**
@@ -343,7 +343,7 @@ export type ExtensionNotification =
   | ExtensionInitializeMessage
   | ExtensionRouteChangedMessage
   | ExtensionVisualizationDataMessage
-  | TileHostChangedMessage
+  | TileHostDataChangedMessage
 
 /**
  * Route change data
@@ -493,7 +493,7 @@ export interface ExtensionHostConfiguration {
   /**
    * Callback called when the host is updated
    */
-  tileHostChangedCallback?: TileHostChangedCallback
+  tileHostDataChangedCallback?: TileHostDataChangedCallback
 }
 
 export interface ExtensionHostApiConfiguration

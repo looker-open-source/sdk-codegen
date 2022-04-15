@@ -28,8 +28,8 @@
  * Callback that is invoked when a change in the host happens
  * <code>Looker >=22.8</code>
  */
-export type TileHostChangedCallback = (
-  changeDetail: TileHostChangeDetail
+export type TileHostDataChangedCallback = (
+  changeDetail: TileHostDataChangedDetail
 ) => void
 
 export enum TileHostChangeType {
@@ -41,7 +41,7 @@ export enum TileHostChangeType {
   DASHBOARD_FILTERS_CHANGED = 'DASHBOARD_FILTERS_CHANGED',
 }
 
-export interface TileHostChangeDetail {
+export interface TileHostDataChangedDetail {
   changeType: TileHostChangeType
   filters?: Filters
   isCrossFiltersEnabled?: boolean
@@ -118,7 +118,7 @@ export interface Filters {
 
 export interface TileSDK {
   tileHostData?: TileHostData
-  tileHostDataChanged: (changeDetail: TileHostChangeDetail) => void
+  tileHostDataChanged: (changeDetail: TileHostDataChangedDetail) => void
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void
   trigger: (message: string, config: TriggerConfig[]) => void

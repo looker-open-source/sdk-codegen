@@ -205,7 +205,7 @@ describe('extension_host_api tests', () => {
     const setInitialRoute = jest.fn()
     const initializedCallback = jest.fn()
     const hostChangedRoute = jest.fn()
-    const tileHostChangedCallback = jest.fn()
+    const tileHostDataChangedCallback = jest.fn()
     const lookerHostData = {
       extensionId: 'a::b',
       route: '/sandbox',
@@ -219,7 +219,7 @@ describe('extension_host_api tests', () => {
       initializedCallback,
       setInitialRoute,
       hostChangedRoute,
-      tileHostChangedCallback,
+      tileHostDataChangedCallback,
       requiredLookerVersion: '>=7.6.0',
     })
     api.handleNotification({
@@ -227,10 +227,10 @@ describe('extension_host_api tests', () => {
       payload: lookerHostData,
     })
     api.handleNotification({
-      type: ExtensionNotificationType.TILE_HOST_CHANGED,
+      type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED,
       payload: { changeType: TileHostChangeType.DASHBOARD_RUN_START },
     })
-    expect(tileHostChangedCallback).toHaveBeenCalledWith({
+    expect(tileHostDataChangedCallback).toHaveBeenCalledWith({
       changeType: 'DASHBOARD_RUN_START',
     })
   })

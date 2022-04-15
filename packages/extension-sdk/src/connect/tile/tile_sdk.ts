@@ -33,7 +33,7 @@ import type {
   CrossfilterOptions,
   Filters,
   TileHostData,
-  TileHostChangeDetail,
+  TileHostDataChangedDetail,
 } from './types'
 import { TileHostChangeType, DashboardRunState } from './types'
 
@@ -51,7 +51,7 @@ export class TileSDKImpl implements TileSDK {
     this.tileHostData = { ...defaultHostData }
   }
 
-  tileHostDataChanged(changeDetail: TileHostChangeDetail) {
+  tileHostDataChanged(changeDetail: TileHostDataChangedDetail) {
     switch (changeDetail.changeType) {
       case TileHostChangeType.START_EDITING: {
         this.tileHostData.isEditing = true

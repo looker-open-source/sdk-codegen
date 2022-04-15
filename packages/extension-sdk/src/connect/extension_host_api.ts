@@ -32,7 +32,7 @@ import type {
   VisualizationSDK,
 } from './visualization'
 import { VisualizationSDKImpl } from './visualization/visualization_sdk'
-import type { TileHostChangedCallback, TileSDK } from './tile'
+import type { TileHostDataChangedCallback, TileSDK } from './tile'
 import { TileSDKImpl } from './tile/tile_sdk'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
@@ -61,7 +61,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
   private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
-  private tileHostChangedCallback?: TileHostChangedCallback
+  private tileHostDataChangedCallback?: TileHostDataChangedCallback
   private _visualizationSDK?: VisualizationSDK
   private _tileSDK?: TileSDK
 
@@ -74,13 +74,13 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       setInitialRoute,
       hostChangedRoute,
       visualizationDataReceivedCallback,
-      tileHostChangedCallback,
+      tileHostDataChangedCallback,
     } = this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
     this.visualizationDataReceivedCallback = visualizationDataReceivedCallback
-    this.tileHostChangedCallback = tileHostChangedCallback
+    this.tileHostDataChangedCallback = tileHostDataChangedCallback
   }
 
   get visualizationSDK(): VisualizationSDK {
@@ -124,11 +124,11 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         }
         return undefined
       }
-      case ExtensionNotificationType.TILE_HOST_CHANGED: {
+      case ExtensionNotificationType.TILE_HOST_DATA_CHANGED: {
         const { payload } = message
         this.tileSDK.tileHostDataChanged(payload)
-        if (this.tileHostChangedCallback) {
-          this.tileHostChangedCallback(payload)
+        if (this.tileHostDataChangedCallback) {
+          this.tileHostDataChangedCallback(payload)
         }
         return undefined
       }
