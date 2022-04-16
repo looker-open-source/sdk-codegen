@@ -35,9 +35,8 @@ import type {
   CrossfilterOptions,
   Filters,
   TileHostData,
-  TileHostDataChangedDetail,
 } from './types'
-import { TileHostChangeType, DashboardRunState } from './types'
+import { DashboardRunState } from './types'
 
 const defaultHostData: TileHostData = {
   isEditing: false,
@@ -53,35 +52,8 @@ export class TileSDKImpl implements TileSDK {
     this.tileHostData = { ...defaultHostData }
   }
 
-  tileHostDataChanged(changeDetail: TileHostDataChangedDetail) {
-    switch (changeDetail.changeType) {
-      case TileHostChangeType.START_EDITING: {
-        this.tileHostData.isEditing = true
-        break
-      }
-      case TileHostChangeType.STOP_EDITING: {
-        this.tileHostData.isEditing = true
-        break
-      }
-      case TileHostChangeType.DASHBOARD_LOADED: {
-        this.tileHostData.dashboardRunState = DashboardRunState.LOADED
-        break
-      }
-      case TileHostChangeType.DASHBOARD_RUN_START: {
-        this.tileHostData.dashboardRunState = DashboardRunState.RUNNING
-        break
-      }
-      case TileHostChangeType.DASHBOARD_RUN_COMPLETE: {
-        this.tileHostData.dashboardRunState = DashboardRunState.COMPLETE
-        break
-      }
-      case TileHostChangeType.DASHBOARD_FILTERS_CHANGED: {
-        this.tileHostData.filters = changeDetail.filters || {}
-        this.tileHostData.isCrossFiltersEnabled =
-          changeDetail.isCrossFiltersEnabled || false
-        break
-      }
-    }
+  tileHostDataChanged(partialHostData: Partial<TileHostData>) {
+    this.tileHostData = { ...this.tileHostData, ...partialHostData }
   }
 
   addErrors(...errors: TileError[]) {

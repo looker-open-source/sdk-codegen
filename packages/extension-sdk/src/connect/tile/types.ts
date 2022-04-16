@@ -31,23 +31,8 @@ import type { MouseEvent } from 'react'
  * <code>Looker >=22.8</code>
  */
 export type TileHostDataChangedCallback = (
-  changeDetail: TileHostDataChangedDetail
+  tileHostData: Partial<TileHostData>
 ) => void
-
-export enum TileHostChangeType {
-  START_EDITING = 'START_EDITING',
-  STOP_EDITING = 'STOP_EDITING',
-  DASHBOARD_LOADED = 'DASHBOARD_LOADED',
-  DASHBOARD_RUN_START = 'DASHBOARD_RUN_START',
-  DASHBOARD_RUN_COMPLETE = 'DASHBOARD_RUN_COMPLETE',
-  DASHBOARD_FILTERS_CHANGED = 'DASHBOARD_FILTERS_CHANGED',
-}
-
-export interface TileHostDataChangedDetail {
-  changeType: TileHostChangeType
-  filters?: Filters
-  isCrossFiltersEnabled?: boolean
-}
 
 export enum DashboardRunState {
   UNKNOWN = 'UNKNOWN',
@@ -117,7 +102,7 @@ export interface Filters {
 
 export interface TileSDK {
   tileHostData: TileHostData
-  tileHostDataChanged: (changeDetail: TileHostDataChangedDetail) => void
+  tileHostDataChanged: (hostData: Partial<TileHostData>) => void
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void
   trigger: (

@@ -27,10 +27,7 @@
 import isEqual from 'lodash/isEqual'
 import React, { useState } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import type {
-  RawVisualizationData,
-  TileHostDataChangedDetail,
-} from '@looker/extension-sdk'
+import type { RawVisualizationData, TileHostData } from '@looker/extension-sdk'
 import { connectExtensionHost } from '@looker/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
@@ -91,11 +88,11 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
   }
 
   const tileHostDataChangedCallback = (
-    changeDetail: TileHostDataChangedDetail
+    partialHostData: Partial<TileHostData>
   ) => {
     if (contextData.tileSDK) {
       const { tileSDK } = contextData
-      tileSDK.tileHostDataChanged(changeDetail)
+      tileSDK.tileHostDataChanged(partialHostData)
       updateContextData({
         ...contextData,
         tileHostData: contextData.tileHostData,

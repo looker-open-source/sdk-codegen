@@ -32,7 +32,6 @@ import {
 } from './extension_host_api'
 import { ExtensionNotificationType, ApiVersion, MountPoint } from './types'
 import type { ExtensionInitializeMessage } from './types'
-import { TileHostChangeType } from './tile'
 
 describe('extension_host_api tests', () => {
   let chattyHost: ChattyHostConnection
@@ -228,10 +227,11 @@ describe('extension_host_api tests', () => {
     })
     api.handleNotification({
       type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED,
-      payload: { changeType: TileHostChangeType.DASHBOARD_RUN_START },
+      payload: { isEditing: true, isCrossFiltersEnabled: true },
     })
     expect(tileHostDataChangedCallback).toHaveBeenCalledWith({
-      changeType: 'DASHBOARD_RUN_START',
+      isEditing: true,
+      isCrossFiltersEnabled: true,
     })
   })
 

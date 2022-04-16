@@ -30,11 +30,7 @@ import type {
   RawVisualizationData,
   VisualizationSDK,
 } from './visualization'
-import type {
-  TileHostDataChangedCallback,
-  TileHostDataChangedDetail,
-  TileSDK,
-} from './tile'
+import type { TileHostDataChangedCallback, TileSDK, TileHostData } from './tile'
 
 /**
  * Extension event used for chatty communication
@@ -333,7 +329,7 @@ export interface ExtensionVisualizationDataMessage {
  */
 export interface TileHostDataChangedMessage {
   type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED
-  payload: TileHostDataChangedDetail
+  payload: Partial<TileHostData>
 }
 
 /**
