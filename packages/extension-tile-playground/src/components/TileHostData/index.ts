@@ -23,26 +23,4 @@
  SOFTWARE.
 
  */
-import React, { useContext, useRef, useEffect } from 'react'
-import { SpaceVertical, Text } from '@looker/components'
-import { ExtensionContext2 } from '@looker/extension-sdk-react'
-
-export const DashboardTile: React.FC = () => {
-  const renderRef = useRef(null)
-  const { extensionSDK } = useContext(ExtensionContext2)
-
-  useEffect(() => {
-    if (renderRef.current) {
-      extensionSDK.rendered()
-    }
-  }, [renderRef.current, extensionSDK])
-
-  return (
-    <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-      <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-        Dashboard Tile
-      </Text>
-      <pre ref={renderRef}>{JSON.stringify({ hello: 'world' }, null, 2)}</pre>
-    </SpaceVertical>
-  )
-}
+export * from './TileHostData'

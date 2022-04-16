@@ -24,29 +24,36 @@
 
  */
 import React, { useContext } from 'react'
-import { ComponentsProvider, MessageBar } from '@looker/components'
+import {
+  ComponentsProvider,
+  MessageBar,
+  SpaceVertical,
+} from '@looker/components'
 import { ExtensionContext2 } from '@looker/extension-sdk-react'
 import { MountPoint } from '@looker/extension-sdk'
 import { VisualizationTile } from './components/VisualizationTile/VisualizationTile'
 import { DashboardTile } from './components/DashboardTile/DashboardTile'
+import { TileHostData } from './components/TileHostData/TileHostData'
 
 export const TileExtension: React.FC = () => {
-  const { extensionSDK } = useContext(ExtensionContext2)
-  const { lookerHostData } = extensionSDK
+  const { lookerHostData } = useContext(ExtensionContext2)
 
   return (
     <ComponentsProvider>
-      {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
-        <VisualizationTile />
-      )}
-      {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
-        <DashboardTile />
-      )}
-      {lookerHostData?.mountPoint === MountPoint.standalone && (
-        <MessageBar intent="critical">
-          This extension must be mounted in a dashboard.
-        </MessageBar>
-      )}
+      <SpaceVertical gap="medium">
+        <TileHostData />
+        {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
+          <VisualizationTile />
+        )}
+        {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
+          <DashboardTile />
+        )}
+        {lookerHostData?.mountPoint === MountPoint.standalone && (
+          <MessageBar intent="critical">
+            This extension must be mounted in a dashboard.
+          </MessageBar>
+        )}
+      </SpaceVertical>
     </ComponentsProvider>
   )
 }

@@ -32,7 +32,7 @@ import { liquidFillDefaultConfig, getValueAndFormat } from './util/liquid_fill'
 
 export const VisualizationTile: React.FC = () => {
   const { height, width } = useWindowSize()
-  const vizSize = Math.min(height, width) - 200
+  const vizSize = Math.min(height, width) - 250
   const { visualizationData, visualizationSDK, extensionSDK } =
     useContext(ExtensionContext2)
 
