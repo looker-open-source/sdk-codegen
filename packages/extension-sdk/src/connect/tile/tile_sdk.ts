@@ -23,6 +23,8 @@
  SOFTWARE.
 
  */
+
+import type { MouseEvent } from 'react'
 import { ExtensionRequestType } from '../types'
 import type { ExtensionHostApiImpl } from '../extension_host_api'
 import type {
@@ -90,17 +92,25 @@ export class TileSDKImpl implements TileSDK {
     this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
   }
 
-  trigger(message: string, config: TriggerConfig[]) {
-    this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, { message, config })
+  trigger(message: string, config: TriggerConfig[], event?: MouseEvent) {
+    this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, {
+      message,
+      config,
+      event: this.sanitizeEvent(event),
+    })
   }
 
-  openDrillMenu(options: DrillMenuOptions) {
-    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, { options })
+  openDrillMenu(options: DrillMenuOptions, event?: MouseEvent) {
+    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, {
+      options,
+      event: this.sanitizeEvent(event),
+    })
   }
 
-  toggleCrossFilter(options: CrossfilterOptions) {
+  toggleCrossFilter(options: CrossfilterOptions, event?: MouseEvent) {
     this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
       options,
+      event: this.sanitizeEvent(event),
     })
   }
 
@@ -123,5 +133,17 @@ export class TileSDKImpl implements TileSDK {
       ExtensionRequestType.TILE_OPEN_SCHEDULE_DIALOG,
       {}
     )
+  }
+
+  sanitizeEvent(event?: MouseEvent) {
+    if (event) {
+      return {
+        metaKey: event.metaKey,
+        pageX: event.pageX,
+        pageY: event.pageY,
+        type: event.type,
+      }
+    }
+    return undefined
   }
 }

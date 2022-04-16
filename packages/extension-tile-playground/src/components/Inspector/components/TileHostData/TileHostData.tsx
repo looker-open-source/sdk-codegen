@@ -25,24 +25,23 @@
  */
 import React, { useContext } from 'react'
 import {
+  Accordion2,
   Card,
   CardContent,
-  Space,
   SpaceVertical,
-  Text,
-  DividerVertical,
+  Paragraph,
 } from '@looker/components'
-import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 import { DashboardRunState } from '@looker/extension-sdk'
 
 export const TileHostData: React.FC = () => {
-  const { tileHostData, lookerHostData } = useContext(ExtensionContext2)
+  const { tileHostData, lookerHostData } = useContext(ExtensionContext40)
   const { isEditing, dashboardRunState, filters, isCrossFiltersEnabled } =
     tileHostData
 
   const printingMessage = lookerHostData?.isRendering
     ? 'Dashboard is printing'
-    : 'Dashboard is not printing'
+    : 'Dashboard is NOT printing'
 
   const editingMessage = isEditing
     ? 'Dashboard is editing'
@@ -57,7 +56,7 @@ export const TileHostData: React.FC = () => {
       dashboardRunStateMessage = 'Dashboard is running'
       break
     case DashboardRunState.COMPLETE:
-      dashboardRunStateMessage = 'Dashboard is not running'
+      dashboardRunStateMessage = 'Dashboard is NOT running'
       break
 
     default:
@@ -72,24 +71,21 @@ export const TileHostData: React.FC = () => {
     .join(', ')
 
   return (
-    <Card raised>
+    <Card>
       <CardContent>
-        <SpaceVertical gap="small">
-          <Space>
-            <Text>{printingMessage}</Text>
-            <DividerVertical />
-            <Text>{editingMessage}</Text>
-            <DividerVertical />
-            <Text>{dashboardRunStateMessage}</Text>
-            <DividerVertical />
-            <Text>{crossFiltersEnabledMessage}</Text>
-          </Space>
-          <Space>
-            {filtersArray.length
-              ? `Dashboard filters are ${filtersArray}`
-              : 'Dashboard has no filters'}
-          </Space>
-        </SpaceVertical>
+        <Accordion2 label="Tile host data" defaultOpen>
+          <SpaceVertical gap="small" mt="medium">
+            <Paragraph>{printingMessage}</Paragraph>
+            <Paragraph>{editingMessage}</Paragraph>
+            <Paragraph>{dashboardRunStateMessage}</Paragraph>
+            <Paragraph>{crossFiltersEnabledMessage}</Paragraph>
+            <Paragraph>
+              {filtersArray.length
+                ? `Dashboard filters are ${filtersArray}`
+                : 'Dashboard has no filters'}
+            </Paragraph>
+          </SpaceVertical>
+        </Accordion2>
       </CardContent>
     </Card>
   )

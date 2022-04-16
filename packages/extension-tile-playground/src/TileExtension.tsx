@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,36 @@
 
  */
 import React, { useContext } from 'react'
-import {
-  ComponentsProvider,
-  MessageBar,
-  SpaceVertical,
-} from '@looker/components'
-import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { ComponentsProvider } from '@looker/components'
+import { Switch, Route } from 'react-router-dom'
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 import { MountPoint } from '@looker/extension-sdk'
 import { VisualizationTile } from './components/VisualizationTile/VisualizationTile'
 import { DashboardTile } from './components/DashboardTile/DashboardTile'
-import { TileHostData } from './components/TileHostData/TileHostData'
+import { Inspector } from './components/Inspector/Inspector'
+import { Unsupported } from './components/Unsupported/Unsupported'
 
 export const TileExtension: React.FC = () => {
-  const { lookerHostData } = useContext(ExtensionContext2)
+  const { lookerHostData } = useContext(ExtensionContext40)
 
   return (
     <ComponentsProvider>
-      <SpaceVertical gap="medium">
-        <TileHostData />
-        {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
-          <VisualizationTile />
-        )}
-        {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
-          <DashboardTile />
-        )}
-        {lookerHostData?.mountPoint === MountPoint.standalone && (
-          <MessageBar intent="critical">
-            This extension must be mounted in a dashboard.
-          </MessageBar>
-        )}
-      </SpaceVertical>
+      <Switch>
+        <Route path="/inspect">
+          <Inspector />
+        </Route>
+        <Route>
+          {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
+            <VisualizationTile />
+          )}
+          {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
+            <DashboardTile />
+          )}
+          {lookerHostData?.mountPoint === MountPoint.standalone && (
+            <Unsupported />
+          )}
+        </Route>
+      </Switch>
     </ComponentsProvider>
   )
 }

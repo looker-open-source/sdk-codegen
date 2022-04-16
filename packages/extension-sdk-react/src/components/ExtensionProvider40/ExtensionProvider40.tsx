@@ -24,56 +24,55 @@
 
  */
 
+import type { ReactNode } from 'react'
 import React, { useState } from 'react'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
 import { LookerExtensionSDK } from '@looker/extension-sdk'
-import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import type { ILooker40SDK, Looker40SDK } from '@looker/sdk'
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
 import { ExtensionConnector } from '../ExtensionConnector'
-import { registerCore31SDK, unregisterCore31SDK } from '../../sdk/core_sdk_31'
 import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
-import type { ExtensionContextData } from './types'
+
+export interface ExtensionContextData40 extends BaseExtensionContextData {
+  coreSDK: ILooker40SDK
+}
 
 /**
- * React context provider for extension API and SDK
+ * React context provider for extension API and Looker SDK 4.0.
  */
-export const ExtensionContext = React.createContext<ExtensionContextData>(
+export const ExtensionContext40 = React.createContext<ExtensionContextData40>(
   undefined as any // no one will ever see this undefined!
 )
 
+export interface ExtensionProvider40Props extends ExtensionProviderProps {
+  children?: ReactNode
+}
+
 /**
- * ExtensionProvider component. Provides access to the extension API and SDK (use
- * ExtensionContext) and react routing services.
- * @deprecated use ExtensionProvider40
+ * ExtensionProvider40 component. Provides access to the extension API and SDK (use
+ * ExtensionContext40) and react routing services.
  */
-export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
-  children,
-  ...props
-}) => {
-  const [extensionData, setExtensionData] = useState<ExtensionContextData>(
-    {} as ExtensionContextData
+export function ExtensionProvider40(props: ExtensionProvider40Props) {
+  const { children, ...rest } = props
+  const [extensionData, setExtensionData] = useState<ExtensionContextData40>(
+    {} as ExtensionContextData40
   )
+
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    const core31SDK: Looker31SDK =
-      LookerExtensionSDK.create31Client(extensionHost)
-    const core40SDK: Looker40SDK =
+    const coreSDK: ILooker40SDK =
       LookerExtensionSDK.create40Client(extensionHost)
-    // Provide global access for use by redux if needed
-    registerCore31SDK(core31SDK)
-    registerCore40SDK(core40SDK)
+    registerCore40SDK(coreSDK as Looker40SDK)
     const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
     const { visualizationData } = visualizationSDK
     const { tileHostData } = tileSDK
-    setExtensionData((previousState: ExtensionContextData) => {
+    setExtensionData((previousState: any) => {
       return {
         ...previousState,
         extensionSDK: extensionHost,
-        coreSDK: core31SDK,
-        core31SDK,
-        core40SDK,
+        coreSDK,
         visualizationSDK,
         tileSDK,
         visualizationData,
@@ -84,12 +83,11 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   }
 
   const unloadedCallback = () => {
-    unregisterCore31SDK()
     unregisterCore40SDK()
   }
 
   const updateContextData = (updatedContextData: BaseExtensionContextData) => {
-    setExtensionData((previousState: ExtensionContextData) => {
+    setExtensionData((previousState: ExtensionContextData40) => {
       return {
         ...previousState,
         ...updatedContextData,
@@ -98,9 +96,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   }
 
   return (
-    <ExtensionContext.Provider value={extensionData}>
+    <ExtensionContext40.Provider value={extensionData}>
       <ExtensionConnector
-        {...props}
+        {...rest}
         contextData={extensionData}
         connectedCallback={connectedCallback}
         updateContextData={updateContextData}
@@ -108,6 +106,6 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
       >
         {children}
       </ExtensionConnector>
-    </ExtensionContext.Provider>
+    </ExtensionContext40.Provider>
   )
 }

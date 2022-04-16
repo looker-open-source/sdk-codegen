@@ -24,6 +24,8 @@
 
  */
 
+import type { MouseEvent } from 'react'
+
 /**
  * Callback that is invoked when a change in the host happens
  * <code>Looker >=22.8</code>
@@ -98,10 +100,7 @@ export interface TileError {
   group: string
 }
 
-export type CrossfilterEvent = Partial<MouseEvent>
-
 export interface CrossfilterOptions {
-  event: CrossfilterEvent
   pivot: Pivot
   row: Row
 }
@@ -121,9 +120,13 @@ export interface TileSDK {
   tileHostDataChanged: (changeDetail: TileHostDataChangedDetail) => void
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void
-  trigger: (message: string, config: TriggerConfig[]) => void
-  openDrillMenu: (options: DrillMenuOptions) => void
-  toggleCrossFilter: (options: CrossfilterOptions) => void
+  trigger: (
+    message: string,
+    config: TriggerConfig[],
+    event?: MouseEvent
+  ) => void
+  openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void
+  toggleCrossFilter: (options: CrossfilterOptions, event?: MouseEvent) => void
   runDashboard: () => void
   stopDashboard: () => void
   updateFilters: (filters: Filters) => void

@@ -23,23 +23,27 @@
  SOFTWARE.
 
  */
+import React, { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+import { IconButton } from '@looker/components'
+import type { IconType } from '@looker/components'
 
-const { merge } = require('webpack-merge')
-const base = require('../../webpack.base.config')(__dirname)
-const browser = require('../../webpack.browser.config')()
+export interface NavigateButtonProps {
+  path: string
+  icon: IconType
+}
 
-module.exports = merge(base, browser, {
-  mode: 'development',
-  devServer: {
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    publicPath: '/dist/',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, content-type, Authorization',
-    },
-  },
-})
+export const NavigateButton: React.FC<NavigateButtonProps> = ({
+  path,
+  icon,
+}) => {
+  const history = useHistory()
+
+  const navigateClick = useCallback(() => {
+    history.push(path)
+  }, [history])
+
+  return (
+    <IconButton onClick={navigateClick} icon={icon} label="" size="large" />
+  )
+}

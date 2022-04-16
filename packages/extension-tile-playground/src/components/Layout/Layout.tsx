@@ -23,23 +23,22 @@
  SOFTWARE.
 
  */
+import React from 'react'
+import type { ReactNode } from 'react'
+import { Flex, Box2 } from '@looker/components'
 
-const { merge } = require('webpack-merge')
-const base = require('../../webpack.base.config')(__dirname)
-const browser = require('../../webpack.browser.config')()
+export interface LayoutProps {
+  children: ReactNode
+  right: ReactNode
+}
 
-module.exports = merge(base, browser, {
-  mode: 'development',
-  devServer: {
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    publicPath: '/dist/',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, content-type, Authorization',
-    },
-  },
-})
+export const Layout: React.FC<LayoutProps> = ({ children, right }) => {
+  return (
+    <Flex justifyContent="space-between">
+      <Box2 mr="small" flexBasis="95%">
+        {children}
+      </Box2>
+      <Box2>{right}</Box2>
+    </Flex>
+  )
+}

@@ -23,23 +23,29 @@
  SOFTWARE.
 
  */
+import React from 'react'
+import { SpaceVertical, Box2 } from '@looker/components'
+import { DashboardGauge } from '@looker/icons'
+import { Layout } from '../Layout'
+import { NavigateButton } from '../NavigateButton'
+import { EventTester } from './components/EventTester'
+import { TileHostData } from './components/TileHostData'
+import { VisualizationData } from './components/VisualizationData'
 
-const { merge } = require('webpack-merge')
-const base = require('../../webpack.base.config')(__dirname)
-const browser = require('../../webpack.browser.config')()
-
-module.exports = merge(base, browser, {
-  mode: 'development',
-  devServer: {
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    publicPath: '/dist/',
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, content-type, Authorization',
-    },
-  },
-})
+export const Inspector: React.FC = () => {
+  return (
+    <Layout right={<NavigateButton path="/" icon={<DashboardGauge />} />}>
+      <SpaceVertical gap="small">
+        <Box2 width="100%">
+          <TileHostData />
+        </Box2>
+        <Box2 width="100%">
+          <EventTester />
+        </Box2>
+        <Box2 width="100%">
+          <VisualizationData />
+        </Box2>
+      </SpaceVertical>
+    </Layout>
+  )
+}

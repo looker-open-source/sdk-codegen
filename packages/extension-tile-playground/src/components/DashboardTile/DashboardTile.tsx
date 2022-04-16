@@ -25,11 +25,11 @@
  */
 import React, { useContext, useRef, useEffect } from 'react'
 import { SpaceVertical, Text } from '@looker/components'
-import { ExtensionContext2 } from '@looker/extension-sdk-react'
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
 export const DashboardTile: React.FC = () => {
   const renderRef = useRef(null)
-  const { extensionSDK } = useContext(ExtensionContext2)
+  const { extensionSDK } = useContext(ExtensionContext40)
 
   useEffect(() => {
     if (renderRef.current) {
