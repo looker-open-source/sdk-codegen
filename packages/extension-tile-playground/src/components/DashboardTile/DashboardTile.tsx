@@ -23,26 +23,42 @@
  SOFTWARE.
 
  */
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { SpaceVertical, Text } from '@looker/components'
+import { More } from '@looker/icons'
 import { ExtensionContext40 } from '@looker/extension-sdk-react'
+import { useWindowSize } from '../../hooks/use_window_size'
+import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
+import { Layout } from '../Layout'
+import { NavigateButton } from '../NavigateButton'
 
 export const DashboardTile: React.FC = () => {
-  const renderRef = useRef(null)
+  const { height, width } = useWindowSize()
+  const vizSize = Math.min(height, width) - 250
   const { extensionSDK } = useContext(ExtensionContext40)
 
-  useEffect(() => {
-    if (renderRef.current) {
-      extensionSDK.rendered()
-    }
-  }, [renderRef.current, extensionSDK])
+  const value = '69'
+
+  const renderComplete = useCallback(() => {
+    extensionSDK.rendered()
+  }, [extensionSDK])
 
   return (
-    <SpaceVertical p="xxxxxlarge" width="100%" height="50vh" around>
-      <Text p="xxxxxlarge" fontSize="xxxxxlarge">
-        Dashboard Tile
-      </Text>
-      <pre ref={renderRef}>{JSON.stringify({ hello: 'world' }, null, 2)}</pre>
-    </SpaceVertical>
+    <Layout right={<NavigateButton path="/inspect" icon={<More />} />}>
+      <SpaceVertical p="xxxxxlarge" width="100%" align="center">
+        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
+          Dashboard Tile
+        </Text>
+        {value && (
+          <LiquidFillGaugeViz
+            width={vizSize}
+            height={vizSize}
+            value={value}
+            renderComplete={renderComplete}
+            valueFormat={null}
+          />
+        )}
+      </SpaceVertical>
+    </Layout>
   )
 }
