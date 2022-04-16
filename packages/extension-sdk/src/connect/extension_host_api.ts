@@ -124,7 +124,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         }
         return undefined
       }
-      case ExtensionNotificationType.TILE_HOST_DATA_CHANGED: {
+      case ExtensionNotificationType.TILE_HOST_DATA: {
         const { payload } = message
         this.tileSDK.tileHostDataChanged(payload)
         if (this.tileHostDataChangedCallback) {

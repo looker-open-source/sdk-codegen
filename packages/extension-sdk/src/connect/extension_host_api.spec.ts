@@ -226,7 +226,7 @@ describe('extension_host_api tests', () => {
       payload: lookerHostData,
     })
     api.handleNotification({
-      type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED,
+      type: ExtensionNotificationType.TILE_HOST_DATA,
       payload: { isEditing: true, isCrossFiltersEnabled: true },
     })
     expect(tileHostDataChangedCallback).toHaveBeenCalledWith({

@@ -292,7 +292,7 @@ export enum ExtensionNotificationType {
   /**
    * Tile host data changed
    */
-  TILE_HOST_DATA_CHANGED = 'TILE_HOST_DATA_CHANGED',
+  TILE_HOST_DATA = 'TILE_HOST_DATA',
 }
 
 /**
@@ -328,7 +328,7 @@ export interface ExtensionVisualizationDataMessage {
  * <code>Looker >=22.8</code>
  */
 export interface TileHostDataChangedMessage {
-  type: ExtensionNotificationType.TILE_HOST_DATA_CHANGED
+  type: ExtensionNotificationType.TILE_HOST_DATA
   payload: Partial<TileHostData>
 }
 
