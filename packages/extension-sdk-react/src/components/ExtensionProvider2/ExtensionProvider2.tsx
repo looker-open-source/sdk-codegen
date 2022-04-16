@@ -74,7 +74,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
       )
     }
     registerCoreSDK2(coreSDK)
-    const { visualizationSDK, tileSDK } = extensionHost
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
     const { visualizationData } = visualizationSDK
     const { tileHostData } = tileSDK
     setExtensionData((previousState: any) => {
@@ -86,6 +86,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
         tileSDK,
         visualizationData,
         tileHostData,
+        lookerHostData,
       }
     })
   }

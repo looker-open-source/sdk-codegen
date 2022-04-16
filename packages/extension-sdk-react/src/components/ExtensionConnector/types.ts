@@ -31,6 +31,7 @@ import type {
   TileHostData,
   TileSDK,
   VisualizationSDK,
+  LookerHostData,
 } from '@looker/extension-sdk'
 
 /**
@@ -41,6 +42,10 @@ export interface BaseExtensionContextData {
    * Extension SDK.
    */
   extensionSDK: ExtensionSDK
+  /**
+   * Looker host data
+   */
+  lookerHostData?: Readonly<LookerHostData>
   /**
    * Error message will be set in an initialization error occurs.
    * @deprecated if an initialization error occurs the extension
@@ -59,7 +64,7 @@ export interface BaseExtensionContextData {
   /**
    * Visualization data.
    */
-  visualizationData?: RawVisualizationData
+  visualizationData?: Readonly<RawVisualizationData>
   /**
    * Visualization api.
    */
@@ -67,7 +72,7 @@ export interface BaseExtensionContextData {
   /**
    * Tile host data
    */
-  tileHostData: TileHostData
+  tileHostData: Readonly<TileHostData>
   /**
    * Tile api.
    */
