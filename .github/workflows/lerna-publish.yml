@@ -12,7 +12,7 @@ on:
 
 jobs:
   setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
+    uses: looker-open-source/reusable-actions/.github/workflows/primary-version.yml@main
 
   publish:
     needs: setup
