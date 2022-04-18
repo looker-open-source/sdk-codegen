@@ -2323,10 +2323,10 @@
     polished "^4.1.2"
     styled-system "^5.1.5"
 
-"@looker/eslint-config-oss@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@looker/eslint-config-oss/-/eslint-config-oss-1.7.1.tgz#fbcac3570faa7e53bb838237812c140be1ff20e4"
-  integrity sha512-vyV6UTWutzvttReVRPOQz2g02YrxRO7TimM+fTi8JPFJE6sZ0GGyQlWjjpC+na4PeQQCWU4fwDi71/v3vKNrQQ==
+"@looker/eslint-config-oss@1.7.14":
+  version "1.7.14"
+  resolved "https://registry.yarnpkg.com/@looker/eslint-config-oss/-/eslint-config-oss-1.7.14.tgz#e6ea69149c5d724a6b3f50797a2594dad8da5ba9"
+  integrity sha512-cTh9EDlL3l9/lyD/h3baAs7AHoTZfKX+Oq8mUznBTNEm+EAkYtvxlo9H+shrpgoRzhaHFwUU8W1LJgvI3w/9Cg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^4.29.2"
     "@typescript-eslint/parser" "^4.31.0"
@@ -2339,6 +2339,7 @@
     eslint-plugin-i18next "^5.1.1"
     eslint-plugin-import "^2.24.1"
     eslint-plugin-jest-dom "3.9.0"
+    eslint-plugin-lodash "7.1.0"
     eslint-plugin-mdx "^1.14.1"
     eslint-plugin-node "^11.1.0"
     eslint-plugin-prettier "3.4.0"
@@ -2348,10 +2349,9 @@
     eslint-plugin-sort-keys-fix "^1.1.2"
     eslint-plugin-standard "5.0.0"
     eslint-plugin-testing-library "4.11.0"
-    prettier "^2.3.1"
     typescript "4.4.2"
 
-"@looker/extension-sdk-react@^21.4.1":
+"@looker/extension-sdk-react@^21.4.2":
   version "21.20.1"
   resolved "https://registry.yarnpkg.com/@looker/extension-sdk-react/-/extension-sdk-react-21.20.1.tgz#8130aa002b7dde94696a1cae60ec3f06d7298300"
   integrity sha512-UmBP9feI580UztaD28USHPuGi0b84m7EtMyxhp3fdCGQkREmBfsyJwCBZPVPlbtnkfNO2cDUaeRx9kP4m5yVLA==
@@ -2362,7 +2362,7 @@
     history "^4.9.0"
     lodash "^4.17.20"
 
-"@looker/extension-sdk@^21.20.1", "@looker/extension-sdk@^21.4.1":
+"@looker/extension-sdk@^21.20.1", "@looker/extension-sdk@^21.4.2":
   version "21.20.1"
   resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-21.20.1.tgz#519e5135b04357f731c6ed54c731c284f23193ef"
   integrity sha512-UnEBMJiUYhtluvxCE4d/iIZQezuMMTv6EW2kgDjrN7U3KZDeOQ5QNLKG764cjbNCfePRtS2lwYyJyoK4vtLKFg==
@@ -6421,6 +6421,11 @@ eslint-plugin-jest-dom@3.9.0:
     "@babel/runtime" "^7.9.6"
     "@testing-library/dom" "^7.28.1"
     requireindex "^1.2.0"
+
+eslint-plugin-lodash@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-lodash/-/eslint-plugin-lodash-7.1.0.tgz#5ad9bf1240a01c6c3f94e956213e2d6422af3192"
+  integrity sha512-BRkEI/+ZjmeDCM1DfzR+NVwYkC/+ChJhaOSm3Xm7rer/fs89TKU6AMtkQiDdqQel1wZ4IJM+B6hlep9xwVKaMQ==
 
 eslint-plugin-markdown@^2.2.0:
   version "2.2.1"
@@ -10664,9 +10669,9 @@ minimist-options@^3.0.1:
     is-plain-obj "^1.1.0"
 
 minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 minipass@^2.3.5, minipass@^2.6.0, minipass@^2.9.0:
   version "2.9.0"
@@ -11909,7 +11914,7 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.3.1, prettier@^2.4.1:
+prettier@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
   integrity sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==
