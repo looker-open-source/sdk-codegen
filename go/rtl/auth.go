@@ -28,7 +28,7 @@ type AuthSession struct {
 	Client    http.Client
 }
 
-// This struct implements the Roundtripper interface.
+// This struct implements the Roundtripper interface (golang's http middleware)
 // It sets the "x-looker-appid" Header on requests
 type transportWithHeaders struct{
 	Base http.RoundTripper
@@ -51,7 +51,7 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 
 // The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
-	// This transport (Roundtripper) sets 
+	// This transport (Roundtripper) sets
 	// the "x-looker-appid" Header on requests
 	appIdHeaderTransport := &transportWithHeaders{
 		Base: transport,
@@ -68,8 +68,8 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	ctx := context.WithValue(
 		context.Background(),
 		oauth2.HTTPClient,
-		// Will set "x-looker-appid" Header on calls to TokenUrl 
-		&http.Client{Transport: appIdHeaderTransport}, 
+		// Will set "x-looker-appid" Header on TokenURL requests
+		&http.Client{Transport: appIdHeaderTransport},
 	)
 
 	oauthTransport := &oauth2.Transport{
