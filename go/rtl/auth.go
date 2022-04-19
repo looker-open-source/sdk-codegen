@@ -28,6 +28,8 @@ type AuthSession struct {
 	Client    http.Client
 }
 
+// This struct implements the Roundtripper interface.
+// It sets the "x-looker-appid" Header on requests
 type transportWithHeaders struct{
 	Base http.RoundTripper
 }
