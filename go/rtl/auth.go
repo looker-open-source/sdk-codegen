@@ -49,11 +49,13 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 
 // The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
-	// This transport sets the "x-looker-appid" Header
+	// This transport (Roundtripper) sets 
+	// the "x-looker-appid" Header on requests
 	appIdHeaderTransport := &transportWithHeaders{
 		Base: transport,
 	}
 
+	// clientcredentials.Config manages the token refreshing
 	oauthConfig := clientcredentials.Config{
 		ClientID:     config.ClientId,
 		ClientSecret: config.ClientSecret,
@@ -64,13 +66,13 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	ctx := context.WithValue(
 		context.Background(),
 		oauth2.HTTPClient,
-		// Transport will set "x-looker-appid" Header on calls to TokenUrl 
+		// Will set "x-looker-appid" Header on calls to TokenUrl 
 		&http.Client{Transport: appIdHeaderTransport}, 
 	)
 
 	oauthTransport := &oauth2.Transport{
 		Source: oauthConfig.TokenSource(ctx),
-		// Base transport will set "x-looker-appid" Header on all other requests
+		// Will set "x-looker-appid" Header on all other requests
 		Base: appIdHeaderTransport,
     }
 
