@@ -9,7 +9,8 @@ import (
 	"net/url"
 	"os"
 	"reflect"
-	"time"
+	"golang.org/x/oauth2/clientcredentials"
+	"golang.org/x/oauth2"
 
 	json "github.com/json-iterator/go"
 	extra "github.com/json-iterator/go/extra"
@@ -21,92 +22,53 @@ func init() {
 	extra.RegisterFuzzyDecoders()
 }
 
-type AccessToken struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
-	ExpiresIn   int32  `json:"expires_in"`
-	ExpireTime  time.Time
-}
-
-func (t AccessToken) IsExpired() bool {
-	return t.ExpireTime.IsZero() || time.Now().After(t.ExpireTime)
-}
-
-func NewAccessToken(js []byte) (AccessToken, error) {
-	token := AccessToken{}
-	if err := json.Unmarshal(js, &token); err != nil {
-		return token, err
-	}
-	token.ExpireTime = time.Now().Add(time.Duration(token.ExpiresIn) * time.Second)
-	return token, nil
-}
-
 type AuthSession struct {
 	Config    ApiSettings
-	Transport http.RoundTripper
-	token     AccessToken
+	Client    http.Client
+}
+
+type transportWithHeaders struct{
+	Base http.RoundTripper
+}
+
+//
+func (t *transportWithHeaders) RoundTrip(req *http.Request) (*http.Response, error) {
+    req.Header.Add("x-looker-appid", "go-sdk")
+    return t.Base.RoundTrip(req)
 }
 
 func NewAuthSession(config ApiSettings) *AuthSession {
-	tr := &http.Transport{
+	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: !config.VerifySsl,
 		},
 	}
-	return &AuthSession{
-		Config:    config,
-		Transport: tr,
-	}
+
+	return NewAuthSessionWithTransport(config, transport)
 }
 
 // The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
+	t := &transportWithHeaders{
+		Base: transport,
+	}
+
+	oauthConfig := clientcredentials.Config{
+		ClientID:     config.ClientId,
+		ClientSecret: config.ClientSecret,
+		TokenURL: fmt.Sprintf("%s/api/%s/login", config.BaseUrl, config.ApiVersion),
+		AuthStyle: oauth2.AuthStyleInParams,
+	}
+
+	oauthTransport := &oauth2.Transport{
+		Source: oauthConfig.TokenSource(oauth2.NoContext),
+		Base: t,
+   }
+
 	return &AuthSession{
 		Config:    config,
-		Transport: transport,
+		Client:    http.Client{ Transport: oauthTransport },
 	}
-}
-
-func (s *AuthSession) login(id *string) error {
-	u := fmt.Sprintf("%s/api/%s/login", s.Config.BaseUrl, s.Config.ApiVersion)
-	data := url.Values{
-		"client_id":     {s.Config.ClientId},
-		"client_secret": {s.Config.ClientSecret},
-	}
-
-	cl := http.Client{
-		Transport: s.Transport,
-		Timeout:   time.Duration(s.Config.Timeout) * time.Second,
-	}
-	res, err := cl.PostForm(u, data)
-	if err != nil {
-		return err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("status not OK: %s", res.Status)
-	}
-
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return fmt.Errorf("error reading response body: %w", err)
-	}
-
-	s.token, err = NewAccessToken(body)
-
-	return err
-}
-
-// Authenticate checks if the token is expired (do the token refresh if so), and updates the request header with Authorization
-func (s *AuthSession) Authenticate(req *http.Request) error {
-	if s.token.IsExpired() {
-		if err := s.login(nil); err != nil {
-			return err
-		}
-	}
-	req.Header.Add("Authorization", fmt.Sprintf("token %s", s.token.AccessToken))
-	return nil
 }
 
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
@@ -125,18 +87,8 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	// set query params
 	setQuery(req.URL, reqPars)
 
-	// set auth header
-	if err := s.Authenticate(req); err != nil {
-		return err
-	}
-
-	cl := http.Client{
-		Transport: s.Transport,
-		Timeout:   time.Duration(s.Config.Timeout) * time.Second,
-	}
-
 	// do the actual http call
-	res, err := cl.Do(req)
+	res, err := s.Client.Do(req)
 	if err != nil {
 		return err
 	}
