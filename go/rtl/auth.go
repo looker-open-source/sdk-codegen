@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"context"
 	"golang.org/x/oauth2/clientcredentials"
 	"golang.org/x/oauth2"
 
@@ -31,9 +32,8 @@ type transportWithHeaders struct{
 	Base http.RoundTripper
 }
 
-//
 func (t *transportWithHeaders) RoundTrip(req *http.Request) (*http.Response, error) {
-    req.Header.Add("x-looker-appid", "go-sdk")
+    req.Header.Set("x-looker-appid", "go-sdk")
     return t.Base.RoundTrip(req)
 }
 
@@ -49,7 +49,8 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 
 // The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
-	t := &transportWithHeaders{
+	// This transport sets the "x-looker-appid" Header
+	appIdHeaderTransport := &transportWithHeaders{
 		Base: transport,
 	}
 
@@ -60,10 +61,18 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		AuthStyle: oauth2.AuthStyleInParams,
 	}
 
+	ctx := context.WithValue(
+		context.Background(),
+		oauth2.HTTPClient,
+		// Transport will set "x-looker-appid" Header on calls to TokenUrl 
+		&http.Client{Transport: appIdHeaderTransport}, 
+	)
+
 	oauthTransport := &oauth2.Transport{
-		Source: oauthConfig.TokenSource(oauth2.NoContext),
-		Base: t,
-   }
+		Source: oauthConfig.TokenSource(ctx),
+		// Base transport will set "x-looker-appid" Header on all other requests
+		Base: appIdHeaderTransport,
+    }
 
 	return &AuthSession{
 		Config:    config,
