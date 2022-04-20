@@ -26,7 +26,7 @@
 
 import type { IAPIMethods, IRawResponse } from '@looker/sdk-rtl'
 import cloneDeep from 'lodash/cloneDeep'
-import { isEmpty } from 'lodash'
+import isEmpty from 'lodash/isEmpty'
 import type { IApiModel, IMethod, IType } from '@looker/sdk-codegen'
 import {
   ArrayType,

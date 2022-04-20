@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "2.3.0",
+  "version": "2.3.2",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -82,7 +82,7 @@
     "@babel/preset-typescript": "^7.13.0",
     "@babel/runtime": "^7.14.0",
     "@babel/runtime-corejs3": "^7.14.0",
-    "@looker/eslint-config-oss": "^1.7.1",
+    "@looker/eslint-config-oss": "1.7.14",
     "@testing-library/jest-dom": "^5.11.6",
     "@types/blueimp-md5": "^2.7.0",
     "@types/ini": "^1.3.30",
@@ -164,6 +164,7 @@
       "@typescript-eslint/no-empty-interface": "off",
       "import/default": "off",
       "sort-keys": "off",
+      "no-nested-ternary": "off",
       "spaced-comment": [
         "error",
         "always",
@@ -174,7 +175,42 @@
           ]
         }
       ],
-      "no-use-before-define": "off"
+      "no-use-before-define": "off",
+      "header/header": [
+        2,
+        "block",
+        [
+          "",
+          "",
+          " MIT License",
+          "",
+          {
+            "pattern": " Copyright \\(c\\) 20\\d{2} Looker Data Sciences, Inc.",
+            "template": " Copyright (c) 2022 Looker Data Sciences, Inc."
+          },
+          "",
+          " Permission is hereby granted, free of charge, to any person obtaining a copy",
+          " of this software and associated documentation files (the \"Software\"), to deal",
+          " in the Software without restriction, including without limitation the rights",
+          " to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+          " copies of the Software, and to permit persons to whom the Software is",
+          " furnished to do so, subject to the following conditions:",
+          "",
+          " The above copyright notice and this permission notice shall be included in all",
+          " copies or substantial portions of the Software.",
+          "",
+          " THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
+          " IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
+          " FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
+          " AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
+          " LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
+          " OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
+          " SOFTWARE.",
+          "",
+          " "
+        ],
+        1
+      ]
     },
     "settings": {
       "import/resolver": {

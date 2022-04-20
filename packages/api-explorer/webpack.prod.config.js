@@ -30,7 +30,7 @@ const browser = require('../../webpack.browser.config')()
 
 module.exports = merge(base, browser, {
   entry: {
-    app: path.join(__dirname, 'src/index.ts'),
+    app: path.join(__dirname, 'src/App.tsx'),
   },
   mode: 'production',
 })
