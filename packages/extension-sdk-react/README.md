@@ -21,15 +21,15 @@ Extension SDK.
 
 ### Provider
 
-Add the `ExtensionProvider` near the root of the extension component tree.
+Add the `ExtensionProvider40` near the root of the extension component tree. ExtensionProvider40 exposes the Looker 4.0 sdk.
 
 ```tsx
-<ExtensionProvider
+<ExtensionProvider40
   loadingComponent={<div>Loading ...</div>}
-  requiredLookerVersion=">=7.0.0"
+  requiredLookerVersion=">=22.0.0"
 >
   <MyComponent />
-</ExtensionProvider>
+</ExtensionProvider40>
 ```
 
 - An optional `loadingComponent` can be passed in to display the while the provider is establishing a connection with the looker host
@@ -45,10 +45,8 @@ import {
 } from "@looker/extension-sdk-react"
 
 export const MyComponent: React.FC<{}> = () => {
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const extensionHost = extensionContext.extensionSDK
-  const sdk = extensionContext.core40SDK
-  const initializeError = extensionContext.initializeError
+  const extensionContext = useContext<ExtensionContext40Data>(ExtensionContext)
+  const { extensionSDK, coreSDK, initializaError } = extensionContext.extensionSDK
 
 ```
 
@@ -60,7 +58,7 @@ the router so you can add `Switch` and `Route` components as childrem. The Looke
 of changes to the React routes and the child route is appended to he Looker extension
 route. This means that the route can be restored on a page reload or sent as a link.
 
-The `ExtensionProvider` can also notify the extension of changes to the route using the
+The `ExtensionProvider40` can also notify the extension of changes to the route using the
 `onPathnameChange` attribute.
 
 #### Example
@@ -70,7 +68,7 @@ export const MyExtension: React.FC<{}> = () => {
   const [pathname, setPathname] = useState("")
 
   return (
-      <ExtensionProvider onPathnameChange={setPathname}>
+      <ExtensionProvider40 onPathnameChange={setPathname}>
         <MyLayout>
           <MySidebar pathname={pathname} />
           <Switch>
@@ -82,7 +80,7 @@ export const MyExtension: React.FC<{}> = () => {
             </Route>
           </Switch>
         </MyLayout>
-      </ExtensionProvider>
+      </ExtensionProvider40>
   )
 }
 ```
@@ -96,17 +94,18 @@ The Looker SDK can be accessed as follows:
 
 The extension context exposes the following properties:
 
-- `coreSDK` - SDK version 3.1 (kept for backwards compatability)
-- `core31SDK` - SDK version 3.1
-- `core40SDK` - SDK version 4.0
+- `coreSDK` - SDK version 4.0 (kept for backwards compatability)
 
 The following global access methods are available:
 
-- `getCoreSDK()` - SDK version 3.1 (kept for backwards compatability)
-- `getCore31SDK()` - SDK version 3.1
 - `getCore40SDK()` - SDK version 4.0
 
 There is no restriction on which SDK can be used within an extension, none, one or all of the above can be used interchangeably, context or global access. The one caveat is that it is recommended that the Looker version support SDK 4.0 if the 4.0 SDK is used (the results may be unpredictable otherwise).
+
+If you require access to SDK version 3.1, use `<ExtensionProvider/>` or `<ExtensionProvider2 type={Looker31SDK}/>`. SDK version 3.1 will then globally be available through the following methods:
+
+- `getCoreSDK()` - SDK version 3.1 (kept for backwards compatability)
+- `getCore31SDK()` - SDK version 3.1
 
 ### Redux support
 
