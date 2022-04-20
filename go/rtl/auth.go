@@ -2,6 +2,7 @@ package rtl
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"fmt"
 	"io/ioutil"
@@ -9,9 +10,9 @@ import (
 	"net/url"
 	"os"
 	"reflect"
-	"context"
-	"golang.org/x/oauth2/clientcredentials"
+
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 
 	json "github.com/json-iterator/go"
 	extra "github.com/json-iterator/go/extra"
