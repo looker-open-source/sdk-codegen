@@ -23,11 +23,6 @@ func init() {
 	extra.RegisterFuzzyDecoders()
 }
 
-type AuthSession struct {
-	Config    ApiSettings
-	Client    http.Client
-}
-
 // This struct implements the Roundtripper interface (golang's http middleware)
 // It sets the "x-looker-appid" Header on requests
 type transportWithHeaders struct{
@@ -37,6 +32,11 @@ type transportWithHeaders struct{
 func (t *transportWithHeaders) RoundTrip(req *http.Request) (*http.Response, error) {
     req.Header.Set("x-looker-appid", "go-sdk")
     return t.Base.RoundTrip(req)
+}
+
+type AuthSession struct {
+	Config    ApiSettings
+	Client    http.Client
 }
 
 func NewAuthSession(config ApiSettings) *AuthSession {
@@ -72,6 +72,7 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		&http.Client{Transport: appIdHeaderTransport},
 	)
 
+	// Make use of oauth2 transport to handle token management
 	oauthTransport := &oauth2.Transport{
 		Source: oauthConfig.TokenSource(ctx),
 		// Will set "x-looker-appid" Header on all other requests
