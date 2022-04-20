@@ -39,14 +39,10 @@ Add the `ExtensionProvider40` near the root of the extension component tree. Ext
 
 ```tsx
 import React, { useContext } from "react"
-import {
-  ExtensionContext,
-  ExtensionContextData
-} from "@looker/extension-sdk-react"
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
 export const MyComponent: React.FC<{}> = () => {
-  const extensionContext = useContext<ExtensionContext40Data>(ExtensionContext)
-  const { extensionSDK, coreSDK, initializaError } = extensionContext.extensionSDK
+  const { extensionSDK, coreSDK, initializeError } = useContext(ExtensionContext40)
 
 ```
 
@@ -94,7 +90,7 @@ The Looker SDK can be accessed as follows:
 
 The extension context exposes the following properties:
 
-- `coreSDK` - SDK version 4.0 (kept for backwards compatability)
+- `coreSDK` - SDK version 4.0
 
 The following global access methods are available:
 
