@@ -50,7 +50,7 @@ following steps:
       entitlements: {
          local_storage: yes
          use_form_submit: yes
-         core_api_methods: []
+         core_api_methods: ["run_inline_query"]
          external_api_urls: []
          oauth2_urls: []
          scoped_user_attributes: []

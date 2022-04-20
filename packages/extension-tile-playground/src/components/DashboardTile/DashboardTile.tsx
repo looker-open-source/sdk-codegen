@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import React, { useContext, useCallback } from 'react'
-import { SpaceVertical, Text } from '@looker/components'
+import React, { useContext, useCallback, useEffect, useState } from 'react'
+import { SpaceVertical, Text, MessageBar } from '@looker/components'
 import { More } from '@looker/icons'
 import { ExtensionContext40 } from '@looker/extension-sdk-react'
 import { useWindowSize } from '../../hooks/use_window_size'
@@ -35,9 +35,34 @@ import { NavigateButton } from '../NavigateButton'
 export const DashboardTile: React.FC = () => {
   const { height, width } = useWindowSize()
   const vizSize = Math.min(height, width) - 250
-  const { extensionSDK } = useContext(ExtensionContext40)
+  const { extensionSDK, coreSDK } = useContext(ExtensionContext40)
+  const [value, setValue] = useState<number | undefined>()
+  const [message, setMessage] = useState<string | undefined>()
 
-  const value = '69'
+  useEffect(() => {
+    const readData = async () => {
+      try {
+        const response = await coreSDK.ok(
+          coreSDK.run_inline_query({
+            result_format: 'json',
+            body: {
+              model: 'thelook',
+              view: 'users',
+              fields: ['users.average_age'],
+              total: false,
+            },
+          })
+        )
+        setValue(response[0]['users.average_age'])
+        setMessage(undefined)
+      } catch (error) {
+        console.error(error)
+        setValue(undefined)
+        setMessage('Failed to read data')
+      }
+    }
+    readData()
+  }, [])
 
   const renderComplete = useCallback(() => {
     extensionSDK.rendered()
@@ -49,6 +74,7 @@ export const DashboardTile: React.FC = () => {
         <Text p="xxxxxlarge" fontSize="xxxxxlarge">
           Dashboard Tile
         </Text>
+        {message && <MessageBar intent="critical">{message}</MessageBar>}
         {value && (
           <LiquidFillGaugeViz
             width={vizSize}
