@@ -21,7 +21,7 @@ The extension playground can be manually installed and run with a Looker instanc
    project_name: "extension-playground"
    application: extension-playground {
       label: "Extension Playground"
-      url: "http://localhost:8080/dist/bundle.js"
+      url: "https://localhost:8080/dist/bundle.js"
       entitlements: {
          local_storage: no
          navigation: no
@@ -29,7 +29,7 @@ The extension playground can be manually installed and run with a Looker instanc
          raw_api_request: yes
          use_form_submit: yes
          use_embeds: yes
-         core_api_methods: []
+         core_api_methods: ["me"]
          external_api_urls: []
          oauth2_urls: []
       }

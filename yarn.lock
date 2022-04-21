@@ -2351,48 +2351,12 @@
     eslint-plugin-testing-library "4.11.0"
     typescript "4.4.2"
 
-"@looker/extension-sdk-react@^21.4.2":
-  version "21.20.1"
-  resolved "https://registry.yarnpkg.com/@looker/extension-sdk-react/-/extension-sdk-react-21.20.1.tgz#8130aa002b7dde94696a1cae60ec3f06d7298300"
-  integrity sha512-UmBP9feI580UztaD28USHPuGi0b84m7EtMyxhp3fdCGQkREmBfsyJwCBZPVPlbtnkfNO2cDUaeRx9kP4m5yVLA==
-  dependencies:
-    "@looker/extension-sdk" "^21.20.1"
-    "@looker/sdk" "^21.20.1"
-    "@looker/sdk-rtl" "^21.3.1"
-    history "^4.9.0"
-    lodash "^4.17.20"
-
-"@looker/extension-sdk@^21.20.1", "@looker/extension-sdk@^21.4.2":
-  version "21.20.1"
-  resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-21.20.1.tgz#519e5135b04357f731c6ed54c731c284f23193ef"
-  integrity sha512-UnEBMJiUYhtluvxCE4d/iIZQezuMMTv6EW2kgDjrN7U3KZDeOQ5QNLKG764cjbNCfePRtS2lwYyJyoK4vtLKFg==
-  dependencies:
-    "@looker/chatty" "^2.3.0"
-    "@looker/sdk" "^21.20.1"
-    "@looker/sdk-rtl" "^21.3.1"
-    deepmerge "^4.2.2"
-    readable-stream "^3.4.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.8"
-    semver "^7.3.4"
-
 "@looker/icons@^1.5.3":
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/@looker/icons/-/icons-1.5.3.tgz#0815625b7d9b28409b4edd8714a5b93d5f17e267"
   integrity sha512-dcSezlvmEITmTup4nUzkRQOZojadqSZHk95INSVTHu8OlwYpLUVLp6OpAzzglmbFZrmNAH2A3eRqq1oIAFZNSw==
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
-
-"@looker/sdk@^21.20.1":
-  version "21.20.1"
-  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-21.20.1.tgz#3d257309c2fe5ad1246e01837ea71aeeb7f4df22"
-  integrity sha512-t54yXAMeJAIeq7uUc1Oa3SdFsE3zvQaL9S28ebXy9TrljbnHG4FsVMacfq0XQGYPDzYUIoEySShWcBOsFZ+eyw==
-  dependencies:
-    "@looker/sdk-rtl" "^21.3.1"
-    ini "^1.3.8"
-    readable-stream "^3.4.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.8"
 
 "@mdx-js/util@1.6.22":
   version "1.6.22"
