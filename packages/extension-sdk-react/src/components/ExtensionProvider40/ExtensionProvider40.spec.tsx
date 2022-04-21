@@ -46,7 +46,7 @@ jest.mock('@looker/extension-sdk', () => ({
   },
 }))
 
-describe('ExtensionProvider2 component', () => {
+describe('ExtensionProvider40 component', () => {
   let originalConsoleError: any
 
   beforeEach(() => {
