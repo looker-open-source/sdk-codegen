@@ -11,7 +11,11 @@ on:
         required: true
 
 jobs:
+  setup:
+    uses: looker-open-source/reusable-actions/.github/workflows/primary-version.yml@main
+
   publish:
+    needs: setup
     if: >
       (github.event.inputs) ||
       (startsWith(github.event.release.tag_name, 'sdk-codegen-all') &&
@@ -21,8 +25,8 @@ jobs:
     env:
       LOOKERSDK_BASE_URL: https://localhost:20000
       LOOKERSDK_VERIFY_SSL: false
-      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID__21_18 }}
-      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET__21_18 }}
+      LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
+      LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
@@ -42,8 +46,8 @@ jobs:
 
       - name: Pull and run Looker docker image
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_2
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/22_2
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(needs.setup.outputs.matrix_json)[0] }}
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(needs.setup.outputs.matrix_json)[0] }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - uses: actions/setup-node@v2
