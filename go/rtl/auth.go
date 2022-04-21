@@ -15,6 +15,12 @@ import (
 	extra "github.com/json-iterator/go/extra"
 )
 
+func init() {
+	// Register fuzzy json decoders to parse
+	// from string to num and vice versa
+	extra.RegisterFuzzyDecoders()
+}
+
 type AccessToken struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
@@ -155,7 +161,6 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 			}
 			*v = string(b)
 	default:
-		extra.RegisterFuzzyDecoders()
 		return json.NewDecoder(res.Body).Decode(&result)
 	}
 
