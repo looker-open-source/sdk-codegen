@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,5 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ExtensionProvider40 } from '@looker/extension-sdk-react'
 
-import { Playground } from './Playground'
-
-export const App = () => (
-  <ExtensionProvider40>
-    <Playground />
-  </ExtensionProvider40>
-)
+export * from './ExtensionProvider40'
