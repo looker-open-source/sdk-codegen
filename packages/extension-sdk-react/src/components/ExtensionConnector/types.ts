@@ -24,6 +24,7 @@
 
  */
 
+import type { ReactNode } from 'react'
 import type {
   ExtensionHostApi,
   ExtensionSDK,
@@ -121,6 +122,10 @@ export interface ExtensionProviderProps {
    * Set to -1 for no timeout.
    */
   chattyTimeout?: number
+  /**
+   * Children
+   */
+  children?: ReactNode
 }
 
 export interface ExtensionConnectorProps extends ExtensionProviderProps {

@@ -24,7 +24,6 @@
 
  */
 
-import type { ReactNode } from 'react'
 import React, { useState } from 'react'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
 import { SdkConnection } from '@looker/extension-sdk'
@@ -51,7 +50,6 @@ export const ExtensionContext2 = React.createContext<
 
 export interface ExtensionProvider2Props<T> extends ExtensionProviderProps {
   type: T
-  children?: ReactNode
 }
 
 /**
