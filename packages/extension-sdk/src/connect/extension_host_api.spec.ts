@@ -174,7 +174,7 @@ describe('extension_host_api tests', () => {
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
-      lookerVersion: '7.6.0',
+      lookerVersion: '22.8.0',
       hostUrl: 'https://self-signed.looker.com:9999',
       mountPoint: MountPoint.dashboardVisualization,
     }
@@ -184,7 +184,7 @@ describe('extension_host_api tests', () => {
       setInitialRoute,
       hostChangedRoute,
       visualizationDataReceivedCallback,
-      requiredLookerVersion: '>=7.6.0',
+      requiredLookerVersion: '>=22.8.0',
     })
     api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
@@ -194,6 +194,7 @@ describe('extension_host_api tests', () => {
       type: ExtensionNotificationType.VISUALIZATION_DATA,
       payload: { visConfig: {}, queryResponse: {} as RawVisQueryResponse },
     })
+    expect(api.visualizationSDK).toBeDefined()
     expect(visualizationDataReceivedCallback).toHaveBeenCalledWith({
       visConfig: {},
       queryResponse: {},
@@ -209,7 +210,7 @@ describe('extension_host_api tests', () => {
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
-      lookerVersion: '7.6.0',
+      lookerVersion: '22.8.0',
       hostUrl: 'https://self-signed.looker.com:9999',
       mountPoint: MountPoint.dashboardVisualization,
     }
@@ -219,7 +220,7 @@ describe('extension_host_api tests', () => {
       setInitialRoute,
       hostChangedRoute,
       tileHostDataChangedCallback,
-      requiredLookerVersion: '>=7.6.0',
+      requiredLookerVersion: '>=22.8.0',
     })
     api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
@@ -229,6 +230,7 @@ describe('extension_host_api tests', () => {
       type: ExtensionNotificationType.TILE_HOST_DATA,
       payload: { isEditing: true, isCrossFiltersEnabled: true },
     })
+    expect(api.tileSDK).toBeDefined()
     expect(tileHostDataChangedCallback).toHaveBeenCalledWith({
       isEditing: true,
       isCrossFiltersEnabled: true,
@@ -911,5 +913,15 @@ describe('extension_host_api tests', () => {
     await expect(hostApi.refreshContextData()).rejects.toThrowError(
       'Extension requires Looker version >=7.13, got 7.12'
     )
+  })
+
+  it('renders', async (done) => {
+    const hostApi = createHostApi()
+    await hostApi.rendered('Oh No!')
+    expect(sendSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: { failureMessage: 'Oh No!' },
+      type: 'RENDERED',
+    })
+    done()
   })
 })

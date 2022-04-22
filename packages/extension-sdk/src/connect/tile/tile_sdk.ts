@@ -32,7 +32,7 @@ import type {
   TileError,
   DrillMenuOptions,
   TriggerConfig,
-  CrossfilterOptions,
+  CrossFilterOptions,
   Filters,
   TileHostData,
 } from './types'
@@ -79,7 +79,7 @@ export class TileSDKImpl implements TileSDK {
     })
   }
 
-  toggleCrossFilter(options: CrossfilterOptions, event?: MouseEvent) {
+  toggleCrossFilter(options: CrossFilterOptions, event?: MouseEvent) {
     this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
       options,
       event: this.sanitizeEvent(event),
@@ -95,7 +95,7 @@ export class TileSDKImpl implements TileSDK {
   }
 
   updateFilters(filters: Filters) {
-    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
+    this.hostApi.send(ExtensionRequestType.TILE_UPDATE_FILTERS, {
       filters,
     })
   }

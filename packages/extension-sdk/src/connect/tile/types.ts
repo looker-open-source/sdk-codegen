@@ -85,7 +85,7 @@ export interface TileError {
   group: string
 }
 
-export interface CrossfilterOptions {
+export interface CrossFilterOptions {
   pivot: Pivot
   row: Row
 }
@@ -111,7 +111,7 @@ export interface TileSDK {
     event?: MouseEvent
   ) => void
   openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void
-  toggleCrossFilter: (options: CrossfilterOptions, event?: MouseEvent) => void
+  toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void
   runDashboard: () => void
   stopDashboard: () => void
   updateFilters: (filters: Filters) => void

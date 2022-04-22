@@ -51,7 +51,7 @@ jest.mock('@looker/extension-sdk', () => ({
   },
 }))
 
-describe('ExtensionProvider component', () => {
+describe('ExtensionConnector component', () => {
   let originalConsoleError: any
 
   const getContextData = () => {

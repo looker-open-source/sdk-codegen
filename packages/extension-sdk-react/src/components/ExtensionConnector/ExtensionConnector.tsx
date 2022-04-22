@@ -95,7 +95,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
       tileSDK.tileHostDataChanged(partialHostData)
       updateContextData({
         ...contextData,
-        tileHostData: contextData.tileHostData,
+        tileHostData: tileSDK.tileHostData,
       })
     }
   }
