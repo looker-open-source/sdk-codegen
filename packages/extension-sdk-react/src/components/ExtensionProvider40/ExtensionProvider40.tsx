@@ -24,7 +24,6 @@
 
  */
 
-import type { ReactNode } from 'react'
 import React, { useState } from 'react'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
 import { LookerExtensionSDK } from '@looker/extension-sdk'
@@ -47,9 +46,7 @@ export const ExtensionContext40 = React.createContext<ExtensionContextData40>(
   undefined as any // no one will ever see this undefined!
 )
 
-export interface ExtensionProvider40Props extends ExtensionProviderProps {
-  children?: ReactNode
-}
+export interface ExtensionProvider40Props extends ExtensionProviderProps {}
 
 /**
  * ExtensionProvider40 component. Provides access to the extension API and SDK (use
