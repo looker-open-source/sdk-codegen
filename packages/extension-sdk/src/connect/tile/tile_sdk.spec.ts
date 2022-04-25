@@ -94,22 +94,10 @@ describe('TileSDK', () => {
     expect(api.send).toBeCalledWith('TILE_CLEAR_ERRORS', { group: 'abc' })
   })
 
-  it('sends tigger message ', () => {
+  it('sends trigger message ', () => {
     const tileSdk = makeTileSdk()
     const config = [{ hello: 'world' }]
     const message = 'message1'
-    tileSdk.trigger(message, config, makeEvent(config))
-    expect(api.send).toBeCalledWith('TILE_TRIGGER', {
-      message,
-      config,
-      event: makeEvent(),
-    })
-  })
-
-  it('sends tigger message ', () => {
-    const tileSdk = makeTileSdk()
-    const message = 'message1'
-    const config = [{ hello: 'world' }]
     tileSdk.trigger(message, config, makeEvent(config))
     expect(api.send).toBeCalledWith('TILE_TRIGGER', {
       message,
