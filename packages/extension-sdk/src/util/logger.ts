@@ -32,3 +32,8 @@ export const logWarn = (message?: any, ...optionalParams: any[]) => {
   // eslint-disable-next-line no-console
   console.warn(message, optionalParams)
 }
+
+export const dummyExtensionSdk = () => {
+  // Force publish - to be deleted
+  return 'dummy'
+}

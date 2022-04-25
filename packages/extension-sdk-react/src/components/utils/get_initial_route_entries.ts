@@ -35,3 +35,8 @@ export const getInitialRouteEntries = (initialRouteData?: RouteData) => {
   }
   return initialEntries
 }
+
+export const dummyExtensionSdkReact = () => {
+  // Force publish - to be deleted
+  return 'dummy'
+}
