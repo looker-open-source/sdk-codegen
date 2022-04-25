@@ -41,70 +41,70 @@ import type {
 } from './types'
 
 class QueryResponseImpl implements QueryResponse {
-  queryResponse?: RawVisQueryResponse
+  _queryResponse?: RawVisQueryResponse
 
   constructor(queryResponse?: RawVisQueryResponse) {
-    this.queryResponse = queryResponse
+    this._queryResponse = queryResponse
   }
 
   update(queryResponse: RawVisQueryResponse) {
-    this.queryResponse = queryResponse
+    this._queryResponse = queryResponse
   }
 
   get fieldMeasures(): Measure[] {
-    return this.queryResponse?.fields?.measures || []
+    return this._queryResponse?.fields?.measures || []
   }
 
   get fieldDimensions(): Dimension[] {
-    return this.queryResponse?.fields?.dimensions || []
+    return this._queryResponse?.fields?.dimensions || []
   }
 
   get fieldTableCalculations(): TableCalculation[] {
-    return this.queryResponse?.fields?.table_calculations || []
+    return this._queryResponse?.fields?.table_calculations || []
   }
 
   get fieldPivots(): PivotConfig[] {
-    return this.queryResponse?.fields?.pivots || []
+    return this._queryResponse?.fields?.pivots || []
   }
 
   get fieldMeasureLike(): Measure[] {
-    return this.queryResponse?.fields?.measure_like || []
+    return this._queryResponse?.fields?.measure_like || []
   }
 
   get fieldDimensionLike(): Dimension[] {
-    return this.queryResponse?.fields?.dimension_like || []
+    return this._queryResponse?.fields?.dimension_like || []
   }
 
   get data(): Row[] {
-    return this.queryResponse?.data || []
+    return this._queryResponse?.data || []
   }
 }
 
 class VisualizationConfigImpl implements VisualizationConfig {
-  visConfig?: RawVisConfig
+  _visConfig?: RawVisConfig
 
   constructor(visConfig?: RawVisConfig) {
-    this.visConfig = visConfig
+    this._visConfig = visConfig
   }
 
   update(visConfig: RawVisConfig) {
-    this.visConfig = visConfig
+    this._visConfig = visConfig
   }
 
   get queryFieldMeasures(): Measure[] {
-    return this.visConfig?.query_fields?.measures || []
+    return this._visConfig?.query_fields?.measures || []
   }
 
   get queryFieldDimensions(): Dimension[] {
-    return this.visConfig?.query_fields?.dimensions || []
+    return this._visConfig?.query_fields?.dimensions || []
   }
 
   get queryFieldTableCalculations(): TableCalculation[] {
-    return this.visConfig?.query_fields?.table_calculations || []
+    return this._visConfig?.query_fields?.table_calculations || []
   }
 
   get queryFieldPivots(): PivotConfig[] {
-    return this.visConfig?.query_fields?.pivots || []
+    return this._visConfig?.query_fields?.pivots || []
   }
 }
 
