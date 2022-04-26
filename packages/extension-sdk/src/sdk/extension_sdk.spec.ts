@@ -91,6 +91,7 @@ describe('extension_sdk tests', () => {
     hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         extensionId: 'a::b',
         route: '/sandbox',
         lookerVersion: '6.25.0',

@@ -24,6 +24,7 @@
 
  */
 
+import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors'
 import type { ExtensionHostApiImpl } from '../extension_host_api'
 import { ExtensionRequestType } from '../types'
 import type { Row } from '../tile'
@@ -119,17 +120,25 @@ export class VisualizationSDKImpl implements VisualizationSDK {
   }
 
   updateVisData(visualizationData: RawVisualizationData) {
-    this.visualizationData = visualizationData
-    if (this._visConfig) {
-      this._visConfig.update(this.visualizationData.visConfig)
-    }
-    if (this._queryResponse) {
-      this._queryResponse.update(this.visualizationData.queryResponse)
+    // Ignore update messages if dashboard mounts not supported.
+    // Should never happen.
+    if (this.hostApi.isDashboardMountSupported) {
+      this.visualizationData = visualizationData
+      if (this._visConfig) {
+        this._visConfig.update(this.visualizationData.visConfig)
+      }
+      if (this._queryResponse) {
+        this._queryResponse.update(this.visualizationData.queryResponse)
+      }
     }
   }
 
   configureVisualization(options: RawVisConfig): void {
-    this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   get visConfig(): VisualizationConfig {

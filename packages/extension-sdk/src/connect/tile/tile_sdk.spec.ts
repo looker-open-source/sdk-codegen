@@ -32,12 +32,17 @@ describe('TileSDK', () => {
   let api: ExtensionHostApiImpl
   beforeEach(() => {
     api = {
+      isDashboardMountSupported: true,
       send: jest.fn(),
       sendAndReceive: jest.fn(),
     } as unknown as ExtensionHostApiImpl
   })
 
-  const makeTileSdk = () => {
+  const makeTileSdk = (isDashboardMountSupported = true) => {
+    api = {
+      ...api,
+      isDashboardMountSupported,
+    } as unknown as ExtensionHostApiImpl
     const tileSdk = new TileSDKImpl(api)
     tileSdk.tileHostDataChanged({
       isEditing: true,
@@ -76,6 +81,23 @@ describe('TileSDK', () => {
     expect(isEditing).toEqual(true)
     expect(dashboardRunState).toEqual('RUNNING')
     expect(filters).toEqual({ hello: 'world' })
+  })
+
+  it('does not update host data when dashboard tile mount not supported', () => {
+    api = {
+      ...api,
+      isDashboardMountSupported: false,
+    } as unknown as ExtensionHostApiImpl
+    const tileSdk = new TileSDKImpl(api)
+    tileSdk.tileHostDataChanged({
+      isEditing: true,
+      dashboardRunState: DashboardRunState.RUNNING,
+      filters: { hello: 'world' },
+    })
+    const { isEditing, dashboardRunState, filters } = tileSdk.tileHostData
+    expect(isEditing).toEqual(false)
+    expect(dashboardRunState).toEqual('UNKNOWN')
+    expect(filters).toEqual({})
   })
 
   it('sends add errors message ', () => {
@@ -152,4 +174,25 @@ describe('TileSDK', () => {
     tileSdk.openScheduleDialog()
     expect(api.sendAndReceive).toBeCalledWith('TILE_OPEN_SCHEDULE_DIALOG', {})
   })
+
+  it.each`
+    method
+    ${'addErrors'}
+    ${'clearErrors'}
+    ${'trigger'}
+    ${'openDrillMenu'}
+    ${'toggleCrossFilter'}
+    ${'runDashboard'}
+    ${'stopDashboard'}
+    ${'updateFilters'}
+    ${'openScheduleDialog'}
+  `(
+    '$method method throws error when dashboard mount not supported',
+    ({ method }) => {
+      const tileSdk = makeTileSdk(false)
+      expect(() => tileSdk[method]()).toThrow(
+        'Mounting dashboards in extensions is not supported'
+      )
+    }
+  )
 })

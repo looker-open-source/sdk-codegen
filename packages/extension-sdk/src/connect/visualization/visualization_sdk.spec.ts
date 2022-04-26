@@ -35,6 +35,7 @@ describe('VisualizationSDK', () => {
   let api: ExtensionHostApiImpl
   beforeEach(() => {
     api = {
+      isDashboardMountSupported: true,
       send: jest.fn(),
       sendAndReceive: jest.fn(),
     } as unknown as ExtensionHostApiImpl
@@ -115,5 +116,40 @@ describe('VisualizationSDK', () => {
     expect(sdk.queryResponse.fieldDimensionLike).toEqual(
       queryResponse.fields.dimension_like
     )
+  })
+
+  it('does not update host data when dashboard tile mount not supported', () => {
+    api = {
+      ...api,
+      isDashboardMountSupported: false,
+    } as unknown as ExtensionHostApiImpl
+    const sdk = new VisualizationSDKImpl(api)
+    expect(sdk.visualizationData).toBeUndefined()
+    const visConfig: RawVisConfig = {
+      query_fields: {
+        measures: [{ a: 'a' }],
+        dimensions: [{ a: 'b' }],
+        table_calculations: [{ a: 'c' }],
+        pivots: [{ a: 'd' }],
+      },
+    }
+    const queryResponse: RawVisQueryResponse = {
+      data: [{ abc: { value: 'xyz' } }],
+      fields: {
+        measures: [{ a: 'a' }],
+        dimensions: [{ a: 'b' }],
+        table_calculations: [{ a: 'c' }],
+        pivots: [{ a: 'd' }],
+        measure_like: [{ a: 'e' }],
+        dimension_like: [{ a: 'f' }],
+      },
+      pivots: [],
+    }
+    const visualizationData: RawVisualizationData = {
+      visConfig,
+      queryResponse,
+    }
+    sdk.updateVisData(visualizationData)
+    expect(sdk.visualizationData).toBeUndefined()
   })
 })

@@ -95,6 +95,7 @@ describe('connect_extension_host tests', () => {
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         lookerVersion: '7.14.0',
         hostUrl: 'https://self-signed.looker.com:9999',
         hostOrigin: 'https://self-signed.looker.com:9999',
@@ -126,6 +127,7 @@ describe('connect_extension_host tests', () => {
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         route: '/',
         routeState: { hello: 'world' },
         lookerVersion: '7.14.0',
@@ -156,6 +158,7 @@ describe('connect_extension_host tests', () => {
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         route: '/',
         routeState: { hello: 'world' },
         lookerVersion: '7.14.0',

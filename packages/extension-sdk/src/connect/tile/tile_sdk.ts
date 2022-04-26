@@ -25,6 +25,7 @@
  */
 
 import type { MouseEvent } from 'react'
+import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors'
 import { ExtensionRequestType } from '../types'
 import type { ExtensionHostApiImpl } from '../extension_host_api'
 import type {
@@ -53,58 +54,98 @@ export class TileSDKImpl implements TileSDK {
   }
 
   tileHostDataChanged(partialHostData: Partial<TileHostData>) {
-    this.tileHostData = { ...this.tileHostData, ...partialHostData }
+    // Ignore update messages if dashboard mounts not supported.
+    // Should never happen.
+    if (this.hostApi.isDashboardMountSupported) {
+      this.tileHostData = { ...this.tileHostData, ...partialHostData }
+    }
   }
 
   addErrors(...errors: TileError[]) {
-    this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, { errors })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, { errors })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   clearErrors(group?: string) {
-    this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   trigger(message: string, config: TriggerConfig[], event?: MouseEvent) {
-    this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, {
-      message,
-      config,
-      event: this.sanitizeEvent(event),
-    })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, {
+        message,
+        config,
+        event: this.sanitizeEvent(event),
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   openDrillMenu(options: DrillMenuOptions, event?: MouseEvent) {
-    this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, {
-      options,
-      event: this.sanitizeEvent(event),
-    })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, {
+        options,
+        event: this.sanitizeEvent(event),
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   toggleCrossFilter(options: CrossFilterOptions, event?: MouseEvent) {
-    this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
-      options,
-      event: this.sanitizeEvent(event),
-    })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
+        options,
+        event: this.sanitizeEvent(event),
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   runDashboard() {
-    this.hostApi.send(ExtensionRequestType.TILE_RUN_DASHBOARD, {})
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_RUN_DASHBOARD, {})
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   stopDashboard() {
-    this.hostApi.send(ExtensionRequestType.TILE_STOP_DASHBOARD, {})
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_STOP_DASHBOARD, {})
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   updateFilters(filters: Filters) {
-    this.hostApi.send(ExtensionRequestType.TILE_UPDATE_FILTERS, {
-      filters,
-    })
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_UPDATE_FILTERS, {
+        filters,
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   openScheduleDialog() {
-    return this.hostApi.sendAndReceive(
-      ExtensionRequestType.TILE_OPEN_SCHEDULE_DIALOG,
-      {}
-    )
+    if (this.hostApi.isDashboardMountSupported) {
+      return this.hostApi.sendAndReceive(
+        ExtensionRequestType.TILE_OPEN_SCHEDULE_DIALOG,
+        {}
+      )
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
   }
 
   sanitizeEvent(event?: MouseEvent) {

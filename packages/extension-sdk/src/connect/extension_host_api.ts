@@ -83,6 +83,14 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     this.tileHostDataChangedCallback = tileHostDataChangedCallback
   }
 
+  get isDashboardMountSupported(): boolean {
+    return (
+      !!this._lookerHostData?.extensionDashboardTileEnabled &&
+      (this.lookerHostData?.mountPoint === MountPoint.dashboardTile ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardVisualization)
+    )
+  }
+
   get visualizationSDK(): VisualizationSDK {
     if (!this._visualizationSDK) {
       this._visualizationSDK = new VisualizationSDKImpl(this)

@@ -204,6 +204,7 @@ export interface UpdateLocationRequest {
 }
 
 export interface ExtensionHostApi extends ExtensionSDK {
+  isDashboardMountSupported: boolean
   handleNotification(
     message: ExtensionNotification
   ): ExtensionInitializationResponse | undefined
@@ -434,6 +435,11 @@ export interface LookerHostData {
    * <code>Looker >=22.8</code>
    */
   isRendering?: boolean
+  /**
+   * When true the dashboard tile has been enabled.
+   * <code>Looker >=22.8</code>
+   */
+  extensionDashboardTileEnabled: boolean
 }
 
 /**
@@ -858,4 +864,12 @@ export interface ExtensionSDK {
    * Tile API.
    */
   tileSDK: TileSDK
+
+  /**
+   * Returns true if dashboard mount is supported. There are two
+   * checks involved:
+   * 1. The extension mount point is configured correctly
+   * 2. The Looker host system supports it.
+   */
+  isDashboardMountSupported: boolean
 }

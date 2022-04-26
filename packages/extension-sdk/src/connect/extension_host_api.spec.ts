@@ -74,6 +74,7 @@ describe('extension_host_api tests', () => {
     const resp = hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         lookerVersion,
         extensionId: 'ks::ks',
         route: '/sandbox',
@@ -105,6 +106,7 @@ describe('extension_host_api tests', () => {
     const setInitialRoute = jest.fn()
     const initializedCallback = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: false,
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
@@ -135,6 +137,7 @@ describe('extension_host_api tests', () => {
     const initializedCallback = jest.fn()
     const hostChangedRoute = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: false,
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
@@ -171,6 +174,7 @@ describe('extension_host_api tests', () => {
     const hostChangedRoute = jest.fn()
     const visualizationDataReceivedCallback = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: true,
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
@@ -207,6 +211,7 @@ describe('extension_host_api tests', () => {
     const hostChangedRoute = jest.fn()
     const tileHostDataChangedCallback = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: true,
       extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },

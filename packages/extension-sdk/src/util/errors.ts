@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,6 @@
  SOFTWARE.
 
  */
-
-import * as H from 'history'
-import type { RouteData } from '../ExtensionConnector/types'
-
-export const getInitialRouteEntries = (initialRouteData?: RouteData) => {
-  let initialEntries: H.LocationDescriptor[] | undefined
-  if (initialRouteData) {
-    const { route, routeState } = initialRouteData
-    initialEntries = [{ ...H.parsePath(route), state: routeState }]
-  }
-  return initialEntries
-}
+export const NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR = new Error(
+  'Mounting dashboards in extensions is not supported'
+)
