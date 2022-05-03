@@ -1217,7 +1217,7 @@ class Looker31SDK(api_methods.APIMethods):
         body: mdls.WelcomeEmailTest,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.WelcomeEmailTest:
-        """Send a test welcome email to the currently logged in user with the supplied content """
+        """Send a test welcome email to the currently logged in user with the supplied content"""
         response = cast(
             mdls.WelcomeEmailTest,
             self.put(
@@ -2269,8 +2269,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # Creates a new dashboard object and returns the details of the newly created dashboard.
     #
-    # `Title`, `user_id`, and `space_id` are all required fields.
-    # `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+    # `Title` and `space_id` are required fields.
+    # `Space_id` must contain the id of an existing space.
     # A dashboard's `title` must be unique within the space in which it resides.
     #
     # If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2361,10 +2361,6 @@ class Looker31SDK(api_methods.APIMethods):
         page: Optional[int] = None,
         # Results per page.
         per_page: Optional[int] = None,
-        # Number of results to return. (used with offset and takes priority over page and per_page)
-        limit: Optional[int] = None,
-        # Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
-        offset: Optional[int] = None,
         # One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
@@ -2393,8 +2389,6 @@ class Looker31SDK(api_methods.APIMethods):
                     "fields": fields,
                     "page": page,
                     "per_page": per_page,
-                    "limit": limit,
-                    "offset": offset,
                     "sorts": sorts,
                     "filter_or": filter_or,
                 },
@@ -2779,6 +2773,8 @@ class Looker31SDK(api_methods.APIMethods):
         body: mdls.WriteDashboardElement,
         # Requested fields.
         fields: Optional[str] = None,
+        # Apply relevant filters on dashboard to this tile
+        apply_filters: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.DashboardElement:
         """Create DashboardElement"""
@@ -2787,7 +2783,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.post(
                 path="/dashboard_elements",
                 structure=mdls.DashboardElement,
-                query_params={"fields": fields},
+                query_params={"fields": fields, "apply_filters": apply_filters},
                 body=body,
                 transport_options=transport_options,
             ),
@@ -3706,9 +3702,9 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
-        # Requested page.
+        # Return only page N of paginated results
         page: Optional[int] = None,
-        # Results per page.
+        # Return N rows of data per page
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
@@ -3959,9 +3955,9 @@ class Looker31SDK(api_methods.APIMethods):
         group_id: int,
         # Requested fields.
         fields: Optional[str] = None,
-        # Requested page.
+        # Return only page N of paginated results
         page: Optional[int] = None,
-        # Results per page.
+        # Return N rows of data per page
         per_page: Optional[int] = None,
         # Fields to sort by.
         sorts: Optional[str] = None,
@@ -4401,7 +4397,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /homepage_items/{homepage_item_id} -> str
     def delete_homepage_item(
         self,
-        # Id of homepage_item
+        # Id of homepage item
         homepage_item_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -4515,7 +4511,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /homepage_sections/{homepage_section_id} -> str
     def delete_homepage_section(
         self,
-        # Id of homepage_section
+        # Id of homepage section
         homepage_section_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -4606,7 +4602,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /integration_hubs/{integration_hub_id} -> mdls.IntegrationHub
     def integration_hub(
         self,
-        # Id of Integration Hub
+        # Id of integration_hub
         integration_hub_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -4631,7 +4627,7 @@ class Looker31SDK(api_methods.APIMethods):
     # PATCH /integration_hubs/{integration_hub_id} -> mdls.IntegrationHub
     def update_integration_hub(
         self,
-        # Id of Integration Hub
+        # Id of integration_hub
         integration_hub_id: int,
         body: mdls.WriteIntegrationHub,
         # Requested fields.
@@ -4928,10 +4924,6 @@ class Looker31SDK(api_methods.APIMethods):
         page: Optional[int] = None,
         # Results per page.
         per_page: Optional[int] = None,
-        # Number of results to return. (used with offset and takes priority over page and per_page)
-        limit: Optional[int] = None,
-        # Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
-        offset: Optional[int] = None,
         # One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
         sorts: Optional[str] = None,
         # Combine given search criteria in a boolean OR expression
@@ -4958,8 +4950,6 @@ class Looker31SDK(api_methods.APIMethods):
                     "fields": fields,
                     "page": page,
                     "per_page": per_page,
-                    "limit": limit,
-                    "offset": offset,
                     "sorts": sorts,
                     "filter_or": filter_or,
                 },
@@ -6643,11 +6633,11 @@ class Looker31SDK(api_methods.APIMethods):
     # ```ruby
     # query_params =
     # {
-    #   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+    #   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
     #   :"f[category.name]" => "socks",
-    #   :sorts => "products.count desc 0",
-    #   :limit => "500",
-    #   :query_timezone => "America/Los_Angeles"
+    #   sorts: "products.count desc 0",
+    #   limit: "500",
+    #   query_timezone: "America/Los_Angeles"
     # }
     # response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
     #
@@ -7392,7 +7382,7 @@ class Looker31SDK(api_methods.APIMethods):
     # PATCH /permission_sets/{permission_set_id} -> mdls.PermissionSet
     def update_permission_set(
         self,
-        # id of permission set
+        # Id of permission set
         permission_set_id: int,
         body: mdls.WritePermissionSet,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -7670,9 +7660,9 @@ class Looker31SDK(api_methods.APIMethods):
     # PUT /roles/{role_id}/groups -> Sequence[mdls.Group]
     def set_role_groups(
         self,
-        # Id of Role
+        # id of role
         role_id: int,
-        body: Sequence[int],
+        body: Sequence[str],
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Group]:
         """Update Role Groups"""
@@ -7692,7 +7682,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /roles/{role_id}/users -> Sequence[mdls.User]
     def role_users(
         self,
-        # id of user
+        # id of role
         role_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -7722,7 +7712,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # id of role
         role_id: int,
-        body: Sequence[int],
+        body: Sequence[str],
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.User]:
         """Update Role Users"""
@@ -9412,7 +9402,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def user_credentials_email(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9435,7 +9425,7 @@ class Looker31SDK(api_methods.APIMethods):
     # POST /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def create_user_credentials_email(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         body: mdls.WriteCredentialsEmail,
         # Requested fields.
@@ -9460,7 +9450,7 @@ class Looker31SDK(api_methods.APIMethods):
     # PATCH /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def update_user_credentials_email(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         body: mdls.WriteCredentialsEmail,
         # Requested fields.
@@ -9485,7 +9475,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_email -> str
     def delete_user_credentials_email(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9505,7 +9495,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def user_credentials_totp(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9528,7 +9518,7 @@ class Looker31SDK(api_methods.APIMethods):
     # POST /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def create_user_credentials_totp(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: Optional[mdls.CredentialsTotp] = None,
@@ -9554,7 +9544,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_totp -> str
     def delete_user_credentials_totp(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9574,7 +9564,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_ldap -> mdls.CredentialsLDAP
     def user_credentials_ldap(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9597,7 +9587,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_ldap -> str
     def delete_user_credentials_ldap(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9617,7 +9607,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_google -> mdls.CredentialsGoogle
     def user_credentials_google(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9640,7 +9630,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_google -> str
     def delete_user_credentials_google(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9660,7 +9650,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_saml -> mdls.CredentialsSaml
     def user_credentials_saml(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9683,7 +9673,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_saml -> str
     def delete_user_credentials_saml(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9703,7 +9693,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_oidc -> mdls.CredentialsOIDC
     def user_credentials_oidc(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9726,7 +9716,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_oidc -> str
     def delete_user_credentials_oidc(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9771,9 +9761,9 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> str
     def delete_user_credentials_api3(
         self,
-        # id of user
+        # Id of user
         user_id: int,
-        # id of API 3 Credential
+        # Id of API 3 Credential
         credentials_api3_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9793,7 +9783,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_api3 -> Sequence[mdls.CredentialsApi3]
     def all_user_credentials_api3s(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9816,7 +9806,7 @@ class Looker31SDK(api_methods.APIMethods):
     # POST /users/{user_id}/credentials_api3 -> mdls.CredentialsApi3
     def create_user_credentials_api3(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # WARNING: no writeable properties found for POST, PUT, or PATCH
         body: Optional[mdls.CredentialsApi3] = None,
@@ -9867,9 +9857,9 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> str
     def delete_user_credentials_embed(
         self,
-        # id of user
+        # Id of user
         user_id: int,
-        # id of Embedding Credential
+        # Id of Embedding Credential
         credentials_embed_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9889,7 +9879,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9912,7 +9902,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/credentials_looker_openid -> mdls.CredentialsLookerOpenid
     def user_credentials_looker_openid(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -9935,7 +9925,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/credentials_looker_openid -> str
     def delete_user_credentials_looker_openid(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -9980,9 +9970,9 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /users/{user_id}/sessions/{session_id} -> str
     def delete_user_session(
         self,
-        # id of user
+        # Id of user
         user_id: int,
-        # id of Web Login Session
+        # Id of Web Login Session
         session_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:
@@ -10002,7 +9992,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/sessions -> Sequence[mdls.Session]
     def all_user_sessions(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -10058,7 +10048,7 @@ class Looker31SDK(api_methods.APIMethods):
     # GET /users/{user_id}/roles -> Sequence[mdls.Role]
     def user_roles(
         self,
-        # id of user
+        # Id of user
         user_id: int,
         # Requested fields.
         fields: Optional[str] = None,
@@ -10086,9 +10076,9 @@ class Looker31SDK(api_methods.APIMethods):
     # PUT /users/{user_id}/roles -> Sequence[mdls.Role]
     def set_user_roles(
         self,
-        # id of user
+        # Id of user
         user_id: int,
-        body: Sequence[int],
+        body: Sequence[str],
         # Requested fields.
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -10320,7 +10310,7 @@ class Looker31SDK(api_methods.APIMethods):
     # DELETE /user_attributes/{user_attribute_id} -> str
     def delete_user_attribute(
         self,
-        # Id of user_attribute
+        # Id of user attribute
         user_attribute_id: int,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> str:

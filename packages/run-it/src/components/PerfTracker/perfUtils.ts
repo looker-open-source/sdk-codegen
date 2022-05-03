@@ -139,7 +139,25 @@ export class LoadTimes implements IResourceLoadTimes {
 export class PerfTimings {
   private _full = false
   private _bufferSize = 0
-  public static supported = performance !== undefined
+  private static _supported: boolean | undefined = undefined
+
+  /** Are performance timings supported in this runtime? */
+  public static get supported() {
+    if (PerfTimings._supported === undefined) {
+      // This gyration is necessary to avoid IDEA-based exceptions about performance being undefined,
+      // which it may be, but this now throws up in IDEA
+      try {
+        PerfTimings._supported = performance !== undefined
+      } catch {
+        PerfTimings._supported = false
+      }
+    }
+    return PerfTimings._supported
+  }
+
+  public static set supported(value: boolean) {
+    PerfTimings._supported = value
+  }
 
   constructor() {
     if (PerfTimings.supported) {

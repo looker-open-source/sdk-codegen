@@ -104,13 +104,13 @@ function* addUsersSaga(action: ReturnType<typeof addUsers>): SagaIterator {
       if (!user.credentials_email) {
         let result = yield call(
           [lookerSdk, lookerSdk.create_user_credentials_email],
-          user.id as number,
+          user.id as string,
           { email }
         )
         yield call([lookerSdk, lookerSdk.ok], result)
         result = yield call(
           [lookerSdk, lookerSdk.send_user_credentials_email_password_reset],
-          user.id as number
+          user.id as string
         )
         yield call([lookerSdk, lookerSdk.ok], result)
       }
@@ -118,14 +118,14 @@ function* addUsersSaga(action: ReturnType<typeof addUsers>): SagaIterator {
       if (!user.credentials_api3) {
         const result = yield call(
           [lookerSdk, lookerSdk.create_user_credentials_api3],
-          user.id as number
+          user.id as string
         )
         yield call([lookerSdk, lookerSdk.ok], result)
       }
 
       const result = yield call(
         [lookerSdk, lookerSdk.add_group_user],
-        hackathonGroup.id as number,
+        hackathonGroup.id as string,
         { user_id: user.id }
       )
       yield call([lookerSdk, lookerSdk.ok], result)
@@ -176,7 +176,7 @@ function* createUpdateEnableUserByEmail(
     ) {
       result = yield call(
         [lookerSdk, lookerSdk.update_user],
-        lookerUser.id as number,
+        lookerUser.id as string,
         fieldsToUpdate
       )
       lookerUser = yield call([lookerSdk, lookerSdk.ok], result)
@@ -225,20 +225,20 @@ function* setupHackathonGroup(hackathonRole: IRole): SagaIterator {
 
     result = yield call(
       [lookerSdk, lookerSdk.role_groups],
-      hackathonRole.id as number
+      hackathonRole.id as string
     )
     const oldRoleGroups: IGroup[] = yield call(
       [lookerSdk, lookerSdk.ok],
       result
     )
 
-    const newRoleGroupIds: number[] = oldRoleGroups
-      .map((g) => g.id as number)
-      .concat(newGroup.id as number)
+    const newRoleGroupIds: string[] = oldRoleGroups
+      .map((g) => g.id as string)
+      .concat(newGroup.id as string)
 
     result = yield call(
       [lookerSdk, lookerSdk.set_role_groups],
-      hackathonRole.id as number,
+      hackathonRole.id as string,
       newRoleGroupIds
     )
     yield call([lookerSdk, lookerSdk.ok], result)
@@ -266,7 +266,7 @@ function* setupHackathonGroup(hackathonRole: IRole): SagaIterator {
 
 function* setUserHackathonAttribute(user: IUser): SagaIterator {
   const lookerSdk = getCore40SDK()
-  let hackathonAttrId: number = yield call(
+  let hackathonAttrId: string = yield call(
     getUserAttributeId,
     HACKATHON_USER_ATTR_NAME
   )
@@ -281,20 +281,20 @@ function* setUserHackathonAttribute(user: IUser): SagaIterator {
       [lookerSdk, lookerSdk.ok],
       result
     )
-    hackathonAttrId = newAttribute.id as number
+    hackathonAttrId = newAttribute.id as string
   }
 
   const { _id: currentHackathonId } = yield select(getCurrentHackathonState)
   const result = yield call(
     [lookerSdk, lookerSdk.set_user_attribute_user_value],
-    user.id as number,
+    user.id as string,
     hackathonAttrId,
     { value: currentHackathonId }
   )
   yield call([lookerSdk, lookerSdk.ok], result)
 }
 
-function* getUserAttributeId(name: string): SagaIterator<number | undefined> {
+function* getUserAttributeId(name: string): SagaIterator<string | undefined> {
   const lookerSdk = getCore40SDK()
 
   const result = yield call([lookerSdk, lookerSdk.all_user_attributes], {

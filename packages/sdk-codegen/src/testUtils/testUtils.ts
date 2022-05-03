@@ -35,6 +35,10 @@ interface IKeyAny {
 
 const utf8 = 'utf-8'
 
+/**
+ * Convert a spec file into an APIModel
+ * @param specFile name of spec file
+ */
 export const specFromFile = (specFile: string): ApiModel => {
   const specContent = fs.readFileSync(specFile, { encoding: utf8 })
   return ApiModel.fromString(specContent)
@@ -44,25 +48,45 @@ export const specFromFile = (specFile: string): ApiModel => {
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
+  /** the openApi.json snapshot in the test/ dir */
   apiTestModel: ApiModel
+  /** root dir of this repository */
   rootPath: string
+  /** <rootPath>/test dir */
   testPath: string
+  /** test/data.yml.json file */
   dataFile: string
+  /** root looker.ini file or LOOKERSDK_INI value */
   localIni: string
+  /** base_url from looker.ini section */
   baseUrl: string
+  /** timeout from looker.ini section */
   timeout: number
+  /** contents of test/data.yml.json */
   testData: any
+  /** ini file configured in testData */
   testIni: string
+  /** contents of local ini */
   configContents: string
+  /** the APIConfig version of local ini */
   config: IKeyAny
+  /** [Looker] section of local ini */
   section: IKeyAny
+  /** APIConfig of the test ini */
   testConfig: IKeyAny
+  /** [Looker] section of test ini */
   testSection: IKeyAny
 }
 
 const homeToRoost = '../../../../'
 
+/** fully resolved root dir of the repository */
 export const getRootPath = (): string => path.join(__dirname, homeToRoost)
+
+/**
+ * Fully resolved path to a file based from the root path
+ * @param fileName to path. It can start with folders
+ */
 export const rootFile = (fileName = ''): string =>
   path.join(getRootPath(), fileName)
 

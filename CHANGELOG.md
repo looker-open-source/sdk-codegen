@@ -1,5 +1,34 @@
 # Changelog
 
+### [2.3.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.1...sdk-codegen-all-v2.3.2) (2022-04-07)
+
+
+### Bug Fixes
+
+* encodeParam doc tweak to republish ([#1050](https://www.github.com/looker-open-source/sdk-codegen/issues/1050)) ([512bc81](https://www.github.com/looker-open-source/sdk-codegen/commit/512bc81865a9f5cbf8fafb83f41dfc2e8629ff3b))
+
+### [2.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.0...sdk-codegen-all-v2.3.1) (2022-04-07)
+
+
+### Bug Fixes
+
+* encodeParam returned [object Object] for object types ([#1047](https://www.github.com/looker-open-source/sdk-codegen/issues/1047)) ([eccc1db](https://www.github.com/looker-open-source/sdk-codegen/commit/eccc1dbb3d64f36e6a06d71a1c3da37d972abd3a))
+
+## [2.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.2.0...sdk-codegen-all-v2.3.0) (2022-03-24)
+
+
+### Features
+
+* Looker 22.4 API updates ([#1024](https://www.github.com/looker-open-source/sdk-codegen/issues/1024)) ([19bdd61](https://www.github.com/looker-open-source/sdk-codegen/commit/19bdd612366a44bb74d793544df0f9d4babfb099))
+* Revert "Update release-please version, add r-p config for Go, add Go publish CI ([#1030](https://www.github.com/looker-open-source/sdk-codegen/issues/1030))" ([#1035](https://www.github.com/looker-open-source/sdk-codegen/issues/1035)) ([8f79913](https://www.github.com/looker-open-source/sdk-codegen/commit/8f79913c70dc37c0798dc5b28006b41c13a3ce9e))
+* Update release-please version, add r-p config for Go, add Go publish CI ([#1030](https://www.github.com/looker-open-source/sdk-codegen/issues/1030)) ([e597978](https://www.github.com/looker-open-source/sdk-codegen/commit/e597978f0c27eb5818e97e3c9426704948e0a6e6))
+
+
+### Bug Fixes
+
+* declaration miner (internal utility) ([#1025](https://www.github.com/looker-open-source/sdk-codegen/issues/1025)) ([9b987b2](https://www.github.com/looker-open-source/sdk-codegen/commit/9b987b2c2f24e4a43d6ff25921c5f46804b7702a))
+* Make Go SDK parse response by result type ([#1021](https://www.github.com/looker-open-source/sdk-codegen/issues/1021)) ([c1675ab](https://www.github.com/looker-open-source/sdk-codegen/commit/c1675abb20593467b210decc212902e0110db270))
+
 ## [2.2.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.1.0...sdk-codegen-all-v2.2.0) (2022-03-04)
 
 

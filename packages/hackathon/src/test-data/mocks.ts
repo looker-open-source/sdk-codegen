@@ -49,21 +49,21 @@ export const noSheetData = {} as SheetData
 export const mockTabTable = {} as ITabTable
 
 export const mockUser = new Hacker(mockLookerSDK)
-mockUser.user = { id: 1, first_name: 'Ordinary', last_name: 'Joe' }
+mockUser.user = { id: '1', first_name: 'Ordinary', last_name: 'Joe' }
 mockUser.assignRights()
 
 export const mockStaff = new Hacker(mockLookerSDK)
-mockStaff.user = { id: 2, first_name: 'Looker', last_name: 'Staff' }
+mockStaff.user = { id: '2', first_name: 'Looker', last_name: 'Staff' }
 mockStaff.roles.add('staff')
 mockStaff.assignRights()
 
 export const mockJudge = new Hacker(mockLookerSDK)
-mockJudge.user = { id: 3, first_name: 'Looker', last_name: 'Judge' }
+mockJudge.user = { id: '3', first_name: 'Looker', last_name: 'Judge' }
 mockJudge.roles.add('judge')
 mockJudge.assignRights()
 
 export const mockAdmin = new Hacker(mockLookerSDK)
-mockJudge.user = { id: 4, first_name: 'Looker', last_name: 'Admin' }
+mockJudge.user = { id: '4', first_name: 'Looker', last_name: 'Admin' }
 mockAdmin.roles.add('admin')
 mockAdmin.assignRights()
 
@@ -76,14 +76,14 @@ mockAdmin.assignRights()
 // export const mockHackathonData = mockTabs.hackathons
 // export const mockProjectData = mockTabs.projects
 
-export const mockAHacker = (id: number): Hacker => {
+export const mockAHacker = (id: string): Hacker => {
   const result = new Hacker(mockLookerSDK)
   result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' }
   result.assignRights()
   return result
 }
 
-export const mockAJudge = (id: number): Hacker => {
+export const mockAJudge = (id: string): Hacker => {
   const result = mockAHacker(id)
   result.roles.add('judge')
   result.assignRights()

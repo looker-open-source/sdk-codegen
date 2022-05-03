@@ -25,7 +25,7 @@
  */
 
 /**
- * 443 API methods
+ * 438 API methods
  */
 
 
@@ -100,9 +100,9 @@ open class LookerSDK: APIMethods {
      */
     public func get_alert(
         /**
-         * @param {Int64} alert_id ID of an alert
+         * @param {String} alert_id ID of an alert
          */
-        _ alert_id: Int64,
+        _ alert_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Alert, SDKError> {
         let path_alert_id = encodeParam(alert_id)
@@ -119,9 +119,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_alert(
         /**
-         * @param {Int64} alert_id ID of an alert
+         * @param {String} alert_id ID of an alert
          */
-        _ alert_id: Int64,
+        _ alert_id: String,
         /**
          * @param {WriteAlert} body
          */
@@ -142,9 +142,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_alert_field(
         /**
-         * @param {Int64} alert_id ID of an alert
+         * @param {String} alert_id ID of an alert
          */
-        _ alert_id: Int64,
+        _ alert_id: String,
         /**
          * @param {AlertPatch} body
          */
@@ -163,9 +163,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_alert(
         /**
-         * @param {Int64} alert_id ID of an alert
+         * @param {String} alert_id ID of an alert
          */
-        _ alert_id: Int64,
+        _ alert_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Voidable, SDKError> {
         let path_alert_id = encodeParam(alert_id)
@@ -230,9 +230,9 @@ open class LookerSDK: APIMethods {
      */
     public func enqueue_alert(
         /**
-         * @param {Int64} alert_id ID of an alert
+         * @param {String} alert_id ID of an alert
          */
-        _ alert_id: Int64,
+        _ alert_id: String,
         /**
          * @param {Bool} force Whether to enqueue an alert again if its already running.
          */
@@ -319,9 +319,9 @@ open class LookerSDK: APIMethods {
      */
     public func login_user(
         /**
-         * @param {Int64} user_id Id of user.
+         * @param {String} user_id Id of user.
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {Bool} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
          */
@@ -375,9 +375,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_embed_secret(
         /**
-         * @param {Int64} embed_secret_id Id of Embed Secret
+         * @param {String} embed_secret_id Id of Embed Secret
          */
-        _ embed_secret_id: Int64,
+        _ embed_secret_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_embed_secret_id = encodeParam(embed_secret_id)
@@ -808,9 +808,9 @@ open class LookerSDK: APIMethods {
          */
         _ client_guid: String,
         /**
-         * @param {Int64} user_id The id of the user to enable use of this app
+         * @param {String} user_id The id of the user to enable use of this app
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -844,9 +844,9 @@ open class LookerSDK: APIMethods {
          */
         _ client_guid: String,
         /**
-         * @param {Int64} user_id The id of the user to enable use of this app
+         * @param {String} user_id The id of the user to enable use of this app
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -1286,13 +1286,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Return only page N of paginated results
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Return N rows of data per page
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -1320,7 +1328,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[UserLoginLockout], SDKError> {
         let result: SDKResponse<[UserLoginLockout], SDKError> = self.get("/user_login_lockouts/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "auth_type": auth_type, "full_name": full_name, "email": email, "remote_id": remote_id, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "auth_type": auth_type, "full_name": full_name, "email": email, "remote_id": remote_id, "filter_or": filter_or as Any?], nil, options)
         return result
     }
 
@@ -1443,11 +1451,11 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} page The page to return.
+         * @param {Int64} page The page to return. DEPRECATED. Use offset instead.
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page The number of items in the returned page.
+         * @param {Int64} per_page The number of items in the returned page. DEPRECATED. Use limit instead.
          */
         per_page: Int64? = nil,
         /**
@@ -1476,9 +1484,9 @@ open class LookerSDK: APIMethods {
      */
     public func board(
         /**
-         * @param {Int64} board_id Id of board
+         * @param {String} board_id Id of board
          */
-        _ board_id: Int64,
+        _ board_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -1498,9 +1506,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_board(
         /**
-         * @param {Int64} board_id Id of board
+         * @param {String} board_id Id of board
          */
-        _ board_id: Int64,
+        _ board_id: String,
         /**
          * @param {WriteBoard} body
          */
@@ -1524,9 +1532,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_board(
         /**
-         * @param {Int64} board_id Id of board
+         * @param {String} board_id Id of board
          */
-        _ board_id: Int64,
+        _ board_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_board_id = encodeParam(board_id)
@@ -1587,9 +1595,9 @@ open class LookerSDK: APIMethods {
      */
     public func board_item(
         /**
-         * @param {Int64} board_item_id Id of board item
+         * @param {String} board_item_id Id of board item
          */
-        _ board_item_id: Int64,
+        _ board_item_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -1609,9 +1617,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_board_item(
         /**
-         * @param {Int64} board_item_id Id of board item
+         * @param {String} board_item_id Id of board item
          */
-        _ board_item_id: Int64,
+        _ board_item_id: String,
         /**
          * @param {WriteBoardItem} body
          */
@@ -1635,9 +1643,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_board_item(
         /**
-         * @param {Int64} board_item_id Id of board_item
+         * @param {String} board_item_id Id of board item
          */
-        _ board_item_id: Int64,
+        _ board_item_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_board_item_id = encodeParam(board_item_id)
@@ -1694,9 +1702,9 @@ open class LookerSDK: APIMethods {
      */
     public func board_section(
         /**
-         * @param {Int64} board_section_id Id of board section
+         * @param {String} board_section_id Id of board section
          */
-        _ board_section_id: Int64,
+        _ board_section_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -1716,9 +1724,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_board_section(
         /**
-         * @param {Int64} board_section_id Id of board section
+         * @param {String} board_section_id Id of board section
          */
-        _ board_section_id: Int64,
+        _ board_section_id: String,
         /**
          * @param {WriteBoardSection} body
          */
@@ -1742,9 +1750,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_board_section(
         /**
-         * @param {Int64} board_section_id Id of board section
+         * @param {String} board_section_id Id of board section
          */
-        _ board_section_id: Int64,
+        _ board_section_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_board_section_id = encodeParam(board_section_id)
@@ -1958,94 +1966,6 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<String, SDKError> {
         let path_collection_id = encodeParam(collection_id)
         let result: SDKResponse<String, SDKError> = self.delete("/color_collections/\(path_collection_id)", nil, nil, options)
-        return result
-    }
-
-
-
-    // MARK Command: Manage Commands
-
-    /**
-     * ### Get All Commands.
-     *
-     * GET /commands -> [Command]
-     */
-    public func get_all_commands(
-        /**
-         * @param {String} content_id Id of the associated content. This must be accompanied with content_type.
-         */
-        content_id: String? = nil,
-        /**
-         * @param {String} content_type Type of the associated content. This must be accompanied with content_id.
-         */
-        content_type: String? = nil,
-        /**
-         * @param {Int64} limit Number of results to return.
-         */
-        limit: Int64? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<[Command], SDKError> {
-        let result: SDKResponse<[Command], SDKError> = self.get("/commands", 
-            ["content_id": content_id, "content_type": content_type, "limit": limit], nil, options)
-        return result
-    }
-
-    /**
-     * ### Create a new command.
-     * # Required fields: [:name, :linked_content_id, :linked_content_type]
-     * # `linked_content_type` must be one of ["dashboard", "lookml_dashboard"]
-     * #
-     *
-     * POST /commands -> Command
-     */
-    public func create_command(
-        /**
-         * @param {WriteCommand} body
-         */
-        _ body: WriteCommand,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Command, SDKError> {
-        let result: SDKResponse<Command, SDKError> = self.post("/commands", nil, try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Update an existing custom command.
-     * # Optional fields: ['name', 'description']
-     * #
-     *
-     * PATCH /commands/{command_id} -> Command
-     */
-    public func update_command(
-        /**
-         * @param {Int64} command_id ID of a command
-         */
-        _ command_id: Int64,
-        /**
-         * @param {UpdateCommand} body
-         */
-        _ body: UpdateCommand,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Command, SDKError> {
-        let path_command_id = encodeParam(command_id)
-        let result: SDKResponse<Command, SDKError> = self.patch("/commands/\(path_command_id)", nil, try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Delete an existing custom command.
-     *
-     * DELETE /commands/{command_id} -> Voidable
-     */
-    public func delete_command(
-        /**
-         * @param {Int64} command_id ID of a command
-         */
-        _ command_id: Int64,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Voidable, SDKError> {
-        let path_command_id = encodeParam(command_id)
-        let result: SDKResponse<Voidable, SDKError> = self.delete("/commands/\(path_command_id)", nil, nil, options)
         return result
     }
 
@@ -2325,7 +2245,7 @@ open class LookerSDK: APIMethods {
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
-     *  - whitelabel_configuration
+     *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
      *
@@ -2350,7 +2270,7 @@ open class LookerSDK: APIMethods {
      *  - extension_framework_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
-     *  - whitelabel_configuration
+     *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
      *
@@ -3004,9 +2924,9 @@ open class LookerSDK: APIMethods {
      */
     public func search_content_favorites(
         /**
-         * @param {Int64} id Match content favorite id(s)
+         * @param {String} id Match content favorite id(s)
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
          */
@@ -3061,9 +2981,9 @@ open class LookerSDK: APIMethods {
      */
     public func content_favorite(
         /**
-         * @param {Int64} content_favorite_id Id of favorite content
+         * @param {String} content_favorite_id Id of favorite content
          */
-        _ content_favorite_id: Int64,
+        _ content_favorite_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -3083,9 +3003,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_content_favorite(
         /**
-         * @param {Int64} content_favorite_id Id of favorite content
+         * @param {String} content_favorite_id Id of favorite content
          */
-        _ content_favorite_id: Int64,
+        _ content_favorite_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_content_favorite_id = encodeParam(content_favorite_id)
@@ -3116,9 +3036,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_content_metadatas(
         /**
-         * @param {Int64} parent_id Parent space of content.
+         * @param {String} parent_id Parent space of content.
          */
-        _ parent_id: Int64,
+        _ parent_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -3137,9 +3057,9 @@ open class LookerSDK: APIMethods {
      */
     public func content_metadata(
         /**
-         * @param {Int64} content_metadata_id Id of content metadata
+         * @param {String} content_metadata_id Id of content metadata
          */
-        _ content_metadata_id: Int64,
+        _ content_metadata_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -3159,9 +3079,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_content_metadata(
         /**
-         * @param {Int64} content_metadata_id Id of content metadata
+         * @param {String} content_metadata_id Id of content metadata
          */
-        _ content_metadata_id: Int64,
+        _ content_metadata_id: String,
         /**
          * @param {WriteContentMeta} body
          */
@@ -3180,9 +3100,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_content_metadata_accesses(
         /**
-         * @param {Int64} content_metadata_id Id of content metadata
+         * @param {String} content_metadata_id Id of content metadata
          */
-        _ content_metadata_id: Int64,
+        _ content_metadata_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -3243,9 +3163,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_content_metadata_access(
         /**
-         * @param {Int64} content_metadata_access_id Id of content metadata access
+         * @param {String} content_metadata_access_id Id of content metadata access
          */
-        _ content_metadata_access_id: Int64,
+        _ content_metadata_access_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_content_metadata_access_id = encodeParam(content_metadata_access_id)
@@ -3468,8 +3388,8 @@ open class LookerSDK: APIMethods {
      *
      * Creates a new dashboard object and returns the details of the newly created dashboard.
      *
-     * `Title`, `user_id`, and `space_id` are all required fields.
-     * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+     * `Title` and `space_id` are required fields.
+     * `Space_id` must contain the id of an existing space.
      * A dashboard's `title` must be unique within the space in which it resides.
      *
      * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -3579,11 +3499,11 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         /**
@@ -3916,13 +3836,13 @@ open class LookerSDK: APIMethods {
      */
     public func search_dashboard_elements(
         /**
-         * @param {Int64} dashboard_id Select elements that refer to a given dashboard id
+         * @param {String} dashboard_id Select elements that refer to a given dashboard id
          */
-        dashboard_id: Int64? = nil,
+        dashboard_id: String? = nil,
         /**
-         * @param {Int64} look_id Select elements that refer to a given look id
+         * @param {String} look_id Select elements that refer to a given look id
          */
-        look_id: Int64? = nil,
+        look_id: String? = nil,
         /**
          * @param {String} title Match the title of element
          */
@@ -4051,10 +3971,14 @@ open class LookerSDK: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {Bool} apply_filters Apply relevant filters on dashboard to this tile
+         */
+        apply_filters: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<DashboardElement, SDKError> {
         let result: SDKResponse<DashboardElement, SDKError> = self.post("/dashboard_elements", 
-            ["fields": fields], try! self.encode(body), options)
+            ["fields": fields, "apply_filters": apply_filters as Any?], try! self.encode(body), options)
         return result
     }
 
@@ -4403,9 +4327,9 @@ open class LookerSDK: APIMethods {
      */
     public func datagroup(
         /**
-         * @param {Int64} datagroup_id ID of datagroup.
+         * @param {String} datagroup_id ID of datagroup.
          */
-        _ datagroup_id: Int64,
+        _ datagroup_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Datagroup, SDKError> {
         let path_datagroup_id = encodeParam(datagroup_id)
@@ -4420,9 +4344,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_datagroup(
         /**
-         * @param {Int64} datagroup_id ID of datagroup.
+         * @param {String} datagroup_id ID of datagroup.
          */
-        _ datagroup_id: Int64,
+        _ datagroup_id: String,
         /**
          * @param {WriteDatagroup} body
          */
@@ -4607,9 +4531,9 @@ open class LookerSDK: APIMethods {
          */
         name: String? = nil,
         /**
-         * @param {Int64} id Match Space id
+         * @param {String} id Match Space id
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} parent_id Filter on a children of a particular folder.
          */
@@ -4904,25 +4828,33 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
         sorts: String? = nil,
         /**
-         * @param {DelimArray<Int64>} ids Optional of ids to get specific groups.
+         * @param {DelimArray<String>} ids Optional of ids to get specific groups.
          */
-        ids: DelimArray<Int64>? = nil,
+        ids: DelimArray<String>? = nil,
         /**
-         * @param {Int64} content_metadata_id Id of content metadata to which groups must have access.
+         * @param {String} content_metadata_id Id of content metadata to which groups must have access.
          */
-        content_metadata_id: Int64? = nil,
+        content_metadata_id: String? = nil,
         /**
          * @param {Bool} can_add_to_content_metadata Select only groups that either can/cannot be given access to content.
          */
@@ -4930,7 +4862,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[LkGroup], SDKError> {
         let result: SDKResponse<[LkGroup], SDKError> = self.get("/groups", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts, "ids": ids as Any?, "content_metadata_id": content_metadata_id, "can_add_to_content_metadata": can_add_to_content_metadata as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "ids": ids as Any?, "content_metadata_id": content_metadata_id, "can_add_to_content_metadata": can_add_to_content_metadata as Any?], nil, options)
         return result
     }
 
@@ -5005,9 +4937,9 @@ open class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         /**
-         * @param {Int64} id Match group id.
+         * @param {String} id Match group id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match group name.
          */
@@ -5081,9 +5013,9 @@ open class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         /**
-         * @param {Int64} id Match group id.
+         * @param {String} id Match group id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match group name.
          */
@@ -5158,9 +5090,9 @@ open class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         /**
-         * @param {Int64} id Match group id.
+         * @param {String} id Match group id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match group name.
          */
@@ -5191,9 +5123,9 @@ open class LookerSDK: APIMethods {
      */
     public func group(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -5213,9 +5145,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_group(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {WriteGroup} body
          */
@@ -5239,9 +5171,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_group(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_group_id = encodeParam(group_id)
@@ -5256,9 +5188,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_group_groups(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -5278,9 +5210,9 @@ open class LookerSDK: APIMethods {
      */
     public func add_group_group(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {GroupIdForGroupInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
@@ -5299,21 +5231,29 @@ open class LookerSDK: APIMethods {
      */
     public func all_group_users(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -5322,7 +5262,7 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<[User], SDKError> {
         let path_group_id = encodeParam(group_id)
         let result: SDKResponse<[User], SDKError> = self.get("/groups/\(path_group_id)/users", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts], nil, options)
         return result
     }
 
@@ -5333,9 +5273,9 @@ open class LookerSDK: APIMethods {
      */
     public func add_group_user(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
          * @param {GroupIdForGroupUserInclusion} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
@@ -5354,13 +5294,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_group_user(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
-         * @param {Int64} user_id Id of user to remove from group
+         * @param {String} user_id Id of user to remove from group
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Voidable, SDKError> {
         let path_group_id = encodeParam(group_id)
@@ -5376,13 +5316,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_group_from_group(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
-         * @param {Int64} deleting_group_id Id of group to delete
+         * @param {String} deleting_group_id Id of group to delete
          */
-        _ deleting_group_id: Int64,
+        _ deleting_group_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Voidable, SDKError> {
         let path_group_id = encodeParam(group_id)
@@ -5400,13 +5340,13 @@ open class LookerSDK: APIMethods {
      */
     public func update_user_attribute_group_value(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {UserAttributeGroupValue} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
@@ -5426,13 +5366,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_attribute_group_value(
         /**
-         * @param {Int64} group_id Id of group
+         * @param {String} group_id Id of group
          */
-        _ group_id: Int64,
+        _ group_id: String,
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Voidable, SDKError> {
         let path_group_id = encodeParam(group_id)
@@ -5513,9 +5453,9 @@ open class LookerSDK: APIMethods {
      */
     public func integration_hub(
         /**
-         * @param {Int64} integration_hub_id Id of Integration Hub
+         * @param {String} integration_hub_id Id of integration_hub
          */
-        _ integration_hub_id: Int64,
+        _ integration_hub_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -5537,9 +5477,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_integration_hub(
         /**
-         * @param {Int64} integration_hub_id Id of Integration Hub
+         * @param {String} integration_hub_id Id of integration_hub
          */
-        _ integration_hub_id: Int64,
+        _ integration_hub_id: String,
         /**
          * @param {WriteIntegrationHub} body
          */
@@ -5563,9 +5503,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_integration_hub(
         /**
-         * @param {Int64} integration_hub_id Id of integration_hub
+         * @param {String} integration_hub_id Id of integration_hub
          */
-        _ integration_hub_id: Int64,
+        _ integration_hub_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_integration_hub_id = encodeParam(integration_hub_id)
@@ -5580,9 +5520,9 @@ open class LookerSDK: APIMethods {
      */
     public func accept_integration_hub_legal_agreement(
         /**
-         * @param {Int64} integration_hub_id Id of integration_hub
+         * @param {String} integration_hub_id Id of integration_hub
          */
-        _ integration_hub_id: Int64,
+        _ integration_hub_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<IntegrationHub, SDKError> {
         let path_integration_hub_id = encodeParam(integration_hub_id)
@@ -5816,9 +5756,9 @@ open class LookerSDK: APIMethods {
          */
         deleted: Bool? = nil,
         /**
-         * @param {Int64} query_id Select looks that reference a particular query by query_id
+         * @param {String} query_id Select looks that reference a particular query by query_id
          */
-        query_id: Int64? = nil,
+        query_id: String? = nil,
         /**
          * @param {Bool} curate Exclude items that exist only in personal spaces other than the users
          */
@@ -5832,11 +5772,11 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         /**
@@ -7551,9 +7491,9 @@ open class LookerSDK: APIMethods {
      */
     public func query(
         /**
-         * @param {Int64} query_id Id of query
+         * @param {String} query_id Id of query
          */
-        _ query_id: Int64,
+        _ query_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -7661,9 +7601,9 @@ open class LookerSDK: APIMethods {
      */
     public func run_query(
         /**
-         * @param {Int64} query_id Id of query
+         * @param {String} query_id Id of query
          */
-        _ query_id: Int64,
+        _ query_id: String,
         /**
          * @param {String} result_format Format of result
          */
@@ -7876,11 +7816,11 @@ open class LookerSDK: APIMethods {
      * ```ruby
      * query_params =
      * {
-     *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+     *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
      *   :"f[category.name]" => "socks",
-     *   :sorts => "products.count desc 0",
-     *   :limit => "500",
-     *   :query_timezone => "America/Los_Angeles"
+     *   sorts: "products.count desc 0",
+     *   limit: "500",
+     *   query_timezone: "America/Los_Angeles"
      * }
      * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
      *
@@ -8099,9 +8039,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_look_render_task(
         /**
-         * @param {Int64} look_id Id of look to render
+         * @param {String} look_id Id of look to render
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
          * @param {String} result_format Output type: png, or jpg
          */
@@ -8138,9 +8078,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_query_render_task(
         /**
-         * @param {Int64} query_id Id of the query to render
+         * @param {String} query_id Id of the query to render
          */
-        _ query_id: Int64,
+        _ query_id: String,
         /**
          * @param {String} result_format Output type: png or jpg
          */
@@ -8370,9 +8310,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match model set id.
+         * @param {String} id Match model set id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match model set name.
          */
@@ -8403,9 +8343,9 @@ open class LookerSDK: APIMethods {
      */
     public func model_set(
         /**
-         * @param {Int64} model_set_id Id of model set
+         * @param {String} model_set_id Id of model set
          */
-        _ model_set_id: Int64,
+        _ model_set_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -8425,9 +8365,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_model_set(
         /**
-         * @param {Int64} model_set_id id of model set
+         * @param {String} model_set_id id of model set
          */
-        _ model_set_id: Int64,
+        _ model_set_id: String,
         /**
          * @param {WriteModelSet} body
          */
@@ -8446,9 +8386,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_model_set(
         /**
-         * @param {Int64} model_set_id id of model set
+         * @param {String} model_set_id id of model set
          */
-        _ model_set_id: Int64,
+        _ model_set_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_model_set_id = encodeParam(model_set_id)
@@ -8545,9 +8485,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match permission set id.
+         * @param {String} id Match permission set id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match permission set name.
          */
@@ -8578,9 +8518,9 @@ open class LookerSDK: APIMethods {
      */
     public func permission_set(
         /**
-         * @param {Int64} permission_set_id Id of permission set
+         * @param {String} permission_set_id Id of permission set
          */
-        _ permission_set_id: Int64,
+        _ permission_set_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -8600,9 +8540,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_permission_set(
         /**
-         * @param {Int64} permission_set_id id of permission set
+         * @param {String} permission_set_id Id of permission set
          */
-        _ permission_set_id: Int64,
+        _ permission_set_id: String,
         /**
          * @param {WritePermissionSet} body
          */
@@ -8621,9 +8561,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_permission_set(
         /**
-         * @param {Int64} permission_set_id Id of permission set
+         * @param {String} permission_set_id Id of permission set
          */
-        _ permission_set_id: Int64,
+        _ permission_set_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_permission_set_id = encodeParam(permission_set_id)
@@ -8675,9 +8615,9 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {DelimArray<Int64>} ids Optional list of ids to get specific roles.
+         * @param {DelimArray<String>} ids Optional list of ids to get specific roles.
          */
-        ids: DelimArray<Int64>? = nil,
+        ids: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Role], SDKError> {
         let result: SDKResponse<[Role], SDKError> = self.get("/roles", 
@@ -8747,9 +8687,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match role id.
+         * @param {String} id Match role id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match role name.
          */
@@ -8816,9 +8756,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match role id.
+         * @param {String} id Match role id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match role name.
          */
@@ -8845,9 +8785,9 @@ open class LookerSDK: APIMethods {
      */
     public func role(
         /**
-         * @param {Int64} role_id id of role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Role, SDKError> {
         let path_role_id = encodeParam(role_id)
@@ -8862,9 +8802,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_role(
         /**
-         * @param {Int64} role_id id of role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         /**
          * @param {WriteRole} body
          */
@@ -8883,9 +8823,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_role(
         /**
-         * @param {Int64} role_id id of role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_role_id = encodeParam(role_id)
@@ -8900,9 +8840,9 @@ open class LookerSDK: APIMethods {
      */
     public func role_groups(
         /**
-         * @param {Int64} role_id id of role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -8922,13 +8862,13 @@ open class LookerSDK: APIMethods {
      */
     public func set_role_groups(
         /**
-         * @param {Int64} role_id Id of Role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         /**
-         * @param {[Int64]} body
+         * @param {[String]} body
          */
-        _ body: [Int64],
+        _ body: [String],
         options: ITransportSettings? = nil
     ) -> SDKResponse<[LkGroup], SDKError> {
         let path_role_id = encodeParam(role_id)
@@ -8943,9 +8883,9 @@ open class LookerSDK: APIMethods {
      */
     public func role_users(
         /**
-         * @param {Int64} role_id id of user
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -8969,13 +8909,13 @@ open class LookerSDK: APIMethods {
      */
     public func set_role_users(
         /**
-         * @param {Int64} role_id id of role
+         * @param {String} role_id id of role
          */
-        _ role_id: Int64,
+        _ role_id: String,
         /**
-         * @param {[Int64]} body
+         * @param {[String]} body
          */
-        _ body: [Int64],
+        _ body: [String],
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let path_role_id = encodeParam(role_id)
@@ -8996,9 +8936,9 @@ open class LookerSDK: APIMethods {
      */
     public func scheduled_plans_for_space(
         /**
-         * @param {Int64} space_id Space Id
+         * @param {String} space_id Space Id
          */
-        _ space_id: Int64,
+        _ space_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -9020,9 +8960,9 @@ open class LookerSDK: APIMethods {
      */
     public func scheduled_plan(
         /**
-         * @param {Int64} scheduled_plan_id Scheduled Plan Id
+         * @param {String} scheduled_plan_id Scheduled Plan Id
          */
-        _ scheduled_plan_id: Int64,
+        _ scheduled_plan_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -9083,9 +9023,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_scheduled_plan(
         /**
-         * @param {Int64} scheduled_plan_id Scheduled Plan Id
+         * @param {String} scheduled_plan_id Scheduled Plan Id
          */
-        _ scheduled_plan_id: Int64,
+        _ scheduled_plan_id: String,
         /**
          * @param {WriteScheduledPlan} body
          */
@@ -9108,9 +9048,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_scheduled_plan(
         /**
-         * @param {Int64} scheduled_plan_id Scheduled Plan Id
+         * @param {String} scheduled_plan_id Scheduled Plan Id
          */
-        _ scheduled_plan_id: Int64,
+        _ scheduled_plan_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_scheduled_plan_id = encodeParam(scheduled_plan_id)
@@ -9135,9 +9075,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_scheduled_plans(
         /**
-         * @param {Int64} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
+         * @param {String} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
          */
-        user_id: Int64? = nil,
+        user_id: String? = nil,
         /**
          * @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response
          */
@@ -9295,13 +9235,13 @@ open class LookerSDK: APIMethods {
      */
     public func scheduled_plans_for_look(
         /**
-         * @param {Int64} look_id Look Id
+         * @param {String} look_id Look Id
          */
-        _ look_id: Int64,
+        _ look_id: String,
         /**
-         * @param {Int64} user_id User Id (default is requesting user if not specified)
+         * @param {String} user_id User Id (default is requesting user if not specified)
          */
-        user_id: Int64? = nil,
+        user_id: String? = nil,
         /**
          * @param {String} fields Requested fields.
          */
@@ -9335,13 +9275,13 @@ open class LookerSDK: APIMethods {
      */
     public func scheduled_plans_for_dashboard(
         /**
-         * @param {Int64} dashboard_id Dashboard Id
+         * @param {String} dashboard_id Dashboard Id
          */
-        _ dashboard_id: Int64,
+        _ dashboard_id: String,
         /**
-         * @param {Int64} user_id User Id (default is requesting user if not specified)
+         * @param {String} user_id User Id (default is requesting user if not specified)
          */
-        user_id: Int64? = nil,
+        user_id: String? = nil,
         /**
          * @param {Bool} all_users Return scheduled plans belonging to all users for the dashboard
          */
@@ -9379,9 +9319,9 @@ open class LookerSDK: APIMethods {
          */
         _ lookml_dashboard_id: String,
         /**
-         * @param {Int64} user_id User Id (default is requesting user if not specified)
+         * @param {String} user_id User Id (default is requesting user if not specified)
          */
-        user_id: Int64? = nil,
+        user_id: String? = nil,
         /**
          * @param {String} fields Requested fields.
          */
@@ -9451,9 +9391,9 @@ open class LookerSDK: APIMethods {
      */
     public func scheduled_plan_run_once_by_id(
         /**
-         * @param {Int64} scheduled_plan_id Id of schedule plan to copy and run
+         * @param {String} scheduled_plan_id Id of schedule plan to copy and run
          */
-        _ scheduled_plan_id: Int64,
+        _ scheduled_plan_id: String,
         /**
          * @param {WriteScheduledPlan} body
          */
@@ -9619,9 +9559,9 @@ open class LookerSDK: APIMethods {
      */
     public func search_themes(
         /**
-         * @param {Int64} id Match theme id.
+         * @param {String} id Match theme id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} name Match theme name.
          */
@@ -9803,9 +9743,9 @@ open class LookerSDK: APIMethods {
      */
     public func theme(
         /**
-         * @param {Int64} theme_id Id of theme
+         * @param {String} theme_id Id of theme
          */
-        _ theme_id: Int64,
+        _ theme_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -9827,9 +9767,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_theme(
         /**
-         * @param {Int64} theme_id Id of theme
+         * @param {String} theme_id Id of theme
          */
-        _ theme_id: Int64,
+        _ theme_id: String,
         /**
          * @param {WriteTheme} body
          */
@@ -9916,9 +9856,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match credentials_email id.
+         * @param {String} id Match credentials_email id.
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} email Match credentials_email email.
          */
@@ -9986,9 +9926,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {DelimArray<Int64>} ids Optional list of ids to get specific users.
+         * @param {DelimArray<String>} ids Optional list of ids to get specific users.
          */
-        ids: DelimArray<Int64>? = nil,
+        ids: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users", 
@@ -10163,9 +10103,9 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} id Match User Id
+         * @param {String} id Match User Id
          */
-        id: Int64? = nil,
+        id: String? = nil,
         /**
          * @param {String} first_name Match First name
          */
@@ -10205,9 +10145,9 @@ open class LookerSDK: APIMethods {
      */
     public func user(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10227,9 +10167,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_user(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {WriteUser} body
          */
@@ -10255,9 +10195,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10326,9 +10266,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_email(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10348,9 +10288,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_user_credentials_email(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {WriteCredentialsEmail} body
          */
@@ -10374,9 +10314,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_user_credentials_email(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {WriteCredentialsEmail} body
          */
@@ -10400,9 +10340,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_email(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10417,9 +10357,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_totp(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10439,9 +10379,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_user_credentials_totp(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
          */
@@ -10465,9 +10405,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_totp(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10482,9 +10422,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_ldap(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10504,9 +10444,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_ldap(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10521,9 +10461,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_google(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10543,9 +10483,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_google(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10560,9 +10500,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_saml(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10582,9 +10522,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_saml(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10599,9 +10539,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_oidc(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10621,9 +10561,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_oidc(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10638,13 +10578,13 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_api3(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} credentials_api3_id Id of API 3 Credential
+         * @param {String} credentials_api3_id Id of API 3 Credential
          */
-        _ credentials_api3_id: Int64,
+        _ credentials_api3_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10665,13 +10605,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_api3(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} credentials_api3_id id of API 3 Credential
+         * @param {String} credentials_api3_id Id of API 3 Credential
          */
-        _ credentials_api3_id: Int64,
+        _ credentials_api3_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10687,9 +10627,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_user_credentials_api3s(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10709,9 +10649,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_user_credentials_api3(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10731,13 +10671,13 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_embed(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} credentials_embed_id Id of Embedding Credential
+         * @param {String} credentials_embed_id Id of Embedding Credential
          */
-        _ credentials_embed_id: Int64,
+        _ credentials_embed_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10758,13 +10698,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_embed(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} credentials_embed_id id of Embedding Credential
+         * @param {String} credentials_embed_id Id of Embedding Credential
          */
-        _ credentials_embed_id: Int64,
+        _ credentials_embed_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10780,9 +10720,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_user_credentials_embeds(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10802,9 +10742,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_credentials_looker_openid(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10824,9 +10764,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_credentials_looker_openid(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10841,13 +10781,13 @@ open class LookerSDK: APIMethods {
      */
     public func user_session(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} session_id Id of Web Login Session
+         * @param {String} session_id Id of Web Login Session
          */
-        _ session_id: Int64,
+        _ session_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10868,13 +10808,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_session(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} session_id id of Web Login Session
+         * @param {String} session_id Id of Web Login Session
          */
-        _ session_id: Int64,
+        _ session_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -10890,9 +10830,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_user_sessions(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10920,9 +10860,9 @@ open class LookerSDK: APIMethods {
      */
     public func create_user_credentials_email_password_reset(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {Bool} expires Expiring token.
          */
@@ -10946,9 +10886,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_roles(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -10972,13 +10912,13 @@ open class LookerSDK: APIMethods {
      */
     public func set_user_roles(
         /**
-         * @param {Int64} user_id id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {[Int64]} body
+         * @param {[String]} body
          */
-        _ body: [Int64],
+        _ body: [String],
         /**
          * @param {String} fields Requested fields.
          */
@@ -11013,17 +10953,17 @@ open class LookerSDK: APIMethods {
      */
     public func user_attribute_user_values(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
         /**
-         * @param {DelimArray<Int64>} user_attribute_ids Specific user attributes to request. Omit or leave blank to request all user attributes.
+         * @param {DelimArray<String>} user_attribute_ids Specific user attributes to request. Omit or leave blank to request all user attributes.
          */
-        user_attribute_ids: DelimArray<Int64>? = nil,
+        user_attribute_ids: DelimArray<String>? = nil,
         /**
          * @param {Bool} all_values If true, returns all values in the search path instead of just the first value found. Useful for debugging group precedence.
          */
@@ -11049,13 +10989,13 @@ open class LookerSDK: APIMethods {
      */
     public func set_user_attribute_user_value(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {WriteUserAttributeWithValue} body
          */
@@ -11080,13 +11020,13 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_attribute_user_value(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Voidable, SDKError> {
         let path_user_id = encodeParam(user_id)
@@ -11108,9 +11048,9 @@ open class LookerSDK: APIMethods {
      */
     public func send_user_credentials_email_password_reset(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -11135,9 +11075,9 @@ open class LookerSDK: APIMethods {
      */
     public func wipeout_user_emails(
         /**
-         * @param {Int64} user_id Id of user
+         * @param {String} user_id Id of user
          */
-        _ user_id: Int64,
+        _ user_id: String,
         /**
          * @param {UserEmailOnly} body
          */
@@ -11232,9 +11172,9 @@ open class LookerSDK: APIMethods {
      */
     public func user_attribute(
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -11254,9 +11194,9 @@ open class LookerSDK: APIMethods {
      */
     public func update_user_attribute(
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {WriteUserAttribute} body
          */
@@ -11280,9 +11220,9 @@ open class LookerSDK: APIMethods {
      */
     public func delete_user_attribute(
         /**
-         * @param {Int64} user_attribute_id Id of user_attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_user_attribute_id = encodeParam(user_attribute_id)
@@ -11303,9 +11243,9 @@ open class LookerSDK: APIMethods {
      */
     public func all_user_attribute_group_values(
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {String} fields Requested fields.
          */
@@ -11344,9 +11284,9 @@ open class LookerSDK: APIMethods {
      */
     public func set_user_attribute_group_values(
         /**
-         * @param {Int64} user_attribute_id Id of user attribute
+         * @param {String} user_attribute_id Id of user attribute
          */
-        _ user_attribute_id: Int64,
+        _ user_attribute_id: String,
         /**
          * @param {[UserAttributeGroupValue]} body
          */

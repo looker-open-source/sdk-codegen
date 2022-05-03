@@ -25,7 +25,7 @@
  */
 
 /**
- * 312 API models: 232 Spec, 0 Request, 59 Write, 21 Enum
+ * 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
  */
 
 
@@ -80,13 +80,13 @@ data class Alert (
     var comparison_type: ComparisonType,
     var cron: String,
     var custom_title: String? = null,
-    var dashboard_element_id: Long? = null,
+    var dashboard_element_id: String? = null,
     var description: String? = null,
     var destinations: Array<AlertDestination>,
     var field: AlertField,
     var followed: Boolean? = null,
     var followable: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var is_disabled: Boolean? = null,
     var disabled_reason: String? = null,
     var is_public: Boolean? = null,
@@ -95,7 +95,7 @@ data class Alert (
     var investigative_content_title: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
-    var owner_id: Long,
+    var owner_id: String,
     var owner_display_name: String? = null,
     var threshold: Double,
     var time_series_condition_state: AlertConditionState? = null
@@ -166,7 +166,7 @@ data class AlertFieldFilter (
  * @property threshold New threshold value
  */
 data class AlertPatch (
-    var owner_id: Long? = null,
+    var owner_id: String? = null,
     var is_disabled: Boolean? = null,
     var disabled_reason: String? = null,
     var is_public: Boolean? = null,
@@ -189,7 +189,7 @@ enum class Align : Serializable {
 data class ApiSession (
     var can: Map<String,Boolean>? = null,
     var workspace_id: String? = null,
-    var sudo_user_id: Long? = null
+    var sudo_user_id: String? = null
 ) : Serializable
 
 /**
@@ -255,16 +255,16 @@ data class BackupConfiguration (
  */
 data class Board (
     var can: Map<String,Boolean>? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var created_at: Date? = null,
     var deleted_at: Date? = null,
     var description: String? = null,
     var board_sections: Array<BoardSection>? = null,
-    var id: Long? = null,
-    var section_order: Array<Long>? = null,
+    var id: String? = null,
+    var section_order: Array<String>? = null,
     var title: String? = null,
     var updated_at: Date? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var primary_homepage: Boolean? = null
 ) : Serializable
 
@@ -289,22 +289,28 @@ data class Board (
  * @property order An arbitrary integer representing the sort order within the section
  * @property title The actual title for display (read-only)
  * @property url Relative url for the associated content (read-only)
+ * @property use_custom_description Whether the custom description should be used instead of the content description, if the item is associated with content
+ * @property use_custom_title Whether the custom title should be used instead of the content title, if the item is associated with content
+ * @property use_custom_url Whether the custom url should be used instead of the content url, if the item is associated with content
  * @property view_count Number of times content has been viewed, if present (read-only)
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property custom_image_url Custom image_url entered by the user, if present (read-only)
+ * @property use_custom_image Whether the custom image should be used instead of the content image, if the item is associated with content
  */
 data class BoardItem (
     var can: Map<String,Boolean>? = null,
     var content_created_by: String? = null,
-    var content_favorite_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var content_favorite_id: String? = null,
+    var content_metadata_id: String? = null,
     var content_updated_at: String? = null,
     var custom_description: String? = null,
     var custom_title: String? = null,
     var custom_url: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var description: String? = null,
     var favorite_count: Long? = null,
-    var board_section_id: Long? = null,
-    var id: Long? = null,
+    var board_section_id: String? = null,
+    var id: String? = null,
     var image_url: String? = null,
     var location: String? = null,
     var look_id: String? = null,
@@ -312,7 +318,13 @@ data class BoardItem (
     var order: Long? = null,
     var title: String? = null,
     var url: String? = null,
-    var view_count: Long? = null
+    var use_custom_description: Boolean? = null,
+    var use_custom_title: Boolean? = null,
+    var use_custom_url: Boolean? = null,
+    var view_count: Long? = null,
+    var custom_image_data_base64: String? = null,
+    var custom_image_url: String? = null,
+    var use_custom_image: Boolean? = null
 ) : Serializable
 
 /**
@@ -333,11 +345,11 @@ data class BoardSection (
     var created_at: Date? = null,
     var deleted_at: Date? = null,
     var description: String? = null,
-    var board_id: Long? = null,
+    var board_id: String? = null,
     var board_items: Array<BoardItem>? = null,
-    var id: Long? = null,
-    var item_order: Array<Long>? = null,
-    var visible_item_order: Array<Long>? = null,
+    var id: String? = null,
+    var item_order: Array<String>? = null,
+    var visible_item_order: Array<String>? = null,
     var title: String? = null,
     var updated_at: Date? = null
 ) : Serializable
@@ -387,23 +399,6 @@ data class ColumnSearch (
     var table_name: String? = null,
     var column_name: String? = null,
     var data_type: String? = null
-) : Serializable
-
-/**
- * @property id Id of the command record (read-only)
- * @property author_id Id of the command author (read-only)
- * @property name Name of the command
- * @property description Description of the command
- * @property linked_content_id Id of the content associated with the command
- * @property linked_content_type Name of the command Valid values are: "dashboard", "lookml_dashboard".
- */
-data class Command (
-    var id: Long? = null,
-    var author_id: Long? = null,
-    var name: String? = null,
-    var description: String? = null,
-    var linked_content_id: String? = null,
-    var linked_content_type: LinkedContentType? = null
 ) : Serializable
 
 /**
@@ -468,14 +463,14 @@ data class ConnectionFeatures (
  * @property board_id Id of a board (read-only)
  */
 data class ContentFavorite (
-    var id: Long? = null,
-    var user_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var id: String? = null,
+    var user_id: String? = null,
+    var content_metadata_id: String? = null,
     var look_id: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var look: LookBasic? = null,
     var dashboard: DashboardBase? = null,
-    var board_id: Long? = null
+    var board_id: String? = null
 ) : Serializable
 
 /**
@@ -493,15 +488,15 @@ data class ContentFavorite (
  */
 data class ContentMeta (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
-    var parent_id: Long? = null,
+    var parent_id: String? = null,
     var dashboard_id: String? = null,
     var look_id: String? = null,
     var folder_id: String? = null,
     var content_type: String? = null,
     var inherits: Boolean? = null,
-    var inheriting_id: Long? = null,
+    var inheriting_id: String? = null,
     var slug: String? = null
 ) : Serializable
 
@@ -520,8 +515,8 @@ data class ContentMetaGroupUser (
     var id: String? = null,
     var content_metadata_id: String? = null,
     var permission_type: PermissionType? = null,
-    var group_id: Long? = null,
-    var user_id: Long? = null
+    var group_id: String? = null,
+    var user_id: String? = null
 ) : Serializable
 
 /**
@@ -552,7 +547,7 @@ data class ContentValidation (
  * @property custom_title An optional, user-defined title for the alert
  */
 data class ContentValidationAlert (
-    var id: Long? = null,
+    var id: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
     var custom_title: String? = null
@@ -588,6 +583,7 @@ data class ContentValidationDashboard (
  * @property title_hidden Whether title is hidden
  * @property title_text Text tile title
  * @property type Type
+ * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  */
 data class ContentValidationDashboardElement (
     var body_text: String? = null,
@@ -598,12 +594,13 @@ data class ContentValidationDashboardElement (
     var note_state: String? = null,
     var note_text: String? = null,
     var note_text_as_html: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var subtitle_text: String? = null,
     var title: String? = null,
     var title_hidden: Boolean? = null,
     var title_text: String? = null,
-    var type: String? = null
+    var type: String? = null,
+    var rich_content_json: String? = null
 ) : Serializable
 
 /**
@@ -694,7 +691,7 @@ data class ContentValidationLookMLDashboardElement (
 data class ContentValidationScheduledPlan (
     var name: String? = null,
     var look_id: String? = null,
-    var id: Long? = null
+    var id: String? = null
 ) : Serializable
 
 /**
@@ -738,13 +735,13 @@ data class ContentValidatorError (
  */
 data class ContentView (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var look_id: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var title: String? = null,
-    var content_metadata_id: Long? = null,
-    var user_id: Long? = null,
-    var group_id: Long? = null,
+    var content_metadata_id: String? = null,
+    var user_id: String? = null,
+    var group_id: String? = null,
     var view_count: Long? = null,
     var favorite_count: Long? = null,
     var last_viewed_at: String? = null,
@@ -798,7 +795,7 @@ data class CreateCostEstimate (
  */
 data class CreateCredentialsApi3 (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var client_id: String? = null,
     var created_at: String? = null,
     var is_disabled: Boolean? = null,
@@ -889,8 +886,8 @@ data class CreateOAuthApplicationUserStateRequest (
  * @property oauth_application_id OAuth Application ID (read-only)
  */
 data class CreateOAuthApplicationUserStateResponse (
-    var user_id: Long,
-    var oauth_application_id: Long
+    var user_id: String,
+    var oauth_application_id: String
 ) : Serializable
 
 /**
@@ -904,7 +901,7 @@ data class CreateOAuthApplicationUserStateResponse (
  */
 data class CreateQueryTask (
     var can: Map<String,Boolean>? = null,
-    var query_id: Long,
+    var query_id: String,
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
@@ -923,7 +920,7 @@ data class CreateQueryTask (
  */
 data class CredentialsApi3 (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var client_id: String? = null,
     var created_at: String? = null,
     var is_disabled: Boolean? = null,
@@ -997,7 +994,7 @@ data class CredentialsEmbed (
     var created_at: String? = null,
     var external_group_id: String? = null,
     var external_user_id: String? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var type: String? = null,
@@ -1198,8 +1195,8 @@ data class CustomWelcomeEmail (
  */
 data class Dashboard (
     var can: Map<String,Boolean>? = null,
-    var content_favorite_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var content_favorite_id: String? = null,
+    var content_metadata_id: String? = null,
     var description: String? = null,
     var hidden: Boolean? = null,
     var id: String? = null,
@@ -1210,7 +1207,7 @@ data class Dashboard (
     var refresh_interval_to_i: Long? = null,
     var folder: FolderBase? = null,
     var title: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null,
     var alert_sync_with_dashboard_filter_enabled: Boolean? = null,
@@ -1222,14 +1219,14 @@ data class Dashboard (
     var dashboard_layouts: Array<DashboardLayout>? = null,
     var deleted: Boolean? = null,
     var deleted_at: Date? = null,
-    var deleter_id: Long? = null,
+    var deleter_id: String? = null,
     var edit_uri: String? = null,
     var favorite_count: Long? = null,
     var filters_bar_collapsed: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
     var updated_at: Date? = null,
-    var last_updater_id: Long? = null,
+    var last_updater_id: String? = null,
     var last_updater_name: String? = null,
     var user_name: String? = null,
     var load_configuration: String? = null,
@@ -1294,8 +1291,8 @@ data class DashboardAppearance (
  */
 data class DashboardBase (
     var can: Map<String,Boolean>? = null,
-    var content_favorite_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var content_favorite_id: String? = null,
+    var content_metadata_id: String? = null,
     var description: String? = null,
     var hidden: Boolean? = null,
     var id: String? = null,
@@ -1306,7 +1303,7 @@ data class DashboardBase (
     var refresh_interval_to_i: Long? = null,
     var folder: FolderBase? = null,
     var title: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var slug: String? = null,
     var preferred_viewer: String? = null
 ) : Serializable
@@ -1338,6 +1335,7 @@ data class DashboardBase (
  * @property title_text Text tile title
  * @property type Type
  * @property alert_count Count of Alerts associated to a dashboard element (read-only)
+ * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  * @property title_text_as_html Text tile title text as Html (read-only)
  * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
  */
@@ -1357,17 +1355,18 @@ data class DashboardElement (
     var note_text: String? = null,
     var note_text_as_html: String? = null,
     var query: Query? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var refresh_interval: String? = null,
     var refresh_interval_to_i: Long? = null,
     var result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = null,
-    var result_maker_id: Long? = null,
+    var result_maker_id: String? = null,
     var subtitle_text: String? = null,
     var title: String? = null,
     var title_hidden: Boolean? = null,
     var title_text: String? = null,
     var type: String? = null,
     var alert_count: Long? = null,
+    var rich_content_json: String? = null,
     var title_text_as_html: String? = null,
     var subtitle_text_as_html: String? = null
 ) : Serializable
@@ -1563,7 +1562,7 @@ data class DataActionUserState (
 data class Datagroup (
     var can: Map<String,Boolean>? = null,
     var created_at: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var model_name: String? = null,
     var name: String? = null,
     var stale_before: Long? = null,
@@ -1660,7 +1659,7 @@ data class DBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null,
+    var oauth_application_id: String? = null,
     var always_retry_failed_builds: Boolean? = null,
     var cost_estimate_enabled: Boolean? = null,
     var pdt_api_control_enabled: Boolean? = null
@@ -1734,7 +1733,7 @@ data class DBConnectionTestResult (
 data class DelegateOauthTest (
     var name: String? = null,
     var installation_target_id: String? = null,
-    var installation_id: Long? = null,
+    var installation_id: String? = null,
     var success: Boolean? = null
 ) : Serializable
 
@@ -1767,6 +1766,7 @@ enum class DestinationType : Serializable {
  * @property name The name of the dialect (read-only)
  * @property label The human-readable label of the connection (read-only)
  * @property supports_cost_estimate Whether the dialect supports query cost estimates (read-only)
+ * @property cost_estimate_style How the dialect handles cost estimation (read-only)
  * @property persistent_table_indexes PDT index columns (read-only)
  * @property persistent_table_sortkeys PDT sortkey columns (read-only)
  * @property persistent_table_distkey PDT distkey column (read-only)
@@ -1782,6 +1782,7 @@ data class Dialect (
     var name: String? = null,
     var label: String? = null,
     var supports_cost_estimate: Boolean? = null,
+    var cost_estimate_style: String? = null,
     var persistent_table_indexes: String? = null,
     var persistent_table_sortkeys: String? = null,
     var persistent_table_distkey: String? = null,
@@ -1897,9 +1898,9 @@ data class EmbedSecret (
     var algorithm: String? = null,
     var created_at: String? = null,
     var enabled: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var secret: String? = null,
-    var user_id: Long? = null
+    var user_id: String? = null
 ) : Serializable
 
 /**
@@ -1927,10 +1928,10 @@ data class EmbedSsoParams (
     var user_timezone: String? = null,
     var permissions: Array<String>? = null,
     var models: Array<String>? = null,
-    var group_ids: Array<Long>? = null,
+    var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var secret_id: Long? = null
+    var secret_id: String? = null
 ) : Serializable
 
 /**
@@ -1960,7 +1961,7 @@ data class Error (
  */
 data class ExternalOauthApplication (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var client_id: String? = null,
     var client_secret: String? = null,
@@ -2000,9 +2001,9 @@ data class Folder (
     var name: String,
     var parent_id: String? = null,
     var id: String? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var created_at: Date? = null,
-    var creator_id: Long? = null,
+    var creator_id: String? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
     var is_embed: Boolean? = null,
@@ -2039,9 +2040,9 @@ data class FolderBase (
     var name: String,
     var parent_id: String? = null,
     var id: String? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var created_at: Date? = null,
-    var creator_id: Long? = null,
+    var creator_id: String? = null,
     var child_count: Long? = null,
     var external_id: String? = null,
     var is_embed: Boolean? = null,
@@ -2155,7 +2156,7 @@ data class Group (
     var contains_current_user: Boolean? = null,
     var external_group_id: String? = null,
     var externally_managed: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var include_by_default: Boolean? = null,
     var name: String? = null,
     var user_count: Long? = null
@@ -2180,12 +2181,12 @@ data class GroupHierarchy (
     var contains_current_user: Boolean? = null,
     var external_group_id: String? = null,
     var externally_managed: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var include_by_default: Boolean? = null,
     var name: String? = null,
     var user_count: Long? = null,
-    var parent_group_ids: Array<Long>? = null,
-    var role_ids: Array<Long>? = null
+    var parent_group_ids: Array<String>? = null,
+    var role_ids: Array<String>? = null
 ) : Serializable
 
 /**
@@ -2194,7 +2195,7 @@ data class GroupHierarchy (
  * @property group_id Id of group (read-only)
  */
 data class GroupIdForGroupInclusion (
-    var group_id: Long? = null
+    var group_id: String? = null
 ) : Serializable
 
 /**
@@ -2203,7 +2204,7 @@ data class GroupIdForGroupInclusion (
  * @property user_id Id of user (read-only)
  */
 data class GroupIdForGroupUserInclusion (
-    var user_id: Long? = null
+    var user_id: String? = null
 ) : Serializable
 
 /**
@@ -2224,7 +2225,7 @@ data class GroupSearch (
     var contains_current_user: Boolean? = null,
     var external_group_id: String? = null,
     var externally_managed: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var include_by_default: Boolean? = null,
     var name: String? = null,
     var user_count: Long? = null,
@@ -2264,19 +2265,19 @@ data class GroupSearch (
 data class HomepageItem (
     var can: Map<String,Boolean>? = null,
     var content_created_by: String? = null,
-    var content_favorite_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var content_favorite_id: String? = null,
+    var content_metadata_id: String? = null,
     var content_updated_at: String? = null,
     var custom_description: String? = null,
     var custom_image_data_base64: String? = null,
     var custom_image_url: String? = null,
     var custom_title: String? = null,
     var custom_url: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var description: String? = null,
     var favorite_count: Long? = null,
-    var homepage_section_id: Long? = null,
-    var id: Long? = null,
+    var homepage_section_id: String? = null,
+    var id: String? = null,
     var image_url: String? = null,
     var location: String? = null,
     var look_id: String? = null,
@@ -2312,15 +2313,15 @@ data class HomepageSection (
     var created_at: Date? = null,
     var deleted_at: Date? = null,
     var detail_url: String? = null,
-    var homepage_id: Long? = null,
+    var homepage_id: String? = null,
     var homepage_items: Array<HomepageItem>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var is_header: Boolean? = null,
-    var item_order: Array<Long>? = null,
+    var item_order: Array<String>? = null,
     var title: String? = null,
     var updated_at: Date? = null,
     var description: String? = null,
-    var visible_item_order: Array<Long>? = null
+    var visible_item_order: Array<String>? = null
 ) : Serializable
 
 /**
@@ -2345,7 +2346,7 @@ data class ImportedProject (
  * @property enabled Whether the integration is available to users.
  * @property params Array of params for the integration.
  * @property supported_formats A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
- * @property supported_action_types A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (read-only)
+ * @property supported_action_types A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)
  * @property supported_formattings A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (read-only)
  * @property supported_visualization_formattings A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (read-only)
  * @property supported_download_settings A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (read-only)
@@ -2358,7 +2359,7 @@ data class ImportedProject (
 data class Integration (
     var can: Map<String,Boolean>? = null,
     var id: String? = null,
-    var integration_hub_id: Long? = null,
+    var integration_hub_id: String? = null,
     var label: String? = null,
     var description: String? = null,
     var enabled: Boolean? = null,
@@ -2372,7 +2373,7 @@ data class Integration (
     var uses_oauth: Boolean? = null,
     var required_fields: Array<IntegrationRequiredField>? = null,
     var delegate_oauth: Boolean? = null,
-    var installed_delegate_oauth_targets: Array<Long>? = null
+    var installed_delegate_oauth_targets: Array<String>? = null
 ) : Serializable
 
 /**
@@ -2390,7 +2391,7 @@ data class Integration (
  */
 data class IntegrationHub (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var url: String? = null,
     var label: String? = null,
     var official: Boolean? = null,
@@ -2531,9 +2532,9 @@ data class LDAPConfig (
     var connection_port: String? = null,
     var connection_tls: Boolean? = null,
     var connection_tls_no_verify: Boolean? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
     var default_new_user_groups: Array<Group>? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
     var default_new_user_roles: Array<Role>? = null,
     var enabled: Boolean? = null,
     var force_no_page: Boolean? = null,
@@ -2604,8 +2605,8 @@ data class LDAPConfigTestResult (
  * @property url Link to ldap config (read-only)
  */
 data class LDAPGroupRead (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
     var roles: Array<Role>? = null,
@@ -2621,11 +2622,11 @@ data class LDAPGroupRead (
  * @property url Link to ldap config (read-only)
  */
 data class LDAPGroupWrite (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
-    var role_ids: Array<Long>? = null,
+    var role_ids: Array<String>? = null,
     var url: String? = null
 ) : Serializable
 
@@ -2676,7 +2677,7 @@ data class LDAPUserAttributeRead (
 data class LDAPUserAttributeWrite (
     var name: String? = null,
     var required: Boolean? = null,
-    var user_attribute_ids: Array<Long>? = null,
+    var user_attribute_ids: Array<String>? = null,
     var url: String? = null
 ) : Serializable
 
@@ -2710,14 +2711,6 @@ data class LegacyFeature (
     var approximate_end_of_life_date: Date? = null,
     var has_disabled_on_upgrade: Boolean? = null
 ) : Serializable
-
-/**
- * Name of the command Valid values are: "dashboard", "lookml_dashboard". (Enum defined in Command)
- */
-enum class LinkedContentType : Serializable {
-    dashboard,
-    lookml_dashboard
-}
 
 /**
  * @property code Code for Locale (read-only)
@@ -2773,15 +2766,15 @@ data class LocalizationSettings (
  */
 data class Look (
     var can: Map<String,Boolean>? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var id: String? = null,
     var title: String? = null,
-    var user_id: Long? = null,
-    var content_favorite_id: Long? = null,
+    var user_id: String? = null,
+    var content_favorite_id: String? = null,
     var created_at: Date? = null,
     var deleted: Boolean? = null,
     var deleted_at: Date? = null,
-    var deleter_id: Long? = null,
+    var deleter_id: String? = null,
     var description: String? = null,
     var embed_url: String? = null,
     var excel_file_url: String? = null,
@@ -2790,13 +2783,13 @@ data class Look (
     var image_embed_url: String? = null,
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
-    var last_updater_id: Long? = null,
+    var last_updater_id: String? = null,
     var last_viewed_at: Date? = null,
     var model: LookModel? = null,
     var public: Boolean? = null,
     var public_slug: String? = null,
     var public_url: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var short_url: String? = null,
     var folder: FolderBase? = null,
     var folder_id: String? = null,
@@ -2813,10 +2806,10 @@ data class Look (
  */
 data class LookBasic (
     var can: Map<String,Boolean>? = null,
-    var content_metadata_id: Long? = null,
-    var id: Long? = null,
+    var content_metadata_id: String? = null,
+    var id: String? = null,
     var title: String? = null,
-    var user_id: Long? = null
+    var user_id: String? = null
 ) : Serializable
 
 /**
@@ -3307,15 +3300,15 @@ data class LookModel (
  */
 data class LookWithDashboards (
     var can: Map<String,Boolean>? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var id: String? = null,
     var title: String? = null,
-    var user_id: Long? = null,
-    var content_favorite_id: Long? = null,
+    var user_id: String? = null,
+    var content_favorite_id: String? = null,
     var created_at: Date? = null,
     var deleted: Boolean? = null,
     var deleted_at: Date? = null,
-    var deleter_id: Long? = null,
+    var deleter_id: String? = null,
     var description: String? = null,
     var embed_url: String? = null,
     var excel_file_url: String? = null,
@@ -3324,13 +3317,13 @@ data class LookWithDashboards (
     var image_embed_url: String? = null,
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
-    var last_updater_id: Long? = null,
+    var last_updater_id: String? = null,
     var last_viewed_at: Date? = null,
     var model: LookModel? = null,
     var public: Boolean? = null,
     var public_slug: String? = null,
     var public_url: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var short_url: String? = null,
     var folder: FolderBase? = null,
     var folder_id: String? = null,
@@ -3375,15 +3368,15 @@ data class LookWithDashboards (
  */
 data class LookWithQuery (
     var can: Map<String,Boolean>? = null,
-    var content_metadata_id: Long? = null,
+    var content_metadata_id: String? = null,
     var id: String? = null,
     var title: String? = null,
-    var user_id: Long? = null,
-    var content_favorite_id: Long? = null,
+    var user_id: String? = null,
+    var content_favorite_id: String? = null,
     var created_at: Date? = null,
     var deleted: Boolean? = null,
     var deleted_at: Date? = null,
-    var deleter_id: Long? = null,
+    var deleter_id: String? = null,
     var description: String? = null,
     var embed_url: String? = null,
     var excel_file_url: String? = null,
@@ -3392,13 +3385,13 @@ data class LookWithQuery (
     var image_embed_url: String? = null,
     var is_run_on_load: Boolean? = null,
     var last_accessed_at: Date? = null,
-    var last_updater_id: Long? = null,
+    var last_updater_id: String? = null,
     var last_viewed_at: Date? = null,
     var model: LookModel? = null,
     var public: Boolean? = null,
     var public_slug: String? = null,
     var public_url: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var short_url: String? = null,
     var folder: FolderBase? = null,
     var folder_id: String? = null,
@@ -3457,7 +3450,7 @@ data class MergeQuery (
     var dynamic_fields: String? = null,
     var id: String? = null,
     var pivots: Array<String>? = null,
-    var result_maker_id: Long? = null,
+    var result_maker_id: String? = null,
     var sorts: Array<String>? = null,
     var source_queries: Array<MergeQuerySourceQuery>? = null,
     var total: Boolean? = null,
@@ -3472,7 +3465,7 @@ data class MergeQuery (
 data class MergeQuerySourceQuery (
     var merge_fields: Array<MergeFields>? = null,
     var name: String? = null,
-    var query_id: Long? = null
+    var query_id: String? = null
 ) : Serializable
 
 /**
@@ -3536,7 +3529,7 @@ data class ModelSet (
     var can: Map<String,Boolean>? = null,
     var all_access: Boolean? = null,
     var built_in: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var models: Array<String>? = null,
     var name: String? = null,
     var url: String? = null
@@ -3585,7 +3578,7 @@ data class OauthClientApp (
     var display_name: String? = null,
     var description: String? = null,
     var enabled: Boolean? = null,
-    var group_id: Long? = null,
+    var group_id: String? = null,
     var tokens_invalid_before: Date? = null,
     var activated_users: Array<UserPublic>? = null
 ) : Serializable
@@ -3631,9 +3624,9 @@ data class OIDCConfig (
     var audience: String? = null,
     var auth_requires_role: Boolean? = null,
     var authorization_endpoint: String? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
     var default_new_user_groups: Array<Group>? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
     var default_new_user_roles: Array<Role>? = null,
     var enabled: Boolean? = null,
     var groups: Array<OIDCGroupRead>? = null,
@@ -3642,7 +3635,7 @@ data class OIDCConfig (
     var identifier: String? = null,
     var issuer: String? = null,
     var modified_at: Date? = null,
-    var modified_by: Long? = null,
+    var modified_by: String? = null,
     var new_user_migration_types: String? = null,
     var scopes: Array<String>? = null,
     var secret: String? = null,
@@ -3669,8 +3662,8 @@ data class OIDCConfig (
  * @property roles Looker Roles (read-only)
  */
 data class OIDCGroupRead (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
     var roles: Array<Role>? = null
@@ -3684,11 +3677,11 @@ data class OIDCGroupRead (
  * @property role_ids Looker Role Ids
  */
 data class OIDCGroupWrite (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
-    var role_ids: Array<Long>? = null
+    var role_ids: Array<String>? = null
 ) : Serializable
 
 /**
@@ -3710,7 +3703,7 @@ data class OIDCUserAttributeRead (
 data class OIDCUserAttributeWrite (
     var name: String? = null,
     var required: Boolean? = null,
-    var user_attribute_ids: Array<Long>? = null
+    var user_attribute_ids: Array<String>? = null
 ) : Serializable
 
 /**
@@ -3754,7 +3747,7 @@ data class PermissionSet (
     var can: Map<String,Boolean>? = null,
     var all_access: Boolean? = null,
     var built_in: Boolean? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var permissions: Array<String>? = null,
     var url: String? = null
@@ -3767,6 +3760,41 @@ enum class PermissionType : Serializable {
     view,
     edit
 }
+
+/**
+ * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
+ * @property logo_url Logo image url (read-only) (read-only)
+ * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)
+ * @property favicon_url Favicon image url (read-only) (read-only)
+ * @property default_title Default page title
+ * @property show_help_menu Boolean to toggle showing help menus
+ * @property show_docs Boolean to toggle showing docs
+ * @property show_email_sub_options Boolean to toggle showing email subscription options.
+ * @property allow_looker_mentions Boolean to toggle mentions of Looker in emails
+ * @property allow_looker_links Boolean to toggle links to Looker in emails
+ * @property custom_welcome_email_advanced Allow subject line and email heading customization in customized emails”
+ * @property setup_mentions Remove the word Looker from appearing in the account setup page
+ * @property alerts_logo Remove Looker logo from Alerts
+ * @property alerts_links Remove Looker links from Alerts
+ * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
+ */
+data class PrivatelabelConfiguration (
+    var logo_file: String? = null,
+    var logo_url: String? = null,
+    var favicon_file: String? = null,
+    var favicon_url: String? = null,
+    var default_title: String? = null,
+    var show_help_menu: Boolean? = null,
+    var show_docs: Boolean? = null,
+    var show_email_sub_options: Boolean? = null,
+    var allow_looker_mentions: Boolean? = null,
+    var allow_looker_links: Boolean? = null,
+    var custom_welcome_email_advanced: Boolean? = null,
+    var setup_mentions: Boolean? = null,
+    var alerts_logo: Boolean? = null,
+    var alerts_links: Boolean? = null,
+    var folders_mentions: Boolean? = null
+) : Serializable
 
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
@@ -3958,7 +3986,7 @@ enum class PullRequestMode : Serializable {
  */
 data class Query (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var model: String,
     var view: String,
     var fields: Array<String>? = null,
@@ -4009,7 +4037,7 @@ data class Query (
 data class QueryTask (
     var can: Map<String,Boolean>? = null,
     var id: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var query: Query? = null,
     var generate_links: Boolean? = null,
     var force_production: Boolean? = null,
@@ -4054,14 +4082,14 @@ data class RenderTask (
     var can: Map<String,Boolean>? = null,
     var created_at: String? = null,
     var dashboard_filters: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var dashboard_style: String? = null,
     var finalized_at: String? = null,
     var height: Long? = null,
     var id: String? = null,
     var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var dashboard_element_id: String? = null,
     var query_runtime: Double? = null,
     var render_runtime: Double? = null,
@@ -4069,7 +4097,7 @@ data class RenderTask (
     var runtime: Double? = null,
     var status: String? = null,
     var status_detail: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var width: Long? = null
 ) : Serializable
 
@@ -4145,13 +4173,13 @@ data class ResultMakerFilterablesListen (
  * @property vis_config Vis config of the constituent Query, or Merge Query. (read-only)
  */
 data class ResultMakerWithIdVisConfigAndDynamicFields (
-    var id: Long? = null,
+    var id: String? = null,
     var dynamic_fields: String? = null,
     var filterables: Array<ResultMakerFilterables>? = null,
     var sorts: Array<String>? = null,
     var merge_result_id: String? = null,
     var total: Boolean? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var sql_query_id: String? = null,
     var query: Query? = null,
     var vis_config: Map<String,Any>? = null
@@ -4170,12 +4198,12 @@ data class ResultMakerWithIdVisConfigAndDynamicFields (
  */
 data class Role (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var permission_set: PermissionSet? = null,
-    var permission_set_id: Long? = null,
+    var permission_set_id: String? = null,
     var model_set: ModelSet? = null,
-    var model_set_id: Long? = null,
+    var model_set_id: String? = null,
     var url: String? = null,
     var users_url: String? = null
 ) : Serializable
@@ -4194,12 +4222,12 @@ data class Role (
  */
 data class RoleSearch (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var permission_set: PermissionSet? = null,
-    var permission_set_id: Long? = null,
+    var permission_set_id: String? = null,
     var model_set: ModelSet? = null,
-    var model_set_id: Long? = null,
+    var model_set_id: String? = null,
     var user_count: Long? = null,
     var url: String? = null,
     var users_url: String? = null
@@ -4230,7 +4258,7 @@ data class RoleSearch (
  */
 data class RunningQueries (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var user: UserPublic? = null,
     var query: Query? = null,
     var sql_query: SqlQuery? = null,
@@ -4305,8 +4333,8 @@ data class SamlConfig (
     var modified_by: String? = null,
     var default_new_user_roles: Array<Role>? = null,
     var default_new_user_groups: Array<Group>? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups: Array<SamlGroupRead>? = null,
@@ -4332,8 +4360,8 @@ data class SamlConfig (
  * @property url Link to saml config (read-only)
  */
 data class SamlGroupRead (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
     var roles: Array<Role>? = null,
@@ -4349,11 +4377,11 @@ data class SamlGroupRead (
  * @property url Link to saml config (read-only)
  */
 data class SamlGroupWrite (
-    var id: Long? = null,
-    var looker_group_id: Long? = null,
+    var id: String? = null,
+    var looker_group_id: String? = null,
     var looker_group_name: String? = null,
     var name: String? = null,
-    var role_ids: Array<Long>? = null,
+    var role_ids: Array<String>? = null,
     var url: String? = null
 ) : Serializable
 
@@ -4392,7 +4420,7 @@ data class SamlUserAttributeRead (
 data class SamlUserAttributeWrite (
     var name: String? = null,
     var required: Boolean? = null,
-    var user_attribute_ids: Array<Long>? = null,
+    var user_attribute_ids: Array<String>? = null,
     var url: String? = null
 ) : Serializable
 
@@ -4434,11 +4462,11 @@ data class SamlUserAttributeWrite (
  */
 data class ScheduledPlan (
     var name: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
     var look_id: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,
     var dashboard_filters: String? = null,
@@ -4459,7 +4487,7 @@ data class ScheduledPlan (
     var color_theme: String? = null,
     var long_tables: Boolean? = null,
     var inline_table_width: Long? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var created_at: Date? = null,
     var updated_at: Date? = null,
     var title: String? = null,
@@ -4483,8 +4511,8 @@ data class ScheduledPlan (
  * @property message Optional message to be included in scheduled emails
  */
 data class ScheduledPlanDestination (
-    var id: Long? = null,
-    var scheduled_plan_id: Long? = null,
+    var id: String? = null,
+    var scheduled_plan_id: String? = null,
     var format: String? = null,
     var apply_formatting: Boolean? = null,
     var apply_vis: Boolean? = null,
@@ -4590,7 +4618,7 @@ data class SchemaTables (
  */
 data class Session (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var ip_address: String? = null,
     var browser: String? = null,
     var operating_system: String? = null,
@@ -4600,7 +4628,7 @@ data class Session (
     var credentials_type: String? = null,
     var extended_at: String? = null,
     var extended_count: Long? = null,
-    var sudo_user_id: Long? = null,
+    var sudo_user_id: String? = null,
     var created_at: String? = null,
     var expires_at: String? = null,
     var url: String? = null
@@ -4627,7 +4655,7 @@ data class SessionConfig (
  * @property extension_framework_enabled Toggle extension framework on or off
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
- * @property whitelabel_configuration
+ * @property privatelabel_configuration
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
  */
@@ -4635,7 +4663,7 @@ data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
-    var whitelabel_configuration: WhitelabelConfiguration? = null,
+    var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null
 ) : Serializable
@@ -4722,7 +4750,7 @@ data class SqlQuery (
     var explore_url: String? = null,
     var plaintext: Boolean? = null,
     var vis_config: Map<String,Any>? = null,
-    var result_maker_id: Long? = null
+    var result_maker_id: String? = null
 ) : Serializable
 
 /**
@@ -4847,12 +4875,13 @@ data class SupportAccessStatus (
 ) : Serializable
 
 /**
- * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard". (Enum defined in Integration)
+ * A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
  */
 enum class SupportedActionTypes : Serializable {
     cell,
     query,
-    dashboard
+    dashboard,
+    none
 }
 
 /**
@@ -4910,7 +4939,7 @@ data class Theme (
     var can: Map<String,Boolean>? = null,
     var begin_at: Date? = null,
     var end_at: Date? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String? = null,
     var settings: ThemeSettings? = null
 ) : Serializable
@@ -4966,15 +4995,6 @@ data class Timezone (
 ) : Serializable
 
 /**
- * @property name Name of the command
- * @property description Description of the command
- */
-data class UpdateCommand (
-    var name: String? = null,
-    var description: String? = null
-) : Serializable
-
-/**
  * @property name Unique Name
  * @property parent_id Id of Parent. If the parent id is null, this is a root-level entry
  */
@@ -4998,7 +5018,7 @@ data class UpdateFolder (
  * @property credentials_totp
  * @property display_name Full name for display (available only if both first_name and last_name are set) (read-only)
  * @property email EMail address (read-only)
- * @property embed_group_space_id (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
+ * @property embed_group_space_id (DEPRECATED) (Embed only) ID of user's group space based on the external_group_id optionally specified during embed user login (read-only)
  * @property first_name First name
  * @property group_ids Array of ids of the groups for this user (read-only)
  * @property home_folder_id ID string for user's home folder
@@ -5018,6 +5038,7 @@ data class UpdateFolder (
  * @property allow_direct_roles User can be directly assigned a role. (read-only)
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
+ * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
  * @property url Link to get this item (read-only)
  */
 data class User (
@@ -5035,19 +5056,19 @@ data class User (
     var credentials_totp: CredentialsTotp? = null,
     var display_name: String? = null,
     var email: String? = null,
-    var embed_group_space_id: Long? = null,
+    var embed_group_space_id: String? = null,
     var first_name: String? = null,
-    var group_ids: Array<Long>? = null,
+    var group_ids: Array<String>? = null,
     var home_folder_id: String? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var is_disabled: Boolean? = null,
     var last_name: String? = null,
     var locale: String? = null,
     var looker_versions: Array<String>? = null,
     var models_dir_validated: Boolean? = null,
-    var personal_folder_id: Long? = null,
+    var personal_folder_id: String? = null,
     var presumed_looker_employee: Boolean? = null,
-    var role_ids: Array<Long>? = null,
+    var role_ids: Array<String>? = null,
     var sessions: Array<Session>? = null,
     var ui_state: Map<String,Any>? = null,
     var verified_looker_employee: Boolean? = null,
@@ -5055,6 +5076,7 @@ data class User (
     var allow_direct_roles: Boolean? = null,
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
+    var embed_group_folder_id: String? = null,
     var url: String? = null
 ) : Serializable
 
@@ -5074,7 +5096,7 @@ data class User (
  */
 data class UserAttribute (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var name: String,
     var label: String,
     var type: String,
@@ -5115,9 +5137,9 @@ enum class UserAttributeFilterTypes : Serializable {
  */
 data class UserAttributeGroupValue (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
-    var group_id: Long? = null,
-    var user_attribute_id: Long? = null,
+    var id: String? = null,
+    var group_id: String? = null,
+    var user_attribute_id: String? = null,
     var value_is_hidden: Boolean? = null,
     var rank: Long? = null,
     var value: String? = null
@@ -5142,10 +5164,10 @@ data class UserAttributeWithValue (
     var label: String? = null,
     var rank: Long? = null,
     var value: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var user_can_edit: Boolean? = null,
     var value_is_hidden: Boolean? = null,
-    var user_attribute_id: Long? = null,
+    var user_attribute_id: String? = null,
     var source: String? = null,
     var hidden_value_domain_whitelist: String? = null
 ) : Serializable
@@ -5174,7 +5196,7 @@ data class UserLoginLockout (
     var key: String? = null,
     var auth_type: String? = null,
     var ip: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var remote_id: String? = null,
     var full_name: String? = null,
     var email: String? = null,
@@ -5193,7 +5215,7 @@ data class UserLoginLockout (
  */
 data class UserPublic (
     var can: Map<String,Boolean>? = null,
-    var id: Long? = null,
+    var id: String? = null,
     var first_name: String? = null,
     var last_name: String? = null,
     var display_name: String? = null,
@@ -5268,7 +5290,7 @@ data class WelcomeEmailTest (
  * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
  */
 data class WhitelabelConfiguration (
-    var id: Long? = null,
+    var id: String? = null,
     var logo_file: String? = null,
     var logo_url: String? = null,
     var favicon_file: String? = null,
@@ -5325,7 +5347,7 @@ data class WriteAlert (
     var comparison_type: ComparisonType,
     var cron: String,
     var custom_title: String? = null,
-    var dashboard_element_id: Long? = null,
+    var dashboard_element_id: String? = null,
     var description: String? = null,
     var destinations: Array<AlertDestination>,
     var field: AlertField,
@@ -5336,7 +5358,7 @@ data class WriteAlert (
     var investigative_content_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
-    var owner_id: Long,
+    var owner_id: String,
     var threshold: Double,
     var time_series_condition_state: AlertConditionState? = null
 ) : Serializable
@@ -5381,13 +5403,13 @@ data class WriteBackupConfiguration (
 data class WriteBoard (
     var deleted_at: Date? = null,
     var description: String? = null,
-    var section_order: Array<Long>? = null,
+    var section_order: Array<String>? = null,
     var title: String? = null
 ) : Serializable
 
 /**
  * Dynamic writeable type for BoardItem removes:
- * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count
+ * can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, description, favorite_count, id, image_url, location, title, url, view_count, custom_image_url
  *
  * @property custom_description Custom description entered by the user, if present
  * @property custom_title Custom title entered by the user, if present
@@ -5397,16 +5419,26 @@ data class WriteBoard (
  * @property look_id Look to base this item on
  * @property lookml_dashboard_id LookML Dashboard to base this item on
  * @property order An arbitrary integer representing the sort order within the section
+ * @property use_custom_description Whether the custom description should be used instead of the content description, if the item is associated with content
+ * @property use_custom_title Whether the custom title should be used instead of the content title, if the item is associated with content
+ * @property use_custom_url Whether the custom url should be used instead of the content url, if the item is associated with content
+ * @property custom_image_data_base64 (Write-Only) base64 encoded image data
+ * @property use_custom_image Whether the custom image should be used instead of the content image, if the item is associated with content
  */
 data class WriteBoardItem (
     var custom_description: String? = null,
     var custom_title: String? = null,
     var custom_url: String? = null,
-    var dashboard_id: Long? = null,
-    var board_section_id: Long? = null,
+    var dashboard_id: String? = null,
+    var board_section_id: String? = null,
     var look_id: String? = null,
     var lookml_dashboard_id: String? = null,
-    var order: Long? = null
+    var order: Long? = null,
+    var use_custom_description: Boolean? = null,
+    var use_custom_title: Boolean? = null,
+    var use_custom_url: Boolean? = null,
+    var custom_image_data_base64: String? = null,
+    var use_custom_image: Boolean? = null
 ) : Serializable
 
 /**
@@ -5422,8 +5454,8 @@ data class WriteBoardItem (
 data class WriteBoardSection (
     var deleted_at: Date? = null,
     var description: String? = null,
-    var board_id: Long? = null,
-    var item_order: Array<Long>? = null,
+    var board_id: String? = null,
+    var item_order: Array<String>? = null,
     var title: String? = null
 ) : Serializable
 
@@ -5444,22 +5476,6 @@ data class WriteColorCollection (
 ) : Serializable
 
 /**
- * Dynamic writeable type for Command removes:
- * id, author_id
- *
- * @property name Name of the command
- * @property description Description of the command
- * @property linked_content_id Id of the content associated with the command
- * @property linked_content_type Name of the command Valid values are: "dashboard", "lookml_dashboard".
- */
-data class WriteCommand (
-    var name: String? = null,
-    var description: String? = null,
-    var linked_content_id: String? = null,
-    var linked_content_type: LinkedContentType? = null
-) : Serializable
-
-/**
  * Dynamic writeable type for ContentFavorite removes:
  * id, look_id, dashboard_id, board_id
  *
@@ -5471,8 +5487,8 @@ data class WriteCommand (
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 data class WriteContentFavorite (
-    var user_id: Long? = null,
-    var content_metadata_id: Long? = null,
+    var user_id: String? = null,
+    var content_metadata_id: String? = null,
     var look: WriteLookBasic? = null,
     var dashboard: WriteDashboardBase? = null
 ) : Serializable
@@ -5533,7 +5549,7 @@ data class WriteCreateDashboardFilter (
  * @property dashboard_id Id of dashboard associated with query.
  */
 data class WriteCreateQueryTask (
-    var query_id: Long,
+    var query_id: String,
     var result_format: ResultFormat,
     var source: String? = null,
     var deferred: Boolean? = null,
@@ -5644,6 +5660,7 @@ data class WriteDashboardBase (
  * @property title_hidden Whether title is hidden
  * @property title_text Text tile title
  * @property type Type
+ * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  */
 data class WriteDashboardElement (
     var body_text: String? = null,
@@ -5655,15 +5672,16 @@ data class WriteDashboardElement (
     var note_state: String? = null,
     var note_text: String? = null,
     var query: WriteQuery? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var refresh_interval: String? = null,
     var result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = null,
-    var result_maker_id: Long? = null,
+    var result_maker_id: String? = null,
     var subtitle_text: String? = null,
     var title: String? = null,
     var title_hidden: Boolean? = null,
     var title_text: String? = null,
-    var type: String? = null
+    var type: String? = null,
+    var rich_content_json: String? = null
 ) : Serializable
 
 /**
@@ -5829,7 +5847,7 @@ data class WriteDBConnection (
     var tunnel_id: String? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
-    var oauth_application_id: Long? = null,
+    var oauth_application_id: String? = null,
     var always_retry_failed_builds: Boolean? = null,
     var cost_estimate_enabled: Boolean? = null,
     var pdt_api_control_enabled: Boolean? = null
@@ -5940,7 +5958,7 @@ data class WriteGroup (
 data class WriteIntegration (
     var enabled: Boolean? = null,
     var params: Array<IntegrationParam>? = null,
-    var installed_delegate_oauth_targets: Array<Long>? = null
+    var installed_delegate_oauth_targets: Array<String>? = null
 ) : Serializable
 
 /**
@@ -6025,8 +6043,8 @@ data class WriteLDAPConfig (
     var connection_port: String? = null,
     var connection_tls: Boolean? = null,
     var connection_tls_no_verify: Boolean? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
     var enabled: Boolean? = null,
     var force_no_page: Boolean? = null,
     var groups_base_dn: String? = null,
@@ -6070,7 +6088,7 @@ data class WriteLegacyFeature (
  * @property user_id User Id
  */
 data class WriteLookBasic (
-    var user_id: Long? = null
+    var user_id: String? = null
 ) : Serializable
 
 /**
@@ -6108,12 +6126,12 @@ data class WriteLookmlModel (
  */
 data class WriteLookWithQuery (
     var title: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var deleted: Boolean? = null,
     var description: String? = null,
     var is_run_on_load: Boolean? = null,
     var public: Boolean? = null,
-    var query_id: Long? = null,
+    var query_id: String? = null,
     var folder: WriteFolderBase? = null,
     var folder_id: String? = null,
     var query: WriteQuery? = null
@@ -6168,7 +6186,7 @@ data class WriteOauthClientApp (
     var display_name: String? = null,
     var description: String? = null,
     var enabled: Boolean? = null,
-    var group_id: Long? = null
+    var group_id: String? = null
 ) : Serializable
 
 /**
@@ -6205,8 +6223,8 @@ data class WriteOIDCConfig (
     var audience: String? = null,
     var auth_requires_role: Boolean? = null,
     var authorization_endpoint: String? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
     var enabled: Boolean? = null,
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<OIDCGroupWrite>? = null,
@@ -6253,6 +6271,40 @@ data class WritePasswordConfig (
 data class WritePermissionSet (
     var name: String? = null,
     var permissions: Array<String>? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for PrivatelabelConfiguration removes:
+ * logo_url, favicon_url
+ *
+ * @property logo_file Customer logo image. Expected base64 encoded data (write-only)
+ * @property favicon_file Custom favicon image. Expected base64 encoded data (write-only)
+ * @property default_title Default page title
+ * @property show_help_menu Boolean to toggle showing help menus
+ * @property show_docs Boolean to toggle showing docs
+ * @property show_email_sub_options Boolean to toggle showing email subscription options.
+ * @property allow_looker_mentions Boolean to toggle mentions of Looker in emails
+ * @property allow_looker_links Boolean to toggle links to Looker in emails
+ * @property custom_welcome_email_advanced Allow subject line and email heading customization in customized emails”
+ * @property setup_mentions Remove the word Looker from appearing in the account setup page
+ * @property alerts_logo Remove Looker logo from Alerts
+ * @property alerts_links Remove Looker links from Alerts
+ * @property folders_mentions Remove Looker mentions in home folder page when you don’t have any items saved
+ */
+data class WritePrivatelabelConfiguration (
+    var logo_file: String? = null,
+    var favicon_file: String? = null,
+    var default_title: String? = null,
+    var show_help_menu: Boolean? = null,
+    var show_docs: Boolean? = null,
+    var show_email_sub_options: Boolean? = null,
+    var allow_looker_mentions: Boolean? = null,
+    var allow_looker_links: Boolean? = null,
+    var custom_welcome_email_advanced: Boolean? = null,
+    var setup_mentions: Boolean? = null,
+    var alerts_logo: Boolean? = null,
+    var alerts_links: Boolean? = null,
+    var folders_mentions: Boolean? = null
 ) : Serializable
 
 /**
@@ -6385,9 +6437,9 @@ data class WriteResultMakerWithIdVisConfigAndDynamicFields (
 data class WriteRole (
     var name: String? = null,
     var permission_set: WritePermissionSet? = null,
-    var permission_set_id: Long? = null,
+    var permission_set_id: String? = null,
     var model_set: WriteModelSet? = null,
-    var model_set_id: Long? = null
+    var model_set_id: String? = null
 ) : Serializable
 
 /**
@@ -6431,8 +6483,8 @@ data class WriteSamlConfig (
     var user_attribute_map_last_name: String? = null,
     var new_user_migration_types: String? = null,
     var alternate_email_login_allowed: Boolean? = null,
-    var default_new_user_role_ids: Array<Long>? = null,
-    var default_new_user_group_ids: Array<Long>? = null,
+    var default_new_user_role_ids: Array<String>? = null,
+    var default_new_user_group_ids: Array<String>? = null,
     var set_roles_from_groups: Boolean? = null,
     var groups_attribute: String? = null,
     var groups_with_role_ids: Array<SamlGroupWrite>? = null,
@@ -6479,11 +6531,11 @@ data class WriteSamlConfig (
  */
 data class WriteScheduledPlan (
     var name: String? = null,
-    var user_id: Long? = null,
+    var user_id: String? = null,
     var run_as_recipient: Boolean? = null,
     var enabled: Boolean? = null,
     var look_id: String? = null,
-    var dashboard_id: Long? = null,
+    var dashboard_id: String? = null,
     var lookml_dashboard_id: String? = null,
     var filters_string: String? = null,
     var dashboard_filters: String? = null,
@@ -6530,8 +6582,8 @@ data class WriteSessionConfig (
  * @property extension_framework_enabled Toggle extension framework on or off
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
- * @property whitelabel_configuration Dynamic writeable type for WhitelabelConfiguration removes:
- * id, logo_url, favicon_url
+ * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
+ * logo_url, favicon_url
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
  */
@@ -6539,7 +6591,7 @@ data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
-    var whitelabel_configuration: WriteWhitelabelConfiguration? = null,
+    var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null
 ) : Serializable
@@ -6592,7 +6644,7 @@ data class WriteTheme (
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url

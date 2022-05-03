@@ -1,5 +1,43 @@
 # Changelog
 
+### [21.3.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.3.2...sdk-codegen-scripts-v21.3.3) (2022-04-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.4.1 to ^22.4.2
+    * @looker/sdk-codegen bumped from ^21.5.1 to ^21.5.2
+    * @looker/sdk-node bumped from ^22.4.1 to ^22.4.2
+    * @looker/sdk-rtl bumped from ^21.3.2 to ^21.3.3
+
+### [21.3.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.3.1...sdk-codegen-scripts-v21.3.2) (2022-04-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.4.0 to ^22.4.1
+    * @looker/sdk-codegen bumped from ^21.5.0 to ^21.5.1
+    * @looker/sdk-node bumped from ^22.4.0 to ^22.4.1
+
+### [21.3.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.3.0...sdk-codegen-scripts-v21.3.1) (2022-03-24)
+
+
+### Bug Fixes
+
+* declaration miner (internal utility) ([#1025](https://www.github.com/looker-open-source/sdk-codegen/issues/1025)) ([9b987b2](https://www.github.com/looker-open-source/sdk-codegen/commit/9b987b2c2f24e4a43d6ff25921c5f46804b7702a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.2.0 to ^22.4.0
+    * @looker/sdk-node bumped from ^22.2.0 to ^22.4.0
+
 ## [21.3.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.2.3...sdk-codegen-scripts-v21.3.0) (2022-03-04)
 
 

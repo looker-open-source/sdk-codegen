@@ -138,6 +138,7 @@ import type {
   IRequestAllScheduledPlans,
   IRequestAllUsers,
   IRequestContentThumbnail,
+  IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateLookmlDashboardRenderTask,
   IRequestCreateQueryTask,
@@ -2475,8 +2476,8 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * Creates a new dashboard object and returns the details of the newly created dashboard.
    *
-   * `Title`, `user_id`, and `space_id` are all required fields.
-   * `Space_id` and `user_id` must contain the id of an existing space or user, respectively.
+   * `Title` and `space_id` are required fields.
+   * `Space_id` must contain the id of an existing space.
    * A dashboard's `title` must be unique within the space in which it resides.
    *
    * If you receive a 422 error response when creating a dashboard, be sure to look at the
@@ -2563,8 +2564,6 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
-        limit: request.limit,
-        offset: request.offset,
         sorts: request.sorts,
         filter_or: request.filter_or,
       },
@@ -2939,20 +2938,18 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /dashboard_elements -> IDashboardElement
    *
-   * @param body Partial<IWriteDashboardElement>
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestCreateDashboardElement" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async create_dashboard_element(
-    body: Partial<IWriteDashboardElement>,
-    fields?: string,
+    request: IRequestCreateDashboardElement,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement, IError | IValidationError>> {
     return this.post<IDashboardElement, IError | IValidationError>(
       '/dashboard_elements',
-      { fields },
-      body,
+      { fields: request.fields, apply_filters: request.apply_filters },
+      request.body,
       options
     )
   }
@@ -4471,7 +4468,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * @deprecated
    *
-   * @param homepage_item_id Id of homepage_item
+   * @param homepage_item_id Id of homepage item
    * @param options one-time API call overrides
    *
    */
@@ -4594,7 +4591,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * @deprecated
    *
-   * @param homepage_section_id Id of homepage_section
+   * @param homepage_section_id Id of homepage section
    * @param options one-time API call overrides
    *
    */
@@ -4686,7 +4683,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -4711,7 +4708,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * PATCH /integration_hubs/{integration_hub_id} -> IIntegrationHub
    *
-   * @param integration_hub_id Id of Integration Hub
+   * @param integration_hub_id Id of integration_hub
    * @param body Partial<IWriteIntegrationHub>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -5003,8 +5000,6 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
-        limit: request.limit,
-        offset: request.offset,
         sorts: request.sorts,
         filter_or: request.filter_or,
       },
@@ -6581,11 +6576,11 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    * ```ruby
    * query_params =
    * {
-   *   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+   *   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
    *   :"f[category.name]" => "socks",
-   *   :sorts => "products.count desc 0",
-   *   :limit => "500",
-   *   :query_timezone => "America/Los_Angeles"
+   *   sorts: "products.count desc 0",
+   *   limit: "500",
+   *   query_timezone: "America/Los_Angeles"
    * }
    * response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
    *
@@ -7287,7 +7282,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * PATCH /permission_sets/{permission_set_id} -> IPermissionSet
    *
-   * @param permission_set_id id of permission set
+   * @param permission_set_id Id of permission set
    * @param body Partial<IWritePermissionSet>
    * @param options one-time API call overrides
    *
@@ -7546,14 +7541,14 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
-   * @param role_id Id of Role
-   * @param body Partial<number[]>
+   * @param role_id id of role
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_groups(
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError | IValidationError>> {
     return this.put<IGroup[], IError | IValidationError>(
@@ -7594,13 +7589,13 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    * PUT /roles/{role_id}/users -> IUser[]
    *
    * @param role_id id of role
-   * @param body Partial<number[]>
+   * @param body Partial<string[]>
    * @param options one-time API call overrides
    *
    */
   async set_role_users(
     role_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError | IValidationError>> {
     return this.put<IUser[], IError | IValidationError>(
@@ -9164,7 +9159,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9187,7 +9182,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -9212,7 +9207,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body Partial<IWriteCredentialsEmail>
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -9237,7 +9232,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_email -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9258,7 +9253,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9281,7 +9276,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -9306,7 +9301,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_totp -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9327,7 +9322,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9350,7 +9345,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9371,7 +9366,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9394,7 +9389,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_google -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9415,7 +9410,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9438,7 +9433,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9459,7 +9454,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9482,7 +9477,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9528,8 +9523,8 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_api3_id id of API 3 Credential
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API 3 Credential
    * @param options one-time API call overrides
    *
    */
@@ -9551,7 +9546,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9574,7 +9569,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -9624,8 +9619,8 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
-   * @param user_id id of user
-   * @param credentials_embed_id id of Embedding Credential
+   * @param user_id Id of user
+   * @param credentials_embed_id Id of Embedding Credential
    * @param options one-time API call overrides
    *
    */
@@ -9647,7 +9642,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9670,7 +9665,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9693,7 +9688,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param options one-time API call overrides
    *
    */
@@ -9739,8 +9734,8 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
-   * @param user_id id of user
-   * @param session_id id of Web Login Session
+   * @param user_id Id of user
+   * @param session_id Id of Web Login Session
    * @param options one-time API call overrides
    *
    */
@@ -9762,7 +9757,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
-   * @param user_id id of user
+   * @param user_id Id of user
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -9838,15 +9833,15 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * PUT /users/{user_id}/roles -> IRole[]
    *
-   * @param user_id id of user
-   * @param body Partial<number[]>
+   * @param user_id Id of user
+   * @param body Partial<string[]>
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
    */
   async set_user_roles(
     user_id: number,
-    body: Partial<number[]>,
+    body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>> {
@@ -10064,7 +10059,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    *
    * DELETE /user_attributes/{user_attribute_id} -> string
    *
-   * @param user_attribute_id Id of user_attribute
+   * @param user_attribute_id Id of user attribute
    * @param options one-time API call overrides
    *
    */

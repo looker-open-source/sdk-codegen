@@ -28,6 +28,7 @@ import type { Agent } from 'https'
 import type { Headers } from 'request'
 import type { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
+import { DelimArray } from './delimArray'
 
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
@@ -373,14 +374,21 @@ export type Values = { [key: string]: any } | null | undefined
 
 /**
  * Encode parameter if not already encoded
+ *
+ * Note: this includes recognition of Date, DelimArray, and default objects for special handling
+ *
  * @param value value of parameter
  * @returns URI encoded value
  */
 export function encodeParam(value: any) {
   if (value instanceof Date) {
     value = value.toISOString()
+  } else if (value instanceof DelimArray) {
+    value = value.toString()
   }
-  let encoded = value.toString()
+  // check for object type to prevent "[object Object]" as the value.toString()
+  let encoded =
+    typeof value === 'object' ? JSON.stringify(value) : value.toString()
 
   // decodeURIComponent throws URIError if there is a % character
   // without it being part of an encoded

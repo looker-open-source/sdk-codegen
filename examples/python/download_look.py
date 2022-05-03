@@ -54,7 +54,7 @@ def download_look(look: models.Look, result_format: str, width: int, height: int
     task = sdk.create_look_render_task(id, result_format, width, height,)
 
     if not (task and task.id):
-        raise sdk_exceptions.RenderTaskError(
+        raise Exception(
             f"Could not create a render task for '{look.title}'"
         )
 

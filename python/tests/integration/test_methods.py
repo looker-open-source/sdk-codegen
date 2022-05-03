@@ -34,7 +34,7 @@ def test_crud_user(sdk: mtds.Looker40SDK):
         )
     )
     assert isinstance(user, ml.User)
-    assert isinstance(user.id, int)
+    assert isinstance(user.id, str)
     assert user.first_name == TEST_FIRST_NAME
     assert user.last_name == TEST_LAST_NAME
     assert not user.is_disabled
@@ -155,7 +155,7 @@ def test_me_field_filters(sdk: mtds.Looker40SDK):
     """me() should return only the requested fields."""
     me = sdk.me("id, first_name, last_name")
     assert isinstance(me, ml.User)
-    assert isinstance(me.id, int)
+    assert isinstance(me.id, str)
     assert isinstance(me.first_name, str)
     assert me.first_name != ""
     assert isinstance(me.last_name, str)
@@ -300,8 +300,8 @@ def test_it_creates_and_runs_query(
         query = sdk.create_query(request)
         assert isinstance(query, ml.Query)
         assert query.id
-        assert isinstance(query.id, int)
-        assert query.id > 0
+        assert isinstance(query.id, str)
+        assert query.id != '0'
 
         sql = sdk.run_query(query.id, "sql")
         assert "SELECT" in sql

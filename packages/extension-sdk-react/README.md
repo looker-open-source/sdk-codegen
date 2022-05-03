@@ -21,34 +21,28 @@ Extension SDK.
 
 ### Provider
 
-Add the `ExtensionProvider` near the root of the extension component tree.
+Add the `ExtensionProvider40` near the root of the extension component tree. ExtensionProvider40 exposes the Looker 4.0 sdk.
 
 ```tsx
-<ExtensionProvider
+<ExtensionProvider40
   loadingComponent={<div>Loading ...</div>}
-  requiredLookerVersion=">=7.0.0"
+  requiredLookerVersion=">=22.0.0"
 >
   <MyComponent />
-</ExtensionProvider>
+</ExtensionProvider40>
 ```
 
-- An optional `loadingComponent` can be passed in to display the while the provider is establishing a connection with the looker host
+- An optional `loadingComponent` can be passed in to display while the provider is establishing a connection with the looker host
 - `requiredLookerVersion` indicates what version of Looker is required. Check `context.initializeError` to see if a version error was detected.
 
 ### Access the Extension SDK
 
 ```tsx
 import React, { useContext } from "react"
-import {
-  ExtensionContext,
-  ExtensionContextData
-} from "@looker/extension-sdk-react"
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
 export const MyComponent: React.FC<{}> = () => {
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
-  const extensionHost = extensionContext.extensionSDK
-  const sdk = extensionContext.core40SDK
-  const initializeError = extensionContext.initializeError
+  const { extensionSDK, coreSDK, initializeError } = useContext(ExtensionContext40)
 
 ```
 
@@ -60,7 +54,7 @@ the router so you can add `Switch` and `Route` components as childrem. The Looke
 of changes to the React routes and the child route is appended to he Looker extension
 route. This means that the route can be restored on a page reload or sent as a link.
 
-The `ExtensionProvider` can also notify the extension of changes to the route using the
+The `ExtensionProvider40` can also notify the extension of changes to the route using the
 `onPathnameChange` attribute.
 
 #### Example
@@ -70,7 +64,7 @@ export const MyExtension: React.FC<{}> = () => {
   const [pathname, setPathname] = useState("")
 
   return (
-      <ExtensionProvider onPathnameChange={setPathname}>
+      <ExtensionProvider40 onPathnameChange={setPathname}>
         <MyLayout>
           <MySidebar pathname={pathname} />
           <Switch>
@@ -82,7 +76,7 @@ export const MyExtension: React.FC<{}> = () => {
             </Route>
           </Switch>
         </MyLayout>
-      </ExtensionProvider>
+      </ExtensionProvider40>
   )
 }
 ```
@@ -96,21 +90,22 @@ The Looker SDK can be accessed as follows:
 
 The extension context exposes the following properties:
 
-- `coreSDK` - SDK version 3.1 (kept for backwards compatability)
-- `core31SDK` - SDK version 3.1
-- `core40SDK` - SDK version 4.0
+- `coreSDK` - SDK version 4.0
 
 The following global access methods are available:
 
-- `getCoreSDK()` - SDK version 3.1 (kept for backwards compatability)
-- `getCore31SDK()` - SDK version 3.1
 - `getCore40SDK()` - SDK version 4.0
 
 There is no restriction on which SDK can be used within an extension, none, one or all of the above can be used interchangeably, context or global access. The one caveat is that it is recommended that the Looker version support SDK 4.0 if the 4.0 SDK is used (the results may be unpredictable otherwise).
 
+If you require access to SDK version 3.1, use `<ExtensionProvider/>` or `<ExtensionProvider2 type={Looker31SDK}/>`. SDK version 3.1 will then globally be available through the following methods:
+
+- `getCoreSDK()` - SDK version 3.1 (kept for backwards compatibility)
+- `getCore31SDK()` - SDK version 3.1
+
 ### Redux support
 
-The Looker SDK is available outside of the Extension provider using the `getCore40SDK` method. This means that `redux sagas` or `redux thunks` can utilize the SDK from within a `saga` or `thunk`. Note that the Looker connection MUST be established before `getCoreSDK` can be called. An error will be thrown if the method is called to soon. Note that children of the `ExtensionProvider` will not be rendered until after the connection has been established. As such it safe for children of the `ExtensionProvider` to utilize `sagas` or `thunks`.
+The Looker SDK is available outside of the Extension provider using the `getCore40SDK` method. This means that `redux sagas` or `redux thunks` can utilize the SDK from within a `saga` or `thunk`. Note that the Looker connection MUST be established before `getCoreSDK` can be called. An error will be thrown if the method is called too soon. Note that children of the `ExtensionProvider40` will not be rendered until after the connection has been established. As such it is safe for children of the `ExtensionProvider40` to utilize `sagas` or `thunks`.
 
 #### Example saga
 

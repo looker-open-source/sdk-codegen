@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,52 +26,42 @@
 
 import React, { useState } from 'react'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
-import { SdkConnection } from '@looker/extension-sdk'
-import { LookerExtensionSDK } from '@looker/sdk'
+import { LookerExtensionSDK } from '@looker/extension-sdk'
+import type { ILooker40SDK, Looker40SDK } from '@looker/sdk'
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
 import { ExtensionConnector } from '../ExtensionConnector'
-import { registerCoreSDK2, unregisterCoreSDK2 } from '../../sdk/core_sdk2'
+import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
 
-export interface ExtensionContextData2<T> extends BaseExtensionContextData {
-  coreSDK: T
+export interface ExtensionContextData40 extends BaseExtensionContextData {
+  coreSDK: ILooker40SDK
 }
 
 /**
- * React context provider for extension API and SDK
+ * React context provider for extension API and Looker SDK 4.0.
  */
-export const ExtensionContext2 = React.createContext<
-  ExtensionContextData2<any>
->(
+export const ExtensionContext40 = React.createContext<ExtensionContextData40>(
   undefined as any // no one will ever see this undefined!
 )
 
-export interface ExtensionProvider2Props<T> extends ExtensionProviderProps {
-  type: T
-}
+export interface ExtensionProvider40Props extends ExtensionProviderProps {}
 
 /**
- * ExtensionProvider component. Provides access to the extension API and SDK (use
- * ExtensionContext) and react routing services.
+ * ExtensionProvider40 component. Provides access to the extension API and SDK (use
+ * ExtensionContext40) and react routing services.
  */
-export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
-  const { children, type, ...rest } = props
-  const [extensionData, setExtensionData] = useState<ExtensionContextData2<T>>(
-    {} as ExtensionContextData2<T>
+export function ExtensionProvider40(props: ExtensionProvider40Props) {
+  const { children, ...rest } = props
+  const [extensionData, setExtensionData] = useState<ExtensionContextData40>(
+    {} as ExtensionContextData40
   )
-  const apiVersion = (type as any).ApiVersion
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    let coreSDK: any
-    if (apiVersion) {
-      coreSDK = LookerExtensionSDK.createClient(
-        new SdkConnection(extensionHost, apiVersion),
-        type as any
-      )
-    }
-    registerCoreSDK2(coreSDK)
+    const coreSDK: ILooker40SDK =
+      LookerExtensionSDK.create40Client(extensionHost)
+    registerCore40SDK(coreSDK as Looker40SDK)
     setExtensionData((previousState: any) => {
       return {
         ...previousState,
@@ -82,11 +72,11 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
   }
 
   const unloadedCallback = () => {
-    unregisterCoreSDK2()
+    unregisterCore40SDK()
   }
 
   const updateContextData = (updatedContextData: BaseExtensionContextData) => {
-    setExtensionData((previousState: ExtensionContextData2<T>) => {
+    setExtensionData((previousState: ExtensionContextData40) => {
       return {
         ...previousState,
         ...updatedContextData,
@@ -95,7 +85,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
   }
 
   return (
-    <ExtensionContext2.Provider value={extensionData!}>
+    <ExtensionContext40.Provider value={extensionData}>
       <ExtensionConnector
         {...rest}
         contextData={extensionData}
@@ -105,6 +95,6 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
       >
         {children}
       </ExtensionConnector>
-    </ExtensionContext2.Provider>
+    </ExtensionContext40.Provider>
   )
 }

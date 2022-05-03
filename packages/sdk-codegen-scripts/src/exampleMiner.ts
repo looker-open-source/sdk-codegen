@@ -99,19 +99,23 @@ export const getAllFiles = (
   const files = fs.readdirSync(searchPath)
 
   files.forEach((file) => {
-    if (fs.statSync(searchPath + '/' + file).isDirectory()) {
-      if (!skipFolder(file, ignorePaths))
-        listOfFiles = getAllFiles(
-          searchPath + '/' + file,
-          listOfFiles,
-          filter,
-          ignorePaths
-        )
-    } else {
-      if (filter(file)) {
-        const fileName = path.join(searchPath, '/', file)
-        listOfFiles.push(fileName)
+    try {
+      if (fs.statSync(searchPath + '/' + file).isDirectory()) {
+        if (!skipFolder(file, ignorePaths))
+          listOfFiles = getAllFiles(
+            searchPath + '/' + file,
+            listOfFiles,
+            filter,
+            ignorePaths
+          )
+      } else {
+        if (filter(file)) {
+          const fileName = path.join(searchPath, '/', file)
+          listOfFiles.push(fileName)
+        }
       }
+    } catch (_e: any) {
+      // warn(`skipping ${file}: ${e}`)
     }
   })
 
@@ -129,7 +133,7 @@ export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
   filter: FileFilter = filterCodeFiles,
-  ignorePaths: string[] = ['node_modules', 'lib', 'dist']
+  ignorePaths: string[] = ['node_modules', 'lib', 'dist', 'bazel-bin']
 ) => {
   return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }
@@ -164,6 +168,13 @@ export const getRemoteHttpOrigin = () => {
     return match[1]
   }
   return `https://github.com/${match[1]}`
+}
+
+/** Permalink paths should not have the `.git` ending for a repo */
+export const getPermalinkRoot = () => {
+  let root = getRemoteHttpOrigin()
+  if (root.endsWith('.git')) root = root.substr(0, root.length - 4)
+  return root
 }
 
 export class CodeMiner implements IFileMine {
@@ -310,7 +321,7 @@ export class ExampleMiner {
   summaries: Summaries = {}
   nuggets: Nuggets = {}
   commitHash: string = getCommitHash()
-  remoteOrigin: string = getRemoteHttpOrigin()
+  remoteOrigin: string = getPermalinkRoot()
 
   constructor(public readonly sourcePath: string) {
     this.execute(sourcePath)
