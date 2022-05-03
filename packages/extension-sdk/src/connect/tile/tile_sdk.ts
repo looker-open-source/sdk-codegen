@@ -40,9 +40,9 @@ import type {
 import { DashboardRunState } from './types'
 
 const defaultHostData: TileHostData = {
-  isEditing: false,
+  isDashboardEditing: false,
   dashboardRunState: DashboardRunState.UNKNOWN,
-  filters: {},
+  dashboardFilters: {},
 }
 export class TileSDKImpl implements TileSDK {
   hostApi: ExtensionHostApiImpl

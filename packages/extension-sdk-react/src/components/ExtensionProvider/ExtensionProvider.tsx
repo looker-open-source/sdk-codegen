@@ -88,7 +88,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     unregisterCore40SDK()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData) => {
       return {
         ...previousState,

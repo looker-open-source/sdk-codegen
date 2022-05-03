@@ -36,15 +36,16 @@ export type TileHostDataChangedCallback = (
 
 export enum DashboardRunState {
   UNKNOWN = 'UNKNOWN',
-  LOADED = 'LOADED',
   RUNNING = 'RUNNING',
-  COMPLETE = 'COMPLETE',
+  NOT_RUNNING = 'NOT_RUNNING',
 }
 export interface TileHostData {
-  isEditing: boolean
-  dashboardRunState: DashboardRunState
-  filters: Filters
-  isCrossFiltersEnabled?: boolean
+  isExploring?: boolean
+  dashboardId?: string
+  dashboardFilters?: Filters
+  dashboardRunState?: DashboardRunState
+  isDashboardEditing?: boolean
+  isDashboardCrossFilteringEnabled?: boolean
 }
 
 export interface Pivot {

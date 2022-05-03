@@ -233,12 +233,15 @@ describe('extension_host_api tests', () => {
     })
     api.handleNotification({
       type: ExtensionNotificationType.TILE_HOST_DATA,
-      payload: { isEditing: true, isCrossFiltersEnabled: true },
+      payload: {
+        isDashboardEditing: true,
+        isDashboardCrossFilteringEnabled: true,
+      },
     })
     expect(api.tileSDK).toBeDefined()
     expect(tileHostDataChangedCallback).toHaveBeenCalledWith({
-      isEditing: true,
-      isCrossFiltersEnabled: true,
+      isDashboardEditing: true,
+      isDashboardCrossFilteringEnabled: true,
     })
   })
 

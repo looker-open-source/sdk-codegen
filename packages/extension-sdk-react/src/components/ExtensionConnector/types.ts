@@ -131,6 +131,6 @@ export interface ExtensionProviderProps {
 export interface ExtensionConnectorProps extends ExtensionProviderProps {
   contextData: BaseExtensionContextData
   connectedCallback: (extensionSDK: ExtensionHostApi) => void
-  updateContextData: (contextData: BaseExtensionContextData) => void
+  updateContextData: (contextData: Partial<BaseExtensionContextData>) => void
   unloadedCallback: () => void
 }
