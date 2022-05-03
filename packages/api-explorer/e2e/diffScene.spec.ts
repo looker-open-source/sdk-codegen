@@ -25,7 +25,7 @@
  */
 import '@testing-library/jest-dom'
 
-import { goToPage, pageReload, BASE_URL } from './helpers'
+import { goToPage, BASE_URL } from './helpers'
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
@@ -85,7 +85,7 @@ describe('Diff Scene', () => {
 
       await body.click()
       const baseOptionsOnClose = await page.$(globalOptionsSelector)
-      expect(baseOptionsOnLoad).toBeNull()
+      expect(baseOptionsOnClose).toBeNull()
     }
 
     // "Comparison" input element
@@ -108,7 +108,7 @@ describe('Diff Scene', () => {
 
       await body.click()
       const compOptionsOnClose = await page.$(globalOptionsSelector)
-      expect(compOptionsOnLoad).toBeNull()
+      expect(compOptionsOnClose).toBeNull()
     }
 
     // Switch button (disabled)
@@ -123,7 +123,7 @@ describe('Diff Scene', () => {
     }
   })
 
-  it('loads a comparison scene (/diff/3.1/4.0)', async () => {
+  it('loads a comparison scene (/diff/3.1/4.0) and navigates from it', async () => {
     await goToPage(`${BASE_URL}/diff/3.1/4.0`)
 
     // "Base" input element
@@ -170,12 +170,40 @@ describe('Diff Scene', () => {
       )
       expect(page1Methods).toEqual(expectedPage1MethodsFrom31To40)
     }
+
+    // Expand a result
+    {
+      const expandedSelector =
+        resultCardsSelector + `>div[class*=Accordion2]>div[aria-expanded=true]`
+
+      // Initially not expanded
+      const expandedCardBefore = await page.$(expandedSelector)
+      expect(expandedCardBefore).toBeNull()
+
+      // Click a card
+      const firstResultCard = (await page.$$(resultCardsSelector))[0]
+      await firstResultCard.click()
+
+      // Expanded
+      const expandedCardAfter = await page.$(expandedSelector)
+      expect(expandedCardAfter).not.toBeNull()
+
+      // Find and validate method link
+      const methodLink = await page.$(`${resultCardsSelector} a[role=link]`)
+      expect(methodLink).not.toBeNull()
+      const methodText = await page.evaluate((e) => e.innerText, methodLink)
+      expect(methodText).toMatch(`delete_board_item for 4.0`)
+
+      // Click and validate destination
+      await methodLink.click()
+      await page.waitForSelector(`div[class*=MethodBadge]`, { timeout: 5000 })
+      const compUrl = page.url()
+      expect(compUrl).toEqual(`${BASE_URL}/4.0/methods/Board/delete_board_item`)
+    }
   })
 
   it('updates when a comparison is chosen or switched', async () => {
     await goToPage(`${BASE_URL}/diff/3.1`)
-
-    const body = await page.$('body')
 
     // "Base" input element
     const baseInputElement = await page.$(baseInputSelector)

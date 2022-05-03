@@ -208,6 +208,31 @@ describe('API Explorer', () => {
     })
   })
 
+  describe('outbound navigation', () => {
+    it('should be able to navigate from a method to Github', async () => {
+      await goToPage(`${v40}/methods/Dashboard/all_dashboards`)
+      const exampleLink = await page.$(
+        'table[aria-label="SDK Examples"] a[class*=Link][target=_blank'
+      )
+      expect(exampleLink).not.toBeNull()
+
+      // Suggested/intuitive method of waiting for navigation does not seem to be working and just waits indefinitely on the target page
+      // await Promise.all([
+      //   page.waitForNavigation({timeout:5000}),
+      //   exampleLink.click()
+      //   ])
+      await exampleLink.click()
+      await page.waitForTimeout(250)
+
+      const body = await page.$('body')
+      const codeMatch = await page.evaluate(
+        (e) => e.innerText.match('all_dashboards\\('),
+        body
+      )
+      expect(codeMatch).not.toBeNull()
+    })
+  })
+
   describe('search', () => {
     beforeEach(async () => {
       await goToPage(v31)
