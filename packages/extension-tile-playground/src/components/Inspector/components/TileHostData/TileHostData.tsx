@@ -36,37 +36,45 @@ import { DashboardRunState } from '@looker/extension-sdk'
 
 export const TileHostData: React.FC = () => {
   const { tileHostData, lookerHostData } = useContext(ExtensionContext40)
-  const { isEditing, dashboardRunState, filters, isCrossFiltersEnabled } =
-    tileHostData
+  const {
+    dashboardId,
+    isExploring,
+    isDashboardEditing,
+    dashboardRunState,
+    dashboardFilters,
+    isDashboardCrossFilteringEnabled,
+  } = tileHostData
 
-  const printingMessage = lookerHostData?.isRendering
-    ? 'Dashboard is printing'
-    : 'Dashboard is NOT printing'
+  const dashboardIdMessage = `Dashboard id is ${dashboardId}`
 
-  const editingMessage = isEditing
+  const dashboardPrintingMessage =
+    lookerHostData?.isRendering && dashboardId
+      ? 'Dashboard is printing'
+      : 'Dashboard is NOT printing'
+
+  const exploringMessage =
+    isExploring && 'Extension visualization is being configured in exlore'
+
+  const dashboardEditingMessage = isDashboardEditing
     ? 'Dashboard is editing'
     : 'Dashboard is NOT editing'
 
   let dashboardRunStateMessage
   switch (dashboardRunState) {
-    case DashboardRunState.LOADED:
-      dashboardRunStateMessage = 'Dashboard has not started running'
-      break
     case DashboardRunState.RUNNING:
-      dashboardRunStateMessage = 'Dashboard is running'
+      dashboardRunStateMessage = 'Dashboard queries are running'
       break
-    case DashboardRunState.COMPLETE:
-      dashboardRunStateMessage = 'Dashboard is NOT running'
+    case DashboardRunState.NOT_RUNNING:
+      dashboardRunStateMessage = 'Dashboard queries are not running'
       break
-
     default:
-      dashboardRunStateMessage = 'Dashboard run state is unknown'
+      dashboardRunStateMessage = 'Query run state is unknown'
       break
   }
-  const crossFiltersEnabledMessage = isCrossFiltersEnabled
-    ? 'Cross filters are enabled'
-    : 'Cross filters are NOT enabled'
-  const filtersArray = Object.entries(filters)
+  const dashboardCrossFiltersEnabledMessage = isDashboardCrossFilteringEnabled
+    ? 'Dashboard cross filters are enabled'
+    : 'DashboardCross filters are NOT enabled'
+  const filtersArray = Object.entries(dashboardFilters || {})
     .map(([key, value]) => `${key}=${value}`)
     .join(', ')
 
@@ -75,15 +83,21 @@ export const TileHostData: React.FC = () => {
       <CardContent>
         <Accordion2 label="Tile host data" defaultOpen>
           <SpaceVertical gap="small" mt="medium">
-            <Paragraph>{printingMessage}</Paragraph>
-            <Paragraph>{editingMessage}</Paragraph>
-            <Paragraph>{dashboardRunStateMessage}</Paragraph>
-            <Paragraph>{crossFiltersEnabledMessage}</Paragraph>
-            <Paragraph>
-              {filtersArray.length
-                ? `Dashboard filters are ${filtersArray}`
-                : 'Dashboard has no filters'}
-            </Paragraph>
+            {isExploring && <Paragraph>{exploringMessage}</Paragraph>}
+            {!isExploring && (
+              <>
+                <Paragraph>{dashboardIdMessage}</Paragraph>
+                <Paragraph>{dashboardPrintingMessage}</Paragraph>
+                <Paragraph>{dashboardEditingMessage}</Paragraph>
+                <Paragraph>{dashboardRunStateMessage}</Paragraph>
+                <Paragraph>{dashboardCrossFiltersEnabledMessage}</Paragraph>
+                <Paragraph>
+                  {filtersArray.length
+                    ? `Dashboard filters are ${filtersArray}`
+                    : 'Dashboard has no filters'}
+                </Paragraph>
+              </>
+            )}
           </SpaceVertical>
         </Accordion2>
       </CardContent>

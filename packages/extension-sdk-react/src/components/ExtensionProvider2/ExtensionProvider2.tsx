@@ -93,7 +93,9 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
     unregisterCoreSDK2()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData2<T>) => {
       return {
         ...previousState,

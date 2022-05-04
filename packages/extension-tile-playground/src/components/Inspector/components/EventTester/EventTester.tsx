@@ -37,7 +37,7 @@ import { ExtensionContext40 } from '@looker/extension-sdk-react'
 export const EventTester: React.FC = () => {
   const {
     tileSDK,
-    tileHostData: { filters },
+    tileHostData: { dashboardFilters },
   } = useContext(ExtensionContext40)
 
   const addErrorsClick = useCallback(() => {
@@ -111,14 +111,14 @@ export const EventTester: React.FC = () => {
 
   const updateFiltersClick = useCallback(() => {
     const updatedFilter = {}
-    Object.entries(filters).forEach(([key, value]) => {
+    Object.entries(dashboardFilters || {}).forEach(([key, value]) => {
       updatedFilter[key] = value
       if (typeof value === 'string') {
         updatedFilter[key] = value.split('').reverse().join()
       }
     })
     tileSDK.updateFilters(updatedFilter)
-  }, [tileSDK, filters])
+  }, [tileSDK, dashboardFilters])
 
   const openScheduleDialogClick = useCallback(() => {
     tileSDK.openScheduleDialog()

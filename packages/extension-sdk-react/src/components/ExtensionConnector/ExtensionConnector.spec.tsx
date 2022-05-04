@@ -198,16 +198,16 @@ describe('ExtensionConnector component', () => {
     expect(await screen.findByText('Mock Extension')).toBeInTheDocument()
     expect(connectedCallback).toHaveBeenCalled()
     tileHostDataChangedCb!({
-      isEditing: false,
-      dashboardRunState: DashboardRunState.COMPLETE,
-      filters: {},
-      isCrossFiltersEnabled: false,
+      isDashboardEditing: false,
+      dashboardRunState: DashboardRunState.NOT_RUNNING,
+      dashboardFilters: {},
+      isDashboardCrossFilteringEnabled: false,
     })
     expect(tileSDK.tileHostDataChanged).toHaveBeenCalledWith({
-      filters: {},
-      isCrossFiltersEnabled: false,
-      dashboardRunState: 'COMPLETE',
-      isEditing: false,
+      dashboardFilters: {},
+      isDashboardCrossFilteringEnabled: false,
+      dashboardRunState: 'NOT_RUNNING',
+      isDashboardEditing: false,
     })
   })
 
@@ -228,9 +228,10 @@ describe('ExtensionConnector component', () => {
       visConfig: {},
       queryResponse: { data: [], fields: {}, pivots: [] },
     })
-    expect(updateContextData).toHaveBeenNthCalledWith(1, getContextData())
+    expect(updateContextData).toHaveBeenNthCalledWith(1, {
+      tileHostData: undefined,
+    })
     expect(updateContextData).toHaveBeenNthCalledWith(2, {
-      ...getContextData(),
       visualizationData: {
         visConfig: {},
         queryResponse: { data: [], fields: {}, pivots: [] },

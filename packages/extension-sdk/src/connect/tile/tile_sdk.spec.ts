@@ -45,9 +45,9 @@ describe('TileSDK', () => {
     } as unknown as ExtensionHostApiImpl
     const tileSdk = new TileSDKImpl(api)
     tileSdk.tileHostDataChanged({
-      isEditing: true,
-      dashboardRunState: DashboardRunState.COMPLETE,
-      filters: { hello: 'world' },
+      isDashboardEditing: true,
+      dashboardRunState: DashboardRunState.NOT_RUNNING,
+      dashboardFilters: { hello: 'world' },
     })
     return tileSdk
   }
@@ -64,23 +64,25 @@ describe('TileSDK', () => {
 
   it('constructs', () => {
     const tileSdk = new TileSDKImpl(api)
-    const { isEditing, dashboardRunState, filters } = tileSdk.tileHostData
-    expect(isEditing).toEqual(false)
+    const { isDashboardEditing, dashboardRunState, dashboardFilters } =
+      tileSdk.tileHostData
+    expect(isDashboardEditing).toEqual(false)
     expect(dashboardRunState).toEqual('UNKNOWN')
-    expect(filters).toEqual({})
+    expect(dashboardFilters).toEqual({})
   })
 
   it('updates host data', () => {
     const tileSdk = new TileSDKImpl(api)
     tileSdk.tileHostDataChanged({
-      isEditing: true,
+      isDashboardEditing: true,
       dashboardRunState: DashboardRunState.RUNNING,
-      filters: { hello: 'world' },
+      dashboardFilters: { hello: 'world' },
     })
-    const { isEditing, dashboardRunState, filters } = tileSdk.tileHostData
-    expect(isEditing).toEqual(true)
+    const { isDashboardEditing, dashboardRunState, dashboardFilters } =
+      tileSdk.tileHostData
+    expect(isDashboardEditing).toEqual(true)
     expect(dashboardRunState).toEqual('RUNNING')
-    expect(filters).toEqual({ hello: 'world' })
+    expect(dashboardFilters).toEqual({ hello: 'world' })
   })
 
   it('does not update host data when dashboard tile mount not supported', () => {
@@ -90,14 +92,15 @@ describe('TileSDK', () => {
     } as unknown as ExtensionHostApiImpl
     const tileSdk = new TileSDKImpl(api)
     tileSdk.tileHostDataChanged({
-      isEditing: true,
+      isDashboardEditing: true,
       dashboardRunState: DashboardRunState.RUNNING,
-      filters: { hello: 'world' },
+      dashboardFilters: { hello: 'world' },
     })
-    const { isEditing, dashboardRunState, filters } = tileSdk.tileHostData
-    expect(isEditing).toEqual(false)
+    const { isDashboardEditing, dashboardRunState, dashboardFilters } =
+      tileSdk.tileHostData
+    expect(isDashboardEditing).toEqual(false)
     expect(dashboardRunState).toEqual('UNKNOWN')
-    expect(filters).toEqual({})
+    expect(dashboardFilters).toEqual({})
   })
 
   it('sends add errors message ', () => {

@@ -83,7 +83,9 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
     unregisterCore40SDK()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData40) => {
       return {
         ...previousState,
