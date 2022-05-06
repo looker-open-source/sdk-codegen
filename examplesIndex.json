@@ -1,5 +1,5 @@
 {
-  "commitHash": "82838d0fac84b360068411b6f2200e5cdba61bea",
+  "commitHash": "d51a6750f7d5f22efa84278492a71336e39d92e1",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -448,16 +448,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 104
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 296
-          },
-          {
             "sourceFile": "kotlin/src/test/TestAsync.kt",
             "column": 53,
             "line": 20
@@ -658,14 +648,16 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 30,
-            "line": 233
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 30,
             "line": 232
+          }
+        ],
+        ".tsx": [
+          {
+            "sourceFile": "packages/extension-playground/src/Playground.tsx",
+            "column": 36,
+            "line": 42
           }
         ],
         ".swift": [
@@ -701,20 +693,10 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 14,
-            "line": 5091
+            "line": 5090
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
-            "column": 18,
-            "line": 6083
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/streams.kt",
-            "column": 18,
-            "line": 6081
-          },
           {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/methods.kt",
             "column": 18,
@@ -818,20 +800,10 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 4,
-            "line": 6632
+            "line": 6631
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/methods.kt",
-            "column": 8,
-            "line": 8026
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/main/com/looker/sdk/4.0/streams.kt",
-            "column": 8,
-            "line": 8024
-          },
           {
             "sourceFile": "kotlin/src/main/com/looker/sdk/4.0/methods.kt",
             "column": 8,
@@ -923,7 +895,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 572
+            "line": 569
           }
         ]
       }
@@ -964,7 +936,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 557
+            "line": 554
           }
         ]
       }
@@ -980,11 +952,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 349
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -1026,16 +993,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 26,
-            "line": 107
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 298
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 26,
@@ -1305,16 +1262,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 37,
-            "line": 213
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 246
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 37,
@@ -1620,11 +1567,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 46,
-            "line": 253
-          },
-          {
             "sourceFile": "kotlin/src/test/KotlinExample.kt",
             "column": 50,
             "line": 11
@@ -1914,11 +1856,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 311
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 310
@@ -1985,11 +1922,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 470
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -2100,11 +2032,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 523
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 522
@@ -2186,16 +2113,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 87
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 409
-          },
           {
             "sourceFile": "kotlin/src/test/TestAsync.kt",
             "column": 45,
@@ -2408,11 +2325,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 176
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 175
@@ -2463,16 +2375,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 34,
-            "line": 210
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 34,
-            "line": 244
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 34,
@@ -2641,16 +2543,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 411
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 32,
-            "line": 532
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 410
@@ -2729,16 +2621,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 260
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 40,
-            "line": 462
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 259
@@ -2809,11 +2691,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 279
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 278
@@ -2879,21 +2756,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 160
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 49,
-            "line": 195
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 481
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 49,
             "line": 159
@@ -2940,11 +2802,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 442
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 441
@@ -2982,11 +2839,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 320
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3042,11 +2894,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 525
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -3125,11 +2972,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 483
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 482
@@ -3170,11 +3012,6 @@
           }
         ],
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 375
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3335,11 +3172,6 @@
         ],
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 277
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 276
@@ -3438,22 +3270,22 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 170
+            "line": 169
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 14,
-            "line": 182
+            "line": 181
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 321
+            "line": 319
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 410
+            "line": 408
           }
         ]
       }
@@ -3525,17 +3357,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 18,
-            "line": 194
+            "line": 193
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 214
+            "line": 213
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 234
+            "line": 233
           }
         ]
       }
@@ -3547,12 +3379,12 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 206
+            "line": 205
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 226
+            "line": 225
           }
         ]
       }
@@ -3564,17 +3396,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 247
+            "line": 246
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 324
+            "line": 322
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 501
+            "line": 498
           }
         ]
       }
@@ -3586,17 +3418,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 253
+            "line": 252
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 266
+            "line": 265
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 12,
-            "line": 285
+            "line": 284
           }
         ]
       }
@@ -3608,7 +3440,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 298
+            "line": 297
           }
         ]
       }
@@ -3620,7 +3452,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 331
+            "line": 329
           }
         ]
       }
@@ -3631,13 +3463,13 @@
         ".go": [
           {
             "sourceFile": "go/integration/integration_test.go",
-            "column": 18,
-            "line": 362
+            "column": 19,
+            "line": 360
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 18,
-            "line": 402
+            "line": 400
           }
         ]
       }
@@ -3649,7 +3481,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 23,
-            "line": 375
+            "line": 373
           }
         ]
       }
@@ -3661,7 +3493,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 13,
-            "line": 392
+            "line": 390
           }
         ]
       }
@@ -3673,7 +3505,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 21,
-            "line": 415
+            "line": 413
           }
         ]
       }
@@ -3684,13 +3516,13 @@
         ".go": [
           {
             "sourceFile": "go/integration/integration_test.go",
-            "column": 23,
-            "line": 435
+            "column": 24,
+            "line": 432
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 23,
-            "line": 547
+            "line": 544
           }
         ]
       }
@@ -3702,7 +3534,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 28,
-            "line": 447
+            "line": 444
           }
         ]
       }
@@ -3714,7 +3546,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 19,
-            "line": 465
+            "line": 462
           }
         ]
       }
@@ -3726,7 +3558,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 508
+            "line": 505
           }
         ]
       }
@@ -3738,7 +3570,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 13,
-            "line": 537
+            "line": 534
           }
         ]
       }
@@ -3750,12 +3582,12 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 590
+            "line": 587
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 607
+            "line": 604
           }
         ]
       }
@@ -3764,11 +3596,6 @@
       "operationId": "create_look",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 92
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
@@ -3811,11 +3638,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 110
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 109
@@ -3842,16 +3664,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 41,
-            "line": 123
-          },
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 347
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 41,
             "line": 122
@@ -3876,11 +3688,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 129
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 128
@@ -3892,11 +3699,6 @@
       "operationId": "create_board_section",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 138
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
@@ -3910,11 +3712,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 12,
-            "line": 146
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 12,
             "line": 145
@@ -3927,11 +3724,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 32,
-            "line": 199
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 32,
             "line": 198
@@ -3943,11 +3735,6 @@
       "operationId": "all_color_collections",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 268
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -3992,11 +3779,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 270
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 269
@@ -4008,11 +3790,6 @@
       "operationId": "all_datagroups",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 286
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4040,11 +3817,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 288
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
             "line": 287
@@ -4056,11 +3828,6 @@
       "operationId": "all_dialect_infos",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 46,
-            "line": 304
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 46,
@@ -4080,11 +3847,6 @@
       "operationId": "folder",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 313
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
@@ -4115,11 +3877,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 322
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 321
@@ -4131,11 +3888,6 @@
       "operationId": "all_board_items",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 330
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4149,11 +3901,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 332
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 331
@@ -4165,11 +3912,6 @@
       "operationId": "search_boards",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 44,
-            "line": 338
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 44,
@@ -4183,11 +3925,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 357
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 356
@@ -4200,11 +3937,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 359
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 358
@@ -4216,11 +3948,6 @@
       "operationId": "all_integration_hubs",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 366
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4241,11 +3968,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 368
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 367
@@ -4258,11 +3980,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 377
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 376
@@ -4274,11 +3991,6 @@
       "operationId": "all_legacy_features",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 384
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4299,11 +4011,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 386
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
             "line": 385
@@ -4315,11 +4022,6 @@
       "operationId": "all_locales",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 41,
-            "line": 392
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 41,
@@ -4340,11 +4042,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 399
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 398
@@ -4364,11 +4061,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 401
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 400
@@ -4380,11 +4072,6 @@
       "operationId": "all_model_sets",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 418
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4405,11 +4092,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 420
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 419
@@ -4421,11 +4103,6 @@
       "operationId": "all_permission_sets",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 427
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4439,11 +4116,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 429
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 428
@@ -4455,11 +4127,6 @@
       "operationId": "all_permissions",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 45,
-            "line": 435
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 45,
@@ -4480,11 +4147,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 444
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 443
@@ -4496,11 +4158,6 @@
       "operationId": "all_roles",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 451
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4528,11 +4185,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 453
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 23,
             "line": 452
@@ -4544,11 +4196,6 @@
       "operationId": "all_themes",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 491
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
@@ -4569,11 +4216,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 493
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 492
@@ -4585,11 +4227,6 @@
       "operationId": "all_timezones",
       "calls": {
         ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 43,
-            "line": 499
-          },
           {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 43,
@@ -4610,11 +4247,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 506
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 14,
             "line": 505
@@ -4634,11 +4266,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 28,
-            "line": 508
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 28,
             "line": 507
@@ -4651,11 +4278,6 @@
       "calls": {
         ".kt": [
           {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 51,
-            "line": 514
-          },
-          {
             "sourceFile": "kotlin/src/test/TestMethods.kt",
             "column": 51,
             "line": 513
@@ -4666,47 +4288,6 @@
             "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
             "column": 30,
             "line": 184
-          }
-        ]
-      }
-    },
-    "all_workspaces": {
-      "operationId": "all_workspaces",
-      "calls": {
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 542
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 14,
-            "line": 564
-          }
-        ],
-        ".swift": [
-          {
-            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
-            "column": 30,
-            "line": 337
-          }
-        ]
-      }
-    },
-    "workspace": {
-      "operationId": "workspace",
-      "calls": {
-        ".kt": [
-          {
-            "sourceFile": "kotlin/build/spotless/spotlessKotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 544
-          },
-          {
-            "sourceFile": "kotlin/src/test/TestMethods.kt",
-            "column": 23,
-            "line": 566
           }
         ]
       }
@@ -4745,6 +4326,37 @@
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 21,
             "line": 250
+          }
+        ]
+      }
+    },
+    "all_workspaces": {
+      "operationId": "all_workspaces",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 14,
+            "line": 564
+          }
+        ],
+        ".swift": [
+          {
+            "sourceFile": "swift/looker/Tests/lookerTests/smokeTests.swift",
+            "column": 30,
+            "line": 337
+          }
+        ]
+      }
+    },
+    "workspace": {
+      "operationId": "workspace",
+      "calls": {
+        ".kt": [
+          {
+            "sourceFile": "kotlin/src/test/TestMethods.kt",
+            "column": 23,
+            "line": 566
           }
         ]
       }
@@ -6948,7 +6560,7 @@
           {
             "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider2/ExtensionProvider2.tsx",
             "column": 16,
-            "line": 71
+            "line": 69
           }
         ]
       }
@@ -6992,6 +6604,11 @@
             "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider/ExtensionProvider.tsx",
             "column": 6,
             "line": 62
+          },
+          {
+            "sourceFile": "packages/extension-sdk-react/src/components/ExtensionProvider40/ExtensionProvider40.tsx",
+            "column": 6,
+            "line": 63
           }
         ]
       }

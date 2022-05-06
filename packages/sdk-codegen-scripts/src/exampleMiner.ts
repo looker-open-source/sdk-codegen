@@ -80,7 +80,17 @@ export const filterCodeFiles = (fileName: string) => {
   return ext in fileMiners
 }
 
-const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
+export const IGNORE_PATHS = [
+  'node_modules',
+  'lib',
+  'dist',
+  'bazel-bin',
+  'build',
+  'bin',
+  '.build',
+]
+
+const skipFolder = (name: string, excludeList: string[] = IGNORE_PATHS) =>
   new RegExp(excludeList.join('|'), 'gi').test(name)
 
 /**
@@ -133,7 +143,7 @@ export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
   filter: FileFilter = filterCodeFiles,
-  ignorePaths: string[] = ['node_modules', 'lib', 'dist', 'bazel-bin']
+  ignorePaths: string[] = IGNORE_PATHS
 ) => {
   return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }
