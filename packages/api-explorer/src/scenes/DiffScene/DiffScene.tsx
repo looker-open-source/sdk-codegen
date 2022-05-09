@@ -170,6 +170,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
             />
           </FlexItem>
           <IconButton
+            className="switch-button"
             label="switch"
             size="small"
             disabled={!leftKey || !rightKey}

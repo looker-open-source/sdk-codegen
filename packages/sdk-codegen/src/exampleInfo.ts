@@ -109,6 +109,14 @@ export interface IExampleMine extends IMine {
   nuggets: Nuggets
 }
 
+/** function type for formatting source code links */
+export type SourceLink = (
+  remote: string,
+  hash: string,
+  fileName: string,
+  line: number
+) => string
+
 /**
  * Create a permalink for a github file with line number
  * @param remote https url for repository
@@ -116,13 +124,27 @@ export interface IExampleMine extends IMine {
  * @param fileName name of file
  * @param line line number in file
  */
-export const permaLink = (
+export const permaLink: SourceLink = (
   // https://github.com/looker-open-source/sdk-codegen/blob/bfca52d2c8ba85018f76548158fd1dd90aa1f64a/examples/typescript/customConfigReader.ts#L53
   remote: string,
   hash: string,
   fileName: string,
   line: number
 ) => `${remote}/blob/${hash}/${fileName}#L${line}`
+
+/**
+ * Create a permalink for a code search with commit hash and line number
+ * @param remote https url for repository
+ * @param hash commit hash
+ * @param fileName name of file
+ * @param line line number in file
+ */
+export const codeSearchLink: SourceLink = (
+  remote: string,
+  hash: string,
+  fileName: string,
+  line: number
+) => `${remote}/${fileName}?l=${line}&rcl=${hash}`
 
 /**
  * Create an IDE file link with line number
