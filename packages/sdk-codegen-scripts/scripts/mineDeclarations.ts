@@ -38,6 +38,7 @@ import {
   const indexName = `declarationsIndex.json`
   let sourcePath = ''
   let copyPath = ''
+  let originOverride = ''
   if (total > 0) {
     sourcePath = path.join(root, args[0])
     if (total > 1) {
@@ -54,6 +55,9 @@ import {
       if (settings.copy_path) {
         copyPath = path.join(root, settings.copy_path)
       }
+      if (settings.origin_override) {
+        originOverride = settings.origin_override
+      }
     } catch (e) {
       console.error(
         'A source path is required. Specify it with "base_url" in the Miner section in looker.ini or pass it as an argument'
@@ -64,7 +68,12 @@ import {
   const indexFile = path.join(root, indexName)
   console.log(`Mining declarations from ${sourcePath} ...`)
 
-  const miner = new DeclarationMiner(sourcePath, rubyMethodProbe, rubyTypeProbe)
+  const miner = new DeclarationMiner(
+    sourcePath,
+    rubyMethodProbe,
+    rubyTypeProbe,
+    originOverride
+  )
   const result = miner.execute()
   fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
     encoding: 'utf-8',
