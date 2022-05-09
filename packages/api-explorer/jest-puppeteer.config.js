@@ -25,7 +25,11 @@
  */
 module.exports = {
   launch: {
+    // `headless:false` and `slowMo:250` can be useful for "test-watch" usage
     headless: true,
+    // slowMo: 250,
+
+    // Other launch settings constant for both dev and testing usage
     args: ['--ignore-certificate-errors'],
     product: 'chrome',
     devtools: true,
