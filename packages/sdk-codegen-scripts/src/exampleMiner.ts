@@ -88,6 +88,12 @@ export const IGNORE_PATHS = [
   'build',
   'bin',
   '.build',
+  '.direnv',
+  '.github',
+  '.vscode',
+  '.idea',
+  '.gradle',
+  'results',
 ]
 
 const skipFolder = (name: string, excludeList: string[] = IGNORE_PATHS) =>

@@ -1,5 +1,5 @@
 {
-  "commitHash": "d51a6750f7d5f22efa84278492a71336e39d92e1",
+  "commitHash": "a4eb5a0b1c9d09f7e45db2a83d30be7ebd707afb",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -477,11 +477,6 @@
         ],
         ".java": [
           {
-            "sourceFile": "examples/java/example_gradle/src/main/java/com/looker/example/ExampleRunner.java",
-            "column": 23,
-            "line": 44
-          },
-          {
             "sourceFile": "examples/java/example_maven/src/main/java/com/looker/example/ExampleRunner.java",
             "column": 23,
             "line": 44
@@ -693,7 +688,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 14,
-            "line": 5090
+            "line": 5091
           }
         ],
         ".kt": [
@@ -800,7 +795,7 @@
           {
             "sourceFile": "go/sdk/v4/methods.go",
             "column": 4,
-            "line": 6631
+            "line": 6632
           }
         ],
         ".kt": [
@@ -895,7 +890,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 569
+            "line": 572
           }
         ]
       }
@@ -936,7 +931,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 554
+            "line": 557
           }
         ]
       }
@@ -3270,22 +3265,22 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 169
+            "line": 170
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 14,
-            "line": 181
+            "line": 182
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 319
+            "line": 321
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 408
+            "line": 410
           }
         ]
       }
@@ -3357,17 +3352,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 18,
-            "line": 193
+            "line": 194
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 213
+            "line": 214
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 233
+            "line": 234
           }
         ]
       }
@@ -3379,12 +3374,12 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 205
+            "line": 206
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 11,
-            "line": 225
+            "line": 226
           }
         ]
       }
@@ -3396,17 +3391,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 246
+            "line": 247
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 322
+            "line": 324
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 498
+            "line": 501
           }
         ]
       }
@@ -3418,17 +3413,17 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 252
+            "line": 253
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 265
+            "line": 266
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 12,
-            "line": 284
+            "line": 285
           }
         ]
       }
@@ -3440,7 +3435,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 22,
-            "line": 297
+            "line": 298
           }
         ]
       }
@@ -3452,7 +3447,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 329
+            "line": 331
           }
         ]
       }
@@ -3463,13 +3458,13 @@
         ".go": [
           {
             "sourceFile": "go/integration/integration_test.go",
-            "column": 19,
-            "line": 360
+            "column": 18,
+            "line": 362
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 18,
-            "line": 400
+            "line": 402
           }
         ]
       }
@@ -3481,7 +3476,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 23,
-            "line": 373
+            "line": 375
           }
         ]
       }
@@ -3493,7 +3488,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 13,
-            "line": 390
+            "line": 392
           }
         ]
       }
@@ -3505,7 +3500,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 21,
-            "line": 413
+            "line": 415
           }
         ]
       }
@@ -3516,13 +3511,13 @@
         ".go": [
           {
             "sourceFile": "go/integration/integration_test.go",
-            "column": 24,
-            "line": 432
+            "column": 23,
+            "line": 435
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 23,
-            "line": 544
+            "line": 547
           }
         ]
       }
@@ -3534,7 +3529,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 28,
-            "line": 444
+            "line": 447
           }
         ]
       }
@@ -3546,7 +3541,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 19,
-            "line": 462
+            "line": 465
           }
         ]
       }
@@ -3558,7 +3553,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 17,
-            "line": 505
+            "line": 508
           }
         ]
       }
@@ -3570,7 +3565,7 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 13,
-            "line": 534
+            "line": 537
           }
         ]
       }
@@ -3582,12 +3577,12 @@
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 16,
-            "line": 587
+            "line": 590
           },
           {
             "sourceFile": "go/integration/integration_test.go",
             "column": 15,
-            "line": 604
+            "line": 607
           }
         ]
       }
