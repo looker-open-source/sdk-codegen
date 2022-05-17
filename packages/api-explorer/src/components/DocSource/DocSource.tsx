@@ -26,7 +26,7 @@
 import type { FC } from 'react'
 import React from 'react'
 import type { IMethod, IType } from '@looker/sdk-codegen'
-import { findDeclaration } from '@looker/sdk-codegen'
+import { codeSearchLink, findDeclaration } from '@looker/sdk-codegen'
 import { Icon, Link, Tooltip } from '@looker/components'
 import { IdeFileDocument } from '@looker/icons'
 import { useSelector } from 'react-redux'
@@ -46,7 +46,8 @@ export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
     ;({ declaration, link: sourceLink } = findDeclaration(
       declarations,
       method?.id,
-      type?.name
+      type?.name,
+      codeSearchLink
     ))
   }
 
