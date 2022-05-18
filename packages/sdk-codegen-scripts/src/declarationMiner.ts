@@ -32,7 +32,7 @@ import {
   ExampleMiner,
   readFile,
   getCommitHash,
-  getRemoteHttpOrigin,
+  getRemoteOrigin,
 } from './exampleMiner'
 
 /**
@@ -94,7 +94,8 @@ export class DeclarationMiner {
   constructor(
     public readonly sourcePath: string,
     public readonly methodProbe: IProbe,
-    public readonly typeProbe: IProbe
+    public readonly typeProbe: IProbe,
+    private readonly originOverride: string
   ) {}
 
   execute(sourcePath?: string, methodProbe?: IProbe, typeProbe?: IProbe) {
@@ -127,8 +128,11 @@ export class DeclarationMiner {
   }
 
   get remoteOrigin(): string {
+    if (this.originOverride) {
+      return this.originOverride
+    }
     process.chdir(this.sourcePath)
-    return getRemoteHttpOrigin()
+    return getRemoteOrigin()
   }
 
   get lode(): IDeclarationMine {
