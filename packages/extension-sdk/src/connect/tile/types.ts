@@ -34,18 +34,73 @@ export type TileHostDataChangedCallback = (
   tileHostData: Partial<TileHostData>
 ) => void
 
+/**
+ * Defines the current run state of the dashboard
+ */
 export enum DashboardRunState {
   UNKNOWN = 'UNKNOWN',
   RUNNING = 'RUNNING',
   NOT_RUNNING = 'NOT_RUNNING',
 }
+
 export interface TileHostData {
+  /**
+   * When true indicates that the tile is being configured as
+   * a visualization inside of an explore.
+   */
   isExploring?: boolean
+  /**
+   * The dashboard if the tile is being rendered in. If the tile
+   * is being configured as an explore this will not be populated.
+   */
   dashboardId?: string
+  /**
+   * The filters being applied to the dashboard. If the tile
+   * is being configured as an explore this will not be populated.
+   */
   dashboardFilters?: Filters
+  /**
+   * Indicates whether the dashboard is running. If the tile
+   * is being configured as an explore the state will be UNKNOWN.
+   * Note that for dashboard performance reasons, the runstate
+   * may NEVER be shown as running. This generally will happen
+   * if there no other tiles associated with a query (including
+   * the one the extension is associated with).
+   * If the extension needs to know for certain that a dashboard
+   * has been run, detecting differences in the lastRunStartTime
+   * is the reliable way.
+   */
   dashboardRunState?: DashboardRunState
+  /**
+   * When true, the dashboard is being edited. If the tile
+   * is being configured as an explore this will not be populated.
+   */
   isDashboardEditing?: boolean
+  /**
+   * When true, cross filtering. If the tile
+   * is being configured as an explore this will not be populated.
+   */
   isDashboardCrossFilteringEnabled?: boolean
+  /**
+   * Indicates the last dashboard run start time. If the tile
+   * is being configured as an explore this will not be populated.
+   * Note that the start and end times reported should not
+   * used for capturing performance metrics.
+   */
+  lastRunStartTime?: number
+  /**
+   * Indicates the last dashboard run end time. If the tile
+   * is being configured as an explore this will not be populated.
+   * Note that the start and end times reported should not
+   * used for capturing performance metrics.
+   */
+  lastRunEndTime?: number
+  /**
+   * Indicates whether the last dashboard run was succesful or not.
+   * If the tile is being configured as an explore this will not be
+   * populated.
+   */
+  lastRunSuccess?: boolean
 }
 
 export interface Pivot {
