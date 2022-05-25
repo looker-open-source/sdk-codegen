@@ -76,7 +76,9 @@ export const TileHostData: React.FC = () => {
   }
 
   const lastDashboardRunMessage = lastRunStartTime
-    ? `Last start time: ${lastRunStartTime}, last end time: ${lastRunEndTime}, last success: ${lastRunSuccess}`
+    ? `Last start time: ${lastRunStartTime || ''}, last end time: ${
+        lastRunEndTime || ''
+      }, last success: ${lastRunSuccess || ''}`
     : 'The dashboard has not run yet'
 
   const dashboardCrossFiltersEnabledMessage = isDashboardCrossFilteringEnabled
