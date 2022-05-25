@@ -27,20 +27,39 @@ import React, { useContext, useCallback, useEffect, useState } from 'react'
 import { SpaceVertical, Text, MessageBar } from '@looker/components'
 import { More } from '@looker/icons'
 import { ExtensionContext40 } from '@looker/extension-sdk-react'
+import { DashboardRunState } from '@looker/extension-sdk'
 import { useWindowSize } from '../../hooks/use_window_size'
 import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
 import { Layout } from '../Layout'
 import { NavigateButton } from '../NavigateButton'
 
+/**
+ * This component demonstrates a dashboard tile that is reponsible for
+ * getting its own data. Note the technique for determining whether
+ * the user has clicked the dashboard reload button. It is not
+ * guaranteed that dashboardRunState from tileHostData will ever
+ * indicate that the dashboard is running. This is due to performance
+ * techniques used by the dashboard and happens when the dashboard does
+ * not contain and tiles that run queries. A guaranteed technique to
+ * determine if the dashboard reload button has been clicked is to save
+ * the lastRunStartTime value from the tileHostData. If this value changes
+ * then the user has clicked the dashboard run button (or the dashboard
+ * has been setup to auto refresh).
+ */
 export const DashboardTile: React.FC = () => {
   const { height, width } = useWindowSize()
   const vizSize = Math.min(height, width) - 250
-  const { extensionSDK, coreSDK } = useContext(ExtensionContext40)
+  const { extensionSDK, coreSDK, tileHostData } = useContext(ExtensionContext40)
+  const { lastRunStartTime, dashboardRunState } = tileHostData || -1
+  const [saveLastRunStartTime, setSaveLastRunStartTime] = useState<
+    number | undefined
+  >()
   const [value, setValue] = useState<number | undefined>()
   const [message, setMessage] = useState<string | undefined>()
 
   useEffect(() => {
     const readData = async () => {
+      setSaveLastRunStartTime(lastRunStartTime)
       try {
         const response = await coreSDK.ok(
           coreSDK.run_inline_query({
@@ -61,8 +80,20 @@ export const DashboardTile: React.FC = () => {
         setMessage('Failed to read data')
       }
     }
-    readData()
-  }, [])
+    if (
+      !saveLastRunStartTime ||
+      lastRunStartTime !== saveLastRunStartTime ||
+      // Not required but shown here as an alternative
+      dashboardRunState === DashboardRunState.RUNNING
+    ) {
+      readData()
+    }
+  }, [
+    lastRunStartTime,
+    saveLastRunStartTime,
+    setSaveLastRunStartTime,
+    dashboardRunState,
+  ])
 
   const renderComplete = useCallback(() => {
     extensionSDK.rendered()

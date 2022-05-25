@@ -43,6 +43,9 @@ export const TileHostData: React.FC = () => {
     dashboardRunState,
     dashboardFilters,
     isDashboardCrossFilteringEnabled,
+    lastRunStartTime,
+    lastRunEndTime,
+    lastRunSuccess,
   } = tileHostData
 
   const dashboardIdMessage = `Dashboard id is ${dashboardId}`
@@ -71,9 +74,15 @@ export const TileHostData: React.FC = () => {
       dashboardRunStateMessage = 'Query run state is unknown'
       break
   }
+
+  const lastDashboardRunMessage = lastRunStartTime
+    ? `Last start time: ${lastRunStartTime}, last end time: ${lastRunEndTime}, last success: ${lastRunSuccess}`
+    : 'The dashboard has not run yet'
+
   const dashboardCrossFiltersEnabledMessage = isDashboardCrossFilteringEnabled
     ? 'Dashboard cross filters are enabled'
     : 'DashboardCross filters are NOT enabled'
+
   const filtersArray = Object.entries(dashboardFilters || {})
     .map(([key, value]) => `${key}=${value}`)
     .join(', ')
@@ -90,6 +99,7 @@ export const TileHostData: React.FC = () => {
                 <Paragraph>{dashboardPrintingMessage}</Paragraph>
                 <Paragraph>{dashboardEditingMessage}</Paragraph>
                 <Paragraph>{dashboardRunStateMessage}</Paragraph>
+                <Paragraph>{lastDashboardRunMessage}</Paragraph>
                 <Paragraph>{dashboardCrossFiltersEnabledMessage}</Paragraph>
                 <Paragraph>
                   {filtersArray.length
