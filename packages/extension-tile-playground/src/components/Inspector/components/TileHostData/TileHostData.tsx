@@ -38,6 +38,7 @@ export const TileHostData: React.FC = () => {
   const { tileHostData, lookerHostData } = useContext(ExtensionContext40)
   const {
     dashboardId,
+    elementId,
     isExploring,
     isDashboardEditing,
     dashboardRunState,
@@ -46,9 +47,12 @@ export const TileHostData: React.FC = () => {
     lastRunStartTime,
     lastRunEndTime,
     lastRunSuccess,
+    lastRunSourceElementId,
   } = tileHostData
 
-  const dashboardIdMessage = `Dashboard id is ${dashboardId}`
+  const dashboardIdMessage = `Dashboard id is "${
+    dashboardId || ''
+  }". Element id is "${elementId || ''}".`
 
   const dashboardPrintingMessage =
     lookerHostData?.isRendering && dashboardId
@@ -78,7 +82,9 @@ export const TileHostData: React.FC = () => {
   const lastDashboardRunMessage = lastRunStartTime
     ? `Last start time: ${lastRunStartTime || ''}, last end time: ${
         lastRunEndTime || ''
-      }, last success: ${lastRunSuccess || ''}`
+      }, last success: ${lastRunSuccess || ''}, initiated by: ${
+        lastRunSourceElementId || ''
+      }`
     : 'The dashboard has not run yet'
 
   const dashboardCrossFiltersEnabledMessage = isDashboardCrossFilteringEnabled
