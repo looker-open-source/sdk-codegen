@@ -50,10 +50,15 @@ export interface TileHostData {
    */
   isExploring?: boolean
   /**
-   * The dashboard if the tile is being rendered in. If the tile
+   * The dashboard id the tile is being rendered in. If the tile
    * is being configured as an explore this will not be populated.
    */
   dashboardId?: string
+  /**
+   * The element id of the tile being rendered. If the tile
+   * is being configured as an explore this will not be populated.
+   */
+  elementId?: string
   /**
    * The filters being applied to the dashboard. If the tile
    * is being configured as an explore this will not be populated.
@@ -82,6 +87,18 @@ export interface TileHostData {
    */
   isDashboardCrossFilteringEnabled?: boolean
   /**
+   * The id of the tile extension element that triggered the last
+   * dashboard run. The id will be undefined if the dashboard run
+   * was triggered by the dashboard run button or auto run or if
+   * the run was triggered using the embed SDK. If the tile
+   * is being configured as an explore this will not be populated.
+   * Note that the lastRunSourceElementId CAN be the same as the
+   * element id of the current extension instance, in other words,
+   * if the extension triggers a dashboard run, it will be notified
+   * when the dashboard run starts and finishes.
+   */
+  lastRunSourceElementId?: string
+  /**
    * Indicates the last dashboard run start time. If the tile
    * is being configured as an explore this will not be populated.
    * Note that the start and end times reported should not
@@ -91,6 +108,7 @@ export interface TileHostData {
   /**
    * Indicates the last dashboard run end time. If the tile
    * is being configured as an explore this will not be populated.
+   * If the tile is running, this will not be populated.
    * Note that the start and end times reported should not
    * used for capturing performance metrics.
    */
@@ -99,6 +117,7 @@ export interface TileHostData {
    * Indicates whether the last dashboard run was succesful or not.
    * If the tile is being configured as an explore this will not be
    * populated.
+   * If the tile is running, this will not be populated.
    */
   lastRunSuccess?: boolean
 }
