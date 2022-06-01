@@ -189,6 +189,6 @@ export interface TileSDK {
   toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void
   runDashboard: () => void
   stopDashboard: () => void
-  updateFilters: (filters: Filters) => void
+  updateFilters: (filters: Filters, runDashboard?: boolean) => void
   openScheduleDialog: () => Promise<void>
 }

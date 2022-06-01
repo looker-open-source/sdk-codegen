@@ -194,9 +194,10 @@ describe('TileSDK', () => {
   it('sends update filters message ', () => {
     const tileSdk = makeTileSdk()
     const filters = { hello: 'world' }
-    tileSdk.updateFilters(filters)
+    tileSdk.updateFilters(filters, true)
     expect(api.send).toBeCalledWith('TILE_UPDATE_FILTERS', {
       filters,
+      runDashboard: true,
     })
   })
 

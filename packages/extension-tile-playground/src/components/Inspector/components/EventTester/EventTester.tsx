@@ -23,14 +23,16 @@
  SOFTWARE.
 
  */
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import type { MouseEvent } from 'react'
 import {
+  Space,
   Accordion2,
   Card,
   CardContent,
   Grid,
   ButtonOutline,
+  FieldToggleSwitch,
 } from '@looker/components'
 import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
@@ -39,6 +41,7 @@ export const EventTester: React.FC = () => {
     tileSDK,
     tileHostData: { dashboardFilters },
   } = useContext(ExtensionContext40)
+  const [runDashboard, setRunDashboard] = useState(false)
 
   const addErrorsClick = useCallback(() => {
     tileSDK.addErrors(
@@ -113,12 +116,15 @@ export const EventTester: React.FC = () => {
     const updatedFilter = {}
     Object.entries(dashboardFilters || {}).forEach(([key, value]) => {
       updatedFilter[key] = value
-      if (typeof value === 'string') {
-        updatedFilter[key] = value.split('').reverse().join()
+      if (key === 'State') {
+        updatedFilter[key] =
+          value === 'California' ? 'Washington' : 'California'
+      } else if (typeof value === 'string') {
+        updatedFilter[key] = value.split('').reverse().join('')
       }
     })
-    tileSDK.updateFilters(updatedFilter)
-  }, [tileSDK, dashboardFilters])
+    tileSDK.updateFilters(updatedFilter, runDashboard)
+  }, [tileSDK, dashboardFilters, runDashboard])
 
   const openScheduleDialogClick = useCallback(() => {
     tileSDK.openScheduleDialog()
@@ -153,9 +159,18 @@ export const EventTester: React.FC = () => {
             <ButtonOutline onClick={stopDashboardClick} width="100%">
               Test stop dashboard
             </ButtonOutline>
-            <ButtonOutline onClick={updateFiltersClick} width="100%">
-              Test update filters
-            </ButtonOutline>
+            <Space width="100%">
+              <ButtonOutline onClick={updateFiltersClick} width="50%">
+                Test update filters
+              </ButtonOutline>
+              <FieldToggleSwitch
+                label="Run dashboard"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setRunDashboard(event.target.checked)
+                }
+                on={runDashboard}
+              ></FieldToggleSwitch>
+            </Space>
             <ButtonOutline onClick={openScheduleDialogClick} width="100%">
               Test open schedule dialog
             </ButtonOutline>
