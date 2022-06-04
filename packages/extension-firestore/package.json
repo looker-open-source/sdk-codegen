@@ -1,0 +1,44 @@
+{
+  "name": "@looker/extension-firestore",
+  "version": "1.1.0",
+  "description": "Looker Extension SDK Firestore Demo",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "analyze": "export ANALYZE_MODE=static && yarn bundle",
+    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "develop": "webpack serve --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "dependencies": {
+    "@looker/extension-sdk": "^22.4.2",
+    "@looker/extension-sdk-react": "22.4.2",
+    "@looker/sdk": "^22.0.0",
+    "@looker/sdk-codegen": "^21.3.2",
+    "@looker/components": "^2.8.1",
+    "@looker/icons": "^1.5.3",
+    "@styled-icons/material": "^10.28.0",
+    "@styled-icons/material-outlined": "^10.28.0",
+    "@styled-icons/material-rounded": "^10.28.0",
+    "firebase": "^9.6.11",
+    "lodash": "^4.17.21",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-is": "^16.13.1",
+    "react-router-dom": "^5.3.0",
+    "reactfire": "^4.2.1",
+    "semver": "^7.3.4",
+    "styled-components": "^5.3.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.178",
+    "@types/redux": "^3.6.0",
+    "@types/styled-components": "^5.1.7",
+    "@looker/components-test-utils": "^1.5.5",
+    "@testing-library/react": "^11.2.2",
+    "webpack-bundle-analyzer": "^4.2.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  }
+}

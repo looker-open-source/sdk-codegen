@@ -163,6 +163,18 @@ export enum ExtensionRequestType {
    * Open schedule dialog.
    */
   TILE_OPEN_SCHEDULE_DIALOG = 'TILE_OPEN_SCHEDULE_DIALOG',
+  /**
+   * Get the google access token. Will automatically refresh the
+   * token if needed.
+   */
+  GET_GOOGLE_ACCESS_TOKEN = 'GET_GOOGLE_ACCESS_TOKEN',
+  /**
+   * Google API scopes should be authorized before the extension
+   * is loaded. It is possible that the scope authorizations
+   * can be revoked after the extension is loaded. This mechanism
+   * allows the extension to request re-authorization.
+   */
+  REAUTHORIZE_GOOGLE_API_SCOPES = 'REAUTHORIZE_GOOGLE_API_SCOPES',
 }
 
 /**
@@ -576,6 +588,10 @@ export interface FetchProxy {
     responseBodyType?: FetchResponseBodyType
   ): Promise<FetchProxyDataResponse>
 }
+export interface GoogleAccessToken {
+  access_token: string
+  expires_at: number
+}
 
 /**
  * Public extension SDK
@@ -872,4 +888,23 @@ export interface ExtensionSDK {
    * 2. The Looker host system supports it.
    */
   isDashboardMountSupported: boolean
+
+  /**
+   * Get the google access token. If the token has expired
+   * set forceTokenRefresh to refresh it. The host will do
+   * this for you if it determines that the token is about
+   * to expire.
+   */
+  getGoogleAccessToken: (
+    forceTokenRefresh?: boolean
+  ) => Promise<GoogleAccessToken | null>
+
+  /**
+   * Reauthorize the google api scopes associated with the extension.
+   * In general it is unlikely that it will be necessary to call this.
+   * The scenario where this is necessary is when the application
+   * the extension is associated with has its third party access
+   * removed.
+   */
+  reauthorizeGoogleApiScopes: () => Promise<boolean>
 }

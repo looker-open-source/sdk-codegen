@@ -44,6 +44,7 @@ import type {
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
+  GoogleAccessToken,
 } from './types'
 import {
   ExtensionEvent,
@@ -429,6 +430,21 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
 
   unloaded() {
     this.send(ExtensionRequestType.EXTENSION_UNLOADED, {})
+  }
+
+  async getGoogleAccessToken(
+    forceTokenRefresh?: boolean
+  ): Promise<GoogleAccessToken | null> {
+    return this.sendAndReceive(ExtensionRequestType.GET_GOOGLE_ACCESS_TOKEN, {
+      payload: forceTokenRefresh,
+    })
+  }
+
+  async reauthorizeGoogleApiScopes(): Promise<boolean> {
+    return this.sendAndReceive(
+      ExtensionRequestType.REAUTHORIZE_GOOGLE_API_SCOPES,
+      {}
+    )
   }
 
   createFetchProxy(
