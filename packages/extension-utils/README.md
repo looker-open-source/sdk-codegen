@@ -1,5 +1,7 @@
 # @looker/extension-utils
 
+Easier browser-based TypeScript authentication via OAuth, and support for building React applications that can run both inside and outside of [Looker's Extension Framework](https://docs.looker.com/data-modeling/extension-framework/extension-framework-intro) hosting environment.
+
 ## "Dual mode" Looker browser applications
 
 This package provides interfaces and classes that support building a Looker application that can be both hosted as
