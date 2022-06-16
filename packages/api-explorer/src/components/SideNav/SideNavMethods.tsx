@@ -24,7 +24,7 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
@@ -45,10 +45,12 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
+    defaultOpen = match ? match.params.methodTag === tag : defaultOpen
+    const searchPattern = useSelector(selectSearchPattern)
+
     const [isOpen, setIsOpen] = useState(defaultOpen)
     const history = useHistory()
 
@@ -57,13 +59,6 @@ export const SideNavMethods = styled(
       setIsOpen(_isOpen)
       if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
     }
-
-    useEffect(() => {
-      const status = match
-        ? defaultOpen || match.params.methodTag === tag
-        : defaultOpen
-      setIsOpen(status)
-    }, [defaultOpen, match, tag])
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (
