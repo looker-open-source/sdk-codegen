@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
+
 export * from './logger'
+export * from './errors'
