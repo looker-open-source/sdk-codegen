@@ -51,15 +51,7 @@ describe('SideNavMethods', () => {
       `/3.1/methods/${tag}/${Object.values(methods)[0].name}`
     )
   })
-  /*
-   *  Tests to include:
-   *   1) test that can open and close properly
-   *   2) testing if methods show up default unopenned if nothing in url
-   *   3) testing it will be openned if parameter in the url
-   *
-   * *** DO THIS FOR THE SIDENAVTYPES AS WELL ***
-   *
-   * */
+
   test('method opens successfully', () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
