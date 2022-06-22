@@ -24,7 +24,7 @@
 
  */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
@@ -48,11 +48,16 @@ export const SideNavMethods = styled(
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
-    defaultOpen = match ? match.params.methodTag === tag : defaultOpen
     const searchPattern = useSelector(selectSearchPattern)
-
     const [isOpen, setIsOpen] = useState(defaultOpen)
     const history = useHistory()
+
+    useEffect(() => {
+      const status = match
+        ? defaultOpen || match.params.methodTag === tag
+        : defaultOpen
+      setIsOpen(status)
+    }, [defaultOpen])
 
     const handleOpen = () => {
       const _isOpen = !isOpen

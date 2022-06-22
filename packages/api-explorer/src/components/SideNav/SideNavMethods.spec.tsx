@@ -52,27 +52,36 @@ describe('SideNavMethods', () => {
     )
   })
 
-  test('method opens successfully', () => {
+  test('tag expands and displays methods after clicked', () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
     )
-    const initExpandedPanels = screen.queryByRole('region')
-    expect(initExpandedPanels).not.toBeInTheDocument()
+    const firstMethod = Object.values(methods)[0].schema.summary
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     userEvent.click(screen.getByText(tag))
-    const expandedPanelsAfterClick = screen.getByRole('region')
-    expect(expandedPanelsAfterClick).toBeInTheDocument()
+    expect(screen.queryByText(firstMethod)).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(
+      Object.values(methods).length
+    )
   })
 
-  test('method closes successfully', () => {
+  test('expanded tag closes when clicked', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
+      <SideNavMethods
+        methods={methods}
+        tag={tag}
+        specKey={'3.1'}
+        defaultOpen={true}
+      />
+    )
+    const firstMethod = Object.values(methods)[0].schema.summary
+    expect(screen.queryByText(firstMethod)).toBeInTheDocument()
+    expect(screen.queryAllByRole('link')).toHaveLength(
+      Object.values(methods).length
     )
     userEvent.click(screen.getByText(tag))
-    const expandedPanelsAfterClick = screen.getByRole('region')
-    expect(expandedPanelsAfterClick).toBeInTheDocument()
-    userEvent.click(screen.getByText(tag))
-    const expandedPanelsClosed = screen.queryByRole('region')
-    expect(expandedPanelsClosed).not.toBeInTheDocument()
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 
   test('it highlights text matching search pattern in both tag and methods', () => {
