@@ -70,6 +70,7 @@ interface SideNavProps {
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const history = useHistory()
   const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -91,6 +92,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         history.push(parts.join('/'))
       }
     }
+    history.replace({ search: searchParams.toString() })
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const searchCriteria = useSelector(selectSearchCriteria)
@@ -123,6 +125,12 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)
+      if (!pattern && searchParams.get('s')) {
+        searchParams.delete('s')
+      } else {
+        searchParams.set('s', debouncedPattern)
+      }
+      history.replace({ search: searchParams.toString() })
     } else {
       newTags = api.tags || {}
       newTypes = api.types || {}
