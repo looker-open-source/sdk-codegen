@@ -98,7 +98,9 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const searchCriteria = useSelector(selectSearchCriteria)
   const { setSearchPatternAction } = useSettingActions()
 
-  const [pattern, setSearchPattern] = useState('')
+  const [pattern, setSearchPattern] = useState(
+    searchParams.get('s') ? searchParams.get('s') : ''
+  )
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
