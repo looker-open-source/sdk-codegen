@@ -45,12 +45,23 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
+    const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
-    const searchPattern = useSelector(selectSearchPattern)
     const [isOpen, setIsOpen] = useState(defaultOpen)
     const history = useHistory()
+
+    const handleOpen = () => {
+      const _isOpen = !isOpen
+      setIsOpen(_isOpen)
+      if (_isOpen) {
+        // do for types as well, else statement remove name
+        history.push(`/${specKey}/methods/${tag}`)
+      } else {
+        history.push(`/${specKey}/methods`)
+      }
+    }
 
     useEffect(() => {
       const status = match
@@ -58,12 +69,6 @@ export const SideNavMethods = styled(
         : defaultOpen
       setIsOpen(status)
     }, [defaultOpen])
-
-    const handleOpen = () => {
-      const _isOpen = !isOpen
-      setIsOpen(_isOpen)
-      if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
-    }
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (

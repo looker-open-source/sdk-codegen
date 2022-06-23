@@ -55,7 +55,12 @@ export const SideNavTypes = styled(
     const handleOpen = () => {
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
-      if (_isOpen) history.push(`/${specKey}/types/${tag}`)
+      if (_isOpen) {
+        // do for types as well, else statement remove name
+        history.push(`/${specKey}/types/${tag}`)
+      } else {
+        history.push(`/${specKey}/types`)
+      }
     }
 
     useEffect(() => {
