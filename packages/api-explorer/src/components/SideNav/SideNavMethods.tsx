@@ -56,7 +56,6 @@ export const SideNavMethods = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        // do for types as well, else statement remove name
         history.push(`/${specKey}/methods/${tag}`)
       } else {
         history.push(`/${specKey}/methods`)
