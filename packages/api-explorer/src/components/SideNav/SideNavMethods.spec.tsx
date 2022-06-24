@@ -35,6 +35,17 @@ import {
 } from '../../test-utils'
 import { SideNavMethods } from './SideNavMethods'
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+    }),
+  }
+})
+
 describe('SideNavMethods', () => {
   const tag = 'Dashboard'
   const methods = api.tags[tag]
@@ -59,6 +70,7 @@ describe('SideNavMethods', () => {
     const firstMethod = Object.values(methods)[0].schema.summary
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     userEvent.click(screen.getByText(tag))
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1/methods/${tag}`)
     expect(screen.queryByText(firstMethod)).toBeInTheDocument()
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.values(methods).length
@@ -80,6 +92,7 @@ describe('SideNavMethods', () => {
       Object.values(methods).length
     )
     userEvent.click(screen.getByText(tag))
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1/methods`)
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })

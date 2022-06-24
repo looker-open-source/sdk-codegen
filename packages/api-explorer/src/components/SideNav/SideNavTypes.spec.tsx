@@ -26,6 +26,7 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 
+import userEvent from '@testing-library/user-event'
 import { api } from '../../test-data'
 import {
   createTestStore,
@@ -33,30 +34,64 @@ import {
 } from '../../test-utils'
 import { SideNavTypes } from './SideNavTypes'
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+    }),
+  }
+})
+
 describe('SideNavTypes', () => {
+  const tag = 'Dashboard'
+  const specKey = '3.1'
+  const typeTags = Object.keys(api.typeTags[tag])
+
   test('it renders provided types', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavTypes
-        specKey={'3.1'}
-        types={{
-          Dashboard: api.types.Dashboard,
-        }}
-        tag="Dashboard"
-      />
+      <SideNavTypes specKey={specKey} types={{ ...api.types }} tag={tag} />
     )
     const h4 = screen.getByRole('heading', { level: 4 })
-    expect(h4).toHaveTextContent('Dashboard')
+    expect(h4).toHaveTextContent(tag)
+  })
+
+  test('tag expands and displays types after clicked', () => {
+    renderWithRouterAndReduxProvider(
+      <SideNavTypes types={{ ...api.types }} tag={tag} specKey={specKey} />
+    )
+    expect(screen.queryByText(typeTags[0])).not.toBeInTheDocument()
+    userEvent.click(screen.getByText(tag))
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1/types/${tag}`)
+    expect(screen.queryByText(typeTags[0])).toBeInTheDocument()
+  })
+
+  test('expanded tag closes when clicked', () => {
+    renderWithRouterAndReduxProvider(
+      <SideNavTypes
+        types={{ ...api.types }}
+        tag={tag}
+        specKey={'3.1'}
+        defaultOpen={true}
+      />
+    )
+    expect(screen.queryByText(typeTags[0])).toBeInTheDocument()
+    userEvent.click(screen.getAllByText(tag)[0])
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1/types`)
+    expect(screen.queryByText(typeTags[0])).not.toBeInTheDocument()
   })
 
   test('it highlights text matching search pattern', () => {
     const store = createTestStore({ settings: { searchPattern: 'dash' } })
     renderWithRouterAndReduxProvider(
       <SideNavTypes
-        specKey={'3.1'}
+        specKey={specKey}
         types={{
-          Dashboard: api.types.Dashboard,
+          ...api.types,
         }}
-        tag="Dashboard"
+        tag={tag}
       />,
       undefined,
       store
