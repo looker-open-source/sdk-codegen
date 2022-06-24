@@ -92,7 +92,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         history.push(parts.join('/'))
       }
     }
-    history.replace({ search: searchParams.toString() })
+    history.push({ search: searchParams.toString() })
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const searchCriteria = useSelector(selectSearchCriteria)
@@ -132,7 +132,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       } else {
         searchParams.set('s', debouncedPattern)
       }
-      history.replace({ search: searchParams.toString() })
+      history.push({ search: searchParams.toString() })
     } else {
       newTags = api.tags || {}
       newTypes = api.types || {}
@@ -162,6 +162,19 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       onSelectTab(defaultIndex)
     }
   }, [defaultIndex, tabs])
+
+  useEffect(() => {
+    return () => {
+      if (history.action === 'POP') {
+        const searchQuery = new URLSearchParams(history.location.search).get(
+          's'
+        )
+        if (searchQuery) {
+          setSearchPattern(searchQuery)
+        }
+      }
+    }
+  }, [location])
 
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
