@@ -123,7 +123,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     const api = spec.api || ({} as ApiModel)
 
     if (debouncedPattern && api.search) {
-      results = api.search(pattern, criteriaToSet(searchCriteria))
+      results = api.search(pattern!, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)
@@ -146,7 +146,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-    setSearchPatternAction({ searchPattern: debouncedPattern })
+    setSearchPatternAction({ searchPattern: debouncedPattern! })
   }, [
     debouncedPattern,
     specKey,
