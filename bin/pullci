@@ -1,0 +1,21 @@
+#!/bin/sh
+# pull a version and start up looker dockerized container
+
+if [[ $# -ne 1 ]]; then
+    echo "$0 <release_version>"
+    echo "  release_version: XX_XX, like 22_4, not 22.4"
+    exit 2
+fi
+
+VERSION=$1
+NAME=looker-sdk-codegen-ci
+DOCK=us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/$VERSION
+
+function dock_stop() {
+  docker kill $(docker ps -a -q) 1> /dev/null
+}
+
+dock_stop
+docker rm -f "$NAME" 1> /dev/null
+docker pull "$DOCK"
+docker run --name "$NAME" -d -p 10000:9999 -p 20000:19999 "$DOCK"

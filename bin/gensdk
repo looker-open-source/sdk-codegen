@@ -1,0 +1,129 @@
+#!/usr/bin/env node
+
+/**
+ * Create branch if on main,
+ * generate SDK bindings,
+ * run smoke tests for TS and Python,
+ * commit and push if everything passes
+ * create pull request https://docs.github.com/en/rest/pulls/pulls#create-a-pull-request
+ * */
+
+// const fs = require('fs')
+const path = require('path')
+const proc = require('child_process')
+const looker = require('@looker/sdk-node')
+const utf8 = { encoding: 'utf-8' }
+
+const root = path.join(__dirname, '/../')
+const sdk = looker.LookerNodeSDK.init40()
+
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+/** wait for the Looker CI image to be responsive */
+const waitForLooker = async () => {
+  const max_tries = 30
+  const delay = 5
+  let alive = false
+  let tries = 1
+  while (tries <= max_tries && !alive) {
+    try {
+      const user = await sdk.ok(sdk.me()) // make any API call
+      alive = sdk.authSession.isAuthenticated()
+      console.info(`Hi, ${user.first_name} ${user.last_name}!`)
+    } catch {
+      await sleep(delay * 1000)
+      tries++
+      console.info(`Waiting ${delay} seconds before attempt ${tries} of ${max_tries} (Total: ${delay * (tries - 1)})`)
+    }
+  }
+  return alive
+}
+
+/**
+ * Get the CI version for the release
+ * @param release to munge
+ * @returns release version with _ instead of .
+ */
+const ciVersion = (release) => release.replace('.', '_')
+
+const ok = (result) => {
+  if (typeof result === 'string') {
+    return true
+  }
+  console.error(result)
+  return false
+}
+
+const trapper = (command) => {
+  let result
+  try {
+    result = proc.execSync(command).toString()
+  }
+  catch (error) {
+    result = error
+  }
+  return result
+}
+
+/** get the trimmed output of the command as a UTF-8 string */
+const execRead = (command) => {
+  return proc.execSync(command, utf8).trim()
+}
+
+/** get this git repository's current branch name */
+const getBranchName = () => execRead('git rev-parse --abbrev-ref HEAD')
+
+/**
+ * Pull the specified Looker CI image and wait for it to be ready
+ * @param release like '21.10'
+ */
+const build = async (release) => {
+  const opts = {
+    cwd: root,
+    maxBuffer: 1024 * 1024,
+    stdio: 'inherit',
+  }
+  const script = path.resolve(root, 'bin/pullci')
+  // Throws exception on error, which we want
+  proc.execFileSync(script, [ciVersion(release)], opts)
+  return await waitForLooker()
+}
+
+const generate = () => {
+  const result = trapper()
+}
+
+/**
+ * run smoke tests for TS and PY, returning error level
+ * @returns error level from smoke test
+ */
+const smoke = async () => {
+  return trapper('yarn foo')
+}
+
+/** Regen against the specified release and complete flows */
+const regen = async (release) => {
+  console.info(`Generating SDKs for Looker ${release} ...`)
+  console.info(`on branch ${getBranchName()}`)
+  // await build(release)
+  await generate()
+  if (ok(await smoke())) {
+    console.log('Ready to regenerate')
+  }
+  await sdk.authSession.logout()
+}
+
+(async () => {
+  console.info(`${process.argv[1]} <version>`)
+  const args = process.argv.slice(2)
+  if (args.length >= 1) {
+    await regen(args[0])
+  } else
+  {
+    console.error('No release version was specified')
+  }
+})().catch( e => {
+  console.error(e)
+})
