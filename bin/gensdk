@@ -147,7 +147,7 @@ const regen = async (release) => {
   await pullci(release)
   return batch([
       'yarn gen',
-      'bin/smoke typescript python',
+      'bin/smoke typescript',
       // 'git add -A', `git commit -m "feat: generated SDK version ${release}"`, 'git push'
   ])
 }
