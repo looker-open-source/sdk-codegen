@@ -32,6 +32,7 @@ const waitForLooker = async () => {
       const user = await sdk.ok(sdk.me()) // make any API call
       alive = sdk.authSession.isAuthenticated()
       console.info(`Hi, ${user.first_name} ${user.last_name}!`)
+      await sdk.authSession.logout()
     } catch {
       await sleep(delay * 1000)
       tries++
@@ -56,14 +57,31 @@ const ok = (result) => {
   return false
 }
 
-const trapper = (command) => {
+const run = (command) => {
   let result
   try {
+    console.info(`Running ${command} ...`)
     result = proc.execSync(command).toString()
   }
   catch (error) {
     result = error
   }
+  return result
+}
+
+/**
+ * Run multiple commands one after another, returning on first failure
+ * @param commands
+ */
+const batch = (commands) => {
+  let result = ''
+  commands.forEach(command => {
+    result = run(command)
+    if (!ok(result)) {
+      console.error(`${command} failed.`)
+      return result
+    }
+  })
   return result
 }
 
@@ -73,50 +91,70 @@ const execRead = (command) => {
 }
 
 /** get this git repository's current branch name */
-const getBranchName = () => execRead('git rev-parse --abbrev-ref HEAD')
+const getCurrentBranch = () => execRead('git rev-parse --abbrev-ref HEAD')
+
+/**
+ * Get the standardized name for this branch
+ * @param release either xx.xx or xx_xx
+ * @returns sdk_<release>
+ */
+const branchName = (release) => `sdk_${ciVersion(release)}`
+
+/**
+ * Is the running version the desired release?
+ * @param release version to check
+ * @returns {Promise<boolean>}
+ */
+const runningVersion = async (release) => {
+  try {
+    const payload = await sdk.ok(sdk.versions())
+    return payload.looker_release_version.startsWith(release)
+  } catch {
+    // don't care what the error was, it failed
+    return false
+  }
+}
 
 /**
  * Pull the specified Looker CI image and wait for it to be ready
  * @param release like '21.10'
  */
-const build = async (release) => {
+const pullci = async (release) => {
   const opts = {
     cwd: root,
     maxBuffer: 1024 * 1024,
     stdio: 'inherit',
   }
-  const script = path.resolve(root, 'bin/pullci')
-  // Throws exception on error, which we want
-  proc.execFileSync(script, [ciVersion(release)], opts)
+  if (! await runningVersion(release)) {
+    const script = path.resolve(root, 'bin/pullci')
+    // Throws exception on error, which we want
+    proc.execFileSync(script, [ciVersion(release)], opts)
+  }
   return await waitForLooker()
-}
-
-const generate = () => {
-  const result = trapper()
-}
-
-/**
- * run smoke tests for TS and PY, returning error level
- * @returns error level from smoke test
- */
-const smoke = async () => {
-  return trapper('yarn foo')
 }
 
 /** Regen against the specified release and complete flows */
 const regen = async (release) => {
+  let result
   console.info(`Generating SDKs for Looker ${release} ...`)
-  console.info(`on branch ${getBranchName()}`)
-  // await build(release)
-  await generate()
-  if (ok(await smoke())) {
-    console.log('Ready to regenerate')
+  let current = getCurrentBranch()
+  if (current === 'main') {
+    const branch = branchName(release)
+    console.log(`Creating branch ${branch} ...`)
+    result = run(`git checkout -b ${branch} origin/main`)
+    if (!(ok(result))) return result
   }
-  await sdk.authSession.logout()
+  await pullci(release)
+  return batch([
+      'yarn gen',
+      'bin/smoke typescript python',
+      // 'git add -A', `git commit -m "feat: generated SDK version ${release}"`, 'git push'
+  ])
 }
 
 (async () => {
   console.info(`${process.argv[1]} <version>`)
+  console.info('  version: Looker release version, like 22.10')
   const args = process.argv.slice(2)
   if (args.length >= 1) {
     await regen(args[0])
