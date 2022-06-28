@@ -48,7 +48,7 @@ export interface IGeneratorSpec {
   legacy?: string // legacy language tag
 }
 
-// To disable generation of any language specification, you can just comment it out
+// To disable generation of any language specification, just comment it out
 export const Generators: Array<IGeneratorSpec> = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>

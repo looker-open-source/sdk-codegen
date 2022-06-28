@@ -152,9 +152,9 @@ The code generator will:
 
 - validate the OpenAPI 3.x file(s)
 
-- by default, call the code generator for each active language configured in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
+- by default, call the code generator for each active language 
 
-  - If you want to generate for one specific language, use `yarn gen {language}`. Currently, supported `{language}` values are `kotlin`, `python`, `swift` and `typescript`
+  - To generate on specific language SDK, use `yarn gen {language}`. The supported languages have a factory declared in the `Generators` array in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
 
 When the generator completes successfully, the output will be similar to:
 
@@ -191,7 +191,7 @@ yarn run
 to see the list of all scripts that can be run by the code generator.
 
 After generation, the generated code might not conform with the code standards.
-Changes cannot be commited until they pass the lint tests.
+Changes cannot be committed until they pass the lint tests.
 This can be checked with the following:
 
 ```sh
