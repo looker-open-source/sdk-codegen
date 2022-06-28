@@ -4044,7 +4044,7 @@ public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
-  /// <summary>Base font size for scaling fonts</summary>
+  /// <summary>Base font size for scaling fonts (only supported by legacy dashboards)</summary>
   public string? base_font_size { get; set; } = null;
   /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
   public string? color_collection_id { get; set; } = null;
@@ -4074,7 +4074,7 @@ public class ThemeSettings : SdkModel
   public string? warn_button_color { get; set; } = null;
   /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// <summary>Toggles the tile shadow (New Dashboards)</summary>
+  /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
 }
 

@@ -25,7 +25,7 @@
  */
 
 /**
- * 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
+ * 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
  */
 
 
@@ -523,6 +523,80 @@ public struct AlertFieldFilter: SDKModel {
 
     public init(_ field_name: String, _ field_value: AnyCodable, filter_value: String? = nil) {
         self.init(field_name: field_name, field_value: field_value, filter_value: filter_value)
+    }
+
+}
+
+public struct AlertNotifications: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _notification_id = "notification_id"
+        case _alert_condition_id = "alert_condition_id"
+        case _user_id = "user_id"
+        case is_read
+        case field_value
+        case threshold_value
+        case _ran_at = "ran_at"
+    }
+    private var _notification_id: AnyString?
+    /**
+     * ID of the notification (read-only)
+     */
+    public var notification_id: String? {
+        get { _notification_id?.value }
+        set { _notification_id = newValue.map(AnyString.init) }
+    }
+
+    private var _alert_condition_id: AnyString?
+    /**
+     * ID of the alert (read-only)
+     */
+    public var alert_condition_id: String? {
+        get { _alert_condition_id?.value }
+        set { _alert_condition_id = newValue.map(AnyString.init) }
+    }
+
+    private var _user_id: AnyString?
+    /**
+     * ID of the user (read-only)
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Read state of the notification
+     */
+    public var is_read: Bool?
+
+    /**
+     * The value of the field on which the alert condition is set (read-only)
+     */
+    public var field_value: Double?
+
+    /**
+     * The value of the threshold which triggers the alert notification (read-only)
+     */
+    public var threshold_value: Double?
+
+    private var _ran_at: AnyString?
+    /**
+     * The time at which the alert query ran (read-only)
+     */
+    public var ran_at: String? {
+        get { _ran_at?.value }
+        set { _ran_at = newValue.map(AnyString.init) }
+    }
+
+    public init(notification_id: String? = nil, alert_condition_id: String? = nil, user_id: String? = nil, is_read: Bool? = nil, field_value: Double? = nil, threshold_value: Double? = nil, ran_at: String? = nil) {
+        self._notification_id = notification_id.map(AnyString.init)
+        self._alert_condition_id = alert_condition_id.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
+        self.is_read = is_read
+        self.field_value = field_value
+        self.threshold_value = threshold_value
+        self._ran_at = ran_at.map(AnyString.init)
     }
 
 }
@@ -5166,6 +5240,7 @@ public struct DashboardElement: SDKModel {
         case _rich_content_json = "rich_content_json"
         case _title_text_as_html = "title_text_as_html"
         case _subtitle_text_as_html = "subtitle_text_as_html"
+        case _extension_id = "extension_id"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -5399,7 +5474,16 @@ public struct DashboardElement: SDKModel {
         set { _subtitle_text_as_html = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil) {
+    private var _extension_id: AnyString?
+    /**
+     * Extension ID (read-only)
+     */
+    public var extension_id: String? {
+        get { _extension_id?.value }
+        set { _extension_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
@@ -5429,6 +5513,7 @@ public struct DashboardElement: SDKModel {
         self._rich_content_json = rich_content_json.map(AnyString.init)
         self._title_text_as_html = title_text_as_html.map(AnyString.init)
         self._subtitle_text_as_html = subtitle_text_as_html.map(AnyString.init)
+        self._extension_id = extension_id.map(AnyString.init)
     }
 
 }
@@ -18492,6 +18577,11 @@ public struct Setting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
+     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     */
+    public var extension_load_url_enabled: Bool?
+
+    /**
      * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
      */
     public var marketplace_auto_install_enabled: Bool?
@@ -18510,8 +18600,9 @@ public struct Setting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
+        self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.privatelabel_configuration = privatelabel_configuration
@@ -19447,7 +19538,7 @@ public struct ThemeSettings: SDKModel {
 
     private var _base_font_size: AnyString?
     /**
-     * Base font size for scaling fonts
+     * Base font size for scaling fonts (only supported by legacy dashboards)
      */
     public var base_font_size: String? {
         get { _base_font_size?.value }
@@ -19573,7 +19664,7 @@ public struct ThemeSettings: SDKModel {
     }
 
     /**
-     * Toggles the tile shadow (New Dashboards)
+     * Toggles the tile shadow (not supported)
      */
     public var tile_shadow: Bool?
 
@@ -21996,7 +22087,7 @@ public struct WriteDashboardBase: SDKModel {
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
  */
 public struct WriteDashboardElement: SDKModel {
 
@@ -25550,6 +25641,11 @@ public struct WriteSetting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
+     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     */
+    public var extension_load_url_enabled: Bool?
+
+    /**
      * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
      */
     public var marketplace_auto_install_enabled: Bool?
@@ -25572,8 +25668,9 @@ public struct WriteSetting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
+        self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
         self.privatelabel_configuration = privatelabel_configuration

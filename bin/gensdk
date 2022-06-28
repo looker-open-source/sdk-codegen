@@ -8,7 +8,6 @@
  * create pull request https://docs.github.com/en/rest/pulls/pulls#create-a-pull-request
  * */
 
-// const fs = require('fs')
 const path = require('path')
 const proc = require('child_process')
 const looker = require('@looker/sdk-node')
@@ -105,7 +104,7 @@ const branchName = (release) => `sdk_${ciVersion(release)}`
  * @param release version to check
  * @returns {Promise<boolean>}
  */
-const runningVersion = async (release) => {
+const checkVersion = async (release) => {
   try {
     const payload = await sdk.ok(sdk.versions())
     return payload.looker_release_version.startsWith(release)
@@ -125,12 +124,12 @@ const pullci = async (release) => {
     maxBuffer: 1024 * 1024,
     stdio: 'inherit',
   }
-  if (! await runningVersion(release)) {
+  if (! await checkVersion(release)) {
     const script = path.resolve(root, 'bin/pullci')
     // Throws exception on error, which we want
     proc.execFileSync(script, [ciVersion(release)], opts)
+    return await waitForLooker()
   }
-  return await waitForLooker()
 }
 
 /** Regen against the specified release and complete flows */
@@ -148,7 +147,13 @@ const regen = async (release) => {
   return batch([
       'yarn gen',
       'bin/smoke typescript',
-      // 'git add -A', `git commit -m "feat: generated SDK version ${release}"`, 'git push'
+      /*
+      Test these out after first cut is merged to main
+      'git add -A',
+      `git commit -m "feat: generate SDK version ${release}"`,
+      'git push'
+      create PR
+       */
   ])
 }
 
