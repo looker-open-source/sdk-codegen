@@ -37,7 +37,7 @@ jobs:
           python-version: '3.10'
       - run: pip install -e .
       - run: pip install mypy types-requests
-      - run: mypy looker_sdk/ disable until linting is fixed
+      - run: mypy looker_sdk/
 
   unit:
     needs: typecheck
