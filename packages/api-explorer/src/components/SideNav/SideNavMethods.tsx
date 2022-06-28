@@ -55,7 +55,11 @@ export const SideNavMethods = styled(
     const handleOpen = () => {
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
-      if (_isOpen) history.push(`/${specKey}/methods/${tag}`)
+      if (_isOpen) {
+        history.push(`/${specKey}/methods/${tag}`)
+      } else {
+        history.push(`/${specKey}/methods`)
+      }
     }
 
     useEffect(() => {
@@ -63,7 +67,7 @@ export const SideNavMethods = styled(
         ? defaultOpen || match.params.methodTag === tag
         : defaultOpen
       setIsOpen(status)
-    }, [defaultOpen, match, tag])
+    }, [defaultOpen])
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (
