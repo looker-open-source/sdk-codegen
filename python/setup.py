@@ -33,10 +33,6 @@ VERSION = version["__version__"]
 REQUIRES = [
     "requests >= 2.22",
     "typing-extensions >= 4.1.1",
-    # Python 3.6
-    "attrs >= 18.2.0;python_version<'3.7'",
-    "cattrs < 1.1.0;python_version<'3.7'",
-    "python-dateutil;python_version<'3.7'",
     # Python 3.7+
     "attrs >= 20.1.0;python_version>='3.7'",
     "cattrs >= 1.3;python_version>='3.7'",
