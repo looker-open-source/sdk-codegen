@@ -18,31 +18,29 @@ env:
   TOX_JUNIT_OUTPUT_DIR: results
 
 jobs:
-#  todo need to get mypy type checking working again
-#  typecheck:
-#    name: Mypy
-#    runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        shell: bash
-#        working-directory: python/
-#
-#    steps:
-#      - name: Cancel Previous Runs
-#        uses: styfle/cancel-workflow-action@0.6.0
-#        with:
-#          access_token: ${{ secrets.GITHUB_TOKEN }}
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-python@v2
-#        with:
-#          python-version: '3.10'
-#      - run: pip install -e .
-#      - run: pip install mypy types-requests
-#      - run: mypy looker_sdk/ disable until linting is fixed
+  typecheck:
+    name: Mypy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: python/
+
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - run: pip install -e .
+      - run: pip install mypy types-requests
+      - run: mypy looker_sdk/ disable until linting is fixed
 
   unit:
-    # todo reinstate typecheck
-#    needs: typecheck
+    needs: typecheck
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
