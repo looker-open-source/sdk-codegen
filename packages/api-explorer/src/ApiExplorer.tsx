@@ -91,7 +91,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
-  const { initSettingsAction } = useSettingActions()
+  const { initSettingsAction, setSearchPatternAction } = useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
@@ -122,6 +122,12 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
     }
   }, [location.pathname, spec])
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const searchPattern = searchParams.get('s') ? searchParams.get('s') : ''
+    setSearchPatternAction({ searchPattern: searchPattern! })
+  }, [location.search])
 
   useEffect(() => {
     if (headless) {

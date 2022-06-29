@@ -44,10 +44,13 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-import { selectSearchCriteria, useSettingActions } from '../../state'
+import {
+  selectSearchCriteria,
+  selectSearchPattern,
+  // useSettingActions,
+} from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -60,7 +63,6 @@ interface SideNavState {
   typeCount: number
   searchResults?: ISearchResult
 }
-
 interface SideNavProps {
   headless?: boolean
   /** Current selected spec */
@@ -84,23 +86,25 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        history.push(parts.join('/'))
+        history.push({
+          pathname: parts.join('/'),
+          search: searchParams.toString(),
+        })
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        history.push(parts.join('/'))
+        history.push({
+          pathname: parts.join('/'),
+          search: searchParams.toString(),
+        })
       }
     }
-    history.push({ search: searchParams.toString() })
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const searchCriteria = useSelector(selectSearchCriteria)
-  const { setSearchPatternAction } = useSettingActions()
-
-  const [pattern, setSearchPattern] = useState(
-    searchParams.get('s') ? searchParams.get('s') : ''
-  )
+  const searchPattern = useSelector(selectSearchPattern)
+  const [pattern, setSearchPattern] = useState(searchPattern)
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
@@ -116,29 +120,33 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   }
 
   useEffect(() => {
+    if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
+      searchParams.set('s', debouncedPattern)
+      history.push({ search: searchParams.toString() })
+    } else if (!debouncedPattern && searchParams.get('s')) {
+      searchParams.delete('s')
+      history.push({ search: searchParams.toString() })
+    }
+  }, [debouncedPattern])
+
+  useEffect(() => {
     let results
     let newTags
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
+    setSearchPattern(searchPattern)
 
-    if (debouncedPattern && api.search) {
-      results = api.search(pattern!, criteriaToSet(searchCriteria))
+    if (searchPattern && api.search) {
+      results = api.search(searchPattern, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)
-      if (!pattern && searchParams.get('s')) {
-        searchParams.delete('s')
-      } else {
-        searchParams.set('s', debouncedPattern)
-      }
-      history.push({ search: searchParams.toString() })
     } else {
       newTags = api.tags || {}
       newTypes = api.types || {}
       newTypeTags = api.typeTags || {}
     }
-
     setSideNavState({
       tags: newTags,
       typeTags: newTypeTags,
@@ -146,15 +154,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-    setSearchPatternAction({ searchPattern: debouncedPattern! })
-  }, [
-    debouncedPattern,
-    specKey,
-    spec,
-    setSearchPatternAction,
-    pattern,
-    searchCriteria,
-  ])
+  }, [searchPattern, specKey, spec, searchCriteria])
 
   useEffect(() => {
     const { selectedIndex, onSelectTab } = tabs
@@ -162,19 +162,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       onSelectTab(defaultIndex)
     }
   }, [defaultIndex, tabs])
-
-  useEffect(() => {
-    return () => {
-      if (history.action === 'POP') {
-        const searchQuery = new URLSearchParams(history.location.search).get(
-          's'
-        )
-        if (searchQuery) {
-          setSearchPattern(searchQuery)
-        }
-      }
-    }
-  }, [location])
 
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
