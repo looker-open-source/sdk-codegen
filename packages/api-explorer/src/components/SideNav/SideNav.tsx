@@ -46,11 +46,7 @@ import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
-import {
-  selectSearchCriteria,
-  selectSearchPattern,
-  // useSettingActions,
-} from '../../state'
+import { selectSearchCriteria, selectSearchPattern } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
