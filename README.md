@@ -154,7 +154,7 @@ The code generator will:
 
 - by default, call the code generator for each active language 
 
-  - To generate on specific language SDK, use `yarn gen {language}`. The supported languages have a factory declared in the `Generators` array in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
+  - To generate one specific language SDK, use `yarn gen {language}`. The supported languages have a factory declared in the `Generators` array in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
 
 When the generator completes successfully, the output will be similar to:
 
