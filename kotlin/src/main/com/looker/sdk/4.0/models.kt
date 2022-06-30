@@ -25,7 +25,7 @@
  */
 
 /**
- * 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
+ * 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
  */
 
 
@@ -156,6 +156,25 @@ data class AlertFieldFilter (
     var field_name: String,
     var field_value: Any,
     var filter_value: String? = null
+) : Serializable
+
+/**
+ * @property notification_id ID of the notification (read-only)
+ * @property alert_condition_id ID of the alert (read-only)
+ * @property user_id ID of the user (read-only)
+ * @property is_read Read state of the notification
+ * @property field_value The value of the field on which the alert condition is set (read-only)
+ * @property threshold_value The value of the threshold which triggers the alert notification (read-only)
+ * @property ran_at The time at which the alert query ran (read-only)
+ */
+data class AlertNotifications (
+    var notification_id: String? = null,
+    var alert_condition_id: String? = null,
+    var user_id: String? = null,
+    var is_read: Boolean? = null,
+    var field_value: Double? = null,
+    var threshold_value: Double? = null,
+    var ran_at: String? = null
 ) : Serializable
 
 /**
@@ -1338,6 +1357,7 @@ data class DashboardBase (
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  * @property title_text_as_html Text tile title text as Html (read-only)
  * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
+ * @property extension_id Extension ID (read-only)
  */
 data class DashboardElement (
     var can: Map<String,Boolean>? = null,
@@ -1368,7 +1388,8 @@ data class DashboardElement (
     var alert_count: Long? = null,
     var rich_content_json: String? = null,
     var title_text_as_html: String? = null,
-    var subtitle_text_as_html: String? = null
+    var subtitle_text_as_html: String? = null,
+    var extension_id: String? = null
 ) : Serializable
 
 /**
@@ -4653,6 +4674,7 @@ data class SessionConfig (
 
 /**
  * @property extension_framework_enabled Toggle extension framework on or off
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
  * @property privatelabel_configuration
@@ -4661,6 +4683,7 @@ data class SessionConfig (
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
+    var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
@@ -4946,7 +4969,7 @@ data class Theme (
 
 /**
  * @property background_color Default background color
- * @property base_font_size Base font size for scaling fonts
+ * @property base_font_size Base font size for scaling fonts (only supported by legacy dashboards)
  * @property color_collection_id Optional. ID of color collection to use with the theme. Use an empty string for none.
  * @property font_color Default font color
  * @property font_family Primary font family
@@ -4961,7 +4984,7 @@ data class Theme (
  * @property title_color Color for titles
  * @property warn_button_color Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
- * @property tile_shadow Toggles the tile shadow (New Dashboards)
+ * @property tile_shadow Toggles the tile shadow (not supported)
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5637,7 +5660,7 @@ data class WriteDashboardBase (
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
  *
  * @property body_text Text tile body text
  * @property dashboard_id Id of Dashboard
@@ -6580,6 +6603,7 @@ data class WriteSessionConfig (
  * Dynamic writeable type for Setting
  *
  * @property extension_framework_enabled Toggle extension framework on or off
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
  * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
@@ -6589,6 +6613,7 @@ data class WriteSessionConfig (
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
+    var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,

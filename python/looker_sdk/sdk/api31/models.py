@@ -8798,7 +8798,7 @@ class ThemeSettings(model.Model):
     """
     Attributes:
         background_color: Default background color
-        base_font_size: Base font size for scaling fonts
+        base_font_size: Base font size for scaling fonts (only supported by legacy dashboards)
         color_collection_id: Optional. ID of color collection to use with the theme. Use an empty string for none.
         font_color: Default font color
         font_family: Primary font family
@@ -8813,7 +8813,7 @@ class ThemeSettings(model.Model):
         title_color: Color for titles
         warn_button_color: Warning button color
         tile_title_alignment: The text alignment of tile titles (New Dashboards)
-        tile_shadow: Toggles the tile shadow (New Dashboards)
+        tile_shadow: Toggles the tile shadow (not supported)
     """
 
     background_color: Optional[str] = None

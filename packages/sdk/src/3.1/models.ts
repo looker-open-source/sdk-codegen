@@ -8507,7 +8507,7 @@ export interface IThemeSettings {
    */
   background_color?: string
   /**
-   * Base font size for scaling fonts
+   * Base font size for scaling fonts (only supported by legacy dashboards)
    */
   base_font_size?: string | null
   /**
@@ -8567,7 +8567,7 @@ export interface IThemeSettings {
    */
   tile_title_alignment?: string
   /**
-   * Toggles the tile shadow (New Dashboards)
+   * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
 }

@@ -78,6 +78,15 @@ describe('specConverter', () => {
       }
       expect(include31(v)).toEqual(true)
     })
+    it('includes 22.6 3.1', () => {
+      const v: IApiVersionElement = {
+        version: '22.6 3.1',
+        full_version: '3.1.22.6',
+        status: 'legacy',
+        swagger_url: '/apix/specs/api_22.6.3.1.json',
+      }
+      expect(include31(v)).toEqual(true)
+    })
     it('includes 4.0', () => {
       const v: IApiVersionElement = {
         status: 'stable',
