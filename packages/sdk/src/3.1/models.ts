@@ -1254,6 +1254,10 @@ export interface IDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date | null
@@ -1286,7 +1290,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**
@@ -6175,11 +6179,11 @@ export interface IRequestFolderChildren {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -9395,6 +9399,10 @@ export interface IWriteDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string | null
@@ -9403,7 +9411,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**

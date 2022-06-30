@@ -25,7 +25,7 @@
  */
 
 /**
- * 367 API models: 232 Spec, 56 Request, 59 Write, 20 Enum
+ * 372 API models: 234 Spec, 57 Request, 60 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -250,6 +250,7 @@ export interface IAlertNotifications {
    * The time at which the alert query ran (read-only)
    */
   ran_at?: string
+  alert?: IMobilePayload
 }
 
 export interface IAlertPatch {
@@ -1891,6 +1892,10 @@ export interface IDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date | null
@@ -1923,7 +1928,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -2806,6 +2811,14 @@ export enum DependencyStatus {
 export enum DestinationType {
   EMAIL = 'EMAIL',
   ACTION_HUB = 'ACTION_HUB',
+}
+
+/**
+ * Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+ */
+export enum DeviceType {
+  android = 'android',
+  ios = 'ios',
 }
 
 export interface IDialect {
@@ -5631,6 +5644,33 @@ export interface IMergeQuerySourceQuery {
   query_id?: string | null
 }
 
+export interface IMobilePayload {
+  /**
+   * Title of the alert (read-only)
+   */
+  title?: string | null
+  /**
+   * ID of the alert (read-only)
+   */
+  alert_id: string
+  /**
+   * ID of the investigative content (read-only)
+   */
+  investigative_content_id?: string | null
+  /**
+   * Name of the dashboard on which the alert has been set (read-only)
+   */
+  dashboard_name?: string | null
+  /**
+   * ID of the dashboard on which the alert has been set (read-only)
+   */
+  dashboard_id?: string
+  /**
+   * Slug of the query which runs the alert queries. (read-only)
+   */
+  query_slug?: string
+}
+
 export interface IMobileSettings {
   /**
    * Specifies whether the force authentication option is enabled for mobile (read-only)
@@ -5640,6 +5680,21 @@ export interface IMobileSettings {
    * Specifies whether mobile access for this instance is enabled. (read-only)
    */
   mobile_app_integration?: boolean
+}
+
+export interface IMobileToken {
+  /**
+   * Unique ID. (read-only)
+   */
+  id?: string
+  /**
+   * Specifies the device token
+   */
+  device_token: string
+  /**
+   * Specifies type of device. Valid values are: "android", "ios".
+   */
+  device_type: DeviceType
 }
 
 export interface IModel {
@@ -6727,6 +6782,20 @@ export interface IRequestActiveThemes {
 }
 
 /**
+ * Dynamically generated request type for alert_notifications
+ */
+export interface IRequestAlertNotifications {
+  /**
+   * (Optional) Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * (Optional) Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+}
+
+/**
  * Dynamically generated request type for all_board_items
  */
 export interface IRequestAllBoardItems {
@@ -7255,13 +7324,21 @@ export interface IRequestFolderChildren {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
   /**
    * Fields to sort by.
    */
@@ -8059,11 +8136,11 @@ export interface IRequestSearchFolders {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -10939,6 +11016,10 @@ export interface IWriteDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string | null
@@ -10947,7 +11028,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -11822,6 +11903,21 @@ export interface IWriteMergeQuery {
    * Visualization Config
    */
   vis_config?: IDictionary<string> | null
+}
+
+/**
+ * Dynamic writeable type for MobileToken removes:
+ * id
+ */
+export interface IWriteMobileToken {
+  /**
+   * Specifies the device token
+   */
+  device_token: string
+  /**
+   * Specifies type of device. Valid values are: "android", "ios".
+   */
+  device_type: DeviceType | null
 }
 
 /**

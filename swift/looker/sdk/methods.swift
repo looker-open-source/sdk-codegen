@@ -25,7 +25,7 @@
  */
 
 /**
- * 439 API methods
+ * 444 API methods
  */
 
 
@@ -252,9 +252,36 @@ open class LookerSDK: APIMethods {
      * GET /alert_notifications -> [AlertNotifications]
      */
     public func alert_notifications(
+        /**
+         * @param {Int64} limit (Optional) Number of results to return (used with `offset`).
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset (Optional) Number of results to skip before returning any (used with `limit`).
+         */
+        offset: Int64? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[AlertNotifications], SDKError> {
-        let result: SDKResponse<[AlertNotifications], SDKError> = self.get("/alert_notifications", nil, nil, options)
+        let result: SDKResponse<[AlertNotifications], SDKError> = self.get("/alert_notifications", 
+            ["limit": limit, "offset": offset], nil, options)
+        return result
+    }
+
+    /**
+     * # Reads a Notification
+     *   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+     *
+     * PATCH /alert_notifications/{alert_notification_id} -> AlertNotifications
+     */
+    public func read_alert_notification(
+        /**
+         * @param {String} alert_notification_id ID of a notification
+         */
+        _ alert_notification_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<AlertNotifications, SDKError> {
+        let path_alert_notification_id = encodeParam(alert_notification_id)
+        let result: SDKResponse<AlertNotifications, SDKError> = self.patch("/alert_notifications/\(path_alert_notification_id)", nil, nil, options)
         return result
     }
 
@@ -265,7 +292,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Present client credentials to obtain an authorization token
      *
-     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
      * The client credentials required for this login must be obtained by creating an API3 key on a user account
      * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
      *
@@ -503,7 +530,7 @@ open class LookerSDK: APIMethods {
      *
      * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * GET /ldap_config -> LDAPConfig
      */
@@ -525,7 +552,7 @@ open class LookerSDK: APIMethods {
      *
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * PATCH /ldap_config -> LDAPConfig
      */
@@ -653,6 +680,57 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<LDAPConfigTestResult, SDKError> {
         let result: SDKResponse<LDAPConfigTestResult, SDKError> = self.put("/ldap_config/test_user_auth", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Registers a mobile device.
+     * # Required fields: [:device_token, :device_type]
+     *
+     * POST /mobile/device -> MobileToken
+     */
+    public func register_mobile_device(
+        /**
+         * @param {WriteMobileToken} body
+         */
+        _ body: WriteMobileToken,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<MobileToken, SDKError> {
+        let result: SDKResponse<MobileToken, SDKError> = self.post("/mobile/device", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Updates the mobile device registration
+     *
+     * PATCH /mobile/device/{device_id} -> MobileToken
+     */
+    public func update_mobile_device_registration(
+        /**
+         * @param {String} device_id Unique id of the device.
+         */
+        _ device_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<MobileToken, SDKError> {
+        let path_device_id = encodeParam(device_id)
+        let result: SDKResponse<MobileToken, SDKError> = self.patch("/mobile/device/\(path_device_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Deregister a mobile device.
+     *
+     * DELETE /mobile/device/{device_id} -> Voidable
+     */
+    public func deregister_mobile_device(
+        /**
+         * @param {String} device_id Unique id of the device.
+         */
+        _ device_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Voidable, SDKError> {
+        let path_device_id = encodeParam(device_id)
+        let result: SDKResponse<Voidable, SDKError> = self.delete("/mobile/device/\(path_device_id)", nil, nil, options)
         return result
     }
 
@@ -3770,9 +3848,14 @@ open class LookerSDK: APIMethods {
     }
 
     /**
-     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     * ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
      *
-     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     * If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+     * dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+     *
+     * If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+     * If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+     * will remain where they were
      *
      * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
      * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -3780,6 +3863,22 @@ open class LookerSDK: APIMethods {
      *
      * Note that the created dashboard is not linked to any LookML Dashboard,
      * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * POST /dashboards/lookml -> DashboardLookml
+     */
+    public func import_dashboard_from_lookml(
+        /**
+         * @param {WriteDashboardLookml} body
+         */
+        _ body: WriteDashboardLookml,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DashboardLookml, SDKError> {
+        let result: SDKResponse<DashboardLookml, SDKError> = self.post("/dashboards/lookml", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
      *
      * POST /dashboards/from_lookml -> DashboardLookml
      */
@@ -4525,11 +4624,11 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         /**
@@ -4692,13 +4791,21 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
         /**
          * @param {String} sorts Fields to sort by.
          */
@@ -4707,7 +4814,7 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<[Folder], SDKError> {
         let path_folder_id = encodeParam(folder_id)
         let result: SDKResponse<[Folder], SDKError> = self.get("/folders/\(path_folder_id)/children", 
-            ["fields": fields, "page": page, "per_page": per_page, "sorts": sorts], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts], nil, options)
         return result
     }
 
@@ -9138,7 +9245,7 @@ open class LookerSDK: APIMethods {
      *
      * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
      * queries are run in the context of each recipient, so different recipients may see different
-     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
      *
      * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
      * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -9516,7 +9623,7 @@ open class LookerSDK: APIMethods {
      *
      * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
      *
-     * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+     * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *

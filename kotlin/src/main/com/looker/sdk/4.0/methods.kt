@@ -25,7 +25,7 @@
  */
 
 /**
- * 439 API methods
+ * 444 API methods
  */
 
 
@@ -222,12 +222,34 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * # Alert Notifications.
      *   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
      *
+     * @param {Long} limit (Optional) Number of results to return (used with `offset`).
+     * @param {Long} offset (Optional) Number of results to skip before returning any (used with `limit`).
+     *
      * GET /alert_notifications -> Array<AlertNotifications>
      */
-    fun alert_notifications(
-
+    @JvmOverloads fun alert_notifications(
+        limit: Long? = null,
+        offset: Long? = null
     ) : SDKResponse {
-        return this.get<Array<AlertNotifications>>("/alert_notifications", mapOf())
+        return this.get<Array<AlertNotifications>>("/alert_notifications", 
+            mapOf("limit" to limit,
+                 "offset" to offset))
+    }
+
+
+    /**
+     * # Reads a Notification
+     *   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+     *
+     * @param {String} alert_notification_id ID of a notification
+     *
+     * PATCH /alert_notifications/{alert_notification_id} -> AlertNotifications
+     */
+    fun read_alert_notification(
+        alert_notification_id: String
+    ) : SDKResponse {
+        val path_alert_notification_id = encodeParam(alert_notification_id)
+        return this.patch<AlertNotifications>("/alert_notifications/${path_alert_notification_id}", mapOf())
     }
 
     //endregion Alert: Alert
@@ -238,7 +260,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Present client credentials to obtain an authorization token
      *
-     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
      * The client credentials required for this login must be obtained by creating an API3 key on a user account
      * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
      *
@@ -461,7 +483,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * GET /ldap_config -> LDAPConfig
      */
@@ -483,7 +505,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * @param {WriteLDAPConfig} body
      *
@@ -601,6 +623,51 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         body: WriteLDAPConfig
     ) : SDKResponse {
         return this.put<LDAPConfigTestResult>("/ldap_config/test_user_auth", mapOf(), body)
+    }
+
+
+    /**
+     * ### Registers a mobile device.
+     * # Required fields: [:device_token, :device_type]
+     *
+     * @param {WriteMobileToken} body
+     *
+     * POST /mobile/device -> MobileToken
+     */
+    fun register_mobile_device(
+        body: WriteMobileToken
+    ) : SDKResponse {
+        return this.post<MobileToken>("/mobile/device", mapOf(), body)
+    }
+
+
+    /**
+     * ### Updates the mobile device registration
+     *
+     * @param {String} device_id Unique id of the device.
+     *
+     * PATCH /mobile/device/{device_id} -> MobileToken
+     */
+    fun update_mobile_device_registration(
+        device_id: String
+    ) : SDKResponse {
+        val path_device_id = encodeParam(device_id)
+        return this.patch<MobileToken>("/mobile/device/${path_device_id}", mapOf())
+    }
+
+
+    /**
+     * ### Deregister a mobile device.
+     *
+     * @param {String} device_id Unique id of the device.
+     *
+     * DELETE /mobile/device/{device_id} -> Void
+     */
+    fun deregister_mobile_device(
+        device_id: String
+    ) : SDKResponse {
+        val path_device_id = encodeParam(device_id)
+        return this.delete<Void>("/mobile/device/${path_device_id}", mapOf())
     }
 
 
@@ -3311,9 +3378,14 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     * ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
      *
-     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     * If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+     * dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+     *
+     * If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+     * If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+     * will remain where they were
      *
      * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
      * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -3321,6 +3393,20 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Note that the created dashboard is not linked to any LookML Dashboard,
      * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * @param {WriteDashboardLookml} body
+     *
+     * POST /dashboards/lookml -> DashboardLookml
+     */
+    fun import_dashboard_from_lookml(
+        body: WriteDashboardLookml
+    ) : SDKResponse {
+        return this.post<DashboardLookml>("/dashboards/lookml", mapOf(), body)
+    }
+
+
+    /**
+     * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
      *
      * @param {WriteDashboardLookml} body
      *
@@ -3935,8 +4021,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * Search for folders by creator id, parent id, name, etc
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
@@ -4072,8 +4158,10 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} folder_id Id of folder
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      *
      * GET /folders/{folder_id}/children -> Array<Folder>
@@ -4083,6 +4171,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null
     ) : SDKResponse {
         val path_folder_id = encodeParam(folder_id)
@@ -4090,6 +4180,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
             mapOf("fields" to fields,
                  "page" to page,
                  "per_page" to per_page,
+                 "limit" to limit,
+                 "offset" to offset,
                  "sorts" to sorts))
     }
 
@@ -7852,7 +7944,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
      * queries are run in the context of each recipient, so different recipients may see different
-     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
      *
      * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
      * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -8200,7 +8292,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
      *
-     * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+     * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *

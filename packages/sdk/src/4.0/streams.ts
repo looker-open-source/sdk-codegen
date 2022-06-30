@@ -25,7 +25,7 @@
  */
 
 /**
- * 439 API methods
+ * 444 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -132,6 +132,7 @@ import type {
   IMaterializePDT,
   IMergeQuery,
   IMobileSettings,
+  IMobileToken,
   IModel,
   IModelFieldSuggestions,
   IModelSet,
@@ -150,6 +151,7 @@ import type {
   IRenderTask,
   IRepositoryCredential,
   IRequestActiveThemes,
+  IRequestAlertNotifications,
   IRequestAllBoardItems,
   IRequestAllBoardSections,
   IRequestAllExternalOauthApplications,
@@ -274,6 +276,7 @@ import type {
   IWriteLookmlModel,
   IWriteLookWithQuery,
   IWriteMergeQuery,
+  IWriteMobileToken,
   IWriteModelSet,
   IWriteOauthClientApp,
   IWriteOIDCConfig,
@@ -551,17 +554,46 @@ export class Looker40SDKStream extends APIMethods {
    * GET /alert_notifications -> IAlertNotifications[]
    *
    * @param callback streaming output function
+   * @param request composed interface "IRequestAlertNotifications" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async alert_notifications(
     callback: (readable: Readable) => Promise<IAlertNotifications[]>,
+    request: IRequestAlertNotifications,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAlertNotifications[]>(
       callback,
       'GET',
       '/alert_notifications',
+      { limit: request.limit, offset: request.offset },
+      null,
+      options
+    )
+  }
+
+  /**
+   * # Reads a Notification
+   *   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+   *
+   * PATCH /alert_notifications/{alert_notification_id} -> IAlertNotifications
+   *
+   * @param callback streaming output function
+   * @param alert_notification_id ID of a notification
+   * @param options one-time API call overrides
+   *
+   */
+  async read_alert_notification(
+    callback: (readable: Readable) => Promise<IAlertNotifications>,
+    alert_notification_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    alert_notification_id = encodeParam(alert_notification_id)
+    return this.authStream<IAlertNotifications>(
+      callback,
+      'PATCH',
+      `/alert_notifications/${alert_notification_id}`,
       null,
       null,
       options
@@ -575,7 +607,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Present client credentials to obtain an authorization token
    *
-   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
    * The client credentials required for this login must be obtained by creating an API3 key on a user account
    * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
    *
@@ -870,7 +902,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
    *
-   * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
    *
    * GET /ldap_config -> ILDAPConfig
    *
@@ -903,7 +935,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
    *
-   * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
    *
    * PATCH /ldap_config -> ILDAPConfig
    *
@@ -1075,6 +1107,84 @@ export class Looker40SDKStream extends APIMethods {
       '/ldap_config/test_user_auth',
       null,
       body,
+      options
+    )
+  }
+
+  /**
+   * ### Registers a mobile device.
+   * # Required fields: [:device_token, :device_type]
+   *
+   * POST /mobile/device -> IMobileToken
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteMobileToken>
+   * @param options one-time API call overrides
+   *
+   */
+  async register_mobile_device(
+    callback: (readable: Readable) => Promise<IMobileToken>,
+    body: Partial<IWriteMobileToken>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IMobileToken>(
+      callback,
+      'POST',
+      '/mobile/device',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * ### Updates the mobile device registration
+   *
+   * PATCH /mobile/device/{device_id} -> IMobileToken
+   *
+   * @param callback streaming output function
+   * @param device_id Unique id of the device.
+   * @param options one-time API call overrides
+   *
+   */
+  async update_mobile_device_registration(
+    callback: (readable: Readable) => Promise<IMobileToken>,
+    device_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    device_id = encodeParam(device_id)
+    return this.authStream<IMobileToken>(
+      callback,
+      'PATCH',
+      `/mobile/device/${device_id}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Deregister a mobile device.
+   *
+   * DELETE /mobile/device/{device_id} -> void
+   *
+   * @param callback streaming output function
+   * @param device_id Unique id of the device.
+   * @param options one-time API call overrides
+   *
+   */
+  async deregister_mobile_device(
+    callback: (readable: Readable) => Promise<void>,
+    device_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    device_id = encodeParam(device_id)
+    return this.authStream<void>(
+      callback,
+      'DELETE',
+      `/mobile/device/${device_id}`,
+      null,
+      null,
       options
     )
   }
@@ -5112,9 +5222,14 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
-   * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+   * ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
    *
-   * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+   * If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+   * dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+   *
+   * If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+   * If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+   * will remain where they were
    *
    * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
    * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -5122,6 +5237,31 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Note that the created dashboard is not linked to any LookML Dashboard,
    * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+   *
+   * POST /dashboards/lookml -> IDashboardLookml
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteDashboardLookml>
+   * @param options one-time API call overrides
+   *
+   */
+  async import_dashboard_from_lookml(
+    callback: (readable: Readable) => Promise<IDashboardLookml>,
+    body: Partial<IWriteDashboardLookml>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IDashboardLookml>(
+      callback,
+      'POST',
+      '/dashboards/lookml',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
+   * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
    *
    * POST /dashboards/from_lookml -> IDashboardLookml
    *
@@ -6222,6 +6362,8 @@ export class Looker40SDKStream extends APIMethods {
         fields: request.fields,
         page: request.page,
         per_page: request.per_page,
+        limit: request.limit,
+        offset: request.offset,
         sorts: request.sorts,
       },
       null,
@@ -11091,7 +11233,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
    * queries are run in the context of each recipient, so different recipients may see different
-   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
    *
    * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
    * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -11522,7 +11664,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
    *
-   * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+   * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
    *
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *

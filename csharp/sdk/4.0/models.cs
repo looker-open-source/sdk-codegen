@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
+/// 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
 
 #nullable enable
 using System;
@@ -170,6 +170,7 @@ public class AlertNotifications : SdkModel
   public double? threshold_value { get; set; } = null;
   /// <summary>The time at which the alert query ran (read-only)</summary>
   public string? ran_at { get; set; } = null;
+  public MobilePayload? alert { get; set; }
 }
 
 public class AlertPatch : SdkModel
@@ -1156,6 +1157,8 @@ public class Dashboard : SdkModel
   public long? favorite_count { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
@@ -1172,7 +1175,7 @@ public class Dashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -1685,6 +1688,15 @@ public enum DestinationType
   EMAIL,
   [EnumMember(Value = "ACTION_HUB")]
   ACTION_HUB
+}
+
+/// Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+public enum DeviceType
+{
+  [EnumMember(Value = "android")]
+  android,
+  [EnumMember(Value = "ios")]
+  ios
 }
 
 public class Dialect : SdkModel
@@ -3311,12 +3323,39 @@ public class MergeQuerySourceQuery : SdkModel
   public string? query_id { get; set; } = null;
 }
 
+public class MobilePayload : SdkModel
+{
+  /// <summary>Title of the alert (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>ID of the alert (read-only)</summary>
+  public string alert_id { get; set; } = "";
+  /// <summary>ID of the investigative content (read-only)</summary>
+  public string? investigative_content_id { get; set; } = null;
+  /// <summary>Name of the dashboard on which the alert has been set (read-only)</summary>
+  public string? dashboard_name { get; set; } = null;
+  /// <summary>ID of the dashboard on which the alert has been set (read-only)</summary>
+  public string? dashboard_id { get; set; } = null;
+  /// <summary>Slug of the query which runs the alert queries. (read-only)</summary>
+  public string? query_slug { get; set; } = null;
+}
+
 public class MobileSettings : SdkModel
 {
   /// <summary>Specifies whether the force authentication option is enabled for mobile (read-only)</summary>
   public bool? mobile_force_authentication { get; set; } = null;
   /// <summary>Specifies whether mobile access for this instance is enabled. (read-only)</summary>
   public bool? mobile_app_integration { get; set; } = null;
+}
+
+public class MobileToken : SdkModel
+{
+  /// <summary>Unique ID. (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Specifies the device token</summary>
+  public string device_token { get; set; } = "";
+  /// <summary>Specifies type of device. Valid values are: "android", "ios".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DeviceType device_type { get; set; }
 }
 
 public class Model : SdkModel
@@ -5382,11 +5421,13 @@ public class WriteDashboard : SdkModel
   public bool? deleted { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -5902,6 +5943,17 @@ public class WriteMergeQuery : SdkModel
   public bool? total { get; set; } = null;
   /// <summary>Visualization Config</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
+}
+
+/// Dynamic writeable type for MobileToken removes:
+/// id
+public class WriteMobileToken : SdkModel
+{
+  /// <summary>Specifies the device token</summary>
+  public string device_token { get; set; } = "";
+  /// <summary>Specifies type of device. Valid values are: "android", "ios".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DeviceType device_type { get; set; }
 }
 
 /// Dynamic writeable type for ModelSet removes:
