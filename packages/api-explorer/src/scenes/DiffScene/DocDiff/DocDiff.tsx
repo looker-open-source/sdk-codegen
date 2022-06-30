@@ -64,11 +64,7 @@ export const DocDiff: FC<DocDiffProps> = ({
   if (delta.length === 0) return <Text>{'No differences found'}</Text>
 
   const pageCount = Math.round((delta.length - 1) / pageSize)
-  // The +1 is to skip the header row
-  const pageItemData = delta.slice(
-    (page - 1) * pageSize + 1,
-    page * pageSize + 1
-  )
+  const pageItemData = delta.slice((page - 1) * pageSize, page * pageSize + 1)
 
   return (
     <>
@@ -82,7 +78,7 @@ export const DocDiff: FC<DocDiffProps> = ({
           <SpaceVertical mt="large" gap="xxsmall">
             {pageItemData.map((item, index) => (
               <DiffItem
-                key={index}
+                key={`page-${page} item-${index}`}
                 item={item}
                 leftKey={leftKey}
                 leftSpec={leftSpec}

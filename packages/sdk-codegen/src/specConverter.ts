@@ -143,7 +143,7 @@ export const include31 = (ver: IApiVersionElement) => {
       ver.status !== 'internal_test' &&
       ver.status !== 'deprecated' &&
       ver.status !== 'legacy') ||
-    (ver.version || '') >= '3.1' // unfortunately, need to hard-code this for API Explorer's spec selector
+    /\b3.1\b/.test(ver.version || '') // unfortunately, need to hard-code this for API Explorer's spec selector
   )
 }
 

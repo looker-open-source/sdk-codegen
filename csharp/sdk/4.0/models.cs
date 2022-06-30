@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
+/// 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
 
 #nullable enable
 using System;
@@ -152,6 +152,24 @@ public class AlertFieldFilter : SdkModel
   public object field_value { get; set; } = null;
   /// <summary>Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
   public string? filter_value { get; set; } = null;
+}
+
+public class AlertNotifications : SdkModel
+{
+  /// <summary>ID of the notification (read-only)</summary>
+  public string? notification_id { get; set; } = null;
+  /// <summary>ID of the alert (read-only)</summary>
+  public string? alert_condition_id { get; set; } = null;
+  /// <summary>ID of the user (read-only)</summary>
+  public string? user_id { get; set; } = null;
+  /// <summary>Read state of the notification</summary>
+  public bool? is_read { get; set; } = null;
+  /// <summary>The value of the field on which the alert condition is set (read-only)</summary>
+  public double? field_value { get; set; } = null;
+  /// <summary>The value of the threshold which triggers the alert notification (read-only)</summary>
+  public double? threshold_value { get; set; } = null;
+  /// <summary>The time at which the alert query ran (read-only)</summary>
+  public string? ran_at { get; set; } = null;
 }
 
 public class AlertPatch : SdkModel
@@ -1292,6 +1310,8 @@ public class DashboardElement : SdkModel
   public string? title_text_as_html { get; set; } = null;
   /// <summary>Text tile subtitle text as Html (read-only)</summary>
   public string? subtitle_text_as_html { get; set; } = null;
+  /// <summary>Extension ID (read-only)</summary>
+  public string? extension_id { get; set; } = null;
 }
 
 public class DashboardFilter : SdkModel
@@ -4440,6 +4460,8 @@ public class Setting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  public bool? extension_load_url_enabled { get; set; } = null;
   /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
@@ -4734,7 +4756,7 @@ public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
-  /// <summary>Base font size for scaling fonts</summary>
+  /// <summary>Base font size for scaling fonts (only supported by legacy dashboards)</summary>
   public string? base_font_size { get; set; } = null;
   /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
   public string? color_collection_id { get; set; } = null;
@@ -4764,7 +4786,7 @@ public class ThemeSettings : SdkModel
   public string? warn_button_color { get; set; } = null;
   /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// <summary>Toggles the tile shadow (New Dashboards)</summary>
+  /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
 }
 
@@ -5393,7 +5415,7 @@ public class WriteDashboardBase : SdkModel
 }
 
 /// Dynamic writeable type for DashboardElement removes:
-/// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+/// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
 public class WriteDashboardElement : SdkModel
 {
   /// <summary>Text tile body text</summary>
@@ -6281,6 +6303,8 @@ public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  public bool? extension_load_url_enabled { get; set; } = null;
   /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>

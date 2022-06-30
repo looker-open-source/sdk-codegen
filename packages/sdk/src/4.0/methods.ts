@@ -25,7 +25,7 @@
  */
 
 /**
- * 438 API methods
+ * 439 API methods
  */
 
 import type {
@@ -45,6 +45,7 @@ import type { ILooker40SDK } from './methodsInterface'
 import type {
   IAccessToken,
   IAlert,
+  IAlertNotifications,
   IAlertPatch,
   IApiSession,
   IApiVersion,
@@ -501,6 +502,26 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.post<void, IError>(
       `/alerts/${alert_id}/enqueue`,
       { force },
+      null,
+      options
+    )
+  }
+
+  /**
+   * # Alert Notifications.
+   *   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+   *
+   * GET /alert_notifications -> IAlertNotifications[]
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async alert_notifications(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAlertNotifications[], IError>> {
+    return this.get<IAlertNotifications[], IError>(
+      '/alert_notifications',
+      null,
       null,
       options
     )
@@ -1072,6 +1093,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Deletes the registration info of the app with the matching client_guid.
    * All active sessions and tokens issued for this app will immediately become invalid.
+   *
+   * As with most REST DELETE operations, this endpoint does not return an error if the
+   * indicated resource does not exist.
    *
    * ### Note: this deletion cannot be undone.
    *
@@ -2814,6 +2838,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Available settings are:
    *  - extension_framework_enabled
+   *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - privatelabel_configuration
@@ -2843,6 +2868,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Available settings are:
    *  - extension_framework_enabled
+   *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
    *  - privatelabel_configuration

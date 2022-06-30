@@ -23,43 +23,16 @@ Included in this repository are scripts and source code that hopefully reduce th
 
 - [OAuth application registration](../packages/sdk-codegen-scripts/scripts/register.ts) is a Node script that can create and update an OAuth app configuration
 - a sample OAuth application configuration file [`appconfig.json`](../packages/sdk-codegen-scripts/scripts/appconfig.json) has the configuration for the stand-alone [API Explorer](../packages/api-explorer) in this repository
-- a working [`readConfig` override](../packages/run-it/src/utils/RunItSDK.ts) provides the values required by `OAuthSession`
-- a working React-based [OAuth handler](../packages/run-it/src/scenes/OAuthScene) processes OAuth authentications and "logs in" the SDK
+- an [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts) from `@looker/extension-utils` to support OAuth handshakes with the Looker server 
 
 ## SDK support
 
 Because the OAuth workflow redirects the browser page to the Looker instance to authenticate, then back to your web application, the Browser's [sessionStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) is used to persist some variables used by the SDK.
 
-### readConfig override
+### OAuth requests 
 
-`readConfig()` must be overridden to provide the additional configuration values `OAuthSession` needs to complete an OAuth handshake:
-
-- `client_id` is the OAuth application ID and **must match the `client_guid` used for the OAuth application registration**.
-- `looker_url` is the url of the Looker application server, typically on port `9999` and **not** the API server, typically on port `19999`.
-- `redirect_uri` is the web application page that receives OAuth responses from the looker server, and **must match the `redirect_uri` used for the OAuth application registration**.
-
-The code below is from the [RunIt readConfig() override](../packages/run-it/src/utils/RunItSDK.ts):
-
-```ts
-  readConfig(_section?: string): IApiSection {
-    /**
-     * Use the values that can be resolved dynamically
-     */
-    const url = new URL(this.base_url)
-    const oauthServer = `${url.protocol}//${url.hostname}`
-    return {
-      ...super.readConfig(_section),
-      ...{
-        client_id: 'looker.api-explorer',
-        looker_url: `${oauthServer}:9999`,
-        redirect_uri: `${window.location.origin}/oauth`,
-      },
-    }
-  }
-
-```
-
-To make this code as generic as possible, `looker_url` is based on `base_url` and redirect_uri is calculated from the running web application.
+API Explorer uses a package called "RunIt" to make its API requests. The [`initRunItSDK` function](../packages/run-it/src/utils/RunItSDK.ts) uses the [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts). 
+This sets up the authentication session for OAuth.
 
 ### Automatic login
 
@@ -79,7 +52,6 @@ Therefore, `OAuthSession.login()` has three different branches:
    - the `code_verifier` (used for OAuth crypto) is saved to `sessionStorage`
    - the browser session redirects to the Looker server OAuth authentication url
 1. if `returnUrl` is in `sessionStorage`:
-
    - the return url is saved locally in `login()` and the `sessionStorage` is cleared
    - the authentication `code` sent by Looker to the `redirect_uri` is used to redeem the Looker authentication code and get an API token.
    - `OAuthSession.activeToken` is assigned this API token
@@ -88,6 +60,6 @@ Therefore, `OAuthSession.login()` has three different branches:
 
 Because the OAuth `code` is retrieved from the current browser url, the final `OAuthSession.login()` must be called directly from the `redirect_uri` page.
 
-[OAuthScene.tsx](../packages/run-it/src/scenes/OAuthScene/OAuthScene.tsx) shows how the `returnUrl` can be captured and used to go back to the original browser location requiring authentication.
+[OAuthScene.tsx](../packages/extension-utils/src/OAuthScene.tsx) shows how the `returnUrl` can be captured and used to go back to the original browser location requiring authentication.
 
 **NOTE**: `OAuthSession.activeToken` is **not** saved in `sessionStorage` so it will disappear if the browser page reloads. That's why `history.push()` is used to relocate the browser page for the React application. The `returnUrl` in `sessionStorage` is a relative URI for this same reason.

@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 438 API methods
+/// 439 API methods
 
 #nullable enable
 using System;
@@ -212,6 +212,19 @@ namespace Looker.SDK.API40
       alert_id = SdkUtils.EncodeParam(alert_id);
     return await AuthRequest<string, Exception>(HttpMethod.Post, $"/alerts/{alert_id}/enqueue", new Values {
       { "force", force }},null,options);
+  }
+
+  /// # Alert Notifications.
+  ///   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+  ///
+  /// GET /alert_notifications -> AlertNotifications[]
+  ///
+  /// <returns><c>AlertNotifications[]</c> It shows all the alert notifications received by the user on email. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<AlertNotifications[], Exception>> alert_notifications(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<AlertNotifications[], Exception>(HttpMethod.Get, "/alert_notifications", null,null,options);
   }
 
   #endregion Alert: Alert
@@ -669,6 +682,9 @@ namespace Looker.SDK.API40
   ///
   /// Deletes the registration info of the app with the matching client_guid.
   /// All active sessions and tokens issued for this app will immediately become invalid.
+  ///
+  /// As with most REST DELETE operations, this endpoint does not return an error if the
+  /// indicated resource does not exist.
   ///
   /// ### Note: this deletion cannot be undone.
   ///
@@ -1961,6 +1977,7 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - extension_framework_enabled
+  ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - privatelabel_configuration
@@ -1984,6 +2001,7 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - extension_framework_enabled
+  ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - privatelabel_configuration
