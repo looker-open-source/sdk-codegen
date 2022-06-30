@@ -88,6 +88,12 @@ describe('SideNav', () => {
   })
 })
 
+// TODO: tests for search query nav
+//       1) inputting text in search updates URL
+//       2) mock state, when state updates, search triggers
+//       2) searching with param in URL returns searched page
+//       3) back / forward navigation maintains previous state
+
 describe('Search', () => {
   test('it filters methods and types on input', async () => {
     renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
@@ -111,4 +117,28 @@ describe('Search', () => {
       expect(screen.getByText('EmbedSso')).toBeInTheDocument()
     })
   })
+  // test('Entering URL with search parameter drives search state', async () => {
+  //   renderWithRouterAndReduxProvider(<SideNav spec={spec} />, [
+  //     '/3.1/methods?s=test',
+  //   ])
+  //   const input = screen.getByLabelText('Search')
+  //   jest.spyOn(spec.api!, 'search')
+  //   expect(input).toContain('test')
+  //   /** Pasting to avoid triggering search multiple times */
+  //   await userEvent.paste(input, searchPattern)
+  //   await waitFor(() => {
+  //     expect(spec.api!.search).toHaveBeenCalledWith(
+  //       searchPattern,
+  //       criteriaToSet(defaultSettingsState.searchCriteria)
+  //     )
+  //     const methods = screen.getByRole('tab', { name: 'Methods (1)' })
+  //     userEvent.click(methods)
+  //     expect(
+  //       screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
+  //     ).toBeInTheDocument()
+  //     const types = screen.getByRole('tab', { name: 'Types (1)' })
+  //     userEvent.click(types)
+  //     expect(screen.getByText('EmbedSso')).toBeInTheDocument()
+  //   })
+  // })
 })

@@ -41,6 +41,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+import { navigate } from '../../utils/navUtils'
 
 import { getApixAdaptor } from '../../utils'
 import {
@@ -94,9 +95,11 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
       // Invalid method
       if (api.tags[methodTag]) {
         // Found tag though
-        history.push(`/${specKey}/methods/${methodTag}`)
+        navigate(`/${specKey}/methods/${methodTag}`, {}, history)
+        // history.push(`/${specKey}/methods/${methodTag}`)
       } else {
-        history.push(`/${specKey}/methods`)
+        navigate(`/${specKey}/methods`, {}, history)
+        // history.push(`/${specKey}/methods`)
       }
     }
   }, [api, history, methodName, methodTag, specKey])

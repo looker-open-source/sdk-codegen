@@ -30,7 +30,7 @@ import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-
+import { navigate } from '../../utils/navUtils'
 import { Link } from '../Link'
 import { buildMethodPath, highlightHTML } from '../../utils'
 import { selectSearchPattern } from '../../state'
@@ -45,20 +45,20 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
+    const history = useHistory()
+    const searchParams = new URLSearchParams(history.location.search)
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
     const [isOpen, setIsOpen] = useState(defaultOpen)
-    const history = useHistory()
-
     const handleOpen = () => {
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        history.push(`/${specKey}/methods/${tag}`)
+        navigate(`/${specKey}/methods/${tag}`, {}, history)
       } else {
-        history.push(`/${specKey}/methods`)
+        navigate(`/${specKey}/methods`, {}, history)
       }
     }
 
@@ -84,7 +84,12 @@ export const SideNavMethods = styled(
         <ul>
           {Object.values(methods).map((method) => (
             <li key={method.name}>
-              <Link to={`${buildMethodPath(specKey, tag, method.name)}`}>
+              <Link
+                to={{
+                  pathname: `${buildMethodPath(specKey, tag, method.name)}`,
+                  search: searchParams.toString(),
+                }}
+              >
                 {highlightHTML(searchPattern, method.summary)}
               </Link>
             </li>

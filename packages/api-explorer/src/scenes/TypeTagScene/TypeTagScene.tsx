@@ -28,6 +28,7 @@ import React, { useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams, useHistory } from 'react-router-dom'
+import { navigate } from '../../utils/navUtils'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath } from '../../utils'
 import { getMetaTypes } from './utils'
@@ -54,7 +55,8 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const types = api.typeTags[typeTag]
   useEffect(() => {
     if (!types) {
-      history.push(`/${specKey}/types`)
+      navigate(`/${specKey}/types`, {}, history)
+      // history.push(`/${specKey}/types`)
     }
   }, [history, types])
 

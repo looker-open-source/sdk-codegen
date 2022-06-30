@@ -45,6 +45,7 @@ import type {
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { useWindowSize } from '../../utils'
+import { navigate } from '../../utils/navUtils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
@@ -82,18 +83,20 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        history.push({
-          pathname: parts.join('/'),
-          search: searchParams.toString(),
-        })
+        navigate(parts.join('/'), {}, history)
+        // history.push({
+        //   pathname: parts.join('/'),
+        //   search: searchParams.toString(),
+        // })
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        history.push({
-          pathname: parts.join('/'),
-          search: searchParams.toString(),
-        })
+        navigate(parts.join('/'), {}, history)
+        // history.push({
+        //   pathname: parts.join('/'),
+        //   search: searchParams.toString(),
+        // })
       }
     }
   }
@@ -118,10 +121,13 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   useEffect(() => {
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      history.push({ search: searchParams.toString() })
+      navigate(null, { search: searchParams.toString() }, history)
+
+      // history.push({ search: searchParams.toString() })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      history.push({ search: searchParams.toString() })
+      navigate(null, { search: searchParams.toString() }, history)
+      // history.push({ search: searchParams.toString() })
     }
   }, [debouncedPattern])
 

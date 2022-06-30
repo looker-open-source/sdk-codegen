@@ -23,44 +23,27 @@
  SOFTWARE.
 
  */
+import type { History } from 'history'
 
-import type { FC } from 'react'
-import React from 'react'
-import { Select } from '@looker/components'
-import { useHistory, useLocation } from 'react-router-dom'
-import type { SpecItem } from '@looker/sdk-codegen'
-import { useSelector } from 'react-redux'
-import { navigate } from '../../utils/navUtils'
-
-import { selectSpecs } from '../../state'
-
-interface ApiSpecSelectorProps {
-  spec: SpecItem
-}
-
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
-  const history = useHistory()
-  const location = useLocation()
-  const specs = useSelector(selectSpecs)
-  const options = Object.entries(specs).map(([key, spec]) => ({
-    value: key,
-    label: key,
-    description: spec.status,
-  }))
-
-  const handleChange = (specKey: string) => {
-    const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
-    navigate(matchPath, {}, history)
-    // history.push(matchPath)
+export const navigate = (
+  route: string | null,
+  newParams: { search?: string },
+  history: History
+): void => {
+  const curParams = new URLSearchParams(history.location.search)
+  if (!route) {
+    // we are pushing something to current
+    history.push({ search: newParams.search })
+    return
   }
-
-  return (
-    <Select
-      width="10rem"
-      aria-label="spec selector"
-      defaultValue={spec.key}
-      options={options}
-      onChange={handleChange}
-    />
-  )
+  if (!newParams) {
+    // if it is null, empty params
+    history.push({ pathname: route })
+  } else if (Object.keys(newParams).length === 0) {
+    // if params is empty, leave the path be
+    history.push({ pathname: route, search: curParams.toString() })
+  } else {
+    // push the given parameters
+    history.push({ pathname: route, search: newParams.search })
+  }
 }
