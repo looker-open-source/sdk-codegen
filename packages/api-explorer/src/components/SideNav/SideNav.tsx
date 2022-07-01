@@ -60,6 +60,7 @@ interface SideNavState {
   typeCount: number
   searchResults?: ISearchResult
 }
+
 interface SideNavProps {
   headless?: boolean
   /** Current selected spec */
@@ -149,6 +150,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       newTypes = api.types || {}
       newTypeTags = api.typeTags || {}
     }
+
     setSideNavState({
       tags: newTags,
       typeTags: newTypeTags,

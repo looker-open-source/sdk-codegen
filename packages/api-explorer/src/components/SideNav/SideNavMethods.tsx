@@ -29,7 +29,7 @@ import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 import { navigate } from '../../utils/navUtils'
 import { Link } from '../Link'
 import { buildMethodPath, highlightHTML } from '../../utils'
@@ -46,7 +46,8 @@ interface MethodsProps {
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
     const history = useHistory()
-    const searchParams = new URLSearchParams(history.location.search)
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
