@@ -25,7 +25,7 @@
  */
 
 /**
- * 438 API methods
+ * 439 API methods
  */
 
 import type {
@@ -47,6 +47,7 @@ import { sdkVersion } from '../constants'
 import type {
   IAccessToken,
   IAlert,
+  IAlertNotifications,
   IAlertPatch,
   IApiSession,
   IApiVersion,
@@ -514,6 +515,28 @@ export const enqueue_alert = async (
   return sdk.post<void, IError>(
     `/alerts/${alert_id}/enqueue`,
     { force },
+    null,
+    options
+  )
+}
+
+/**
+ * # Alert Notifications.
+ *   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+ *
+ * GET /alert_notifications -> IAlertNotifications[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const alert_notifications = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAlertNotifications[], IError>> => {
+  return sdk.get<IAlertNotifications[], IError>(
+    '/alert_notifications',
+    null,
     null,
     options
   )
@@ -1119,6 +1142,9 @@ export const update_oauth_client_app = async (
  *
  * Deletes the registration info of the app with the matching client_guid.
  * All active sessions and tokens issued for this app will immediately become invalid.
+ *
+ * As with most REST DELETE operations, this endpoint does not return an error if the
+ * indicated resource does not exist.
  *
  * ### Note: this deletion cannot be undone.
  *
@@ -2997,6 +3023,7 @@ export const mobile_settings = async (
  *
  * Available settings are:
  *  - extension_framework_enabled
+ *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
  *  - privatelabel_configuration
@@ -3028,6 +3055,7 @@ export const get_setting = async (
  *
  * Available settings are:
  *  - extension_framework_enabled
+ *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
  *  - privatelabel_configuration

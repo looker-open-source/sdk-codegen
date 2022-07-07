@@ -80,7 +80,23 @@ export const filterCodeFiles = (fileName: string) => {
   return ext in fileMiners
 }
 
-const skipFolder = (name: string, excludeList: string[] = ['node_modules']) =>
+export const IGNORE_PATHS = [
+  'node_modules',
+  'lib',
+  'dist',
+  'bazel-bin',
+  'build',
+  'bin',
+  '.build',
+  '.direnv',
+  '.github',
+  '.vscode',
+  '.idea',
+  '.gradle',
+  'results',
+]
+
+const skipFolder = (name: string, excludeList: string[] = IGNORE_PATHS) =>
   new RegExp(excludeList.join('|'), 'gi').test(name)
 
 /**
@@ -133,7 +149,7 @@ export const getCodeFiles = (
   searchPath: string,
   listOfFiles: string[] = [],
   filter: FileFilter = filterCodeFiles,
-  ignorePaths: string[] = ['node_modules', 'lib', 'dist', 'bazel-bin']
+  ignorePaths: string[] = IGNORE_PATHS
 ) => {
   return getAllFiles(searchPath, listOfFiles, filter, ignorePaths)
 }
@@ -168,6 +184,13 @@ export const getRemoteHttpOrigin = () => {
     return match[1]
   }
   return `https://github.com/${match[1]}`
+}
+
+/** Permalink paths should not have the `.git` ending for a repo */
+export const getPermalinkRoot = () => {
+  let root = getRemoteHttpOrigin()
+  if (root.endsWith('.git')) root = root.substr(0, root.length - 4)
+  return root
 }
 
 export class CodeMiner implements IFileMine {
@@ -314,7 +337,7 @@ export class ExampleMiner {
   summaries: Summaries = {}
   nuggets: Nuggets = {}
   commitHash: string = getCommitHash()
-  remoteOrigin: string = getRemoteHttpOrigin()
+  remoteOrigin: string = getPermalinkRoot()
 
   constructor(public readonly sourcePath: string) {
     this.execute(sourcePath)

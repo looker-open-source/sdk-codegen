@@ -23,8 +23,9 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ComponentsProvider, Space, Text } from '@looker/components'
+import React, { useContext, useEffect, useState } from 'react'
+import { ComponentsProvider, SpaceVertical, Text } from '@looker/components'
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
 /**
  * Playground for testing extension SDK functionality.
@@ -32,13 +33,38 @@ import { ComponentsProvider, Space, Text } from '@looker/components'
  * away at anytime. Keep this simple.
  */
 export const Playground: React.FC = () => {
+  const { coreSDK } = useContext(ExtensionContext40)
+  const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        const me = await coreSDK.ok(coreSDK.me())
+        setMessage(`Hello, ${me.display_name}`)
+      } catch (error) {
+        console.error(error)
+        setMessage('An error occurred while getting information about me!')
+      }
+    }
+    getMe()
+  }, [coreSDK])
+
   return (
     <ComponentsProvider>
-      <Space p="xxxxxlarge" width="100%" height="50vh" around>
+      <SpaceVertical
+        p="xxxxxlarge"
+        width="100%"
+        height="90vh"
+        justifyContent="center"
+        align="center"
+      >
         <Text p="xxxxxlarge" fontSize="xxxxxlarge">
           Welcome to the Playground
         </Text>
-      </Space>
+        <Text p="xxxxxlarge" fontSize="xxxxxlarge">
+          <Text fontSize="xxxxxlarge">{message}</Text>
+        </Text>
+      </SpaceVertical>
     </ComponentsProvider>
   )
 }

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,4 @@
 
  */
 
-/**
- * Constants
- */
-export const BASE_URL = 'https://localhost:8080'
-export const v31Url = `${BASE_URL}/3.1`
-export const v40Url = `${BASE_URL}/4.0`
-
-/**
- * Reloads the page, waiting for for the DomContentLoaded event before resolving
- */
-export const pageReload = async (): Promise<void> => {
-  await page.reload({ waitUntil: ['domcontentloaded', 'networkidle0'] })
-}
-
-/**
- * Navigates to the given url, waiting for the DomContentLoaded event before resolving
- * @param url url to navigate to
- */
-export const goToPage = async (url: string): Promise<void> => {
-  await page.goto(url, {
-    waitUntil: ['domcontentloaded', 'networkidle0'],
-    timeout: 120000,
-  })
-}
-
-/**
- * Gets the key of the selected spec
- */
-export const getSpecKey = async (): Promise<string> => {
-  const specSelectorHandle = await page.$('input[aria-label="spec selector"]')
-  const specKey = await page.evaluate((e) => e.value, specSelectorHandle)
-  return specKey
-}
+export * from './ExtensionProvider40'

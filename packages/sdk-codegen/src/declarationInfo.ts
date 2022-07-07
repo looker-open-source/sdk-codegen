@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { IMine, IFileCall } from './exampleInfo'
+import type { IMine, IFileCall, SourceLink } from './exampleInfo'
 import { permaLink } from './exampleInfo'
 import type { KeyedCollection } from './sdkModels'
 
@@ -43,11 +43,13 @@ export type DeclarationNuggets = KeyedCollection<IDeclarationNugget>
  * @param lode All declaration data
  * @param methodId Method id to search for
  * @param typeId Type id to search for
+ * @param sourcerer Function to format source code link
  */
 export const findDeclaration = (
   lode: IDeclarationMine,
   methodId?: string,
-  typeId?: string
+  typeId?: string,
+  sourcerer: SourceLink = permaLink
 ) => {
   let declaration
   if (methodId) {
@@ -58,8 +60,7 @@ export const findDeclaration = (
 
   let link
   if (declaration) {
-    // TODO make link configurable
-    link = permaLink(
+    link = sourcerer(
       lode.remoteOrigin,
       lode.commitHash,
       declaration.sourceFile,

@@ -25,7 +25,7 @@
  */
 
 /**
- * 438 API methods
+ * 439 API methods
  */
 
 
@@ -240,6 +240,19 @@ open class LookerSDKStream: APIMethods {
         let path_alert_id = encodeParam(alert_id)
         let result: SDKResponse<Data, SDKError> = self.post("/alerts/\(path_alert_id)/enqueue", 
             ["force": force as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * # Alert Notifications.
+     *   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+     *
+     * GET /alert_notifications -> [AlertNotifications]
+     */
+    public func alert_notifications(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/alert_notifications", nil, nil, options)
         return result
     }
 
@@ -752,6 +765,9 @@ open class LookerSDKStream: APIMethods {
      *
      * Deletes the registration info of the app with the matching client_guid.
      * All active sessions and tokens issued for this app will immediately become invalid.
+     *
+     * As with most REST DELETE operations, this endpoint does not return an error if the
+     * indicated resource does not exist.
      *
      * ### Note: this deletion cannot be undone.
      *
@@ -2241,6 +2257,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Available settings are:
      *  - extension_framework_enabled
+     *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - privatelabel_configuration
@@ -2266,6 +2283,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Available settings are:
      *  - extension_framework_enabled
+     *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - privatelabel_configuration

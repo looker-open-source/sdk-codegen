@@ -25,7 +25,7 @@
  */
 
 /**
- * 366 API models: 231 Spec, 56 Request, 59 Write, 20 Enum
+ * 367 API models: 232 Spec, 56 Request, 59 Write, 20 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -219,6 +219,37 @@ export interface IAlertFieldFilter {
    * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string | null
+}
+
+export interface IAlertNotifications {
+  /**
+   * ID of the notification (read-only)
+   */
+  notification_id?: string
+  /**
+   * ID of the alert (read-only)
+   */
+  alert_condition_id?: string
+  /**
+   * ID of the user (read-only)
+   */
+  user_id?: string
+  /**
+   * Read state of the notification
+   */
+  is_read?: boolean
+  /**
+   * The value of the field on which the alert condition is set (read-only)
+   */
+  field_value?: number | null
+  /**
+   * The value of the threshold which triggers the alert notification (read-only)
+   */
+  threshold_value?: number | null
+  /**
+   * The time at which the alert query ran (read-only)
+   */
+  ran_at?: string
 }
 
 export interface IAlertPatch {
@@ -2141,6 +2172,10 @@ export interface IDashboardElement {
    * Text tile subtitle text as Html (read-only)
    */
   subtitle_text_as_html?: string | null
+  /**
+   * Extension ID (read-only)
+   */
+  extension_id?: string | null
 }
 
 export interface IDashboardFilter {
@@ -9464,6 +9499,10 @@ export interface ISetting {
    */
   extension_framework_enabled?: boolean
   /**
+   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   */
+  extension_load_url_enabled?: boolean
+  /**
    * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
    */
   marketplace_auto_install_enabled?: boolean
@@ -9868,7 +9907,7 @@ export interface IThemeSettings {
    */
   background_color?: string
   /**
-   * Base font size for scaling fonts
+   * Base font size for scaling fonts (only supported by legacy dashboards)
    */
   base_font_size?: string | null
   /**
@@ -9928,7 +9967,7 @@ export interface IThemeSettings {
    */
   tile_title_alignment?: string
   /**
-   * Toggles the tile shadow (New Dashboards)
+   * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
 }
@@ -10952,7 +10991,7 @@ export interface IWriteDashboardBase {
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
  */
 export interface IWriteDashboardElement {
   /**
@@ -12492,6 +12531,10 @@ export interface IWriteSetting {
    * Toggle extension framework on or off
    */
   extension_framework_enabled?: boolean
+  /**
+   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   */
+  extension_load_url_enabled?: boolean
   /**
    * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
    */

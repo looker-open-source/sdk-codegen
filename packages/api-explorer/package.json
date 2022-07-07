@@ -27,7 +27,7 @@
     "build": "tsc && webpack --config webpack.prod.config.js",
     "develop": "webpack serve --host=0.0.0.0 --https --disable-host-check --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
-    "test:e2e": "yarn jest e2e",
+    "test:e2e": "yarn jest e2e --config=jest-puppeteer.config.js",
     "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
     "deploy-dev-portal": "rm -f ../../../developer-portal/static/apix/dist/*.js* && cp -R ./dist/*.js* ../../../developer-portal/static/apix/dist"
   },

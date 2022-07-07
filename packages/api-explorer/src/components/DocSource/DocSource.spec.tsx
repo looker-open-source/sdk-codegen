@@ -26,7 +26,7 @@
 import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import type { IDeclarationMine } from '@looker/sdk-codegen'
-import { permaLink } from '@looker/sdk-codegen'
+import { codeSearchLink } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
 import { api } from '../../test-data'
 import { renderWithLode } from '../../test-utils'
@@ -82,7 +82,7 @@ describe('DocSource', () => {
     renderWithLode(<DocSource type={type} />, examples, declarations)
     const link = screen.getByRole('link')
     const declaration = declarations.types.Query
-    const expected = permaLink(
+    const expected = codeSearchLink(
       declarations.remoteOrigin,
       declarations.commitHash,
       declaration.sourceFile,
@@ -101,7 +101,7 @@ describe('DocSource', () => {
     renderWithLode(<DocSource method={method} />, examples, declarations)
     const link = screen.getByRole('link')
     const declaration = declarations.methods['POST /login']
-    const expected = permaLink(
+    const expected = codeSearchLink(
       declarations.remoteOrigin,
       declarations.commitHash,
       declaration.sourceFile,
