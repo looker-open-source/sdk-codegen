@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.2...sdk-codegen-all-v2.4.0) (2022-07-07)
+
+
+### Features
+
+* Add ExtensionProvider40 component ([#1068](https://www.github.com/looker-open-source/sdk-codegen/issues/1068)) ([425aee5](https://www.github.com/looker-open-source/sdk-codegen/commit/425aee5097361b580b3ff7e93f227d6d34f21eb3))
+* generate SDK 22.6 ([#1102](https://www.github.com/looker-open-source/sdk-codegen/issues/1102)) ([2162860](https://www.github.com/looker-open-source/sdk-codegen/commit/2162860f0bf292bce0a79f8115f7c9fc5628057f))
+
+
+### Bug Fixes
+
+* add children property to ExtensionProvider type ([#1070](https://www.github.com/looker-open-source/sdk-codegen/issues/1070)) ([9524583](https://www.github.com/looker-open-source/sdk-codegen/commit/9524583fd99f0b46bba443a1dfa59cc6f42d081c))
+* correct HTTP status code values ([#1101](https://www.github.com/looker-open-source/sdk-codegen/issues/1101)) ([3d0f902](https://www.github.com/looker-open-source/sdk-codegen/commit/3d0f902b67d6384c08641579ae959829c78d1994))
+* description sync issues in diff scene ([#1086](https://www.github.com/looker-open-source/sdk-codegen/issues/1086)) ([a37aa50](https://www.github.com/looker-open-source/sdk-codegen/commit/a37aa50064bb41ca5af2c9d19371e2ef7973e6d9))
+* example miner github permalinks do not use `.git` in the repository name ([#1063](https://www.github.com/looker-open-source/sdk-codegen/issues/1063)) ([e150b33](https://www.github.com/looker-open-source/sdk-codegen/commit/e150b33ff974575d731f48f2f1488bdbeeb9118c))
+* package refs for API Explorer extension ([#1055](https://www.github.com/looker-open-source/sdk-codegen/issues/1055)) ([5fcf358](https://www.github.com/looker-open-source/sdk-codegen/commit/5fcf3588e1f4e87fc6d1d5789e00f66cf4fe92d9))
+* Refactored Go SDK to use Go oauth2 client, added `x-looker-appid` header to Go requests ([#1069](https://www.github.com/looker-open-source/sdk-codegen/issues/1069)) ([d51a675](https://www.github.com/looker-open-source/sdk-codegen/commit/d51a6750f7d5f22efa84278492a71336e39d92e1))
+* Register Go Fuzzy JSON Decoders once on init ([#1054](https://www.github.com/looker-open-source/sdk-codegen/issues/1054)) ([350d32d](https://www.github.com/looker-open-source/sdk-codegen/commit/350d32dfecb42679cff06e0c4508bebcf7fa6809))
+* remove generated files from examples index ([#1076](https://www.github.com/looker-open-source/sdk-codegen/issues/1076)) ([d75bce8](https://www.github.com/looker-open-source/sdk-codegen/commit/d75bce8dc25d41fd6bc5e2e513782eaa6009fd10))
+* replacing unimported exception ([#1066](https://www.github.com/looker-open-source/sdk-codegen/issues/1066)) ([d85b1b8](https://www.github.com/looker-open-source/sdk-codegen/commit/d85b1b889c9d27e337a5e8d38fc3f32e013cc4d8))
+* Sidenav Methods Panel Open & Closing ([#1097](https://www.github.com/looker-open-source/sdk-codegen/issues/1097)) ([c49fae4](https://www.github.com/looker-open-source/sdk-codegen/commit/c49fae4ca6a7a30feb61f021ec878a8091eaa078))
+* Update prod entrypoint to match dev entrypoint (pull [#1059](https://www.github.com/looker-open-source/sdk-codegen/issues/1059)) ([0e4c3f4](https://www.github.com/looker-open-source/sdk-codegen/commit/0e4c3f47782d23f6c8e5509bd2942b0934e44ea2))
+
 ### [2.3.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.1...sdk-codegen-all-v2.3.2) (2022-04-07)
 
 

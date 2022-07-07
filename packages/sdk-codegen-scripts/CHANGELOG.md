@@ -1,5 +1,23 @@
 # Changelog
 
+### [21.3.4](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.3.3...sdk-codegen-scripts-v21.3.4) (2022-07-07)
+
+
+### Bug Fixes
+
+* example miner github permalinks do not use `.git` in the repository name ([#1063](https://www.github.com/looker-open-source/sdk-codegen/issues/1063)) ([e150b33](https://www.github.com/looker-open-source/sdk-codegen/commit/e150b33ff974575d731f48f2f1488bdbeeb9118c))
+* remove generated files from examples index ([#1076](https://www.github.com/looker-open-source/sdk-codegen/issues/1076)) ([d75bce8](https://www.github.com/looker-open-source/sdk-codegen/commit/d75bce8dc25d41fd6bc5e2e513782eaa6009fd10))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.4.2 to ^22.6.0
+    * @looker/sdk-codegen bumped from ^21.5.2 to ^21.6.0
+    * @looker/sdk-node bumped from ^22.4.2 to ^22.6.0
+    * @looker/sdk-rtl bumped from ^21.3.3 to ^21.3.4
+
 ### [21.3.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.3.2...sdk-codegen-scripts-v21.3.3) (2022-04-07)
 
 
