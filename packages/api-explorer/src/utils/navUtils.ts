@@ -27,8 +27,8 @@ import type { History } from 'history'
 
 export const navigate = (
   route: string,
-  newParams: { search?: string },
-  history: History
+  history: History,
+  newParams: { search?: string } | null | undefined
 ): void => {
   const curParams = new URLSearchParams(history.location.search)
   if (typeof newParams === 'undefined') {
