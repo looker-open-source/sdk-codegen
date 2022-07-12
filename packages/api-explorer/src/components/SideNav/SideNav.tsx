@@ -158,7 +158,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-  }, [searchPattern, specKey, spec, searchCriteria])
+  }, [searchPattern, specKey, spec, searchCriteria, history.location])
 
   useEffect(() => {
     const { selectedIndex, onSelectTab } = tabs

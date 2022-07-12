@@ -35,6 +35,16 @@ import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
 const spec = getLoadedSpecs()['4.0']
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+    }),
+  }
+})
 
 describe('SideNav', () => {
   const allTagsPattern = /^(Auth|ApiAuth)$/
@@ -94,6 +104,12 @@ describe('SideNav', () => {
 //       2) searching with param in URL returns searched page
 //       3) back / forward navigation maintains previous state
 
+/*
+ TODO: what is going on here is that the route gets pushed, however the URL
+       cannot drive state unless the APIExplorer useEffect for location.search
+       is executed, so we need to mock that.
+ */
+
 describe('Search', () => {
   test('it filters methods and types on input', async () => {
     renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
@@ -102,6 +118,7 @@ describe('Search', () => {
     jest.spyOn(spec.api!, 'search')
     /** Pasting to avoid triggering search multiple times */
     await userEvent.paste(input, searchPattern)
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1`)
     await waitFor(() => {
       expect(spec.api!.search).toHaveBeenCalledWith(
         searchPattern,
