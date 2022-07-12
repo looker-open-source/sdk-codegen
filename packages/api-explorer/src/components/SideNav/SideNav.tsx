@@ -48,6 +48,7 @@ import { useSelector } from 'react-redux'
 import { useWindowSize } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, useSettingActions } from '../../state'
+import { navigate } from '../../utils/navUtils'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -71,6 +72,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const history = useHistory()
   const location = useLocation()
   const specKey = spec.key
+  const searchParams = new URLSearchParams(history.location.search)
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
   const sideNavTab = pathParts[1] === 'diff' ? pathParts[3] : pathParts[2]
@@ -83,12 +85,14 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        history.push(parts.join('/'))
+        navigate(parts.join('/'), history, undefined)
+        // history.push(parts.join('/'))
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        history.push(parts.join('/'))
+        navigate(parts.join('/'), history, undefined)
+        // history.push(parts.join('/'))
       }
     }
   }
