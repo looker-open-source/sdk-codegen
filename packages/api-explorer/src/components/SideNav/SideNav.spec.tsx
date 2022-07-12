@@ -42,6 +42,7 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
+      location,
     }),
   }
 })
@@ -118,6 +119,7 @@ describe('Search', () => {
     jest.spyOn(spec.api!, 'search')
     /** Pasting to avoid triggering search multiple times */
     await userEvent.paste(input, searchPattern)
+
     expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1`)
     await waitFor(() => {
       expect(spec.api!.search).toHaveBeenCalledWith(
