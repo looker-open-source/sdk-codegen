@@ -89,17 +89,22 @@ def create_test_users(
 ):
     user_ids: List[int] = []
     for u in users:
-        # TODO: if the test crashes it doesn't clean up the users.
-        user = sdk40.create_user(
-            models40.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
-        )
-
-        if user.id:
+        users = sdk40.search_users(first_name=u["first_name"], last_name=u["last_name"])
+        if len(users) > 0:
+            # recover from crashed test, dummy
+            user = users[0]
             user_ids.append(user.id)
-            email = f"{u['first_name']}.{u['last_name']}{email_domain}"
-            sdk40.create_user_credentials_email(
-                user.id, models40.WriteCredentialsEmail(email=email)
+        else:
+            user = sdk40.create_user(
+                models40.WriteUser(first_name=u["first_name"], last_name=u["last_name"])
             )
+
+            if user.id:
+                user_ids.append(user.id)
+                email = f"{u['first_name']}.{u['last_name']}{email_domain}"
+                sdk40.create_user_credentials_email(
+                    user.id, models40.WriteCredentialsEmail(email=email)
+                )
 
     yield
 
