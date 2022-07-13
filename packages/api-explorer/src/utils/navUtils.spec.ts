@@ -33,25 +33,12 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
-      location,
+      location: { pathname: '/3.1/methods', search: 's=test' },
     }),
   }
 })
 
 describe('Navigate', () => {
-  let saveLocation: Location
-
-  beforeEach(() => {
-    saveLocation = window.location
-    window.location = {
-      ...window.location,
-      pathname: '/3.1',
-    }
-  })
-
-  afterEach(() => {
-    window.location = saveLocation
-  })
   /**
    * TODO: add more robust tests for different use cases
    */
@@ -60,6 +47,7 @@ describe('Navigate', () => {
   const route = `/3.1`
   test('if params passed in is undefined, maintain existing params in URL', () => {
     navigate(route, history, undefined)
+    expect(curParams.get('s')).toBe('test')
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
       search: curParams.toString(),
@@ -67,15 +55,22 @@ describe('Navigate', () => {
     // TODO: check URL that it changed
   })
 
-  test('if params passed in is null or empty, remove all params from URL', () => {
+  test('if params passed in is null, remove all params from URL', () => {
     navigate(route, history, null)
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
+  test('if params passed in is empty, remove all params from URL', () => {
+    navigate(route, history, {})
+    expect(mockHistoryPush).lastCalledWith({
+      pathname: route,
+    })
+  })
+
   test('if we have new parameters passed in, push to URL', () => {
-    const newParams = '?s=embedsso'
+    const newParams = 's=embedsso'
     navigate(route, history, { search: newParams })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
