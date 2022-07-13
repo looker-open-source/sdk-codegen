@@ -3928,7 +3928,7 @@ namespace Looker.SDK.API31
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -4786,14 +4786,14 @@ namespace Looker.SDK.API31
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
   /// <param name="apply_vis">Apply visualization options to results.</param>
   /// <param name="cache">Get results from cache if available.</param>
-  /// <param name="image_width">Render width for image formats.</param>
-  /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="image_width">Render width for image formats.</param>
+  /// <param name="image_height">Render height for image formats.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -4801,14 +4801,14 @@ namespace Looker.SDK.API31
     bool? apply_formatting = null,
     bool? apply_vis = null,
     bool? cache = null,
-    long? image_width = null,
-    long? image_height = null,
     bool? generate_drill_links = null,
     bool? force_production = null,
     bool? cache_only = null,
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    long? image_width = null,
+    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -4817,14 +4817,14 @@ namespace Looker.SDK.API31
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
       { "cache", cache },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "generate_drill_links", generate_drill_links },
       { "force_production", force_production },
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
+      { "image_width", image_width },
+      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -5047,7 +5047,7 @@ namespace Looker.SDK.API31
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -5155,7 +5155,7 @@ namespace Looker.SDK.API31
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>

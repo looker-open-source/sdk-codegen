@@ -125,7 +125,7 @@ const branchOffMain = (release) => {
     const branch = branchName(release)
     if (branchExists(branch)) {
       console.log(`Switching to branch ${branch} ...`)
-      result = run(`git checkout ${branch} && git pull`)
+      result = run(`git checkout ${branch}`)
     } else {
       console.log(`Creating branch ${branch} ...`)
       result = run(`git checkout -b ${branch} origin/main`)
@@ -172,16 +172,15 @@ const pullci = async (release) => {
 const regen = async (release) => {
   console.info(`Generating SDKs for Looker ${release} ...`)
   if (ok(branchOffMain(release))) {
+    const branch = branchActive()
     if (await pullci(release)) {
       return batch([
         'yarn gen',
         'yarn test:sdk',
-        // 'git add -A',
-        // `git commit -m "feat: generate SDKs for Looker ${release}"`,
-        /*
-        Test these out after first cut is merged to main
-        'git push'
-        create PR
+        'git add -A',
+        `git commit -m "feat: generate SDKs for Looker ${release}"`,
+        `git push origin ${branch}`,
+        /* create PR
          */
       ])
     } else {
