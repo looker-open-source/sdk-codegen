@@ -161,30 +161,32 @@ const pullci = async (release) => {
     maxBuffer: 1024 * 1024,
     stdio: 'inherit',
   }
-  if (! await checkVersion(release)) {
-    const script = path.resolve(root, 'bin/pullci')
-    // Throws exception on error, which we want
-    proc.execFileSync(script, [ciVersion(release)], opts)
-    return await waitForLooker()
-  }
+  if (await checkVersion(release)) return true
+  const script = path.resolve(root, 'bin/pullci')
+  // Throws exception on error, which we want
+  proc.execFileSync(script, [ciVersion(release)], opts)
+  return await waitForLooker()
 }
 
 /** Regen against the specified release and complete flows */
 const regen = async (release) => {
   console.info(`Generating SDKs for Looker ${release} ...`)
   if (ok(branchOffMain(release))) {
-    await pullci(release)
-    return batch([
-      'yarn gen',
-      'yarn test:sdk',
-      // 'git add -A',
-      // `git commit -m "feat: generate SDKs for Looker ${release}"`,
-      /*
-      Test these out after first cut is merged to main
-      'git push'
-      create PR
-       */
-    ])
+    if (await pullci(release)) {
+      return batch([
+        'yarn gen',
+        'yarn test:sdk',
+        // 'git add -A',
+        // `git commit -m "feat: generate SDKs for Looker ${release}"`,
+        /*
+        Test these out after first cut is merged to main
+        'git push'
+        create PR
+         */
+      ])
+    } else {
+      console.error(`timed out waiting for Looker ${release}`)
+    }
   }
 }
 
