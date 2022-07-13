@@ -33,7 +33,7 @@ import {
   createTestStore,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
-import { defaultSettingsState, useSettingActions } from '../../state'
+import { defaultSettingsState } from '../../state'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
@@ -92,16 +92,8 @@ describe('SideNav', () => {
 })
 
 // TODO: tests for search query nav
-//       1) inputting text in search updates search box and URL
-//       2) updated URL results in search triggered
 //       3) searching with param in URL returns searched page
 //       4) back / forward navigation maintains previous state
-
-/*
- TODO: what is going on here is that the route gets pushed, however the URL
-       cannot drive state unless the APIExplorer useEffect for location.search
-       is executed, so we need to mock that.
- */
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -135,9 +127,9 @@ describe('Search', () => {
     })
     jest.spyOn(spec.api!, 'search')
     renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined, store)
+    const input = screen.getByLabelText('Search')
+    expect(input).toHaveValue(searchPattern)
     await waitFor(() => {
-      const input = screen.getByLabelText('Search')
-      // expect(input).toHaveTextContent(searchPattern)
       expect(spec.api!.search).toHaveBeenCalledWith(
         searchPattern,
         criteriaToSet(defaultSettingsState.searchCriteria)
@@ -152,28 +144,4 @@ describe('Search', () => {
       expect(screen.getByText('EmbedSso')).toBeInTheDocument()
     })
   })
-  // test('Entering URL with search parameter drives search state', async () => {
-  //   renderWithRouterAndReduxProvider(<SideNav spec={spec} />, [
-  //     '/3.1/methods?s=test',
-  //   ])
-  //   const input = screen.getByLabelText('Search')
-  //   jest.spyOn(spec.api!, 'search')
-  //   expect(input).toContain('test')
-  //   /** Pasting to avoid triggering search multiple times */
-  //   await userEvent.paste(input, searchPattern)
-  //   await waitFor(() => {
-  //     expect(spec.api!.search).toHaveBeenCalledWith(
-  //       searchPattern,
-  //       criteriaToSet(defaultSettingsState.searchCriteria)
-  //     )
-  //     const methods = screen.getByRole('tab', { name: 'Methods (1)' })
-  //     userEvent.click(methods)
-  //     expect(
-  //       screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
-  //     ).toBeInTheDocument()
-  //     const types = screen.getByRole('tab', { name: 'Types (1)' })
-  //     userEvent.click(types)
-  //     expect(screen.getByText('EmbedSso')).toBeInTheDocument()
-  //   })
-  // })
 })
