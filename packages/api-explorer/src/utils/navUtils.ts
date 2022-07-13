@@ -27,9 +27,9 @@ import type { History } from 'history'
 
 /**
  *
- * @param route
- * @param history
- * @param queryParams
+ * @param route the pathname to which you want to push to history
+ * @param history caller's history object to be modified
+ * @param queryParams parameters to add to the URL
  */
 export const navigate = (
   route: string,
