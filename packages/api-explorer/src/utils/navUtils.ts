@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,25 +25,26 @@
  */
 import type { History } from 'history'
 
+/**
+ *
+ * @param route the pathname to which you want to push to history
+ * @param history caller's history object to be modified
+ * @param queryParams parameters to add to the URL
+ */
 export const navigate = (
-  route: string | null,
-  newParams: { search?: string },
-  history: History
-): void => {
+  route: string,
+  history: History,
+  queryParams?: { search?: string } | null
+) => {
   const curParams = new URLSearchParams(history.location.search)
-  if (!route) {
-    // we are pushing something to current
-    history.push({ search: newParams.search })
-    return
-  }
-  if (!newParams) {
-    // if it is null, empty params
-    history.push({ pathname: route })
-  } else if (Object.keys(newParams).length === 0) {
-    // if params is empty, leave the path be
+  if (queryParams === undefined) {
+    // if params passed in is undefined, maintain existing params in URL
     history.push({ pathname: route, search: curParams.toString() })
+  } else if (queryParams === null || Object.keys(queryParams).length === 0) {
+    // if params passed in is null or empty, remove all params from URL
+    history.push({ pathname: route })
   } else {
-    // push the given parameters
-    history.push({ pathname: route, search: newParams.search })
+    // if we have new parameters passed in, push to URL
+    history.push({ pathname: route, search: queryParams.search })
   }
 }

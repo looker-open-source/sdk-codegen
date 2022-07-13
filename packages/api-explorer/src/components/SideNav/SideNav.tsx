@@ -84,7 +84,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        navigate(parts.join('/'), {}, history)
+        navigate(parts.join('/'), history)
         // history.push({
         //   pathname: parts.join('/'),
         //   search: searchParams.toString(),
@@ -93,7 +93,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        navigate(parts.join('/'), {}, history)
+        navigate(parts.join('/'), history)
         // history.push({
         //   pathname: parts.join('/'),
         //   search: searchParams.toString(),
@@ -122,12 +122,12 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   useEffect(() => {
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(null, { search: searchParams.toString() }, history)
+      navigate(location.pathname, history, { search: searchParams.toString() })
 
       // history.push({ search: searchParams.toString() })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      navigate(null, { search: searchParams.toString() }, history)
+      navigate(location.pathname, history, { search: searchParams.toString() })
       // history.push({ search: searchParams.toString() })
     }
   }, [debouncedPattern])

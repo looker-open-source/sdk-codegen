@@ -30,6 +30,7 @@ import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath } from '../../utils'
+import { navigate } from '../../utils/navUtils'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -54,7 +55,8 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const methods = api.tags[methodTag]
   useEffect(() => {
     if (!methods) {
-      history.push(`/${specKey}/methods`)
+      navigate(`/${specKey}/methods`, history)
+      // history.push(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {

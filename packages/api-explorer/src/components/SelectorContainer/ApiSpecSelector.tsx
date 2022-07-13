@@ -50,7 +50,7 @@ export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
 
   const handleChange = (specKey: string) => {
     const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
-    navigate(matchPath, {}, history)
+    navigate(matchPath, history)
     // history.push(matchPath)
   }
 

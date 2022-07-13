@@ -95,10 +95,10 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
       // Invalid method
       if (api.tags[methodTag]) {
         // Found tag though
-        navigate(`/${specKey}/methods/${methodTag}`, {}, history)
+        navigate(`/${specKey}/methods/${methodTag}`, history)
         // history.push(`/${specKey}/methods/${methodTag}`)
       } else {
-        navigate(`/${specKey}/methods`, {}, history)
+        navigate(`/${specKey}/methods`, history)
         // history.push(`/${specKey}/methods`)
       }
     }

@@ -57,9 +57,9 @@ export const SideNavMethods = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        navigate(`/${specKey}/methods/${tag}`, {}, history)
+        navigate(`/${specKey}/methods/${tag}`, history)
       } else {
-        navigate(`/${specKey}/methods`, {}, history)
+        navigate(`/${specKey}/methods`, history)
       }
     }
 

@@ -109,24 +109,29 @@ jest.mock('react-router-dom', () => {
 
 describe('Search', () => {
   test('inputting text in search box updates URL', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined)
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
     await userEvent.paste(input, searchPattern)
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: '/3.1/methods',
         search: `s=${searchPattern}`,
       })
     })
   })
 
-  test('URL with search parameters drives state and filters methods and types', async () => {
+  test('State variable tied to URL parameters drives filtering of methods and types', async () => {
     const searchPattern = 'embedsso'
     const store = createTestStore({
       settings: { searchPattern: searchPattern },
     })
     jest.spyOn(spec.api!, 'search')
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined, store)
+    renderWithRouterAndReduxProvider(
+      <SideNav spec={spec} />,
+      ['/3.1/methods?s=embedsso'],
+      store
+    )
     const input = screen.getByLabelText('Search')
     expect(input).toHaveValue(searchPattern)
     await waitFor(() => {
