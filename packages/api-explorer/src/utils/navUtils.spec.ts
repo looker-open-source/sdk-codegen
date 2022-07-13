@@ -39,6 +39,22 @@ jest.mock('react-router-dom', () => {
 })
 
 describe('Navigate', () => {
+  let saveLocation: Location
+
+  beforeEach(() => {
+    saveLocation = window.location
+    window.location = {
+      ...window.location,
+      pathname: '/3.1',
+    }
+  })
+
+  afterEach(() => {
+    window.location = saveLocation
+  })
+  /**
+   * TODO: add more robust tests for different use cases
+   */
   const history = useHistory()
   const curParams = new URLSearchParams(history.location.search)
   const route = `/3.1`
@@ -48,6 +64,7 @@ describe('Navigate', () => {
       pathname: route,
       search: curParams.toString(),
     })
+    // TODO: check URL that it changed
   })
 
   test('if params passed in is null or empty, remove all params from URL', () => {

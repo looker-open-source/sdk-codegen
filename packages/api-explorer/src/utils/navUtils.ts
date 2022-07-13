@@ -25,20 +25,26 @@
  */
 import type { History } from 'history'
 
+/**
+ *
+ * @param route
+ * @param history
+ * @param queryParams
+ */
 export const navigate = (
   route: string,
   history: History,
-  newParams: { search?: string } | null | undefined
-): void => {
+  queryParams?: { search?: string } | null
+) => {
   const curParams = new URLSearchParams(history.location.search)
-  if (typeof newParams === 'undefined') {
+  if (queryParams === undefined) {
     // if params passed in is undefined, maintain existing params in URL
     history.push({ pathname: route, search: curParams.toString() })
-  } else if (!newParams || Object.keys(newParams).length === 0) {
+  } else if (queryParams === null || Object.keys(queryParams).length === 0) {
     // if params passed in is null or empty, remove all params from URL
     history.push({ pathname: route })
   } else {
     // if we have new parameters passed in, push to URL
-    history.push({ pathname: route, search: newParams.search })
+    history.push({ pathname: route, search: queryParams.search })
   }
 }
