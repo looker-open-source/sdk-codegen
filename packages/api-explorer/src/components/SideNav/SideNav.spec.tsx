@@ -29,8 +29,12 @@ import userEvent from '@testing-library/user-event'
 import { screen, waitFor } from '@testing-library/react'
 
 import { getLoadedSpecs } from '../../test-data'
-import { renderWithRouterAndReduxProvider } from '../../test-utils'
-import { defaultSettingsState } from '../../state'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
+import { defaultSettingsState, useSettingActions } from '../../state'
+import { sleep } from '../../../../../examples/typescript/utils'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
@@ -110,17 +114,15 @@ describe('SideNav', () => {
        cannot drive state unless the APIExplorer useEffect for location.search
        is executed, so we need to mock that.
  */
-
+const store = createTestStore()
 describe('Search', () => {
   test('it filters methods and types on input', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined, store)
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
     jest.spyOn(spec.api!, 'search')
     /** Pasting to avoid triggering search multiple times */
     await userEvent.paste(input, searchPattern)
-
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/3.1`)
     await waitFor(() => {
       expect(spec.api!.search).toHaveBeenCalledWith(
         searchPattern,
