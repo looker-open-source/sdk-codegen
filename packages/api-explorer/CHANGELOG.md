@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.33](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.32...api-explorer-v0.9.33) (2022-07-07)
+
+
+### Bug Fixes
+
+* description sync issues in diff scene ([#1086](https://www.github.com/looker-open-source/sdk-codegen/issues/1086)) ([a37aa50](https://www.github.com/looker-open-source/sdk-codegen/commit/a37aa50064bb41ca5af2c9d19371e2ef7973e6d9))
+* remove generated files from examples index ([#1076](https://www.github.com/looker-open-source/sdk-codegen/issues/1076)) ([d75bce8](https://www.github.com/looker-open-source/sdk-codegen/commit/d75bce8dc25d41fd6bc5e2e513782eaa6009fd10))
+* Sidenav Methods Panel Open & Closing ([#1097](https://www.github.com/looker-open-source/sdk-codegen/issues/1097)) ([c49fae4](https://www.github.com/looker-open-source/sdk-codegen/commit/c49fae4ca6a7a30feb61f021ec878a8091eaa078))
+* Update prod entrypoint to match dev entrypoint (pull [#1059](https://www.github.com/looker-open-source/sdk-codegen/issues/1059)) ([0e4c3f4](https://www.github.com/looker-open-source/sdk-codegen/commit/0e4c3f47782d23f6c8e5509bd2942b0934e44ea2))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.9 to ^0.1.10
+    * @looker/code-editor bumped from ^0.1.21 to ^0.1.22
+    * @looker/run-it bumped from ^0.9.32 to ^0.9.33
+    * @looker/sdk bumped from ^22.4.2 to ^22.6.0
+    * @looker/sdk-codegen bumped from ^21.5.2 to ^21.6.0
+    * @looker/sdk-rtl bumped from ^21.3.3 to ^21.3.4
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.3.3 to ^21.3.4
+    * @looker/sdk-node bumped from ^22.4.2 to ^22.6.0
+
 ### [0.9.32](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.31...api-explorer-v0.9.32) (2022-04-07)
 
 

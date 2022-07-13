@@ -12,7 +12,7 @@ initializing that supports run-time specific transports (currently only
 (`AuthSession` and `OAuthSession`). The methods and models are generated from
 the Looker API spec by a new code generator developed at Looker.
 
-Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues)
+Please `report any issues <https://github.com/looker-open-source/sdk-codegen/issues>`_
 encountered, and indicate the SDK language in the report.
 
 Basic Usage
