@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Create branch if on main,
+ * Create sdk_version branch if on main,
  * generate SDK bindings,
  * run smoke tests for TS and Python,
  * commit and push if everything passes
@@ -74,13 +74,13 @@ const run = (command) => {
  */
 const batch = (commands) => {
   let result = ''
-  commands.forEach(command => {
+  for (const command of commands) {
     result = run(command)
     if (!ok(result)) {
       console.error(`${command} failed.`)
       return result
     }
-  })
+  }
   return result
 }
 
@@ -90,7 +90,22 @@ const execRead = (command) => {
 }
 
 /** get this git repository's current branch name */
-const getCurrentBranch = () => execRead('git rev-parse --abbrev-ref HEAD')
+const branchActive = () => execRead('git rev-parse --abbrev-ref HEAD')
+
+/**
+ * Returns true if the branch exists locally or remote
+ * @param branch name
+ * @returns true if it exists
+ */
+const branchExists = (branch) => {
+  const checkRemote = `git ls-remote --heads origin "${branch}" | wc -l `
+  let result = execRead(checkRemote)
+  if (result !== '1') {
+    const checkLocal = `git show-ref --verify refs/heads/"${branch}" | wc -l`
+    result = execRead(checkLocal)
+  }
+  return result === '1'
+}
 
 /**
  * Get the standardized name for this branch
@@ -98,6 +113,28 @@ const getCurrentBranch = () => execRead('git rev-parse --abbrev-ref HEAD')
  * @returns sdk_<release>
  */
 const branchName = (release) => `sdk_${ciVersion(release)}`
+
+/**
+ * If currently on main, create or switch to the sdk_release branch
+ * @param release version branch to create
+ */
+const branchOffMain = (release) => {
+  let result = ''
+  let current = branchActive()
+  if (current === 'main') {
+    const branch = branchName(release)
+    if (branchExists(branch)) {
+      console.log(`Switching to branch ${branch} ...`)
+      result = run(`git checkout ${branch} && git pull`)
+    } else {
+      console.log(`Creating branch ${branch} ...`)
+      result = run(`git checkout -b ${branch} origin/main`)
+    }
+  } else {
+    console.log(`Using branch ${current} to generate SDKs for ${release}`)
+  }
+  return result
+}
 
 /**
  * Is the running version the desired release?
@@ -124,37 +161,33 @@ const pullci = async (release) => {
     maxBuffer: 1024 * 1024,
     stdio: 'inherit',
   }
-  if (! await checkVersion(release)) {
-    const script = path.resolve(root, 'bin/pullci')
-    // Throws exception on error, which we want
-    proc.execFileSync(script, [ciVersion(release)], opts)
-    return await waitForLooker()
-  }
+  if (await checkVersion(release)) return true
+  const script = path.resolve(root, 'bin/pullci')
+  // Throws exception on error, which we want
+  proc.execFileSync(script, [ciVersion(release)], opts)
+  return await waitForLooker()
 }
 
 /** Regen against the specified release and complete flows */
 const regen = async (release) => {
-  let result
   console.info(`Generating SDKs for Looker ${release} ...`)
-  let current = getCurrentBranch()
-  if (current === 'main') {
-    const branch = branchName(release)
-    console.log(`Creating branch ${branch} ...`)
-    result = run(`git checkout -b ${branch} origin/main`)
-    if (!(ok(result))) return result
+  if (ok(branchOffMain(release))) {
+    if (await pullci(release)) {
+      return batch([
+        'yarn gen',
+        'yarn test:sdk',
+        // 'git add -A',
+        // `git commit -m "feat: generate SDKs for Looker ${release}"`,
+        /*
+        Test these out after first cut is merged to main
+        'git push'
+        create PR
+         */
+      ])
+    } else {
+      console.error(`timed out waiting for Looker ${release}`)
+    }
   }
-  await pullci(release)
-  return batch([
-      'yarn gen',
-      'bin/smoke typescript',
-      /*
-      Test these out after first cut is merged to main
-      'git add -A',
-      `git commit -m "feat: generate SDK version ${release}"`,
-      'git push'
-      create PR
-       */
-  ])
 }
 
 (async () => {

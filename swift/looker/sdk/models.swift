@@ -25,7 +25,7 @@
  */
 
 /**
- * 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
+ * 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -537,6 +537,7 @@ public struct AlertNotifications: SDKModel {
         case field_value
         case threshold_value
         case _ran_at = "ran_at"
+        case alert
     }
     private var _notification_id: AnyString?
     /**
@@ -589,7 +590,9 @@ public struct AlertNotifications: SDKModel {
         set { _ran_at = newValue.map(AnyString.init) }
     }
 
-    public init(notification_id: String? = nil, alert_condition_id: String? = nil, user_id: String? = nil, is_read: Bool? = nil, field_value: Double? = nil, threshold_value: Double? = nil, ran_at: String? = nil) {
+    public var alert: MobilePayload?
+
+    public init(notification_id: String? = nil, alert_condition_id: String? = nil, user_id: String? = nil, is_read: Bool? = nil, field_value: Double? = nil, threshold_value: Double? = nil, ran_at: String? = nil, alert: MobilePayload? = nil) {
         self._notification_id = notification_id.map(AnyString.init)
         self._alert_condition_id = alert_condition_id.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
@@ -597,6 +600,7 @@ public struct AlertNotifications: SDKModel {
         self.field_value = field_value
         self.threshold_value = threshold_value
         self._ran_at = ran_at.map(AnyString.init)
+        self.alert = alert
     }
 
 }
@@ -4531,6 +4535,7 @@ public struct Dashboard: SDKModel {
         case _edit_uri = "edit_uri"
         case _favorite_count = "favorite_count"
         case filters_bar_collapsed
+        case filters_location_top
         case last_accessed_at
         case last_viewed_at
         case updated_at
@@ -4750,6 +4755,11 @@ public struct Dashboard: SDKModel {
     public var filters_bar_collapsed: Bool?
 
     /**
+     * Sets the default state of the filters location to top(true) or right(false)
+     */
+    public var filters_location_top: Bool?
+
+    /**
      * Time the dashboard was last accessed (read-only)
      */
     public var last_accessed_at: Date?
@@ -4810,7 +4820,7 @@ public struct Dashboard: SDKModel {
     }
 
     /**
-     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
      */
     public var show_filters_bar: Bool?
 
@@ -4884,7 +4894,7 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -4914,6 +4924,7 @@ public struct Dashboard: SDKModel {
         self._edit_uri = edit_uri.map(AnyString.init)
         self._favorite_count = favorite_count.map(AnyInt.init)
         self.filters_bar_collapsed = filters_bar_collapsed
+        self.filters_location_top = filters_location_top
         self.last_accessed_at = last_accessed_at
         self.last_viewed_at = last_viewed_at
         self.updated_at = updated_at
@@ -7058,6 +7069,14 @@ public enum DependencyStatus: String, Codable {
 public enum DestinationType: String, Codable {
     case EMAIL = "EMAIL"
     case ACTION_HUB = "ACTION_HUB"
+}
+
+/**
+ * Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+ */
+public enum DeviceType: String, Codable {
+    case android = "android"
+    case ios = "ios"
 }
 
 public struct Dialect: SDKModel {
@@ -13868,6 +13887,85 @@ public struct MergeQuerySourceQuery: SDKModel {
 
 }
 
+public struct MobilePayload: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _title = "title"
+        case _alert_id = "alert_id"
+        case _investigative_content_id = "investigative_content_id"
+        case _dashboard_name = "dashboard_name"
+        case _dashboard_id = "dashboard_id"
+        case _query_slug = "query_slug"
+    }
+    private var _title: AnyString?
+    /**
+     * Title of the alert (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _alert_id: AnyString
+    /**
+     * ID of the alert (read-only)
+     */
+    public var alert_id: String {
+        get { _alert_id.value }
+        set { _alert_id = AnyString.init(newValue) }
+    }
+
+    private var _investigative_content_id: AnyString?
+    /**
+     * ID of the investigative content (read-only)
+     */
+    public var investigative_content_id: String? {
+        get { _investigative_content_id?.value }
+        set { _investigative_content_id = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_name: AnyString?
+    /**
+     * Name of the dashboard on which the alert has been set (read-only)
+     */
+    public var dashboard_name: String? {
+        get { _dashboard_name?.value }
+        set { _dashboard_name = newValue.map(AnyString.init) }
+    }
+
+    private var _dashboard_id: AnyString?
+    /**
+     * ID of the dashboard on which the alert has been set (read-only)
+     */
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _query_slug: AnyString?
+    /**
+     * Slug of the query which runs the alert queries. (read-only)
+     */
+    public var query_slug: String? {
+        get { _query_slug?.value }
+        set { _query_slug = newValue.map(AnyString.init) }
+    }
+
+    public init(title: String? = nil, alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil) {
+        self._title = title.map(AnyString.init)
+        self._alert_id = AnyString.init(alert_id)
+        self._investigative_content_id = investigative_content_id.map(AnyString.init)
+        self._dashboard_name = dashboard_name.map(AnyString.init)
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._query_slug = query_slug.map(AnyString.init)
+    }
+
+    public init(title: String? = nil, _ alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil) {
+        self.init(title: title, alert_id: alert_id, investigative_content_id: investigative_content_id, dashboard_name: dashboard_name, dashboard_id: dashboard_id, query_slug: query_slug)
+    }
+
+}
+
 public struct MobileSettings: SDKModel {
     /**
      * Specifies whether the force authentication option is enabled for mobile (read-only)
@@ -13882,6 +13980,48 @@ public struct MobileSettings: SDKModel {
     public init(mobile_force_authentication: Bool? = nil, mobile_app_integration: Bool? = nil) {
         self.mobile_force_authentication = mobile_force_authentication
         self.mobile_app_integration = mobile_app_integration
+    }
+
+}
+
+public struct MobileToken: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _device_token = "device_token"
+        case device_type
+    }
+    private var _id: AnyString?
+    /**
+     * Unique ID. (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _device_token: AnyString
+    /**
+     * Specifies the device token
+     */
+    public var device_token: String {
+        get { _device_token.value }
+        set { _device_token = AnyString.init(newValue) }
+    }
+
+    /**
+     * Specifies type of device. Valid values are: "android", "ios".
+     */
+    public var device_type: DeviceType
+
+    public init(id: String? = nil, device_token: String, device_type: DeviceType) {
+        self._id = id.map(AnyString.init)
+        self._device_token = AnyString.init(device_token)
+        self.device_type = device_type
+    }
+
+    public init(id: String? = nil, _ device_token: String, _ device_type: DeviceType) {
+        self.init(id: id, device_token: device_token, device_type: device_type)
     }
 
 }
@@ -21860,6 +22000,7 @@ public struct WriteDashboard: SDKModel {
         case crossfilter_enabled
         case deleted
         case filters_bar_collapsed
+        case filters_location_top
         case _load_configuration = "load_configuration"
         case _lookml_link_id = "lookml_link_id"
         case show_filters_bar
@@ -21965,6 +22106,11 @@ public struct WriteDashboard: SDKModel {
      */
     public var filters_bar_collapsed: Bool?
 
+    /**
+     * Sets the default state of the filters location to top(true) or right(false)
+     */
+    public var filters_location_top: Bool?
+
     private var _load_configuration: AnyString?
     /**
      * configuration option that governs how dashboard loading will happen.
@@ -21984,7 +22130,7 @@ public struct WriteDashboard: SDKModel {
     }
 
     /**
-     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
      */
     public var show_filters_bar: Bool?
 
@@ -22040,7 +22186,7 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, filters_bar_collapsed: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -22054,6 +22200,7 @@ public struct WriteDashboard: SDKModel {
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
         self.filters_bar_collapsed = filters_bar_collapsed
+        self.filters_location_top = filters_location_top
         self._load_configuration = load_configuration.map(AnyString.init)
         self._lookml_link_id = lookml_link_id.map(AnyString.init)
         self.show_filters_bar = show_filters_bar
@@ -24035,6 +24182,41 @@ public struct WriteMergeQuery: SDKModel {
         self.source_queries = source_queries
         self.total = total
         self.vis_config = vis_config
+    }
+
+}
+
+/**
+ * Dynamic writeable type for MobileToken removes:
+ * id
+ */
+public struct WriteMobileToken: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _device_token = "device_token"
+        case device_type
+    }
+    private var _device_token: AnyString
+    /**
+     * Specifies the device token
+     */
+    public var device_token: String {
+        get { _device_token.value }
+        set { _device_token = AnyString.init(newValue) }
+    }
+
+    /**
+     * Specifies type of device. Valid values are: "android", "ios".
+     */
+    public var device_type: DeviceType
+
+    public init(device_token: String, device_type: DeviceType) {
+        self._device_token = AnyString.init(device_token)
+        self.device_type = device_type
+    }
+
+    public init(_ device_token: String, _ device_type: DeviceType) {
+        self.init(device_token: device_token, device_type: device_type)
     }
 
 }

@@ -25,7 +25,7 @@
  */
 
 /**
- * 311 API models: 232 Spec, 0 Request, 59 Write, 20 Enum
+ * 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -166,6 +166,7 @@ data class AlertFieldFilter (
  * @property field_value The value of the field on which the alert condition is set (read-only)
  * @property threshold_value The value of the threshold which triggers the alert notification (read-only)
  * @property ran_at The time at which the alert query ran (read-only)
+ * @property alert
  */
 data class AlertNotifications (
     var notification_id: String? = null,
@@ -174,7 +175,8 @@ data class AlertNotifications (
     var is_read: Boolean? = null,
     var field_value: Double? = null,
     var threshold_value: Double? = null,
-    var ran_at: String? = null
+    var ran_at: String? = null,
+    var alert: MobilePayload? = null
 ) : Serializable
 
 /**
@@ -1193,6 +1195,7 @@ data class CustomWelcomeEmail (
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
  * @property favorite_count Number of times favorited (read-only)
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
+ * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property last_accessed_at Time the dashboard was last accessed (read-only)
  * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
  * @property updated_at Time that the Dashboard was most recently updated. (read-only)
@@ -1201,7 +1204,7 @@ data class CustomWelcomeEmail (
  * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -1242,6 +1245,7 @@ data class Dashboard (
     var edit_uri: String? = null,
     var favorite_count: Long? = null,
     var filters_bar_collapsed: Boolean? = null,
+    var filters_location_top: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
     var updated_at: Date? = null,
@@ -1781,6 +1785,14 @@ enum class DependencyStatus : Serializable {
 enum class DestinationType : Serializable {
     EMAIL,
     ACTION_HUB
+}
+
+/**
+ * Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+ */
+enum class DeviceType : Serializable {
+    android,
+    ios
 }
 
 /**
@@ -3490,12 +3502,40 @@ data class MergeQuerySourceQuery (
 ) : Serializable
 
 /**
+ * @property title Title of the alert (read-only)
+ * @property alert_id ID of the alert (read-only)
+ * @property investigative_content_id ID of the investigative content (read-only)
+ * @property dashboard_name Name of the dashboard on which the alert has been set (read-only)
+ * @property dashboard_id ID of the dashboard on which the alert has been set (read-only)
+ * @property query_slug Slug of the query which runs the alert queries. (read-only)
+ */
+data class MobilePayload (
+    var title: String? = null,
+    var alert_id: String,
+    var investigative_content_id: String? = null,
+    var dashboard_name: String? = null,
+    var dashboard_id: String? = null,
+    var query_slug: String? = null
+) : Serializable
+
+/**
  * @property mobile_force_authentication Specifies whether the force authentication option is enabled for mobile (read-only)
  * @property mobile_app_integration Specifies whether mobile access for this instance is enabled. (read-only)
  */
 data class MobileSettings (
     var mobile_force_authentication: Boolean? = null,
     var mobile_app_integration: Boolean? = null
+) : Serializable
+
+/**
+ * @property id Unique ID. (read-only)
+ * @property device_token Specifies the device token
+ * @property device_type Specifies type of device. Valid values are: "android", "ios".
+ */
+data class MobileToken (
+    var id: String? = null,
+    var device_token: String,
+    var device_type: DeviceType
 ) : Serializable
 
 /**
@@ -5610,9 +5650,10 @@ data class WriteCredentialsEmail (
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
+ * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -5635,6 +5676,7 @@ data class WriteDashboard (
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
     var filters_bar_collapsed: Boolean? = null,
+    var filters_location_top: Boolean? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -6180,6 +6222,18 @@ data class WriteMergeQuery (
     var source_queries: Array<MergeQuerySourceQuery>? = null,
     var total: Boolean? = null,
     var vis_config: Map<String,Any>? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for MobileToken removes:
+ * id
+ *
+ * @property device_token Specifies the device token
+ * @property device_type Specifies type of device. Valid values are: "android", "ios".
+ */
+data class WriteMobileToken (
+    var device_token: String,
+    var device_type: DeviceType
 ) : Serializable
 
 /**

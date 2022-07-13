@@ -97,7 +97,7 @@ class PythonFormatter extends BaseFormatter {
     if (pipEnvExists.includes('pipenv')) {
       const list = files.join(' ')
       // pipenv check completed without error
-      run('pipenv', ['run', 'black', list])
+      run('pipenv', ['run', 'black', list], 'Python reformat', true)
       return success(files)
     } else {
       return danger(this.instructions)
@@ -173,6 +173,7 @@ class TypescriptFormatter extends BaseFormatter {
     return this.skipping()
   }
 }
+
 class KotlinFormatter extends BaseFormatter {
   // TODO Kotlin formatter
   constructor() {
@@ -285,7 +286,7 @@ class CsharpFormatter extends BaseFormatter {
 }
 
 class GoFormatter extends BaseFormatter {
-  // TODO C# formatter https://github.com/dotnet/format
+  // TODO Go formatter
   constructor() {
     super('Go')
   }
