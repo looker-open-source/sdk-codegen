@@ -34,22 +34,10 @@ import {
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
 import { defaultSettingsState, useSettingActions } from '../../state'
-import { sleep } from '../../../../../examples/typescript/utils'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
 
 const spec = getLoadedSpecs()['4.0']
-const mockHistoryPush = jest.fn()
-jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
-  return {
-    ...ReactRouterDOM,
-    useHistory: () => ({
-      push: mockHistoryPush,
-      location,
-    }),
-  }
-})
 
 describe('SideNav', () => {
   const allTagsPattern = /^(Auth|ApiAuth)$/
@@ -104,26 +92,52 @@ describe('SideNav', () => {
 })
 
 // TODO: tests for search query nav
-//       1) inputting text in search updates URL
-//       2) mock state, when state updates, search triggers
-//       2) searching with param in URL returns searched page
-//       3) back / forward navigation maintains previous state
+//       1) inputting text in search updates search box and URL
+//       2) updated URL results in search triggered
+//       3) searching with param in URL returns searched page
+//       4) back / forward navigation maintains previous state
 
 /*
  TODO: what is going on here is that the route gets pushed, however the URL
        cannot drive state unless the APIExplorer useEffect for location.search
        is executed, so we need to mock that.
  */
-const store = createTestStore()
+
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location,
+    }),
+  }
+})
+
 describe('Search', () => {
-  test('it filters methods and types on input', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined, store)
+  test('inputting text in search box updates URL', async () => {
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined)
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    jest.spyOn(spec.api!, 'search')
-    /** Pasting to avoid triggering search multiple times */
     await userEvent.paste(input, searchPattern)
     await waitFor(() => {
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        search: `s=${searchPattern}`,
+      })
+    })
+  })
+
+  test('URL with search parameters drives state and filters methods and types', async () => {
+    const searchPattern = 'embedsso'
+    const store = createTestStore({
+      settings: { searchPattern: searchPattern },
+    })
+    jest.spyOn(spec.api!, 'search')
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, undefined, store)
+    await waitFor(() => {
+      const input = screen.getByLabelText('Search')
+      // expect(input).toHaveTextContent(searchPattern)
       expect(spec.api!.search).toHaveBeenCalledWith(
         searchPattern,
         criteriaToSet(defaultSettingsState.searchCriteria)

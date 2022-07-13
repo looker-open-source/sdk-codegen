@@ -138,7 +138,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
-    setSearchPattern(searchPattern)
+    // setSearchPattern(searchPattern)
 
     if (searchPattern && api.search) {
       results = api.search(searchPattern, criteriaToSet(searchCriteria))
@@ -158,7 +158,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-  }, [searchPattern, specKey, spec, searchCriteria, history.location])
+  }, [searchPattern, specKey, spec, searchCriteria])
 
   useEffect(() => {
     const { selectedIndex, onSelectTab } = tabs
