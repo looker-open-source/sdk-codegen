@@ -25,7 +25,7 @@
  */
 
 /**
- * 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
+ * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -3502,6 +3502,15 @@ data class MergeQuerySourceQuery (
 ) : Serializable
 
 /**
+ * @property feature_flag_name Specifies the name of feature flag. (read-only)
+ * @property feature_flag_state Specifies the state of feature flag (read-only)
+ */
+data class MobileFeatureFlags (
+    var feature_flag_name: String? = null,
+    var feature_flag_state: Boolean? = null
+) : Serializable
+
+/**
  * @property title Title of the alert (read-only)
  * @property alert_id ID of the alert (read-only)
  * @property investigative_content_id ID of the investigative content (read-only)
@@ -3521,10 +3530,12 @@ data class MobilePayload (
 /**
  * @property mobile_force_authentication Specifies whether the force authentication option is enabled for mobile (read-only)
  * @property mobile_app_integration Specifies whether mobile access for this instance is enabled. (read-only)
+ * @property mobile_feature_flags Specifies feature flag and state relevant to mobile. (read-only)
  */
 data class MobileSettings (
     var mobile_force_authentication: Boolean? = null,
-    var mobile_app_integration: Boolean? = null
+    var mobile_app_integration: Boolean? = null,
+    var mobile_feature_flags: Array<MobileFeatureFlags>? = null
 ) : Serializable
 
 /**
@@ -3627,7 +3638,7 @@ enum class Name : Serializable {
  * @property redirect_uri The uri with which this application will receive an auth code by browser redirect.
  * @property display_name The application's display name
  * @property description A description of the application that will be displayed to users
- * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+ * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
  * @property group_id If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
  * @property tokens_invalid_before All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
  * @property activated_users All users who have been activated to use this app (read-only)
@@ -6255,7 +6266,7 @@ data class WriteModelSet (
  * @property redirect_uri The uri with which this application will receive an auth code by browser redirect.
  * @property display_name The application's display name
  * @property description A description of the application that will be displayed to users
- * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+ * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
  * @property group_id If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
  */
 data class WriteOauthClientApp (

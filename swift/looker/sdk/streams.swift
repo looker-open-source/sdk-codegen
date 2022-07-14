@@ -25,7 +25,7 @@
  */
 
 /**
- * 444 API methods
+ * 446 API methods
  */
 
 
@@ -37,6 +37,40 @@ import Foundation
 open class LookerSDKStream: APIMethods {
 
     // MARK Alert: Alert
+
+    /**
+     * Follow an alert.
+     *
+     * POST /alerts/{alert_id}/follow -> Voidable
+     */
+    public func follow_alert(
+        /**
+         * @param {String} alert_id ID of an alert
+         */
+        _ alert_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/alerts/\(path_alert_id)/follow", nil, nil, options)
+        return result
+    }
+
+    /**
+     * Unfollow an alert.
+     *
+     * DELETE /alerts/{alert_id}/follow -> Voidable
+     */
+    public func unfollow_alert(
+        /**
+         * @param {String} alert_id ID of an alert
+         */
+        _ alert_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_alert_id = encodeParam(alert_id)
+        let result: SDKResponse<Data, SDKError> = self.delete("/alerts/\(path_alert_id)/follow", nil, nil, options)
+        return result
+    }
 
     /**
      * ### Search Alerts
@@ -6079,7 +6113,7 @@ open class LookerSDKStream: APIMethods {
          */
         generate_drill_links: Bool? = nil,
         /**
-         * @param {Bool} force_production Force use of production models even if the user is in development mode.
+         * @param {Bool} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
          */
         force_production: Bool? = nil,
         /**
@@ -7459,19 +7493,11 @@ open class LookerSDKStream: APIMethods {
          */
         cache: Bool? = nil,
         /**
-         * @param {Int64} image_width Render width for image formats.
-         */
-        image_width: Int64? = nil,
-        /**
-         * @param {Int64} image_height Render height for image formats.
-         */
-        image_height: Int64? = nil,
-        /**
          * @param {Bool} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
          */
         generate_drill_links: Bool? = nil,
         /**
-         * @param {Bool} force_production Force use of production models even if the user is in development mode.
+         * @param {Bool} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
          */
         force_production: Bool? = nil,
         /**
@@ -7491,13 +7517,21 @@ open class LookerSDKStream: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         /**
+         * @param {Int64} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+         */
+        image_width: Int64? = nil,
+        /**
+         * @param {Int64} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
+         */
+        image_height: Int64? = nil,
+        /**
          * @param {String} fields Requested fields
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/query_tasks", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "fields": fields], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "image_width": image_width, "image_height": image_height, "fields": fields], try! self.encode(body), options)
         return result
     }
 
@@ -7760,7 +7794,7 @@ open class LookerSDKStream: APIMethods {
          */
         generate_drill_links: Bool? = nil,
         /**
-         * @param {Bool} force_production Force use of production models even if the user is in development mode.
+         * @param {Bool} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
          */
         force_production: Bool? = nil,
         /**
@@ -7886,7 +7920,7 @@ open class LookerSDKStream: APIMethods {
          */
         generate_drill_links: Bool? = nil,
         /**
-         * @param {Bool} force_production Force use of production models even if the user is in development mode.
+         * @param {Bool} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
          */
         force_production: Bool? = nil,
         /**

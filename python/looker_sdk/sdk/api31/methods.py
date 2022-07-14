@@ -4956,7 +4956,7 @@ class Looker31SDK(api_methods.APIMethods):
         image_height: Optional[int] = None,
         # Generate drill links (only applicable to 'json_detail' format.
         generate_drill_links: Optional[bool] = None,
-        # Force use of production models even if the user is in development mode.
+        # Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
         force_production: Optional[bool] = None,
         # Retrieve any results from cache even if the results have expired.
         cache_only: Optional[bool] = None,
@@ -6004,13 +6004,9 @@ class Looker31SDK(api_methods.APIMethods):
         apply_vis: Optional[bool] = None,
         # Get results from cache if available.
         cache: Optional[bool] = None,
-        # Render width for image formats.
-        image_width: Optional[int] = None,
-        # Render height for image formats.
-        image_height: Optional[int] = None,
         # Generate drill links (only applicable to 'json_detail' format.
         generate_drill_links: Optional[bool] = None,
-        # Force use of production models even if the user is in development mode.
+        # Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
         force_production: Optional[bool] = None,
         # Retrieve any results from cache even if the results have expired.
         cache_only: Optional[bool] = None,
@@ -6020,6 +6016,10 @@ class Looker31SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
+        # Render width for image formats.
+        image_width: Optional[int] = None,
+        # Render height for image formats.
+        image_height: Optional[int] = None,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -6030,7 +6030,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.post(
                 path="/query_tasks",
                 structure=mdls.QueryTask,
-                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs, "fields": fields},
+                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs, "image_width": image_width, "image_height": image_height, "fields": fields},
                 body=body,
                 transport_options=transport_options
             )
@@ -6289,7 +6289,7 @@ class Looker31SDK(api_methods.APIMethods):
         image_height: Optional[int] = None,
         # Generate drill links (only applicable to 'json_detail' format.
         generate_drill_links: Optional[bool] = None,
-        # Force use of production models even if the user is in development mode.
+        # Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
         force_production: Optional[bool] = None,
         # Retrieve any results from cache even if the results have expired.
         cache_only: Optional[bool] = None,
@@ -6385,7 +6385,7 @@ class Looker31SDK(api_methods.APIMethods):
         image_height: Optional[int] = None,
         # Generate drill links (only applicable to 'json_detail' format.
         generate_drill_links: Optional[bool] = None,
-        # Force use of production models even if the user is in development mode.
+        # Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
         force_production: Optional[bool] = None,
         # Retrieve any results from cache even if the results have expired.
         cache_only: Optional[bool] = None,

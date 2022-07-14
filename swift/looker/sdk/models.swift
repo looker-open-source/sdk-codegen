@@ -25,7 +25,7 @@
  */
 
 /**
- * 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
+ * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -13887,6 +13887,33 @@ public struct MergeQuerySourceQuery: SDKModel {
 
 }
 
+public struct MobileFeatureFlags: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _feature_flag_name = "feature_flag_name"
+        case feature_flag_state
+    }
+    private var _feature_flag_name: AnyString?
+    /**
+     * Specifies the name of feature flag. (read-only)
+     */
+    public var feature_flag_name: String? {
+        get { _feature_flag_name?.value }
+        set { _feature_flag_name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Specifies the state of feature flag (read-only)
+     */
+    public var feature_flag_state: Bool?
+
+    public init(feature_flag_name: String? = nil, feature_flag_state: Bool? = nil) {
+        self._feature_flag_name = feature_flag_name.map(AnyString.init)
+        self.feature_flag_state = feature_flag_state
+    }
+
+}
+
 public struct MobilePayload: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -13977,9 +14004,15 @@ public struct MobileSettings: SDKModel {
      */
     public var mobile_app_integration: Bool?
 
-    public init(mobile_force_authentication: Bool? = nil, mobile_app_integration: Bool? = nil) {
+    /**
+     * Specifies feature flag and state relevant to mobile. (read-only)
+     */
+    public var mobile_feature_flags: [MobileFeatureFlags]?
+
+    public init(mobile_force_authentication: Bool? = nil, mobile_app_integration: Bool? = nil, mobile_feature_flags: [MobileFeatureFlags]? = nil) {
         self.mobile_force_authentication = mobile_force_authentication
         self.mobile_app_integration = mobile_app_integration
+        self.mobile_feature_flags = mobile_feature_flags
     }
 
 }
@@ -14338,7 +14371,7 @@ public struct OauthClientApp: SDKModel {
     }
 
     /**
-     * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+     * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
      */
     public var enabled: Bool?
 
@@ -24294,7 +24327,7 @@ public struct WriteOauthClientApp: SDKModel {
     }
 
     /**
-     * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+     * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
      */
     public var enabled: Bool?
 

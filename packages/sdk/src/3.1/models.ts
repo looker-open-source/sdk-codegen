@@ -6093,19 +6093,11 @@ export interface IRequestCreateQueryTask {
    */
   cache?: boolean | null
   /**
-   * Render width for image formats.
-   */
-  image_width?: number | null
-  /**
-   * Render height for image formats.
-   */
-  image_height?: number | null
-  /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6124,6 +6116,14 @@ export interface IRequestCreateQueryTask {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null
+  /**
+   * Render width for image formats.
+   */
+  image_width?: number | null
+  /**
+   * Render height for image formats.
+   */
+  image_height?: number | null
   /**
    * Requested fields
    */
@@ -6345,7 +6345,7 @@ export interface IRequestRunInlineQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6407,7 +6407,7 @@ export interface IRequestRunLook {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6491,7 +6491,7 @@ export interface IRequestRunQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**

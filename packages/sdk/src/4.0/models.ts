@@ -25,7 +25,7 @@
  */
 
 /**
- * 372 API models: 234 Spec, 57 Request, 60 Write, 21 Enum
+ * 373 API models: 235 Spec, 57 Request, 60 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -5644,6 +5644,17 @@ export interface IMergeQuerySourceQuery {
   query_id?: string | null
 }
 
+export interface IMobileFeatureFlags {
+  /**
+   * Specifies the name of feature flag. (read-only)
+   */
+  feature_flag_name?: string | null
+  /**
+   * Specifies the state of feature flag (read-only)
+   */
+  feature_flag_state?: boolean
+}
+
 export interface IMobilePayload {
   /**
    * Title of the alert (read-only)
@@ -5680,6 +5691,10 @@ export interface IMobileSettings {
    * Specifies whether mobile access for this instance is enabled. (read-only)
    */
   mobile_app_integration?: boolean
+  /**
+   * Specifies feature flag and state relevant to mobile. (read-only)
+   */
+  mobile_feature_flags?: IMobileFeatureFlags[] | null
 }
 
 export interface IMobileToken {
@@ -5831,7 +5846,7 @@ export interface IOauthClientApp {
    */
   description?: string
   /**
-   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
    */
   enabled?: boolean
   /**
@@ -7238,19 +7253,11 @@ export interface IRequestCreateQueryTask {
    */
   cache?: boolean | null
   /**
-   * Render width for image formats.
-   */
-  image_width?: number | null
-  /**
-   * Render height for image formats.
-   */
-  image_height?: number | null
-  /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7269,6 +7276,14 @@ export interface IRequestCreateQueryTask {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null
+  /**
+   * DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+   */
+  image_width?: number | null
+  /**
+   * DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
+   */
+  image_height?: number | null
   /**
    * Requested fields
    */
@@ -7524,7 +7539,7 @@ export interface IRequestRunInlineQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7586,7 +7601,7 @@ export interface IRequestRunLook {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7670,7 +7685,7 @@ export interface IRequestRunQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -11950,7 +11965,7 @@ export interface IWriteOauthClientApp {
    */
   description?: string
   /**
-   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
    */
   enabled?: boolean
   /**
