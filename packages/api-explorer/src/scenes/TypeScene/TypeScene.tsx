@@ -65,7 +65,6 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         ? `/${specKey}/types/${typeTag}`
         : `/${specKey}/types`
       navigate(route, history)
-      // history.push(`/${specKey}/types`)
     }
   }, [history, specKey, type])
 

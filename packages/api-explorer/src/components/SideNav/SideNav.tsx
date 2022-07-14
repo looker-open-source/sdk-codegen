@@ -85,19 +85,11 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
         navigate(parts.join('/'), history)
-        // history.push({
-        //   pathname: parts.join('/'),
-        //   search: searchParams.toString(),
-        // })
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
         navigate(parts.join('/'), history)
-        // history.push({
-        //   pathname: parts.join('/'),
-        //   search: searchParams.toString(),
-        // })
       }
     }
   }
@@ -123,12 +115,9 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
       navigate(location.pathname, history, { search: searchParams.toString() })
-
-      // history.push({ search: searchParams.toString() })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
       navigate(location.pathname, history, { search: searchParams.toString() })
-      // history.push({ search: searchParams.toString() })
     }
   }, [debouncedPattern])
 
@@ -138,7 +127,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
-    // setSearchPattern(searchPattern)
 
     if (searchPattern && api.search) {
       results = api.search(searchPattern, criteriaToSet(searchCriteria))

@@ -56,7 +56,6 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   useEffect(() => {
     if (!types) {
       navigate(`/${specKey}/types`, history)
-      // history.push(`/${specKey}/types`)
     }
   }, [history, types])
 

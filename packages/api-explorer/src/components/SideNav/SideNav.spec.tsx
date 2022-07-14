@@ -91,10 +91,6 @@ describe('SideNav', () => {
   })
 })
 
-// TODO: tests for search query nav
-//       3) searching with param in URL returns searched page
-//       4) back / forward navigation maintains previous state
-
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
@@ -121,7 +117,7 @@ describe('Search', () => {
     })
   })
 
-  test('State variable tied to URL parameters drives filtering of methods and types', async () => {
+  test('Store variable for search pattern tied to URL parameters drives filtering of methods and types', async () => {
     const searchPattern = 'embedsso'
     const store = createTestStore({
       settings: { searchPattern: searchPattern },

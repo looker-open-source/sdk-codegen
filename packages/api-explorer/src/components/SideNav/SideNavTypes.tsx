@@ -57,10 +57,6 @@ export const SideNavTypes = styled(
       setIsOpen(_isOpen)
       if (_isOpen) {
         navigate(`/${specKey}/types/${tag}`, history)
-        // history.push({
-        //   pathname: `/${specKey}/types/${tag}`,
-        //   search: new URLSearchParams(location.search).toString(),
-        // })
       } else {
         navigate(`/${specKey}/types`, history)
       }

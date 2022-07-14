@@ -96,10 +96,8 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
       if (api.tags[methodTag]) {
         // Found tag though
         navigate(`/${specKey}/methods/${methodTag}`, history)
-        // history.push(`/${specKey}/methods/${methodTag}`)
       } else {
         navigate(`/${specKey}/methods`, history)
-        // history.push(`/${specKey}/methods`)
       }
     }
   }, [api, history, methodName, methodTag, specKey])

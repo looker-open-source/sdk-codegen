@@ -56,7 +56,6 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   useEffect(() => {
     if (!methods) {
       navigate(`/${specKey}/methods`, history)
-      // history.push(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {
