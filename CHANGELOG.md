@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.5.0...sdk-codegen-all-v2.6.0) (2022-07-14)
+
+
+### Features
+
+* generate SDKs for Looker 22.10 ([#1115](https://www.github.com/looker-open-source/sdk-codegen/issues/1115)) ([2156fff](https://www.github.com/looker-open-source/sdk-codegen/commit/2156ffff2e041fceb38554bbf5a743ec6e3a2c97))
+
 ## [2.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.4.0...sdk-codegen-all-v2.5.0) (2022-07-13)
 
 
