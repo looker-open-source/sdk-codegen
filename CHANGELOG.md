@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.4.0...sdk-codegen-all-v2.5.0) (2022-07-13)
+
+
+### Features
+
+* generate 22.8 SDKs ([#1114](https://www.github.com/looker-open-source/sdk-codegen/issues/1114)) ([c771395](https://www.github.com/looker-open-source/sdk-codegen/commit/c771395e37940df581d10fb95b62382e20b1600c))
+
+
+### Bug Fixes
+
+* handle python crashed test ([#1111](https://www.github.com/looker-open-source/sdk-codegen/issues/1111)) ([08248c0](https://www.github.com/looker-open-source/sdk-codegen/commit/08248c07802030af10a59af3090c763a19ff9b4b))
+
 ## [2.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.3.2...sdk-codegen-all-v2.4.0) (2022-07-07)
 
 
