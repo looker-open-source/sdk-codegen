@@ -27,24 +27,24 @@ import type { History } from 'history'
 
 /**
  *
- * @param route the pathname to which you want to push to history
- * @param history caller's history object to be modified
- * @param queryParams parameters to add to the URL
+ * @param path the pathname to navigate to using history (empty string maintains current location)
+ * @param history the current browser session's history object
+ * @param queryParams object determining the current URLs parameters
  */
 export const navigate = (
-  route: string,
+  path: string,
   history: History,
   queryParams?: { search?: string } | null
 ) => {
   const curParams = new URLSearchParams(history.location.search)
   if (queryParams === undefined) {
-    // if params passed in is undefined, maintain existing params in URL
-    history.push({ pathname: route, search: curParams.toString() })
+    // if params passed in is undefined, maintain existing parameters in the URL
+    history.push({ pathname: path, search: curParams.toString() })
   } else if (queryParams === null || Object.keys(queryParams).length === 0) {
-    // if params passed in is null or empty, remove all params from URL
-    history.push({ pathname: route })
+    // if params passed in is null or empty, remove all parameters from the URL
+    history.push({ pathname: path })
   } else {
-    // if we have new parameters passed in, push to URL
-    history.push({ pathname: route, search: queryParams.search })
+    // if we have new parameters passed in, push them to the URL
+    history.push({ pathname: path, search: queryParams.search })
   }
 }

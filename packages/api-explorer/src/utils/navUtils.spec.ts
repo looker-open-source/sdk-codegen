@@ -52,21 +52,21 @@ describe('Navigate', () => {
     })
   })
 
-  test('if query parameters is null, remove all parameters from URL', () => {
+  test('if query parameters is null, will remove all parameters from URL', () => {
     navigate(route, history, null)
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
-  test('if query parameters is an empty object, remove all parameters from URL', () => {
+  test('if query parameters is an empty object, will remove all parameters from URL', () => {
     navigate(route, history, {})
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
-  test('if query parameters are passed in, push to the URL', () => {
+  test('if new query parameters are passed in, will push to the URL', () => {
     const newParams = 's=embedsso'
     navigate(route, history, { search: newParams })
     expect(mockHistoryPush).lastCalledWith({
