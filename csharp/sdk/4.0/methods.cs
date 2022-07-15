@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 444 API methods
+/// 446 API methods
 
 #nullable enable
 using System;
@@ -40,6 +40,36 @@ namespace Looker.SDK.API40
     public Looker40SDK(IAuthSession authSession): base(authSession, "4.0") { }
 
   #region Alert: Alert
+
+  /// Follow an alert.
+  ///
+  /// POST /alerts/{alert_id}/follow -> void
+  ///
+  /// <returns><c>void</c> Successfully followed an alert. ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<string, Exception>> follow_alert(
+    string alert_id,
+    ITransportSettings? options = null)
+{  
+      alert_id = SdkUtils.EncodeParam(alert_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Post, $"/alerts/{alert_id}/follow", null,null,options);
+  }
+
+  /// Unfollow an alert.
+  ///
+  /// DELETE /alerts/{alert_id}/follow -> void
+  ///
+  /// <returns><c>void</c> Successfully unfollowed an alert. ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<string, Exception>> unfollow_alert(
+    string alert_id,
+    ITransportSettings? options = null)
+{  
+      alert_id = SdkUtils.EncodeParam(alert_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/alerts/{alert_id}/follow", null,null,options);
+  }
 
   /// ### Search Alerts
   ///
@@ -5149,7 +5179,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -6336,14 +6366,14 @@ namespace Looker.SDK.API40
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
   /// <param name="apply_vis">Apply visualization options to results.</param>
   /// <param name="cache">Get results from cache if available.</param>
-  /// <param name="image_width">Render width for image formats.</param>
-  /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="image_width">DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.</param>
+  /// <param name="image_height">DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -6351,14 +6381,14 @@ namespace Looker.SDK.API40
     bool? apply_formatting = null,
     bool? apply_vis = null,
     bool? cache = null,
-    long? image_width = null,
-    long? image_height = null,
     bool? generate_drill_links = null,
     bool? force_production = null,
     bool? cache_only = null,
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    long? image_width = null,
+    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -6367,14 +6397,14 @@ namespace Looker.SDK.API40
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
       { "cache", cache },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "generate_drill_links", generate_drill_links },
       { "force_production", force_production },
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
+      { "image_width", image_width },
+      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -6598,7 +6628,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -6710,7 +6740,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>

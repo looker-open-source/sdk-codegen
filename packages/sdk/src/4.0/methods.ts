@@ -25,7 +25,7 @@
  */
 
 /**
- * 444 API methods
+ * 446 API methods
  */
 
 import type {
@@ -312,6 +312,50 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   //#region Alert: Alert
+
+  /**
+   * Follow an alert.
+   *
+   * POST /alerts/{alert_id}/follow -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async follow_alert(
+    alert_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    alert_id = encodeParam(alert_id)
+    return this.post<void, IError>(
+      `/alerts/${alert_id}/follow`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * Unfollow an alert.
+   *
+   * DELETE /alerts/{alert_id}/follow -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  async unfollow_alert(
+    alert_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>> {
+    alert_id = encodeParam(alert_id)
+    return this.delete<void, IError>(
+      `/alerts/${alert_id}/follow`,
+      null,
+      null,
+      options
+    )
+  }
 
   /**
    * ### Search Alerts
@@ -8084,14 +8128,14 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         apply_formatting: request.apply_formatting,
         apply_vis: request.apply_vis,
         cache: request.cache,
-        image_width: request.image_width,
-        image_height: request.image_height,
         generate_drill_links: request.generate_drill_links,
         force_production: request.force_production,
         cache_only: request.cache_only,
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        image_width: request.image_width,
+        image_height: request.image_height,
         fields: request.fields,
       },
       request.body,

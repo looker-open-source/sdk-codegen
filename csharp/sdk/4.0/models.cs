@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 315 API models: 234 Spec, 0 Request, 60 Write, 21 Enum
+/// 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
 
 #nullable enable
 using System;
@@ -3323,6 +3323,14 @@ public class MergeQuerySourceQuery : SdkModel
   public string? query_id { get; set; } = null;
 }
 
+public class MobileFeatureFlags : SdkModel
+{
+  /// <summary>Specifies the name of feature flag. (read-only)</summary>
+  public string? feature_flag_name { get; set; } = null;
+  /// <summary>Specifies the state of feature flag (read-only)</summary>
+  public bool? feature_flag_state { get; set; } = null;
+}
+
 public class MobilePayload : SdkModel
 {
   /// <summary>Title of the alert (read-only)</summary>
@@ -3345,6 +3353,8 @@ public class MobileSettings : SdkModel
   public bool? mobile_force_authentication { get; set; } = null;
   /// <summary>Specifies whether mobile access for this instance is enabled. (read-only)</summary>
   public bool? mobile_app_integration { get; set; } = null;
+  /// <summary>Specifies feature flag and state relevant to mobile. (read-only)</summary>
+  public MobileFeatureFlags[]? mobile_feature_flags { get; set; } = null;
 }
 
 public class MobileToken : SdkModel
@@ -3456,7 +3466,7 @@ public class OauthClientApp : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public string? group_id { get; set; } = null;
@@ -5975,7 +5985,7 @@ public class WriteOauthClientApp : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public string? group_id { get; set; } = null;

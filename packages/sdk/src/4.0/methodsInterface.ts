@@ -25,7 +25,7 @@
  */
 
 /**
- * 444 API methods
+ * 446 API methods
  */
 
 import type {
@@ -299,6 +299,34 @@ import type {
 
 export interface ILooker40SDK extends IAPIMethods {
   //#region Alert: Alert
+
+  /**
+   * Follow an alert.
+   *
+   * POST /alerts/{alert_id}/follow -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  follow_alert(
+    alert_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>>
+
+  /**
+   * Unfollow an alert.
+   *
+   * DELETE /alerts/{alert_id}/follow -> void
+   *
+   * @param alert_id ID of an alert
+   * @param options one-time API call overrides
+   *
+   */
+  unfollow_alert(
+    alert_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>>
 
   /**
    * ### Search Alerts

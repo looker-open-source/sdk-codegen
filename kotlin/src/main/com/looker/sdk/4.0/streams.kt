@@ -25,7 +25,7 @@
  */
 
 /**
- * 444 API methods
+ * 446 API methods
  */
 
 
@@ -39,6 +39,36 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     //region Alert: Alert
+
+
+    /**
+     * Follow an alert.
+     *
+     * @param {String} alert_id ID of an alert
+     *
+     * POST /alerts/{alert_id}/follow -> ByteArray
+     */
+    fun follow_alert(
+        alert_id: String
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+            return this.post<ByteArray>("/alerts/${path_alert_id}/follow", mapOf())
+    }
+
+
+    /**
+     * Unfollow an alert.
+     *
+     * @param {String} alert_id ID of an alert
+     *
+     * DELETE /alerts/{alert_id}/follow -> ByteArray
+     */
+    fun unfollow_alert(
+        alert_id: String
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+            return this.delete<ByteArray>("/alerts/${path_alert_id}/follow", mapOf())
+    }
 
 
     /**
@@ -5217,7 +5247,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
@@ -6395,14 +6425,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} apply_formatting Apply model-specified formatting to each result.
      * @param {Boolean} apply_vis Apply visualization options to results.
      * @param {Boolean} cache Get results from cache if available.
-     * @param {Long} image_width Render width for image formats.
-     * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
+     * @param {Long} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+     * @param {Long} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
      * @param {String} fields Requested fields
      *
      * POST /query_tasks -> ByteArray
@@ -6413,14 +6443,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         apply_formatting: Boolean? = null,
         apply_vis: Boolean? = null,
         cache: Boolean? = null,
-        image_width: Long? = null,
-        image_height: Long? = null,
         generate_drill_links: Boolean? = null,
         force_production: Boolean? = null,
         cache_only: Boolean? = null,
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
+        image_width: Long? = null,
+        image_height: Long? = null,
         fields: String? = null
     ) : SDKResponse {
             return this.post<ByteArray>("/query_tasks", 
@@ -6428,14 +6458,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                      "apply_formatting" to apply_formatting,
                      "apply_vis" to apply_vis,
                      "cache" to cache,
-                     "image_width" to image_width,
-                     "image_height" to image_height,
                      "generate_drill_links" to generate_drill_links,
                      "force_production" to force_production,
                      "cache_only" to cache_only,
                      "path_prefix" to path_prefix,
                      "rebuild_pdts" to rebuild_pdts,
                      "server_table_calcs" to server_table_calcs,
+                     "image_width" to image_width,
+                     "image_height" to image_height,
                      "fields" to fields), body)
     }
 
@@ -6646,7 +6676,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
@@ -6754,7 +6784,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
