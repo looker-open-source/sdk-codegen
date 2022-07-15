@@ -17,8 +17,8 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "engines": {
-    "node": ">=12",
-    "yarn": ">=1.14.0"
+    "node": ">=16",
+    "yarn": ">=1.22.0"
   },
   "scripts": {
     "convert": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/src/specConvert.ts",
@@ -129,7 +129,8 @@
     "webpack": "^5.10.0",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-merge": "^5.7.3",
-    "yarn-deduplicate": "^3.1.0"
+    "yarn-deduplicate": "^3.1.0",
+    "yarn-audit-fix": "^9.3.2"
   },
   "dependencies": {},
   "lint-staged": {
