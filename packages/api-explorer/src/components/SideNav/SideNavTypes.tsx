@@ -31,7 +31,7 @@ import type { TypeList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Link } from '../Link'
-import { buildTypePath, highlightHTML, navigate } from '../../utils'
+import { buildTypePath, highlightHTML, useNavigation } from '../../utils'
 import { selectSearchPattern } from '../../state'
 
 interface TypesProps {
@@ -45,6 +45,7 @@ interface TypesProps {
 export const SideNavTypes = styled(
   ({ className, types, tag, specKey, defaultOpen = false }: TypesProps) => {
     const history = useHistory()
+    const navigate = useNavigation()
     const searchParams = new URLSearchParams(history.location.search)
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ typeTag: string }>(
@@ -55,9 +56,9 @@ export const SideNavTypes = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        navigate(`/${specKey}/types/${tag}`, history)
+        navigate(`/${specKey}/types/${tag}`)
       } else {
-        navigate(`/${specKey}/types`, history)
+        navigate(`/${specKey}/types`)
       }
     }
 

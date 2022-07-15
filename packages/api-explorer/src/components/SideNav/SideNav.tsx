@@ -26,7 +26,7 @@
 
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import {
   TabList,
   Tab,
@@ -44,7 +44,7 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { useWindowSize, navigate } from '../../utils'
+import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
@@ -67,8 +67,8 @@ interface SideNavProps {
 }
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
-  const history = useHistory()
   const location = useLocation()
+  const navigate = useNavigation()
   const searchParams = new URLSearchParams(location.search)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
@@ -83,12 +83,12 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        navigate(parts.join('/'), history)
+        navigate(parts.join('/'))
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        navigate(parts.join('/'), history)
+        navigate(parts.join('/'))
       }
     }
   }
@@ -113,10 +113,10 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   useEffect(() => {
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(location.pathname, history, { search: searchParams.toString() })
+      navigate(location.pathname, { search: searchParams.toString() })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      navigate(location.pathname, history, { search: searchParams.toString() })
+      navigate(location.pathname, { search: searchParams.toString() })
     }
   }, [debouncedPattern])
 

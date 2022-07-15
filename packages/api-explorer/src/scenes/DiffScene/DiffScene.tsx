@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useRouteMatch } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -42,7 +42,7 @@ import { useSelector } from 'react-redux'
 
 import { ApixSection } from '../../components'
 import { selectCurrentSpec } from '../../state'
-import { diffPath, getApixAdaptor } from '../../utils'
+import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
@@ -84,7 +84,7 @@ const validateParam = (specs: SpecList, specKey = '') => {
 
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const adaptor = getApixAdaptor()
-  const history = useHistory()
+  const navigate = useNavigation()
   const spec = useSelector(selectCurrentSpec)
   const currentSpecKey = spec.key
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
@@ -123,14 +123,14 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const [delta, setDelta] = useState<DiffRow[]>([])
 
   const handleLeftChange = (newLeft: string) => {
-    history.push(`/${diffPath}/${newLeft}/${rightKey}`)
+    navigate(`/${diffPath}/${newLeft}/${rightKey}`)
   }
   const handleRightChange = (newRight: string) => {
-    history.push(`/${diffPath}/${leftKey}/${newRight}`)
+    navigate(`/${diffPath}/${leftKey}/${newRight}`)
   }
 
   const handleSwitch = () => {
-    history.push(`/${diffPath}/${rightKey}/${leftKey}`)
+    navigate(`/${diffPath}/${rightKey}/${leftKey}`)
   }
 
   useEffect(() => {

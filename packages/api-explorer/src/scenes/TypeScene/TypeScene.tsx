@@ -40,7 +40,7 @@ import {
   ExploreType,
   DocSchema,
 } from '../../components'
-import { navigate } from '../../utils'
+import { useNavigation } from '../../utils'
 
 interface DocTypeProps {
   api: ApiModel
@@ -56,6 +56,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const { specKey, typeTag, typeName } = useParams<DocTypeParams>()
   const type = api.types[typeName]
   const history = useHistory()
+  const navigate = useNavigation()
   const typesUsed = typeRefs(api, type?.customTypes)
   const methodsUsedBy = methodRefs(api, type?.methodRefs)
   const typesUsedBy = typeRefs(api, type?.parentTypes)
@@ -64,7 +65,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
       const route = api.typeTags[typeTag]
         ? `/${specKey}/types/${typeTag}`
         : `/${specKey}/types`
-      navigate(route, history)
+      navigate(route)
     }
   }, [history, specKey, type])
 

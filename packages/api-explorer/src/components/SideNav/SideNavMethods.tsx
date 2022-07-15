@@ -29,8 +29,8 @@ import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
-import { navigate, buildMethodPath, highlightHTML } from '../../utils'
+import { useLocation, useRouteMatch } from 'react-router-dom'
+import { useNavigation, buildMethodPath, highlightHTML } from '../../utils'
 import { Link } from '../Link'
 import { selectSearchPattern } from '../../state'
 
@@ -44,8 +44,8 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const history = useHistory()
     const location = useLocation()
+    const navigate = useNavigation()
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
@@ -56,9 +56,9 @@ export const SideNavMethods = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        navigate(`/${specKey}/methods/${tag}`, history)
+        navigate(`/${specKey}/methods/${tag}`)
       } else {
-        navigate(`/${specKey}/methods`, history)
+        navigate(`/${specKey}/methods`)
       }
     }
 

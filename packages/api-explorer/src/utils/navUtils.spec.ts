@@ -24,7 +24,7 @@
 
  */
 import { useHistory } from 'react-router-dom'
-import { navigate } from './navUtils'
+import { useNavigation } from './navUtils'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -40,11 +40,12 @@ jest.mock('react-router-dom', () => {
 
 describe('Navigate', () => {
   const history = useHistory()
+  const navigate = useNavigation()
   const curParams = new URLSearchParams(history.location.search) // 's=test'
   const route = `/3.1`
 
   test('preserves existing query params when given params are undefined', () => {
-    navigate(route, history, undefined)
+    navigate(route)
     expect(curParams.get('s')).toBe('test')
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
@@ -53,14 +54,14 @@ describe('Navigate', () => {
   })
 
   test('clears existing params when given params are null', () => {
-    navigate(route, history, null)
+    navigate(route, null)
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
   test('clears existing params when given params are an empty object', () => {
-    navigate(route, history, {})
+    navigate(route, {})
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
@@ -68,7 +69,7 @@ describe('Navigate', () => {
 
   test('sets query parameters when given a populated query params object', () => {
     const newParams = 's=embedsso'
-    navigate(route, history, { search: newParams })
+    navigate(route, { search: newParams })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
       search: newParams,

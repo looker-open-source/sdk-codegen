@@ -23,29 +23,49 @@
  SOFTWARE.
 
  */
-import type { History } from 'history'
+import { useHistory } from 'react-router-dom'
 
 /**
  * Navigates to given route with specified query params
  *
  * @param path Pathname to navigate to
- * @param history Current browser session's history object
  * @param queryParams Hash of query param name/value pairs to include in the destination url
  */
-export const navigate = (
-  path: string,
-  history: History,
-  queryParams?: { search?: string } | null
-) => {
+
+export const useNavigation = () => {
+  const history = useHistory()
   const curParams = new URLSearchParams(history.location.search)
-  if (queryParams === undefined) {
-    // if params passed in is undefined, maintain existing parameters in the URL
-    history.push({ pathname: path, search: curParams.toString() })
-  } else if (queryParams === null || Object.keys(queryParams).length === 0) {
-    // if params passed in is null or empty, remove all parameters from the URL
-    history.push({ pathname: path })
-  } else {
-    // if we have new parameters passed in, push them to the URL
-    history.push({ pathname: path, search: queryParams.search })
+
+  const navigate = (path: string, queryParams?: { search?: string } | null) => {
+    if (queryParams === undefined) {
+      // if params passed in is undefined, maintain existing parameters in the URL
+      history.push({ pathname: path, search: curParams.toString() })
+    } else if (queryParams === null || Object.keys(queryParams).length === 0) {
+      // if params passed in is null or empty, remove all parameters from the URL
+      history.push({ pathname: path })
+    } else {
+      // if we have new parameters passed in, push them to the URL
+      history.push({ pathname: path, search: queryParams.search })
+    }
   }
+
+  return navigate
 }
+
+// export const navigate = (
+//   path: string,
+//   history: History,
+//   queryParams?: { search?: string } | null
+// ) => {
+//   const curParams = new URLSearchParams(history.location.search)
+//   if (queryParams === undefined) {
+//     // if params passed in is undefined, maintain existing parameters in the URL
+//     history.push({ pathname: path, search: curParams.toString() })
+//   } else if (queryParams === null || Object.keys(queryParams).length === 0) {
+//     // if params passed in is null or empty, remove all parameters from the URL
+//     history.push({ pathname: path })
+//   } else {
+//     // if we have new parameters passed in, push them to the URL
+//     history.push({ pathname: path, search: queryParams.search })
+//   }
+// }
