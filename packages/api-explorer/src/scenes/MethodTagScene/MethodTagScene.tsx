@@ -29,8 +29,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath } from '../../utils'
-import { navigate } from '../../utils/navUtils'
+import { buildMethodPath, navigate } from '../../utils'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {

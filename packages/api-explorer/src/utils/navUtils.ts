@@ -26,10 +26,11 @@
 import type { History } from 'history'
 
 /**
+ * Navigates to given route with specified query params
  *
- * @param path the pathname to navigate to using history (empty string maintains current location)
- * @param history the current browser session's history object
- * @param queryParams object determining the current URLs parameters
+ * @param path Pathname to navigate to
+ * @param history Current browser session's history object
+ * @param queryParams Hash of query param name/value pairs to include in the destination url
  */
 export const navigate = (
   path: string,

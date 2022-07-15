@@ -43,7 +43,7 @@ describe('Navigate', () => {
   const curParams = new URLSearchParams(history.location.search) // 's=test'
   const route = `/3.1`
 
-  test('if query parameters is undefined, will maintain existing parameters in URL', () => {
+  test('preserves existing query params when given params are undefined', () => {
     navigate(route, history, undefined)
     expect(curParams.get('s')).toBe('test')
     expect(mockHistoryPush).lastCalledWith({
@@ -52,21 +52,21 @@ describe('Navigate', () => {
     })
   })
 
-  test('if query parameters is null, will remove all parameters from URL', () => {
+  test('clears existing params when given params are null', () => {
     navigate(route, history, null)
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
-  test('if query parameters is an empty object, will remove all parameters from URL', () => {
+  test('clears existing params when given params are an empty object', () => {
     navigate(route, history, {})
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
     })
   })
 
-  test('if new query parameters are passed in, will push to the URL', () => {
+  test('sets query parameters when given a populated query params object', () => {
     const newParams = 's=embedsso'
     navigate(route, history, { search: newParams })
     expect(mockHistoryPush).lastCalledWith({

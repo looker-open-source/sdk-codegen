@@ -30,9 +30,8 @@ import { Accordion2, Heading } from '@looker/components'
 import type { TypeList } from '@looker/sdk-codegen'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { navigate } from '../../utils/navUtils'
 import { Link } from '../Link'
-import { buildTypePath, highlightHTML } from '../../utils'
+import { buildTypePath, highlightHTML, navigate } from '../../utils'
 import { selectSearchPattern } from '../../state'
 
 interface TypesProps {

@@ -41,9 +41,8 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import { navigate } from '../../utils/navUtils'
 
-import { getApixAdaptor } from '../../utils'
+import { getApixAdaptor, navigate } from '../../utils'
 import {
   ApixSection,
   DocActivityType,

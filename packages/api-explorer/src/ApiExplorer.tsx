@@ -125,7 +125,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
-    const searchPattern = searchParams.get('s') ? searchParams.get('s') : ''
+    const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern! })
   }, [location.search])
 

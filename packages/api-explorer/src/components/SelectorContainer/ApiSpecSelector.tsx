@@ -30,7 +30,7 @@ import { Select } from '@looker/components'
 import { useHistory, useLocation } from 'react-router-dom'
 import type { SpecItem } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { navigate } from '../../utils/navUtils'
+import { navigate } from '../../utils'
 
 import { selectSpecs } from '../../state'
 

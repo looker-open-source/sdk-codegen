@@ -117,7 +117,7 @@ describe('Search', () => {
     })
   })
 
-  test('Store variable for search pattern tied to URL parameters drives filtering of methods and types', async () => {
+  test('sets search default value from store on load', async () => {
     const searchPattern = 'embedsso'
     const store = createTestStore({
       settings: { searchPattern: searchPattern },

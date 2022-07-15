@@ -40,7 +40,7 @@ import {
   ExploreType,
   DocSchema,
 } from '../../components'
-import { navigate } from '../../utils/navUtils'
+import { navigate } from '../../utils'
 
 interface DocTypeProps {
   api: ApiModel
