@@ -29,6 +29,21 @@ import { firstMethodRef } from '@looker/sdk-codegen'
 import type { Location as HLocation } from 'history'
 
 /**
+ * Builds a path matching the route used by scene with search parameters
+ * @param specKey A string to identify the spec in the URL
+ * @param tag Corresponding tag
+ * @param name A method or type name
+ * @param params Hash of query param name/value pairs to include in the destination url
+ * @returns a path including search parameters
+ */
+export const buildNavigationPath = (
+  specKey: string,
+  tag: string,
+  name: string,
+  params: string
+) => `/${specKey}/methods/${tag}/${name}?${params}`
+
+/**
  * Builds a path matching the route used by MethodScene
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding method tag

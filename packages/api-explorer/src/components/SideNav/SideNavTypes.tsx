@@ -28,10 +28,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Accordion2, Heading } from '@looker/components'
 import type { TypeList } from '@looker/sdk-codegen'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Link } from '../Link'
-import { buildTypePath, highlightHTML, useNavigation } from '../../utils'
+import { buildNavigationPath, highlightHTML, useNavigation } from '../../utils'
 import { selectSearchPattern } from '../../state'
 
 interface TypesProps {
@@ -44,9 +44,9 @@ interface TypesProps {
 
 export const SideNavTypes = styled(
   ({ className, types, tag, specKey, defaultOpen = false }: TypesProps) => {
-    const history = useHistory()
+    const location = useLocation()
     const navigate = useNavigation()
-    const searchParams = new URLSearchParams(history.location.search)
+    const searchParams = new URLSearchParams(location.search)
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ typeTag: string }>(
       `/:specKey/types/:typeTag/:typeName?`
@@ -85,10 +85,12 @@ export const SideNavTypes = styled(
           {Object.values(types).map((type) => (
             <li key={type.name}>
               <Link
-                to={{
-                  pathname: `${buildTypePath(specKey, tag, type.name)}`,
-                  search: searchParams.toString(),
-                }}
+                to={`${buildNavigationPath(
+                  specKey,
+                  tag,
+                  type.name,
+                  searchParams.toString()
+                )}`}
               >
                 {highlightHTML(searchPattern, type.name)}
               </Link>

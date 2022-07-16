@@ -30,7 +30,7 @@ import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { useLocation, useRouteMatch } from 'react-router-dom'
-import { useNavigation, buildMethodPath, highlightHTML } from '../../utils'
+import { useNavigation, highlightHTML, buildNavigationPath } from '../../utils'
 import { Link } from '../Link'
 import { selectSearchPattern } from '../../state'
 
@@ -85,10 +85,12 @@ export const SideNavMethods = styled(
           {Object.values(methods).map((method) => (
             <li key={method.name}>
               <Link
-                to={{
-                  pathname: `${buildMethodPath(specKey, tag, method.name)}`,
-                  search: searchParams.toString(),
-                }}
+                to={`${buildNavigationPath(
+                  specKey,
+                  tag,
+                  method.name,
+                  searchParams.toString()
+                )}`}
               >
                 {highlightHTML(searchPattern, method.summary)}
               </Link>

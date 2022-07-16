@@ -69,7 +69,6 @@ interface SideNavProps {
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const location = useLocation()
   const navigate = useNavigation()
-  const searchParams = new URLSearchParams(location.search)
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -111,6 +110,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   }
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
       navigate(location.pathname, { search: searchParams.toString() })
