@@ -87,6 +87,7 @@ export const SideNavMethods = styled(
               <Link
                 to={`${buildNavigationPath(
                   specKey,
+                  'methods',
                   tag,
                   method.name,
                   searchParams.toString()

@@ -25,9 +25,40 @@
  */
 
 import { api } from '../test-data'
-import { buildMethodPath, buildPath, buildTypePath } from './path'
+import {
+  buildMethodPath,
+  buildPath,
+  buildTypePath,
+  buildNavigationPath,
+} from './path'
 
 describe('path utils', () => {
+  describe('buildNavigationPath', () => {
+    const testParam = 's=test'
+    test('it builds a method path with params', () => {
+      const path = buildNavigationPath(
+        '3.1',
+        'methods',
+        'Dashboard',
+        'create_dashboard',
+        testParam
+      )
+      expect(path).toEqual(
+        `/3.1/methods/Dashboard/create_dashboard?${testParam}`
+      )
+    })
+    test('it builds a type path with params', () => {
+      const path = buildNavigationPath(
+        '3.1',
+        'types',
+        'Dashboard',
+        'create_dashboard',
+        testParam
+      )
+      expect(path).toEqual(`/3.1/types/Dashboard/create_dashboard?${testParam}`)
+    })
+  })
+
   describe('buildMethodPath', () => {
     test('it builds a method path', () => {
       const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')

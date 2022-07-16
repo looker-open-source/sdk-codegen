@@ -38,10 +38,11 @@ import type { Location as HLocation } from 'history'
  */
 export const buildNavigationPath = (
   specKey: string,
+  category: string,
   tag: string,
   name: string,
   params: string
-) => `/${specKey}/methods/${tag}/${name}?${params}`
+) => `/${specKey}/${category}/${tag}/${name}?${params}`
 
 /**
  * Builds a path matching the route used by MethodScene
