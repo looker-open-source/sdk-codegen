@@ -29,7 +29,7 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [12.x]
+        node-version: [16.x]
 
     steps:
       - name: Cancel Previous Runs
