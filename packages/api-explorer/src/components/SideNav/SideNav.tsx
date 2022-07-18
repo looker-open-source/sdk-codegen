@@ -34,10 +34,8 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
-  IconButton,
   Box2,
 } from '@looker/components'
-import { Link } from '@styled-icons/material-outlined/Link'
 import type {
   SpecItem,
   ISearchResult,
@@ -51,6 +49,7 @@ import styled from 'styled-components'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
+import { CopyLinkButton } from '../CopyLinkButton'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -68,23 +67,6 @@ interface SideNavProps {
   headless?: boolean
   /** Current selected spec */
   spec: SpecItem
-}
-
-const CopyLinkTooltip = () => {
-  const [title, CopyLinkTooltip] = useState('Copy link to this page view')
-  return (
-    <IconButton
-      onClick={async () => {
-        CopyLinkTooltip('Copied to clipboard')
-        await navigator.clipboard.writeText(location.href)
-      }}
-      onMouseEnter={() => CopyLinkTooltip('Copy link to this section')}
-      size="small"
-      icon={<Link />}
-      label={title}
-      tooltipPlacement="bottom"
-    />
-  )
 }
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
@@ -116,7 +98,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const searchCriteria = useSelector(selectSearchCriteria)
   const searchPattern = useSelector(selectSearchPattern)
   const [pattern, setSearchPattern] = useState(searchPattern)
-  const [copyLinkButtonDisplay, setCopyLinkButtonDisplay] = useState('none')
+  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
@@ -180,13 +162,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const headlessOffset = headless ? 200 : 120
   const menuH = size.height - 16 * HEADER_REM - headlessOffset
 
-  const CopyLink = styled('span')`
-    position: absolute;
-    top: 4px;
-    right: 36px;
-    display: ${copyLinkButtonDisplay};
-  `
-
+  // TODO: can remove
   const SearchWithLinkCopy = styled('div')`
     position: relative;
     width: 100%;
@@ -202,14 +178,10 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
             placeholder="Search"
             value={pattern}
             isClearable
-            onMouseOver={() =>
-              setCopyLinkButtonDisplay(pattern ? 'block' : 'none')
-            }
-            onMouseOut={() => setCopyLinkButtonDisplay('none')}
+            onMouseOver={() => setShowCopyLinkButton(!!pattern)}
+            onMouseOut={() => setShowCopyLinkButton(false)}
           />
-          <CopyLink>
-            <CopyLinkTooltip />
-          </CopyLink>
+          <CopyLinkButton visible={showCopyLinkButton} />
           <SearchMessage search={searchResults} />
         </SearchWithLinkCopy>
       </Box2>

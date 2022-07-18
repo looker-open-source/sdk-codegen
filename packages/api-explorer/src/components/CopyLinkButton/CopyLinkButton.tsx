@@ -28,31 +28,31 @@ import { IconButton } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined/Link'
 import styled from 'styled-components'
 
-export const CopyLink = styled('span')`
+interface CopyLinkButtonProps {
+  visible: boolean
+}
+export const CopyLinkButton = ({ visible }: CopyLinkButtonProps) => {
+  const [title, CopyLinkTooltip] = useState('Copy link to this page view')
+  return (
+    <CopyLink visible={visible}>
+      <IconButton
+        onClick={async () => {
+          CopyLinkTooltip('Copied to clipboard')
+          await navigator.clipboard.writeText(location.href)
+        }}
+        onMouseEnter={() => CopyLinkTooltip('Copy link to this section')}
+        size="small"
+        icon={<Link />}
+        label={title}
+        tooltipPlacement="bottom"
+      />
+    </CopyLink>
+  )
+}
+
+const CopyLink = styled('span')<{ visible: boolean }>`
   position: absolute;
   top: 4px;
   right: 36px;
-  display: ${(props) => props.display};
+  display: ${({ visible }) => (visible ? 'block' : 'none')};
 `
-
-export const SearchWithLinkCopy = styled('div')`
-  position: relative;
-  width: 100%;
-`
-
-export const CopyLinkTooltip = () => {
-  const [title, CopyLinkTooltip] = useState('Copy link to this page view')
-  return (
-    <IconButton
-      onClick={async () => {
-        CopyLinkTooltip('Copied to clipboard')
-        await navigator.clipboard.writeText(location.href)
-      }}
-      onMouseEnter={() => CopyLinkTooltip('Copy link to this section')}
-      size="small"
-      icon={<Link />}
-      label={title}
-      tooltipPlacement="bottom"
-    />
-  )
-}
