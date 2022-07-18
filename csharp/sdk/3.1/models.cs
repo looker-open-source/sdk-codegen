@@ -773,6 +773,8 @@ public class Dashboard : SdkModel
   public long? favorite_count { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
@@ -789,7 +791,7 @@ public class Dashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -4044,7 +4046,7 @@ public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
-  /// <summary>Base font size for scaling fonts</summary>
+  /// <summary>Base font size for scaling fonts (only supported by legacy dashboards)</summary>
   public string? base_font_size { get; set; } = null;
   /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
   public string? color_collection_id { get; set; } = null;
@@ -4074,7 +4076,7 @@ public class ThemeSettings : SdkModel
   public string? warn_button_color { get; set; } = null;
   /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// <summary>Toggles the tile shadow (New Dashboards)</summary>
+  /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
 }
 
@@ -4590,11 +4592,13 @@ public class WriteDashboard : SdkModel
   public bool? deleted { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;

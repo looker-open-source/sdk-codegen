@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
+/// 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
 
 #nullable enable
 using System;
@@ -152,6 +152,25 @@ public class AlertFieldFilter : SdkModel
   public object field_value { get; set; } = null;
   /// <summary>Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
   public string? filter_value { get; set; } = null;
+}
+
+public class AlertNotifications : SdkModel
+{
+  /// <summary>ID of the notification (read-only)</summary>
+  public string? notification_id { get; set; } = null;
+  /// <summary>ID of the alert (read-only)</summary>
+  public string? alert_condition_id { get; set; } = null;
+  /// <summary>ID of the user (read-only)</summary>
+  public string? user_id { get; set; } = null;
+  /// <summary>Read state of the notification</summary>
+  public bool? is_read { get; set; } = null;
+  /// <summary>The value of the field on which the alert condition is set (read-only)</summary>
+  public double? field_value { get; set; } = null;
+  /// <summary>The value of the threshold which triggers the alert notification (read-only)</summary>
+  public double? threshold_value { get; set; } = null;
+  /// <summary>The time at which the alert query ran (read-only)</summary>
+  public string? ran_at { get; set; } = null;
+  public MobilePayload? alert { get; set; }
 }
 
 public class AlertPatch : SdkModel
@@ -1138,6 +1157,8 @@ public class Dashboard : SdkModel
   public long? favorite_count { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>Time the dashboard was last accessed (read-only)</summary>
   public DateTime? last_accessed_at { get; set; } = null;
   /// <summary>Time last viewed in the Looker web UI (read-only)</summary>
@@ -1154,7 +1175,7 @@ public class Dashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -1292,6 +1313,8 @@ public class DashboardElement : SdkModel
   public string? title_text_as_html { get; set; } = null;
   /// <summary>Text tile subtitle text as Html (read-only)</summary>
   public string? subtitle_text_as_html { get; set; } = null;
+  /// <summary>Extension ID (read-only)</summary>
+  public string? extension_id { get; set; } = null;
 }
 
 public class DashboardFilter : SdkModel
@@ -1665,6 +1688,15 @@ public enum DestinationType
   EMAIL,
   [EnumMember(Value = "ACTION_HUB")]
   ACTION_HUB
+}
+
+/// Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+public enum DeviceType
+{
+  [EnumMember(Value = "android")]
+  android,
+  [EnumMember(Value = "ios")]
+  ios
 }
 
 public class Dialect : SdkModel
@@ -3291,12 +3323,49 @@ public class MergeQuerySourceQuery : SdkModel
   public string? query_id { get; set; } = null;
 }
 
+public class MobileFeatureFlags : SdkModel
+{
+  /// <summary>Specifies the name of feature flag. (read-only)</summary>
+  public string? feature_flag_name { get; set; } = null;
+  /// <summary>Specifies the state of feature flag (read-only)</summary>
+  public bool? feature_flag_state { get; set; } = null;
+}
+
+public class MobilePayload : SdkModel
+{
+  /// <summary>Title of the alert (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>ID of the alert (read-only)</summary>
+  public string alert_id { get; set; } = "";
+  /// <summary>ID of the investigative content (read-only)</summary>
+  public string? investigative_content_id { get; set; } = null;
+  /// <summary>Name of the dashboard on which the alert has been set (read-only)</summary>
+  public string? dashboard_name { get; set; } = null;
+  /// <summary>ID of the dashboard on which the alert has been set (read-only)</summary>
+  public string? dashboard_id { get; set; } = null;
+  /// <summary>Slug of the query which runs the alert queries. (read-only)</summary>
+  public string? query_slug { get; set; } = null;
+}
+
 public class MobileSettings : SdkModel
 {
   /// <summary>Specifies whether the force authentication option is enabled for mobile (read-only)</summary>
   public bool? mobile_force_authentication { get; set; } = null;
   /// <summary>Specifies whether mobile access for this instance is enabled. (read-only)</summary>
   public bool? mobile_app_integration { get; set; } = null;
+  /// <summary>Specifies feature flag and state relevant to mobile. (read-only)</summary>
+  public MobileFeatureFlags[]? mobile_feature_flags { get; set; } = null;
+}
+
+public class MobileToken : SdkModel
+{
+  /// <summary>Unique ID. (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Specifies the device token</summary>
+  public string device_token { get; set; } = "";
+  /// <summary>Specifies type of device. Valid values are: "android", "ios".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DeviceType device_type { get; set; }
 }
 
 public class Model : SdkModel
@@ -3397,7 +3466,7 @@ public class OauthClientApp : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public string? group_id { get; set; } = null;
@@ -4440,6 +4509,8 @@ public class Setting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  public bool? extension_load_url_enabled { get; set; } = null;
   /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
@@ -4734,7 +4805,7 @@ public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
-  /// <summary>Base font size for scaling fonts</summary>
+  /// <summary>Base font size for scaling fonts (only supported by legacy dashboards)</summary>
   public string? base_font_size { get; set; } = null;
   /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
   public string? color_collection_id { get; set; } = null;
@@ -4764,7 +4835,7 @@ public class ThemeSettings : SdkModel
   public string? warn_button_color { get; set; } = null;
   /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
-  /// <summary>Toggles the tile shadow (New Dashboards)</summary>
+  /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
 }
 
@@ -5360,11 +5431,13 @@ public class WriteDashboard : SdkModel
   public bool? deleted { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
+  /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
+  public bool? filters_location_top { get; set; } = null;
   /// <summary>configuration option that governs how dashboard loading will happen.</summary>
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -5393,7 +5466,7 @@ public class WriteDashboardBase : SdkModel
 }
 
 /// Dynamic writeable type for DashboardElement removes:
-/// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+/// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
 public class WriteDashboardElement : SdkModel
 {
   /// <summary>Text tile body text</summary>
@@ -5882,6 +5955,17 @@ public class WriteMergeQuery : SdkModel
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
 
+/// Dynamic writeable type for MobileToken removes:
+/// id
+public class WriteMobileToken : SdkModel
+{
+  /// <summary>Specifies the device token</summary>
+  public string device_token { get; set; } = "";
+  /// <summary>Specifies type of device. Valid values are: "android", "ios".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public DeviceType device_type { get; set; }
+}
+
 /// Dynamic writeable type for ModelSet removes:
 /// can, all_access, built_in, id, url
 public class WriteModelSet : SdkModel
@@ -5901,7 +5985,7 @@ public class WriteOauthClientApp : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
   public string? description { get; set; } = null;
-  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.</summary>
+  /// <summary>When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.</summary>
   public bool? enabled { get; set; } = null;
   /// <summary>If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance</summary>
   public string? group_id { get; set; } = null;
@@ -6281,6 +6365,8 @@ public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
+  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  public bool? extension_load_url_enabled { get; set; } = null;
   /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>

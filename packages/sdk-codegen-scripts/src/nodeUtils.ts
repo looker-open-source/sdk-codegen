@@ -139,7 +139,7 @@ export const run = (
     return execSync(command, options)
   } catch (e: any) {
     if (warning) {
-      warn(errMsg)
+      warn(`${errMsg}: ${e.message}`)
       return ''
     } else {
       return quit(errMsg || e)

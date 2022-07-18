@@ -265,7 +265,7 @@ export class Looker31SDKStream extends APIMethods {
   /**
    * ### Present client credentials to obtain an authorization token
    *
-   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
    * The client credentials required for this login must be obtained by creating an API3 key on a user account
    * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
    *
@@ -457,7 +457,7 @@ export class Looker31SDKStream extends APIMethods {
    *
    * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
    *
-   * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
    *
    * GET /ldap_config -> ILDAPConfig
    *
@@ -490,7 +490,7 @@ export class Looker31SDKStream extends APIMethods {
    *
    * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
    *
-   * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
    *
    * PATCH /ldap_config -> ILDAPConfig
    *
@@ -7125,14 +7125,14 @@ export class Looker31SDKStream extends APIMethods {
         apply_formatting: request.apply_formatting,
         apply_vis: request.apply_vis,
         cache: request.cache,
-        image_width: request.image_width,
-        image_height: request.image_height,
         generate_drill_links: request.generate_drill_links,
         force_production: request.force_production,
         cache_only: request.cache_only,
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        image_width: request.image_width,
+        image_height: request.image_height,
         fields: request.fields,
       },
       request.body,
@@ -8971,7 +8971,7 @@ export class Looker31SDKStream extends APIMethods {
    *
    * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
    * queries are run in the context of each recipient, so different recipients may see different
-   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
    *
    * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
    * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -9805,7 +9805,7 @@ export class Looker31SDKStream extends APIMethods {
    *
    * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
    *
-   * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+   * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
    *
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *

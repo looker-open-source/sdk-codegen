@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-366 API models: 231 Spec, 56 Request, 59 Write, 20 Enum
+373 API models: 235 Spec, 57 Request, 60 Write, 21 Enum
 */
 
 
@@ -108,6 +108,18 @@ type AlertFieldFilter struct {
   FieldName   string      `json:"field_name"`              // Field Name. Has format `<view>.<field>`
   FieldValue  interface{} `json:"field_value"`             // Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
   FilterValue *string     `json:"filter_value,omitempty"`  // Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+}
+
+
+type AlertNotifications struct {
+  NotificationId   *string        `json:"notification_id,omitempty"`     // ID of the notification
+  AlertConditionId *string        `json:"alert_condition_id,omitempty"`  // ID of the alert
+  UserId           *string        `json:"user_id,omitempty"`             // ID of the user
+  IsRead           *bool          `json:"is_read,omitempty"`             // Read state of the notification
+  FieldValue       *float64       `json:"field_value,omitempty"`         // The value of the field on which the alert condition is set
+  ThresholdValue   *float64       `json:"threshold_value,omitempty"`     // The value of the threshold which triggers the alert notification
+  RanAt            *string        `json:"ran_at,omitempty"`              // The time at which the alert query ran
+  Alert            *MobilePayload `json:"alert,omitempty"`
 }
 
 
@@ -713,6 +725,7 @@ type Dashboard struct {
   EditUri                             *string              `json:"edit_uri,omitempty"`                                  // Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
   FavoriteCount                       *int64               `json:"favorite_count,omitempty"`                            // Number of times favorited
   FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
+  FiltersLocationTop                  *bool                `json:"filters_location_top,omitempty"`                      // Sets the default state of the filters location to top(true) or right(false)
   LastAccessedAt                      *time.Time           `json:"last_accessed_at,omitempty"`                          // Time the dashboard was last accessed
   LastViewedAt                        *time.Time           `json:"last_viewed_at,omitempty"`                            // Time last viewed in the Looker web UI
   UpdatedAt                           *time.Time           `json:"updated_at,omitempty"`                                // Time that the Dashboard was most recently updated.
@@ -721,7 +734,7 @@ type Dashboard struct {
   UserName                            *string              `json:"user_name,omitempty"`                                 // Name of User that created the dashboard.
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
   LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
   ShowTitle                           *bool                `json:"show_title,omitempty"`                                // Show title
   FolderId                            *string              `json:"folder_id,omitempty"`                                 // Id of folder
   TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                      // Color of text on text tiles
@@ -801,6 +814,7 @@ type DashboardElement struct {
   RichContentJson    *string                                     `json:"rich_content_json,omitempty"`      // JSON with all the properties required for rich editor and buttons elements
   TitleTextAsHtml    *string                                     `json:"title_text_as_html,omitempty"`     // Text tile title text as Html
   SubtitleTextAsHtml *string                                     `json:"subtitle_text_as_html,omitempty"`  // Text tile subtitle text as Html
+  ExtensionId        *string                                     `json:"extension_id,omitempty"`           // Extension ID
 }
 
 
@@ -1025,6 +1039,11 @@ const DependencyStatus_InstallNone  DependencyStatus = "install_none"
 type DestinationType string
 const DestinationType_EMAIL      DestinationType = "EMAIL"
 const DestinationType_ACTION_HUB DestinationType = "ACTION_HUB"
+
+
+type DeviceType string
+const DeviceType_Android DeviceType = "android"
+const DeviceType_Ios     DeviceType = "ios"
 
 
 
@@ -1994,9 +2013,33 @@ type MergeQuerySourceQuery struct {
 }
 
 
+type MobileFeatureFlags struct {
+  FeatureFlagName  *string `json:"feature_flag_name,omitempty"`   // Specifies the name of feature flag.
+  FeatureFlagState *bool   `json:"feature_flag_state,omitempty"`  // Specifies the state of feature flag
+}
+
+
+type MobilePayload struct {
+  Title                  *string `json:"title,omitempty"`                     // Title of the alert
+  AlertId                string  `json:"alert_id"`                            // ID of the alert
+  InvestigativeContentId *string `json:"investigative_content_id,omitempty"`  // ID of the investigative content
+  DashboardName          *string `json:"dashboard_name,omitempty"`            // Name of the dashboard on which the alert has been set
+  DashboardId            *string `json:"dashboard_id,omitempty"`              // ID of the dashboard on which the alert has been set
+  QuerySlug              *string `json:"query_slug,omitempty"`                // Slug of the query which runs the alert queries.
+}
+
+
 type MobileSettings struct {
-  MobileForceAuthentication *bool `json:"mobile_force_authentication,omitempty"`  // Specifies whether the force authentication option is enabled for mobile
-  MobileAppIntegration      *bool `json:"mobile_app_integration,omitempty"`       // Specifies whether mobile access for this instance is enabled.
+  MobileForceAuthentication *bool                 `json:"mobile_force_authentication,omitempty"`  // Specifies whether the force authentication option is enabled for mobile
+  MobileAppIntegration      *bool                 `json:"mobile_app_integration,omitempty"`       // Specifies whether mobile access for this instance is enabled.
+  MobileFeatureFlags        *[]MobileFeatureFlags `json:"mobile_feature_flags,omitempty"`         // Specifies feature flag and state relevant to mobile.
+}
+
+
+type MobileToken struct {
+  Id          *string    `json:"id,omitempty"`  // Unique ID.
+  DeviceToken string     `json:"device_token"`  // Specifies the device token
+  DeviceType  DeviceType `json:"device_type"`   // Specifies type of device. Valid values are: "android", "ios".
 }
 
 
@@ -2060,7 +2103,7 @@ type OauthClientApp struct {
   RedirectUri         *string          `json:"redirect_uri,omitempty"`           // The uri with which this application will receive an auth code by browser redirect.
   DisplayName         *string          `json:"display_name,omitempty"`           // The application's display name
   Description         *string          `json:"description,omitempty"`            // A description of the application that will be displayed to users
-  Enabled             *bool            `json:"enabled,omitempty"`                // When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+  Enabled             *bool            `json:"enabled,omitempty"`                // When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
   GroupId             *string          `json:"group_id,omitempty"`               // If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
   TokensInvalidBefore *time.Time       `json:"tokens_invalid_before,omitempty"`  // All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid.
   ActivatedUsers      *[]UserPublic    `json:"activated_users,omitempty"`        // All users who have been activated to use this app
@@ -2374,6 +2417,12 @@ type RequestActiveThemes struct {
   Fields *string    `json:"fields,omitempty"`  // Requested fields.
 }
 
+// Dynamically generated request type for alert_notifications
+type RequestAlertNotifications struct {
+  Limit  *int64 `json:"limit,omitempty"`   // (Optional) Number of results to return (used with `offset`).
+  Offset *int64 `json:"offset,omitempty"`  // (Optional) Number of results to skip before returning any (used with `limit`).
+}
+
 // Dynamically generated request type for all_board_items
 type RequestAllBoardItems struct {
   Fields         *string `json:"fields,omitempty"`            // Requested fields.
@@ -2528,14 +2577,14 @@ type RequestCreateQueryTask struct {
   ApplyFormatting    *bool                `json:"apply_formatting,omitempty"`      // Apply model-specified formatting to each result.
   ApplyVis           *bool                `json:"apply_vis,omitempty"`             // Apply visualization options to results.
   Cache              *bool                `json:"cache,omitempty"`                 // Get results from cache if available.
-  ImageWidth         *int64               `json:"image_width,omitempty"`           // Render width for image formats.
-  ImageHeight        *int64               `json:"image_height,omitempty"`          // Render height for image formats.
   GenerateDrillLinks *bool                `json:"generate_drill_links,omitempty"`  // Generate drill links (only applicable to 'json_detail' format.
-  ForceProduction    *bool                `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode.
+  ForceProduction    *bool                `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
   CacheOnly          *bool                `json:"cache_only,omitempty"`            // Retrieve any results from cache even if the results have expired.
   PathPrefix         *string              `json:"path_prefix,omitempty"`           // Prefix to use for drill links (url encoded).
   RebuildPdts        *bool                `json:"rebuild_pdts,omitempty"`          // Rebuild PDTS used in query.
   ServerTableCalcs   *bool                `json:"server_table_calcs,omitempty"`    // Perform table calculations on query results
+  ImageWidth         *int64               `json:"image_width,omitempty"`           // DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+  ImageHeight        *int64               `json:"image_height,omitempty"`          // DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
   Fields             *string              `json:"fields,omitempty"`                // Requested fields
 }
 
@@ -2557,8 +2606,10 @@ type RequestDeployRefToProduction struct {
 type RequestFolderChildren struct {
   FolderId string  `json:"folder_id"`           // Id of folder
   Fields   *string `json:"fields,omitempty"`    // Requested fields.
-  Page     *int64  `json:"page,omitempty"`      // Requested page.
-  PerPage  *int64  `json:"per_page,omitempty"`  // Results per page.
+  Page     *int64  `json:"page,omitempty"`      // DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+  PerPage  *int64  `json:"per_page,omitempty"`  // DEPRECATED. Use limit and offset instead. Return N rows of data per page
+  Limit    *int64  `json:"limit,omitempty"`     // Number of results to return. (used with offset and takes priority over page and per_page)
+  Offset   *int64  `json:"offset,omitempty"`    // Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
   Sorts    *string `json:"sorts,omitempty"`     // Fields to sort by.
 }
 
@@ -2625,7 +2676,7 @@ type RequestRunInlineQuery struct {
   ImageWidth         *int64     `json:"image_width,omitempty"`           // Render width for image formats.
   ImageHeight        *int64     `json:"image_height,omitempty"`          // Render height for image formats.
   GenerateDrillLinks *bool      `json:"generate_drill_links,omitempty"`  // Generate drill links (only applicable to 'json_detail' format.
-  ForceProduction    *bool      `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode.
+  ForceProduction    *bool      `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
   CacheOnly          *bool      `json:"cache_only,omitempty"`            // Retrieve any results from cache even if the results have expired.
   PathPrefix         *string    `json:"path_prefix,omitempty"`           // Prefix to use for drill links (url encoded).
   RebuildPdts        *bool      `json:"rebuild_pdts,omitempty"`          // Rebuild PDTS used in query.
@@ -2643,7 +2694,7 @@ type RequestRunLook struct {
   ImageWidth         *int64  `json:"image_width,omitempty"`           // Render width for image formats.
   ImageHeight        *int64  `json:"image_height,omitempty"`          // Render height for image formats.
   GenerateDrillLinks *bool   `json:"generate_drill_links,omitempty"`  // Generate drill links (only applicable to 'json_detail' format.
-  ForceProduction    *bool   `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode.
+  ForceProduction    *bool   `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
   CacheOnly          *bool   `json:"cache_only,omitempty"`            // Retrieve any results from cache even if the results have expired.
   PathPrefix         *string `json:"path_prefix,omitempty"`           // Prefix to use for drill links (url encoded).
   RebuildPdts        *bool   `json:"rebuild_pdts,omitempty"`          // Rebuild PDTS used in query.
@@ -2669,7 +2720,7 @@ type RequestRunQuery struct {
   ImageWidth         *int64  `json:"image_width,omitempty"`           // Render width for image formats.
   ImageHeight        *int64  `json:"image_height,omitempty"`          // Render height for image formats.
   GenerateDrillLinks *bool   `json:"generate_drill_links,omitempty"`  // Generate drill links (only applicable to 'json_detail' format.
-  ForceProduction    *bool   `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode.
+  ForceProduction    *bool   `json:"force_production,omitempty"`      // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
   CacheOnly          *bool   `json:"cache_only,omitempty"`            // Retrieve any results from cache even if the results have expired.
   PathPrefix         *string `json:"path_prefix,omitempty"`           // Prefix to use for drill links (url encoded).
   RebuildPdts        *bool   `json:"rebuild_pdts,omitempty"`          // Rebuild PDTS used in query.
@@ -2813,8 +2864,8 @@ type RequestSearchDashboards struct {
 // Dynamically generated request type for search_folders
 type RequestSearchFolders struct {
   Fields       *string `json:"fields,omitempty"`          // Requested fields.
-  Page         *int64  `json:"page,omitempty"`            // Requested page.
-  PerPage      *int64  `json:"per_page,omitempty"`        // Results per page.
+  Page         *int64  `json:"page,omitempty"`            // DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+  PerPage      *int64  `json:"per_page,omitempty"`        // DEPRECATED. Use limit and offset instead. Return N rows of data per page
   Limit        *int64  `json:"limit,omitempty"`           // Number of results to return. (used with offset and takes priority over page and per_page)
   Offset       *int64  `json:"offset,omitempty"`          // Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
   Sorts        *string `json:"sorts,omitempty"`           // Fields to sort by.
@@ -3291,6 +3342,7 @@ type SessionConfig struct {
 
 type Setting struct {
   ExtensionFrameworkEnabled     *bool                      `json:"extension_framework_enabled,omitempty"`       // Toggle extension framework on or off
+  ExtensionLoadUrlEnabled       *bool                      `json:"extension_load_url_enabled,omitempty"`        // (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
   MarketplaceAutoInstallEnabled *bool                      `json:"marketplace_auto_install_enabled,omitempty"`  // Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
   MarketplaceEnabled            *bool                      `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
   PrivatelabelConfiguration     *PrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`
@@ -3473,7 +3525,7 @@ type Theme struct {
 
 type ThemeSettings struct {
   BackgroundColor     *string `json:"background_color,omitempty"`       // Default background color
-  BaseFontSize        *string `json:"base_font_size,omitempty"`         // Base font size for scaling fonts
+  BaseFontSize        *string `json:"base_font_size,omitempty"`         // Base font size for scaling fonts (only supported by legacy dashboards)
   ColorCollectionId   *string `json:"color_collection_id,omitempty"`    // Optional. ID of color collection to use with the theme. Use an empty string for none.
   FontColor           *string `json:"font_color,omitempty"`             // Default font color
   FontFamily          *string `json:"font_family,omitempty"`            // Primary font family
@@ -3488,7 +3540,7 @@ type ThemeSettings struct {
   TitleColor          *string `json:"title_color,omitempty"`            // Color for titles
   WarnButtonColor     *string `json:"warn_button_color,omitempty"`      // Warning button color
   TileTitleAlignment  *string `json:"tile_title_alignment,omitempty"`   // The text alignment of tile titles (New Dashboards)
-  TileShadow          *bool   `json:"tile_shadow,omitempty"`            // Toggles the tile shadow (New Dashboards)
+  TileShadow          *bool   `json:"tile_shadow,omitempty"`            // Toggles the tile shadow (not supported)
 }
 
 
@@ -3842,9 +3894,10 @@ type WriteDashboard struct {
   CrossfilterEnabled                  *bool                `json:"crossfilter_enabled,omitempty"`                       // Enables crossfiltering in dashboards - only available in dashboards-next (beta)
   Deleted                             *bool                `json:"deleted,omitempty"`                                   // Whether or not a dashboard is 'soft' deleted.
   FiltersBarCollapsed                 *bool                `json:"filters_bar_collapsed,omitempty"`                     // Sets the default state of the filters bar to collapsed or open
+  FiltersLocationTop                  *bool                `json:"filters_location_top,omitempty"`                      // Sets the default state of the filters location to top(true) or right(false)
   LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                        // configuration option that governs how dashboard loading will happen.
   LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                            // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+  ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                          // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
   ShowTitle                           *bool                `json:"show_title,omitempty"`                                // Show title
   FolderId                            *string              `json:"folder_id,omitempty"`                                 // Id of folder
   TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                      // Color of text on text tiles
@@ -3862,7 +3915,7 @@ type WriteDashboardBase struct {
 }
 
 // Dynamic writeable type for DashboardElement removes:
-// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
 type WriteDashboardElement struct {
   BodyText        *string                                          `json:"body_text,omitempty"`          // Text tile body text
   DashboardId     *string                                          `json:"dashboard_id,omitempty"`       // Id of Dashboard
@@ -4149,6 +4202,13 @@ type WriteMergeQuery struct {
   VisConfig     *map[string]interface{}  `json:"vis_config,omitempty"`      // Visualization Config
 }
 
+// Dynamic writeable type for MobileToken removes:
+// id
+type WriteMobileToken struct {
+  DeviceToken string     `json:"device_token"`  // Specifies the device token
+  DeviceType  DeviceType `json:"device_type"`   // Specifies type of device. Valid values are: "android", "ios".
+}
+
 // Dynamic writeable type for ModelSet removes:
 // can, all_access, built_in, id, url
 type WriteModelSet struct {
@@ -4162,7 +4222,7 @@ type WriteOauthClientApp struct {
   RedirectUri *string `json:"redirect_uri,omitempty"`  // The uri with which this application will receive an auth code by browser redirect.
   DisplayName *string `json:"display_name,omitempty"`  // The application's display name
   Description *string `json:"description,omitempty"`   // A description of the application that will be displayed to users
-  Enabled     *bool   `json:"enabled,omitempty"`       // When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+  Enabled     *bool   `json:"enabled,omitempty"`       // When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
   GroupId     *string `json:"group_id,omitempty"`      // If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
 }
 
@@ -4376,6 +4436,7 @@ type WriteSessionConfig struct {
 // Dynamic writeable type for Setting
 type WriteSetting struct {
   ExtensionFrameworkEnabled     *bool                           `json:"extension_framework_enabled,omitempty"`       // Toggle extension framework on or off
+  ExtensionLoadUrlEnabled       *bool                           `json:"extension_load_url_enabled,omitempty"`        // (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
   MarketplaceAutoInstallEnabled *bool                           `json:"marketplace_auto_install_enabled,omitempty"`  // Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
   MarketplaceEnabled            *bool                           `json:"marketplace_enabled,omitempty"`               // Toggle marketplace on or off
   PrivatelabelConfiguration     *WritePrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`        // Dynamic writeable type for PrivatelabelConfiguration removes:

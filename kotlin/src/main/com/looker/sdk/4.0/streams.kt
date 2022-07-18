@@ -25,7 +25,7 @@
  */
 
 /**
- * 438 API methods
+ * 446 API methods
  */
 
 
@@ -39,6 +39,36 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     //region Alert: Alert
+
+
+    /**
+     * Follow an alert.
+     *
+     * @param {String} alert_id ID of an alert
+     *
+     * POST /alerts/{alert_id}/follow -> ByteArray
+     */
+    fun follow_alert(
+        alert_id: String
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+            return this.post<ByteArray>("/alerts/${path_alert_id}/follow", mapOf())
+    }
+
+
+    /**
+     * Unfollow an alert.
+     *
+     * @param {String} alert_id ID of an alert
+     *
+     * DELETE /alerts/{alert_id}/follow -> ByteArray
+     */
+    fun unfollow_alert(
+        alert_id: String
+    ) : SDKResponse {
+        val path_alert_id = encodeParam(alert_id)
+            return this.delete<ByteArray>("/alerts/${path_alert_id}/follow", mapOf())
+    }
 
 
     /**
@@ -216,6 +246,41 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("force" to force))
     }
 
+
+    /**
+     * # Alert Notifications.
+     *   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+     *
+     * @param {Long} limit (Optional) Number of results to return (used with `offset`).
+     * @param {Long} offset (Optional) Number of results to skip before returning any (used with `limit`).
+     *
+     * GET /alert_notifications -> ByteArray
+     */
+    @JvmOverloads fun alert_notifications(
+        limit: Long? = null,
+        offset: Long? = null
+    ) : SDKResponse {
+            return this.get<ByteArray>("/alert_notifications", 
+                mapOf("limit" to limit,
+                     "offset" to offset))
+    }
+
+
+    /**
+     * # Reads a Notification
+     *   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+     *
+     * @param {String} alert_notification_id ID of a notification
+     *
+     * PATCH /alert_notifications/{alert_notification_id} -> ByteArray
+     */
+    fun read_alert_notification(
+        alert_notification_id: String
+    ) : SDKResponse {
+        val path_alert_notification_id = encodeParam(alert_notification_id)
+            return this.patch<ByteArray>("/alert_notifications/${path_alert_notification_id}", mapOf())
+    }
+
     //endregion Alert: Alert
 
     //region ApiAuth: API Authentication
@@ -224,7 +289,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Present client credentials to obtain an authorization token
      *
-     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
      * The client credentials required for this login must be obtained by creating an API3 key on a user account
      * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
      *
@@ -447,7 +512,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * GET /ldap_config -> ByteArray
      */
@@ -469,7 +534,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
      *
-     * See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
      *
      * @param {WriteLDAPConfig} body
      *
@@ -591,6 +656,51 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Registers a mobile device.
+     * # Required fields: [:device_token, :device_type]
+     *
+     * @param {WriteMobileToken} body
+     *
+     * POST /mobile/device -> ByteArray
+     */
+    fun register_mobile_device(
+        body: WriteMobileToken
+    ) : SDKResponse {
+            return this.post<ByteArray>("/mobile/device", mapOf(), body)
+    }
+
+
+    /**
+     * ### Updates the mobile device registration
+     *
+     * @param {String} device_id Unique id of the device.
+     *
+     * PATCH /mobile/device/{device_id} -> ByteArray
+     */
+    fun update_mobile_device_registration(
+        device_id: String
+    ) : SDKResponse {
+        val path_device_id = encodeParam(device_id)
+            return this.patch<ByteArray>("/mobile/device/${path_device_id}", mapOf())
+    }
+
+
+    /**
+     * ### Deregister a mobile device.
+     *
+     * @param {String} device_id Unique id of the device.
+     *
+     * DELETE /mobile/device/{device_id} -> ByteArray
+     */
+    fun deregister_mobile_device(
+        device_id: String
+    ) : SDKResponse {
+        val path_device_id = encodeParam(device_id)
+            return this.delete<ByteArray>("/mobile/device/${path_device_id}", mapOf())
+    }
+
+
+    /**
      * ### List All OAuth Client Apps
      *
      * Lists all applications registered to use OAuth2 login with this Looker instance, including
@@ -683,6 +793,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Deletes the registration info of the app with the matching client_guid.
      * All active sessions and tokens issued for this app will immediately become invalid.
+     *
+     * As with most REST DELETE operations, this endpoint does not return an error if the
+     * indicated resource does not exist.
      *
      * ### Note: this deletion cannot be undone.
      *
@@ -1997,6 +2110,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Available settings are:
      *  - extension_framework_enabled
+     *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - privatelabel_configuration
@@ -2020,6 +2134,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Available settings are:
      *  - extension_framework_enabled
+     *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
      *  - marketplace_enabled
      *  - privatelabel_configuration
@@ -3292,9 +3407,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+     * ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
      *
-     * This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+     * If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+     * dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+     *
+     * If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+     * If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+     * will remain where they were
      *
      * LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
      * from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -3302,6 +3422,20 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Note that the created dashboard is not linked to any LookML Dashboard,
      * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+     *
+     * @param {WriteDashboardLookml} body
+     *
+     * POST /dashboards/lookml -> ByteArray
+     */
+    fun import_dashboard_from_lookml(
+        body: WriteDashboardLookml
+    ) : SDKResponse {
+            return this.post<ByteArray>("/dashboards/lookml", mapOf(), body)
+    }
+
+
+    /**
+     * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
      *
      * @param {WriteDashboardLookml} body
      *
@@ -3916,8 +4050,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Search for folders by creator id, parent id, name, etc
      *
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
      * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
@@ -4053,8 +4187,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} folder_id Id of folder
      * @param {String} fields Requested fields.
-     * @param {Long} page Requested page.
-     * @param {Long} per_page Results per page.
+     * @param {Long} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
+     * @param {Long} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts Fields to sort by.
      *
      * GET /folders/{folder_id}/children -> ByteArray
@@ -4064,6 +4200,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         fields: String? = null,
         page: Long? = null,
         per_page: Long? = null,
+        limit: Long? = null,
+        offset: Long? = null,
         sorts: String? = null
     ) : SDKResponse {
         val path_folder_id = encodeParam(folder_id)
@@ -4071,6 +4209,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 mapOf("fields" to fields,
                      "page" to page,
                      "per_page" to per_page,
+                     "limit" to limit,
+                     "offset" to offset,
                      "sorts" to sorts))
     }
 
@@ -5107,7 +5247,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
@@ -6285,14 +6425,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} apply_formatting Apply model-specified formatting to each result.
      * @param {Boolean} apply_vis Apply visualization options to results.
      * @param {Boolean} cache Get results from cache if available.
-     * @param {Long} image_width Render width for image formats.
-     * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
+     * @param {Long} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+     * @param {Long} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
      * @param {String} fields Requested fields
      *
      * POST /query_tasks -> ByteArray
@@ -6303,14 +6443,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         apply_formatting: Boolean? = null,
         apply_vis: Boolean? = null,
         cache: Boolean? = null,
-        image_width: Long? = null,
-        image_height: Long? = null,
         generate_drill_links: Boolean? = null,
         force_production: Boolean? = null,
         cache_only: Boolean? = null,
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
+        image_width: Long? = null,
+        image_height: Long? = null,
         fields: String? = null
     ) : SDKResponse {
             return this.post<ByteArray>("/query_tasks", 
@@ -6318,14 +6458,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                      "apply_formatting" to apply_formatting,
                      "apply_vis" to apply_vis,
                      "cache" to cache,
-                     "image_width" to image_width,
-                     "image_height" to image_height,
                      "generate_drill_links" to generate_drill_links,
                      "force_production" to force_production,
                      "cache_only" to cache_only,
                      "path_prefix" to path_prefix,
                      "rebuild_pdts" to rebuild_pdts,
                      "server_table_calcs" to server_table_calcs,
+                     "image_width" to image_width,
+                     "image_height" to image_height,
                      "fields" to fields), body)
     }
 
@@ -6536,7 +6676,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
@@ -6644,7 +6784,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} image_width Render width for image formats.
      * @param {Long} image_height Render height for image formats.
      * @param {Boolean} generate_drill_links Generate drill links (only applicable to 'json_detail' format.
-     * @param {Boolean} force_production Force use of production models even if the user is in development mode.
+     * @param {Boolean} force_production Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
      * @param {Boolean} cache_only Retrieve any results from cache even if the results have expired.
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
@@ -7833,7 +7973,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
      * queries are run in the context of each recipient, so different recipients may see different
-     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
      *
      * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
      * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -8181,7 +8321,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
      *
-     * For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+     * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *

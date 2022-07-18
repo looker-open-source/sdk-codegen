@@ -4,7 +4,7 @@ You can find Ruby language examples in this folder.
 
 
 Using Looker docs: https://docs.looker.com/reference/api-and-integration/api-reference   
-Using official Looker Ruby SDK: https://github.com/looker/looker-sdk-ruby/
+Using official Looker Ruby SDK: https://github.com/looker-open-source/looker-sdk-ruby
 
 Use cases with Looker API:
 ___________

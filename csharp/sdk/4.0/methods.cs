@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 438 API methods
+/// 446 API methods
 
 #nullable enable
 using System;
@@ -40,6 +40,36 @@ namespace Looker.SDK.API40
     public Looker40SDK(IAuthSession authSession): base(authSession, "4.0") { }
 
   #region Alert: Alert
+
+  /// Follow an alert.
+  ///
+  /// POST /alerts/{alert_id}/follow -> void
+  ///
+  /// <returns><c>void</c> Successfully followed an alert. ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<string, Exception>> follow_alert(
+    string alert_id,
+    ITransportSettings? options = null)
+{  
+      alert_id = SdkUtils.EncodeParam(alert_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Post, $"/alerts/{alert_id}/follow", null,null,options);
+  }
+
+  /// Unfollow an alert.
+  ///
+  /// DELETE /alerts/{alert_id}/follow -> void
+  ///
+  /// <returns><c>void</c> Successfully unfollowed an alert. ()</returns>
+  ///
+  /// <param name="alert_id">ID of an alert</param>
+  public async Task<SdkResponse<string, Exception>> unfollow_alert(
+    string alert_id,
+    ITransportSettings? options = null)
+{  
+      alert_id = SdkUtils.EncodeParam(alert_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/alerts/{alert_id}/follow", null,null,options);
+  }
 
   /// ### Search Alerts
   ///
@@ -214,13 +244,48 @@ namespace Looker.SDK.API40
       { "force", force }},null,options);
   }
 
+  /// # Alert Notifications.
+  ///   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+  ///
+  /// GET /alert_notifications -> AlertNotifications[]
+  ///
+  /// <returns><c>AlertNotifications[]</c> It shows all the alert notifications received by the user on email. (application/json)</returns>
+  ///
+  /// <param name="limit">(Optional) Number of results to return (used with `offset`).</param>
+  /// <param name="offset">(Optional) Number of results to skip before returning any (used with `limit`).</param>
+  public async Task<SdkResponse<AlertNotifications[], Exception>> alert_notifications(
+    long? limit = null,
+    long? offset = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<AlertNotifications[], Exception>(HttpMethod.Get, "/alert_notifications", new Values {
+      { "limit", limit },
+      { "offset", offset }},null,options);
+  }
+
+  /// # Reads a Notification
+  ///   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+  ///
+  /// PATCH /alert_notifications/{alert_notification_id} -> AlertNotifications
+  ///
+  /// <returns><c>AlertNotifications</c> It updates that the given alert notification has been read by the user (application/json)</returns>
+  ///
+  /// <param name="alert_notification_id">ID of a notification</param>
+  public async Task<SdkResponse<AlertNotifications, Exception>> read_alert_notification(
+    string alert_notification_id,
+    ITransportSettings? options = null)
+{  
+      alert_notification_id = SdkUtils.EncodeParam(alert_notification_id);
+    return await AuthRequest<AlertNotifications, Exception>(HttpMethod.Patch, $"/alert_notifications/{alert_notification_id}", null,null,options);
+  }
+
   #endregion Alert: Alert
 
   #region ApiAuth: API Authentication
 
   /// ### Present client credentials to obtain an authorization token
   ///
-  /// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+  /// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
   /// The client credentials required for this login must be obtained by creating an API3 key on a user account
   /// in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
   ///
@@ -440,7 +505,7 @@ namespace Looker.SDK.API40
   ///
   /// Looker will never return an **auth_password** field. That value can be set, but never retrieved.
   ///
-  /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+  /// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
   ///
   /// GET /ldap_config -> LDAPConfig
   ///
@@ -462,7 +527,7 @@ namespace Looker.SDK.API40
   ///
   /// It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
   ///
-  /// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+  /// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
   ///
   /// PATCH /ldap_config -> LDAPConfig
   ///
@@ -579,6 +644,50 @@ namespace Looker.SDK.API40
     return await AuthRequest<LDAPConfigTestResult, Exception>(HttpMethod.Put, "/ldap_config/test_user_auth", null,body,options);
   }
 
+  /// ### Registers a mobile device.
+  /// # Required fields: [:device_token, :device_type]
+  ///
+  /// POST /mobile/device -> MobileToken
+  ///
+  /// <returns><c>MobileToken</c> Device registered successfully. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<MobileToken, Exception>> register_mobile_device(
+    WriteMobileToken body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<MobileToken, Exception>(HttpMethod.Post, "/mobile/device", null,body,options);
+  }
+
+  /// ### Updates the mobile device registration
+  ///
+  /// PATCH /mobile/device/{device_id} -> MobileToken
+  ///
+  /// <returns><c>MobileToken</c> Device registration updated successfully. (application/json)</returns>
+  ///
+  /// <param name="device_id">Unique id of the device.</param>
+  public async Task<SdkResponse<MobileToken, Exception>> update_mobile_device_registration(
+    string device_id,
+    ITransportSettings? options = null)
+{  
+      device_id = SdkUtils.EncodeParam(device_id);
+    return await AuthRequest<MobileToken, Exception>(HttpMethod.Patch, $"/mobile/device/{device_id}", null,null,options);
+  }
+
+  /// ### Deregister a mobile device.
+  ///
+  /// DELETE /mobile/device/{device_id} -> void
+  ///
+  /// <returns><c>void</c> Device de-registered successfully. ()</returns>
+  ///
+  /// <param name="device_id">Unique id of the device.</param>
+  public async Task<SdkResponse<string, Exception>> deregister_mobile_device(
+    string device_id,
+    ITransportSettings? options = null)
+{  
+      device_id = SdkUtils.EncodeParam(device_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/mobile/device/{device_id}", null,null,options);
+  }
+
   /// ### List All OAuth Client Apps
   ///
   /// Lists all applications registered to use OAuth2 login with this Looker instance, including
@@ -669,6 +778,9 @@ namespace Looker.SDK.API40
   ///
   /// Deletes the registration info of the app with the matching client_guid.
   /// All active sessions and tokens issued for this app will immediately become invalid.
+  ///
+  /// As with most REST DELETE operations, this endpoint does not return an error if the
+  /// indicated resource does not exist.
   ///
   /// ### Note: this deletion cannot be undone.
   ///
@@ -1961,6 +2073,7 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - extension_framework_enabled
+  ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - privatelabel_configuration
@@ -1984,6 +2097,7 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - extension_framework_enabled
+  ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
   ///  - privatelabel_configuration
@@ -3239,9 +3353,14 @@ namespace Looker.SDK.API40
       { "folder_id", folder_id }},null,options);
   }
 
-  /// ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+  /// ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
   ///
-  /// This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+  /// If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+  /// dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+  ///
+  /// If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+  /// If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+  /// will remain where they were
   ///
   /// LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
   /// from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -3249,6 +3368,19 @@ namespace Looker.SDK.API40
   ///
   /// Note that the created dashboard is not linked to any LookML Dashboard,
   /// i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+  ///
+  /// POST /dashboards/lookml -> DashboardLookml
+  ///
+  /// <returns><c>DashboardLookml</c> DashboardLookML (application/json)</returns>
+  ///
+  public async Task<SdkResponse<DashboardLookml, Exception>> import_dashboard_from_lookml(
+    WriteDashboardLookml body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Post, "/dashboards/lookml", null,body,options);
+  }
+
+  /// # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
   ///
   /// POST /dashboards/from_lookml -> DashboardLookml
   ///
@@ -3856,8 +3988,8 @@ namespace Looker.SDK.API40
   /// <returns><c>Folder[]</c> folders (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
   /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">Fields to sort by.</param>
@@ -3991,14 +4123,18 @@ namespace Looker.SDK.API40
   ///
   /// <param name="folder_id">Id of folder</param>
   /// <param name="fields">Requested fields.</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">Fields to sort by.</param>
   public async Task<SdkResponse<Folder[], Exception>> folder_children(
     string folder_id,
     string? fields = null,
     long? page = null,
     long? per_page = null,
+    long? limit = null,
+    long? offset = null,
     string? sorts = null,
     ITransportSettings? options = null)
 {  
@@ -4007,6 +4143,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "page", page },
       { "per_page", per_page },
+      { "limit", limit },
+      { "offset", offset },
       { "sorts", sorts }},null,options);
   }
 
@@ -5041,7 +5179,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -6228,14 +6366,14 @@ namespace Looker.SDK.API40
   /// <param name="apply_formatting">Apply model-specified formatting to each result.</param>
   /// <param name="apply_vis">Apply visualization options to results.</param>
   /// <param name="cache">Get results from cache if available.</param>
-  /// <param name="image_width">Render width for image formats.</param>
-  /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="image_width">DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.</param>
+  /// <param name="image_height">DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -6243,14 +6381,14 @@ namespace Looker.SDK.API40
     bool? apply_formatting = null,
     bool? apply_vis = null,
     bool? cache = null,
-    long? image_width = null,
-    long? image_height = null,
     bool? generate_drill_links = null,
     bool? force_production = null,
     bool? cache_only = null,
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    long? image_width = null,
+    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -6259,14 +6397,14 @@ namespace Looker.SDK.API40
       { "apply_formatting", apply_formatting },
       { "apply_vis", apply_vis },
       { "cache", cache },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "generate_drill_links", generate_drill_links },
       { "force_production", force_production },
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
+      { "image_width", image_width },
+      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -6490,7 +6628,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -6602,7 +6740,7 @@ namespace Looker.SDK.API40
   /// <param name="image_width">Render width for image formats.</param>
   /// <param name="image_height">Render height for image formats.</param>
   /// <param name="generate_drill_links">Generate drill links (only applicable to 'json_detail' format.</param>
-  /// <param name="force_production">Force use of production models even if the user is in development mode.</param>
+  /// <param name="force_production">Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.</param>
   /// <param name="cache_only">Retrieve any results from cache even if the results have expired.</param>
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
@@ -7787,7 +7925,7 @@ namespace Looker.SDK.API40
   ///
   /// When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
   /// queries are run in the context of each recipient, so different recipients may see different
-  /// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+  /// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
   ///
   /// Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
   /// Non-admin users may not create or modify scheduled plans by or for other users.
@@ -8131,7 +8269,7 @@ namespace Looker.SDK.API40
   ///
   /// **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
   ///
-  /// For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+  /// For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
   ///
   /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
   ///

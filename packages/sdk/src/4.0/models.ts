@@ -25,7 +25,7 @@
  */
 
 /**
- * 366 API models: 231 Spec, 56 Request, 59 Write, 20 Enum
+ * 373 API models: 235 Spec, 57 Request, 60 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -219,6 +219,38 @@ export interface IAlertFieldFilter {
    * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string | null
+}
+
+export interface IAlertNotifications {
+  /**
+   * ID of the notification (read-only)
+   */
+  notification_id?: string
+  /**
+   * ID of the alert (read-only)
+   */
+  alert_condition_id?: string
+  /**
+   * ID of the user (read-only)
+   */
+  user_id?: string
+  /**
+   * Read state of the notification
+   */
+  is_read?: boolean
+  /**
+   * The value of the field on which the alert condition is set (read-only)
+   */
+  field_value?: number | null
+  /**
+   * The value of the threshold which triggers the alert notification (read-only)
+   */
+  threshold_value?: number | null
+  /**
+   * The time at which the alert query ran (read-only)
+   */
+  ran_at?: string
+  alert?: IMobilePayload
 }
 
 export interface IAlertPatch {
@@ -1860,6 +1892,10 @@ export interface IDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date | null
@@ -1892,7 +1928,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -2141,6 +2177,10 @@ export interface IDashboardElement {
    * Text tile subtitle text as Html (read-only)
    */
   subtitle_text_as_html?: string | null
+  /**
+   * Extension ID (read-only)
+   */
+  extension_id?: string | null
 }
 
 export interface IDashboardFilter {
@@ -2771,6 +2811,14 @@ export enum DependencyStatus {
 export enum DestinationType {
   EMAIL = 'EMAIL',
   ACTION_HUB = 'ACTION_HUB',
+}
+
+/**
+ * Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+ */
+export enum DeviceType {
+  android = 'android',
+  ios = 'ios',
 }
 
 export interface IDialect {
@@ -5596,6 +5644,44 @@ export interface IMergeQuerySourceQuery {
   query_id?: string | null
 }
 
+export interface IMobileFeatureFlags {
+  /**
+   * Specifies the name of feature flag. (read-only)
+   */
+  feature_flag_name?: string | null
+  /**
+   * Specifies the state of feature flag (read-only)
+   */
+  feature_flag_state?: boolean
+}
+
+export interface IMobilePayload {
+  /**
+   * Title of the alert (read-only)
+   */
+  title?: string | null
+  /**
+   * ID of the alert (read-only)
+   */
+  alert_id: string
+  /**
+   * ID of the investigative content (read-only)
+   */
+  investigative_content_id?: string | null
+  /**
+   * Name of the dashboard on which the alert has been set (read-only)
+   */
+  dashboard_name?: string | null
+  /**
+   * ID of the dashboard on which the alert has been set (read-only)
+   */
+  dashboard_id?: string
+  /**
+   * Slug of the query which runs the alert queries. (read-only)
+   */
+  query_slug?: string
+}
+
 export interface IMobileSettings {
   /**
    * Specifies whether the force authentication option is enabled for mobile (read-only)
@@ -5605,6 +5691,25 @@ export interface IMobileSettings {
    * Specifies whether mobile access for this instance is enabled. (read-only)
    */
   mobile_app_integration?: boolean
+  /**
+   * Specifies feature flag and state relevant to mobile. (read-only)
+   */
+  mobile_feature_flags?: IMobileFeatureFlags[] | null
+}
+
+export interface IMobileToken {
+  /**
+   * Unique ID. (read-only)
+   */
+  id?: string
+  /**
+   * Specifies the device token
+   */
+  device_token: string
+  /**
+   * Specifies type of device. Valid values are: "android", "ios".
+   */
+  device_type: DeviceType
 }
 
 export interface IModel {
@@ -5741,7 +5846,7 @@ export interface IOauthClientApp {
    */
   description?: string
   /**
-   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
    */
   enabled?: boolean
   /**
@@ -6692,6 +6797,20 @@ export interface IRequestActiveThemes {
 }
 
 /**
+ * Dynamically generated request type for alert_notifications
+ */
+export interface IRequestAlertNotifications {
+  /**
+   * (Optional) Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * (Optional) Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+}
+
+/**
  * Dynamically generated request type for all_board_items
  */
 export interface IRequestAllBoardItems {
@@ -7134,19 +7253,11 @@ export interface IRequestCreateQueryTask {
    */
   cache?: boolean | null
   /**
-   * Render width for image formats.
-   */
-  image_width?: number | null
-  /**
-   * Render height for image formats.
-   */
-  image_height?: number | null
-  /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7165,6 +7276,14 @@ export interface IRequestCreateQueryTask {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null
+  /**
+   * DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
+   */
+  image_width?: number | null
+  /**
+   * DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
+   */
+  image_height?: number | null
   /**
    * Requested fields
    */
@@ -7220,13 +7339,21 @@ export interface IRequestFolderChildren {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
   /**
    * Fields to sort by.
    */
@@ -7412,7 +7539,7 @@ export interface IRequestRunInlineQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7474,7 +7601,7 @@ export interface IRequestRunLook {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -7558,7 +7685,7 @@ export interface IRequestRunQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -8024,11 +8151,11 @@ export interface IRequestSearchFolders {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -9464,6 +9591,10 @@ export interface ISetting {
    */
   extension_framework_enabled?: boolean
   /**
+   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   */
+  extension_load_url_enabled?: boolean
+  /**
    * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
    */
   marketplace_auto_install_enabled?: boolean
@@ -9868,7 +9999,7 @@ export interface IThemeSettings {
    */
   background_color?: string
   /**
-   * Base font size for scaling fonts
+   * Base font size for scaling fonts (only supported by legacy dashboards)
    */
   base_font_size?: string | null
   /**
@@ -9928,7 +10059,7 @@ export interface IThemeSettings {
    */
   tile_title_alignment?: string
   /**
-   * Toggles the tile shadow (New Dashboards)
+   * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
 }
@@ -10900,6 +11031,10 @@ export interface IWriteDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string | null
@@ -10908,7 +11043,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -10952,7 +11087,7 @@ export interface IWriteDashboardBase {
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
  */
 export interface IWriteDashboardElement {
   /**
@@ -11786,6 +11921,21 @@ export interface IWriteMergeQuery {
 }
 
 /**
+ * Dynamic writeable type for MobileToken removes:
+ * id
+ */
+export interface IWriteMobileToken {
+  /**
+   * Specifies the device token
+   */
+  device_token: string
+  /**
+   * Specifies type of device. Valid values are: "android", "ios".
+   */
+  device_type: DeviceType | null
+}
+
+/**
  * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  */
@@ -11815,7 +11965,7 @@ export interface IWriteOauthClientApp {
    */
   description?: string
   /**
-   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+   * When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
    */
   enabled?: boolean
   /**
@@ -12492,6 +12642,10 @@ export interface IWriteSetting {
    * Toggle extension framework on or off
    */
   extension_framework_enabled?: boolean
+  /**
+   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   */
+  extension_load_url_enabled?: boolean
   /**
    * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
    */

@@ -26,7 +26,7 @@ SOFTWARE.
 
 /*
 
-438 API methods
+446 API methods
 */
 
 
@@ -52,6 +52,30 @@ func NewLookerSDK(session *rtl.AuthSession) *LookerSDK {
 }
 
   // region Alert: Alert
+
+// Follow an alert.
+//
+// POST /alerts/{alert_id}/follow -> Void
+func (l *LookerSDK) FollowAlert(
+    alertId string,
+    options *rtl.ApiSettings) (error) {
+    alertId = url.PathEscape(alertId)
+    err := l.session.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
+    return err
+
+}
+
+// Unfollow an alert.
+//
+// DELETE /alerts/{alert_id}/follow -> Void
+func (l *LookerSDK) UnfollowAlert(
+    alertId string,
+    options *rtl.ApiSettings) (error) {
+    alertId = url.PathEscape(alertId)
+    err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
+    return err
+
+}
 
 // ### Search Alerts
 //
@@ -180,13 +204,39 @@ func (l *LookerSDK) EnqueueAlert(
 
 }
 
+// # Alert Notifications.
+//   The endpoint returns all the alert notifications received by the user on email in the past 7 days. It also returns whether the notifications have been read by the user.
+//
+// GET /alert_notifications -> []AlertNotifications
+func (l *LookerSDK) AlertNotifications(request RequestAlertNotifications,
+    options *rtl.ApiSettings) ([]AlertNotifications, error) {
+    var result []AlertNotifications
+    err := l.session.Do(&result, "GET", "/4.0", "/alert_notifications", map[string]interface{}{"limit": request.Limit, "offset": request.Offset}, nil, options)
+    return result, err
+
+}
+
+// # Reads a Notification
+//   The endpoint marks a given alert notification as read by the user, in case it wasn't already read. The AlertNotification model is updated for this purpose. It returns the notification as a response.
+//
+// PATCH /alert_notifications/{alert_notification_id} -> AlertNotifications
+func (l *LookerSDK) ReadAlertNotification(
+    alertNotificationId string,
+    options *rtl.ApiSettings) (AlertNotifications, error) {
+    alertNotificationId = url.PathEscape(alertNotificationId)
+    var result AlertNotifications
+    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alert_notifications/%v", alertNotificationId), nil, nil, options)
+    return result, err
+
+}
+
   // endregion Alert: Alert
 
   // region ApiAuth: API Authentication
 
 // ### Present client credentials to obtain an authorization token
 //
-// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://looker.com/docs/r/api/outh2_resource_owner_pc) pattern.
+// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
 // The client credentials required for this login must be obtained by creating an API3 key on a user account
 // in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
 //
@@ -389,7 +439,7 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 //
 // Looker will never return an **auth_password** field. That value can be set, but never retrieved.
 //
-// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
 //
 // GET /ldap_config -> LDAPConfig
 func (l *LookerSDK) LdapConfig(
@@ -410,7 +460,7 @@ func (l *LookerSDK) LdapConfig(
 //
 // It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
 //
-// See the [Looker LDAP docs](https://www.looker.com/docs/r/api/ldap_setup) for additional information.
+// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
 //
 // PATCH /ldap_config -> LDAPConfig
 func (l *LookerSDK) UpdateLdapConfig(
@@ -522,6 +572,44 @@ func (l *LookerSDK) TestLdapConfigUserAuth(
 
 }
 
+// ### Registers a mobile device.
+// # Required fields: [:device_token, :device_type]
+//
+// POST /mobile/device -> MobileToken
+func (l *LookerSDK) RegisterMobileDevice(
+    body WriteMobileToken,
+    options *rtl.ApiSettings) (MobileToken, error) {
+    var result MobileToken
+    err := l.session.Do(&result, "POST", "/4.0", "/mobile/device", nil, body, options)
+    return result, err
+
+}
+
+// ### Updates the mobile device registration
+//
+// PATCH /mobile/device/{device_id} -> MobileToken
+func (l *LookerSDK) UpdateMobileDeviceRegistration(
+    deviceId string,
+    options *rtl.ApiSettings) (MobileToken, error) {
+    deviceId = url.PathEscape(deviceId)
+    var result MobileToken
+    err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
+    return result, err
+
+}
+
+// ### Deregister a mobile device.
+//
+// DELETE /mobile/device/{device_id} -> Void
+func (l *LookerSDK) DeregisterMobileDevice(
+    deviceId string,
+    options *rtl.ApiSettings) (error) {
+    deviceId = url.PathEscape(deviceId)
+    err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
+    return err
+
+}
+
 // ### List All OAuth Client Apps
 //
 // Lists all applications registered to use OAuth2 login with this Looker instance, including
@@ -597,6 +685,9 @@ func (l *LookerSDK) UpdateOauthClientApp(
 //
 // Deletes the registration info of the app with the matching client_guid.
 // All active sessions and tokens issued for this app will immediately become invalid.
+//
+// As with most REST DELETE operations, this endpoint does not return an error if the
+// indicated resource does not exist.
 //
 // ### Note: this deletion cannot be undone.
 //
@@ -1664,6 +1755,7 @@ func (l *LookerSDK) MobileSettings(
 //
 // Available settings are:
 //  - extension_framework_enabled
+//  - extension_load_url_enabled
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
 //  - privatelabel_configuration
@@ -1684,6 +1776,7 @@ func (l *LookerSDK) GetSetting(
 //
 // Available settings are:
 //  - extension_framework_enabled
+//  - extension_load_url_enabled
 //  - marketplace_auto_install_enabled
 //  - marketplace_enabled
 //  - privatelabel_configuration
@@ -2649,9 +2742,14 @@ func (l *LookerSDK) MoveDashboard(
 
 }
 
-// ### Creates a new dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
+// ### Creates a dashboard object based on LookML Dashboard YAML, and returns the details of the newly created dashboard.
 //
-// This is equivalent to creating a LookML Dashboard and converting to a User-defined dashboard.
+// If a dashboard exists with the YAML-defined "preferred_slug", the new dashboard will overwrite it. Otherwise, a new
+// dashboard will be created. Note that when a dashboard is overwritten, alerts will not be maintained.
+//
+// If a folder_id is specified: new dashboards will be placed in that folder, and overwritten dashboards will be moved to it
+// If the folder_id isn't specified: new dashboards will be placed in the caller's personal folder, and overwritten dashboards
+// will remain where they were
 //
 // LookML must contain valid LookML YAML code. It's recommended to use the LookML format returned
 // from [dashboard_lookml()](#!/Dashboard/dashboard_lookml) as the input LookML (newlines replaced with
@@ -2659,6 +2757,18 @@ func (l *LookerSDK) MoveDashboard(
 //
 // Note that the created dashboard is not linked to any LookML Dashboard,
 // i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
+//
+// POST /dashboards/lookml -> DashboardLookml
+func (l *LookerSDK) ImportDashboardFromLookml(
+    body WriteDashboardLookml,
+    options *rtl.ApiSettings) (DashboardLookml, error) {
+    var result DashboardLookml
+    err := l.session.Do(&result, "POST", "/4.0", "/dashboards/lookml", nil, body, options)
+    return result, err
+
+}
+
+// # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
 //
 // POST /dashboards/from_lookml -> DashboardLookml
 func (l *LookerSDK) CreateDashboardFromLookml(
@@ -3208,7 +3318,7 @@ func (l *LookerSDK) FolderChildren(request RequestFolderChildren,
     options *rtl.ApiSettings) ([]Folder, error) {
     request.FolderId = url.PathEscape(request.FolderId)
     var result []Folder
-    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children", request.FolderId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "sorts": request.Sorts}, nil, options)
+    err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children", request.FolderId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
     return result, err
 
 }
@@ -4799,7 +4909,7 @@ func (l *LookerSDK) GetAllRepositoryCredentials(
 func (l *LookerSDK) CreateQueryTask(request RequestCreateQueryTask,
     options *rtl.ApiSettings) (QueryTask, error) {
     var result QueryTask
-    err := l.session.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "fields": request.Fields}, request.Body, options)
+    err := l.session.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "fields": request.Fields}, request.Body, options)
     return result, err
 
 }
@@ -5930,7 +6040,7 @@ func (l *LookerSDK) AllScheduledPlans(request RequestAllScheduledPlans,
 //
 // When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
 // queries are run in the context of each recipient, so different recipients may see different
-// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://looker.com/docs/r/admin/run-as-recipient).
+// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
 //
 // Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
 // Non-admin users may not create or modify scheduled plans by or for other users.
@@ -6229,7 +6339,7 @@ func (l *LookerSDK) AllThemes(
 //
 // **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
 //
-// For more information, see [Creating and Applying Themes](https://looker.com/docs/r/admin/themes).
+// For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
 //
 // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
 //

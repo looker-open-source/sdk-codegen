@@ -25,7 +25,7 @@
  */
 
 /**
- * 310 API models: 231 Spec, 0 Request, 59 Write, 20 Enum
+ * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -156,6 +156,27 @@ data class AlertFieldFilter (
     var field_name: String,
     var field_value: Any,
     var filter_value: String? = null
+) : Serializable
+
+/**
+ * @property notification_id ID of the notification (read-only)
+ * @property alert_condition_id ID of the alert (read-only)
+ * @property user_id ID of the user (read-only)
+ * @property is_read Read state of the notification
+ * @property field_value The value of the field on which the alert condition is set (read-only)
+ * @property threshold_value The value of the threshold which triggers the alert notification (read-only)
+ * @property ran_at The time at which the alert query ran (read-only)
+ * @property alert
+ */
+data class AlertNotifications (
+    var notification_id: String? = null,
+    var alert_condition_id: String? = null,
+    var user_id: String? = null,
+    var is_read: Boolean? = null,
+    var field_value: Double? = null,
+    var threshold_value: Double? = null,
+    var ran_at: String? = null,
+    var alert: MobilePayload? = null
 ) : Serializable
 
 /**
@@ -1174,6 +1195,7 @@ data class CustomWelcomeEmail (
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
  * @property favorite_count Number of times favorited (read-only)
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
+ * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property last_accessed_at Time the dashboard was last accessed (read-only)
  * @property last_viewed_at Time last viewed in the Looker web UI (read-only)
  * @property updated_at Time that the Dashboard was most recently updated. (read-only)
@@ -1182,7 +1204,7 @@ data class CustomWelcomeEmail (
  * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -1223,6 +1245,7 @@ data class Dashboard (
     var edit_uri: String? = null,
     var favorite_count: Long? = null,
     var filters_bar_collapsed: Boolean? = null,
+    var filters_location_top: Boolean? = null,
     var last_accessed_at: Date? = null,
     var last_viewed_at: Date? = null,
     var updated_at: Date? = null,
@@ -1338,6 +1361,7 @@ data class DashboardBase (
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  * @property title_text_as_html Text tile title text as Html (read-only)
  * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
+ * @property extension_id Extension ID (read-only)
  */
 data class DashboardElement (
     var can: Map<String,Boolean>? = null,
@@ -1368,7 +1392,8 @@ data class DashboardElement (
     var alert_count: Long? = null,
     var rich_content_json: String? = null,
     var title_text_as_html: String? = null,
-    var subtitle_text_as_html: String? = null
+    var subtitle_text_as_html: String? = null,
+    var extension_id: String? = null
 ) : Serializable
 
 /**
@@ -1760,6 +1785,14 @@ enum class DependencyStatus : Serializable {
 enum class DestinationType : Serializable {
     EMAIL,
     ACTION_HUB
+}
+
+/**
+ * Specifies type of device. Valid values are: "android", "ios". (Enum defined in MobileToken)
+ */
+enum class DeviceType : Serializable {
+    android,
+    ios
 }
 
 /**
@@ -3469,12 +3502,51 @@ data class MergeQuerySourceQuery (
 ) : Serializable
 
 /**
+ * @property feature_flag_name Specifies the name of feature flag. (read-only)
+ * @property feature_flag_state Specifies the state of feature flag (read-only)
+ */
+data class MobileFeatureFlags (
+    var feature_flag_name: String? = null,
+    var feature_flag_state: Boolean? = null
+) : Serializable
+
+/**
+ * @property title Title of the alert (read-only)
+ * @property alert_id ID of the alert (read-only)
+ * @property investigative_content_id ID of the investigative content (read-only)
+ * @property dashboard_name Name of the dashboard on which the alert has been set (read-only)
+ * @property dashboard_id ID of the dashboard on which the alert has been set (read-only)
+ * @property query_slug Slug of the query which runs the alert queries. (read-only)
+ */
+data class MobilePayload (
+    var title: String? = null,
+    var alert_id: String,
+    var investigative_content_id: String? = null,
+    var dashboard_name: String? = null,
+    var dashboard_id: String? = null,
+    var query_slug: String? = null
+) : Serializable
+
+/**
  * @property mobile_force_authentication Specifies whether the force authentication option is enabled for mobile (read-only)
  * @property mobile_app_integration Specifies whether mobile access for this instance is enabled. (read-only)
+ * @property mobile_feature_flags Specifies feature flag and state relevant to mobile. (read-only)
  */
 data class MobileSettings (
     var mobile_force_authentication: Boolean? = null,
-    var mobile_app_integration: Boolean? = null
+    var mobile_app_integration: Boolean? = null,
+    var mobile_feature_flags: Array<MobileFeatureFlags>? = null
+) : Serializable
+
+/**
+ * @property id Unique ID. (read-only)
+ * @property device_token Specifies the device token
+ * @property device_type Specifies type of device. Valid values are: "android", "ios".
+ */
+data class MobileToken (
+    var id: String? = null,
+    var device_token: String,
+    var device_type: DeviceType
 ) : Serializable
 
 /**
@@ -3566,7 +3638,7 @@ enum class Name : Serializable {
  * @property redirect_uri The uri with which this application will receive an auth code by browser redirect.
  * @property display_name The application's display name
  * @property description A description of the application that will be displayed to users
- * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+ * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
  * @property group_id If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
  * @property tokens_invalid_before All auth codes, access tokens, and refresh tokens issued for this application prior to this date-time for ALL USERS will be invalid. (read-only)
  * @property activated_users All users who have been activated to use this app (read-only)
@@ -4653,6 +4725,7 @@ data class SessionConfig (
 
 /**
  * @property extension_framework_enabled Toggle extension framework on or off
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
  * @property privatelabel_configuration
@@ -4661,6 +4734,7 @@ data class SessionConfig (
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
+    var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
@@ -4946,7 +5020,7 @@ data class Theme (
 
 /**
  * @property background_color Default background color
- * @property base_font_size Base font size for scaling fonts
+ * @property base_font_size Base font size for scaling fonts (only supported by legacy dashboards)
  * @property color_collection_id Optional. ID of color collection to use with the theme. Use an empty string for none.
  * @property font_color Default font color
  * @property font_family Primary font family
@@ -4961,7 +5035,7 @@ data class Theme (
  * @property title_color Color for titles
  * @property warn_button_color Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
- * @property tile_shadow Toggles the tile shadow (New Dashboards)
+ * @property tile_shadow Toggles the tile shadow (not supported)
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5587,9 +5661,10 @@ data class WriteCredentialsEmail (
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
+ * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -5612,6 +5687,7 @@ data class WriteDashboard (
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
     var filters_bar_collapsed: Boolean? = null,
+    var filters_location_top: Boolean? = null,
     var load_configuration: String? = null,
     var lookml_link_id: String? = null,
     var show_filters_bar: Boolean? = null,
@@ -5637,7 +5713,7 @@ data class WriteDashboardBase (
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
  *
  * @property body_text Text tile body text
  * @property dashboard_id Id of Dashboard
@@ -6160,6 +6236,18 @@ data class WriteMergeQuery (
 ) : Serializable
 
 /**
+ * Dynamic writeable type for MobileToken removes:
+ * id
+ *
+ * @property device_token Specifies the device token
+ * @property device_type Specifies type of device. Valid values are: "android", "ios".
+ */
+data class WriteMobileToken (
+    var device_token: String,
+    var device_type: DeviceType
+) : Serializable
+
+/**
  * Dynamic writeable type for ModelSet removes:
  * can, all_access, built_in, id, url
  *
@@ -6178,7 +6266,7 @@ data class WriteModelSet (
  * @property redirect_uri The uri with which this application will receive an auth code by browser redirect.
  * @property display_name The application's display name
  * @property description A description of the application that will be displayed to users
- * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused.
+ * @property enabled When enabled is true, OAuth2 and API requests will be accepted from this app. When false, all requests from this app will be refused. Setting disabled invalidates existing tokens.
  * @property group_id If set, only Looker users who are members of this group can use this web app with Looker. If group_id is not set, any Looker user may use this app to access this Looker instance
  */
 data class WriteOauthClientApp (
@@ -6580,6 +6668,7 @@ data class WriteSessionConfig (
  * Dynamic writeable type for Setting
  *
  * @property extension_framework_enabled Toggle extension framework on or off
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
  * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
@@ -6589,6 +6678,7 @@ data class WriteSessionConfig (
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
+    var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,

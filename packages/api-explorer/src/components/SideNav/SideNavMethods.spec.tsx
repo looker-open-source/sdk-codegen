@@ -35,21 +35,67 @@ import {
 } from '../../test-utils'
 import { SideNavMethods } from './SideNavMethods'
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+    }),
+  }
+})
+
 describe('SideNavMethods', () => {
   const tag = 'Dashboard'
   const methods = api.tags[tag]
+  const specKey = '3.1'
 
   test('it renders provided methods', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavMethods methods={methods} tag={tag} specKey={'3.1'} />
+      <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
     )
     userEvent.click(screen.getByText(tag))
     const sideNavItems = screen.getAllByRole('link')
     expect(sideNavItems).toHaveLength(Object.keys(methods).length)
     expect(sideNavItems[0]).toHaveAttribute(
       'href',
-      `/3.1/methods/${tag}/${Object.values(methods)[0].name}`
+      `/${specKey}/methods/${tag}/${Object.values(methods)[0].name}`
     )
+  })
+
+  test('tag expands and displays methods after clicked', () => {
+    renderWithRouterAndReduxProvider(
+      <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
+    )
+    const firstMethod = Object.values(methods)[0].schema.summary
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
+    userEvent.click(screen.getByText(tag))
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods/${tag}`)
+    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(
+      Object.values(methods).length
+    )
+  })
+
+  test('expanded tag closes when clicked', () => {
+    renderWithRouterAndReduxProvider(
+      <SideNavMethods
+        methods={methods}
+        tag={tag}
+        specKey={specKey}
+        defaultOpen={true}
+      />
+    )
+    const firstMethod = Object.values(methods)[0].schema.summary
+    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(
+      Object.values(methods).length
+    )
+    userEvent.click(screen.getByText(tag))
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods`)
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 
   test('it highlights text matching search pattern in both tag and methods', () => {
@@ -58,7 +104,7 @@ describe('SideNavMethods', () => {
       <SideNavMethods
         methods={pick(methods, 'create_dashboard')}
         tag={tag}
-        specKey={'3.1'}
+        specKey={specKey}
       />,
       undefined,
       store

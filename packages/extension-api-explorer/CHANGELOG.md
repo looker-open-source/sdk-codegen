@@ -1,5 +1,53 @@
 # Changelog
 
+## [22.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.8.0...extension-api-explorer-v22.10.0) (2022-07-14)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.34 to ^0.9.35
+    * @looker/extension-sdk bumped from ^22.8.0 to ^22.10.0
+    * @looker/extension-sdk-react bumped from ^22.8.0 to ^22.10.0
+    * @looker/extension-utils bumped from ^0.1.11 to ^0.1.12
+    * @looker/run-it bumped from ^0.9.34 to ^0.9.35
+    * @looker/sdk bumped from ^22.8.0 to ^22.10.0
+
+## [22.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.6.0...extension-api-explorer-v22.8.0) (2022-07-13)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.33 to ^0.9.34
+    * @looker/extension-sdk bumped from ^22.6.0 to ^22.8.0
+    * @looker/extension-sdk-react bumped from ^22.6.0 to ^22.8.0
+    * @looker/extension-utils bumped from ^0.1.10 to ^0.1.11
+    * @looker/run-it bumped from ^0.9.33 to ^0.9.34
+    * @looker/sdk bumped from ^22.6.0 to ^22.8.0
+
+## [22.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.4.2...extension-api-explorer-v22.6.0) (2022-07-07)
+
+
+### Bug Fixes
+
+* package refs for API Explorer extension ([#1055](https://www.github.com/looker-open-source/sdk-codegen/issues/1055)) ([5fcf358](https://www.github.com/looker-open-source/sdk-codegen/commit/5fcf3588e1f4e87fc6d1d5789e00f66cf4fe92d9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.32 to ^0.9.33
+    * @looker/extension-sdk bumped from ^22.4.2 to ^22.6.0
+    * @looker/extension-sdk-react bumped from ^22.4.2 to ^22.6.0
+    * @looker/extension-utils bumped from ^0.1.9 to ^0.1.10
+    * @looker/run-it bumped from ^0.9.32 to ^0.9.33
+    * @looker/sdk bumped from ^22.4.2 to ^22.6.0
+    * @looker/sdk-codegen bumped from ^21.5.2 to ^21.6.0
+
 ### [22.4.2](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.4.1...extension-api-explorer-v22.4.2) (2022-04-07)
 
 

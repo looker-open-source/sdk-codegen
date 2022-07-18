@@ -1254,6 +1254,10 @@ export interface IDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * Time the dashboard was last accessed (read-only)
    */
   last_accessed_at?: Date | null
@@ -1286,7 +1290,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**
@@ -6089,19 +6093,11 @@ export interface IRequestCreateQueryTask {
    */
   cache?: boolean | null
   /**
-   * Render width for image formats.
-   */
-  image_width?: number | null
-  /**
-   * Render height for image formats.
-   */
-  image_height?: number | null
-  /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6120,6 +6116,14 @@ export interface IRequestCreateQueryTask {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null
+  /**
+   * Render width for image formats.
+   */
+  image_width?: number | null
+  /**
+   * Render height for image formats.
+   */
+  image_height?: number | null
   /**
    * Requested fields
    */
@@ -6175,11 +6179,11 @@ export interface IRequestFolderChildren {
    */
   fields?: string | null
   /**
-   * Requested page.
+   * Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * Return N rows of data per page
    */
   per_page?: number | null
   /**
@@ -6341,7 +6345,7 @@ export interface IRequestRunInlineQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6403,7 +6407,7 @@ export interface IRequestRunLook {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -6487,7 +6491,7 @@ export interface IRequestRunQuery {
    */
   generate_drill_links?: boolean | null
   /**
-   * Force use of production models even if the user is in development mode.
+   * Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
    */
   force_production?: boolean | null
   /**
@@ -8507,7 +8511,7 @@ export interface IThemeSettings {
    */
   background_color?: string
   /**
-   * Base font size for scaling fonts
+   * Base font size for scaling fonts (only supported by legacy dashboards)
    */
   base_font_size?: string | null
   /**
@@ -8567,7 +8571,7 @@ export interface IThemeSettings {
    */
   tile_title_alignment?: string
   /**
-   * Toggles the tile shadow (New Dashboards)
+   * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
 }
@@ -9395,6 +9399,10 @@ export interface IWriteDashboard {
    */
   filters_bar_collapsed?: boolean
   /**
+   * Sets the default state of the filters location to top(true) or right(false)
+   */
+  filters_location_top?: boolean
+  /**
    * configuration option that governs how dashboard loading will happen.
    */
   load_configuration?: string | null
@@ -9403,7 +9411,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://looker.com/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**
