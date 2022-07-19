@@ -118,7 +118,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       searchParams.delete('s')
       navigate(location.pathname, { search: searchParams.toString() })
     }
-  }, [debouncedPattern])
+  }, [location.search, debouncedPattern])
 
   useEffect(() => {
     let results
