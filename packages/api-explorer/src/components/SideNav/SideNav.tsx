@@ -45,7 +45,6 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import styled from 'styled-components'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
@@ -111,6 +110,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
+    setShowCopyLinkButton(!!value)
   }
 
   useEffect(() => {
@@ -162,28 +162,31 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const headlessOffset = headless ? 200 : 120
   const menuH = size.height - 16 * HEADER_REM - headlessOffset
 
-  // TODO: can remove
-  const SearchWithLinkCopy = styled('div')`
-    position: relative;
-    width: 100%;
-  `
-
   return (
     <nav>
-      <Box2 pl="large" pr="large" pb="large" pt={headless ? 'u3' : 'large'}>
-        <SearchWithLinkCopy>
-          <InputSearch
-            aria-label="Search"
-            onChange={handleInputChange}
-            placeholder="Search"
-            value={pattern}
-            isClearable
-            onMouseOver={() => setShowCopyLinkButton(!!pattern)}
-            onMouseOut={() => setShowCopyLinkButton(false)}
-          />
-          <CopyLinkButton visible={showCopyLinkButton} />
-          <SearchMessage search={searchResults} />
-        </SearchWithLinkCopy>
+      <Box2
+        pl="large"
+        pr="large"
+        pb="large"
+        pt={headless ? 'u3' : 'large'}
+        position={'relative'}
+        width={'100%'}
+        onMouseLeave={() => setShowCopyLinkButton(false)}
+      >
+        <InputSearch
+          aria-label="Search"
+          onChange={handleInputChange}
+          placeholder="Search"
+          value={pattern}
+          isClearable
+          onMouseEnter={() => setShowCopyLinkButton(!!pattern)}
+        />
+        <CopyLinkButton
+          top={'24px'}
+          right={'58px'}
+          visible={showCopyLinkButton}
+        />
+        <SearchMessage search={searchResults} />
       </Box2>
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>

@@ -29,12 +29,18 @@ import { Link } from '@styled-icons/material-outlined/Link'
 import styled from 'styled-components'
 
 interface CopyLinkButtonProps {
+  top: string
+  right: string
   visible: boolean
 }
-export const CopyLinkButton = ({ visible }: CopyLinkButtonProps) => {
+export const CopyLinkButton = ({
+  top,
+  right,
+  visible,
+}: CopyLinkButtonProps) => {
   const [title, CopyLinkTooltip] = useState('Copy link to this page view')
   return (
-    <CopyLink visible={visible}>
+    <CopyLink visible={visible} top={top} right={right}>
       <IconButton
         onClick={async () => {
           CopyLinkTooltip('Copied to clipboard')
@@ -50,9 +56,13 @@ export const CopyLinkButton = ({ visible }: CopyLinkButtonProps) => {
   )
 }
 
-const CopyLink = styled('span')<{ visible: boolean }>`
+const CopyLink = styled('span')<{
+  top: string
+  right: string
+  visible: boolean
+}>`
   position: absolute;
-  top: 4px;
-  right: 36px;
+  top: ${({ top }) => top};
+  right: ${({ right }) => right};
   display: ${({ visible }) => (visible ? 'block' : 'none')};
 `
