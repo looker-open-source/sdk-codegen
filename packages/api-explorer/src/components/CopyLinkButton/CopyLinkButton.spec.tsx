@@ -25,7 +25,7 @@
  */
 
 import { renderWithTheme } from '@looker/components-test-utils'
-import { act, screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { CopyLinkButton } from '@looker/api-explorer'
@@ -35,19 +35,18 @@ describe('CopyLinkButton', () => {
     renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
     expect(screen.getByText('Copy link to this page view')).toBeInTheDocument()
   })
-
-  const mockClipboardCopy = jest.fn()
-  jest.mock('navigator', () => {
-    return {
-      clipboard: () => ({
-        writeText: mockClipboardCopy,
-      }),
-    }
+  const mockClipboardCopy = jest
+    .fn()
+    .mockImplementation(() => Promise.resolve())
+  Object.assign(navigator, {
+    clipboard: {
+      writeText: mockClipboardCopy,
+    },
   })
-  test('it copies to clipboard', () => {
+  test('it copies to clipboard', async () => {
     jest.spyOn(navigator.clipboard, 'writeText')
     renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
-    act(() => {
+    await waitFor(() => {
       userEvent.click(screen.getByRole('button'))
       expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
     })

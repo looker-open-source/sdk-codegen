@@ -35,6 +35,7 @@ import {
   useTabs,
   InputSearch,
   Box2,
+  Span,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -171,21 +172,24 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         pt={headless ? 'u3' : 'large'}
         position={'relative'}
         width={'100%'}
-        onMouseLeave={() => setShowCopyLinkButton(false)}
       >
-        <InputSearch
-          aria-label="Search"
-          onChange={handleInputChange}
-          placeholder="Search"
-          value={pattern}
-          isClearable
+        <Span
           onMouseEnter={() => setShowCopyLinkButton(!!pattern)}
-        />
-        <CopyLinkButton
-          top={'24px'}
-          right={'58px'}
-          visible={showCopyLinkButton}
-        />
+          onMouseLeave={() => setShowCopyLinkButton(false)}
+        >
+          <InputSearch
+            aria-label="Search"
+            onChange={handleInputChange}
+            placeholder="Search"
+            value={pattern}
+            isClearable
+          />
+          <CopyLinkButton
+            top={'24px'}
+            right={'58px'}
+            visible={showCopyLinkButton}
+          />
+        </Span>
         <SearchMessage search={searchResults} />
       </Box2>
       <TabList {...tabs} distribute>
