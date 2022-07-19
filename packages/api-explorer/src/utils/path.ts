@@ -29,43 +29,34 @@ import { firstMethodRef } from '@looker/sdk-codegen'
 import type { Location as HLocation } from 'history'
 
 /**
- * Builds a path matching the route used by scene with search parameters
- * @param specKey A string to identify the spec in the URL
- * @param tag Corresponding tag
- * @param name A method or type name
- * @param params Hash of query param name/value pairs to include in the destination url
- * @returns a path including search parameters
- */
-export const buildNavigationPath = (
-  specKey: string,
-  category: string,
-  tag: string,
-  name: string,
-  params: string
-) => `/${specKey}/${category}/${tag}/${name}?${params}`
-
-/**
  * Builds a path matching the route used by MethodScene
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding method tag
  * @param methodName A method name
+ * @param params Hash of query param name/value pairs to include in the destination url
  * @returns a Method path
  */
 export const buildMethodPath = (
   specKey: string,
   tag: string,
-  methodName: string
-) => `/${specKey}/methods/${tag}/${methodName}`
+  methodName: string,
+  params?: string
+) => `/${specKey}/methods/${tag}/${methodName}${params ? `?${params}` : ''}`
 
 /**
  * Builds a path matching the route used by TypeScene
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding type tag
  * @param typeName A type name
+ * @param params Hash of query param name/value pairs to include in the destination url
  * @returns a Type path
  */
-export const buildTypePath = (specKey: string, tag: string, typeName: string) =>
-  `/${specKey}/types/${tag}/${typeName}`
+export const buildTypePath = (
+  specKey: string,
+  tag: string,
+  typeName: string,
+  params?: string
+) => `/${specKey}/types/${tag}/${typeName}${params ? `?${params}` : ''}`
 
 export const diffPath = 'diff'
 export const oAuthPath = 'oauth'

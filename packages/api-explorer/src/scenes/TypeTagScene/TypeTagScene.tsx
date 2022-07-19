@@ -56,7 +56,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
     if (!types) {
       navigate(`/${specKey}/types`)
     }
-  }, [navigate, types])
+  }, [types])
 
   if (!types) {
     return <></>

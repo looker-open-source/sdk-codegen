@@ -26,7 +26,7 @@
 import { useHistory } from 'react-router-dom'
 
 /**
- * Navigates to given route with specified query params
+ * Hook for navigating to given route with specified query params
  *
  * @param path Pathname to navigate to
  * @param queryParams Hash of query param name/value pairs to include in the destination url

@@ -31,7 +31,7 @@ import type { TypeList } from '@looker/sdk-codegen'
 import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Link } from '../Link'
-import { buildNavigationPath, highlightHTML, useNavigation } from '../../utils'
+import { highlightHTML, useNavigation, buildTypePath } from '../../utils'
 import { selectSearchPattern } from '../../state'
 
 interface TypesProps {
@@ -85,9 +85,8 @@ export const SideNavTypes = styled(
           {Object.values(types).map((type) => (
             <li key={type.name}>
               <Link
-                to={`${buildNavigationPath(
+                to={`${buildTypePath(
                   specKey,
-                  'types',
                   tag,
                   type.name,
                   searchParams.toString()

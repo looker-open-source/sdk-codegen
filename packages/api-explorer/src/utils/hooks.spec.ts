@@ -24,7 +24,7 @@
 
  */
 import { useHistory } from 'react-router-dom'
-import { useNavigation } from './navUtils'
+import { useNavigation } from './hooks'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
