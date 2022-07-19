@@ -26,7 +26,7 @@
 
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import {
   TabList,
   Tab,
@@ -44,10 +44,9 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-
-import { useWindowSize } from '../../utils'
+import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
-import { selectSearchCriteria, useSettingActions } from '../../state'
+import { selectSearchCriteria, selectSearchPattern } from '../../state'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -68,8 +67,8 @@ interface SideNavProps {
 }
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
-  const history = useHistory()
   const location = useLocation()
+  const navigate = useNavigation()
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -83,20 +82,19 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        history.push(parts.join('/'))
+        navigate(parts.join('/'))
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        history.push(parts.join('/'))
+        navigate(parts.join('/'))
       }
     }
   }
   const tabs = useTabs({ defaultIndex, onChange: onTabChange })
   const searchCriteria = useSelector(selectSearchCriteria)
-  const { setSearchPatternAction } = useSettingActions()
-
-  const [pattern, setSearchPattern] = useState('')
+  const searchPattern = useSelector(selectSearchPattern)
+  const [pattern, setSearchPattern] = useState(searchPattern)
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
@@ -112,14 +110,25 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   }
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
+      searchParams.set('s', debouncedPattern)
+      navigate(location.pathname, { search: searchParams.toString() })
+    } else if (!debouncedPattern && searchParams.get('s')) {
+      searchParams.delete('s')
+      navigate(location.pathname, { search: searchParams.toString() })
+    }
+  }, [location.search, debouncedPattern])
+
+  useEffect(() => {
     let results
     let newTags
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
 
-    if (debouncedPattern && api.search) {
-      results = api.search(pattern, criteriaToSet(searchCriteria))
+    if (searchPattern && api.search) {
+      results = api.search(searchPattern, criteriaToSet(searchCriteria))
       newTags = results.tags
       newTypes = results.types
       newTypeTags = tagTypes(api, results.types)
@@ -136,15 +145,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       methodCount: countMethods(newTags),
       searchResults: results,
     })
-    setSearchPatternAction({ searchPattern: debouncedPattern })
-  }, [
-    debouncedPattern,
-    specKey,
-    spec,
-    setSearchPatternAction,
-    pattern,
-    searchCriteria,
-  ])
+  }, [searchPattern, specKey, spec, searchCriteria])
 
   useEffect(() => {
     const { selectedIndex, onSelectTab } = tabs

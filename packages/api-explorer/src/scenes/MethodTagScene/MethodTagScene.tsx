@@ -29,7 +29,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath } from '../../utils'
+import { buildMethodPath, useNavigation } from '../../utils'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -44,6 +44,7 @@ interface MethodTagSceneParams {
 export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
+  const navigate = useNavigation()
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const methods = api.tags[methodTag]
   useEffect(() => {
     if (!methods) {
-      history.push(`/${specKey}/methods`)
+      navigate(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {

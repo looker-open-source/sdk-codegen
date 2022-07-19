@@ -41,6 +41,7 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
+      location,
     }),
   }
 })
@@ -63,7 +64,10 @@ describe('SideNavTypes', () => {
     )
     expect(screen.queryByText(typeTags[0])).not.toBeInTheDocument()
     userEvent.click(screen.getByText(tag))
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/types/${tag}`)
+    expect(mockHistoryPush).toHaveBeenCalledWith({
+      pathname: `/${specKey}/types/${tag}`,
+      search: '',
+    })
     expect(screen.getByRole('link', { name: typeTags[0] })).toBeInTheDocument()
   })
 
@@ -78,7 +82,10 @@ describe('SideNavTypes', () => {
     )
     expect(screen.getByRole('link', { name: typeTags[0] })).toBeInTheDocument()
     userEvent.click(screen.getAllByText(tag)[0])
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/types`)
+    expect(mockHistoryPush).toHaveBeenCalledWith({
+      pathname: `/${specKey}/types`,
+      search: '',
+    })
     expect(
       screen.queryByRole('link', { name: typeTags[0] })
     ).not.toBeInTheDocument()

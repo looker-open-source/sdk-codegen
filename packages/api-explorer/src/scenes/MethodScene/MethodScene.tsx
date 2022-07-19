@@ -42,7 +42,7 @@ import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 
-import { getApixAdaptor } from '../../utils'
+import { getApixAdaptor, useNavigation } from '../../utils'
 import {
   ApixSection,
   DocActivityType,
@@ -78,6 +78,7 @@ const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
 export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const adaptor = getApixAdaptor()
   const history = useHistory()
+  const navigate = useNavigation()
   const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
@@ -94,9 +95,9 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
       // Invalid method
       if (api.tags[methodTag]) {
         // Found tag though
-        history.push(`/${specKey}/methods/${methodTag}`)
+        navigate(`/${specKey}/methods/${methodTag}`)
       } else {
-        history.push(`/${specKey}/methods`)
+        navigate(`/${specKey}/methods`)
       }
     }
   }, [api, history, methodName, methodTag, specKey])

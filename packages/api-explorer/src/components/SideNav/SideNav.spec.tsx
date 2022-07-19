@@ -29,7 +29,10 @@ import userEvent from '@testing-library/user-event'
 import { screen, waitFor } from '@testing-library/react'
 
 import { getLoadedSpecs } from '../../test-data'
-import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { defaultSettingsState } from '../../state'
 import { SideNav } from './SideNav'
 import { countMethods, countTypes } from './searchUtils'
@@ -88,14 +91,45 @@ describe('SideNav', () => {
   })
 })
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location,
+    }),
+  }
+})
+
 describe('Search', () => {
-  test('it filters methods and types on input', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
+  test('inputting text in search box updates URL', async () => {
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    jest.spyOn(spec.api!, 'search')
-    /** Pasting to avoid triggering search multiple times */
     await userEvent.paste(input, searchPattern)
+    await waitFor(() => {
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: '/3.1/methods',
+        search: `s=${searchPattern}`,
+      })
+    })
+  })
+
+  test('sets search default value from store on load', async () => {
+    const searchPattern = 'embedsso'
+    const store = createTestStore({
+      settings: { searchPattern: searchPattern },
+    })
+    jest.spyOn(spec.api!, 'search')
+    renderWithRouterAndReduxProvider(
+      <SideNav spec={spec} />,
+      ['/3.1/methods?s=embedsso'],
+      store
+    )
+    const input = screen.getByLabelText('Search')
+    expect(input).toHaveValue(searchPattern)
     await waitFor(() => {
       expect(spec.api!.search).toHaveBeenCalledWith(
         searchPattern,
