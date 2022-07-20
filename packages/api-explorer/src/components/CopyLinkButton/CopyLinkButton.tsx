@@ -28,7 +28,7 @@ import { IconButton } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined/Link'
 import styled from 'styled-components'
 
-interface CopyLinkButtonProps {
+interface DocumentInterfaceProps {
   top: string
   right: string
   visible: boolean
@@ -37,7 +37,7 @@ export const CopyLinkButton = ({
   top,
   right,
   visible,
-}: CopyLinkButtonProps) => {
+}: DocumentInterfaceProps) => {
   const [title, CopyLinkTooltip] = useState('Copy link to this page view')
   return (
     <CopyLink visible={visible} top={top} right={right}>

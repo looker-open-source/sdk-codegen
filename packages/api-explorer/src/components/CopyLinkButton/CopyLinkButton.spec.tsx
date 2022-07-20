@@ -28,7 +28,7 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import { CopyLinkButton } from '@looker/api-explorer'
+import { CopyLinkButton } from '../CopyLinkButton'
 
 describe('CopyLinkButton', () => {
   test('it renders', () => {
