@@ -23,46 +23,49 @@
  SOFTWARE.
 
  */
+import type { ReactNode, ReactNodeArray } from 'react'
 import React, { useState } from 'react'
-import { IconButton } from '@looker/components'
+import { IconButton, Space } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined/Link'
-import styled from 'styled-components'
 
-interface DocumentInterfaceProps {
-  top: string
-  right: string
-  visible: boolean
+interface CopyLinkWrapperProps {
+  children: ReactNode | ReactNodeArray
+  visible?: boolean
 }
-export const CopyLinkButton = ({
-  top,
-  right,
-  visible,
-}: DocumentInterfaceProps) => {
-  const [title, CopyLinkTooltip] = useState('Copy link to this page view')
+
+const COPY_TO_CLIPBOARD = 'Copy to clipboard'
+
+export const CopyLinkWrapper = ({
+  children,
+  visible = true,
+}: CopyLinkWrapperProps) => {
+  const [tooltipContent, setTooltipContent] = useState(COPY_TO_CLIPBOARD)
+  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
+  const handleCopyLink = async () => {
+    // const adaptor = getEnvAdaptor()
+    await navigator.clipboard.writeText(location.href)
+    setTooltipContent('Copied to clipboard')
+  }
+  const handleMouseLeave = () => {
+    setTooltipContent(COPY_TO_CLIPBOARD)
+  }
   return (
-    <CopyLink visible={visible} top={top} right={right}>
-      <IconButton
-        onClick={async () => {
-          CopyLinkTooltip('Copied to clipboard')
-          await navigator.clipboard.writeText(location.href)
-        }}
-        onMouseEnter={() => CopyLinkTooltip('Copy link to this section')}
-        size="small"
-        icon={<Link />}
-        label={title}
-        tooltipPlacement="bottom"
-      />
-    </CopyLink>
+    <Space
+      width={'100%'}
+      onMouseEnter={() => setShowCopyLinkButton(true)}
+      onMouseLeave={() => setShowCopyLinkButton(false)}
+    >
+      {children}
+      {showCopyLinkButton && visible && (
+        <IconButton
+          onClick={handleCopyLink}
+          icon={<Link />}
+          size="small"
+          label={tooltipContent}
+          tooltipPlacement="bottom"
+          onMouseLeave={handleMouseLeave}
+        />
+      )}
+    </Space>
   )
 }
-
-const CopyLink = styled('span')<{
-  top: string
-  right: string
-  visible: boolean
-}>`
-  position: absolute;
-  top: ${({ top }) => top};
-  right: ${({ right }) => right};
-  display: ${({ visible }) => (visible ? 'block' : 'none')};
-`

@@ -35,7 +35,6 @@ import {
   useTabs,
   InputSearch,
   Box2,
-  Span,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -46,10 +45,10 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
+import { CopyLinkWrapper } from '@looker/run-it'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
-import { CopyLinkButton } from '../CopyLinkButton'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
@@ -98,7 +97,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const searchCriteria = useSelector(selectSearchCriteria)
   const searchPattern = useSelector(selectSearchPattern)
   const [pattern, setSearchPattern] = useState(searchPattern)
-  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
@@ -111,7 +109,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
-    setShowCopyLinkButton(!!value)
   }
 
   useEffect(() => {
@@ -173,10 +170,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         position={'relative'}
         width={'100%'}
       >
-        <Span
-          onMouseEnter={() => setShowCopyLinkButton(!!pattern)}
-          onMouseLeave={() => setShowCopyLinkButton(false)}
-        >
+        <CopyLinkWrapper visible={!!pattern}>
           <InputSearch
             aria-label="Search"
             onChange={handleInputChange}
@@ -184,12 +178,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
             value={pattern}
             isClearable
           />
-          <CopyLinkButton
-            top={'24px'}
-            right={'58px'}
-            visible={showCopyLinkButton}
-          />
-        </Span>
+        </CopyLinkWrapper>
         <SearchMessage search={searchResults} />
       </Box2>
       <TabList {...tabs} distribute>

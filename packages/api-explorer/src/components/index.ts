@@ -24,7 +24,6 @@
 
  */
 export { ApixSection, Loader } from './common'
-export { CopyLinkButton } from './CopyLinkButton'
 export { DocActivityType } from './DocActivityType'
 export { DocCode } from './DocCode'
 export { DocMethodSummary, DocSummaryStatus } from './DocMethodSummary'

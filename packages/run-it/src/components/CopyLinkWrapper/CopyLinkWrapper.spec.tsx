@@ -28,12 +28,20 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import { CopyLinkButton } from '../CopyLinkButton'
+import { CopyLinkWrapper } from './index'
 
-describe('CopyLinkButton', () => {
-  test('it renders', () => {
-    renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
-    expect(screen.getByText('Copy link to this page view')).toBeInTheDocument()
+describe('CopyLinkWrapper', () => {
+  test('it renders and hides button upon mouse hover', () => {
+    renderWithTheme(
+      <CopyLinkWrapper>
+        <div>test</div>
+      </CopyLinkWrapper>
+    )
+    const div = screen.getByText('test')
+    userEvent.hover(div)
+    expect(screen.queryByRole('button')).toBeInTheDocument()
+    userEvent.unhover(div)
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
   const mockClipboardCopy = jest
     .fn()
@@ -45,10 +53,36 @@ describe('CopyLinkButton', () => {
   })
   test('it copies to clipboard', async () => {
     jest.spyOn(navigator.clipboard, 'writeText')
-    renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
+    renderWithTheme(
+      <CopyLinkWrapper visible={true}>
+        <div>test</div>
+      </CopyLinkWrapper>
+    )
+    const div = screen.getByText('test')
+    userEvent.hover(div)
     await waitFor(() => {
       userEvent.click(screen.getByRole('button'))
       expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+    })
+  })
+  test('it updates tooltip content upon copy', async () => {
+    renderWithTheme(
+      <CopyLinkWrapper visible={true}>
+        <div>test</div>
+      </CopyLinkWrapper>
+    )
+    const div = screen.getByText('test')
+    userEvent.hover(div)
+    const button = screen.getByRole('button')
+    await waitFor(() => {
+      userEvent.hover(button)
+      expect(screen.getByText('Copy to clipboard')).toBeInTheDocument()
+    })
+    await waitFor(() => {
+      userEvent.click(screen.getByRole('button'))
+      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+      userEvent.hover(button)
+      expect(screen.getAllByText('Copied to clipboard')[0]).toBeVisible()
     })
   })
 })

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { CopyLinkButton } from './CopyLinkButton'
+export { CopyLinkWrapper } from './CopyLinkWrapper'
