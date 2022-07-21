@@ -35,7 +35,6 @@ import {
   useTabs,
   InputSearch,
   Box2,
-  Span,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -49,11 +48,11 @@ import { useSelector } from 'react-redux'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
-import { CopyLinkButton } from '../CopyLinkButton'
 import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
+import { CopyLinkWrapper } from '../CopyLinkWrapper'
 
 interface SideNavState {
   tags: TagList
@@ -173,10 +172,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
         position={'relative'}
         width={'100%'}
       >
-        <Span
-          onMouseEnter={() => setShowCopyLinkButton(!!pattern)}
-          onMouseLeave={() => setShowCopyLinkButton(false)}
-        >
+        <CopyLinkWrapper visible={showCopyLinkButton}>
           <InputSearch
             aria-label="Search"
             onChange={handleInputChange}
@@ -184,12 +180,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
             value={pattern}
             isClearable
           />
-          <CopyLinkButton
-            top={'24px'}
-            right={'58px'}
-            visible={showCopyLinkButton}
-          />
-        </Span>
+        </CopyLinkWrapper>
         <SearchMessage search={searchResults} />
       </Box2>
       <TabList {...tabs} distribute>
