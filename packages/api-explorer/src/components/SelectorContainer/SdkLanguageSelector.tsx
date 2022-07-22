@@ -24,25 +24,27 @@
 
  */
 import type { FC } from 'react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
 import type { SelectOptionProps } from '@looker/components'
 
+import { useHistory } from 'react-router-dom'
 import { useSettingActions, selectSdkLanguage } from '../../state'
+import { useNavigation } from '../../utils'
 
 /**
  * Allows the user to select their preferred SDK language
  */
 export const SdkLanguageSelector: FC = () => {
+  const history = useHistory()
+  const navigate = useNavigation()
   const { setSdkLanguageAction } = useSettingActions()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
-
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.language,
   }))
-
   allSdkLanguages.push({
     options: [
       {
@@ -54,6 +56,21 @@ export const SdkLanguageSelector: FC = () => {
   const handleChange = (language: string) => {
     setSdkLanguageAction({ sdkLanguage: language })
   }
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(history.location.search)
+    const initSdk =
+      searchParams.get('sdk') === 'CSharp' ? 'C#' : searchParams.get('sdk')
+    if (initSdk && allSdkLanguages.find((lang) => lang.value === initSdk)) {
+      setSdkLanguageAction({ sdkLanguage: initSdk! })
+    }
+  }, [])
+
+  useEffect(() => {
+    const language =
+      selectedSdkLanguage === 'C#' ? 'Csharp' : selectedSdkLanguage
+    navigate(history.location.pathname, new URLSearchParams(`sdk=${language}`))
+  }, [selectedSdkLanguage])
 
   return (
     <Select

@@ -111,14 +111,21 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     setSearchPattern(value)
   }
 
+  /**
+   * TODO: dilemma - how to determine whether you want to add a parameter to the URL
+   *        with the currently existing params, or replace them completely? 2 cases
+   *        - my solution: enter in query param with value of '' indicates it
+   *          should be deleted
+   *
+   */
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, searchParams)
     } else if (!debouncedPattern && searchParams.get('s')) {
-      searchParams.delete('s')
-      navigate(location.pathname, { search: searchParams.toString() })
+      searchParams.set('s', '')
+      navigate(location.pathname, searchParams)
     }
   }, [location.search, debouncedPattern])
 

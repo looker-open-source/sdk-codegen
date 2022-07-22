@@ -31,9 +31,20 @@ import * as reactRedux from 'react-redux'
 
 import { registerTestEnvAdaptor } from '@looker/extension-utils'
 import { defaultSettingsState, settingsSlice } from '../../state'
-import { renderWithReduxProvider } from '../../test-utils'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location,
+    }),
+  }
+})
 describe('SdkLanguageSelector', () => {
   window.HTMLElement.prototype.scrollIntoView = jest.fn()
 
@@ -41,15 +52,19 @@ describe('SdkLanguageSelector', () => {
     localStorage.clear()
   })
 
-  test('it has the correct default language selected', () => {
-    renderWithReduxProvider(<SdkLanguageSelector />)
+  test('it has the correct default language selected', async () => {
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
     expect(screen.getByRole('textbox')).toHaveValue(
       defaultSettingsState.sdkLanguage
     )
+    expect(mockHistoryPush).toHaveBeenCalledWith({
+      pathname: location.pathname,
+      search: `sdk=${defaultSettingsState.sdkLanguage}`,
+    })
   })
 
   test('it lists all available languages and "All" as options', async () => {
-    renderWithReduxProvider(<SdkLanguageSelector />)
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
     await act(async () => {
       await userEvent.click(screen.getByRole('textbox'))
       await waitFor(() => {
@@ -64,7 +79,7 @@ describe('SdkLanguageSelector', () => {
     registerTestEnvAdaptor()
     const mockDispatch = jest.fn()
     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-    renderWithReduxProvider(<SdkLanguageSelector />)
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
 
     const selector = screen.getByRole('textbox')
     expect(defaultSettingsState.sdkLanguage).toEqual('Python')
@@ -79,6 +94,22 @@ describe('SdkLanguageSelector', () => {
             sdkLanguage: 'TypeScript',
           })
         )
+      })
+    })
+  })
+  test('changing SDK language causes parameter to be pushed to URL', async () => {
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+    const selector = screen.getByRole('textbox')
+    expect(defaultSettingsState.sdkLanguage).toEqual('Python')
+    expect(selector).toHaveValue('Python')
+    userEvent.click(selector)
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
+      await waitFor(async () => {
+        expect(mockHistoryPush).toHaveBeenLastCalledWith({
+          pathname: location.pathname,
+          search: 'sdk=TypeScript',
+        })
       })
     })
   })
