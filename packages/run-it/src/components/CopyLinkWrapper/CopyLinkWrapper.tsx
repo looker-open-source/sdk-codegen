@@ -35,6 +35,13 @@ interface CopyLinkWrapperProps {
 
 const COPY_TO_CLIPBOARD = 'Copy to clipboard'
 
+/**
+ * Wrapper component that can render a hideable copy link button next to any
+ * passed in children components
+ *
+ * @param children
+ * @param visible
+ */
 export const CopyLinkWrapper = ({
   children,
   visible = true,
