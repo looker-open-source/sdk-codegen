@@ -35,26 +35,27 @@ import { useHistory } from 'react-router-dom'
 export const useNavigation = () => {
   const history = useHistory()
 
-  const navigate = (path: string, queryParams?: URLSearchParams | null) => {
-    const curParams = new URLSearchParams(history.location.search)
+  const navigate = (
+    path: string,
+    queryParams?: { s?: string | null; sdk?: string | null } | null
+  ) => {
+    const urlParams = new URLSearchParams(history.location.search)
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
-      history.push({ pathname: path, search: curParams.toString() })
+      history.push({ pathname: path, search: urlParams.toString() })
     } else if (queryParams === null) {
-      // TODO: worry about if queryParams is empty? When is this the case?
       // if params passed in is null, remove all parameters from the URL
       history.push({ pathname: path })
     } else {
-      // if we have new parameters passed in, push them to the URL
-      // maintain existing parameters unless set in queryParams with empty value
-      curParams.forEach((value, key) => {
-        if (queryParams.get(key) === '') {
-          queryParams.delete(key)
-        } else if (queryParams.get(key) === null) {
-          queryParams.set(key, value)
+      // if we have new parameters passed in, append them to the URL unless null
+      Object.keys(queryParams).forEach((key) => {
+        if (queryParams[key] === null && urlParams.get(key)) {
+          urlParams.delete(key)
+        } else {
+          urlParams.set(key, queryParams[key])
         }
       })
-      history.push({ pathname: path, search: queryParams.toString() })
+      history.push({ pathname: path, search: urlParams.toString() })
     }
   }
 
