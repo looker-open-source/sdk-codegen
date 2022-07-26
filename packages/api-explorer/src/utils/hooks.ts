@@ -47,7 +47,7 @@ export const useNavigation = () => {
       // if params passed in is null, remove all parameters from the URL
       history.push({ pathname: path })
     } else {
-      // if we have new parameters passed in, append them to the URL unless null
+      // push each key as new param to URL, excluding entries with value null
       Object.keys(queryParams).forEach((key) => {
         if (
           (queryParams[key] === null || queryParams[key] === '') &&
