@@ -60,19 +60,14 @@ describe('Navigate', () => {
     })
   })
 
-  test('clears existing params when given params are an empty object', () => {
-    navigate(route, {})
-    expect(mockHistoryPush).lastCalledWith({
-      pathname: route,
-    })
-  })
-
   test('sets query parameters when given a populated query params object', () => {
-    const newParams = 's=embedsso'
-    navigate(route, { search: newParams })
+    const newParams = new URLSearchParams()
+    newParams.set('s', 'test')
+    newParams.set('sdk', 'Kotlin')
+    navigate(route, { s: newParams.get('s'), sdk: newParams.get('sdk') })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
-      search: newParams,
+      search: newParams.toString(),
     })
   })
 })
