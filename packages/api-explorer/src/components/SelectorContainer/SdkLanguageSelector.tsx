@@ -60,16 +60,15 @@ export const SdkLanguageSelector: FC = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(history.location.search)
     const urlSdk = searchParams.get('sdk')
-    const initSdk = urlSdk && urlSdk.toLowerCase() === 'csharp' ? 'C#' : urlSdk
-    if (initSdk && allSdkLanguages.find((lang) => lang.value === initSdk)) {
-      setSdkLanguageAction({ sdkLanguage: initSdk! })
+    if (urlSdk && allSdkLanguages.find((lang) => lang.label === urlSdk)) {
+      setSdkLanguageAction({ sdkLanguage: urlSdk! })
     }
   }, [])
 
   useEffect(() => {
-    const language =
-      selectedSdkLanguage === 'C#' ? 'Csharp' : selectedSdkLanguage
-    navigate(history.location.pathname, { sdk: language })
+    navigate(history.location.pathname, {
+      sdk: selectedSdkLanguage.toLowerCase(),
+    })
   }, [selectedSdkLanguage])
 
   return (

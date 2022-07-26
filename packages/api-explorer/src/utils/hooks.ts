@@ -49,7 +49,10 @@ export const useNavigation = () => {
     } else {
       // if we have new parameters passed in, append them to the URL unless null
       Object.keys(queryParams).forEach((key) => {
-        if (queryParams[key] === null && urlParams.get(key)) {
+        if (
+          (queryParams[key] === null || queryParams[key] === '') &&
+          urlParams.get(key)
+        ) {
           urlParams.delete(key)
         } else {
           urlParams.set(key, queryParams[key])

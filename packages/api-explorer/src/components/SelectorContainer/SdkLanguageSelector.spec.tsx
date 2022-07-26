@@ -59,7 +59,7 @@ describe('SdkLanguageSelector', () => {
     )
     expect(mockHistoryPush).toHaveBeenCalledWith({
       pathname: location.pathname,
-      search: `sdk=${defaultSettingsState.sdkLanguage}`,
+      search: `sdk=python`,
     })
   })
 
@@ -108,7 +108,7 @@ describe('SdkLanguageSelector', () => {
       await waitFor(async () => {
         expect(mockHistoryPush).toHaveBeenLastCalledWith({
           pathname: location.pathname,
-          search: 'sdk=TypeScript',
+          search: 'sdk=typescript',
         })
       })
     })
