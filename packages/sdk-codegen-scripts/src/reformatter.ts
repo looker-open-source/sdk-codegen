@@ -298,7 +298,7 @@ class GoFormatter extends BaseFormatter {
     const gofmtExists = run('command', ['-v', 'gofmt'], this.instructions, true)
     if (gofmtExists.includes('gofmt')) {
       const list = files.join(' ')
-      // pipenv check completed without error
+      // gofmt check completed without error
       run('gofmt', ['-w', list], 'Go reformat', true)
       return success(files)
     } else {
