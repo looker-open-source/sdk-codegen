@@ -2064,7 +2064,6 @@ export interface IApiModel extends IModel {
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
-  // private requestTypes: TypeList = {}
   private enumTypes: TypeList = {}
   private refs: TypeList = {}
   methods: MethodList = {}
@@ -2330,7 +2329,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return `${strRequest}${camelCase('_' + method.name)}`
   }
 
-  // add to this.requestTypes collection with hash as key
+  // add to this.types collection with name as key
   makeRequestType(method: IMethod) {
     const name = this.requestTypeName(method)
     const request = new RequestType(
@@ -2375,7 +2374,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    * only gets the request type if more than one method parameter is optional
    *
    * if needed, create the request type from method parameters
-   * add to this.requestTypes collection
+   * add to this.types collection
    *
    * @param method for request type
    * @returns returns type if request type is needed, otherwise it doesn't
@@ -2478,7 +2477,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
   sortLists() {
     this.methods = this.sortList(this.methods)
     this.types = this.sortList(this.types)
-    // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
     this.typeTags = this.sortList(this.typeTags)
