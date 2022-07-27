@@ -3483,7 +3483,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_roles -> []GroupSearch
-func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
+func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -3518,7 +3518,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_hierarchy -> []GroupHierarchy
-func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
+func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -5630,7 +5630,7 @@ func (l *LookerSDK) AllPermissions(
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /permission_sets/search -> []PermissionSet
-func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
+func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
 	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -5787,7 +5787,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /roles/search/with_user_count -> []RoleSearch
-func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -7314,7 +7314,7 @@ func (l *LookerSDK) CreateEmbedUser(
 // ### Get information about all user attributes.
 //
 // GET /user_attributes -> []UserAttribute
-func (l *LookerSDK) AllUserAttributes(request RequestAllBoardSections,
+func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
 	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)

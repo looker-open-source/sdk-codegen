@@ -25,7 +25,7 @@
  */
 
 /**
- * 373 API models: 235 Spec, 57 Request, 60 Write, 21 Enum
+ * 378 API models: 235 Spec, 62 Request, 60 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -6997,6 +6997,20 @@ export interface IRequestAllScheduledPlans {
 }
 
 /**
+ * Dynamically generated request type for all_user_attributes
+ */
+export interface IRequestAllUserAttributes {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Fields to order the results by. Sortable fields include: name, label
+   */
+  sorts?: string | null
+}
+
+/**
  * Dynamically generated request type for all_users
  */
 export interface IRequestAllUsers {
@@ -8243,6 +8257,98 @@ export interface IRequestSearchGroups {
 }
 
 /**
+ * Dynamically generated request type for search_groups_with_hierarchy
+ */
+export interface IRequestSearchGroupsWithHierarchy {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match group id.
+   */
+  id?: string | null
+  /**
+   * Match group name.
+   */
+  name?: string | null
+  /**
+   * Match group external_group_id.
+   */
+  external_group_id?: string | null
+  /**
+   * Match group externally_managed.
+   */
+  externally_managed?: boolean | null
+  /**
+   * Match group externally_orphaned.
+   */
+  externally_orphaned?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_groups_with_roles
+ */
+export interface IRequestSearchGroupsWithRoles {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match group id.
+   */
+  id?: string | null
+  /**
+   * Match group name.
+   */
+  name?: string | null
+  /**
+   * Match group external_group_id.
+   */
+  external_group_id?: string | null
+  /**
+   * Match group externally_managed.
+   */
+  externally_managed?: boolean | null
+  /**
+   * Match group externally_orphaned.
+   */
+  externally_orphaned?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_looks
  */
 export interface IRequestSearchLooks {
@@ -8363,9 +8469,89 @@ export interface IRequestSearchModelSets {
 }
 
 /**
+ * Dynamically generated request type for search_permission_sets
+ */
+export interface IRequestSearchPermissionSets {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match permission set id.
+   */
+  id?: string | null
+  /**
+   * Match permission set name.
+   */
+  name?: string | null
+  /**
+   * Match permission sets by all_access status.
+   */
+  all_access?: boolean | null
+  /**
+   * Match permission sets by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match role id.
+   */
+  id?: string | null
+  /**
+   * Match role name.
+   */
+  name?: string | null
+  /**
+   * Match roles by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_roles_with_user_count
+ */
+export interface IRequestSearchRolesWithUserCount {
   /**
    * Requested fields.
    */

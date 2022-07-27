@@ -162,6 +162,7 @@ import type {
   IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
@@ -197,9 +198,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -5824,12 +5829,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_roles(
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>> {
     return this.get<IGroupSearch[], IError>(
@@ -5880,12 +5885,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_hierarchy(
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithHierarchy,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>> {
     return this.get<IGroupHierarchy[], IError>(
@@ -9184,12 +9189,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /permission_sets/search -> IPermissionSet[]
    *
-   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
-    request: IRequestSearchModelSets,
+    request: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>> {
     return this.get<IPermissionSet[], IError>(
@@ -9446,12 +9451,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
-   * @param request composed interface "IRequestSearchRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_roles_with_user_count(
-    request: IRequestSearchRoles,
+    request: IRequestSearchRolesWithUserCount,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>> {
     return this.get<IRoleSearch[], IError>(
@@ -11815,12 +11820,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /user_attributes -> IUserAttribute[]
    *
-   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
-    request: IRequestAllBoardSections,
+    request: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>> {
     return this.get<IUserAttribute[], IError>(
