@@ -49,10 +49,7 @@ export const useNavigation = () => {
     } else {
       // push each key as new param to URL, excluding entries with value null
       Object.keys(queryParams).forEach((key) => {
-        if (
-          (queryParams[key] === null || queryParams[key] === '') &&
-          urlParams.get(key)
-        ) {
+        if (queryParams[key] === null || queryParams[key] === '') {
           urlParams.delete(key)
         } else {
           urlParams.set(key, queryParams[key])

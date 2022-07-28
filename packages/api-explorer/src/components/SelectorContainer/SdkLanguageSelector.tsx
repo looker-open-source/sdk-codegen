@@ -58,16 +58,10 @@ export const SdkLanguageSelector: FC = () => {
   }
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(history.location.search)
-    const urlSdk = searchParams.get('sdk')
-    if (urlSdk && allSdkLanguages.find((lang) => lang.label === urlSdk)) {
-      setSdkLanguageAction({ sdkLanguage: urlSdk! })
-    }
-  }, [])
-
-  useEffect(() => {
+    const sdkParam =
+      selectedSdkLanguage === 'All' ? null : selectedSdkLanguage.toLowerCase()
     navigate(history.location.pathname, {
-      sdk: selectedSdkLanguage.toLowerCase(),
+      sdk: sdkParam,
     })
   }, [selectedSdkLanguage])
 

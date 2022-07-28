@@ -120,7 +120,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       searchParams.set('s', '')
       navigate(location.pathname, { s: null })
     }
-  }, [location.search, debouncedPattern])
+  }, [debouncedPattern])
 
   useEffect(() => {
     let results
@@ -128,6 +128,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
+    setSearchPattern(searchPattern)
 
     if (searchPattern && api.search) {
       results = api.search(searchPattern, criteriaToSet(searchCriteria))

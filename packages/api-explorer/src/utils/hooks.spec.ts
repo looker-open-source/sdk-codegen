@@ -60,6 +60,14 @@ describe('Navigate', () => {
     })
   })
 
+  test('removes particular parameter when object is passed in with its value as null', () => {
+    navigate(route, { s: null, sdk: 'test' })
+    expect(mockHistoryPush).lastCalledWith({
+      pathname: route,
+      search: 'sdk=test',
+    })
+  })
+
   test('sets query parameters when given a populated query params object', () => {
     const newParams = new URLSearchParams()
     newParams.set('s', 'test')
@@ -68,6 +76,16 @@ describe('Navigate', () => {
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
       search: newParams.toString(),
+    })
+  })
+
+  test('appends parameters when object is passed in with existing parameters', () => {
+    const newParams = new URLSearchParams()
+    newParams.set('sdk', 'Kotlin')
+    navigate(route, { sdk: newParams.get('sdk') })
+    expect(mockHistoryPush).lastCalledWith({
+      pathname: route,
+      search: curParams.toString() + '&' + newParams.toString(),
     })
   })
 })

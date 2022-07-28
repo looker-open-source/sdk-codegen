@@ -46,6 +46,7 @@ import {
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 
+import { codeGenerators } from '@looker/sdk-codegen'
 import type { IApixAdaptor } from './utils'
 import {
   Header,
@@ -91,13 +92,20 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
-  const { initSettingsAction, setSearchPatternAction } = useSettingActions()
+  const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
+    useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
+  const allSdkLanguages: { value: string }[] = codeGenerators.map((gen) => ({
+    value: gen.language,
+  }))
+  allSdkLanguages.push({
+    value: 'All',
+  })
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -126,7 +134,18 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
-    setSearchPatternAction({ searchPattern: searchPattern! })
+    setSearchPatternAction({ searchPattern: searchPattern })
+    const urlSdk = searchParams.get('sdk')
+    if (urlSdk) {
+      const foundLanguage = allSdkLanguages.find(
+        (lang) => lang.value.toLowerCase() === urlSdk
+      )
+      if (foundLanguage) {
+        setSdkLanguageAction({
+          sdkLanguage: foundLanguage.value,
+        })
+      }
+    }
   }, [location.search])
 
   useEffect(() => {
