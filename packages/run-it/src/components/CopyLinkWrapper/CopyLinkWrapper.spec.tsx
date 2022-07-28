@@ -28,7 +28,9 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
+import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 import { CopyLinkWrapper } from './index'
+import { initRunItSdk } from '@looker/run-it'
 
 describe('CopyLinkWrapper', () => {
   test('it renders and hides button upon mouse hover', () => {
@@ -51,6 +53,7 @@ describe('CopyLinkWrapper', () => {
       writeText: mockClipboardCopy,
     },
   })
+
   test('it copies to clipboard', async () => {
     jest.spyOn(navigator.clipboard, 'writeText')
     renderWithTheme(
@@ -65,7 +68,10 @@ describe('CopyLinkWrapper', () => {
       expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
     })
   })
+
   test('it updates tooltip content upon copy', async () => {
+    const sdk = initRunItSdk()
+    registerTestEnvAdaptor(new BrowserAdaptor(sdk))
     renderWithTheme(
       <CopyLinkWrapper visible={true}>
         <div>test</div>
