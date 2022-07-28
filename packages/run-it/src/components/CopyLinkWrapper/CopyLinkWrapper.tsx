@@ -27,6 +27,8 @@ import type { ReactNode, ReactNodeArray } from 'react'
 import React, { useState } from 'react'
 import { IconButton, Space } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined/Link'
+import type { ExtensionAdaptor, BrowserAdaptor } from '@looker/extension-utils'
+import { getEnvAdaptor } from '@looker/extension-utils'
 
 interface CopyLinkWrapperProps {
   children: ReactNode | ReactNodeArray
@@ -48,8 +50,14 @@ export const CopyLinkWrapper = ({
   const [tooltipContent, setTooltipContent] = useState(COPY_TO_CLIPBOARD)
   const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
   const handleCopyLink = async () => {
-    // const adaptor = getEnvAdaptor()
-    await navigator.clipboard.writeText(location.href)
+    const adaptor = getEnvAdaptor()
+    if (adaptor.isExtension()) {
+      await (adaptor as ExtensionAdaptor).copyToClipboard()
+    } else {
+      await (adaptor as BrowserAdaptor).copyToClipboard()
+    }
+
+    // await navigator.clipboard.writeText(location.href)
     setTooltipContent('Copied to clipboard')
   }
   const handleMouseLeave = () => {

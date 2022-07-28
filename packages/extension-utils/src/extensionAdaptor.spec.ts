@@ -50,4 +50,26 @@ describe('ExtensionAdaptor', () => {
       ).toEqual(expectedOverrides)
     }
   )
+
+  const adaptor = new ExtensionAdaptor(
+    {
+      lookerHostData: {} as Readonly<LookerHostData>,
+    } as ExtensionSDK,
+    {} as IAPIMethods
+  )
+
+  const mockClipboardWrite = jest
+    .fn()
+    .mockImplementation(() => Promise.resolve())
+  Object.assign(adaptor, {
+    extensionSdk: {
+      clipboardWrite: mockClipboardWrite,
+    },
+  })
+
+  test('copies location href to clipboard', async () => {
+    jest.spyOn(adaptor.extensionSdk, 'clipboardWrite')
+    await adaptor.copyToClipboard()
+    expect(mockClipboardWrite).toHaveBeenCalledWith(location.href)
+  })
 })

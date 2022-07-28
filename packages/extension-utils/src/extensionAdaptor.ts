@@ -59,6 +59,10 @@ export class ExtensionAdaptor
     )
   }
 
+  async copyToClipboard() {
+    await this.extensionSdk.clipboardWrite(location.href)
+  }
+
   isExtension() {
     return true
   }
