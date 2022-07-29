@@ -161,6 +161,7 @@ import type {
   IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
@@ -196,9 +197,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -6717,13 +6722,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_roles(
     callback: (readable: Readable) => Promise<IGroupSearch[]>,
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithRoles,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupSearch[]>(
@@ -6777,13 +6782,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_hierarchy(
     callback: (readable: Readable) => Promise<IGroupHierarchy[]>,
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithHierarchy,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupHierarchy[]>(
@@ -10537,13 +10542,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /permission_sets/search -> IPermissionSet[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
     callback: (readable: Readable) => Promise<IPermissionSet[]>,
-    request: IRequestSearchModelSets,
+    request: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
@@ -10835,13 +10840,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_roles_with_user_count(
     callback: (readable: Readable) => Promise<IRoleSearch[]>,
-    request: IRequestSearchRoles,
+    request: IRequestSearchRolesWithUserCount,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRoleSearch[]>(
@@ -13551,13 +13556,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /user_attributes -> IUserAttribute[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
     callback: (readable: Readable) => Promise<IUserAttribute[]>,
-    request: IRequestAllBoardSections,
+    request: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(

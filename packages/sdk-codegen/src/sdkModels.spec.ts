@@ -368,16 +368,18 @@ describe('sdkModels', () => {
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.title).toBeDefined()
+          expect(actual.name).toEqual('RequestSearchLooks')
         }
       })
 
-      it('search_spaces', () => {
+      it('search_folders', () => {
         const method = apiTestModel.methods.search_folders
         expect(method).toBeDefined()
         const actual = apiTestModel.getRequestType(method)
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.fields).toBeDefined()
+          expect(actual.name).toEqual('RequestSearchFolders')
         }
       })
 
