@@ -12,7 +12,7 @@
     "packages/extension-utils": { "release-as": "" },
     "packages/hackathon": { },
     "packages/run-it": { "release-as": "" },
-    "packages/sdk": { },
+    "packages/sdk": { "release-as": "22.10.1" },
     "packages/sdk-codegen": { "release-as": "" },
     "packages/sdk-codegen-scripts": { "release-as": "" },
     "packages/sdk-codegen-utils": { "release-as": "" },
