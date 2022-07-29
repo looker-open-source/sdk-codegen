@@ -32,6 +32,17 @@ import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 import { CopyLinkWrapper } from './index'
 import { initRunItSdk } from '@looker/run-it'
 
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useLocation: () => ({
+      pathname: location.pathname,
+      search: location.search,
+    }),
+  }
+})
+
 describe('CopyLinkWrapper', () => {
   test('it renders and hides button upon mouse hover', () => {
     renderWithTheme(
@@ -45,6 +56,7 @@ describe('CopyLinkWrapper', () => {
     userEvent.unhover(div)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
+
   const mockClipboardCopy = jest
     .fn()
     .mockImplementation(() => Promise.resolve())
@@ -55,6 +67,7 @@ describe('CopyLinkWrapper', () => {
   })
 
   test('it copies to clipboard', async () => {
+    registerTestEnvAdaptor()
     jest.spyOn(navigator.clipboard, 'writeText')
     renderWithTheme(
       <CopyLinkWrapper visible={true}>

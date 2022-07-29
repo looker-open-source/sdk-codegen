@@ -64,12 +64,20 @@ describe('ExtensionAdaptor', () => {
   Object.assign(adaptor, {
     extensionSdk: {
       clipboardWrite: mockClipboardWrite,
+      lookerHostData: {
+        hostUrl: 'https://self-signed.looker.com:9999',
+        extensionId: 'apix::api-explorer',
+      },
     },
   })
 
-  test('copies location href to clipboard', async () => {
+  test('copies browser URL to clipboard', async () => {
     jest.spyOn(adaptor.extensionSdk, 'clipboardWrite')
-    await adaptor.copyToClipboard()
-    expect(mockClipboardWrite).toHaveBeenCalledWith(location.href)
+    await adaptor.copyToClipboard(location)
+    const testHostData = adaptor.extensionSdk.lookerHostData
+    const expectedClipboardContents = `${testHostData!.hostUrl}/extensions/${
+      testHostData!.extensionId
+    }${location.pathname}${location.search}`
+    expect(mockClipboardWrite).toHaveBeenCalledWith(expectedClipboardContents)
   })
 })
