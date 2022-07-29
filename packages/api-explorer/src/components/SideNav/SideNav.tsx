@@ -34,6 +34,7 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
+  Box2,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -51,6 +52,7 @@ import { SideNavMethodTags } from './SideNavMethodTags'
 import { SideNavTypeTags } from './SideNavTypeTags'
 import { useDebounce, countMethods, countTypes } from './searchUtils'
 import { SearchMessage } from './SearchMessage'
+import { CopyLinkWrapper } from '../CopyLinkWrapper'
 
 interface SideNavState {
   tags: TagList
@@ -95,6 +97,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const searchCriteria = useSelector(selectSearchCriteria)
   const searchPattern = useSelector(selectSearchPattern)
   const [pattern, setSearchPattern] = useState(searchPattern)
+  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
   const debouncedPattern = useDebounce(pattern, 250)
   const [sideNavState, setSideNavState] = useState<SideNavState>(() => ({
     tags: spec?.api?.tags || {},
@@ -107,6 +110,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   const handleInputChange = (value: string) => {
     setSearchPattern(value)
+    setShowCopyLinkButton(!!value)
   }
 
   useEffect(() => {
@@ -160,18 +164,25 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   return (
     <nav>
-      <InputSearch
+      <Box2
         pl="large"
         pr="large"
         pb="large"
         pt={headless ? 'u3' : 'large'}
-        aria-label="Search"
-        onChange={handleInputChange}
-        placeholder="Search"
-        value={pattern}
-        isClearable
-      />
-      <SearchMessage search={searchResults} />
+        position={'relative'}
+        width={'100%'}
+      >
+        <CopyLinkWrapper visible={showCopyLinkButton}>
+          <InputSearch
+            aria-label="Search"
+            onChange={handleInputChange}
+            placeholder="Search"
+            value={pattern}
+            isClearable
+          />
+        </CopyLinkWrapper>
+        <SearchMessage search={searchResults} />
+      </Box2>
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>

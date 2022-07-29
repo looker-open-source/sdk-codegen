@@ -23,27 +23,32 @@
  SOFTWARE.
 
  */
-export { ApixSection, Loader } from './common'
-export { CopyLinkButton } from './CopyLinkButton'
-export { DocActivityType } from './DocActivityType'
-export { DocCode } from './DocCode'
-export { DocMethodSummary, DocSummaryStatus } from './DocMethodSummary'
-export { DocMarkdown } from './DocMarkdown'
-export { DocPseudo } from './DocPseudo'
-export { DocRateLimited } from './DocRateLimited'
-export { DocReferences } from './DocReferences'
-export { DocResponses } from './DocResponses'
-export { DocSDKs } from './DocSDKs'
-export { DocSdkUsage } from './DocSdkUsage'
-export { DocSource } from './DocSource'
-export { DocStatus } from './DocStatus'
-export { DocTitle } from './DocTitle'
-export { Header, HEADER_TOGGLE_LABEL } from './Header'
-export { SideNav } from './SideNav'
-export { ExploreType, ExploreProperty } from './ExploreType'
-export { DocSchema } from './DocSchema'
-export { DocTypeSummary } from './DocTypeSummary'
-export { Link } from './Link'
-export { ErrorBoundary } from './ErrorBoundary'
-export { SelectorContainer } from './SelectorContainer'
-export { Banner } from './Banner'
+
+import { renderWithTheme } from '@looker/components-test-utils'
+import { screen, waitFor } from '@testing-library/react'
+import React from 'react'
+import userEvent from '@testing-library/user-event'
+import { CopyLinkButton } from '../CopyLinkButton'
+
+describe('CopyLinkButton', () => {
+  test('it renders', () => {
+    renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
+    expect(screen.getByText('Copy link to this page view')).toBeInTheDocument()
+  })
+  const mockClipboardCopy = jest
+    .fn()
+    .mockImplementation(() => Promise.resolve())
+  Object.assign(navigator, {
+    clipboard: {
+      writeText: mockClipboardCopy,
+    },
+  })
+  test('it copies to clipboard', async () => {
+    jest.spyOn(navigator.clipboard, 'writeText')
+    renderWithTheme(<CopyLinkButton top={'1px'} right={'1px'} visible={true} />)
+    await waitFor(() => {
+      userEvent.click(screen.getByRole('button'))
+      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+    })
+  })
+})

@@ -117,6 +117,18 @@ describe('Search', () => {
     })
   })
 
+  test('renders and removes copy link button based on mouse hover', async () => {
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
+    expect(screen.getByText('Copy link to this page view')).not.toBeVisible()
+    const searchPattern = 'embedsso'
+    const input = screen.getByLabelText('Search')
+    await userEvent.paste(input, searchPattern)
+    userEvent.hover(input)
+    expect(screen.getByText('Copy link to this page view')).toBeVisible()
+    userEvent.unhover(input)
+    expect(screen.getByText('Copy link to this page view')).not.toBeVisible()
+  })
+
   test('sets search default value from store on load', async () => {
     const searchPattern = 'embedsso'
     const store = createTestStore({
