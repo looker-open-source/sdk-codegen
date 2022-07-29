@@ -27,10 +27,7 @@ import React from 'react'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
-import * as reactRedux from 'react-redux'
-
-import { registerTestEnvAdaptor } from '@looker/extension-utils'
-import { defaultSettingsState, settingsSlice } from '../../state'
+import { defaultSettingsState } from '../../state'
 import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
