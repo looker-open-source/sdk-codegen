@@ -75,28 +75,6 @@ describe('SdkLanguageSelector', () => {
     })
   })
 
-  test('it stores the selected language in localStorage', async () => {
-    registerTestEnvAdaptor()
-    const mockDispatch = jest.fn()
-    jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
-
-    const selector = screen.getByRole('textbox')
-    expect(defaultSettingsState.sdkLanguage).toEqual('Python')
-    expect(selector).toHaveValue('Python')
-
-    userEvent.click(selector)
-    await act(async () => {
-      await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
-      await waitFor(async () => {
-        expect(mockDispatch).toHaveBeenLastCalledWith(
-          settingsSlice.actions.setSdkLanguageAction({
-            sdkLanguage: 'TypeScript',
-          })
-        )
-      })
-    })
-  })
   test('changing SDK language causes parameter to be pushed to URL', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
     const selector = screen.getByRole('textbox')

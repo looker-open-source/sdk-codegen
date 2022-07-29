@@ -31,7 +31,7 @@ import { useSelector } from 'react-redux'
 import type { SelectOptionProps } from '@looker/components'
 
 import { useHistory } from 'react-router-dom'
-import { useSettingActions, selectSdkLanguage } from '../../state'
+import { selectSdkLanguage } from '../../state'
 import { useNavigation } from '../../utils'
 
 /**
@@ -40,7 +40,6 @@ import { useNavigation } from '../../utils'
 export const SdkLanguageSelector: FC = () => {
   const history = useHistory()
   const navigate = useNavigation()
-  const { setSdkLanguageAction } = useSettingActions()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.language,
@@ -54,15 +53,23 @@ export const SdkLanguageSelector: FC = () => {
   })
 
   const handleChange = (language: string) => {
-    setSdkLanguageAction({ sdkLanguage: language })
+    navigate(location.pathname, { sdk: language.toLowerCase() })
   }
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
     const sdkParam =
       selectedSdkLanguage === 'All' ? null : selectedSdkLanguage.toLowerCase()
-    navigate(history.location.pathname, {
-      sdk: sdkParam,
-    })
+    const curSdkParam = searchParams.get('sdk')
+    if (
+      !curSdkParam ||
+      (curSdkParam &&
+        curSdkParam.toLowerCase() !== selectedSdkLanguage.toLowerCase())
+    ) {
+      navigate(history.location.pathname, {
+        sdk: sdkParam,
+      })
+    }
   }, [selectedSdkLanguage])
 
   return (
