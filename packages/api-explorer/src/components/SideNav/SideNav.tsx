@@ -121,6 +121,8 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
       navigate(location.pathname, { s: null })
     }
   }, [debouncedPattern])
+  // Removed location.search as dep to fix bug related to
+  // browser forward / backward navigation
 
   useEffect(() => {
     let results
