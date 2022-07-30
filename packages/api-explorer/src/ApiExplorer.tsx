@@ -145,6 +145,10 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
           sdkLanguage: foundLanguage.value,
         })
       }
+    } else {
+      setSdkLanguageAction({
+        sdkLanguage: 'All',
+      })
     }
   }, [location.search])
 

@@ -53,7 +53,8 @@ export const SdkLanguageSelector: FC = () => {
   })
 
   const handleChange = (language: string) => {
-    navigate(location.pathname, { sdk: language.toLowerCase() })
+    const sdkLanguage = language === 'All' ? null : language.toLowerCase()
+    navigate(location.pathname, { sdk: sdkLanguage })
   }
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export const SdkLanguageSelector: FC = () => {
       selectedSdkLanguage === 'All' ? null : selectedSdkLanguage.toLowerCase()
     const curSdkParam = searchParams.get('sdk')
     if (
-      !curSdkParam ||
+      (!curSdkParam && selectedSdkLanguage !== 'All') ||
       (curSdkParam &&
         curSdkParam.toLowerCase() !== selectedSdkLanguage.toLowerCase())
     ) {
