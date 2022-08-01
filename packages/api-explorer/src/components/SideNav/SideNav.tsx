@@ -34,6 +34,7 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
+  Box2,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -44,6 +45,7 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
+import { CopyLinkWrapper } from '@looker/run-it'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
@@ -160,18 +162,25 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   return (
     <nav>
-      <InputSearch
+      <Box2
         pl="large"
         pr="large"
         pb="large"
         pt={headless ? 'u3' : 'large'}
-        aria-label="Search"
-        onChange={handleInputChange}
-        placeholder="Search"
-        value={pattern}
-        isClearable
-      />
-      <SearchMessage search={searchResults} />
+        position={'relative'}
+        width={'100%'}
+      >
+        <CopyLinkWrapper visible={!!pattern}>
+          <InputSearch
+            aria-label="Search"
+            onChange={handleInputChange}
+            placeholder="Search"
+            value={pattern}
+            isClearable
+          />
+        </CopyLinkWrapper>
+        <SearchMessage search={searchResults} />
+      </Box2>
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>

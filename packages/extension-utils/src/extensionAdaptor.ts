@@ -59,6 +59,16 @@ export class ExtensionAdaptor
     )
   }
 
+  async copyToClipboard(location?: { pathname: string; search: string }) {
+    const { lookerHostData } = this.extensionSdk
+    if (lookerHostData && location) {
+      const { hostOrigin, extensionId } = lookerHostData
+      const { pathname, search } = location
+      const url = `${hostOrigin}/extensions/${extensionId}${pathname}${search}`
+      await this.extensionSdk.clipboardWrite(url)
+    }
+  }
+
   isExtension() {
     return true
   }
