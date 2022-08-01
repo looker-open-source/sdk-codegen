@@ -27,7 +27,6 @@ import type { ReactNode, ReactNodeArray } from 'react'
 import React, { useState } from 'react'
 import { IconButton, Space } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined/Link'
-import type { ExtensionAdaptor, BrowserAdaptor } from '@looker/extension-utils'
 import { getEnvAdaptor } from '@looker/extension-utils'
 import { useLocation } from 'react-router-dom'
 
@@ -52,14 +51,7 @@ export const CopyLinkWrapper = ({
   const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
   const location = useLocation()
   const handleCopyLink = async () => {
-    const adaptor = getEnvAdaptor()
-    if (adaptor.isExtension()) {
-      await (adaptor as ExtensionAdaptor).copyToClipboard(location)
-    } else {
-      await (adaptor as BrowserAdaptor).copyToClipboard()
-    }
-
-    // await navigator.clipboard.writeText(location.href)
+    await getEnvAdaptor().copyToClipboard(location)
     setTooltipContent('Copied to clipboard')
   }
   const handleMouseLeave = () => {

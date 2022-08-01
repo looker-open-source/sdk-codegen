@@ -41,6 +41,11 @@ export interface IAuthAdaptor {
  * Examples include: local storage operations and various link navigation functions
  */
 export interface IEnvironmentAdaptor extends IAuthAdaptor {
+  /** Copy page URL to clipboard */
+  copyToClipboard: (location?: {
+    pathname: string
+    search: string
+  }) => Promise<void>
   /** Method for determining whether running in a browser or extension environment */
   isExtension(): boolean
   /** Method for retrieving a keyed value from local storage */
