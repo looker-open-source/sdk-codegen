@@ -55,6 +55,8 @@ export interface IEnvironmentAdaptor extends IAuthAdaptor {
   openBrowserWindow: (url: string, target?: string) => void
   /** error logger */
   logError: (error: Error, componentStack: string) => void
+  /** copy to clipboard */
+  copyToClipboard: () => Promise<void>
 }
 
 /**

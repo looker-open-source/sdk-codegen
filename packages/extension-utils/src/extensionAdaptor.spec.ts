@@ -73,7 +73,7 @@ describe('ExtensionAdaptor', () => {
 
   test('copies browser URL to clipboard', async () => {
     jest.spyOn(adaptor.extensionSdk, 'clipboardWrite')
-    await adaptor.copyToClipboard(location)
+    await adaptor.copyToClipboard()
     const testHostData = adaptor.extensionSdk.lookerHostData
     const expectedClipboardContents = `${testHostData!.hostUrl}/extensions/${
       testHostData!.extensionId

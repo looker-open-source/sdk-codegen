@@ -26,6 +26,11 @@
 
 import type { ExtensionSDK } from '@looker/extension-sdk'
 import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { SpecItem } from '@looker/sdk-codegen'
+import { getSpecsFromVersions } from '@looker/sdk-codegen'
+import cloneDeep from 'lodash/cloneDeep'
+import type { ILooker40SDK } from '@looker/sdk'
+import { sdkSpecFetch } from '@looker/api-explorer'
 import type {
   IEnvironmentAdaptor,
   ThemeOverrides,
@@ -50,6 +55,7 @@ export class ExtensionAdaptor
   implements IEnvironmentAdaptor
 {
   _themeOverrides: ThemeOverrides
+  _route: string | undefined
 
   constructor(public extensionSdk: ExtensionSDK, sdk: IAPIMethods) {
     super(sdk)
@@ -59,10 +65,19 @@ export class ExtensionAdaptor
     )
   }
 
-  async copyToClipboard(location: { pathname: string; search: string }) {
-    const routeContext = this.extensionSdk.lookerHostData
-    const url = `${routeContext?.hostUrl}/extensions/${routeContext?.extensionId}${location.pathname}${location.search}`
-    await this.extensionSdk.clipboardWrite(url)
+  updateRoute(route: string) {
+    this._route = route
+  }
+
+  async copyToClipboard() {
+    const { lookerHostData } = this.extensionSdk
+    if (lookerHostData) {
+      const { extensionId, hostOrigin } = lookerHostData
+      if (hostOrigin && this._route) {
+        const url = `${hostOrigin}/extensions/${extensionId}${this._route}`
+        await this.extensionSdk.clipboardWrite(url)
+      }
+    }
   }
 
   isExtension() {
@@ -94,5 +109,21 @@ export class ExtensionAdaptor
       error: error,
       message: componentStack,
     } as ErrorEvent)
+  }
+
+  async fetchSpecList() {
+    const sdk = this.sdk as ILooker40SDK
+    const versions = await sdk.ok(sdk.versions())
+    const result = await getSpecsFromVersions(versions)
+    return result
+  }
+
+  async fetchSpec(spec: SpecItem): Promise<SpecItem> {
+    const sdk = this.sdk as ILooker40SDK
+    const _spec = cloneDeep(spec)
+    _spec.api = await sdkSpecFetch(spec, (version, name) =>
+      sdk.ok(sdk.api_spec(version, name))
+    )
+    return _spec
   }
 }
