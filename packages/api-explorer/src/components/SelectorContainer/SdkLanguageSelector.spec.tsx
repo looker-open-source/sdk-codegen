@@ -72,7 +72,7 @@ describe('SdkLanguageSelector', () => {
     })
   })
 
-  test('changing SDK language causes parameter to be pushed to URL', async () => {
+  test('choosing SDK language causes parameter to be pushed to URL', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
     const selector = screen.getByRole('textbox')
     expect(defaultSettingsState.sdkLanguage).toEqual('Python')
@@ -84,6 +84,23 @@ describe('SdkLanguageSelector', () => {
         expect(mockHistoryPush).toHaveBeenLastCalledWith({
           pathname: location.pathname,
           search: 'sdk=typescript',
+        })
+      })
+    })
+  })
+
+  test('choosing All removes parameter from URL', async () => {
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+    const selector = screen.getByRole('textbox')
+    expect(defaultSettingsState.sdkLanguage).toEqual('Python')
+    expect(selector).toHaveValue('Python')
+    userEvent.click(selector)
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option', { name: 'All' }))
+      await waitFor(async () => {
+        expect(mockHistoryPush).toHaveBeenLastCalledWith({
+          pathname: location.pathname,
+          search: '',
         })
       })
     })

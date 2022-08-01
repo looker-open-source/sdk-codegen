@@ -138,7 +138,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const urlSdk = searchParams.get('sdk')
     if (urlSdk) {
       const foundLanguage = allSdkLanguages.find(
-        (lang) => lang.value.toLowerCase() === urlSdk
+        (lang) => lang.value.toLowerCase() === urlSdk.toLowerCase()
       )
       if (foundLanguage) {
         setSdkLanguageAction({
