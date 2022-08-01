@@ -67,6 +67,7 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
+  selectTagFilter,
 } from './state'
 import { getSpecKey, diffPath } from './utils'
 
@@ -90,8 +91,10 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
+  const selectedTagFilter = useSelector(selectTagFilter)
   const { initLodesAction } = useLodeActions()
-  const { initSettingsAction, setSearchPatternAction } = useSettingActions()
+  const { initSettingsAction, setSearchPatternAction, setTagFilterAction } =
+    useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
@@ -127,6 +130,12 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern! })
+    const filterMethod = searchParams.get('m')
+    if (filterMethod && selectedTagFilter !== filterMethod) {
+      setTagFilterAction({ tagFilter: filterMethod })
+    } else if (!filterMethod) {
+      setTagFilterAction({ tagFilter: 'ALL' })
+    }
   }, [location.search])
 
   useEffect(() => {

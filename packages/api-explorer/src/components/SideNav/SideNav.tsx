@@ -115,10 +115,10 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     const searchParams = new URLSearchParams(location.search)
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: searchParams.get('s') })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: null })
     }
   }, [location.search, debouncedPattern])
 
