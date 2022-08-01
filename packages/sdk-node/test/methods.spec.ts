@@ -1088,6 +1088,25 @@ describe('LookerNodeSDK', () => {
     )
   })
 
+  describe('Template', () => {
+    it('validate_template returns ok on valid template', async () => {
+      const sdk = new LookerSDK(session)
+      const result = await sdk.ok(
+        sdk.validate_theme({
+          name: 'validTemplate',
+          settings: {
+            show_filters_bar: false,
+            show_title: false,
+            tile_shadow: false,
+            font_family: 'Arial',
+          },
+        })
+      )
+      expect(result).toBeDefined()
+      expect(result).toEqual('')
+    })
+  })
+
   describe('Node environment', () => {
     beforeAll(() => {
       const section = readIniConfig(
