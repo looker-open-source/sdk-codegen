@@ -48,18 +48,20 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const history = useHistory()
   const navigate = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
+  const searchParams = new URLSearchParams(location.search)
 
   const setValue = (filter: string) => {
     navigate(location.pathname, { m: filter === 'ALL' ? null : filter })
   }
 
-  useEffect(() => {
-    /** Reset ButtonToggle value on route change */
-    navigate(location.pathname, { m: null })
-  }, [methodTag])
+  // TODO: Figure out bug here with initial render resulting in no filter
+  // useEffect(() => {
+  //   /** Reset ButtonToggle value on route change */
+  //   navigate(location.pathname, { m: null })
+  //   console.log('so this run whenever')
+  // }, [methodTag])
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search)
     if (searchParams.get('m') && searchParams.get('m') !== selectedTagFilter) {
       navigate(location.pathname, {
         m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
