@@ -61,6 +61,10 @@ export class BrowserAdaptor
     this._themeOverrides = getThemeOverrides(hostedInternally(hostname))
   }
 
+  async copyToClipboard() {
+    await navigator.clipboard.writeText(location.href)
+  }
+
   isExtension() {
     return false
   }

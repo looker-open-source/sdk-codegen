@@ -50,4 +50,20 @@ describe('BrowserAdaptor', () => {
       window.location = saveLoc
     }
   )
+
+  const mockClipboardCopy = jest
+    .fn()
+    .mockImplementation(() => Promise.resolve())
+  Object.assign(navigator, {
+    clipboard: {
+      writeText: mockClipboardCopy,
+    },
+  })
+
+  test('copies location href to clipboard', async () => {
+    jest.spyOn(navigator.clipboard, 'writeText')
+    const adaptor = new BrowserAdaptor({} as IAPIMethods)
+    await adaptor.copyToClipboard()
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+  })
 })
