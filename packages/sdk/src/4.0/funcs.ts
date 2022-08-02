@@ -164,6 +164,7 @@ import type {
   IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
@@ -199,9 +200,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -6228,13 +6233,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6286,13 +6291,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithHierarchy,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -9786,13 +9791,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchPermissionSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10066,13 +10071,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRoles,
+  request: IRequestSearchRolesWithUserCount,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -12576,13 +12581,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+ * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardSections,
+  request: IRequestAllUserAttributes,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

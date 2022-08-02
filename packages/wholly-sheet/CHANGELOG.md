@@ -1,5 +1,16 @@
 # Changelog
 
+### [0.5.32](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.31...wholly-sheet-v0.5.32) (2022-07-29)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.10.0 to ^22.10.1
+  * devDependencies
+    * @looker/sdk-node bumped from ^22.10.0 to ^22.10.1
+
 ### [0.5.31](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.30...wholly-sheet-v0.5.31) (2022-07-14)
 
 
