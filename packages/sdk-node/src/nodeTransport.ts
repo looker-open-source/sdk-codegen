@@ -194,7 +194,7 @@ export class NodeTransport extends BaseTransport {
       }
     } else {
       try {
-        result = Buffer.from(result || '').toString('binary')
+        result = Buffer.from(result ?? '').toString('binary')
       } catch (err) {
         error = err
       }
