@@ -52,6 +52,7 @@ import {
   ApiConfigMap,
   pageAll,
   pager,
+  LookerSDKError,
 } from '@looker/sdk-rtl'
 import {
   NodeSettings,
@@ -1088,8 +1089,8 @@ describe('LookerNodeSDK', () => {
     )
   })
 
-  describe('Template', () => {
-    it('validate_template returns ok on valid template', async () => {
+  describe('Theme', () => {
+    it('validate_theme returns ok on valid template', async () => {
       const sdk = new LookerSDK(session)
       const result = await sdk.ok(
         sdk.validate_theme({
@@ -1104,6 +1105,27 @@ describe('LookerNodeSDK', () => {
       )
       expect(result).toBeDefined()
       expect(result).toEqual('')
+    })
+
+    it('validate_theme throws error with details', async () => {
+      const sdk = new LookerSDK(session)
+      try {
+        await sdk.ok(
+          sdk.validate_theme({
+            settings: {
+              show_filters_bar: false,
+              show_title: false,
+              tile_shadow: false,
+              font_family: 'Arial;',
+            },
+          })
+        )
+      } catch (e: any) {
+        expect(e).toBeInstanceOf(LookerSDKError)
+        expect(e.message).toBeDefined()
+        expect(e.errors).toBeDefined()
+        expect(e.errors).toHaveLength(3)
+      }
     })
   })
 
