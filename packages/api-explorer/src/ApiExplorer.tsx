@@ -128,8 +128,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern! })
-    const filterMethod = searchParams.get('m')
-    setTagFilterAction({ tagFilter: filterMethod || 'ALL' })
+    setTagFilterAction({ tagFilter: searchParams.get('m') || 'ALL' })
   }, [location.search])
 
   useEffect(() => {

@@ -53,26 +53,54 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const setValue = (filter: string) => {
     navigate(location.pathname, { m: filter === 'ALL' ? null : filter })
   }
-
+  const methods = api.tags[methodTag]
   // TODO: Figure out bug here with initial render resulting in no filter
   // useEffect(() => {
   //   /** Reset ButtonToggle value on route change */
-  //   navigate(location.pathname, { m: null })
-  //   console.log('so this run whenever')
+  //   if (
+  //     selectedTagFilter &&
+  //     !Object.keys(methods).find(
+  //       (m) => methods[m].httpMethod === selectedTagFilter
+  //     )
+  //   ) {
+  //     navigate(location.pathname, { m: null })
+  //   } else {
+  //     navigate(location.pathname, {
+  //       m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
+  //     })
+  //   }
   // }, [methodTag])
 
   useEffect(() => {
-    if (searchParams.get('m') && searchParams.get('m') !== selectedTagFilter) {
+    const filterInUrl = searchParams.get('m')
+    if (
+      (!filterInUrl && selectedTagFilter !== 'ALL') ||
+      (filterInUrl && filterInUrl !== selectedTagFilter)
+    ) {
       navigate(location.pathname, {
         m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
       })
     }
+    // if (
+    //   !filterInUrl ||
+    //   (filterInUrl &&
+    //     !Object.keys(methods).find(
+    //       (m) => methods[m].httpMethod === filterInUrl
+    //     ))
+    // ) {
+    //   navigate(location.pathname, {
+    //     m: null,
+    //   })
+    // } else if (filterInUrl && filterInUrl !== selectedTagFilter) {
+    //   navigate(location.pathname, {
+    //     m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
+    //   })
+    // }
   }, [selectedTagFilter])
 
-  const methods = api.tags[methodTag]
   useEffect(() => {
     if (!methods) {
-      navigate(`/${specKey}/methods`)
+      navigate(`/${specKey}/methods`, { m: null })
     }
   }, [history, methods])
   if (!methods) {
@@ -107,7 +135,12 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
             selectedTagFilter === method.httpMethod) && (
             <Link
               key={index}
-              to={buildMethodPath(specKey, tag.name, method.name)}
+              to={buildMethodPath(
+                specKey,
+                tag.name,
+                method.name,
+                searchParams.toString()
+              )}
             >
               <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />

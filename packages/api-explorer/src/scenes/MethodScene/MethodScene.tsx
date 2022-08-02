@@ -84,7 +84,6 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method?.customTypes)
-
   const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {
@@ -95,9 +94,9 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
       // Invalid method
       if (api.tags[methodTag]) {
         // Found tag though
-        navigate(`/${specKey}/methods/${methodTag}`)
+        navigate(`/${specKey}/methods/${methodTag}`, { m: null })
       } else {
-        navigate(`/${specKey}/methods`)
+        navigate(`/${specKey}/methods`, { m: null })
       }
     }
   }, [api, history, methodName, methodTag, specKey])
