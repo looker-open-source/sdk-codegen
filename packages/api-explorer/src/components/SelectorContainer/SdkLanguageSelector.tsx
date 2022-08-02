@@ -25,14 +25,16 @@
  */
 import type { FC } from 'react'
 import React, { useEffect } from 'react'
-import { codeGenerators } from '@looker/sdk-codegen'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
-import type { SelectOptionProps } from '@looker/components'
 
 import { useHistory } from 'react-router-dom'
 import { selectSdkLanguage } from '../../state'
-import { useNavigation } from '../../utils'
+import {
+  getAllSdkLanguages,
+  getLanguageAbbreviations,
+  useNavigation,
+} from '../../utils'
 
 /**
  * Allows the user to select their preferred SDK language
@@ -41,31 +43,35 @@ export const SdkLanguageSelector: FC = () => {
   const history = useHistory()
   const navigate = useNavigation()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
-    value: gen.language,
-  }))
-  allSdkLanguages.push({
-    options: [
-      {
-        value: 'All',
-      },
-    ],
-  })
+  const allSdkLanguages = getAllSdkLanguages()
+  const sdkAbbreviations = getLanguageAbbreviations()
 
   const handleChange = (language: string) => {
     const sdkLanguage = language === 'All' ? null : language.toLowerCase()
-    navigate(location.pathname, { sdk: sdkLanguage })
+    if (!sdkLanguage) {
+      navigate(location.pathname, { sdk: null })
+    } else {
+      const abbreviation = sdkAbbreviations.find(
+        (option) => option.language.toLowerCase() === sdkLanguage
+      )
+      navigate(location.pathname, { sdk: abbreviation!.extension })
+    }
   }
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
+    const sdkLanguageAbbrev = sdkAbbreviations.find(
+      ({ language }) =>
+        selectedSdkLanguage.toLowerCase() === language.toLowerCase()
+    )
     const sdkParam =
-      selectedSdkLanguage === 'All' ? null : selectedSdkLanguage.toLowerCase()
+      selectedSdkLanguage === 'All' ? null : sdkLanguageAbbrev!.extension
     const curSdkParam = searchParams.get('sdk')
     if (
       (!curSdkParam && selectedSdkLanguage !== 'All') ||
       (curSdkParam &&
-        curSdkParam.toLowerCase() !== selectedSdkLanguage.toLowerCase())
+        curSdkParam.toLowerCase() !==
+          sdkLanguageAbbrev!.extension!.toLowerCase())
     ) {
       navigate(history.location.pathname, {
         sdk: sdkParam,

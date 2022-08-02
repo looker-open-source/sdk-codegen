@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,28 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export {
+
+import { codeGenerators } from '@looker/sdk-codegen'
+import {
   getAllSdkLanguages,
   getLanguageAbbreviations,
-} from './sdkSelectorUtils'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation } from './hooks'
+} from '@looker/api-explorer'
+
+describe('SDK Selector Utils', () => {
+  describe('getAllSdkLanguages', () => {
+    test('it gets all available SDK languages', () => {
+      const sdks = getAllSdkLanguages()
+      expect(sdks).toHaveLength(codeGenerators.length + 1)
+    })
+  })
+
+  describe('getLanguageAbbreviations', () => {
+    test('it builds an array of objects with language and abbreviation fields', () => {
+      const sdks = getLanguageAbbreviations()
+      sdks.forEach((sdk) => {
+        expect(sdk.language).not.toBeUndefined()
+        expect(sdk.extension).not.toBeUndefined()
+      })
+    })
+  })
+})

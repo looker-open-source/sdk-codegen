@@ -23,14 +23,38 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export {
-  getAllSdkLanguages,
-  getLanguageAbbreviations,
-} from './sdkSelectorUtils'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation } from './hooks'
+
+import { codeGenerators } from '@looker/sdk-codegen'
+import type { SelectOptionProps } from '@looker/components'
+
+/**
+ * @returns array containing all available SDK languages from codeGenerators
+ */
+
+export const getAllSdkLanguages = () => {
+  const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
+    value: gen.language,
+  }))
+  allSdkLanguages.push({
+    options: [
+      {
+        value: 'All',
+      },
+    ],
+  })
+  return allSdkLanguages
+}
+
+/**
+ * @returns array of objects with SDK language name and extension abbreviation
+ */
+export const getLanguageAbbreviations = () => {
+  const regex = /\.(\w+)\b/
+  const sdkLanguageAbbreviations: { language: string; extension: string }[] =
+    codeGenerators.map((gen) => ({
+      language: gen.language,
+      extension: gen.extension.toString().match(regex)![1],
+    }))
+  sdkLanguageAbbreviations.push({ language: 'All', extension: 'all' })
+  return sdkLanguageAbbreviations
+}

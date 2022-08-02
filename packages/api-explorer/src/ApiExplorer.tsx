@@ -45,8 +45,6 @@ import {
 } from '@looker/extension-utils'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-
-import { codeGenerators } from '@looker/sdk-codegen'
 import type { IApixAdaptor } from './utils'
 import {
   Header,
@@ -69,7 +67,7 @@ import {
   selectSpecs,
   selectCurrentSpec,
 } from './state'
-import { getSpecKey, diffPath } from './utils'
+import { getSpecKey, diffPath, getLanguageAbbreviations } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -100,12 +98,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
-  const allSdkLanguages: { value: string }[] = codeGenerators.map((gen) => ({
-    value: gen.language,
-  }))
-  allSdkLanguages.push({
-    value: 'All',
-  })
+  const allSdkLanguages = getLanguageAbbreviations()
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -138,11 +131,11 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const urlSdk = searchParams.get('sdk')
     if (urlSdk) {
       const foundLanguage = allSdkLanguages.find(
-        (lang) => lang.value.toLowerCase() === urlSdk.toLowerCase()
+        ({ extension }) => extension.toLowerCase() === urlSdk.toLowerCase()
       )
       if (foundLanguage) {
         setSdkLanguageAction({
-          sdkLanguage: foundLanguage.value,
+          sdkLanguage: foundLanguage.language,
         })
       }
     } else {

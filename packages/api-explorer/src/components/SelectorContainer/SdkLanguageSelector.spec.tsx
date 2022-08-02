@@ -30,6 +30,7 @@ import { codeGenerators } from '@looker/sdk-codegen'
 import { defaultSettingsState } from '../../state'
 import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
+import { getLanguageAbbreviations } from '@looker/api-explorer'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -56,7 +57,7 @@ describe('SdkLanguageSelector', () => {
     )
     expect(mockHistoryPush).toHaveBeenCalledWith({
       pathname: location.pathname,
-      search: `sdk=python`,
+      search: `sdk=py`,
     })
   })
 
@@ -72,24 +73,30 @@ describe('SdkLanguageSelector', () => {
     })
   })
 
-  test('choosing SDK language causes parameter to be pushed to URL', async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
-    const selector = screen.getByRole('textbox')
-    expect(defaultSettingsState.sdkLanguage).toEqual('Python')
-    expect(selector).toHaveValue('Python')
-    userEvent.click(selector)
-    await act(async () => {
-      await userEvent.click(screen.getByRole('option', { name: 'TypeScript' }))
-      await waitFor(async () => {
-        expect(mockHistoryPush).toHaveBeenLastCalledWith({
-          pathname: location.pathname,
-          search: 'sdk=typescript',
+  const sdkAbbreviations = getLanguageAbbreviations()
+  test.each([...sdkAbbreviations.filter((sdk) => sdk.language !== 'All')])(
+    'choosing SDK language pushes extension abbreviation to URL',
+    async (sdkLanguage) => {
+      renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+      const selector = screen.getByRole('textbox')
+      expect(defaultSettingsState.sdkLanguage).toEqual('Python')
+      expect(selector).toHaveValue('Python')
+      userEvent.click(selector)
+      await act(async () => {
+        await userEvent.click(
+          screen.getByRole('option', { name: sdkLanguage.language })
+        )
+        await waitFor(async () => {
+          expect(mockHistoryPush).toHaveBeenLastCalledWith({
+            pathname: location.pathname,
+            search: `sdk=${sdkLanguage.extension}`,
+          })
         })
       })
-    })
-  })
+    }
+  )
 
-  test('choosing All removes parameter from URL', async () => {
+  test('choosing All removes SDK parameter from URL', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
     const selector = screen.getByRole('textbox')
     expect(defaultSettingsState.sdkLanguage).toEqual('Python')
