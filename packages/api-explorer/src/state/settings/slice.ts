@@ -64,8 +64,12 @@ export const settingsSlice = createSlice({
   reducers: {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     initSettingsAction() {},
-    initSettingsSuccessAction(state) {
+    initSettingsSuccessAction(
+      state,
+      action: PayloadAction<InitSuccessPayload>
+    ) {
       state.initialized = true
+      state.sdkLanguage = action.payload.sdkLanguage
     },
     initSettingsFailureAction(state, action: PayloadAction<Error>) {
       state.error = action.payload

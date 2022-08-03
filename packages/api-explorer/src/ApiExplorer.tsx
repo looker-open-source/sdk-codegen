@@ -66,6 +66,7 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
+  selectSdkLanguage,
 } from './state'
 import { getSpecKey, diffPath, getLanguageAbbreviations } from './utils'
 
@@ -84,11 +85,12 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  useSettingStoreState()
+  const { initialized } = useSettingStoreState()
   useLodesStoreState()
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
+  const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
     useSettingActions()
@@ -98,7 +100,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
-  const allSdkLanguages = getLanguageAbbreviations()
+  const sdkLanguageAbbreviations = getLanguageAbbreviations()
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -125,25 +127,22 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [location.pathname, spec])
 
   useEffect(() => {
+    if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern })
-    const urlSdk = searchParams.get('sdk')
-    if (urlSdk) {
-      const foundLanguage = allSdkLanguages.find(
-        ({ extension }) => extension.toLowerCase() === urlSdk.toLowerCase()
-      )
-      if (foundLanguage) {
-        setSdkLanguageAction({
-          sdkLanguage: foundLanguage.language,
-        })
-      }
-    } else {
+    const urlSdk = searchParams.get('sdk') || 'all'
+    const foundLanguage = sdkLanguageAbbreviations.find(
+      ({ extension }) => extension === urlSdk.toLowerCase()
+    )
+    if (!foundLanguage) {
+      setSdkLanguageAction({ sdkLanguage: selectedSdkLanguage })
+    } else if (foundLanguage.language !== selectedSdkLanguage) {
       setSdkLanguageAction({
-        sdkLanguage: 'All',
+        sdkLanguage: foundLanguage!.language,
       })
     }
-  }, [location.search])
+  }, [location.search, initialized])
 
   useEffect(() => {
     if (headless) {
