@@ -24,7 +24,6 @@
 
  */
 
-import type { IApiModel } from '@looker/sdk-codegen'
 import type { BaseTransport } from './baseTransport'
 import type { IAPIMethods } from './apiMethods'
 import { sdkOk } from './transport'
@@ -33,9 +32,8 @@ export interface IErrorDocItem {
   url: string
 }
 
-type ErrorCodeIndex = Record<string, IErrorDocItem>
+export type ErrorCodeIndex = Record<string, IErrorDocItem>
 export const ErrorCodesUrl = 'https://marketplace-api.looker.com/errorcodes/'
-export const ErrorCodesIndexUrl = `${ErrorCodesUrl}index.json`
 
 export interface IErrorDocLink {
   /** base redirector url */
@@ -65,6 +63,12 @@ export interface IErrorDoc {
   contentUrl(item: IErrorDocItem): string
 
   /**
+   * fetch content from the URL, returning a "not found" response if it fails
+   * @param url to fetch
+   */
+  getContent(url: string): Promise<string>
+
+  /**
    * Markdown of error document
    * @param docUrl value of documentation_url from error payload
    */
@@ -79,17 +83,16 @@ export interface IErrorDoc {
   /** Fetch and parse the error codes documentation index from the CDN */
   load(): Promise<ErrorCodeIndex>
 
-  /** get the name of the method from the error doc url
-   *
-   * @param docUrl value of documentation_url from error payload
-   * @param api API specification for looking up the method
+  /**
+   * get the name of the method from the error doc url
+   * @param errorMdUrl url for the error document
    */
-  methodName(docUrl: string, api: IApiModel): string
+  methodName(errorMdUrl: string): string
 }
 
 /** Error document link pattern */
-export const ErrorDocPattern =
-  /(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)/i
+const ErrorDocPatternExpression = String.raw`(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`
+export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export class ErrorDoc implements IErrorDoc {
   private transport: BaseTransport
@@ -128,11 +131,22 @@ export class ErrorDoc implements IErrorDoc {
   errorKey(docUrl: string): string {
     const bits = this.parse(docUrl)
     if (!bits.redirector) return ''
-    return `${bits.statusCode}/${bits.apiPath}`
+    return `${bits.statusCode}${bits.apiPath}`
   }
 
   private notFound(key: string): string {
     return `### No documentation found: ${key}`
+  }
+
+  async getContent(url: string): Promise<string> {
+    try {
+      const content = await sdkOk(
+        this.transport.request<string, Error>('GET', url)
+      )
+      return content
+    } catch (e: any) {
+      return Promise.resolve(this.notFound(e.message))
+    }
   }
 
   async content(docUrl: string): Promise<string> {
@@ -144,25 +158,22 @@ export class ErrorDoc implements IErrorDoc {
     if (!item) {
       return Promise.resolve(this.notFound(key))
     }
-    try {
-      const url = this.contentUrl(item)
-      const md = await sdkOk(this.transport.request<string, Error>('GET', url))
-      return md
-    } catch (e: any) {
-      return Promise.resolve(this.notFound(e.message))
-    }
+    const url = this.contentUrl(item)
+    return await this.getContent(url)
   }
 
   contentUrl(item: IErrorDocItem): string {
     return `${this.cdnUrl}${item.url}`
   }
 
-  methodName(docUrl: string, _api: IApiModel): string {
-    return docUrl
+  methodName(errorMdUrl: string): string {
+    const ErrorMdRx = /(?<name>\w+)_\d{3}\.md/i
+    const match = errorMdUrl.match(ErrorMdRx)
+    return match?.groups?.name || ''
   }
 
   parse(docUrl: string): IErrorDocLink {
-    const match = docUrl.match(ErrorDocPattern)
+    const match = docUrl.match(ErrorDocRx)
     const result: IErrorDocLink = {
       redirector: match?.groups?.redirector || '',
       apiVersion: match?.groups?.apiVersion || '',

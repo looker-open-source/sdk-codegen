@@ -27,19 +27,39 @@
 import { APIMethods } from './apiMethods'
 import type { IApiSettings } from './apiSettings'
 import type { IAuthSession } from './authSession'
-import { ErrorDoc } from './errorDoc'
+import type { ErrorCodeIndex } from './errorDoc'
+import { ErrorDoc, ErrorDocRx } from './errorDoc'
 
-/**
- *
- *
- * https://docs.looker.com/r/err/4.0/429/delete/artifact/:namespace/purge
- *
- *
- */
+const sampleIndex: ErrorCodeIndex = {
+  '404/post/login': {
+    url: 'errorcodes/live/login_404.md',
+  },
+}
+
+const badLoginMd = `## API Response 404 for \`login\`
+
+## Description
+
+A 404 Error response from the /login endpoint most often means that an attempt to login at a valid Looker URL was made but the combination of client_id and client_secret provided do not match an existing valid credential on that instance.
+
+See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes/404) for general information about this HTTP response from Looker.`
+
+const loadMock = jest
+  .spyOn(ErrorDoc.prototype, 'load')
+  .mockImplementation(() => {
+    return Promise.resolve(sampleIndex)
+  })
+const getContentMock = jest
+  .spyOn(ErrorDoc.prototype, 'getContent')
+  .mockImplementation((_) => {
+    return Promise.resolve(badLoginMd)
+  })
+
 describe('ErrorDoc', () => {
-  const external = 'https://docs.looker.com/r/err/4.0/422/post/board_items/bulk'
-  const internal =
-    'https://docs.looker.com/r/err/internal/422/post/board_items/bulk'
+  const external =
+    'https://docs.looker.com/r/err/4.0/429/delete/bogus/:namespace/purge'
+  const internal = 'https://docs.looker.com/r/err/internal/422/post/bogus/bulk'
+  const badLogin = 'https://docs.looker.com/r/err/4.0/404/post/login'
   const hostname = 'https://looker.sdk'
   // const apiVersion = '4.0'
   const settings = { base_url: hostname } as IApiSettings
@@ -48,31 +68,84 @@ describe('ErrorDoc', () => {
   const errDoc = new ErrorDoc(api)
   // api.apiVersion = apiVersion
   // api.apiPath = `${settings.base_url}/api/${apiVersion}`
+
   describe('parse', () => {
     it('has a valid regex', () => {
-      const ex = String.raw`(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>d{3})(?<apiPath>.*)`
-      const rx = RegExp(ex, 'i')
-      expect(rx).toBeDefined()
-      let actual = external.match(rx)
+      let actual = ErrorDocRx.exec(external)
       expect(actual).toBeDefined()
-      actual = internal.match(rx)
+      actual = ErrorDocRx.exec(internal)
       expect(actual).toBeDefined()
     })
 
     it('does not fail', () => {
       const actual = errDoc.parse('')
       expect(actual).toBeDefined()
+      expect(actual.redirector).toEqual('')
+      expect(actual.apiVersion).toEqual('')
+      expect(actual.statusCode).toEqual('')
+      expect(actual.apiPath).toEqual('')
     })
 
-    it('handles internal pats', () => {
-      const actual = errDoc.parse(
-        'https://docs.looker.com/r/err/internal/422/post/board_items/bulk'
-      )
+    it('resolves internal paths', () => {
+      const actual = errDoc.parse(internal)
       expect(actual).toBeDefined()
       expect(actual.redirector).toEqual('https://docs.looker.com/r/err/')
       expect(actual.apiVersion).toEqual('internal')
       expect(actual.statusCode).toEqual('422')
-      expect(actual.apiPath).toEqual('post/board_items/bulk')
+      expect(actual.apiPath).toEqual('/post/bogus/bulk')
+    })
+    it('resolves external paths', () => {
+      const actual = errDoc.parse(external)
+      expect(actual).toBeDefined()
+      expect(actual.redirector).toEqual('https://docs.looker.com/r/err/')
+      expect(actual.apiVersion).toEqual('4.0')
+      expect(actual.statusCode).toEqual('429')
+      expect(actual.apiPath).toEqual('/delete/bogus/:namespace/purge')
+    })
+  })
+
+  describe('errorKey', () => {
+    it('resolves internal paths', () => {
+      const actual = errDoc.errorKey(internal)
+      expect(actual).toEqual('422/post/bogus/bulk')
+    })
+    it('resolves external paths', () => {
+      const actual = errDoc.errorKey(external)
+      expect(actual).toEqual('429/delete/bogus/:namespace/purge')
+    })
+  })
+
+  describe('methodName', () => {
+    it.each<[string, string]>([
+      ['', ''],
+      ['foo', ''],
+      ['/foo.md', ''],
+      ['login_404.md', 'login'],
+      ['login_2_404.md', 'login_2'],
+      ['and_another_404.md', 'and_another'],
+      ['errorcodes/live/login_404.md', 'login'],
+      [
+        'https://marketplace-api.looker.com/errorcodes/live/login_404.md',
+        'login',
+      ],
+    ])('url:"%s" should be "%s"', (url, expected) => {
+      expect(errDoc.methodName(url)).toEqual(expected)
+    })
+  })
+
+  describe('content', () => {
+    const no = '### No documentation found: '
+    it.each<[string, string, boolean]>([
+      [badLogin, '## API Response 404 for `login`', true],
+      [internal, `${no}422/post/bogus/bulk`, false],
+      [external, `${no}429/delete/bogus/:namespace/purge`, false],
+      ['', `${no}bad error code link`, false],
+    ])('url:"%s" should be "%s"', async (url, expected, loaded) => {
+      if (loaded) {
+        expect(loadMock).toHaveBeenCalled()
+        expect(getContentMock).toHaveBeenCalled()
+      }
+      await expect(await errDoc.content(url)).toMatch(expected)
     })
   })
 })
