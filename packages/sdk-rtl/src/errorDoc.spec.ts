@@ -32,7 +32,7 @@ import { ErrorDoc, ErrorDocRx } from './errorDoc'
 
 const sampleIndex: ErrorCodeIndex = {
   '404/post/login': {
-    url: 'errorcodes/live/login_404.md',
+    url: 'login_404.md',
   },
 }
 
@@ -43,17 +43,6 @@ const badLoginMd = `## API Response 404 for \`login\`
 A 404 Error response from the /login endpoint most often means that an attempt to login at a valid Looker URL was made but the combination of client_id and client_secret provided do not match an existing valid credential on that instance.
 
 See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes/404) for general information about this HTTP response from Looker.`
-
-const loadMock = jest
-  .spyOn(ErrorDoc.prototype, 'load')
-  .mockImplementation(() => {
-    return Promise.resolve(sampleIndex)
-  })
-const getContentMock = jest
-  .spyOn(ErrorDoc.prototype, 'getContent')
-  .mockImplementation((_) => {
-    return Promise.resolve(badLoginMd)
-  })
 
 describe('ErrorDoc', () => {
   const external =
@@ -66,8 +55,38 @@ describe('ErrorDoc', () => {
   const session = { settings: settings } as IAuthSession
   const api = new APIMethods(session, 'mock')
   const errDoc = new ErrorDoc(api)
+  let loadMock: any
+  let getContentMock: any
+
+  beforeEach(() => {
+    loadMock = jest.spyOn(errDoc, 'load').mockImplementation(() => {
+      return Promise.resolve(sampleIndex)
+    })
+    getContentMock = jest
+      .spyOn(errDoc, 'getContent')
+      .mockImplementation((_) => {
+        return Promise.resolve(badLoginMd)
+      })
+  })
   // api.apiVersion = apiVersion
   // api.apiPath = `${settings.base_url}/api/${apiVersion}`
+
+  describe('content', () => {
+    const no = '### No documentation found: '
+    it.each<[string, string, boolean]>([
+      [badLogin, '## API Response 404 for `login`', true],
+      [internal, `${no}422/post/bogus/bulk`, false],
+      [external, `${no}429/delete/bogus/:namespace/purge`, false],
+      ['', `${no}bad error code link`, false],
+    ])('url:"%s" should be "%s"', async (url, expected, loaded) => {
+      const actual = await errDoc.content(url)
+      if (loaded) {
+        expect(loadMock).toHaveBeenCalled()
+        expect(getContentMock).toHaveBeenCalled()
+      }
+      await expect(actual).toMatch(expected)
+    })
+  })
 
   describe('parse', () => {
     it('has a valid regex', () => {
@@ -130,22 +149,6 @@ describe('ErrorDoc', () => {
       ],
     ])('url:"%s" should be "%s"', (url, expected) => {
       expect(errDoc.methodName(url)).toEqual(expected)
-    })
-  })
-
-  describe('content', () => {
-    const no = '### No documentation found: '
-    it.each<[string, string, boolean]>([
-      [badLogin, '## API Response 404 for `login`', true],
-      [internal, `${no}422/post/bogus/bulk`, false],
-      [external, `${no}429/delete/bogus/:namespace/purge`, false],
-      ['', `${no}bad error code link`, false],
-    ])('url:"%s" should be "%s"', async (url, expected, loaded) => {
-      if (loaded) {
-        expect(loadMock).toHaveBeenCalled()
-        expect(getContentMock).toHaveBeenCalled()
-      }
-      await expect(await errDoc.content(url)).toMatch(expected)
     })
   })
 })
