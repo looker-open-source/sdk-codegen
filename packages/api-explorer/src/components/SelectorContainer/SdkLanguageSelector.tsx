@@ -52,7 +52,9 @@ export const SdkLanguageSelector: FC = () => {
       foundLanguage &&
       foundLanguage.abbreviation !== searchParams.get('sdk')
     ) {
-      navigate(location.pathname, { sdk: foundLanguage!.abbreviation })
+      const param =
+        foundLanguage.language === 'All' ? null : foundLanguage!.abbreviation
+      navigate(location.pathname, { sdk: param })
     }
   }
 

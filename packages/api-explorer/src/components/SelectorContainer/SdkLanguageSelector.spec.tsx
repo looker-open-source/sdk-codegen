@@ -78,7 +78,7 @@ describe('SdkLanguageSelector', () => {
   })
 
   const sdkAbbreviations = getSdkNameAbbreviations()
-  test.each([...sdkAbbreviations])(
+  test.each([...sdkAbbreviations.filter((sdk) => sdk.language !== 'All')])(
     'choosing SDK language pushes its abbreviation to URL',
     async (sdkLanguage) => {
       renderWithRouterAndReduxProvider(
@@ -101,4 +101,19 @@ describe('SdkLanguageSelector', () => {
       })
     }
   )
+
+  test('choosing All removes sdk parameter from the URL', async () => {
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
+    const selector = screen.getByRole('textbox')
+    userEvent.click(selector)
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option', { name: 'All' }))
+      await waitFor(async () => {
+        expect(mockHistoryPush).toHaveBeenLastCalledWith({
+          pathname: location.pathname,
+          search: '',
+        })
+      })
+    })
+  })
 })
