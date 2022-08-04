@@ -28,7 +28,19 @@ import { APIMethods } from './apiMethods'
 import type { IApiSettings } from './apiSettings'
 import type { IAuthSession } from './authSession'
 import type { ErrorCodeIndex } from './errorDoc'
-import { ErrorDoc, ErrorDocRx } from './errorDoc'
+import {
+  ErrorCodesUrl,
+  ErrorDoc,
+  ErrorDocNotFound,
+  ErrorDocRx,
+} from './errorDoc'
+import { BrowserTransport } from './browserTransport'
+import type {
+  Authenticator,
+  HttpMethod,
+  ITransportSettings,
+  Values,
+} from './transport'
 
 const sampleIndex: ErrorCodeIndex = {
   '404/post/login': {
@@ -50,39 +62,53 @@ describe('ErrorDoc', () => {
   const internal = 'https://docs.looker.com/r/err/internal/422/post/bogus/bulk'
   const badLogin = 'https://docs.looker.com/r/err/4.0/404/post/login'
   const hostname = 'https://looker.sdk'
-  // const apiVersion = '4.0'
   const settings = { base_url: hostname } as IApiSettings
-  const session = { settings: settings } as IAuthSession
+  const transport = new BrowserTransport(settings)
+  const session = {
+    settings: settings,
+    transport: transport,
+  } as unknown as IAuthSession
   const api = new APIMethods(session, 'mock')
   const errDoc = new ErrorDoc(api)
-  let loadMock: any
-  let getContentMock: any
+  let requestMock: any
 
   beforeEach(() => {
-    loadMock = jest.spyOn(errDoc, 'load').mockImplementation(() => {
-      return Promise.resolve(sampleIndex)
-    })
-    getContentMock = jest
-      .spyOn(errDoc, 'getContent')
-      .mockImplementation((_) => {
-        return Promise.resolve(badLoginMd)
-      })
+    requestMock = jest
+      .spyOn(transport, 'request')
+      .mockImplementation(
+        (
+          _method: HttpMethod,
+          path: string,
+          _queryParams?: Values,
+          _body?: any,
+          _authenticator?: Authenticator,
+          _options?: Partial<ITransportSettings>
+        ) => {
+          let value: string | ErrorCodeIndex = sampleIndex
+          switch (path) {
+            case `${ErrorCodesUrl}index.json`:
+              value = sampleIndex
+              break
+            case `${ErrorCodesUrl}login_404.md`:
+              value = badLoginMd
+              break
+          }
+          return Promise.resolve({ ok: true, value })
+        }
+      )
   })
-  // api.apiVersion = apiVersion
-  // api.apiPath = `${settings.base_url}/api/${apiVersion}`
 
   describe('content', () => {
-    const no = '### No documentation found: '
-    it.each<[string, string, boolean]>([
-      [badLogin, '## API Response 404 for `login`', true],
-      [internal, `${no}422/post/bogus/bulk`, false],
-      [external, `${no}429/delete/bogus/:namespace/purge`, false],
-      ['', `${no}bad error code link`, false],
-    ])('url:"%s" should be "%s"', async (url, expected, loaded) => {
+    const no = ErrorDocNotFound
+    it.each<[string, string, number]>([
+      [badLogin, '## API Response 404 for `login`', 2],
+      [internal, `${no}422/post/bogus/bulk`, 0],
+      [external, `${no}429/delete/bogus/:namespace/purge`, 0],
+      ['', `${no}bad error code link`, 0],
+    ])('url:"%s" should be "%s"', async (url, expected, called) => {
       const actual = await errDoc.content(url)
-      if (loaded) {
-        expect(loadMock).toHaveBeenCalled()
-        expect(getContentMock).toHaveBeenCalled()
+      if (called) {
+        expect(requestMock).toHaveBeenCalledTimes(called)
       }
       await expect(actual).toMatch(expected)
     })
@@ -99,27 +125,33 @@ describe('ErrorDoc', () => {
     it('does not fail', () => {
       const actual = errDoc.parse('')
       expect(actual).toBeDefined()
-      expect(actual.redirector).toEqual('')
-      expect(actual.apiVersion).toEqual('')
-      expect(actual.statusCode).toEqual('')
-      expect(actual.apiPath).toEqual('')
+      expect(actual).toEqual({
+        redirector: '',
+        apiVersion: '',
+        statusCode: '',
+        apiPath: '',
+      })
     })
 
     it('resolves internal paths', () => {
       const actual = errDoc.parse(internal)
       expect(actual).toBeDefined()
-      expect(actual.redirector).toEqual('https://docs.looker.com/r/err/')
-      expect(actual.apiVersion).toEqual('internal')
-      expect(actual.statusCode).toEqual('422')
-      expect(actual.apiPath).toEqual('/post/bogus/bulk')
+      expect(actual).toEqual({
+        redirector: 'https://docs.looker.com/r/err/',
+        apiVersion: 'internal',
+        statusCode: '422',
+        apiPath: '/post/bogus/bulk',
+      })
     })
     it('resolves external paths', () => {
       const actual = errDoc.parse(external)
       expect(actual).toBeDefined()
-      expect(actual.redirector).toEqual('https://docs.looker.com/r/err/')
-      expect(actual.apiVersion).toEqual('4.0')
-      expect(actual.statusCode).toEqual('429')
-      expect(actual.apiPath).toEqual('/delete/bogus/:namespace/purge')
+      expect(actual).toEqual({
+        redirector: 'https://docs.looker.com/r/err/',
+        apiVersion: '4.0',
+        statusCode: '429',
+        apiPath: '/delete/bogus/:namespace/purge',
+      })
     })
   })
 

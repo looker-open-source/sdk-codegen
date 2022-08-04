@@ -34,6 +34,7 @@ export interface IErrorDocItem {
 
 export type ErrorCodeIndex = Record<string, IErrorDocItem>
 export const ErrorCodesUrl = 'https://marketplace-api.looker.com/errorcodes/'
+export const ErrorDocNotFound = '### No documentation found for '
 
 export interface IErrorDocLink {
   /** base redirector url */
@@ -48,7 +49,7 @@ export interface IErrorDocLink {
 
 export interface IErrorDoc {
   /** Index of all know error codes */
-  index: ErrorCodeIndex
+  index?: ErrorCodeIndex
 
   /**
    * Extract error url into its parts
@@ -58,9 +59,9 @@ export interface IErrorDoc {
 
   /**
    * full url to resolve error document
-   * @param item resolved index item (used by content())
+   * @param urlPath resolved index item (used by content())
    */
-  contentUrl(item: IErrorDocItem): string
+  contentUrl(urlPath: string): string
 
   /**
    * fetch content from the URL, returning a "not found" response if it fails
@@ -96,7 +97,7 @@ export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export class ErrorDoc implements IErrorDoc {
   private transport: BaseTransport
-  private _index: ErrorCodeIndex = {}
+  private _index?: ErrorCodeIndex = undefined
   constructor(
     public sdk: IAPIMethods,
     public readonly cdnUrl: string = ErrorCodesUrl
@@ -105,24 +106,27 @@ export class ErrorDoc implements IErrorDoc {
   }
 
   public async load(): Promise<ErrorCodeIndex> {
-    try {
-      const result = await sdkOk(
-        this.transport.request<ErrorCodeIndex, Error>('GET', this.indexUrl)
-      )
-      return result
-    } catch (e: any) {
-      return {}
+    if (!this._index) {
+      try {
+        const result = await sdkOk(
+          this.transport.request<ErrorCodeIndex, Error>('GET', this.indexUrl)
+        )
+        this._index = result
+      } catch (e: any) {
+        return Promise.resolve({})
+      }
     }
+    return this._index
   }
 
   public get indexUrl() {
-    return `${this.cdnUrl}index.json`
+    return this.contentUrl('index.json')
   }
 
   public get index() {
-    if (Object.keys(this._index).length === 0) {
+    if (!this._index) {
       this.load()
-        .then((response) => (this._index = response))
+        // .then((response) => (this._index = response))
         .catch((reason) => console.error(reason))
     }
     return this._index
@@ -135,15 +139,12 @@ export class ErrorDoc implements IErrorDoc {
   }
 
   private notFound(key: string): string {
-    return `### No documentation found: ${key}`
+    return `${ErrorDocNotFound}${key}`
   }
 
   async getContent(url: string): Promise<string> {
     try {
-      const content = await sdkOk(
-        this.transport.request<string, Error>('GET', url)
-      )
-      return content
+      return await sdkOk(this.transport.request<string, Error>('GET', url))
     } catch (e: any) {
       return Promise.resolve(this.notFound(e.message))
     }
@@ -154,16 +155,17 @@ export class ErrorDoc implements IErrorDoc {
     if (!key) {
       return Promise.resolve(this.notFound('bad error code link'))
     }
-    const item = this.index[docUrl]
+    await this.load()
+    const item = this.index ? this.index[key] : undefined
     if (!item) {
       return Promise.resolve(this.notFound(key))
     }
-    const url = this.contentUrl(item)
+    const url = this.contentUrl(item.url)
     return await this.getContent(url)
   }
 
-  contentUrl(item: IErrorDocItem): string {
-    return `${this.cdnUrl}${item.url}`
+  contentUrl(urlPath: string): string {
+    return `${this.cdnUrl}${urlPath}`
   }
 
   methodName(errorMdUrl: string): string {
@@ -174,12 +176,11 @@ export class ErrorDoc implements IErrorDoc {
 
   parse(docUrl: string): IErrorDocLink {
     const match = docUrl.match(ErrorDocRx)
-    const result: IErrorDocLink = {
+    return {
       redirector: match?.groups?.redirector || '',
       apiVersion: match?.groups?.apiVersion || '',
       statusCode: match?.groups?.statusCode || '',
       apiPath: match?.groups?.apiPath || '',
     }
-    return result
   }
 }
