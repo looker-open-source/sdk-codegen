@@ -28,9 +28,12 @@ import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
 import { defaultSettingsState } from '../../state'
-import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
-import { getLanguageAbbreviations } from '@looker/api-explorer'
+import { getSdkNameAbbreviations } from '@looker/api-explorer'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -45,13 +48,14 @@ jest.mock('react-router-dom', () => {
 })
 describe('SdkLanguageSelector', () => {
   window.HTMLElement.prototype.scrollIntoView = jest.fn()
+  const store = createTestStore({ settings: { initialized: true } })
 
   beforeEach(() => {
     localStorage.clear()
   })
 
   test('it has the correct default language selected', async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
     expect(screen.getByRole('textbox')).toHaveValue(
       defaultSettingsState.sdkLanguage
     )
@@ -62,7 +66,7 @@ describe('SdkLanguageSelector', () => {
   })
 
   test('it lists all available languages and "All" as options', async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
     await act(async () => {
       await userEvent.click(screen.getByRole('textbox'))
       await waitFor(() => {
@@ -73,11 +77,15 @@ describe('SdkLanguageSelector', () => {
     })
   })
 
-  const sdkAbbreviations = getLanguageAbbreviations()
+  const sdkAbbreviations = getSdkNameAbbreviations()
   test.each([...sdkAbbreviations])(
     'choosing SDK language pushes its abbreviation to URL',
     async (sdkLanguage) => {
-      renderWithRouterAndReduxProvider(<SdkLanguageSelector />)
+      renderWithRouterAndReduxProvider(
+        <SdkLanguageSelector />,
+        undefined,
+        store
+      )
       const selector = screen.getByRole('textbox')
       userEvent.click(selector)
       await act(async () => {
@@ -87,7 +95,7 @@ describe('SdkLanguageSelector', () => {
         await waitFor(async () => {
           expect(mockHistoryPush).toHaveBeenLastCalledWith({
             pathname: location.pathname,
-            search: `sdk=${sdkLanguage.extension}`,
+            search: `sdk=${sdkLanguage.abbreviation}`,
           })
         })
       })

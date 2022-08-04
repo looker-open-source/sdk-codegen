@@ -68,7 +68,13 @@ import {
   selectCurrentSpec,
   selectSdkLanguage,
 } from './state'
-import { getSpecKey, diffPath, getLanguageAbbreviations } from './utils'
+import {
+  getSpecKey,
+  diffPath,
+  useNavigation,
+  getSdkDetailsFromName,
+  getSdkDetailsFromAbbrev,
+} from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -97,10 +103,11 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
+  const navigate = useNavigation()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
-  const sdkLanguageAbbreviations = getLanguageAbbreviations()
+  const searchParams = new URLSearchParams(location.search)
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -120,6 +127,28 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
+    // sets APIExplorer and browser state upon initialization from local storage
+    if (initialized) {
+      const sdkInUrl = searchParams.get('sdk')
+      const currentSelectedSdk = getSdkDetailsFromName(selectedSdkLanguage)
+      if (
+        !sdkInUrl &&
+        currentSelectedSdk &&
+        currentSelectedSdk.language !== 'All'
+      ) {
+        // add currently selected sdk to URL if it has no sdk parameter
+        navigate(location.pathname, { sdk: currentSelectedSdk.abbreviation })
+      } else {
+        // update sdkLanguage in store to reflect SDK in URL if it is valid
+        const requestedSdk = getSdkDetailsFromAbbrev(sdkInUrl.toLowerCase())
+        if (requestedSdk) {
+          setSdkLanguageAction({ sdkLanguage: requestedSdk.language })
+        }
+      }
+    }
+  }, [initialized])
+
+  useEffect(() => {
     const maybeSpec = location.pathname?.split('/')[1]
     if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
@@ -128,13 +157,10 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     if (!initialized) return
-    const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern })
     const urlSdk = searchParams.get('sdk') || 'all'
-    const foundLanguage = sdkLanguageAbbreviations.find(
-      ({ extension }) => extension === urlSdk.toLowerCase()
-    )
+    const foundLanguage = getSdkDetailsFromAbbrev(urlSdk.toLowerCase())
     if (!foundLanguage) {
       setSdkLanguageAction({ sdkLanguage: selectedSdkLanguage })
     } else if (foundLanguage.language !== selectedSdkLanguage) {
@@ -142,7 +168,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
         sdkLanguage: foundLanguage!.language,
       })
     }
-  }, [location.search, initialized])
+  }, [location.search])
 
   useEffect(() => {
     if (headless) {

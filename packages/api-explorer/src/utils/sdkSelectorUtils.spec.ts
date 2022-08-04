@@ -27,7 +27,9 @@
 import { codeGenerators } from '@looker/sdk-codegen'
 import {
   getAllSdkLanguages,
-  getLanguageAbbreviations,
+  getSdkDetailsFromAbbrev,
+  getSdkDetailsFromName,
+  getSdkNameAbbreviations,
 } from '@looker/api-explorer'
 
 describe('SDK Selector Utils', () => {
@@ -38,12 +40,26 @@ describe('SDK Selector Utils', () => {
     })
   })
 
-  describe('getLanguageAbbreviations', () => {
+  describe('getSdkNameAbbreviations', () => {
+    const sdks = getSdkNameAbbreviations()
     test('it builds an array of objects with language and abbreviation fields', () => {
-      const sdks = getLanguageAbbreviations()
       sdks.forEach((sdk) => {
         expect(sdk.language).not.toBeUndefined()
-        expect(sdk.extension).not.toBeUndefined()
+        expect(sdk.abbreviation).not.toBeUndefined()
+      })
+    })
+  })
+
+  describe('getSdkDetails', () => {
+    const sdks = getSdkNameAbbreviations()
+    test('it gets the correct object for all SDK names', () => {
+      sdks.forEach((sdk) => {
+        expect(getSdkDetailsFromName(sdk.language)).toEqual({ ...sdk })
+      })
+    })
+    test('it gets the correct object for all SDK abbreviations', () => {
+      sdks.forEach((sdk) => {
+        expect(getSdkDetailsFromAbbrev(sdk.abbreviation)).toEqual({ ...sdk })
       })
     })
   })

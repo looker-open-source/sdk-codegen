@@ -25,10 +25,7 @@
  */
 export { highlightHTML } from './highlight'
 export * from './path'
-export {
-  getAllSdkLanguages,
-  getLanguageAbbreviations,
-} from './sdkSelectorUtils'
+export * from './sdkSelectorUtils'
 export { getLoded } from './lodeUtils'
 export { useWindowSize } from './useWindowSize'
 export * from './apixAdaptor'

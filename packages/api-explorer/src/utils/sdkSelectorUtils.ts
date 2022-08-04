@@ -30,7 +30,6 @@ import type { SelectOptionProps } from '@looker/components'
 /**
  * @returns array containing all available SDK languages from codeGenerators
  */
-
 export const getAllSdkLanguages = () => {
   const allSdkLanguages: SelectOptionProps[] = codeGenerators.map((gen) => ({
     value: gen.language,
@@ -48,13 +47,35 @@ export const getAllSdkLanguages = () => {
 /**
  * @returns array of objects with SDK language name and extension abbreviation
  */
-export const getLanguageAbbreviations = () => {
+export const getSdkNameAbbreviations = () => {
   const regex = /\.(\w+)\b/
-  const sdkLanguageAbbreviations: { language: string; extension: string }[] =
+  const sdkLanguageAbbreviations: { language: string; abbreviation: string }[] =
     codeGenerators.map((gen) => ({
       language: gen.language,
-      extension: gen.extension.toString().match(regex)![1],
+      abbreviation: gen.extension.toString().match(regex)![1],
     }))
-  sdkLanguageAbbreviations.push({ language: 'All', extension: 'all' })
+  sdkLanguageAbbreviations.push({ language: 'All', abbreviation: 'all' })
   return sdkLanguageAbbreviations
+}
+
+/**
+ * Given full SDK language name, returns an object containing the SDK name and abbreviation
+ * @param name
+ */
+export const getSdkDetailsFromName = (name: string) => {
+  const sdkNameDetails = getSdkNameAbbreviations()
+  return sdkNameDetails.find(
+    ({ language }) => language.toLowerCase() === name.toLowerCase()
+  )
+}
+
+/**
+ * Given SDK language abbreviation, returns an object containing the SDK name and abbreviation
+ * @param abbrev
+ */
+export const getSdkDetailsFromAbbrev = (abbrev: string) => {
+  const sdkNameDetails = getSdkNameAbbreviations()
+  return sdkNameDetails.find(
+    ({ abbreviation }) => abbreviation === abbrev.toLowerCase()
+  )
 }
