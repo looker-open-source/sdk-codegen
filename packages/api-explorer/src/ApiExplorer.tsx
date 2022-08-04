@@ -139,7 +139,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       ) {
         // add currently selected sdk to URL if it has no sdk parameter
         navigate(location.pathname, { sdk: currentSelectedSdk.abbreviation })
-      } else {
+      } else if (sdkInUrl) {
         // update sdkLanguage in store to reflect SDK in URL if it is valid
         const requestedSdk = getSdkDetailsFromAbbrev(sdkInUrl.toLowerCase())
         if (requestedSdk) {
