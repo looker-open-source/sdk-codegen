@@ -279,7 +279,7 @@ export class BrowserTransport extends BaseTransport {
   async request<TSuccess, TError>(
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
