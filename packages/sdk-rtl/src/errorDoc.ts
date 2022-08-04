@@ -96,8 +96,8 @@ const ErrorDocPatternExpression = String.raw`(?<redirector>https:\/\/docs\.looke
 export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export class ErrorDoc implements IErrorDoc {
-  private transport: BaseTransport
   private _index?: ErrorCodeIndex = undefined
+  private transport: BaseTransport
   constructor(
     public sdk: IAPIMethods,
     public readonly cdnUrl: string = ErrorCodesUrl

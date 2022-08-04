@@ -56,6 +56,8 @@ A 404 Error response from the /login endpoint most often means that an attempt t
 
 See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes/404) for general information about this HTTP response from Looker.`
 
+// class ErrorDocAccess extends ErrorDoc {}
+
 describe('ErrorDoc', () => {
   const external =
     'https://docs.looker.com/r/err/4.0/429/delete/bogus/:namespace/purge'
@@ -101,15 +103,15 @@ describe('ErrorDoc', () => {
   describe('content', () => {
     const no = ErrorDocNotFound
     it.each<[string, string, number]>([
-      [badLogin, '## API Response 404 for `login`', 2],
-      [internal, `${no}422/post/bogus/bulk`, 0],
-      [external, `${no}429/delete/bogus/:namespace/purge`, 0],
-      ['', `${no}bad error code link`, 0],
+      [badLogin, '## API Response 404 for `login`', 2], // valid mock url and content so load will be called twice
+      [internal, `${no}422/post/bogus/bulk`, 1], // invalid, default to not found
+      [external, `${no}429/delete/bogus/:namespace/purge`, 1], // invalid, default to not found
+      ['', `${no}bad error code link`, 0], // just bad all around
     ])('url:"%s" should be "%s"', async (url, expected, called) => {
+      const index = `_index` // use this to access the private property
+      errDoc[index] = undefined // reset the index so mock counts are correct
       const actual = await errDoc.content(url)
-      if (called) {
-        expect(requestMock).toHaveBeenCalledTimes(called)
-      }
+      expect(requestMock).toHaveBeenCalledTimes(called)
       await expect(actual).toMatch(expected)
     })
   })
