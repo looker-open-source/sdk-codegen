@@ -37,7 +37,7 @@ describe('Settings selectors', () => {
     )
   })
 
-  test('tagFilter selects', () => {
+  test('selectTagFilter selects', () => {
     expect(selectTagFilter(state)).toEqual(preloadedState.settings.tagFilter)
   })
 

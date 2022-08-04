@@ -46,14 +46,23 @@ interface MethodTagSceneParams {
 export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
+  const methods = api.tags[methodTag]
   const navigate = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
   const searchParams = new URLSearchParams(location.search)
 
   const setValue = (filter: string) => {
-    navigate(location.pathname, { m: filter === 'ALL' ? null : filter })
+    const verbInUrl = searchParams.get('v')
+    if ((verbInUrl && verbInUrl === filter) || (!verbInUrl && filter === 'ALL'))
+      return
+    const validVerbForTag = Object.keys(methods).find(
+      (tag) => methods[tag].httpMethod === filter
+    )
+    navigate(location.pathname, {
+      v: filter === 'ALL' || !validVerbForTag ? null : filter,
+    })
   }
-  const methods = api.tags[methodTag]
+
   // TODO: Figure out bug here with initial render resulting in no filter
   // useEffect(() => {
   //   /** Reset ButtonToggle value on route change */
@@ -63,44 +72,21 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   //       (m) => methods[m].httpMethod === selectedTagFilter
   //     )
   //   ) {
-  //     navigate(location.pathname, { m: null })
+  //     navigate(location.pathname, { v: null })
   //   } else {
   //     navigate(location.pathname, {
-  //       m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
+  //       v: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
   //     })
   //   }
   // }, [methodTag])
 
   useEffect(() => {
-    const filterInUrl = searchParams.get('m')
-    if (
-      (!filterInUrl && selectedTagFilter !== 'ALL') ||
-      (filterInUrl && filterInUrl !== selectedTagFilter)
-    ) {
-      navigate(location.pathname, {
-        m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
-      })
-    }
-    // if (
-    //   !filterInUrl ||
-    //   (filterInUrl &&
-    //     !Object.keys(methods).find(
-    //       (m) => methods[m].httpMethod === filterInUrl
-    //     ))
-    // ) {
-    //   navigate(location.pathname, {
-    //     m: null,
-    //   })
-    // } else if (filterInUrl && filterInUrl !== selectedTagFilter) {
-    //   navigate(location.pathname, {
-    //     m: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
-    //   })
-    // }
+    setValue(selectedTagFilter)
   }, [selectedTagFilter])
 
   useEffect(() => {
     if (!methods) {
-      navigate(`/${specKey}/methods`, { m: null })
+      navigate(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {

@@ -33,7 +33,6 @@ import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useNavigation, highlightHTML, buildMethodPath } from '../../utils'
 import { Link } from '../Link'
 import { selectSearchPattern } from '../../state'
-import { api } from '../../test-data'
 
 interface MethodsProps {
   methods: MethodList
@@ -57,15 +56,9 @@ export const SideNavMethods = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        const tags = api.tags[tag]
-        const queryParams = Object.keys(tags).find(
-          (tag) => tags[tag].httpMethod === searchParams.get('m')
-        )
-          ? undefined
-          : { m: null }
-        navigate(`/${specKey}/methods/${tag}`, queryParams)
+        navigate(`/${specKey}/methods/${tag}`)
       } else {
-        navigate(`/${specKey}/methods`, { m: null })
+        navigate(`/${specKey}/methods`)
       }
     }
 
@@ -92,15 +85,12 @@ export const SideNavMethods = styled(
           {Object.values(methods).map((method) => (
             <li key={method.name}>
               <Link
-                to={() => {
-                  searchParams.delete('m')
-                  return buildMethodPath(
-                    specKey,
-                    tag,
-                    method.name,
-                    searchParams.toString()
-                  )
-                }}
+                to={`${buildMethodPath(
+                  specKey,
+                  tag,
+                  method.name,
+                  searchParams.toString()
+                )}`}
               >
                 {highlightHTML(searchPattern, method.summary)}
               </Link>

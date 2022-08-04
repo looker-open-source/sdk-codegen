@@ -37,7 +37,7 @@ export const useNavigation = () => {
 
   const navigate = (
     path: string,
-    queryParams?: { s?: string | null; m?: string | null } | null
+    queryParams?: { s?: string | null; v?: string | null } | null
   ) => {
     const urlParams = new URLSearchParams(history.location.search)
     if (queryParams === undefined) {
