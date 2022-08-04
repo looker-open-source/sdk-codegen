@@ -29,12 +29,22 @@ import type { IAPIMethods } from './apiMethods'
 import { sdkOk } from './transport'
 
 export interface IErrorDocItem {
+  /** relative path of mark down document */
   url: string
 }
 
-export type ErrorCodeIndex = Record<string, IErrorDocItem>
+/** Location of the public CDN for Looker API Error codes */
 export const ErrorCodesUrl = 'https://marketplace-api.looker.com/errorcodes/'
+
+/** Structure of the error code document index */
+export type ErrorCodeIndex = Record<string, IErrorDocItem>
+
+/** Default "not found" content for error documents that don't (yet) exist */
 export const ErrorDocNotFound = '### No documentation found for '
+
+/** API error document_url link pattern */
+const ErrorDocPatternExpression = String.raw`(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`
+export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export interface IErrorDocLink {
   /** base redirector url */
@@ -48,7 +58,7 @@ export interface IErrorDocLink {
 }
 
 export interface IErrorDoc {
-  /** Index of all know error codes */
+  /** Index of all know error codes. Call load() to populate it */
   index?: ErrorCodeIndex
 
   /**
@@ -70,7 +80,14 @@ export interface IErrorDoc {
   getContent(url: string): Promise<string>
 
   /**
-   * Markdown of error document
+   * Returns the markdown of the error document
+   *
+   * Some kind of content is always returned from this method. The content is
+   * one of:
+   * - the specific document for the method and error code
+   * - a generic document for the error code
+   * - a "not found" mark down if the specific and generic are not defined
+   *
    * @param docUrl value of documentation_url from error payload
    */
   content(docUrl: string): Promise<string>
@@ -90,10 +107,6 @@ export interface IErrorDoc {
    */
   methodName(errorMdUrl: string): string
 }
-
-/** Error document link pattern */
-const ErrorDocPatternExpression = String.raw`(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`
-export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export class ErrorDoc implements IErrorDoc {
   private _index?: ErrorCodeIndex = undefined
@@ -125,9 +138,7 @@ export class ErrorDoc implements IErrorDoc {
 
   public get index() {
     if (!this._index) {
-      this.load()
-        // .then((response) => (this._index = response))
-        .catch((reason) => console.error(reason))
+      this.load().catch((reason) => console.error(reason))
     }
     return this._index
   }
@@ -156,9 +167,14 @@ export class ErrorDoc implements IErrorDoc {
       return Promise.resolve(this.notFound('bad error code link'))
     }
     await this.load()
-    const item = this.index ? this.index[key] : undefined
+    let item = this.index ? this.index[key] : undefined
     if (!item) {
-      return Promise.resolve(this.notFound(key))
+      // fallback to generic error document
+      const code = key.split('/')[0]
+      item = this.index ? this.index[code] : undefined
+      if (!item) {
+        return Promise.resolve(this.notFound(key))
+      }
     }
     const url = this.contentUrl(item.url)
     return await this.getContent(url)

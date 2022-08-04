@@ -43,11 +43,15 @@ import type {
 } from './transport'
 
 const sampleIndex: ErrorCodeIndex = {
+  '404': {
+    url: '404.md',
+  },
   '404/post/login': {
     url: 'login_404.md',
   },
 }
 
+const generic404 = `## Generic 404`
 const badLoginMd = `## API Response 404 for \`login\`
 
 ## Description
@@ -63,6 +67,7 @@ describe('ErrorDoc', () => {
     'https://docs.looker.com/r/err/4.0/429/delete/bogus/:namespace/purge'
   const internal = 'https://docs.looker.com/r/err/internal/422/post/bogus/bulk'
   const badLogin = 'https://docs.looker.com/r/err/4.0/404/post/login'
+  const another404 = 'https://docs.looker.com/r/err/4.0/404/post/another'
   const hostname = 'https://looker.sdk'
   const settings = { base_url: hostname } as IApiSettings
   const transport = new BrowserTransport(settings)
@@ -94,6 +99,9 @@ describe('ErrorDoc', () => {
             case `${ErrorCodesUrl}login_404.md`:
               value = badLoginMd
               break
+            case `${ErrorCodesUrl}404.md`:
+              value = generic404
+              break
           }
           return Promise.resolve({ ok: true, value })
         }
@@ -104,6 +112,7 @@ describe('ErrorDoc', () => {
     const no = ErrorDocNotFound
     it.each<[string, string, number]>([
       [badLogin, '## API Response 404 for `login`', 2], // valid mock url and content so load will be called twice
+      [another404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
       [internal, `${no}422/post/bogus/bulk`, 1], // invalid, default to not found
       [external, `${no}429/delete/bogus/:namespace/purge`, 1], // invalid, default to not found
       ['', `${no}bad error code link`, 0], // just bad all around
