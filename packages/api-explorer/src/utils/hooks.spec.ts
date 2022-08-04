@@ -61,11 +61,11 @@ describe('Navigate', () => {
   })
 
   test('sets query parameters when given a populated query params object', () => {
-    const newParams = 'embedsso'
-    navigate(route, { s: newParams })
+    const searchParam = 'embedsso'
+    navigate(route, { s: searchParam })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
-      search: newParams,
+      search: `s=${searchParam}`,
     })
   })
 })

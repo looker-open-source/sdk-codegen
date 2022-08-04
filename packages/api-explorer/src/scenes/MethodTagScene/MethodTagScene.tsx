@@ -53,32 +53,21 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
 
   const setValue = (filter: string) => {
     const verbInUrl = searchParams.get('v')
-    if ((verbInUrl && verbInUrl === filter) || (!verbInUrl && filter === 'ALL'))
+    if (
+      (verbInUrl && verbInUrl.toUpperCase() === filter.toUpperCase()) ||
+      (!verbInUrl && filter.toUpperCase() === 'ALL')
+    )
       return
     const validVerbForTag = Object.keys(methods).find(
-      (tag) => methods[tag].httpMethod === filter
+      (tag) => methods[tag].httpMethod === filter.toUpperCase()
     )
     navigate(location.pathname, {
-      v: filter === 'ALL' || !validVerbForTag ? null : filter,
+      v:
+        filter.toUpperCase() === 'ALL' || !validVerbForTag
+          ? null
+          : filter.toLowerCase(),
     })
   }
-
-  // TODO: Figure out bug here with initial render resulting in no filter
-  // useEffect(() => {
-  //   /** Reset ButtonToggle value on route change */
-  //   if (
-  //     selectedTagFilter &&
-  //     !Object.keys(methods).find(
-  //       (m) => methods[m].httpMethod === selectedTagFilter
-  //     )
-  //   ) {
-  //     navigate(location.pathname, { v: null })
-  //   } else {
-  //     navigate(location.pathname, {
-  //       v: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
-  //     })
-  //   }
-  // }, [methodTag])
 
   useEffect(() => {
     setValue(selectedTagFilter)

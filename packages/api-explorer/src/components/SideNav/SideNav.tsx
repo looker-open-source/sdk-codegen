@@ -89,7 +89,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        navigate(parts.join('/'))
+        navigate(parts.join('/'), { v: null })
       }
     }
   }

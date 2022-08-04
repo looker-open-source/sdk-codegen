@@ -84,6 +84,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method?.customTypes)
+
   const RunItButton = value ? Button : ButtonOutline
 
   useEffect(() => {

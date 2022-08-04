@@ -79,6 +79,8 @@ export interface ApiExplorerProps {
 }
 
 const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
+const opBtnNames =
+  /ALL|GET|POST|PUT|PATCH|DELETE|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 
 export const ApiExplorer: FC<ApiExplorerProps> = ({
   adaptor,
@@ -131,10 +133,16 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const searchPattern = searchParams.get('s') || ''
     setSearchPatternAction({ searchPattern: searchPattern! })
     const verbInUrl = searchParams.get('v')
-    if (!verbInUrl && selectedTagFilter !== 'ALL') {
+    const invalidFilter =
+      (!verbInUrl && selectedTagFilter.toUpperCase() !== 'ALL') ||
+      (verbInUrl && !opBtnNames.test(verbInUrl.toUpperCase()))
+    if (invalidFilter) {
       setTagFilterAction({ tagFilter: 'ALL' })
-    } else if (verbInUrl && verbInUrl !== selectedTagFilter) {
-      setTagFilterAction({ tagFilter: verbInUrl })
+    } else if (
+      verbInUrl &&
+      verbInUrl.toUpperCase() !== selectedTagFilter.toUpperCase()
+    ) {
+      setTagFilterAction({ tagFilter: verbInUrl.toUpperCase() })
     }
   }, [location.search])
 
