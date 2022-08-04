@@ -93,6 +93,16 @@ export interface IErrorDoc {
   content(docUrl: string): Promise<string>
 
   /**
+   * Ensure API request path matches the OpenAPI path pattern
+   *
+   * @example
+   * `/entity/:id/part/:part` should be `/entity/{id}/part/{part}`
+   *
+   * @param path to convert to a spec path
+   */
+  specPath(path: string): string
+
+  /**
    * get the lookup key for the documentation_url
    * @param docUrl value of documentation_url from error payload
    */
@@ -143,10 +153,15 @@ export class ErrorDoc implements IErrorDoc {
     return this._index
   }
 
+  specPath(path: string): string {
+    const result = path.replace(/:\w+/g, (found) => `{${found.substr(1)}}`)
+    return result
+  }
+
   errorKey(docUrl: string): string {
     const bits = this.parse(docUrl)
     if (!bits.redirector) return ''
-    return `${bits.statusCode}${bits.apiPath}`
+    return this.specPath(`${bits.statusCode}${bits.apiPath}`)
   }
 
   private notFound(key: string): string {
