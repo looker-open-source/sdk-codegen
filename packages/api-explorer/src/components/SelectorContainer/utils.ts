@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,23 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation } from './hooks'
+import type { SelectOptionProps } from '@looker/components'
+import { allSdkLanguages } from '../../utils'
+
+/**
+ * @returns sdk language options for render
+ */
+export const allSdkLanguageOptions = (): SelectOptionProps[] => {
+  const options = [] as SelectOptionProps[]
+  const languages = allSdkLanguages()
+  Object.entries(languages).forEach(([alias, language]) => {
+    const option = { value: alias, label: language }
+    if (alias === 'all') {
+      options.push({ options: [option] })
+    } else {
+      options.push(option)
+    }
+  })
+
+  return options
+}

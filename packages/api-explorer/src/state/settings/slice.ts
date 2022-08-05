@@ -43,7 +43,7 @@ export interface SettingState extends UserDefinedSettings {
 }
 
 export const defaultSettings = {
-  sdkLanguage: 'Python',
+  sdkLanguage: 'py',
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
 }
@@ -68,8 +68,8 @@ export const settingsSlice = createSlice({
       state,
       action: PayloadAction<InitSuccessPayload>
     ) {
-      state.initialized = true
       state.sdkLanguage = action.payload.sdkLanguage
+      state.initialized = true
     },
     initSettingsFailureAction(state, action: PayloadAction<Error>) {
       state.error = action.payload

@@ -24,16 +24,16 @@
 
  */
 import React from 'react'
-import { act, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { codeGenerators } from '@looker/sdk-codegen'
-import { defaultSettingsState } from '../../state'
 import {
   createTestStore,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
+import { getAliasByLanguage } from '../../utils'
+import { languages } from '../../test-data'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
-import { getSdkNameAbbreviations } from '@looker/api-explorer'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -56,31 +56,27 @@ describe('SdkLanguageSelector', () => {
 
   test('it has the correct default language selected', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    expect(screen.getByRole('textbox')).toHaveValue(
-      defaultSettingsState.sdkLanguage
-    )
-    expect(mockHistoryPush).toHaveBeenCalledWith({
-      pathname: location.pathname,
-      search: `sdk=py`,
-    })
+    expect(screen.getByRole('textbox')).toHaveValue('Python')
   })
 
   test('it lists all available languages and "All" as options', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    await act(async () => {
-      await userEvent.click(screen.getByRole('textbox'))
-      await waitFor(() => {
-        expect(screen.getAllByRole('option')).toHaveLength(
-          codeGenerators.length + 1
-        )
+    userEvent.click(screen.getByRole('textbox'))
+    await waitFor(() => {
+      expect(screen.getAllByRole('option')).toHaveLength(
+        codeGenerators.length + 1
+      )
+      languages.forEach((language) => {
+        expect(
+          screen.getByRole('option', { name: language })
+        ).toBeInTheDocument()
       })
     })
   })
 
-  const sdkAbbreviations = getSdkNameAbbreviations()
-  test.each([...sdkAbbreviations.filter((sdk) => sdk.language !== 'All')])(
-    'choosing SDK language pushes its abbreviation to URL',
-    async (sdkLanguage) => {
+  test.each(languages.filter((l) => l !== 'All'))(
+    'choosing `%s` pushes its alias to url',
+    async (language) => {
       renderWithRouterAndReduxProvider(
         <SdkLanguageSelector />,
         undefined,
@@ -88,31 +84,24 @@ describe('SdkLanguageSelector', () => {
       )
       const selector = screen.getByRole('textbox')
       userEvent.click(selector)
-      await act(async () => {
-        await userEvent.click(
-          screen.getByRole('option', { name: sdkLanguage.language })
-        )
-        await waitFor(async () => {
-          expect(mockHistoryPush).toHaveBeenLastCalledWith({
-            pathname: location.pathname,
-            search: `sdk=${sdkLanguage.abbreviation}`,
-          })
+      await waitFor(async () => {
+        await userEvent.click(screen.getByRole('option', { name: language }))
+        expect(mockHistoryPush).toHaveBeenLastCalledWith({
+          pathname: location.pathname,
+          search: `sdk=${getAliasByLanguage(language)}`,
         })
       })
     }
   )
 
-  test('choosing All removes sdk parameter from the URL', async () => {
+  test("choosing 'All' removes sdk parameter from the url", async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    const selector = screen.getByRole('textbox')
-    userEvent.click(selector)
-    await act(async () => {
+    userEvent.click(screen.getByRole('textbox'))
+    await waitFor(async () => {
       await userEvent.click(screen.getByRole('option', { name: 'All' }))
-      await waitFor(async () => {
-        expect(mockHistoryPush).toHaveBeenLastCalledWith({
-          pathname: location.pathname,
-          search: '',
-        })
+      expect(mockHistoryPush).toHaveBeenLastCalledWith({
+        pathname: location.pathname,
+        search: '',
       })
     })
   })

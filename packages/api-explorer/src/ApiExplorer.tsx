@@ -73,8 +73,8 @@ import {
   getSpecKey,
   diffPath,
   useNavigation,
-  getSdkDetailsFromName,
-  getSdkDetailsFromAbbrev,
+  getLanguageByAlias,
+  getAliasByLanguage,
 } from './utils'
 
 export interface ApiExplorerProps {
@@ -128,23 +128,21 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
-    // sets APIExplorer and browser state upon initialization from local storage
+    // reconcile local storage state with URL or vice versa
     if (initialized) {
-      const sdkInUrl = searchParams.get('sdk')
-      const currentSelectedSdk = getSdkDetailsFromName(selectedSdkLanguage)
-      if (
-        !sdkInUrl &&
-        currentSelectedSdk &&
-        currentSelectedSdk.language !== 'All'
-      ) {
-        // add currently selected sdk to URL if it has no sdk parameter
-        navigate(location.pathname, { sdk: currentSelectedSdk.abbreviation })
-      } else if (sdkInUrl) {
-        // update sdkLanguage in store to reflect SDK in URL if it is valid
-        const requestedSdk = getSdkDetailsFromAbbrev(sdkInUrl.toLowerCase())
-        if (requestedSdk) {
-          setSdkLanguageAction({ sdkLanguage: requestedSdk.language })
-        }
+      const sdkLanguage = searchParams.get('sdk')
+      if (sdkLanguage && getLanguageByAlias(sdkLanguage)) {
+        // sync store with URL
+        setSdkLanguageAction({
+          sdkLanguage: sdkLanguage.toLowerCase(),
+        })
+      } else {
+        // sync URL with store
+        const sdk =
+          getAliasByLanguage(selectedSdkLanguage) || selectedSdkLanguage
+        navigate(location.pathname, {
+          sdk: sdk === 'all' ? null : sdk,
+        })
       }
     }
   }, [initialized])
@@ -159,16 +157,9 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     if (!initialized) return
     const searchPattern = searchParams.get('s') || ''
-    setSearchPatternAction({ searchPattern: searchPattern })
-    const urlSdk = searchParams.get('sdk') || 'all'
-    const foundLanguage = getSdkDetailsFromAbbrev(urlSdk.toLowerCase())
-    if (!foundLanguage) {
-      setSdkLanguageAction({ sdkLanguage: selectedSdkLanguage })
-    } else if (foundLanguage.language !== selectedSdkLanguage) {
-      setSdkLanguageAction({
-        sdkLanguage: foundLanguage!.language,
-      })
-    }
+    const sdkLanguage = searchParams.get('sdk') || 'all'
+    setSearchPatternAction({ searchPattern })
+    setSdkLanguageAction({ sdkLanguage })
   }, [location.search])
 
   useEffect(() => {

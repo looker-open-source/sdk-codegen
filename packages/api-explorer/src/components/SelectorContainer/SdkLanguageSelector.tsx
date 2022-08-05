@@ -24,15 +24,12 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
-import { selectSdkLanguage, useSettingStoreState } from '../../state'
-import {
-  getAllSdkLanguages,
-  getSdkDetailsFromName,
-  useNavigation,
-} from '../../utils'
+import { selectSdkLanguage } from '../../state'
+import { useNavigation } from '../../utils'
+import { allSdkLanguageOptions } from './utils'
 
 /**
  * Allows the user to select their preferred SDK language
@@ -40,34 +37,23 @@ import {
 export const SdkLanguageSelector: FC = () => {
   const navigate = useNavigation()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const allSdkLanguages = getAllSdkLanguages()
-  const { initialized } = useSettingStoreState()
+  const [language, setLanguage] = useState(selectedSdkLanguage)
+  const options = allSdkLanguageOptions()
 
-  const handleChange = (language: string) => {
-    if (!initialized) return
-    const searchParams = new URLSearchParams(location.search)
-    const sdkLanguage = language.toLowerCase()
-    const foundLanguage = getSdkDetailsFromName(sdkLanguage)
-    if (
-      foundLanguage &&
-      foundLanguage.abbreviation !== searchParams.get('sdk')
-    ) {
-      const param =
-        foundLanguage.language === 'All' ? null : foundLanguage!.abbreviation
-      navigate(location.pathname, { sdk: param })
-    }
+  const handleChange = (alias: string) => {
+    navigate(location.pathname, { sdk: alias === 'all' ? null : alias })
   }
 
   useEffect(() => {
-    handleChange(selectedSdkLanguage)
+    setLanguage(selectedSdkLanguage)
   }, [selectedSdkLanguage])
 
   return (
     <Select
       aria-label="sdk language selector"
-      value={selectedSdkLanguage}
+      value={language}
       onChange={handleChange}
-      options={allSdkLanguages}
+      options={options}
     />
   )
 }

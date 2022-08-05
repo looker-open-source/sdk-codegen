@@ -37,7 +37,7 @@ describe('Settings Sagas', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     sagaTester = new ReduxSagaTester({
-      initialState: { settings: { sdkLanguage: 'Go' } },
+      initialState: { settings: { sdkLanguage: 'go' } },
       reducers: {
         settings: settingsSlice.reducer,
       },
@@ -50,18 +50,18 @@ describe('Settings Sagas', () => {
     const setSdkLanguageAction = settingActions.setSdkLanguageAction
 
     test('persists value sdkLanguage in localstorage', async () => {
-      sagaTester.dispatch(setSdkLanguageAction({ sdkLanguage: 'Kotlin' }))
+      sagaTester.dispatch(setSdkLanguageAction({ sdkLanguage: 'kt' }))
       await sagaTester.waitFor('settings/setSdkLanguageAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(1)
       expect(calledActions[0]).toEqual(
         setSdkLanguageAction({
-          sdkLanguage: 'Kotlin',
+          sdkLanguage: 'kt',
         })
       )
       expect(localStorage.setItem).toHaveBeenLastCalledWith(
         StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
-        JSON.stringify({ sdkLanguage: 'Kotlin' })
+        JSON.stringify({ sdkLanguage: 'kt' })
       )
     })
   })

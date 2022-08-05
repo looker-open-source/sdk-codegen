@@ -72,7 +72,7 @@ describe('Header', () => {
       <Header spec={spec} toggleNavigation={toggleNavigation} />
     )
     const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
+    expect(selector).toHaveValue('Python')
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {

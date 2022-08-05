@@ -56,7 +56,7 @@ describe('SelectorContainer', () => {
   test('it renders an sdk language selector with the correct value and options', async () => {
     renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />)
     const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
+    expect(selector).toHaveValue('Python')
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {

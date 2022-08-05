@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,14 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation } from './hooks'
+export const sdkLanguageMapping = {
+  py: 'Python',
+  ts: 'TypeScript',
+  cs: 'C#',
+  kt: 'Kotlin',
+  swift: 'Swift',
+  go: 'Go',
+  all: 'All',
+}
+export const languageAliases = Object.keys(sdkLanguageMapping)
+export const languages = Object.values(sdkLanguageMapping)

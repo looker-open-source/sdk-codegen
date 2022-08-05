@@ -31,6 +31,7 @@ import type { Store } from 'redux'
 import { api } from '../../test-data'
 import { renderWithReduxProvider, createTestStore } from '../../test-utils'
 import type { RootState } from '../../state'
+import { getAliasByLanguage } from '../../utils'
 import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {
@@ -66,7 +67,10 @@ describe('DocSDKs', () => {
     'it can render a %s method declaration',
     (sdkLanguage) => {
       store = createTestStore({
-        settings: { initialized: false, sdkLanguage },
+        settings: {
+          initialized: false,
+          sdkLanguage: getAliasByLanguage(sdkLanguage),
+        },
       })
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,

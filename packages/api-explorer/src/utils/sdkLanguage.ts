@@ -23,11 +23,38 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation } from './hooks'
+
+import { codeGenerators } from '@looker/sdk-codegen'
+
+export const allSdkLanguages = (): Record<string, string> => {
+  const languages = {}
+  codeGenerators.forEach((gen) => {
+    const alias = gen.extension.toString().match(/\.(\w+)\b/)![1]
+    languages[alias.toLowerCase()] = gen.language
+  })
+
+  return { ...languages, all: 'All' }
+}
+
+/**
+ * Searches for sdk language name by alias
+ * @param alias alias to search by
+ * @returns language name
+ */
+export const getLanguageByAlias = (alias: string) => {
+  const languages = allSdkLanguages()
+  return languages[alias.toLowerCase()]
+}
+
+/**
+ * Searches for alias by sdk language name
+ * @param language name to search by
+ * @returns alias
+ */
+export const getAliasByLanguage = (language: string) => {
+  const languages = allSdkLanguages()
+  const match = Object.keys(languages).find(
+    (alias) => languages[alias].toLowerCase() === language.toLowerCase()
+  )
+  return match
+}
