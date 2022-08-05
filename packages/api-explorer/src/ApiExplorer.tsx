@@ -67,7 +67,7 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
-  selectSdkLanguage,
+  selectSdkLanguageAlias,
 } from './state'
 import {
   getSpecKey,
@@ -97,7 +97,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const selectedLanguageAlias = useSelector(selectSdkLanguageAlias)
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
     useSettingActions()
@@ -134,12 +134,12 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       if (sdkLanguage && getLanguageByAlias(sdkLanguage)) {
         // sync store with URL
         setSdkLanguageAction({
-          sdkLanguage: sdkLanguage.toLowerCase(),
+          sdkLanguageAlias: sdkLanguage.toLowerCase(),
         })
       } else {
         // sync URL with store
         const sdk =
-          getAliasByLanguage(selectedSdkLanguage) || selectedSdkLanguage
+          getAliasByLanguage(selectedLanguageAlias) || selectedLanguageAlias
         navigate(location.pathname, {
           sdk: sdk === 'all' ? null : sdk,
         })
@@ -157,9 +157,9 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     if (!initialized) return
     const searchPattern = searchParams.get('s') || ''
-    const sdkLanguage = searchParams.get('sdk') || 'all'
+    const sdkLanguageAlias = searchParams.get('sdk') || 'all'
     setSearchPatternAction({ searchPattern })
-    setSdkLanguageAction({ sdkLanguage })
+    setSdkLanguageAction({ sdkLanguageAlias })
   }, [location.search])
 
   useEffect(() => {

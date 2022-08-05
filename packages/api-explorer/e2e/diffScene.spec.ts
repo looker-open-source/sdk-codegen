@@ -217,7 +217,7 @@ describe('Diff Scene', () => {
     // Check the URL
     // Would like to do this earlier, but not sure what to wait on
     const compUrl = page.url()
-    expect(compUrl).toEqual(`${BASE_URL}/diff/3.1/4.0?sdk=kt`)
+    expect(compUrl).toEqual(`${BASE_URL}/diff/3.1/4.0?sdk=py`)
 
     // Check the results
     const diffResultCards = await page.$$(resultCardsSelector)

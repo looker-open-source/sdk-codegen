@@ -57,7 +57,7 @@ import {
   DocTitle,
   DocSchema,
 } from '../../components'
-import { selectSdkLanguage } from '../../state'
+import { selectSdkLanguageAlias } from '../../state'
 import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {
@@ -79,7 +79,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const adaptor = getApixAdaptor()
   const history = useHistory()
   const navigate = useNavigation()
-  const alias = useSelector(selectSdkLanguage)
+  const alias = useSelector(selectSdkLanguageAlias)
   const sdkLanguage = getLanguageByAlias(alias)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
@@ -169,7 +169,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
             <RunIt
               adaptor={adaptor}
               key={method.operationId}
-              sdkLanguage={getLanguageByAlias(sdkLanguage)}
+              sdkLanguage={sdkLanguage}
               api={api}
               method={method}
             />

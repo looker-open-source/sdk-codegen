@@ -36,6 +36,7 @@ const v40 = `${BASE_URL}/4.0`
 
 describe('API Explorer', () => {
   beforeEach(async () => {
+    localStorage.clear()
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)
   })

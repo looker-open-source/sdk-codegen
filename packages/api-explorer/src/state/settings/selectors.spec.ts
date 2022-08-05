@@ -24,7 +24,7 @@
 
  */
 import { createTestStore, preloadedState } from '../../test-utils'
-import { selectSdkLanguage, isInitialized } from './selectors'
+import { selectSdkLanguageAlias, isInitialized } from './selectors'
 
 const testStore = createTestStore()
 
@@ -32,8 +32,8 @@ describe('Settings selectors', () => {
   const state = testStore.getState()
 
   test('selectSdkLanguage selects', () => {
-    expect(selectSdkLanguage(state)).toEqual(
-      preloadedState.settings.sdkLanguage
+    expect(selectSdkLanguageAlias(state)).toEqual(
+      preloadedState.settings.sdkLanguageAlias
     )
   })
 

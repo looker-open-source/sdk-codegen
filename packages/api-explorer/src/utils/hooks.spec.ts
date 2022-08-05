@@ -60,7 +60,7 @@ describe('Navigate', () => {
     })
   })
 
-  test('removes particular parameter when object is passed in with its value as null', () => {
+  test('null query params are removed', () => {
     navigate(route, { s: null, sdk: 'test' })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,

@@ -43,7 +43,7 @@ describe('DocSDKs', () => {
     store = createTestStore({
       settings: {
         initialized: false,
-        sdkLanguage: 'All',
+        sdkLanguageAlias: 'All',
       },
     })
   })
@@ -69,7 +69,7 @@ describe('DocSDKs', () => {
       store = createTestStore({
         settings: {
           initialized: false,
-          sdkLanguage: getAliasByLanguage(sdkLanguage),
+          sdkLanguageAlias: getAliasByLanguage(sdkLanguage),
         },
       })
       renderWithReduxProvider(
