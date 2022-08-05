@@ -374,7 +374,7 @@ data class SDKErrorInfo(
 )
 
 fun parseSDKError(msg: String) : SDKErrorInfo {
-    val rx = Regex("\\s+Text:\\s+\"(.*)\"")
+    val rx = Regex("""\s+Text:\s+"(.*)"$""")
     val info = rx.find(msg)
     var result = SDKErrorInfo("", listOf(), "")
     info?.let{
