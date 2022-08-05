@@ -2,7 +2,7 @@
 
 The Looker SDK for Kotlin provides a convenient way to communicate with the Looker API available on your Looker server.
 
-**DISCLAIMER**: This is an _experimental_ version of the Looker SDK. Implementations are still subject to change, but SDK method calls are expected to work correctly. Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
+**NOTICE**: The Kotlin SDK is [community supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy). Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
 ## Getting started
 
@@ -45,18 +45,16 @@ If this command fails the first time, read the [instructions for setting up `yar
 
 ### Use the SDK in your code
 
-Looker 7.2 introduces an experimental API 4.0 that should be used for strongly-typed languages like Kotlin. (In fact, 4.0 was explicitly created to support languages like Swift and Kotlin.)
+API 4.0 should be used for all strongly-typed languages like Kotlin. (API 4.0 was explicitly created to support languages like Swift and Kotlin.)
 
-**NOTE**: For the Kotlin SDK, to correctly deserialize the JSON payloads from the Looker API, you **must** use the 4.0 client `LookerSDK`, not `Looker31SDK`.
-
-When the SDK is installed and the server location and API credentials are configured in your `looker.ini` file, it's ready to be used.
+When the SDK is installed and the server location and API credentials are configured in your `looker.ini` file, it's ready to be used. (There are [other ways](#environment-variable-configuration) of providing API credentials to the Kotlin SDK. Using an `.ini` file is a convenient option for development.)
 
 Verify authentication works and that API calls will succeed with code similar to the following:
 
 ```kotlin
-import com.looker.sdk.ApiSettings;
-import com.looker.rtl.AuthSession;
-import com.looker.sdk.LookerSDK;
+import com.looker.sdk.ApiSettings
+import com.looker.rtl.AuthSession
+import com.looker.sdk.LookerSDK
 
 val localIni = "./looker.ini"
 val settings = ApiSettings.fromIniFile(localIni, "Looker")
@@ -67,6 +65,32 @@ val me = sdk.ok<User>(sdk.me())
 
 /// continue making SDK calls
 val users = sdk.ok<Array<User>>(sdk.all_users())
+```
+
+### Capturing API Error responses
+
+Detailed error responses from the Looker API can be captured using the `parseSDKError()` function. The following test shows how all error information from an API response can be captured:
+
+```kotlin
+@Test
+fun testErrorReporting() {
+    try {
+        val props = ThemeSettings(
+            background_color = "invalid"
+        )
+        val theme = WriteTheme(
+            name = "'bogus!",
+            settings = props
+        )
+        val actual = sdk.ok<Theme>(sdk.validate_theme(theme))
+        assertNull(actual) // test should never get here
+    } catch (e: java.lang.Error) {
+        val error = parseSDKError(e.toString())
+        assertTrue(error.message.isNotEmpty())
+        assertTrue(error.errors.size == 2)
+        assertTrue(error.documentationUrl.isNotEmpty())
+    }
+}
 ```
 
 ### More examples
