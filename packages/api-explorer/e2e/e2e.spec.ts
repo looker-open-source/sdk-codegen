@@ -55,7 +55,7 @@ describe('API Explorer', () => {
         expect(page).toClick('h3', { text: 'Get All Dashboards' }),
       ])
       await expect(page.url()).toEqual(
-        `${v40}/methods/Dashboard/all_dashboards`
+        `${v40}/methods/Dashboard/all_dashboards?sdk=py`
       )
 
       // title
@@ -255,7 +255,9 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('button', { text: 'Types (0)' })
       await expect(page).toClick('a', { text: 'Get Workspace' })
       await expect(page).toMatchElement('h2', { text: 'Get Workspace' })
-      await expect(page.url()).toEqual(`${v40}/methods/Workspace/workspace`)
+      await expect(page.url()).toEqual(
+        `${v40}/methods/Workspace/workspace?sdk=kt&s=get+workspace`
+      )
     })
 
     it('searches types', async () => {
@@ -267,7 +269,9 @@ describe('API Explorer', () => {
       await expect(page).toClick('button', { text: 'Types (1)' })
       await expect(page).toClick('a', { text: 'WriteTheme' })
       await expect(page).toMatchElement('h2', { text: 'WriteTheme' })
-      await expect(page.url()).toEqual(`${v40}/types/Theme/WriteTheme`)
+      await expect(page.url()).toEqual(
+        `${v40}/types/Theme/WriteTheme?sdk=kt&s=writetheme`
+      )
     })
   })
 })
