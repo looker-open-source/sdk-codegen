@@ -1,10 +1,8 @@
 import com.looker.rtl.SDKResponse
+import com.looker.rtl.parseSDKError
 import com.looker.sdk.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.Test
+import kotlin.test.*
 
 class TestMethods {
     val sdk by lazy { TestConfig().sdk }
@@ -70,14 +68,14 @@ class TestMethods {
         )
     }
 
-    private fun slowQuery(): WriteQuery {
-        return WriteQuery(
-            "system__activity",
-            "dashboard",
-            arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
-            limit = "5000"
-        )
-    }
+//    private fun slowQuery(): WriteQuery {
+//        return WriteQuery(
+//            "system__activity",
+//            "dashboard",
+//            arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
+//            limit = "5000"
+//        )
+//    }
 
     /*
     Functions to prepare any data entities that might be missing for testing retrieval and iteration
@@ -565,5 +563,25 @@ class TestMethods {
             { item -> item.id!! },
             { id, _ -> sdk.workspace(id) }
         )
+    }
+
+    @Test
+    fun testErrorReporting() {
+        try {
+            val props = ThemeSettings(
+                background_color = "invalid"
+            )
+            val theme = WriteTheme(
+                name = "'bogus!",
+                settings = props
+            )
+            val actual = sdk.ok<Theme>(sdk.validate_theme(theme))
+            assertNull(actual) // test should never get here
+        } catch (e: java.lang.Error) {
+            val error = parseSDKError(e.toString())
+            assertTrue(error.message.isNotEmpty())
+            assertTrue(error.errors.size == 2)
+            assertTrue(error.documentationUrl.isNotEmpty())
+        }
     }
 }

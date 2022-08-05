@@ -24,18 +24,12 @@
 
 package com.looker.rtl
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.SerializedName
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.looker.sdk.AccessToken
-import io.ktor.client.features.json.GsonSerializer
-import io.ktor.client.features.json.defaultSerializer
-import java.lang.reflect.Type
 import java.time.LocalDateTime
 
 data class AuthToken(
