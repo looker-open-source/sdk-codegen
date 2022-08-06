@@ -209,7 +209,7 @@ describe('ErrorDoc', () => {
     it.each<[string, string]>([
       ['/x/:f/y/:z', '/x/{f}/y/{z}'],
       ['/x/{f}/y/{z}', '/x/{f}/y/{z}'],
-      ['/x/:foo/y/:zoo', '/x/{foo}/y/{zoo}'],
+      ['/x/:foo_bar/y/:zoo', '/x/{foo_bar}/y/{zoo}'],
       ['', ''],
     ])('path: "%s" should be "%s"', (path, expected) =>
       expect(errDoc.specPath(path)).toEqual(expected)
@@ -232,6 +232,7 @@ describe('ErrorDoc', () => {
       ['', ''],
       ['foo', ''],
       ['/foo.md', ''],
+      ['404.md', ''],
       ['login_404.md', 'login'],
       ['login_2_404.md', 'login_2'],
       ['and_another_404.md', 'and_another'],

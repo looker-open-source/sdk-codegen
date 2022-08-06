@@ -61,6 +61,9 @@ export interface IErrorDoc {
   /** Index of all know error codes. Call load() to populate it */
   index?: ErrorCodeIndex
 
+  /** Url of API error document index */
+  indexUrl: string
+
   /**
    * Extract error url into its parts
    * @param docUrl value of documentation_url from error payload
