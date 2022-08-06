@@ -23,7 +23,6 @@
  */
 
 import com.looker.rtl.ErrorDoc
-import com.looker.rtl.ErrorDocLink
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -42,22 +41,20 @@ class TestErrorDoc {
     @Test
     fun parse() {
         var actual = errDoc.parse(external)
-        assertEquals("https://docs.looker.com/r/err/", actual.redirector )
+        assertEquals("https://docs.looker.com/r/err/", actual.redirector)
         assertEquals("4.0", actual.apiVersion)
         assertEquals("429", actual.statusCode)
         assertEquals("/delete/bogus/:namespace/purge", actual.apiPath)
         actual = errDoc.parse(internal)
-        assertEquals("https://docs.looker.com/r/err/", actual.redirector )
+        assertEquals("https://docs.looker.com/r/err/", actual.redirector)
         assertEquals("internal", actual.apiVersion)
         assertEquals("422", actual.statusCode)
         assertEquals("/post/bogus/bulk", actual.apiPath)
         actual = errDoc.parse("")
-        assertEquals(ErrorDocLink("", "", "", ""), actual)
         assertEquals("", actual.redirector)
         assertEquals("", actual.apiVersion)
         assertEquals("", actual.statusCode)
         assertEquals("", actual.apiPath)
-
     }
 
     @Test

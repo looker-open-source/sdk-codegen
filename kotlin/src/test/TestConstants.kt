@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
 import com.looker.rtl.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
