@@ -74,7 +74,6 @@ import {
   diffPath,
   useNavigation,
   getLanguageByAlias,
-  getAliasByLanguage,
 } from './utils'
 
 export interface ApiExplorerProps {
@@ -138,10 +137,8 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
         })
       } else {
         // sync URL with store
-        const sdk =
-          getAliasByLanguage(selectedLanguageAlias) || selectedLanguageAlias
         navigate(location.pathname, {
-          sdk: sdk === 'all' ? null : sdk,
+          sdk: selectedLanguageAlias === 'all' ? null : selectedLanguageAlias,
         })
       }
     }
