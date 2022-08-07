@@ -151,7 +151,7 @@ describe('Diff Scene', () => {
           page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
         )
       )
-      expect(page1Methods).toHaveLength(15)
+      expect(page1Methods).toHaveLength(16)
       expect(page1Methods).toContain('delete_board_item')
     }
 
@@ -176,13 +176,15 @@ describe('Diff Scene', () => {
       const methodLink = await page.$(`${resultCardsSelector} a[role=link]`)
       expect(methodLink).not.toBeNull()
       const methodText = await page.evaluate((e) => e.innerText, methodLink)
-      expect(methodText).toMatch(`delete_board_item for 4.0`)
+      expect(methodText).toMatch(`delete_alert for 4.0`)
 
       // Click and validate destination
       await methodLink.click()
       await page.waitForSelector(`div[class*=MethodBadge]`, { timeout: 5000 })
       const compUrl = page.url()
-      expect(compUrl).toEqual(`${BASE_URL}/4.0/methods/Board/delete_board_item`)
+      expect(compUrl).toEqual(
+        `${BASE_URL}/4.0/methods/Alert/delete_alert?sdk=py`
+      )
     }
   })
 
@@ -228,7 +230,7 @@ describe('Diff Scene', () => {
       )
     )
 
-    expect(diff31to40Page1Methods).toHaveLength(15)
+    expect(diff31to40Page1Methods).toHaveLength(16)
     expect(diff31to40Page1Methods).toContain('delete_board_item')
 
     // Click the switch button
@@ -245,7 +247,7 @@ describe('Diff Scene', () => {
     await page.waitForTimeout(150)
 
     const switchUrl = page.url()
-    expect(switchUrl).toEqual(`${BASE_URL}/diff/4.0/3.1`)
+    expect(switchUrl).toEqual(`${BASE_URL}/diff/4.0/3.1?sdk=py`)
 
     // Check the results again, even though they should be the same
     const diff40to31Page1Methods = await Promise.all(
@@ -254,7 +256,7 @@ describe('Diff Scene', () => {
       )
     )
 
-    expect(diff40to31Page1Methods).toHaveLength(15)
+    expect(diff40to31Page1Methods).toHaveLength(16)
     expect(diff40to31Page1Methods).toContain('delete_board_item')
   })
 })

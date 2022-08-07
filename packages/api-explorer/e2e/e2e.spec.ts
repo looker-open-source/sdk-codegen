@@ -36,7 +36,6 @@ const v40 = `${BASE_URL}/4.0`
 
 describe('API Explorer', () => {
   beforeEach(async () => {
-    localStorage.clear()
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)
   })
@@ -165,6 +164,9 @@ describe('API Explorer', () => {
         'Kotlin'
       )
       await expect(page).toMatchElement('h3', { text: 'Kotlin Declaration' })
+      await page.evaluate(() => {
+        localStorage.clear()
+      })
     })
 
     // This test was broken during the 4.0 GA spec changes, and needs to be fixed
@@ -257,7 +259,7 @@ describe('API Explorer', () => {
       await expect(page).toClick('a', { text: 'Get Workspace' })
       await expect(page).toMatchElement('h2', { text: 'Get Workspace' })
       await expect(page.url()).toEqual(
-        `${v40}/methods/Workspace/workspace?sdk=kt&s=get+workspace`
+        `${v40}/methods/Workspace/workspace?sdk=py&s=get+workspace`
       )
     })
 
@@ -271,7 +273,7 @@ describe('API Explorer', () => {
       await expect(page).toClick('a', { text: 'WriteTheme' })
       await expect(page).toMatchElement('h2', { text: 'WriteTheme' })
       await expect(page.url()).toEqual(
-        `${v40}/types/Theme/WriteTheme?sdk=kt&s=writetheme`
+        `${v40}/types/Theme/WriteTheme?sdk=py&s=writetheme`
       )
     })
   })
