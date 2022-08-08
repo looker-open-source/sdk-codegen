@@ -131,19 +131,20 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
+    const verbInUrl = searchParams.get('v') || 'ALL'
     setSearchPatternAction({ searchPattern: searchPattern! })
-    const verbInUrl = searchParams.get('v')
-    const invalidFilter =
-      (!verbInUrl && selectedTagFilter.toUpperCase() !== 'ALL') ||
-      (verbInUrl && !opBtnNames.test(verbInUrl.toUpperCase()))
-    if (invalidFilter) {
-      setTagFilterAction({ tagFilter: 'ALL' })
-    } else if (
-      verbInUrl &&
-      verbInUrl.toUpperCase() !== selectedTagFilter.toUpperCase()
-    ) {
-      setTagFilterAction({ tagFilter: verbInUrl.toUpperCase() })
-    }
+    setTagFilterAction({ tagFilter: verbInUrl })
+    // const invalidFilter =
+    //   (!verbInUrl && selectedTagFilter.toUpperCase() !== 'ALL') ||
+    //   (verbInUrl && !opBtnNames.test(verbInUrl.toUpperCase()))
+    // if (invalidFilter) {
+    //   setTagFilterAction({ tagFilter: 'ALL' })
+    // } else if (
+    //   verbInUrl &&
+    //   verbInUrl.toUpperCase() !== selectedTagFilter.toUpperCase()
+    // ) {
+    //   setTagFilterAction({ tagFilter: verbInUrl.toUpperCase() })
+    // }
   }, [location.search])
 
   useEffect(() => {

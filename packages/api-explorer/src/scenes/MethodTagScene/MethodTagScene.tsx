@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
@@ -49,28 +49,32 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const methods = api.tags[methodTag]
   const navigate = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
+  const [tagVerb, setTagVerb] = useState(selectedTagFilter)
   const searchParams = new URLSearchParams(location.search)
 
   const setValue = (filter: string) => {
-    const verbInUrl = searchParams.get('v')
-    if (
-      (verbInUrl && verbInUrl.toUpperCase() === filter.toUpperCase()) ||
-      (!verbInUrl && filter.toUpperCase() === 'ALL')
-    )
-      return
-    const validVerbForTag = Object.keys(methods).find(
-      (tag) => methods[tag].httpMethod === filter.toUpperCase()
-    )
     navigate(location.pathname, {
-      v:
-        filter.toUpperCase() === 'ALL' || !validVerbForTag
-          ? null
-          : filter.toLowerCase(),
+      v: filter === 'ALL' ? null : filter,
     })
+    // const verbInUrl = searchParams.get('v')
+    // if (
+    //   (verbInUrl && verbInUrl.toUpperCase() === filter.toUpperCase()) ||
+    //   (!verbInUrl && filter.toUpperCase() === 'ALL')
+    // )
+    //   return
+    // const validVerbForTag = Object.keys(methods).find(
+    //   (tag) => methods[tag].httpMethod === filter.toUpperCase()
+    // )
+    // navigate(location.pathname, {
+    //   v:
+    //     filter.toUpperCase() === 'ALL' || !validVerbForTag
+    //       ? null
+    //       : filter.toLowerCase(),
+    // })
   }
 
   useEffect(() => {
-    setValue(selectedTagFilter)
+    setTagVerb(selectedTagFilter)
   }, [selectedTagFilter])
 
   useEffect(() => {
@@ -89,12 +93,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonToggle
-        mb="small"
-        mt="xlarge"
-        value={selectedTagFilter}
-        onChange={setValue}
-      >
+      <ButtonToggle mb="small" mt="xlarge" value={tagVerb} onChange={setValue}>
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
