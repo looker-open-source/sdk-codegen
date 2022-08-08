@@ -28,6 +28,10 @@ import { codeGenerators } from '@looker/sdk-codegen'
 
 const allAlias = 'all'
 
+/**
+ * Gets all supported sdk languages
+ * @returns mapping of sdk language aliases to name
+ */
 export const allSdkLanguages = (): Record<string, string> => {
   const languages = {}
   codeGenerators.forEach((gen) => {
