@@ -28,7 +28,7 @@ import React, { useEffect, useState } from 'react'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
 import { selectSdkLanguage } from '../../state'
-import { useNavigation } from '../../utils'
+import { allAlias, useNavigation } from '../../utils'
 import { allSdkLanguageOptions } from './utils'
 
 /**
@@ -41,7 +41,7 @@ export const SdkLanguageSelector: FC = () => {
   const options = allSdkLanguageOptions()
 
   const handleChange = (alias: string) => {
-    navigate(location.pathname, { sdk: alias === 'all' ? null : alias })
+    navigate(location.pathname, { sdk: alias === allAlias ? null : alias })
   }
 
   useEffect(() => {
