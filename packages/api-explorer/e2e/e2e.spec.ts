@@ -45,6 +45,12 @@ describe('API Explorer', () => {
       await goToPage(v40)
     })
 
+    afterEach(async () => {
+      await page.evaluate(() => {
+        localStorage.clear()
+      })
+    })
+
     it('renders a method page', async () => {
       await Promise.all([
         page.waitForNavigation(),
