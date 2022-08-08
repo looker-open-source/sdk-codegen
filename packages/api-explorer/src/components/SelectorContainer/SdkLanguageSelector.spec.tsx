@@ -34,6 +34,7 @@ import {
 import { findSdk } from '../../utils'
 import { languages } from '../../test-data'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
+import { defaultSettingsState } from '@looker/api-explorer'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
@@ -56,7 +57,9 @@ describe('SdkLanguageSelector', () => {
 
   test('it has the correct default language selected', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    expect(screen.getByRole('textbox')).toHaveValue('Python')
+    expect(screen.getByRole('textbox')).toHaveValue(
+      defaultSettingsState.sdkLanguage
+    )
   })
 
   test('it lists all available languages and "All" as options', async () => {
