@@ -32,5 +32,5 @@ export const sdkLanguageMapping = {
   go: 'Go',
   all: 'All',
 }
-export const languageAliases = Object.keys(sdkLanguageMapping)
+
 export const languages = Object.values(sdkLanguageMapping)

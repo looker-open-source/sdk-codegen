@@ -36,7 +36,7 @@ import { settingActions, defaultSettings } from './slice'
 function* serializeToLocalStorageSaga() {
   const adaptor = getEnvAdaptor()
   const settings = yield* select((state: RootState) => ({
-    sdkLanguageAlias: state.settings.sdkLanguageAlias,
+    sdkLanguage: state.settings.sdkLanguage,
   }))
   adaptor.localStorageSetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY,

@@ -27,7 +27,7 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
-import { selectSdkLanguageAlias } from '../../state'
+import { selectSdkLanguage } from '../../state'
 import { useNavigation } from '../../utils'
 import { allSdkLanguageOptions } from './utils'
 
@@ -36,8 +36,8 @@ import { allSdkLanguageOptions } from './utils'
  */
 export const SdkLanguageSelector: FC = () => {
   const navigate = useNavigation()
-  const selectedLanguageAlias = useSelector(selectSdkLanguageAlias)
-  const [language, setLanguage] = useState(selectedLanguageAlias)
+  const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const [language, setLanguage] = useState(selectedSdkLanguage)
   const options = allSdkLanguageOptions()
 
   const handleChange = (alias: string) => {
@@ -45,8 +45,8 @@ export const SdkLanguageSelector: FC = () => {
   }
 
   useEffect(() => {
-    setLanguage(selectedLanguageAlias)
-  }, [selectedLanguageAlias])
+    setLanguage(selectedSdkLanguage)
+  }, [selectedSdkLanguage])
 
   return (
     <Select

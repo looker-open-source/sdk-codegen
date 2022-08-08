@@ -37,8 +37,8 @@ import type {
 import { CollapserCard, getGenerators } from '@looker/run-it'
 
 import { DocCode } from '../DocCode'
-import { selectSdkLanguageAlias } from '../../state'
-import { isMethod, getLanguageByAlias } from '../../utils'
+import { selectSdkLanguage } from '../../state'
+import { isMethod, getSdkLanguage } from '../../utils'
 import { noComment } from './utils'
 import { DocDeclarations } from './DocDeclarations'
 
@@ -72,21 +72,21 @@ const getDeclarations = (
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
-  const alias = useSelector(selectSdkLanguageAlias)
-  const sdkLanguage = getLanguageByAlias(alias)!
+  const alias = useSelector(selectSdkLanguage)
+  const sdk = getSdkLanguage(alias)!
   const generators = getGenerators(api)
   const [item, setItem] = useState(method ? noComment(method) : type!)
   const [declarations, setDeclarations] = useState(
-    getDeclarations(generators, sdkLanguage, item)
+    getDeclarations(generators, sdk.language, item)
   )
-  const [header, setHeader] = useState(`${sdkLanguage} Declaration`)
+  const [header, setHeader] = useState(`${sdk.language} Declaration`)
 
   useEffect(() => {
     setItem(method ? noComment(method) : type!)
   }, [method, type])
 
   useEffect(() => {
-    const declarations = getDeclarations(generators, sdkLanguage, item)
+    const declarations = getDeclarations(generators, sdk.language, item)
     setDeclarations(declarations)
     const languages = Object.keys(declarations)
     if (languages.length > 1) {
@@ -94,7 +94,7 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
     } else {
       setHeader(`${languages[0]} Declaration`)
     }
-  }, [sdkLanguage, item])
+  }, [sdk.language, item])
 
   return (
     <CollapserCard heading={header} id="sdk declarations">

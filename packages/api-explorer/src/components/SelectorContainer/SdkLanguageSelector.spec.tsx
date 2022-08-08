@@ -31,7 +31,7 @@ import {
   createTestStore,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
-import { getAliasByLanguage } from '../../utils'
+import { getSdkLanguage } from '../../utils'
 import { languages } from '../../test-data'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
 
@@ -86,9 +86,10 @@ describe('SdkLanguageSelector', () => {
       userEvent.click(selector)
       await waitFor(async () => {
         await userEvent.click(screen.getByRole('option', { name: language }))
+        const sdk = getSdkLanguage(language)!
         expect(mockHistoryPush).toHaveBeenLastCalledWith({
           pathname: location.pathname,
-          search: `sdk=${getAliasByLanguage(language)}`,
+          search: `sdk=${sdk.alias}`,
         })
       })
     }

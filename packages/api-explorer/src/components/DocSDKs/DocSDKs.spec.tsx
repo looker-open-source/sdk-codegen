@@ -31,7 +31,7 @@ import type { Store } from 'redux'
 import { api } from '../../test-data'
 import { renderWithReduxProvider, createTestStore } from '../../test-utils'
 import type { RootState } from '../../state'
-import { getAliasByLanguage } from '../../utils'
+import { getSdkLanguage } from '../../utils'
 import { DocSDKs } from './DocSDKs'
 
 describe('DocSDKs', () => {
@@ -43,7 +43,7 @@ describe('DocSDKs', () => {
     store = createTestStore({
       settings: {
         initialized: false,
-        sdkLanguageAlias: 'All',
+        sdkLanguage: 'All',
       },
     })
   })
@@ -69,7 +69,7 @@ describe('DocSDKs', () => {
       store = createTestStore({
         settings: {
           initialized: false,
-          sdkLanguageAlias: getAliasByLanguage(sdkLanguage),
+          sdkLanguage: getSdkLanguage(sdkLanguage)!.alias,
         },
       })
       renderWithReduxProvider(

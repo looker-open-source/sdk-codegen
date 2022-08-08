@@ -32,7 +32,7 @@ import { SearchAll, setToCriteria } from '@looker/sdk-codegen'
 import { saga } from './sagas'
 
 export interface UserDefinedSettings {
-  sdkLanguageAlias: string
+  sdkLanguage: string
 }
 
 export interface SettingState extends UserDefinedSettings {
@@ -43,7 +43,7 @@ export interface SettingState extends UserDefinedSettings {
 }
 
 export const defaultSettings = {
-  sdkLanguageAlias: 'py',
+  sdkLanguage: 'py',
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
 }
@@ -54,7 +54,7 @@ export const defaultSettingsState: SettingState = {
 }
 
 type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>
-type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguageAlias'>
+type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
@@ -68,7 +68,7 @@ export const settingsSlice = createSlice({
       state,
       action: PayloadAction<InitSuccessPayload>
     ) {
-      state.sdkLanguageAlias = action.payload.sdkLanguageAlias
+      state.sdkLanguage = action.payload.sdkLanguage
       state.initialized = true
     },
     initSettingsFailureAction(state, action: PayloadAction<Error>) {
@@ -76,7 +76,7 @@ export const settingsSlice = createSlice({
       state.initialized = false
     },
     setSdkLanguageAction(state, action: PayloadAction<SetSdkLanguageAction>) {
-      state.sdkLanguageAlias = action.payload.sdkLanguageAlias
+      state.sdkLanguage = action.payload.sdkLanguage
     },
     setSearchPatternAction(
       state,

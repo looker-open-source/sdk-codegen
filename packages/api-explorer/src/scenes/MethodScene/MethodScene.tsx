@@ -42,7 +42,7 @@ import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 
-import { getApixAdaptor, getLanguageByAlias, useNavigation } from '../../utils'
+import { getApixAdaptor, getSdkLanguage, useNavigation } from '../../utils'
 import {
   ApixSection,
   DocActivityType,
@@ -57,7 +57,7 @@ import {
   DocTitle,
   DocSchema,
 } from '../../components'
-import { selectSdkLanguageAlias } from '../../state'
+import { selectSdkLanguage } from '../../state'
 import { DocOperation, DocRequestBody } from './components'
 
 interface MethodSceneProps {
@@ -79,8 +79,8 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const adaptor = getApixAdaptor()
   const history = useHistory()
   const navigate = useNavigation()
-  const alias = useSelector(selectSdkLanguageAlias)
-  const sdkLanguage = getLanguageByAlias(alias)
+  const alias = useSelector(selectSdkLanguage)
+  const selectedSdk = getSdkLanguage(alias)!
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
@@ -169,7 +169,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
             <RunIt
               adaptor={adaptor}
               key={method.operationId}
-              sdkLanguage={sdkLanguage}
+              sdkLanguage={selectedSdk.language}
               api={api}
               method={method}
             />

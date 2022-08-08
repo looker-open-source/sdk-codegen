@@ -41,8 +41,8 @@ import { CollapserCard } from '@looker/run-it'
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
 import { useSelector } from 'react-redux'
 
-import { selectSdkLanguageAlias, selectExamplesLode } from '../../state'
-import { getLanguageByAlias } from '../../utils'
+import { selectSdkLanguage, selectExamplesLode } from '../../state'
+import { getSdkLanguage } from '../../utils'
 import {
   exampleColumns,
   EMPTY_STRING,
@@ -62,8 +62,8 @@ interface DocSdkUsageProps {
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   const examples = useSelector(selectExamplesLode)
-  const alias = useSelector(selectSdkLanguageAlias)
-  const sdkLanguage = getLanguageByAlias(alias)
+  const alias = useSelector(selectSdkLanguage)
+  const sdk = getSdkLanguage(alias)!
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   let languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
-  languages = sortLanguagesByPreference(languages, sdkLanguage)
+  languages = sortLanguagesByPreference(languages, sdk.language)
 
   const { pageExamples, pageLimit, paginate } = prepareExampleDataTable(
     languages,

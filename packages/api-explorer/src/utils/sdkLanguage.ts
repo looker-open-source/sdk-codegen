@@ -37,24 +37,17 @@ export const allSdkLanguages = (): Record<string, string> => {
 }
 
 /**
- * Searches for sdk language name by alias
- * @param alias alias to search by
- * @returns language name
+ * Searches for sdk language details given label
+ * @param label label to search by
+ * @returns language name and alias
  */
-export const getLanguageByAlias = (alias: string) => {
+export const getSdkLanguage = (label: string | null) => {
+  if (!label) return null
   const languages = allSdkLanguages()
-  return languages[alias.toLowerCase()]
-}
-
-/**
- * Searches for alias by sdk language name
- * @param language name to search by
- * @returns alias
- */
-export const getAliasByLanguage = (language: string) => {
-  const languages = allSdkLanguages()
-  const match = Object.keys(languages).find(
-    (alias) => languages[alias].toLowerCase() === language.toLowerCase()
+  const found = Object.entries(languages).find(
+    ([alias, language]) =>
+      label.toLowerCase() === alias ||
+      label.toLowerCase() === language.toLowerCase()
   )
-  return match
+  return found ? { alias: found[0], language: found[1] } : null
 }

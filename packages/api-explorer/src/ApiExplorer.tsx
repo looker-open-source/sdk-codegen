@@ -67,14 +67,9 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
-  selectSdkLanguageAlias,
+  selectSdkLanguage,
 } from './state'
-import {
-  getSpecKey,
-  diffPath,
-  useNavigation,
-  getLanguageByAlias,
-} from './utils'
+import { getSpecKey, diffPath, useNavigation, getSdkLanguage } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -96,7 +91,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
-  const selectedLanguageAlias = useSelector(selectSdkLanguageAlias)
+  const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
     useSettingActions()
@@ -129,16 +124,16 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     // reconcile local storage state with URL or vice versa
     if (initialized) {
-      const sdkLanguage = searchParams.get('sdk')
-      if (sdkLanguage && getLanguageByAlias(sdkLanguage)) {
+      const sdk = getSdkLanguage(searchParams.get('sdk'))
+      if (sdk) {
         // sync store with URL
         setSdkLanguageAction({
-          sdkLanguageAlias: sdkLanguage.toLowerCase(),
+          sdkLanguage: sdk.alias,
         })
       } else {
         // sync URL with store
         navigate(location.pathname, {
-          sdk: selectedLanguageAlias === 'all' ? null : selectedLanguageAlias,
+          sdk: selectedSdkLanguage === 'all' ? null : selectedSdkLanguage,
         })
       }
     }
@@ -154,9 +149,9 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     if (!initialized) return
     const searchPattern = searchParams.get('s') || ''
-    const sdkLanguageAlias = searchParams.get('sdk') || 'all'
+    const sdkLanguage = searchParams.get('sdk') || 'all'
     setSearchPatternAction({ searchPattern })
-    setSdkLanguageAction({ sdkLanguageAlias })
+    setSdkLanguageAction({ sdkLanguage })
   }, [location.search])
 
   useEffect(() => {

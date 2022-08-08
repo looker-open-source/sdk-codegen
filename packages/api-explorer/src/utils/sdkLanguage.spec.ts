@@ -25,12 +25,8 @@
  */
 
 import { codeGenerators } from '@looker/sdk-codegen'
-import {
-  allSdkLanguages,
-  getAliasByLanguage,
-  getLanguageByAlias,
-} from '../utils'
-import { languageAliases, languages, sdkLanguageMapping } from '../test-data'
+import { allSdkLanguages, getSdkLanguage } from '../utils'
+import { sdkLanguageMapping } from '../test-data'
 
 describe('SDK Language Utils', () => {
   test('allSdkLanguages gets all sdk languages', () => {
@@ -42,32 +38,26 @@ describe('SDK Language Utils', () => {
     )
   })
 
-  test.each(languageAliases)(
-    `getLanguageByAlias finds language for alias %s`,
-    (alias) => {
-      const actual = getLanguageByAlias(alias)
-      expect(actual).toEqual(sdkLanguageMapping[alias])
-    }
-  )
+  describe('getSdkLanguage', () => {
+    test('it is not case sensitive', () => {
+      const actual = getSdkLanguage('pY')
+      expect(actual?.language).toEqual('Python')
+    })
 
-  test('getLanguageByAlias is not case sensitive', () => {
-    const actual = getLanguageByAlias('pY')
-    expect(actual).toEqual('Python')
-  })
+    test.each(Object.entries(sdkLanguageMapping))(
+      `it finds language for alias %s`,
+      (alias, language) => {
+        const actual = getSdkLanguage(alias)
+        expect(actual?.language).toEqual(language)
+      }
+    )
 
-  test.each(languages)(
-    `getAliasByLanguage finds alias for language %s`,
-    (language) => {
-      const actual = getAliasByLanguage(language)
-      const expected = Object.entries(sdkLanguageMapping).find(
-        ([, v]) => v === language
-      )
-      expect(actual).toEqual(expected![0])
-    }
-  )
-
-  test('getAliasByLanguage is not case sensitive', () => {
-    const actual = getAliasByLanguage('pYtHon')
-    expect(actual).toEqual('py')
+    test.each(Object.entries(sdkLanguageMapping))(
+      `it finds alias for language %s`,
+      (alias, language) => {
+        const actual = getSdkLanguage(language)
+        expect(actual?.alias).toEqual(alias)
+      }
+    )
   })
 })
