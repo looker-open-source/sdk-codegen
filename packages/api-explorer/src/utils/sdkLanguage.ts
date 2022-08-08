@@ -26,14 +26,16 @@
 
 import { codeGenerators } from '@looker/sdk-codegen'
 
+const allAlias = 'all'
+
 export const allSdkLanguages = (): Record<string, string> => {
   const languages = {}
   codeGenerators.forEach((gen) => {
     const alias = gen.extension.toString().match(/\.(\w+)\b/)![1]
-    languages[alias.toLowerCase()] = gen.language
+    languages[alias] = gen.language
   })
 
-  return { ...languages, all: 'All' }
+  return { ...languages, [allAlias]: 'All' }
 }
 
 /**
@@ -41,13 +43,17 @@ export const allSdkLanguages = (): Record<string, string> => {
  * @param label label to search by
  * @returns language name and alias
  */
-export const getSdkLanguage = (label: string | null) => {
-  if (!label) return null
+export const findSdk = (label: string) => {
   const languages = allSdkLanguages()
-  const found = Object.entries(languages).find(
-    ([alias, language]) =>
-      label.toLowerCase() === alias ||
-      label.toLowerCase() === language.toLowerCase()
-  )
-  return found ? { alias: found[0], language: found[1] } : null
+  let match = { alias: allAlias, language: languages[allAlias] }
+  for (const [alias, language] of Object.entries(languages)) {
+    if (
+      !label.localeCompare(alias, 'en', { sensitivity: 'base' }) ||
+      !label.localeCompare(language, 'en', { sensitivity: 'base' })
+    ) {
+      match = { alias, language }
+      break
+    }
+  }
+  return match
 }

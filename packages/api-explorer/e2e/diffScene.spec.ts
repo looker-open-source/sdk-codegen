@@ -182,9 +182,7 @@ describe('Diff Scene', () => {
       await methodLink.click()
       await page.waitForSelector(`div[class*=MethodBadge]`, { timeout: 5000 })
       const compUrl = page.url()
-      expect(compUrl).toEqual(
-        `${BASE_URL}/4.0/methods/Alert/delete_alert?sdk=py`
-      )
+      expect(compUrl).toEqual(`${BASE_URL}/4.0/methods/Alert/delete_alert`)
     }
   })
 

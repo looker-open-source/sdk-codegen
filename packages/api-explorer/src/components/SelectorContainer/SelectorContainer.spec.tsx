@@ -30,6 +30,7 @@ import userEvent from '@testing-library/user-event'
 
 import { getLoadedSpecs, specs } from '../../test-data'
 import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { SelectorContainer } from './SelectorContainer'
 
 describe('SelectorContainer', () => {
@@ -55,7 +56,7 @@ describe('SelectorContainer', () => {
   test('it renders an sdk language selector with the correct value and options', async () => {
     renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />)
     const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue('Python')
+    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {

@@ -69,7 +69,7 @@ import {
   selectCurrentSpec,
   selectSdkLanguage,
 } from './state'
-import { getSpecKey, diffPath, useNavigation, getSdkLanguage } from './utils'
+import { getSpecKey, diffPath, useNavigation, findSdk } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -124,16 +124,21 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     // reconcile local storage state with URL or vice versa
     if (initialized) {
-      const sdk = getSdkLanguage(searchParams.get('sdk'))
-      if (sdk) {
+      const sdkParam = searchParams.get('sdk') || ''
+      const sdk = findSdk(sdkParam)
+      const paramMatchesSdk =
+        !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
+        !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
+      if (sdkParam && sdk && paramMatchesSdk) {
         // sync store with URL
         setSdkLanguageAction({
-          sdkLanguage: sdk.alias,
+          sdkLanguage: sdk.language,
         })
       } else {
         // sync URL with store
+        const { alias } = findSdk(selectedSdkLanguage)
         navigate(location.pathname, {
-          sdk: selectedSdkLanguage === 'all' ? null : selectedSdkLanguage,
+          sdk: alias === 'all' ? null : alias,
         })
       }
     }
@@ -149,7 +154,8 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     if (!initialized) return
     const searchPattern = searchParams.get('s') || ''
-    const sdkLanguage = searchParams.get('sdk') || 'all'
+    const sdkParam = searchParams.get('sdk') || 'all'
+    const { language: sdkLanguage } = findSdk(sdkParam)
     setSearchPatternAction({ searchPattern })
     setSdkLanguageAction({ sdkLanguage })
   }, [location.search])

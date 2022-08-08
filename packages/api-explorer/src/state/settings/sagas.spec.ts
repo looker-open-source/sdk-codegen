@@ -37,7 +37,7 @@ describe('Settings Sagas', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     sagaTester = new ReduxSagaTester({
-      initialState: { settings: { sdkLanguage: 'go' } },
+      initialState: { settings: { sdkLanguage: 'Go' } },
       reducers: {
         settings: settingsSlice.reducer,
       },
@@ -50,18 +50,18 @@ describe('Settings Sagas', () => {
     const setSdkLanguageAction = settingActions.setSdkLanguageAction
 
     test('persists value sdkLanguage in localstorage', async () => {
-      sagaTester.dispatch(setSdkLanguageAction({ sdkLanguage: 'kt' }))
+      sagaTester.dispatch(setSdkLanguageAction({ sdkLanguage: 'Kotlin' }))
       await sagaTester.waitFor('settings/setSdkLanguageAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(1)
       expect(calledActions[0]).toEqual(
         setSdkLanguageAction({
-          sdkLanguage: 'kt',
+          sdkLanguage: 'Kotlin',
         })
       )
       expect(localStorage.setItem).toHaveBeenLastCalledWith(
         StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
-        JSON.stringify({ sdkLanguage: 'kt' })
+        JSON.stringify({ sdkLanguage: 'Kotlin' })
       )
     })
   })
@@ -89,7 +89,7 @@ describe('Settings Sagas', () => {
     test('sends initSettingsSuccessAction with persisted language on success', async () => {
       jest
         .spyOn(getEnvAdaptor(), 'localStorageGetItem')
-        .mockResolvedValueOnce(JSON.stringify({ sdkLanguage: 'go' }))
+        .mockResolvedValueOnce(JSON.stringify({ sdkLanguage: 'Go' }))
 
       sagaTester.dispatch(initSettingsAction())
       await sagaTester.waitFor('settings/initSettingsSuccessAction')
@@ -99,7 +99,7 @@ describe('Settings Sagas', () => {
       expect(calledActions[1]).toEqual(
         initSettingsSuccessAction({
           ...defaultSettings,
-          sdkLanguage: 'go',
+          sdkLanguage: 'Go',
         })
       )
     })

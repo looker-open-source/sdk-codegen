@@ -30,6 +30,7 @@ import userEvent from '@testing-library/user-event'
 
 import { getLoadedSpecs, specs } from '../../test-data'
 import { renderWithRouterAndReduxProvider } from '../../test-utils'
+import { defaultSettingsState } from '../../state'
 import { Header } from './Header'
 
 describe('Header', () => {
@@ -71,7 +72,7 @@ describe('Header', () => {
       <Header spec={spec} toggleNavigation={toggleNavigation} />
     )
     const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue('Python')
+    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
     await act(async () => {
       await userEvent.click(selector)
       await waitFor(() => {

@@ -43,7 +43,7 @@ export interface SettingState extends UserDefinedSettings {
 }
 
 export const defaultSettings = {
-  sdkLanguage: 'py',
+  sdkLanguage: 'Python',
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
 }

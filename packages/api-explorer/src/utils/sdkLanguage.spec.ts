@@ -25,7 +25,7 @@
  */
 
 import { codeGenerators } from '@looker/sdk-codegen'
-import { allSdkLanguages, getSdkLanguage } from '../utils'
+import { allSdkLanguages, findSdk } from '../utils'
 import { sdkLanguageMapping } from '../test-data'
 
 describe('SDK Language Utils', () => {
@@ -40,14 +40,14 @@ describe('SDK Language Utils', () => {
 
   describe('getSdkLanguage', () => {
     test('it is not case sensitive', () => {
-      const actual = getSdkLanguage('pY')
+      const actual = findSdk('pY')
       expect(actual?.language).toEqual('Python')
     })
 
     test.each(Object.entries(sdkLanguageMapping))(
       `it finds language for alias %s`,
       (alias, language) => {
-        const actual = getSdkLanguage(alias)
+        const actual = findSdk(alias)
         expect(actual?.language).toEqual(language)
       }
     )
@@ -55,7 +55,7 @@ describe('SDK Language Utils', () => {
     test.each(Object.entries(sdkLanguageMapping))(
       `it finds alias for language %s`,
       (alias, language) => {
-        const actual = getSdkLanguage(language)
+        const actual = findSdk(language)
         expect(actual?.alias).toEqual(alias)
       }
     )

@@ -42,7 +42,6 @@ import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile
 import { useSelector } from 'react-redux'
 
 import { selectSdkLanguage, selectExamplesLode } from '../../state'
-import { getSdkLanguage } from '../../utils'
 import {
   exampleColumns,
   EMPTY_STRING,
@@ -62,8 +61,7 @@ interface DocSdkUsageProps {
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   const examples = useSelector(selectExamplesLode)
-  const alias = useSelector(selectSdkLanguage)
-  const sdk = getSdkLanguage(alias)!
+  const sdkLanguage = useSelector(selectSdkLanguage)
   const [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -74,7 +72,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
   let languages = findExampleLanguages(examples, method.name)
   if (languages.length === 0) return <></>
 
-  languages = sortLanguagesByPreference(languages, sdk.language)
+  languages = sortLanguagesByPreference(languages, sdkLanguage)
 
   const { pageExamples, pageLimit, paginate } = prepareExampleDataTable(
     languages,
