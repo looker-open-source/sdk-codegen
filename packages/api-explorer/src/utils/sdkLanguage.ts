@@ -26,7 +26,7 @@
 
 import { codeGenerators } from '@looker/sdk-codegen'
 
-const allAlias = 'all'
+export const allAlias = 'all'
 
 /**
  * Gets all supported sdk languages

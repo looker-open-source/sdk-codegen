@@ -33,8 +33,8 @@ import {
 } from '../../test-utils'
 import { findSdk } from '../../utils'
 import { languages } from '../../test-data'
+import { defaultSettingsState } from '../../state'
 import { SdkLanguageSelector } from './SdkLanguageSelector'
-import { defaultSettingsState } from '@looker/api-explorer'
 
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {

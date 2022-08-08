@@ -24,7 +24,7 @@
 
  */
 import type { SelectOptionProps } from '@looker/components'
-import { allSdkLanguages } from '../../utils'
+import { allSdkLanguages, allAlias } from '../../utils'
 
 /**
  * @returns sdk language options for render
@@ -34,7 +34,7 @@ export const allSdkLanguageOptions = (): SelectOptionProps[] => {
   const languages = allSdkLanguages()
   Object.entries(languages).forEach(([alias, language]) => {
     const option = { value: alias, label: language }
-    if (alias === 'all') {
+    if (alias === allAlias) {
       options.push({ options: [option] })
     } else {
       options.push(option)

@@ -69,7 +69,7 @@ import {
   selectCurrentSpec,
   selectSdkLanguage,
 } from './state'
-import { getSpecKey, diffPath, useNavigation, findSdk } from './utils'
+import { getSpecKey, diffPath, useNavigation, findSdk, allAlias } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -126,10 +126,10 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     if (initialized) {
       const sdkParam = searchParams.get('sdk') || ''
       const sdk = findSdk(sdkParam)
-      const paramMatchesSdk =
+      const validSdkParam =
         !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
         !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
-      if (sdkParam && sdk && paramMatchesSdk) {
+      if (validSdkParam) {
         // sync store with URL
         setSdkLanguageAction({
           sdkLanguage: sdk.language,
@@ -138,7 +138,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
         // sync URL with store
         const { alias } = findSdk(selectedSdkLanguage)
         navigate(location.pathname, {
-          sdk: alias === 'all' ? null : alias,
+          sdk: alias === allAlias ? null : alias,
         })
       }
     }

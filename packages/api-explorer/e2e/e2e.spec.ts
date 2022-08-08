@@ -170,9 +170,6 @@ describe('API Explorer', () => {
         'Kotlin'
       )
       await expect(page).toMatchElement('h3', { text: 'Kotlin Declaration' })
-      await page.evaluate(() => {
-        localStorage.clear()
-      })
     })
 
     // This test was broken during the 4.0 GA spec changes, and needs to be fixed
@@ -252,6 +249,12 @@ describe('API Explorer', () => {
   describe('search', () => {
     beforeEach(async () => {
       await goToPage(v40)
+    })
+
+    afterEach(async () => {
+      await page.evaluate(() => {
+        localStorage.clear()
+      })
     })
 
     it('searches methods', async () => {

@@ -38,17 +38,23 @@ describe('SDK Language Utils', () => {
     )
   })
 
-  describe('getSdkLanguage', () => {
+  describe('findSdk', () => {
     test('it is not case sensitive', () => {
       const actual = findSdk('pY')
-      expect(actual?.language).toEqual('Python')
+      expect(actual.language).toEqual('Python')
+    })
+
+    test("it returns 'All' option if provided bogus input", () => {
+      const actual = findSdk('random')
+      expect(actual.language).toEqual('All')
+      expect(actual.alias).toEqual('all')
     })
 
     test.each(Object.entries(sdkLanguageMapping))(
       `it finds language for alias %s`,
       (alias, language) => {
         const actual = findSdk(alias)
-        expect(actual?.language).toEqual(language)
+        expect(actual.language).toEqual(language)
       }
     )
 
@@ -56,7 +62,7 @@ describe('SDK Language Utils', () => {
       `it finds alias for language %s`,
       (alias, language) => {
         const actual = findSdk(language)
-        expect(actual?.alias).toEqual(alias)
+        expect(actual.alias).toEqual(alias)
       }
     )
   })
