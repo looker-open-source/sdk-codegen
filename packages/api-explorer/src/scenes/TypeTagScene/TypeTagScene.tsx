@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
@@ -48,6 +48,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const navigate = useNavigation()
   const searchParams = new URLSearchParams(location.search)
   const selectedTagFilter = useSelector(selectTagFilter)
+  const [tagFilter, setTagFilter] = useState(selectedTagFilter)
 
   const types = api.typeTags[typeTag]
   useEffect(() => {
@@ -57,7 +58,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   }, [types])
 
   useEffect(() => {
-    setValue(selectedTagFilter)
+    setTagFilter(selectedTagFilter)
   }, [selectedTagFilter])
 
   if (!types) {
@@ -78,7 +79,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
       <ButtonToggle
         mb="small"
         mt="xlarge"
-        value={selectedTagFilter}
+        value={tagFilter}
         onChange={setValue}
       >
         <ButtonItem key="ALL" px="large" py="xsmall">
