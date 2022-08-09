@@ -115,12 +115,14 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     const searchParams = new URLSearchParams(location.search)
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: searchParams.get('s') })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: null })
     }
-  }, [location.search, debouncedPattern])
+  }, [debouncedPattern])
+  // Removed location.search as dep to fix bug related to
+  // browser forward / backward navigation
 
   useEffect(() => {
     let results
@@ -128,6 +130,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
+    setSearchPattern(searchPattern)
 
     if (searchPattern && api.search) {
       results = api.search(searchPattern, criteriaToSet(searchCriteria))

@@ -49,17 +49,20 @@ export const HEADER_REM = 4
 export const SelectorContainer: FC<SelectorContainerProps> = ({
   spec,
   ...spaceProps
-}) => (
-  <Space width="auto" {...spaceProps}>
-    <SdkLanguageSelector />
-    <ApiSpecSelector spec={spec} />
-    <Link to={`/${diffPath}/${spec.key}/`}>
-      <IconButton
-        toggle
-        label="Compare Specifications"
-        icon={<ChangeHistory />}
-        size="small"
-      />
-    </Link>
-  </Space>
-)
+}) => {
+  const searchParams = new URLSearchParams(location.search)
+  return (
+    <Space width="auto" {...spaceProps}>
+      <SdkLanguageSelector />
+      <ApiSpecSelector spec={spec} />
+      <Link to={`/${diffPath}/${spec.key}/?${searchParams.toString()}`}>
+        <IconButton
+          toggle
+          label="Compare Specifications"
+          icon={<ChangeHistory />}
+          size="small"
+        />
+      </Link>
+    </Space>
+  )
+}
