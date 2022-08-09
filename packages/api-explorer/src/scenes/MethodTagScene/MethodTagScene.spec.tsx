@@ -32,7 +32,6 @@ import { api } from '../../test-data'
 import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { MethodTagScene } from './MethodTagScene'
 
-// TODO: use constant from path.ts
 const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
 
 const mockHistoryPush = jest.fn()

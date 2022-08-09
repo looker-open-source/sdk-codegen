@@ -24,8 +24,14 @@
 
  */
 
-import { api } from '../test-data'
-import { buildMethodPath, buildPath, buildTypePath } from './path'
+import { api, methodFilters, typeFilters } from '../test-data'
+import {
+  buildMethodPath,
+  buildPath,
+  buildTypePath,
+  getSceneType,
+  isValidFilter,
+} from './path'
 
 describe('path utils', () => {
   const testParam = 's=test'
@@ -72,6 +78,49 @@ describe('path utils', () => {
     test('given a type it creates a type path', () => {
       const path = buildPath(api, api.types.Dashboard, '3.1')
       expect(path).toEqual('/3.1/types/Dashboard/Dashboard')
+    })
+  })
+
+  describe('getSceneType', () => {
+    test('returns correct scene type given location with pathname', () => {
+      const methodLocation = {
+        pathname: '/3.1/methods/RandomMethod',
+      } as Location
+      const typeLocation = { pathname: '/3.1/types/RandomType' } as Location
+      expect(getSceneType(methodLocation)).toEqual('methods')
+      expect(getSceneType(typeLocation)).toEqual('types')
+    })
+    test('returns empty string if there is no scene type', () => {
+      const noSceneTypePath = { pathname: '/' } as Location
+      expect(getSceneType(noSceneTypePath)).toEqual('')
+    })
+  })
+
+  describe('isValidFilter', () => {
+    const methodLocation = {
+      pathname: '/3.1/methods/RandomMethod',
+    } as Location
+    const typeLocation = { pathname: '/3.1/types/RandomType' } as Location
+
+    test("validates 'all' as a valid filter for methods and types", () => {
+      expect(isValidFilter(methodLocation, 'ALL')).toBe(true)
+      expect(isValidFilter(typeLocation, 'ALL')).toBe(true)
+    })
+
+    test.each(methodFilters)(
+      'validates %s as a valid method filter',
+      (filter) => {
+        expect(isValidFilter(methodLocation, filter)).toBe(true)
+      }
+    )
+
+    test('invalidates wrong parameter for methods and types', () => {
+      expect(isValidFilter(methodLocation, 'INVALID')).toBe(false)
+      expect(isValidFilter(typeLocation, 'INVALID')).toBe(false)
+    })
+
+    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+      expect(isValidFilter(typeLocation, filter)).toBe(true)
     })
   })
 })

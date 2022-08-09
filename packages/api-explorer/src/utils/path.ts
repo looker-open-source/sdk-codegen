@@ -29,41 +29,8 @@ import { firstMethodRef } from '@looker/sdk-codegen'
 import type { Location as HLocation } from 'history'
 import { matchPath } from 'react-router'
 
-// TODO: documenting, testing the below
-export const methodFilterOptions = /ALL|GET|POST|PUT|PATCH|DELETE/i
-export const typeFilterOptions = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/i
-
-/**
- * Gets the scene type of the current page
- *
- * @param location browser location
- * @returns string representing the scene type
- */
-export const getSceneType = (location: HLocation | Location) => {
-  const match = matchPath<{ tabType: string }>(location.pathname, {
-    path: '/:specKey/:tabType',
-  })
-  return match ? match!.params.tabType : ''
-}
-
-/**
- * Confirms if filter parameter is valid for the page scene type
- *
- * @param location browser location
- * @param filter filter tag for page
- */
-export const isValidFilter = (
-  location: HLocation | Location,
-  filter: string
-) => {
-  const sceneType = getSceneType(location)
-  if (!sceneType) return false
-  else if (sceneType === 'methods') {
-    return methodFilterOptions.test(filter)
-  } else {
-    return typeFilterOptions.test(filter)
-  }
-}
+export const methodFilterOptions = /GET|POST|PUT|PATCH|DELETE/i
+export const typeFilterOptions = /SPECIFICATION|WRITE|REQUEST|ENUMERATED/i
 
 /**
  * Builds a path matching the route used by MethodScene
@@ -164,4 +131,36 @@ export const getSpecKey = (location: HLocation | Location): string | null => {
     match = pathname.match(/\/(?<specKey>\w+\.\w+).*/)
   }
   return match?.groups?.specKey || null
+}
+
+/**
+ * Gets the scene type of the current page
+ * @param location browser location
+ * @returns string representing the scene type
+ */
+export const getSceneType = (location: HLocation | Location) => {
+  const match = matchPath<{ tabType: string }>(location.pathname, {
+    path: '/:specKey/:tabType',
+  })
+  return match ? match!.params.tabType : ''
+}
+
+/**
+ * Confirms if filter is valid for the page scene type
+ * @param location browser location
+ * @param filter filter tag for page
+ */
+export const isValidFilter = (
+  location: HLocation | Location,
+  filter: string
+) => {
+  const sceneType = getSceneType(location)
+  if (!sceneType) return false
+  else if (!filter.localeCompare('all', 'en', { sensitivity: 'base' }))
+    return true
+  else if (sceneType === 'methods') {
+    return methodFilterOptions.test(filter)
+  } else {
+    return typeFilterOptions.test(filter)
+  }
 }

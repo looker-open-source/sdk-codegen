@@ -96,12 +96,15 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
             selectedTagFilter === type.metaType.toString().toUpperCase()) && (
             <Link
               key={index}
-              to={buildTypePath(
-                specKey,
-                tag.name,
-                type.name,
-                searchParams.toString()
-              )}
+              to={() => {
+                searchParams.delete('v')
+                return buildTypePath(
+                  specKey,
+                  tag.name,
+                  type.name,
+                  searchParams.toString()
+                )
+              }}
             >
               <Grid columns={1} py="xsmall">
                 <DocTypeSummary key={index} type={type} />

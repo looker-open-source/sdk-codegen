@@ -51,6 +51,9 @@ export const SelectorContainer: FC<SelectorContainerProps> = ({
   ...spaceProps
 }) => {
   const searchParams = new URLSearchParams(location.search)
+  // TODO: noticing that there are certain pages where we must delete extra params
+  //       before pushing its link, what's a way we can handle this?
+  searchParams.delete('v')
   return (
     <Space width="auto" {...spaceProps}>
       <SdkLanguageSelector />

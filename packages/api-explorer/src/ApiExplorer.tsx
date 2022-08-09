@@ -68,6 +68,7 @@ import {
   selectSpecs,
   selectCurrentSpec,
   selectSdkLanguage,
+  selectTagFilter,
 } from './state'
 import {
   getSpecKey,
@@ -99,6 +100,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const selectedTagFilter = useSelector(selectTagFilter)
   const { initLodesAction } = useLodeActions()
   const {
     initSettingsAction,
@@ -136,10 +138,13 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     // reconcile local storage state with URL or vice versa
     if (initialized) {
       const sdkParam = searchParams.get('sdk') || ''
+      const verbParam = searchParams.get('v') || ''
       const sdk = findSdk(sdkParam)
       const validSdkParam =
         !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
         !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
+      const validVerbParam = isValidFilter(location, verbParam)
+
       if (validSdkParam) {
         // sync store with URL
         setSdkLanguageAction({
@@ -150,6 +155,14 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
         const { alias } = findSdk(selectedSdkLanguage)
         navigate(location.pathname, {
           sdk: alias === allAlias ? null : alias,
+        })
+      }
+
+      if (validVerbParam) {
+        setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
+      } else {
+        navigate(location.pathname, {
+          v: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
         })
       }
     }
@@ -171,8 +184,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const { language: sdkLanguage } = findSdk(sdkParam)
     setSearchPatternAction({ searchPattern })
     setSdkLanguageAction({ sdkLanguage })
-    // TODO: need to validate verbParam, checking against all available
-    //       httpMethod and metaType options, default to ALL if not valid
     setTagFilterAction({
       tagFilter: isValidFilter(location, verbParam)
         ? verbParam.toUpperCase()

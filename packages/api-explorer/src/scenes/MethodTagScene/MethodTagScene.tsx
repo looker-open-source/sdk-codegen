@@ -99,12 +99,15 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
             selectedTagFilter === method.httpMethod) && (
             <Link
               key={index}
-              to={buildMethodPath(
-                specKey,
-                tag.name,
-                method.name,
-                searchParams.toString()
-              )}
+              to={() => {
+                searchParams.delete('v')
+                return buildMethodPath(
+                  specKey,
+                  tag.name,
+                  method.name,
+                  searchParams.toString()
+                )
+              }}
             >
               <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />
