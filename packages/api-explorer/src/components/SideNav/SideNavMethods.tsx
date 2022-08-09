@@ -32,7 +32,7 @@ import { useSelector } from 'react-redux'
 import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useNavigation, highlightHTML, buildMethodPath } from '../../utils'
 import { Link } from '../Link'
-import { selectSearchPattern } from '../../state'
+import { selectSearchPattern, selectTagFilter } from '../../state'
 
 interface MethodsProps {
   methods: MethodList
@@ -48,6 +48,7 @@ export const SideNavMethods = styled(
     const navigate = useNavigation()
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = useSelector(selectSearchPattern)
+    const selectedTagFilter = useSelector(selectTagFilter)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
     )
@@ -82,20 +83,24 @@ export const SideNavMethods = styled(
         }
       >
         <ul>
-          {Object.values(methods).map((method) => (
-            <li key={method.name}>
-              <Link
-                to={`${buildMethodPath(
-                  specKey,
-                  tag,
-                  method.name,
-                  searchParams.toString()
-                )}`}
-              >
-                {highlightHTML(searchPattern, method.summary)}
-              </Link>
-            </li>
-          ))}
+          {Object.values(methods).map(
+            (method) =>
+              (selectedTagFilter === 'ALL' ||
+                selectedTagFilter === method.httpMethod) && (
+                <li key={method.name}>
+                  <Link
+                    to={buildMethodPath(
+                      specKey,
+                      tag,
+                      method.name,
+                      searchParams.toString()
+                    )}
+                  >
+                    {highlightHTML(searchPattern, method.summary)}
+                  </Link>
+                </li>
+              )
+          )}
         </ul>
       </Accordion2>
     )

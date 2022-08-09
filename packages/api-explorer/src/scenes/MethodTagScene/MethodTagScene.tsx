@@ -49,32 +49,17 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const methods = api.tags[methodTag]
   const navigate = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
-  const [tagVerb, setTagVerb] = useState(selectedTagFilter)
+  const [tagFilter, setTagFilter] = useState(selectedTagFilter)
   const searchParams = new URLSearchParams(location.search)
 
   const setValue = (filter: string) => {
     navigate(location.pathname, {
-      v: filter === 'ALL' ? null : filter,
+      v: filter === 'ALL' ? null : filter.toLowerCase(),
     })
-    // const verbInUrl = searchParams.get('v')
-    // if (
-    //   (verbInUrl && verbInUrl.toUpperCase() === filter.toUpperCase()) ||
-    //   (!verbInUrl && filter.toUpperCase() === 'ALL')
-    // )
-    //   return
-    // const validVerbForTag = Object.keys(methods).find(
-    //   (tag) => methods[tag].httpMethod === filter.toUpperCase()
-    // )
-    // navigate(location.pathname, {
-    //   v:
-    //     filter.toUpperCase() === 'ALL' || !validVerbForTag
-    //       ? null
-    //       : filter.toLowerCase(),
-    // })
   }
 
   useEffect(() => {
-    setTagVerb(selectedTagFilter)
+    setTagFilter(selectedTagFilter)
   }, [selectedTagFilter])
 
   useEffect(() => {
@@ -93,7 +78,12 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonToggle mb="small" mt="xlarge" value={tagVerb} onChange={setValue}>
+      <ButtonToggle
+        mb="small"
+        mt="xlarge"
+        value={tagFilter}
+        onChange={setValue}
+      >
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>

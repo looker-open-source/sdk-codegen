@@ -86,7 +86,7 @@ describe('TypeTagScene', () => {
     ).toHaveLength(2)
   })
 
-  test('it pushes filter to URL on button toggle', async () => {
+  test('it pushes filter to URL on toggle', async () => {
     renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />

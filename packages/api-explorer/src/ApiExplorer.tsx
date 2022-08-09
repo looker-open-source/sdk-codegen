@@ -67,7 +67,6 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
-  selectTagFilter,
 } from './state'
 import { getSpecKey, diffPath } from './utils'
 
@@ -79,8 +78,6 @@ export interface ApiExplorerProps {
 }
 
 const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
-const opBtnNames =
-  /ALL|GET|POST|PUT|PATCH|DELETE|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 
 export const ApiExplorer: FC<ApiExplorerProps> = ({
   adaptor,
@@ -93,7 +90,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
-  const selectedTagFilter = useSelector(selectTagFilter)
   const { initLodesAction } = useLodeActions()
   const { initSettingsAction, setSearchPatternAction, setTagFilterAction } =
     useSettingActions()
@@ -131,20 +127,15 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
-    const verbInUrl = searchParams.get('v') || 'ALL'
-    setSearchPatternAction({ searchPattern: searchPattern! })
-    setTagFilterAction({ tagFilter: verbInUrl })
-    // const invalidFilter =
-    //   (!verbInUrl && selectedTagFilter.toUpperCase() !== 'ALL') ||
-    //   (verbInUrl && !opBtnNames.test(verbInUrl.toUpperCase()))
-    // if (invalidFilter) {
-    //   setTagFilterAction({ tagFilter: 'ALL' })
-    // } else if (
-    //   verbInUrl &&
-    //   verbInUrl.toUpperCase() !== selectedTagFilter.toUpperCase()
-    // ) {
-    //   setTagFilterAction({ tagFilter: verbInUrl.toUpperCase() })
-    // }
+    const verbParam = searchParams.get('v') || 'ALL'
+    // TODO: need to validate verbParam, checking against all available
+    //       httpMethod and metaType options, default to ALL if not valid
+    setSearchPatternAction({
+      searchPattern: searchPattern!,
+    })
+    setTagFilterAction({
+      tagFilter: verbParam.toUpperCase(),
+    })
   }, [location.search])
 
   useEffect(() => {

@@ -65,17 +65,8 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   }
 
   const setValue = (filter: string) => {
-    const verbInUrl = searchParams.get('v')
-    if (
-      (verbInUrl && verbInUrl.toUpperCase() === filter.toUpperCase()) ||
-      (!verbInUrl && filter.toUpperCase() === 'ALL')
-    )
-      return
-    const validVerbForTag = Object.keys(types).find(
-      (tag) => types[tag].metaType.toUpperCase() === filter.toUpperCase()
-    )
     navigate(location.pathname, {
-      v: filter === 'ALL' || !validVerbForTag ? null : filter.toLowerCase(),
+      v: filter === 'ALL' ? null : filter.toLowerCase(),
     })
   }
 

@@ -32,7 +32,7 @@ import { useLocation, useRouteMatch } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Link } from '../Link'
 import { highlightHTML, useNavigation, buildTypePath } from '../../utils'
-import { selectSearchPattern } from '../../state'
+import { selectSearchPattern, selectTagFilter } from '../../state'
 
 interface TypesProps {
   types: TypeList
@@ -48,6 +48,7 @@ export const SideNavTypes = styled(
     const navigate = useNavigation()
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = useSelector(selectSearchPattern)
+    const selectedTagFilter = useSelector(selectTagFilter)
     const match = useRouteMatch<{ typeTag: string }>(
       `/:specKey/types/:typeTag/:typeName?`
     )
@@ -82,20 +83,24 @@ export const SideNavTypes = styled(
         }
       >
         <ul>
-          {Object.values(types).map((type) => (
-            <li key={type.name}>
-              <Link
-                to={`${buildTypePath(
-                  specKey,
-                  tag,
-                  type.name,
-                  searchParams.toString()
-                )}`}
-              >
-                {highlightHTML(searchPattern, type.name)}
-              </Link>
-            </li>
-          ))}
+          {Object.values(types).map(
+            (type) =>
+              (selectedTagFilter === 'ALL' ||
+                selectedTagFilter === type.metaType.toUpperCase()) && (
+                <li key={type.name}>
+                  <Link
+                    to={`${buildTypePath(
+                      specKey,
+                      tag,
+                      type.name,
+                      searchParams.toString()
+                    )}`}
+                  >
+                    {highlightHTML(searchPattern, type.name)}
+                  </Link>
+                </li>
+              )
+          )}
         </ul>
       </Accordion2>
     )
