@@ -60,19 +60,12 @@ describe('Navigate', () => {
     })
   })
 
-  test('clears existing params when given params are an empty object', () => {
-    navigate(route, {})
-    expect(mockHistoryPush).lastCalledWith({
-      pathname: route,
-    })
-  })
-
   test('sets query parameters when given a populated query params object', () => {
-    const newParams = 's=embedsso'
-    navigate(route, { search: newParams })
+    const searchParam = 'embedsso'
+    navigate(route, { s: searchParam })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
-      search: newParams,
+      search: `s=${searchParam}`,
     })
   })
 })

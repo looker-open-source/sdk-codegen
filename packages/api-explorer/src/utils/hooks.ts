@@ -35,17 +35,27 @@ import { useHistory } from 'react-router-dom'
 export const useNavigation = () => {
   const history = useHistory()
 
-  const navigate = (path: string, queryParams?: { search?: string } | null) => {
+  const navigate = (
+    path: string,
+    queryParams?: { s?: string | null; v?: string | null } | null
+  ) => {
+    const urlParams = new URLSearchParams(history.location.search)
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
-      const curParams = new URLSearchParams(history.location.search)
-      history.push({ pathname: path, search: curParams.toString() })
-    } else if (queryParams === null || Object.keys(queryParams).length === 0) {
-      // if params passed in is null or empty, remove all parameters from the URL
+      history.push({ pathname: path, search: urlParams.toString() })
+    } else if (queryParams === null) {
+      // if params passed in is null, remove all parameters from the URL
       history.push({ pathname: path })
     } else {
-      // if we have new parameters passed in, push them to the URL
-      history.push({ pathname: path, search: queryParams.search })
+      // push each key as new param to URL, excluding entries with value null
+      Object.keys(queryParams).forEach((key) => {
+        if (queryParams[key] === null || queryParams[key] === '') {
+          urlParams.delete(key)
+        } else {
+          urlParams.set(key, queryParams[key])
+        }
+      })
+      history.push({ pathname: path, search: urlParams.toString() })
     }
   }
 

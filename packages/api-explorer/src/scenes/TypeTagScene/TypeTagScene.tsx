@@ -24,12 +24,14 @@
 
  */
 import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath, useNavigation } from '../../utils'
+import { selectTagFilter } from '../../state'
 import { getMetaTypes } from './utils'
 
 interface TypeTagSceneProps {
@@ -44,12 +46,8 @@ interface TypeTagSceneParams {
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const { specKey, typeTag } = useParams<TypeTagSceneParams>()
   const navigate = useNavigation()
-  const [value, setValue] = useState('ALL')
-
-  useEffect(() => {
-    /** Reset ButtonToggle value on route change */
-    setValue('ALL')
-  }, [typeTag])
+  const searchParams = new URLSearchParams(location.search)
+  const selectedTagFilter = useSelector(selectTagFilter)
 
   const types = api.typeTags[typeTag]
   useEffect(() => {
@@ -58,8 +56,18 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
     }
   }, [types])
 
+  useEffect(() => {
+    setValue(selectedTagFilter)
+  }, [selectedTagFilter])
+
   if (!types) {
     return <></>
+  }
+
+  const setValue = (filter: string) => {
+    navigate(location.pathname, {
+      v: filter === 'ALL' ? null : filter.toLowerCase(),
+    })
   }
 
   const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
@@ -67,7 +75,12 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
+      <ButtonToggle
+        mb="small"
+        mt="xlarge"
+        value={selectedTagFilter}
+        onChange={setValue}
+      >
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
@@ -79,9 +92,17 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
       </ButtonToggle>
       {Object.values(types).map(
         (type, index) =>
-          (value === 'ALL' ||
-            value === type.metaType.toString().toUpperCase()) && (
-            <Link key={index} to={buildTypePath(specKey, tag.name, type.name)}>
+          (selectedTagFilter === 'ALL' ||
+            selectedTagFilter === type.metaType.toString().toUpperCase()) && (
+            <Link
+              key={index}
+              to={buildTypePath(
+                specKey,
+                tag.name,
+                type.name,
+                searchParams.toString()
+              )}
+            >
               <Grid columns={1} py="xsmall">
                 <DocTypeSummary key={index} type={type} />
               </Grid>

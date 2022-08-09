@@ -91,7 +91,8 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
-  const { initSettingsAction, setSearchPatternAction } = useSettingActions()
+  const { initSettingsAction, setSearchPatternAction, setTagFilterAction } =
+    useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
@@ -126,7 +127,15 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
-    setSearchPatternAction({ searchPattern: searchPattern! })
+    const verbParam = searchParams.get('v') || 'ALL'
+    // TODO: need to validate verbParam, checking against all available
+    //       httpMethod and metaType options, default to ALL if not valid
+    setSearchPatternAction({
+      searchPattern: searchPattern!,
+    })
+    setTagFilterAction({
+      tagFilter: verbParam.toUpperCase(),
+    })
   }, [location.search])
 
   useEffect(() => {

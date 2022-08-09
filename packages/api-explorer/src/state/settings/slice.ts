@@ -38,6 +38,7 @@ export interface UserDefinedSettings {
 export interface SettingState extends UserDefinedSettings {
   searchPattern: string
   searchCriteria: SearchCriterionTerm[]
+  tagFilter: string
   initialized: boolean
   error?: Error
 }
@@ -46,6 +47,7 @@ export const defaultSettings = {
   sdkLanguage: 'Python',
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
+  tagFilter: 'ALL',
 }
 
 export const defaultSettingsState: SettingState = {
@@ -55,6 +57,7 @@ export const defaultSettingsState: SettingState = {
 
 type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>
 type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
+type SetTagFilterAction = Pick<SettingState, 'tagFilter'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
@@ -83,6 +86,9 @@ export const settingsSlice = createSlice({
       action: PayloadAction<SetSearchPatternAction>
     ) {
       state.searchPattern = action.payload.searchPattern
+    },
+    setTagFilterAction(state, action: PayloadAction<SetTagFilterAction>) {
+      state.tagFilter = action.payload.tagFilter
     },
   },
 })

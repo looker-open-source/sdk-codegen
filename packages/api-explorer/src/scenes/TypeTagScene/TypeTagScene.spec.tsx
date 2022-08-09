@@ -36,6 +36,18 @@ const opBtnNames = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 
 const path = '/:specKey/types/:typeTag'
 
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location,
+    }),
+  }
+})
+
 describe('TypeTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
 
@@ -74,30 +86,28 @@ describe('TypeTagScene', () => {
     ).toHaveLength(2)
   })
 
-  test('it filters methods by operation type', async () => {
+  test('it pushes filter to URL on toggle', async () => {
     renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
       ['/3.1/types/Look']
     )
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
-      Object.keys(api.typeTags.Look).length
-    )
-
-    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(
-      Object.keys(api.typeTags.Look).length
-    )
-
     /** Filter by SPECIFICATION */
     userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
     await waitFor(() => {
-      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(5)
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: location.pathname,
+        search: 'v=specification',
+      })
     })
     /** Filter by REQUEST */
     userEvent.click(screen.getByRole('button', { name: 'REQUEST' }))
     await waitFor(() => {
-      expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(2)
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: location.pathname,
+        search: 'v=request',
+      })
     })
   })
 })
