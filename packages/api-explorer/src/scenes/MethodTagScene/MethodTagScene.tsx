@@ -45,6 +45,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
   const navigate = useNavigation()
+  const searchParams = new URLSearchParams(location.search)
   const [value, setValue] = useState('ALL')
 
   useEffect(() => {
@@ -84,7 +85,12 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
           (value === 'ALL' || value === method.httpMethod) && (
             <Link
               key={index}
-              to={buildMethodPath(specKey, tag.name, method.name)}
+              to={buildMethodPath(
+                specKey,
+                tag.name,
+                method.name,
+                searchParams.toString()
+              )}
             >
               <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />
