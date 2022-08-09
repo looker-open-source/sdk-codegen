@@ -31,8 +31,8 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath, useNavigation } from '../../utils'
+import { selectTagFilter } from '../../state'
 import { getOperations } from './utils'
-import { selectTagFilter } from '@looker/api-explorer'
 
 interface MethodTagSceneProps {
   api: ApiModel

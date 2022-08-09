@@ -31,8 +31,8 @@ import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath, useNavigation } from '../../utils'
+import { selectTagFilter } from '../../state'
 import { getMetaTypes } from './utils'
-import { selectTagFilter } from '@looker/api-explorer'
 
 interface TypeTagSceneProps {
   api: ApiModel
