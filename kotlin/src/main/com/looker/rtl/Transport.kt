@@ -24,20 +24,16 @@
 
 package com.looker.rtl
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import io.ktor.client.HttpClient
-import io.ktor.client.call.receive
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.features.json.GsonSerializer
-import io.ktor.client.features.json.defaultSerializer
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.forms.FormDataContent
-import io.ktor.client.request.request
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.HttpStatement
-import io.ktor.http.takeFrom
+import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.json.*
+import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -53,6 +49,16 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
+import kotlin.collections.Map
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.emptyMap
+import kotlin.collections.filter
+import kotlin.collections.forEach
+import kotlin.collections.joinToString
+import kotlin.collections.map
+import kotlin.collections.set
+import kotlin.collections.toMutableMap
 
 sealed class SDKResponse {
     /** A successful SDK call. */
@@ -350,4 +356,35 @@ class Transport(val options: TransportOptions) {
         }
         return builder
     }
+}
+
+data class SDKErrorDetailInfo(
+    var message: String,
+    var field: String,
+    var code: String,
+    @SerializedName("documentation_url")
+    var documentationUrl: String,
+)
+
+data class SDKErrorInfo(
+    var message: String,
+    var errors: List<SDKErrorDetailInfo>,
+    @SerializedName("documentation_url")
+    var documentationUrl: String,
+)
+
+fun parseSDKError(msg: String) : SDKErrorInfo {
+    val rx = Regex("""\s+Text:\s+"(.*)"$""")
+    val info = rx.find(msg)
+    var result = SDKErrorInfo("", listOf(), "")
+    info?.let{
+        val (payload) = it.destructured
+        val gson = Gson()
+        result = gson.fromJson(payload, SDKErrorInfo::class.java)
+        // Ignore the linter suggestion to replace `.isNullOrEmpty()` with `.isEmpty()` because it's *wrong*
+        if (result.errors.isNullOrEmpty()) {
+            result.errors = listOf()
+        }
+    }
+    return result
 }
