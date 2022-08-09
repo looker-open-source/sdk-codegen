@@ -60,12 +60,32 @@ describe('Navigate', () => {
     })
   })
 
-  test('sets query parameters when given a populated query params object', () => {
-    const searchParam = 'embedsso'
-    navigate(route, { s: searchParam })
+  test('null query params are removed', () => {
+    navigate(route, { s: null, sdk: 'test' })
     expect(mockHistoryPush).lastCalledWith({
       pathname: route,
-      search: `s=${searchParam}`,
+      search: 'sdk=test',
+    })
+  })
+
+  test('sets query parameters when given a populated query params object', () => {
+    const newParams = new URLSearchParams()
+    newParams.set('s', 'test')
+    newParams.set('sdk', 'kt')
+    navigate(route, { s: newParams.get('s'), sdk: newParams.get('sdk') })
+    expect(mockHistoryPush).lastCalledWith({
+      pathname: route,
+      search: newParams.toString(),
+    })
+  })
+
+  test('appends parameters when object is passed in with existing parameters', () => {
+    const newParams = new URLSearchParams()
+    newParams.set('sdk', 'kt')
+    navigate(route, { sdk: newParams.get('sdk') })
+    expect(mockHistoryPush).lastCalledWith({
+      pathname: route,
+      search: curParams.toString() + '&' + newParams.toString(),
     })
   })
 })

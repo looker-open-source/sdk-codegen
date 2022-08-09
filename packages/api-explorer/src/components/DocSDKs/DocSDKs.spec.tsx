@@ -66,7 +66,10 @@ describe('DocSDKs', () => {
     'it can render a %s method declaration',
     (sdkLanguage) => {
       store = createTestStore({
-        settings: { initialized: false, sdkLanguage },
+        settings: {
+          initialized: false,
+          sdkLanguage: sdkLanguage,
+        },
       })
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,
