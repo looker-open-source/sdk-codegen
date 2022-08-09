@@ -68,7 +68,7 @@ import {
   selectSpecs,
   selectCurrentSpec,
 } from './state'
-import { getSpecKey, diffPath } from './utils'
+import { getSpecKey, diffPath, isValidFilter } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -134,7 +134,9 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       searchPattern: searchPattern!,
     })
     setTagFilterAction({
-      tagFilter: verbParam.toUpperCase(),
+      tagFilter: isValidFilter(location, verbParam)
+        ? verbParam.toUpperCase()
+        : 'ALL',
     })
   }, [location.search])
 
