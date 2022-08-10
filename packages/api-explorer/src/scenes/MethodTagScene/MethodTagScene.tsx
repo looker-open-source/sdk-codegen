@@ -30,8 +30,9 @@ import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath, useNavigation } from '../../utils'
-import { selectTagFilter } from '../../state'
+import { buildMethodPath, isValidFilter, useNavigation } from '../../utils'
+import { selectTagFilter, useSettingActions } from '../../state'
+import { useTagSceneSync } from '../../utils/hooks/syncHooks'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -49,14 +50,27 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const methods = api.tags[methodTag]
   const navigate = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
+  const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
-  const searchParams = new URLSearchParams(location.search)
+  const isSynced = useTagSceneSync()
+  let searchParams = new URLSearchParams(location.search)
 
-  const setValue = (filter: string) => {
+  const handleChange = (filter: string) => {
     navigate(location.pathname, {
       v: filter === 'ALL' ? null : filter.toLowerCase(),
     })
   }
+
+  useEffect(() => {
+    if (!isSynced) return
+    searchParams = new URLSearchParams(location.search)
+    const verbParam = searchParams.get('v') || 'ALL'
+    setTagFilterAction({
+      tagFilter: isValidFilter(location, verbParam)
+        ? verbParam.toUpperCase()
+        : 'ALL',
+    })
+  }, [location.search])
 
   useEffect(() => {
     setTagFilter(selectedTagFilter)
@@ -82,7 +96,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
         mb="small"
         mt="xlarge"
         value={tagFilter}
-        onChange={setValue}
+        onChange={handleChange}
       >
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL

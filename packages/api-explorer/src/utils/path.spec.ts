@@ -24,7 +24,7 @@
 
  */
 
-import { api, methodFilters, typeFilters } from '../test-data'
+import { api } from '../test-data'
 import {
   buildMethodPath,
   buildPath,
@@ -83,15 +83,13 @@ describe('path utils', () => {
 
   describe('getSceneType', () => {
     test('returns correct scene type given location with pathname', () => {
-      const methodLocation = {
-        pathname: '/3.1/methods/RandomMethod',
-      } as Location
-      const typeLocation = { pathname: '/3.1/types/RandomType' } as Location
-      expect(getSceneType(methodLocation)).toEqual('methods')
-      expect(getSceneType(typeLocation)).toEqual('types')
+      const methodPath = '/3.1/methods/RandomMethod'
+      const typePath = '/3.1/types/RandomType'
+      expect(getSceneType(methodPath)).toEqual('methods')
+      expect(getSceneType(typePath)).toEqual('types')
     })
     test('returns empty string if there is no scene type', () => {
-      const noSceneTypePath = { pathname: '/' } as Location
+      const noSceneTypePath = '/'
       expect(getSceneType(noSceneTypePath)).toEqual('')
     })
   })
@@ -107,10 +105,31 @@ describe('path utils', () => {
       expect(isValidFilter(typeLocation, 'ALL')).toBe(true)
     })
 
+    const methodFilters = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+    const typeFilters = ['SPECIFICATION', 'WRITE', 'REQUEST', 'ENUMERATED']
+
     test.each(methodFilters)(
       'validates %s as a valid method filter',
       (filter) => {
         expect(isValidFilter(methodLocation, filter)).toBe(true)
+      }
+    )
+
+    test.each(methodFilters)(
+      'invalidates %s when containing extra characters',
+      (filter) => {
+        expect(isValidFilter(methodLocation, filter + 'x')).toBe(false)
+      }
+    )
+
+    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+      expect(isValidFilter(typeLocation, filter)).toBe(true)
+    })
+
+    test.each(typeFilters)(
+      'invalidates %s when containing extra characters',
+      (filter) => {
+        expect(isValidFilter(typeLocation, filter + 'x')).toBe(false)
       }
     )
 

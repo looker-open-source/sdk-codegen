@@ -26,7 +26,7 @@
 
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Accordion2, Heading } from '@looker/components'
+import { Accordion2, Heading, Span } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { useLocation, useRouteMatch } from 'react-router-dom'
@@ -86,6 +86,7 @@ export const SideNavMethods = styled(
             <li key={method.name}>
               <Link
                 to={() => {
+                  // TODO: span behaving like link with custom navigate?
                   searchParams.delete('v')
                   return buildMethodPath(
                     specKey,

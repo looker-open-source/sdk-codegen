@@ -60,24 +60,15 @@ import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
 import {
   useSettingActions,
-  useSettingStoreState,
   useLodeActions,
   useLodesStoreState,
   useSpecActions,
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
-  selectSdkLanguage,
-  selectTagFilter,
 } from './state'
-import {
-  getSpecKey,
-  diffPath,
-  useNavigation,
-  findSdk,
-  allAlias,
-  isValidFilter,
-} from './utils'
+import { getSpecKey, diffPath, findSdk } from './utils'
+import { useGlobalSync } from './utils/hooks/syncHooks'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -94,28 +85,20 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  const { initialized } = useSettingStoreState()
   useLodesStoreState()
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const selectedTagFilter = useSelector(selectTagFilter)
   const { initLodesAction } = useLodeActions()
-  const {
-    initSettingsAction,
-    setSearchPatternAction,
-    setSdkLanguageAction,
-    setTagFilterAction,
-  } = useSettingActions()
+  const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
+    useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
-  const navigate = useNavigation()
+  const isSynced = useGlobalSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
-  const searchParams = new URLSearchParams(location.search)
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -135,40 +118,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
-    // reconcile local storage state with URL or vice versa
-    if (initialized) {
-      const sdkParam = searchParams.get('sdk') || ''
-      const verbParam = searchParams.get('v') || ''
-      const sdk = findSdk(sdkParam)
-      const validSdkParam =
-        !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
-        !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
-      const validVerbParam = isValidFilter(location, verbParam)
-
-      if (validSdkParam) {
-        // sync store with URL
-        setSdkLanguageAction({
-          sdkLanguage: sdk.language,
-        })
-      } else {
-        // sync URL with store
-        const { alias } = findSdk(selectedSdkLanguage)
-        navigate(location.pathname, {
-          sdk: alias === allAlias ? null : alias,
-        })
-      }
-
-      if (validVerbParam) {
-        setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
-      } else {
-        navigate(location.pathname, {
-          v: selectedTagFilter === 'ALL' ? null : selectedTagFilter,
-        })
-      }
-    }
-  }, [initialized])
-
-  useEffect(() => {
     const maybeSpec = location.pathname?.split('/')[1]
     if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
@@ -176,19 +125,14 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [location.pathname, spec])
 
   useEffect(() => {
-    if (!initialized) return
+    if (!isSynced) return
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     const sdkParam = searchParams.get('sdk') || 'all'
-    const verbParam = searchParams.get('v') || 'ALL'
+
     const { language: sdkLanguage } = findSdk(sdkParam)
     setSearchPatternAction({ searchPattern })
     setSdkLanguageAction({ sdkLanguage })
-    setTagFilterAction({
-      tagFilter: isValidFilter(location, verbParam)
-        ? verbParam.toUpperCase()
-        : 'ALL',
-    })
   }, [location.search])
 
   useEffect(() => {

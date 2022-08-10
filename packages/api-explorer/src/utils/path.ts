@@ -29,8 +29,8 @@ import { firstMethodRef } from '@looker/sdk-codegen'
 import type { Location as HLocation } from 'history'
 import { matchPath } from 'react-router'
 
-export const methodFilterOptions = /GET|POST|PUT|PATCH|DELETE/i
-export const typeFilterOptions = /SPECIFICATION|WRITE|REQUEST|ENUMERATED/i
+export const methodFilterOptions = /GET$|POST$|PUT$|PATCH$|DELETE$/i
+export const typeFilterOptions = /SPECIFICATION$|WRITE$|REQUEST$|ENUMERATED$/i
 
 /**
  * Builds a path matching the route used by MethodScene
@@ -135,14 +135,14 @@ export const getSpecKey = (location: HLocation | Location): string | null => {
 
 /**
  * Gets the scene type of the current page
- * @param location browser location
+ * @param path path of browser location
  * @returns string representing the scene type
  */
-export const getSceneType = (location: HLocation | Location) => {
-  const match = matchPath<{ tabType: string }>(location.pathname, {
-    path: '/:specKey/:tabType',
+export const getSceneType = (path: string) => {
+  const match = matchPath<{ tagType: string }>(path, {
+    path: '/:specKey/:tagType',
   })
-  return match ? match!.params.tabType : ''
+  return match ? match!.params.tagType : ''
 }
 
 /**
@@ -154,7 +154,7 @@ export const isValidFilter = (
   location: HLocation | Location,
   filter: string
 ) => {
-  const sceneType = getSceneType(location)
+  const sceneType = getSceneType(location.pathname)
   if (!sceneType) return false
   else if (!filter.localeCompare('all', 'en', { sensitivity: 'base' }))
     return true

@@ -86,6 +86,7 @@ export const SideNavTypes = styled(
             <li key={type.name}>
               <Link
                 to={() => {
+                  // TODO: span behaving like link with custom navigate?
                   searchParams.delete('v')
                   return buildTypePath(
                     specKey,

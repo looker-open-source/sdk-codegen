@@ -24,6 +24,16 @@
 
  */
 import { useHistory } from 'react-router-dom'
+import { matchPath } from 'react-router'
+
+interface QueryParamProps {
+  /** Search Query **/
+  s?: string | null
+  /** Chosen SDK Language **/
+  sdk?: string | null
+  /** Tag Scene Filter **/
+  v?: string | null
+}
 
 /**
  * Hook for navigating to given route with specified query params
@@ -35,15 +45,17 @@ import { useHistory } from 'react-router-dom'
 export const useNavigation = () => {
   const history = useHistory()
 
-  const navigate = (
-    path: string,
-    queryParams?: {
-      s?: string | null
-      sdk?: string | null
-      v?: string | null
-    } | null
-  ) => {
+  const navigate = (path: string, queryParams?: QueryParamProps | null) => {
     const urlParams = new URLSearchParams(history.location.search)
+    // TODO: making this hook smarter, delete verb when not on scene page
+    // const match = matchPath<{ specKey: string; tagType: string }>(path, {
+    //   path: `/:specKey/:tagType?`,
+    // })
+    // if (match && match.params.specKey === 'diff') {
+    //   urlParams.delete('v')
+    // }
+    // console.log(match)
+
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
       history.push({ pathname: path, search: urlParams.toString() })

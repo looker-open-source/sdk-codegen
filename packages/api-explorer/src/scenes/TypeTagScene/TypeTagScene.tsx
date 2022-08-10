@@ -98,6 +98,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
             <Link
               key={index}
               to={() => {
+                // TODO: span behaving like link with custom navigate?
                 searchParams.delete('v')
                 return buildTypePath(
                   specKey,
