@@ -95,7 +95,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
-  const isSynced = useGlobalSync()
+  useGlobalSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
@@ -125,7 +125,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [location.pathname, spec])
 
   useEffect(() => {
-    if (!isSynced) return
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     const sdkParam = searchParams.get('sdk') || 'all'

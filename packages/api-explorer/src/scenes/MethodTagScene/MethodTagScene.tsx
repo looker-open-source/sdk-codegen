@@ -52,7 +52,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const selectedTagFilter = useSelector(selectTagFilter)
   const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
-  const isSynced = useTagSceneSync()
+  useTagSceneSync()
   let searchParams = new URLSearchParams(location.search)
 
   const handleChange = (filter: string) => {
@@ -62,7 +62,6 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   }
 
   useEffect(() => {
-    if (!isSynced) return
     searchParams = new URLSearchParams(location.search)
     const verbParam = searchParams.get('v') || 'ALL'
     setTagFilterAction({

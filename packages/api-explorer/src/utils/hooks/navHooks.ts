@@ -24,7 +24,6 @@
 
  */
 import { useHistory } from 'react-router-dom'
-import { matchPath } from 'react-router'
 
 interface QueryParamProps {
   /** Search Query **/
