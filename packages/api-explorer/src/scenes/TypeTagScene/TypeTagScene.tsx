@@ -30,8 +30,9 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
-import { buildTypePath, useNavigation } from '../../utils'
-import { selectTagFilter } from '../../state'
+import { buildTypePath, isValidFilter, useNavigation } from '../../utils'
+import { selectTagFilter, useSettingActions } from '../../state'
+import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
 import { getMetaTypes } from './utils'
 
 interface TypeTagSceneProps {
@@ -45,15 +46,32 @@ interface TypeTagSceneParams {
 
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const { specKey, typeTag } = useParams<TypeTagSceneParams>()
-  const navigate = useNavigation()
-  const searchParams = new URLSearchParams(location.search)
+  const { navigate, buildPathWithGlobal, navigateWithGlobal } = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
+  const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
+  useTagStoreSync()
+
+  const handleChange = (filter: string) => {
+    navigate(location.pathname, {
+      v: filter === 'ALL' ? null : filter.toLowerCase(),
+    })
+  }
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const verbParam = searchParams.get('v') || 'ALL'
+    setTagFilterAction({
+      tagFilter: isValidFilter(location, verbParam)
+        ? verbParam.toUpperCase()
+        : 'ALL',
+    })
+  }, [location.search])
 
   const types = api.typeTags[typeTag]
   useEffect(() => {
     if (!types) {
-      navigate(`/${specKey}/types`)
+      navigateWithGlobal(`/${specKey}/types`)
     }
   }, [types])
 
@@ -65,12 +83,6 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
     return <></>
   }
 
-  const setValue = (filter: string) => {
-    navigate(location.pathname, {
-      v: filter === 'ALL' ? null : filter.toLowerCase(),
-    })
-  }
-
   const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
   const metaTypes = getMetaTypes(types)
   return (
@@ -80,7 +92,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
         mb="small"
         mt="xlarge"
         value={tagFilter}
-        onChange={setValue}
+        onChange={handleChange}
       >
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
@@ -97,16 +109,9 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
             selectedTagFilter === type.metaType.toString().toUpperCase()) && (
             <Link
               key={index}
-              to={() => {
-                // TODO: span behaving like link with custom navigate?
-                searchParams.delete('v')
-                return buildTypePath(
-                  specKey,
-                  tag.name,
-                  type.name,
-                  searchParams.toString()
-                )
-              }}
+              to={buildPathWithGlobal(
+                buildTypePath(specKey, tag.name, type.name)
+              )}
             >
               <Grid columns={1} py="xsmall">
                 <DocTypeSummary key={index} type={type} />

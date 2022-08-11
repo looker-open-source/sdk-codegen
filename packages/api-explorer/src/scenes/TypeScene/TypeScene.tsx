@@ -56,7 +56,7 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
   const { specKey, typeTag, typeName } = useParams<DocTypeParams>()
   const type = api.types[typeName]
   const history = useHistory()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const typesUsed = typeRefs(api, type?.customTypes)
   const methodsUsedBy = methodRefs(api, type?.methodRefs)
   const typesUsedBy = typeRefs(api, type?.parentTypes)

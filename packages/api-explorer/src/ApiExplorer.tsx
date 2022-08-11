@@ -68,8 +68,7 @@ import {
   selectCurrentSpec,
   useSettingStoreState,
 } from './state'
-import { getSpecKey, diffPath, findSdk } from './utils'
-import { useGlobalSync } from './utils/hooks/syncHooks'
+import { getSpecKey, diffPath, findSdk, useGlobalStoreSync } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -97,7 +96,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
-  const isSynced = useGlobalSync()
+  useGlobalStoreSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
@@ -155,7 +154,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     neededSpec = spec?.key
   }
 
-  return isSynced ? (
+  return (
     <>
       <ComponentsProvider
         loadGoogleFonts={themeOverrides.loadGoogleFonts}
@@ -231,7 +230,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
-  ) : null
+  )
 }
 
 const AsideBorder = styled(Aside)<{

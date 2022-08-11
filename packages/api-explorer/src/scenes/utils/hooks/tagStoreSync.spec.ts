@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,5 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { Select } from '@looker/components'
-import { useSelector } from 'react-redux'
-import { selectSdkLanguage } from '../../state'
-import { allAlias, useNavigation } from '../../utils'
-import { allSdkLanguageOptions } from './utils'
 
-/**
- * Allows the user to select their preferred SDK language
- */
-export const SdkLanguageSelector: FC = () => {
-  const { navigate } = useNavigation()
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const [language, setLanguage] = useState(selectedSdkLanguage)
-  const options = allSdkLanguageOptions()
-
-  const handleChange = (alias: string) => {
-    navigate(location.pathname, { sdk: alias === allAlias ? null : alias })
-  }
-
-  useEffect(() => {
-    setLanguage(selectedSdkLanguage)
-  }, [selectedSdkLanguage])
-
-  return (
-    <Select
-      aria-label="sdk language selector"
-      value={language}
-      onChange={handleChange}
-      options={options}
-    />
-  )
-}
+// TODO: testing the hook outside of a component?

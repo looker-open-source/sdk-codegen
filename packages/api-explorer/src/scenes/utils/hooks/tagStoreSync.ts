@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,45 @@
  SOFTWARE.
 
  */
-
-import type { FC } from 'react'
-import React from 'react'
-import { Select } from '@looker/components'
 import { useLocation } from 'react-router-dom'
-import type { SpecItem } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { useNavigation } from '../../utils'
+import { useEffect } from 'react'
+import {
+  selectTagFilter,
+  useSettingActions,
+  useSettingStoreState,
+} from '../../../state'
+import { isValidFilter, useNavigation } from '../../../utils'
 
-import { selectSpecs } from '../../state'
-
-interface ApiSpecSelectorProps {
-  spec: SpecItem
-}
-
-export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
+/**
+ * Hook for syncing tag scene URL params with the Redux store
+ *
+ * Tag scene specific search parameters: 'v'
+ */
+export const useTagStoreSync = () => {
   const location = useLocation()
   const { navigate } = useNavigation()
-  const specs = useSelector(selectSpecs)
-  const options = Object.entries(specs).map(([key, spec]) => ({
-    value: key,
-    label: key,
-    description: spec.status,
-  }))
+  const { setTagFilterAction } = useSettingActions()
+  const { initialized } = useSettingStoreState()
+  const selectedTagFilter = useSelector(selectTagFilter)
 
-  const handleChange = (specKey: string) => {
-    const matchPath = location.pathname.replace(`/${spec.key}`, `/${specKey}`)
-    navigate(matchPath)
-  }
+  useEffect(() => {
+    if (initialized) {
+      const params = new URLSearchParams(location.search)
 
-  return (
-    <Select
-      width="10rem"
-      aria-label="spec selector"
-      defaultValue={spec.key}
-      options={options}
-      onChange={handleChange}
-    />
-  )
+      // syncing verb filter on tag scene page
+      const verbParam = params.get('v') || 'ALL'
+      const validVerbParam = isValidFilter(location, verbParam)
+      if (validVerbParam) {
+        setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
+      } else {
+        navigate(location.pathname, {
+          v:
+            selectedTagFilter === 'ALL'
+              ? null
+              : selectedTagFilter.toLowerCase(),
+        })
+      }
+    }
+  }, [initialized])
 }

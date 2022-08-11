@@ -35,25 +35,20 @@ interface QueryParamProps {
 }
 
 /**
- * Hook for navigating to given route with specified query params
- *
- * @param path Pathname to navigate to
- * @param queryParams Hash of query param name/value pairs to include in the destination url
+ * Hook for navigating to given route with query params
  */
 
 export const useNavigation = () => {
   const history = useHistory()
 
+  /**
+   * Navigates to path including provided search parameters
+   *
+   * @param path Pathname to navigate to
+   * @param queryParams Hash of query param name/value pairs to include in the destination url
+   */
   const navigate = (path: string, queryParams?: QueryParamProps | null) => {
     const urlParams = new URLSearchParams(history.location.search)
-    // TODO: making this hook smarter, delete verb when not on scene page
-    // const match = matchPath<{ specKey: string; tagType: string }>(path, {
-    //   path: `/:specKey/:tagType?`,
-    // })
-    // if (match && match.params.specKey === 'diff') {
-    //   urlParams.delete('v')
-    // }
-    // console.log(match)
 
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
@@ -74,5 +69,66 @@ export const useNavigation = () => {
     }
   }
 
-  return navigate
+  /**
+   * Builds path to a scene and removes any scene-specific URL parameters
+   *
+   * @param path the destination path
+   * @returns a path excluding scene-specific search parameters
+   */
+  const buildPathWithGlobal = (path: string) => {
+    const params = new URLSearchParams(history.location.search)
+    params.delete('v')
+    return `${path}?${params.toString()}`
+  }
+
+  /**
+   * Navigates to a scene removing any scene-specific URL parameters
+   *
+   * @param path Pathname to navigate to
+   */
+  const navigateWithGlobal = (path: string) => {
+    history.push(buildPathWithGlobal(path))
+  }
+
+  // TODO: Discuss proposition of using buildGlobalPath/navigateWithGlobal,
+  //  leaves reconciliation step to do the URL fixing
+  // /**
+  //  * Builds a path matching the route used by MethodScene
+  //  * @param specKey A string to identify the spec in the URL
+  //  * @param tag Corresponding method tag
+  //  * @param methodName A method name
+  //  * @returns a Method path with filtered search parameters
+  //  */
+  // const buildMethodScenePath = (
+  //   specKey: string,
+  //   tag: string,
+  //   methodName: string
+  // ) => {
+  //   const params = new URLSearchParams(location.search)
+  //   params.delete('v')
+  //   return `/${specKey}/methods/${tag}/${methodName}${params.toString()}`
+  // }
+  //
+  // /**
+  //  * Builds a path matching the route used by TypeScene
+  //  * @param specKey A string to identify the spec in the URL
+  //  * @param tag Corresponding type tag
+  //  * @param typeName A type name
+  //  * @returns a Type path with filtered search parameters
+  //  */
+  // const buildTypeScenePath = (
+  //   specKey: string,
+  //   tag: string,
+  //   typeName: string
+  // ) => {
+  //   const params = new URLSearchParams(location.search)
+  //   params.delete('v')
+  //   return `/${specKey}/types/${tag}/${typeName}${params.toString()}`
+  // }
+
+  return {
+    navigate,
+    navigateWithGlobal,
+    buildPathWithGlobal,
+  }
 }

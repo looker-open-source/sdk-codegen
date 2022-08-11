@@ -26,10 +26,10 @@
 
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Accordion2, Heading, Span } from '@looker/components'
+import { Accordion2, Heading } from '@looker/components'
 import type { MethodList } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { useLocation, useRouteMatch } from 'react-router-dom'
+import { useRouteMatch } from 'react-router-dom'
 import { useNavigation, highlightHTML, buildMethodPath } from '../../utils'
 import { Link } from '../Link'
 import { selectSearchPattern } from '../../state'
@@ -44,9 +44,7 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const location = useLocation()
-    const navigate = useNavigation()
-    const searchParams = new URLSearchParams(location.search)
+    const { navigate, buildPathWithGlobal } = useNavigation()
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
@@ -85,16 +83,9 @@ export const SideNavMethods = styled(
           {Object.values(methods).map((method) => (
             <li key={method.name}>
               <Link
-                to={() => {
-                  // TODO: span behaving like link with custom navigate?
-                  searchParams.delete('v')
-                  return buildMethodPath(
-                    specKey,
-                    tag,
-                    method.name,
-                    searchParams.toString()
-                  )
-                }}
+                to={buildPathWithGlobal(
+                  buildMethodPath(specKey, tag, method.name)
+                )}
               >
                 {highlightHTML(searchPattern, method.summary)}
               </Link>

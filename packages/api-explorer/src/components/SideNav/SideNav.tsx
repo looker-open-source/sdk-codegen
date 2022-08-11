@@ -70,7 +70,7 @@ interface SideNavProps {
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const location = useLocation()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')

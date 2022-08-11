@@ -32,7 +32,7 @@ import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath, isValidFilter, useNavigation } from '../../utils'
 import { selectTagFilter, useSettingActions } from '../../state'
-import { useTagSceneSync } from '../../utils/hooks/syncHooks'
+import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -48,12 +48,11 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
   const methods = api.tags[methodTag]
-  const navigate = useNavigation()
+  const { navigate, buildPathWithGlobal, navigateWithGlobal } = useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
   const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
-  const isSynced = useTagSceneSync()
-  let searchParams = new URLSearchParams(location.search)
+  useTagStoreSync()
 
   const handleChange = (filter: string) => {
     navigate(location.pathname, {
@@ -62,7 +61,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   }
 
   useEffect(() => {
-    searchParams = new URLSearchParams(location.search)
+    const searchParams = new URLSearchParams(location.search)
     const verbParam = searchParams.get('v') || 'ALL'
     setTagFilterAction({
       tagFilter: isValidFilter(location, verbParam)
@@ -77,7 +76,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
 
   useEffect(() => {
     if (!methods) {
-      navigate(`/${specKey}/methods`)
+      navigateWithGlobal(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {
@@ -88,7 +87,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   )!
   const operations = getOperations(methods)
 
-  return isSynced ? (
+  return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
       <ButtonToggle
@@ -112,15 +111,9 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
             selectedTagFilter === method.httpMethod) && (
             <Link
               key={index}
-              to={() => {
-                searchParams.delete('v')
-                return buildMethodPath(
-                  specKey,
-                  tag.name,
-                  method.name,
-                  searchParams.toString()
-                )
-              }}
+              to={buildPathWithGlobal(
+                buildMethodPath(specKey, tag.name, method.name)
+              )}
             >
               <Grid columns={1} py="xsmall">
                 <DocMethodSummary key={index} method={method} />
@@ -129,5 +122,5 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
           )
       )}
     </ApixSection>
-  ) : null
+  )
 }
