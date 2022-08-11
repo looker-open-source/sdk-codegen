@@ -29,6 +29,7 @@ import type { Headers } from 'request'
 import type { Readable } from 'readable-stream'
 import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
 import { DelimArray } from './delimArray'
+import { LookerSDKError } from './lookerSDKError'
 
 export const agentPrefix = 'TS-SDK'
 export const LookerAppId = 'x-looker-appid'
@@ -470,32 +471,35 @@ function bufferString(val: any) {
  */
 export function sdkError(response: any) {
   if (typeof response === 'string') {
-    return new Error(response)
+    return new LookerSDKError(response)
   }
   if ('error' in response) {
     const error = response.error
     if (typeof error === 'string') {
-      return new Error(error)
+      return new LookerSDKError(error)
     }
     // Try to get most specific error first
     if ('error' in error) {
       const result = bufferString(error.error)
-      return new Error(result)
+      return new LookerSDKError(result)
     }
     if ('message' in error) {
-      return new Error(response.error.message.toString())
+      return new LookerSDKError(response.error.message.toString(), {
+        errors: error.errors,
+        documentation_url: error.documentation_url,
+      })
     }
     if ('statusMessage' in error) {
-      return new Error(error.statusMessage)
+      return new LookerSDKError(error.statusMessage)
     }
     const result = bufferString(error)
-    return new Error(result)
+    return new LookerSDKError(result)
   }
   if ('message' in response) {
-    return new Error(response.message)
+    return new LookerSDKError(response.message)
   }
   const error = JSON.stringify(response)
-  return new Error(`Unknown error with SDK method ${error}`)
+  return new LookerSDKError(`Unknown error with SDK method ${error}`)
 }
 
 /** A helper method for simplifying error handling of SDK responses.
