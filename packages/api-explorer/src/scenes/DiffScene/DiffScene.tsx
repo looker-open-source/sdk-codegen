@@ -43,7 +43,6 @@ import { useSelector } from 'react-redux'
 import { ApixSection } from '../../components'
 import { selectCurrentSpec } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
-import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
@@ -97,7 +96,6 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
     label: `${key} (${spec.status})`,
   }))
 
-  useTagStoreSync()
   const [leftKey, setLeftKey] = useState<string>(l || currentSpecKey)
   const [rightKey, setRightKey] = useState<string>(r || '')
   const [leftApi, setLeftApi] = useState<ApiModel>(specs[leftKey].api!)
