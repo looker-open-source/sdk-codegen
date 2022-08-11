@@ -86,7 +86,11 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       this: LookerSDKError | undefined,
       ...[
         message,
-        { errors = [], documentation_url = '', ...errorOptions } = {},
+        {
+          errors,
+          documentation_url,
+          ...errorOptions
+        } = {} as ILookerSDKErrorOptions,
         ...rest
       ]: AugmentErrorOptions<
         ConstructorParameters<ErrorConstructor>,
@@ -97,6 +101,10 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
           ILookerSDKErrorOptions
         >
     ) {
+      // handle null in addition to undefined
+      errors ??= []
+      documentation_url ??= ''
+
       // The `super()` call. At present, Error() and new Error() are
       // indistinguishable, but use whatever we were invoked with in case
       // that ever changes.
@@ -129,23 +137,9 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       // set it to be enumerable for consistency with our non-error responses,
       // which are implemented as plain JavaScript objects where all
       // properties are enumerable.
-      Object.defineProperties(error, {
-        message: {
-          enumerable: true,
-        },
-        errors: {
-          value: errors ?? [], // defaults to an empty array if null or undefined
-          writable: true,
-          configurable: true,
-          enumerable: true,
-        },
-        documentation_url: {
-          value: documentation_url ?? '',
-          writable: true,
-          configurable: true,
-          enumerable: true,
-        },
-      })
+      Object.defineProperty(error, 'message', { enumerable: true })
+      ;(error as LookerSDKError).errors = errors
+      ;(error as LookerSDKError).documentation_url = documentation_url
 
       return error
     } as ILookerSDKErrorConstructor
