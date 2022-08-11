@@ -29,25 +29,28 @@ import { useSelector } from 'react-redux'
 import { allAlias, findSdk, isValidFilter, useNavigation } from '../index'
 import {
   selectSdkLanguage,
+  selectSearchPattern,
   selectTagFilter,
   useSettingActions,
   useSettingStoreState,
 } from '../../state'
 
 /**
- * Hook for syncing URL params with the Redux store
+ * Hook for syncing global URL params with the Redux store
  */
 
 export const useGlobalSync = () => {
   const location = useLocation()
   const navigate = useNavigation()
-  const { setSdkLanguageAction } = useSettingActions()
+  const { setSdkLanguageAction, setSearchPatternAction } = useSettingActions()
   const { initialized } = useSettingStoreState()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const selectedSearchPattern = useSelector(selectSearchPattern)
   const [synced, setSynced] = useState(false)
 
   useEffect(() => {
     if (initialized) {
+      console.log('inside global sync initialization')
       const searchParams = new URLSearchParams(location.search)
       const sdkParam = searchParams.get('sdk') || ''
       const sdk = findSdk(sdkParam)
@@ -68,18 +71,32 @@ export const useGlobalSync = () => {
         })
       }
 
+      // TODO: syncing the search (and additional) parameter without bloating code?
+      const searchQueryParam = searchParams.get('s')
+      if (searchQueryParam) {
+        // sync store with URL
+        setSearchPatternAction({
+          searchPattern: searchQueryParam,
+        })
+      } else {
+        // sync URL with store
+        navigate(location.pathname, {
+          s: selectedSearchPattern || null,
+        })
+      }
+
       setSynced(true)
     }
   }, [initialized])
 
+  console.log('global sync is now gonna return ', synced)
   return synced
 }
 
 /**
- * Hook for syncing URL params with the Redux store
+ * Hook for syncing tag scene URL params with the Redux store
  */
 export const useTagSceneSync = () => {
-  console.log('started executing hook')
   const location = useLocation()
   const navigate = useNavigation()
   const { setTagFilterAction } = useSettingActions()
@@ -89,7 +106,7 @@ export const useTagSceneSync = () => {
 
   useEffect(() => {
     if (initialized) {
-      console.log('running initialization sync')
+      console.log('running initialization sync in tag scene hook')
       const searchParams = new URLSearchParams(location.search)
       const verbParam = searchParams.get('v') || 'ALL'
       const validVerbParam = isValidFilter(location, verbParam)
@@ -106,9 +123,8 @@ export const useTagSceneSync = () => {
       }
       setSynced(true)
     }
+    console.log('tag scene sync is now going to return ', synced)
   }, [initialized])
-
-  console.log('synced will return: ', synced)
 
   return synced
 }

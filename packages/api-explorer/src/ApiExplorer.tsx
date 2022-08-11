@@ -66,6 +66,7 @@ import {
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
+  useSettingStoreState,
 } from './state'
 import { getSpecKey, diffPath, findSdk } from './utils'
 import { useGlobalSync } from './utils/hooks/syncHooks'
@@ -90,12 +91,13 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
+  const { initialized } = useSettingStoreState()
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
     useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
-  useGlobalSync()
+  const isSynced = useGlobalSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
@@ -125,6 +127,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [location.pathname, spec])
 
   useEffect(() => {
+    if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     const sdkParam = searchParams.get('sdk') || 'all'
@@ -152,7 +155,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     neededSpec = spec?.key
   }
 
-  return (
+  return isSynced ? (
     <>
       <ComponentsProvider
         loadGoogleFonts={themeOverrides.loadGoogleFonts}
@@ -228,7 +231,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
-  )
+  ) : null
 }
 
 const AsideBorder = styled(Aside)<{
