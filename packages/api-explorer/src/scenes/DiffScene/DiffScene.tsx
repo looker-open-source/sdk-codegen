@@ -41,7 +41,7 @@ import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
 import { ApixSection } from '../../components'
-import { selectCurrentSpec, useSettingStoreState } from '../../state'
+import { selectCurrentSpec } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
@@ -86,7 +86,6 @@ const validateParam = (specs: SpecList, specKey = '') => {
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const adaptor = getApixAdaptor()
   const { navigate } = useNavigation()
-  const { initialized } = useSettingStoreState()
   const spec = useSelector(selectCurrentSpec)
   const currentSpecKey = spec.key
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
@@ -112,10 +111,6 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
       setRightKey(r)
     }
   }, [r, rightKey])
-
-  useEffect(() => {
-    console.log('initialized in diffScene is ', initialized)
-  }, [initialized])
 
   useEffect(() => {
     if (l !== leftKey) {

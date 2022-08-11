@@ -51,8 +51,6 @@ export const SelectorContainer: FC<SelectorContainerProps> = ({
   ...spaceProps
 }) => {
   const { buildPathWithGlobal } = useNavigation()
-  // TODO: noticing that there are certain pages where we must delete extra params
-  //       before pushing its link, what's a way we can handle this?
   return (
     <Space width="auto" {...spaceProps}>
       <SdkLanguageSelector />

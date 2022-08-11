@@ -130,7 +130,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     const sdkParam = searchParams.get('sdk') || 'all'
-
     const { language: sdkLanguage } = findSdk(sdkParam)
     setSearchPatternAction({ searchPattern })
     setSdkLanguageAction({ sdkLanguage })
