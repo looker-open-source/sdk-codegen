@@ -24,93 +24,89 @@
 
 package com.looker.rtl
 
-//interface IErrorDocItem {
-//    /** relative path of mark down document */
-//    var url: String
-//}
-
+/** structure of error documentation item */
 class ErrorDocItem(var url: String)
 
 /** Structure of the error code document index */
 typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
 
-//interface IErrorDocLink {
-//    /** base redirector url */
-//    var redirector: String
-//    /** api version of the error link */
-//    var apiVersion: String
-//    /** HTTP status code */
-//    var statusCode: String
-//    /** REST API Path */
-//    var apiPath: String
-//}
+ interface IErrorDocLink {
+    /** base redirector url */
+    var redirector: String
+    /** api version of the error link */
+    var apiVersion: String
+    /** HTTP status code */
+    var statusCode: String
+    /** REST API Path */
+    var apiPath: String
+ }
 
-//interface IErrorDoc {
-//    /** Index of all know error codes. Call load() to populate it */
-//    var index: ErrorCodeIndex?
-//
-//    /** Url of API error document index */
-//    val indexUrl: String
-//
-//    /**
-//     * Extract error url into its parts
-//     * @param docUrl value of documentation_url from error payload
-//     */
-//    fun parse(docUrl: String): IErrorDocLink
-//
-//    /**
-//     * full url to resolve error document
-//     * @param urlPath resolved index item (used by content())
-//     */
-//    fun contentUrl(urlPath: String): String
-//
-//    /**
-//     * fetch content from the URL, returning a "not found" response if it fails
-//     * @param url to fetch
-//     */
-//    fun getContent(url: String): String
-//
-//    /**
-//     * Returns the markdown of the error document
-//     *
-//     * Some kind of content is always returned from this method. The content is
-//     * one of:
-//     * - the specific document for the method and error code
-//     * - a generic document for the error code
-//     * - a "not found" mark down if the specific and generic are not defined
-//     *
-//     * @param docUrl value of documentation_url from error payload
-//     */
-//    fun content(docUrl: String): String
-//
-//    /**
-//     * Ensure API request path matches the OpenAPI path pattern
-//     *
-//     * @example
-//     * `/entity/:id/part/:part` should be `/entity/{id}/part/{part}`
-//     *
-//     * @param path to convert to a spec path
-//     */
-//    fun specPath(path: String): String
-//
-//    /**
-//     * get the lookup key for the documentation_url
-//     * @param docUrl value of documentation_url from error payload
-//     */
-//    fun errorKey(docUrl: String): String
-//
-//    /** Fetch and parse the error codes documentation index from the CDN */
-//    fun load(): ErrorCodeIndex
-//
-//    /**
-//     * get the name of the method from the error doc url
-//     * @param errorMdUrl url for the error document
-//     */
-//    fun methodName(errorMdUrl: String): String
-//}
+ interface IErrorDoc {
+    /** Index of all know error codes. Call load() to populate it */
+    var index: ErrorCodeIndex?
+
+    /** Url of API error document index */
+    val indexUrl: String
+
+    /**
+     * Extract error url into its parts
+     * @param docUrl value of documentation_url from error payload
+     */
+    fun parse(docUrl: String): IErrorDocLink
+
+    /**
+     * full url to resolve error document
+     * @param urlPath resolved index item (used by content())
+     */
+    fun contentUrl(urlPath: String): String
+
+    /**
+     * fetch content from the URL, returning a "not found" response if it fails
+     * @param url to fetch
+     */
+    fun getContent(url: String): String
+
+    /**
+     * Returns the markdown of the error document
+     *
+     * Some kind of content is always returned from this method. The content is
+     * one of:
+     * - the specific document for the method and error code
+     * - a generic document for the error code
+     * - a "not found" mark down if the specific and generic are not defined
+     *
+     * @param docUrl value of documentation_url from error payload
+     */
+    fun content(docUrl: String): String
+
+    /**
+     * Ensure API request path matches the OpenAPI path pattern
+     *
+     * @example
+     * `/entity/:id/part/:part` should be `/entity/{id}/part/{part}`
+     *
+     * @param path to convert to a spec path
+     */
+    fun specPath(path: String): String
+
+    /**
+     * get the lookup key for the documentation_url
+     * @param docUrl value of documentation_url from error payload
+     */
+    fun errorKey(docUrl: String): String
+
+    /** Fetch and parse the error codes documentation index from the CDN */
+    fun load(): ErrorCodeIndex
+
+    /**
+     * get the name of the method from the error doc url
+     * @param errorMdUrl url for the error document
+     */
+    fun methodName(errorMdUrl: String): String
+ }
 
 /** Class to process Looker API error payloads and retrieve error documentation */
-class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErrorDoc */ {
+class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl): IErrorDoc {
     companion object {
         /** Location of the public CDN for Looker API Error codes */
         const val ErrorCodesUrl = "https://marketplace-api.looker.com/errorcodes/"
@@ -125,7 +121,7 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
     }
 
     private var _index: ErrorCodeIndex? = null
-    var index: ErrorCodeIndex?
+    override var index: ErrorCodeIndex?
         get() {
             if (_index == null) {
                 _index = load()
@@ -136,29 +132,30 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
             this._index = value
         }
 
-    val indexUrl: String
-    get() {
-        return "${ErrorCodesUrl}index.json"
-    }
+    override val indexUrl: String
+        get() {
+            return "${ErrorCodesUrl}index.json"
+        }
 
-    fun parse(docUrl: String): ErrorDocLink {
+    override fun parse(docUrl: String): IErrorDocLink {
         val match = ErrorDocRx.find(docUrl) ?: return ErrorDocLink()
-        return ErrorDocLink(match.groupValues[1],
+        return ErrorDocLink(
+            match.groupValues[1],
             match.groupValues[2],
             match.groupValues[3],
             match.groupValues[4]
         )
     }
 
-    fun contentUrl(urlPath: String): String {
+    override fun contentUrl(urlPath: String): String {
         return "${cdnUrl}$urlPath"
     }
 
     private fun notFound(key: String): String {
-        return "${ErrorDocNotFound}${key}"
+        return "${ErrorDocNotFound}$key"
     }
 
-    fun getContent(url: String): String {
+    override fun getContent(url: String): String {
         return try {
             sdk.ok(sdk.get<String>(url))
         } catch (e: Exception) {
@@ -166,7 +163,7 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
         }
     }
 
-    fun content(docUrl: String): String {
+    override fun content(docUrl: String): String {
         val key = errorKey(docUrl)
         if (key.isEmpty()) {
             return notFound("bad error code link")
@@ -180,23 +177,23 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
                 return notFound(key)
             }
         }
-        return this.getContent(item.url)
+        return this.getContent(contentUrl(item.url))
     }
 
-    fun specPath(path: String): String {
+    override fun specPath(path: String): String {
         val rx = Regex("""(:\w+)""")
         val result = path.replace(rx) { val x = it.value.substring(1); "{$x}" }
         return result
     }
 
-    fun errorKey(docUrl: String): String {
+    override fun errorKey(docUrl: String): String {
         val bits = parse(docUrl)
         if (bits.redirector.isNullOrEmpty()) return ""
         return this.specPath("${bits.statusCode}${bits.apiPath}")
     }
 
-    fun load(): ErrorCodeIndex {
-        var map = emptyMap<String, ErrorDocItem>() as ErrorCodeIndex
+    override fun load(): ErrorCodeIndex {
+        var map = emptyMap<String, ErrorDocItem>().toMap(ErrorCodeIndex())
         if (this._index == null) {
             try {
                 val result = sdk.ok<ErrorCodeIndex>(sdk.get<ErrorCodeIndex>(indexUrl))
@@ -209,7 +206,7 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
         return map
     }
 
-    fun methodName(errorMdUrl: String): String {
+    override fun methodName(errorMdUrl: String): String {
         // No named capture groups yet but the named group expression is supported/ignored so no need to make it different from TS for Kotlin
         // https://youtrack.jetbrains.com/issue/KT-48246/KJS-Add-support-for-named-capture-group-and-capture-indices-in-MatchResult
         val errorMdRx = Regex("""(?<name>\w+)_\d{3}\.md""", RegexOption.IGNORE_CASE)
@@ -217,13 +214,11 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) /*: IErr
         val result = match.groupValues[1]
         return result
     }
-
 }
 
 class ErrorDocLink(
-    var redirector: String = "",
-    var apiVersion: String = "",
-    var statusCode: String = "",
-    var apiPath: String = ""
-)
-
+    override var redirector: String = "",
+    override var apiVersion: String = "",
+    override var statusCode: String = "",
+    override var apiPath: String = ""
+) : IErrorDocLink

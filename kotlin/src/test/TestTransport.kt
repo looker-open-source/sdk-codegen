@@ -27,9 +27,9 @@ import com.looker.rtl.*
 import com.looker.sdk.AGENT_TAG
 import com.looker.sdk.ENVIRONMENT_PREFIX
 import com.looker.sdk.LOOKER_APPID
+import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import org.junit.Test
 
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
@@ -106,7 +106,7 @@ class TestTransport {
   "num4": 4
 }
         """.trimIndent()
-        /// we use GSon so verify GSon handles ... flexible ... json
+        // / we use GSon so verify GSon handles ... flexible ... json
         val gson = Gson()
         val testModel = gson.fromJson(payload, TestModel::class.java)
         assertEquals("1", testModel.string1)

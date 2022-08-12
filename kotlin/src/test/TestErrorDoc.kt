@@ -22,21 +22,26 @@
  * THE SOFTWARE.
  */
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.looker.rtl.ErrorCodeIndex
 import com.looker.rtl.ErrorDoc
+import com.looker.rtl.ErrorDoc.Companion.ErrorDocNotFound
 import org.junit.Test
+import java.io.File
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+
+val errorCodeType = object : TypeToken<ErrorCodeIndex>() {}.type
 
 class TestErrorDoc {
     val external = "https://docs.looker.com/r/err/4.0/429/delete/bogus/:namespace/purge"
     val internal = "https://docs.looker.com/r/err/internal/422/post/bogus/bulk"
     val badLogin = "https://docs.looker.com/r/err/4.0/404/post/login"
-    val another404 = "https://docs.looker.com/r/err/4.0/404/post/another"
     val config = TestConfig()
     val errDoc = ErrorDoc(config.sdk)
-
-    @Test
-    fun getIndex() {
-    }
+    private val gson = Gson()
 
     @Test
     fun parse() {
@@ -58,11 +63,21 @@ class TestErrorDoc {
     }
 
     @Test
-    fun contentUrl() {
+    fun liveIndex() {
+        // fetch the index document from the live CDN
+        val actual = errDoc.index
+        assertNotNull(actual)
+        assertContains(actual, "404/post/login")
     }
 
     @Test
     fun content() {
+        val index = File(config.testFile("errorCodesIndex.json")).readText()
+        errDoc.index = gson.fromJson<ErrorCodeIndex>(index, errorCodeType)
+        assert(errDoc.content(badLogin).startsWith("## API Response 404 for `login`"))
+        assert(errDoc.content(internal).startsWith("${ErrorDocNotFound}422/post/bogus/bulk"))
+        assert(errDoc.content(external).startsWith("${ErrorDocNotFound}429/delete/bogus/{namespace}/purge"))
+        assert(errDoc.content("").startsWith("${ErrorDocNotFound}bad error code link"))
     }
 
     @Test

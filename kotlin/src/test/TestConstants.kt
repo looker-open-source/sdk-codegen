@@ -25,11 +25,11 @@
 @file:Suppress("UNCHECKED_CAST")
 
 import com.looker.rtl.*
+import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import org.junit.Test
 
 val config = TestConfig()
 
@@ -99,7 +99,7 @@ class TestConstants {
         assertEquals(actual.toString(), "1, 2, 3, 4")
         actual = DelimArray(ids, "|")
         assertEquals(actual.toString(), "1|2|3|4")
-        actual = DelimArray(arrayOf(5,6,7,8))
+        actual = DelimArray(arrayOf(5, 6, 7, 8))
         assertEquals(actual.toString(), "5,6,7,8")
     }
 }

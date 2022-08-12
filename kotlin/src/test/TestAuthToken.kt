@@ -24,8 +24,8 @@
 
 import com.looker.rtl.AuthToken
 import com.looker.sdk.AccessToken
-import kotlin.test.assertEquals
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class TestAuthToken {
     @Test

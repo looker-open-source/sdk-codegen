@@ -32,7 +32,6 @@ import org.ini4j.Ini
 import java.io.ByteArrayInputStream
 import java.io.File
 
-
 /** Structure read from an .INI file */
 typealias ApiSections = Map<String, Map<String, String>>
 
@@ -123,7 +122,6 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
-
     }
 
     override fun isConfigured(): Boolean {
