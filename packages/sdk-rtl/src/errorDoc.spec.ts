@@ -41,52 +41,11 @@ import type {
   ITransportSettings,
   Values,
 } from './transport'
+import { readFile, TestConfig } from './testUtils'
 
-const sampleIndex: ErrorCodeIndex = {
-  '404': {
-    url: '404.md',
-  },
-  '400/get/content_metadata/{content_metadata_id}': {
-    url: 'content_metadata_400.md',
-  },
-  '422/post/folders': {
-    url: 'create_folder_422.md',
-  },
-  '422/post/groups': {
-    url: 'create_group_422.md',
-  },
-  '404/get/dashboards/{dashboard_id}/dashboard_filters': {
-    url: 'dashboard_dashboard_filters_404.md',
-  },
-  '404/delete/alerts/{alert_id}': {
-    url: 'delete_alert_404.md',
-  },
-  '404/delete/boards/{board_id}': {
-    url: 'delete_board_404.md',
-  },
-  '404/delete/dashboard_filters/{dashboard_filter_id}': {
-    url: 'delete_dashboard_filter_404.md',
-  },
-  '404/delete/looks/{look_id}': {
-    url: 'delete_look_404.md',
-  },
-  '404/post/login': {
-    url: 'login_404.md',
-  },
-  '404/get/roles/{role_id}': {
-    url: 'role_404.md',
-  },
-  '404/post/queries/run/{result_format}': {
-    url: 'run_inline_query_404.md',
-  },
-  '422/post/queries/run/{result_format}': {
-    url: 'run_inline_query_422.md',
-  },
-  '404/get/looks/{look_id}/run/{result_format}': {
-    url: 'run_look_404.md',
-  },
-}
-
+const config = TestConfig()
+const errorIndex = `${config.testPath}errorCodesIndex.json`
+const sampleIndex: ErrorCodeIndex = JSON.parse(readFile(errorIndex))
 const generic404 = `## Generic 404`
 const badLoginMd = `## API Response 404 for \`login\`
 
@@ -209,7 +168,7 @@ describe('ErrorDoc', () => {
     it.each<[string, string]>([
       ['/x/:f/y/:z', '/x/{f}/y/{z}'],
       ['/x/{f}/y/{z}', '/x/{f}/y/{z}'],
-      ['/x/:foo/y/:zoo', '/x/{foo}/y/{zoo}'],
+      ['/x/:foo_bar/y/:zoo', '/x/{foo_bar}/y/{zoo}'],
       ['', ''],
     ])('path: "%s" should be "%s"', (path, expected) =>
       expect(errDoc.specPath(path)).toEqual(expected)
@@ -232,6 +191,7 @@ describe('ErrorDoc', () => {
       ['', ''],
       ['foo', ''],
       ['/foo.md', ''],
+      ['404.md', ''],
       ['login_404.md', 'login'],
       ['login_2_404.md', 'login_2'],
       ['and_another_404.md', 'and_another'],

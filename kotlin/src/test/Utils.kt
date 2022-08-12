@@ -46,7 +46,8 @@ class TestSettingsIniFile(
             mapOf(
                 "client_id" to "test_client_id",
                 "redirect_uri" to "looker://"
-            ))
+            )
+        )
     }
 }
 
@@ -93,7 +94,6 @@ open class TestConfig() {
      * Return an HTTP test client
      */
     fun testClient(): HttpClient {
-
         return customClient(testSettings(settings))
     }
 }
