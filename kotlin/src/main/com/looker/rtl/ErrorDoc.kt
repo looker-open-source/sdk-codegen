@@ -42,7 +42,7 @@ typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
  }
 
  interface IErrorDoc {
-    /** Index of all know error codes. Call load() to populate it */
+    /** Index of all known error codes. Call load() to populate it */
     var index: ErrorCodeIndex?
 
     /** Url of API error document index */
