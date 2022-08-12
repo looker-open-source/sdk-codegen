@@ -55,11 +55,11 @@ export const useTagStoreSync = () => {
       if (validVerbParam) {
         setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
       } else {
+        const verb = isValidFilter(location, selectedTagFilter)
+          ? selectedTagFilter
+          : 'ALL'
         navigate(location.pathname, {
-          v:
-            selectedTagFilter === 'ALL'
-              ? null
-              : selectedTagFilter.toLowerCase(),
+          v: verb === 'ALL' ? null : verb.toLowerCase(),
         })
       }
     }

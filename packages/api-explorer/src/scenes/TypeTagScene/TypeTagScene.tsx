@@ -60,11 +60,12 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
-    const verbParam = searchParams.get('v') || 'ALL'
+    let verbParam = searchParams.get('v') || 'ALL'
+    verbParam = isValidFilter(location, verbParam)
+      ? verbParam.toUpperCase()
+      : 'ALL'
     setTagFilterAction({
-      tagFilter: isValidFilter(location, verbParam)
-        ? verbParam.toUpperCase()
-        : 'ALL',
+      tagFilter: verbParam,
     })
   }, [location.search])
 
