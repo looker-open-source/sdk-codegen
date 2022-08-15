@@ -46,7 +46,8 @@ interface TypeTagSceneParams {
 
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const { specKey, typeTag } = useParams<TypeTagSceneParams>()
-  const { navigate, buildPathWithGlobal, navigateWithGlobal } = useNavigation()
+  const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
+    useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
   const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
@@ -72,7 +73,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const types = api.typeTags[typeTag]
   useEffect(() => {
     if (!types) {
-      navigateWithGlobal(`/${specKey}/types`)
+      navigateWithGlobalParams(`/${specKey}/types`)
     }
   }, [types])
 
@@ -110,7 +111,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
             selectedTagFilter === type.metaType.toString().toUpperCase()) && (
             <Link
               key={index}
-              to={buildPathWithGlobal(
+              to={buildPathWithGlobalParams(
                 buildTypePath(specKey, tag.name, type.name)
               )}
             >

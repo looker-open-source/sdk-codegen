@@ -44,7 +44,7 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const { navigate, buildPathWithGlobal } = useNavigation()
+    const { navigate, buildPathWithGlobalParams } = useNavigation()
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
@@ -83,7 +83,7 @@ export const SideNavMethods = styled(
           {Object.values(methods).map((method) => (
             <li key={method.name}>
               <Link
-                to={buildPathWithGlobal(
+                to={buildPathWithGlobalParams(
                   buildMethodPath(specKey, tag, method.name)
                 )}
               >

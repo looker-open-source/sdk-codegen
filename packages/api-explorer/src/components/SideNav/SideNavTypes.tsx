@@ -44,7 +44,7 @@ interface TypesProps {
 
 export const SideNavTypes = styled(
   ({ className, types, tag, specKey, defaultOpen = false }: TypesProps) => {
-    const { navigate, buildPathWithGlobal } = useNavigation()
+    const { navigate, buildPathWithGlobalParams } = useNavigation()
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ typeTag: string }>(
       `/:specKey/types/:typeTag/:typeName?`
@@ -83,7 +83,9 @@ export const SideNavTypes = styled(
           {Object.values(types).map((type) => (
             <li key={type.name}>
               <Link
-                to={buildPathWithGlobal(buildTypePath(specKey, tag, type.name))}
+                to={buildPathWithGlobalParams(
+                  buildTypePath(specKey, tag, type.name)
+                )}
               >
                 {highlightHTML(searchPattern, type.name)}
               </Link>

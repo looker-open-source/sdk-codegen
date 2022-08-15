@@ -91,7 +91,7 @@ export const useNavigation = () => {
 
   return {
     navigate,
-    navigateWithGlobal: navigateWithGlobalParams,
-    buildPathWithGlobal: buildPathWithGlobalParams,
+    navigateWithGlobalParams,
+    buildPathWithGlobalParams,
   }
 }

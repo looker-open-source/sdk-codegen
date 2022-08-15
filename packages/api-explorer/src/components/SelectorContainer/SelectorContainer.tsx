@@ -50,12 +50,12 @@ export const SelectorContainer: FC<SelectorContainerProps> = ({
   spec,
   ...spaceProps
 }) => {
-  const { buildPathWithGlobal } = useNavigation()
+  const { buildPathWithGlobalParams } = useNavigation()
   return (
     <Space width="auto" {...spaceProps}>
       <SdkLanguageSelector />
       <ApiSpecSelector spec={spec} />
-      <Link to={buildPathWithGlobal(`/${diffPath}/${spec.key}/`)}>
+      <Link to={buildPathWithGlobalParams(`/${diffPath}/${spec.key}/`)}>
         <IconButton
           toggle
           label="Compare Specifications"

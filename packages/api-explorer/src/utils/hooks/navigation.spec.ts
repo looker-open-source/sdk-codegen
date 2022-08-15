@@ -43,7 +43,8 @@ jest.mock('react-router-dom', () => {
 
 describe('useNavigation', () => {
   const history = useHistory()
-  const { navigate, navigateWithGlobal, buildPathWithGlobal } = useNavigation()
+  const { navigate, navigateWithGlobalParams, buildPathWithGlobalParams } =
+    useNavigation()
   const curParams = new URLSearchParams(history.location.search) // 's=test&sdk=py&v=get'
   const route = `/3.1`
 
@@ -94,7 +95,7 @@ describe('useNavigation', () => {
   describe('buildPathWithGlobal', () => {
     test('creates path with global parameters and excluding scene specific parameters', () => {
       curParams.delete('v')
-      expect(buildPathWithGlobal(route)).toEqual(
+      expect(buildPathWithGlobalParams(route)).toEqual(
         `${route}?${curParams.toString()}`
       )
     })
@@ -103,7 +104,7 @@ describe('useNavigation', () => {
   describe('navigateWithGlobal', () => {
     test('preserves global query params and removes scene specific parameters', () => {
       curParams.delete('v')
-      navigateWithGlobal(route)
+      navigateWithGlobalParams(route)
       expect(curParams.get('s')).toEqual('test')
       expect(mockHistoryPush).lastCalledWith(`${route}?${curParams.toString()}`)
     })

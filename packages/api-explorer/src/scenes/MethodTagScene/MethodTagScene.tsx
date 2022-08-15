@@ -48,7 +48,8 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
   const methods = api.tags[methodTag]
-  const { navigate, buildPathWithGlobal, navigateWithGlobal } = useNavigation()
+  const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
+    useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
   const { setTagFilterAction } = useSettingActions()
   const [tagFilter, setTagFilter] = useState(selectedTagFilter)
@@ -77,7 +78,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
 
   useEffect(() => {
     if (!methods) {
-      navigateWithGlobal(`/${specKey}/methods`)
+      navigateWithGlobalParams(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {
@@ -112,7 +113,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
             selectedTagFilter === method.httpMethod) && (
             <Link
               key={index}
-              to={buildPathWithGlobal(
+              to={buildPathWithGlobalParams(
                 buildMethodPath(specKey, tag.name, method.name)
               )}
             >
