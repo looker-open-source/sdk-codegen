@@ -45,10 +45,10 @@ type AugmentErrorOptions<
   : never
 
 interface IErrorDetail {
-  field?: string | null
-  code?: string | null
-  message?: string | null
-  documentation_url: string | null
+  field?: string
+  code?: string
+  message?: string
+  documentation_url: string
 }
 
 // This specifies SDK custom error options
