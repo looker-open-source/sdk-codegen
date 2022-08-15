@@ -25,21 +25,30 @@
  */
 import { useHistory } from 'react-router-dom'
 
-/**
- * Hook for navigating to given route with specified query params
- *
- * @param path Pathname to navigate to
- * @param queryParams Hash of query param name/value pairs to include in the destination url
- */
+interface QueryParamProps {
+  /** Search Query **/
+  s?: string | null
+  /** Chosen SDK Language **/
+  sdk?: string | null
+  /** Tag Scene Filter **/
+  v?: string | null
+}
 
+/**
+ * Hook for navigating to given route with query params
+ */
 export const useNavigation = () => {
   const history = useHistory()
 
-  const navigate = (
-    path: string,
-    queryParams?: { s?: string | null; sdk?: string | null } | null
-  ) => {
+  /**
+   * Navigates to path including provided search parameters
+   *
+   * @param path Pathname to navigate to
+   * @param queryParams Hash of query param name/value pairs to include in the destination url
+   */
+  const navigate = (path: string, queryParams?: QueryParamProps | null) => {
     const urlParams = new URLSearchParams(history.location.search)
+
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
       history.push({ pathname: path, search: urlParams.toString() })
@@ -59,5 +68,30 @@ export const useNavigation = () => {
     }
   }
 
-  return navigate
+  /**
+   * Builds path to a scene and removes any scene-specific URL parameters
+   *
+   * @param path the destination path
+   * @returns a path excluding scene-specific search parameters
+   */
+  const buildPathWithGlobalParams = (path: string) => {
+    const params = new URLSearchParams(history.location.search)
+    params.delete('v')
+    return `${path}?${params.toString()}`
+  }
+
+  /**
+   * Navigates to a scene removing any scene-specific URL parameters
+   *
+   * @param path Pathname to navigate to
+   */
+  const navigateWithGlobalParams = (path: string) => {
+    history.push(buildPathWithGlobalParams(path))
+  }
+
+  return {
+    navigate,
+    navigateWithGlobalParams,
+    buildPathWithGlobalParams,
+  }
 }

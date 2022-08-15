@@ -78,7 +78,7 @@ const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
 export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const adaptor = getApixAdaptor()
   const history = useHistory()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()

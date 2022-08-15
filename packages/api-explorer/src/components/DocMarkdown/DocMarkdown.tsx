@@ -40,7 +40,7 @@ interface DocMarkdownProps {
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
   const searchPattern = useSelector(selectSearchPattern)
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
 
   const linkClickHandler = (pathname: string, url: string) => {
     if (pathname.startsWith(`/${specKey}`)) {
