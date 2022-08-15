@@ -24,92 +24,123 @@
 
  */
 import { renderHook } from '@testing-library/react-hooks'
-import { useHistory, useLocation } from 'react-router-dom'
-import type { Location, History } from 'history'
+import { useHistory } from 'react-router-dom'
+import type { Location } from 'history'
+import * as reactRedux from 'react-redux'
+import * as routerLocation from 'react-router-dom'
 import { createTestStore, withReduxProvider } from '../../test-utils'
 import { useGlobalStoreSync } from './globalStoreSync'
 
 jest.mock('react-router', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
   return {
-    __esModule: true,
     ...ReactRouterDOM,
-    useHistory: jest.fn(),
-    useLocation: jest.fn(),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
   }
 })
 
 describe('useGlobalStoreSync', () => {
-  let history: History
-  const mockUseHistory = useHistory as jest.Mock<ReturnType<typeof useHistory>>
-  const mockUseLocation = useLocation as jest.Mock<
-    ReturnType<typeof useLocation>
-  >
+  const mockDispatch = jest.fn()
 
-  beforeEach(() => {
-    history = {
-      push: jest.fn(),
-      location,
-    } as unknown as History
-    mockUseHistory.mockReturnValue(history)
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   test('does nothing if uninitialized', () => {
-    mockUseLocation.mockReturnValue({
-      pathname: '/',
-      search: '',
-    } as Location)
+    const { push } = useHistory()
     const wrapper = ({ children }: any) => withReduxProvider(children)
     renderHook(() => useGlobalStoreSync(), { wrapper })
-    expect(history.push).not.toHaveBeenCalled()
+    expect(push).not.toHaveBeenCalled()
   })
 
-  test('syncs url with local store if it contains past state information', () => {
-    const store = createTestStore({
-      settings: {
-        initialized: true,
-        sdkLanguage: 'kt',
-        searchPattern: 'test',
-      },
-    })
-    mockUseLocation.mockReturnValue({
-      pathname: '/',
-      search: '',
-    } as Location)
-    const wrapper = ({ children }: any) => withReduxProvider(children, store)
-    renderHook(() => useGlobalStoreSync(), { wrapper })
-    expect(history.push).toHaveBeenCalledWith({
-      pathname: '/',
-      search: 's=test',
-    })
-    expect(history.push).toHaveBeenCalledWith({
-      pathname: '/',
-      search: 'sdk=kt',
+  describe('search', () => {
+    test('updates store search pattern with url search pattern if present', () => {
+      const { push } = useHistory()
+      const store = createTestStore({
+        settings: {
+          initialized: true,
+        },
+      })
+      jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+        pathname: '/',
+        search: `s=patternFromUrl`,
+      } as unknown as Location)
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+      const wrapper = ({ children }: any) => withReduxProvider(children, store)
+      renderHook(() => useGlobalStoreSync(), { wrapper })
+      expect(mockDispatch).toHaveBeenCalledWith({
+        payload: { searchPattern: 'patternFromUrl' },
+        type: 'settings/setSearchPatternAction',
+      })
+      expect(push).toHaveBeenCalledWith({ pathname: '/', search: 'sdk=py' })
     })
   })
 
-  /**
-   * TODO: test cases
-   * 1 - url valid params are synced to store
-   * 2 - invalid url params are corrected
-   */
+  describe('sdk', () => {
+    test('syncs url sdk param with sdk in store', () => {
+      const { push } = useHistory()
+      const store = createTestStore({
+        settings: {
+          initialized: true,
+          sdkLanguage: 'Kotlin',
+        },
+      })
+      const wrapper = ({ children }: any) => withReduxProvider(children, store)
+      renderHook(() => useGlobalStoreSync(), { wrapper })
+      expect(push).toHaveBeenCalledWith({
+        pathname: '/',
+        search: 'sdk=kt',
+      })
+    })
 
-  // const mockDispatch = jest.fn()
-  // jest.mock('react-redux', () => ({
-  //   useDispatch: () => mockDispatch,
-  // }))
-  //
-  // test('syncs local store with valid url parameters', () => {
-  //   const store = createTestStore({
-  //     settings: {
-  //       initialized: true,
-  //     },
-  //   })
-  //   mockUseLocation.mockReturnValue({
-  //     pathname: '/',
-  //     search: 's=test&sdk=kt',
-  //   } as Location)
-  //   const wrapper = ({ children }: any) => withReduxProvider(children, store)
-  //   renderHook(() => useGlobalStoreSync(), { wrapper })
-  // })
+    test.each([
+      ['alias', 'kt'],
+      ['language', 'kotlin'],
+    ])(
+      'overrides store with sdk full name given valid url sdk %s',
+      (_, param) => {
+        const { push } = useHistory()
+        const store = createTestStore({
+          settings: {
+            initialized: true,
+          },
+        })
+        jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+          pathname: '/',
+          search: `sdk=${param}`,
+        } as unknown as Location)
+        jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+        const wrapper = ({ children }: any) =>
+          withReduxProvider(children, store)
+        renderHook(() => useGlobalStoreSync(), { wrapper })
+        expect(push).not.toHaveBeenCalled()
+        expect(mockDispatch).toHaveBeenLastCalledWith({
+          payload: { sdkLanguage: 'Kotlin' },
+          type: 'settings/setSdkLanguageAction',
+        })
+      }
+    )
+
+    test('updates url sdk param with store sdk for invalid url sdk param', () => {
+      const { push } = useHistory()
+      const store = createTestStore({
+        settings: {
+          initialized: true,
+        },
+      })
+      jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+        pathname: '/',
+        search: `sdk=invalid`,
+      } as unknown as Location)
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+      const wrapper = ({ children }: any) => withReduxProvider(children, store)
+      renderHook(() => useGlobalStoreSync(), { wrapper })
+      expect(mockDispatch).not.toHaveBeenCalled()
+      expect(push).toHaveBeenCalledWith({
+        pathname: '/',
+        search: `sdk=py`,
+      })
+    })
+  })
 })

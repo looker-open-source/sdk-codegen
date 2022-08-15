@@ -55,6 +55,7 @@ export const useTagStoreSync = () => {
       if (validVerbParam) {
         setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
       } else {
+        // must confirm store tag filter param is valid for tag type before updating
         const verb = isValidFilter(location, selectedTagFilter)
           ? selectedTagFilter
           : 'ALL'

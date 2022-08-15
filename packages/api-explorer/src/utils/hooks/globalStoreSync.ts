@@ -29,7 +29,6 @@ import { useSelector } from 'react-redux'
 import { allAlias, findSdk, useNavigation } from '../index'
 import {
   selectSdkLanguage,
-  selectSearchPattern,
   useSettingActions,
   useSettingStoreState,
 } from '../../state'
@@ -38,14 +37,12 @@ import {
  * Hook for syncing global URL params with the Redux store
  * Global search parameters: 's', 'sdk'
  */
-
 export const useGlobalStoreSync = () => {
   const location = useLocation()
   const { navigate } = useNavigation()
   const { setSdkLanguageAction, setSearchPatternAction } = useSettingActions()
   const { initialized } = useSettingStoreState()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const selectedSearchPattern = useSelector(selectSearchPattern)
 
   useEffect(() => {
     if (initialized) {
@@ -56,10 +53,6 @@ export const useGlobalStoreSync = () => {
       if (searchParam) {
         setSearchPatternAction({
           searchPattern: searchParam,
-        })
-      } else {
-        navigate(location.pathname, {
-          s: selectedSearchPattern || null,
         })
       }
 
