@@ -95,14 +95,12 @@ describe('path utils', () => {
   })
 
   describe('isValidFilter', () => {
-    const methodLocation = {
-      pathname: '/3.1/methods/RandomMethod',
-    } as Location
-    const typeLocation = { pathname: '/3.1/types/RandomType' } as Location
+    const methodPath = '/3.1/methods/RandomMethod'
+    const typePath = '/3.1/types/RandomType'
 
     test("validates 'all' as a valid filter for methods and types", () => {
-      expect(isValidFilter(methodLocation, 'ALL')).toBe(true)
-      expect(isValidFilter(typeLocation, 'ALL')).toBe(true)
+      expect(isValidFilter(methodPath, 'ALL')).toBe(true)
+      expect(isValidFilter(typePath, 'ALL')).toBe(true)
     })
 
     const methodFilters = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
@@ -111,35 +109,35 @@ describe('path utils', () => {
     test.each(methodFilters)(
       'validates %s as a valid method filter',
       (filter) => {
-        expect(isValidFilter(methodLocation, filter)).toBe(true)
+        expect(isValidFilter(methodPath, filter)).toBe(true)
       }
     )
 
     test.each(methodFilters)(
       'invalidates %s when containing extra characters',
       (filter) => {
-        expect(isValidFilter(methodLocation, filter + 'x')).toBe(false)
+        expect(isValidFilter(methodPath, filter + 'x')).toBe(false)
       }
     )
 
     test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
-      expect(isValidFilter(typeLocation, filter)).toBe(true)
+      expect(isValidFilter(typePath, filter)).toBe(true)
     })
 
     test.each(typeFilters)(
       'invalidates %s when containing extra characters',
       (filter) => {
-        expect(isValidFilter(typeLocation, filter + 'x')).toBe(false)
+        expect(isValidFilter(typePath, filter + 'x')).toBe(false)
       }
     )
 
     test('invalidates wrong parameter for methods and types', () => {
-      expect(isValidFilter(methodLocation, 'INVALID')).toBe(false)
-      expect(isValidFilter(typeLocation, 'INVALID')).toBe(false)
+      expect(isValidFilter(methodPath, 'INVALID')).toBe(false)
+      expect(isValidFilter(typePath, 'INVALID')).toBe(false)
     })
 
     test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
-      expect(isValidFilter(typeLocation, filter)).toBe(true)
+      expect(isValidFilter(typePath, filter)).toBe(true)
     })
   })
 })

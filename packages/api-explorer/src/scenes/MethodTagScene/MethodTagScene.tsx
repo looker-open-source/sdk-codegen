@@ -63,7 +63,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     let verbParam = searchParams.get('v') || 'ALL'
-    verbParam = isValidFilter(location, verbParam)
+    verbParam = isValidFilter(location.pathname, verbParam)
       ? verbParam.toUpperCase()
       : 'ALL'
     setTagFilterAction({

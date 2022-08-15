@@ -37,7 +37,6 @@ interface QueryParamProps {
 /**
  * Hook for navigating to given route with query params
  */
-
 export const useNavigation = () => {
   const history = useHistory()
 
@@ -75,7 +74,7 @@ export const useNavigation = () => {
    * @param path the destination path
    * @returns a path excluding scene-specific search parameters
    */
-  const buildPathWithGlobal = (path: string) => {
+  const buildPathWithGlobalParams = (path: string) => {
     const params = new URLSearchParams(history.location.search)
     params.delete('v')
     return `${path}?${params.toString()}`
@@ -86,49 +85,13 @@ export const useNavigation = () => {
    *
    * @param path Pathname to navigate to
    */
-  const navigateWithGlobal = (path: string) => {
-    history.push(buildPathWithGlobal(path))
+  const navigateWithGlobalParams = (path: string) => {
+    history.push(buildPathWithGlobalParams(path))
   }
-
-  // TODO: Discuss proposition of using buildGlobalPath/navigateWithGlobal,
-  //  leaves reconciliation step to do the URL fixing
-  // /**
-  //  * Builds a path matching the route used by MethodScene
-  //  * @param specKey A string to identify the spec in the URL
-  //  * @param tag Corresponding method tag
-  //  * @param methodName A method name
-  //  * @returns a Method path with filtered search parameters
-  //  */
-  // const buildMethodScenePath = (
-  //   specKey: string,
-  //   tag: string,
-  //   methodName: string
-  // ) => {
-  //   const params = new URLSearchParams(location.search)
-  //   params.delete('v')
-  //   return `/${specKey}/methods/${tag}/${methodName}${params.toString()}`
-  // }
-  //
-  // /**
-  //  * Builds a path matching the route used by TypeScene
-  //  * @param specKey A string to identify the spec in the URL
-  //  * @param tag Corresponding type tag
-  //  * @param typeName A type name
-  //  * @returns a Type path with filtered search parameters
-  //  */
-  // const buildTypeScenePath = (
-  //   specKey: string,
-  //   tag: string,
-  //   typeName: string
-  // ) => {
-  //   const params = new URLSearchParams(location.search)
-  //   params.delete('v')
-  //   return `/${specKey}/types/${tag}/${typeName}${params.toString()}`
-  // }
 
   return {
     navigate,
-    navigateWithGlobal,
-    buildPathWithGlobal,
+    navigateWithGlobal: navigateWithGlobalParams,
+    buildPathWithGlobal: buildPathWithGlobalParams,
   }
 }

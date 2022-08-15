@@ -146,21 +146,20 @@ export const getSceneType = (path: string) => {
 }
 
 /**
- * Confirms if filter is valid for the page scene type
- * @param location browser location
+ * Confirms if filter is valid for a given method/type tag
+ * @param path browser location pathname
  * @param filter filter tag for page
  */
-export const isValidFilter = (
-  location: HLocation | Location,
-  filter: string
-) => {
-  const sceneType = getSceneType(location.pathname)
-  if (!sceneType) return false
+export const isValidFilter = (path: string, filter: string) => {
+  let isValid
+  const sceneType = getSceneType(path)
+  if (!sceneType) isValid = false
   else if (!filter.localeCompare('all', 'en', { sensitivity: 'base' }))
-    return true
+    isValid = true
   else if (sceneType === 'methods') {
-    return methodFilterOptions.test(filter)
+    isValid = methodFilterOptions.test(filter)
   } else {
-    return typeFilterOptions.test(filter)
+    isValid = typeFilterOptions.test(filter)
   }
+  return isValid
 }

@@ -51,12 +51,12 @@ export const useTagStoreSync = () => {
 
       // syncing verb filter on tag scene page
       const verbParam = params.get('v') || 'ALL'
-      const validVerbParam = isValidFilter(location, verbParam)
+      const validVerbParam = isValidFilter(location.pathname, verbParam)
       if (validVerbParam) {
         setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
       } else {
         // must confirm store tag filter param is valid for tag type before updating
-        const verb = isValidFilter(location, selectedTagFilter)
+        const verb = isValidFilter(location.pathname, selectedTagFilter)
           ? selectedTagFilter
           : 'ALL'
         navigate(location.pathname, {
