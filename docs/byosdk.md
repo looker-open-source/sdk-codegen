@@ -230,9 +230,9 @@ export const LookerAppId = 'x-looker-appid'
 this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
 ```
 
-Where `lookerVersion` is the version of Looker (like 7.10) and `apiVersion` is (currently) either `3.1` or `4.0`.
+Where `lookerVersion` is the version of Looker (like 7.10) and `apiVersion` is (currently) either `4.0` or `3.1` ([deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation)).
 
-This results in the agentTag appearing like `TS-SDK 7.10.3.1`.
+This results in the agentTag appearing like `TS-SDK 22.6.4.0`.
 
 Additional attributes can be added to the agent tag by separating them with semicolons. (`;`)
 
