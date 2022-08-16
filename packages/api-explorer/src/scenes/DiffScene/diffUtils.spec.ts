@@ -27,7 +27,7 @@
 import type { DiffRow } from '@looker/sdk-codegen'
 import { startCount } from '@looker/sdk-codegen'
 import { api, api40 } from '../../test-data'
-import { diffToSpec } from './diffUtils'
+import { diffToSpec, getDiffOptionsFromUrl } from './diffUtils'
 
 describe('diffUtils', () => {
   test('builds a psuedo spec from diff', () => {
@@ -62,5 +62,21 @@ describe('diffUtils', () => {
     ])
     expect(Object.keys(spec.tags)).toEqual(['Query', 'Dashboard'])
     expect(Object.keys(spec.types)).toEqual([])
+  })
+
+  describe('getDiffOptionsFromUrl', () => {
+    test('returns null if provided null input or given invalid diffscene options', () => {
+      expect(getDiffOptionsFromUrl(null)).toBeNull()
+      const testOptionsParam = 'INVALID,INVALID1,INVALID2'
+      expect(getDiffOptionsFromUrl(testOptionsParam)).toBeNull()
+    })
+
+    test('omits non diffScene options from input', () => {
+      const testOptionsParam = 'INVALID,missing,type'
+      expect(getDiffOptionsFromUrl(testOptionsParam)).toEqual([
+        'missing',
+        'type',
+      ])
+    })
   })
 })

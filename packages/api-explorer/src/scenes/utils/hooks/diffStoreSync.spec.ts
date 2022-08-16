@@ -29,7 +29,7 @@ import type { Location } from 'history'
 import * as reactRedux from 'react-redux'
 import * as routerLocation from 'react-router-dom'
 import { createTestStore, withReduxProvider } from '../../../test-utils'
-import { useTagStoreSync } from './tagStoreSync'
+import { useDiffStoreSync } from './diffStoreSync'
 
 jest.mock('react-router', () => {
   const ReactRouter = jest.requireActual('react-router')
@@ -50,36 +50,37 @@ describe('useDiffStoreSync', () => {
   test('does nothing if uninitialized', () => {
     const { push } = useHistory()
     const wrapper = ({ children }: any) => withReduxProvider(children)
-    renderHook(() => useTagStoreSync(), { wrapper })
+    renderHook(() => useDiffStoreSync(), { wrapper })
     expect(push).not.toHaveBeenCalled()
   })
 
-  describe.each([
-    ['methods', 'get'],
-    ['types', 'specification'],
-  ])('tag filter verb for sidenav %s tab', (tagType, verb) => {
-    test('overrides store tag filter given valid url tag filter param', () => {
+  describe('diff scene options parameter', () => {
+    test('overrides store diff options given valid url diff options param', () => {
       const { push } = useHistory()
       const store = createTestStore({
         settings: {
           initialized: true,
         },
       })
+      const testOptions = ['missing', 'params', 'type']
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
-        pathname: `/4.0/${tagType}/ApiAuth`,
-        search: `v=${verb}`,
+        pathname: `/`,
+        search: `opts=${testOptions.join(',')}`,
       } as unknown as Location)
       jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
       const wrapper = ({ children }: any) => withReduxProvider(children, store)
-      renderHook(() => useTagStoreSync(), { wrapper })
-      expect(push).not.toHaveBeenCalled()
+      renderHook(() => useDiffStoreSync(), { wrapper })
+      expect(push).toHaveBeenCalledWith({
+        pathname: '/',
+        search: 'opts=missing%2Cparams%2Ctype',
+      })
       expect(mockDispatch).toHaveBeenLastCalledWith({
-        payload: { tagFilter: verb.toUpperCase() },
-        type: 'settings/setTagFilterAction',
+        payload: { diffOptions: testOptions },
+        type: 'settings/setDiffOptionsAction',
       })
     })
 
-    test('updates url with store tag filter given invalid url tag filter param', () => {
+    test('updates url with store diff options given invalid url diff options param', () => {
       const { push } = useHistory()
       const store = createTestStore({
         settings: {
@@ -87,15 +88,41 @@ describe('useDiffStoreSync', () => {
         },
       })
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
-        pathname: `/4.0/${tagType}/ApiAuth`,
-        search: 'v=invalid',
+        pathname: '/',
+        search: 'opts=invalid',
       } as unknown as Location)
       jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
       const wrapper = ({ children }: any) => withReduxProvider(children, store)
-      renderHook(() => useTagStoreSync(), { wrapper })
+      renderHook(() => useDiffStoreSync(), { wrapper })
       expect(push).toHaveBeenCalledWith({
-        pathname: `/4.0/${tagType}/ApiAuth`,
-        search: '',
+        pathname: `/`,
+        search: 'opts=missing%2Cparams%2Ctype%2Cbody%2Cresponse',
+      })
+    })
+
+    test('filters invalid options out of from url options parameter if present', () => {
+      const { push } = useHistory()
+      const store = createTestStore({
+        settings: {
+          initialized: true,
+        },
+      })
+      const testOptions = ['missing', 'INVALID_OPTION', 'type']
+      jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+        pathname: `/`,
+        search: `opts=${testOptions.join(',')}`,
+      } as unknown as Location)
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+      const wrapper = ({ children }: any) => withReduxProvider(children, store)
+      renderHook(() => useDiffStoreSync(), { wrapper })
+      const expectedOptions = ['missing', 'type']
+      expect(mockDispatch).toHaveBeenLastCalledWith({
+        payload: { diffOptions: expectedOptions },
+        type: 'settings/setDiffOptionsAction',
+      })
+      expect(push).toHaveBeenCalledWith({
+        pathname: `/`,
+        search: 'opts=missing%2Ctype',
       })
     })
   })

@@ -132,5 +132,5 @@ export const getDiffOptionsFromUrl = (opts: string | null) => {
       diffOptions.push(option.toLowerCase())
     }
   }
-  return diffOptions
+  return diffOptions.length ? diffOptions : null
 }
