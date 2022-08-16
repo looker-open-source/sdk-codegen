@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { api } from '../../test-data'
+import { api } from '../../../../test-data'
 import { buildResponseTree } from './utils'
 
 describe('DocResponses utils', () => {

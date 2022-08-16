@@ -49,7 +49,6 @@ import {
   DocMarkdown,
   DocRateLimited,
   DocReferences,
-  DocResponses,
   DocSDKs,
   DocSdkUsage,
   DocSource,
@@ -58,7 +57,7 @@ import {
   DocSchema,
 } from '../../components'
 import { selectSdkLanguage } from '../../state'
-import { DocOperation, DocRequestBody } from './components'
+import { DocOperation, DocRequestBody, DocResponses } from './components'
 
 interface MethodSceneProps {
   api: ApiModel
