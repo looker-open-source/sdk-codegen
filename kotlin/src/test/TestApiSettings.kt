@@ -22,11 +22,11 @@
  * THE SOFTWARE.
  */
 
-import com.looker.sdk.ApiSettings
 import com.looker.rtl.AuthSession
 import com.looker.rtl.ConfigurationProvider
 import com.looker.rtl.DEFAULT_TIMEOUT
 import com.looker.sdk.*
+import com.looker.sdk.ApiSettings
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -151,5 +151,4 @@ class TestApiSettings {
         assertEquals(mockId, config["client_id"])
         assertEquals(mockSecret, config["client_secret"])
     }
-
 }

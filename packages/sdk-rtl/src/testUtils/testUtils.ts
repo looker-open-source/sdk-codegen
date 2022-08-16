@@ -46,6 +46,7 @@ const homeToRoost = '../../../../'
 
 export const getRootPath = () => path.join(__dirname, homeToRoost)
 export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8)
 
 /**
  * Reads configuration information, returning various test values

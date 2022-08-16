@@ -49,16 +49,9 @@ import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
-import kotlin.collections.Map
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.emptyMap
-import kotlin.collections.filter
-import kotlin.collections.forEach
-import kotlin.collections.joinToString
-import kotlin.collections.map
 import kotlin.collections.set
-import kotlin.collections.toMutableMap
 
 sealed class SDKResponse {
     /** A successful SDK call. */
@@ -298,8 +291,7 @@ class Transport(val options: TransportOptions) {
         val result = try {
             runBlocking {
                 SDKResponse.SDKSuccessResponse(
-                    client.request<HttpStatement>(builder).execute {
-                        response: HttpResponse ->
+                    client.request<HttpStatement>(builder).execute { response: HttpResponse ->
                         response.receive<T>()
                     }
                 )
@@ -313,7 +305,13 @@ class Transport(val options: TransportOptions) {
         return result
     }
 
-    fun httpRequestBuilder(method: HttpMethod, path: String, queryParams: Values, authenticator: Authenticator?, body: Any?): HttpRequestBuilder {
+    fun httpRequestBuilder(
+        method: HttpMethod,
+        path: String,
+        queryParams: Values,
+        authenticator: Authenticator?,
+        body: Any?
+    ): HttpRequestBuilder {
         val builder = HttpRequestBuilder()
         // Set the request method
         builder.method = method.value
@@ -339,11 +337,13 @@ class Transport(val options: TransportOptions) {
                     // Encoded form, probably automatically does headers["Content-Type"] = "application/x-www-form-urlencoded"
                     builder.body = body
                 }
+
                 is String -> {
                     // Presume this is a manually user-encoded value
                     headers["Content-Type"] = "application/x-www-form-urlencoded"
                     builder.body = body
                 }
+
                 else -> {
                     // Request body
                     val json = defaultSerializer()
@@ -373,11 +373,11 @@ data class SDKErrorInfo(
     var documentationUrl: String,
 )
 
-fun parseSDKError(msg: String) : SDKErrorInfo {
+fun parseSDKError(msg: String): SDKErrorInfo {
     val rx = Regex("""\s+Text:\s+"(.*)"$""")
     val info = rx.find(msg)
     var result = SDKErrorInfo("", listOf(), "")
-    info?.let{
+    info?.let {
         val (payload) = it.destructured
         val gson = Gson()
         result = gson.fromJson(payload, SDKErrorInfo::class.java)

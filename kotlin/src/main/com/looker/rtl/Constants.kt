@@ -33,7 +33,8 @@ import java.util.*
 
 const val MATCH_CHARSET = ";.*charset="
 const val MATCH_CHARSET_UTF8 = """$MATCH_CHARSET.*\butf-8\b"""
-const val MATCH_MODE_STRING = """(^application/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text/|.*\+xml\b|$MATCH_CHARSET)"""
+const val MATCH_MODE_STRING =
+    """(^application/.*(\bjson\b|\bxml\b|\bsql\b|\bgraphql\b|\bjavascript\b|\bx-www-form-urlencoded\b)|^text/|.*\+xml\b|$MATCH_CHARSET)"""
 const val MATCH_MODE_BINARY = """^image/|^audio/|^video/|^font/|^application/|^multipart/"""
 
 val StringMatch = Regex(MATCH_MODE_STRING, RegexOption.IGNORE_CASE)
