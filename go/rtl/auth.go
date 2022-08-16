@@ -118,7 +118,7 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return fmt.Errorf("response error. status=%s. error=%s", res.Status, string(b))
 	}
 
-	if res.StatusCode == 204 { // for delete endpoints there's no response body
+	if res.StatusCode == 204 { // 204 No Content. DELETE endpoints returns response with no body
 		return nil
 	}
 
