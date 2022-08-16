@@ -118,3 +118,19 @@ export const diffToSpec = (
   result.types = {}
   return result
 }
+
+/**
+ * Gets all valid diff options from the url opts parameter
+ * @param opts url diff options parameter value
+ */
+export const getDiffOptionsFromUrl = (opts: string | null) => {
+  // expect input to be a comma-delimited list as a string
+  if (!opts) return null
+  const diffOptions = []
+  for (const option of opts.split(',')) {
+    if (allDiffToggles.includes(option.toLowerCase())) {
+      diffOptions.push(option.toLowerCase())
+    }
+  }
+  return diffOptions
+}

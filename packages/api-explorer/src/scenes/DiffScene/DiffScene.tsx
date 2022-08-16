@@ -41,9 +41,14 @@ import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
 import { ApixSection } from '../../components'
-import { selectCurrentSpec } from '../../state'
+import {
+  selectCurrentSpec,
+  selectDiffOptions,
+  useSettingActions,
+} from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
-import { diffSpecs, standardDiffToggles } from './diffUtils'
+import { useDiffStoreSync } from '../utils/hooks/diffStoreSync'
+import { diffSpecs, getDiffOptionsFromUrl } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
 const diffToggles = [
@@ -85,6 +90,8 @@ const validateParam = (specs: SpecList, specKey = '') => {
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const adaptor = getApixAdaptor()
   const { navigate } = useNavigation()
+  const selectedDiffOptions = useSelector(selectDiffOptions)
+  const { setDiffOptionsAction } = useSettingActions()
   const spec = useSelector(selectCurrentSpec)
   const currentSpecKey = spec.key
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
@@ -102,7 +109,8 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const [rightApi, setRightApi] = useState<ApiModel>(() =>
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
-  const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
+  const [toggles, setToggles] = useState<string[]>(selectedDiffOptions)
+  useDiffStoreSync()
 
   useEffect(() => {
     if (r !== rightKey) {
@@ -151,8 +159,20 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
 
   const handleTogglesChange = (values?: string[]) => {
     const newToggles = values || []
-    setToggles(newToggles)
+    navigate(location.pathname, { opts: newToggles.join(',') })
   }
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search)
+    const diffOptionsParam = getDiffOptionsFromUrl(searchParams.get('opts'))
+    setDiffOptionsAction({
+      diffOptions: diffOptionsParam || [],
+    })
+  }, [location.search])
+
+  useEffect(() => {
+    setToggles(selectedDiffOptions)
+  }, [selectedDiffOptions])
 
   return (
     <ApixSection>
@@ -197,7 +217,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
               id="options"
               name="toggles"
               placeholder="Comparison options"
-              defaultValues={toggles}
+              values={toggles}
               onChange={handleTogglesChange}
               options={diffToggles}
             />

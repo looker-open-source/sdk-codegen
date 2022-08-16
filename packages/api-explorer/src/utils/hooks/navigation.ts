@@ -32,6 +32,8 @@ interface QueryParamProps {
   sdk?: string | null
   /** Tag Scene Filter **/
   v?: string | null
+  /** Diff Scene Options **/
+  opts?: string | null
 }
 
 /**
@@ -76,7 +78,11 @@ export const useNavigation = () => {
    */
   const buildPathWithGlobalParams = (path: string) => {
     const params = new URLSearchParams(history.location.search)
-    params.delete('v')
+    for (const key of params.keys()) {
+      if (key !== 's' && key !== 'sdk') {
+        params.delete(key)
+      }
+    }
     return `${path}?${params.toString()}`
   }
 
