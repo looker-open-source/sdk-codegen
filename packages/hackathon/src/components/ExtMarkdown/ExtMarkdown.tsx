@@ -26,8 +26,8 @@
 
 import type { FC, ReactNode } from 'react'
 import React from 'react'
-import { getExtensionSDK } from '@looker/extension-sdk'
 import { Markdown } from '@looker/code-editor'
+import { getEnvAdaptor } from '@looker/extension-utils'
 
 interface ExtMarkdownProps {
   source: string
@@ -53,8 +53,8 @@ export const ExtMarkdown: FC<ExtMarkdownProps> = ({
   paragraphOverride,
 }) => {
   const openBrowserWindow = (_pathname: string, href: string) => {
-    const ext = getExtensionSDK()
-    ext.openBrowserWindow(href)
+    const adaptor = getEnvAdaptor()
+    adaptor.openBrowserWindow(href)
   }
 
   return (

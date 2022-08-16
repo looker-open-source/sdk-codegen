@@ -41,17 +41,35 @@ import {
 } from '@looker/components'
 import { getEnvAdaptor } from './adaptorUtils'
 
-interface DetailedErrorsProps {
+export type ShowErrorDocEvent = (url?: string) => JSX.Element | string
+
+export interface APIErrorDisplayProps {
+  /** Populated SDK error information, which may contain detailed errors */
   error: LookerSDKError
+  /** callback function to show documentation url, or content derived from the documentation url */
+  showDoc?: ShowErrorDocEvent
 }
 
-export const DetailedErrors: FC<DetailedErrorsProps> = ({ error }) => {
-  if (!error?.errors) return null
+export const standardDocLink = (docUrl?: string | null) => {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     const adaptor = getEnvAdaptor()
     adaptor.openBrowserWindow(e.currentTarget.href)
   }
+
+  if (!docUrl) return <></>
+  return (
+    <Link href={docUrl} key={docUrl} onClick={onClick}>
+      {docUrl}
+    </Link>
+  )
+}
+
+export const DetailedErrors: FC<APIErrorDisplayProps> = ({
+  error,
+  showDoc = standardDocLink,
+}) => {
+  if (!error?.errors) return null
 
   return (
     <Table>
@@ -72,13 +90,7 @@ export const DetailedErrors: FC<DetailedErrorsProps> = ({ error }) => {
               <Span>{message}</Span>
             </TableDataCell>
             <TableDataCell p="xsmall">
-              <Link
-                href={documentation_url!}
-                key={`${field}_link`}
-                onClick={onClick}
-              >
-                {documentation_url}
-              </Link>
+              {showDoc(documentation_url ?? '')}
             </TableDataCell>
           </TableRow>
         ))}
@@ -87,31 +99,9 @@ export const DetailedErrors: FC<DetailedErrorsProps> = ({ error }) => {
   )
 }
 
-const docLinkHandler = (docUrl?: string | null) => {
-  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    const adaptor = getEnvAdaptor()
-    adaptor.openBrowserWindow(e.currentTarget.href)
-  }
-
-  if (!docUrl) return null
-  return (
-    <Link href={docUrl} key={docUrl} onClick={onClick}>
-      {docUrl}
-    </Link>
-  )
-}
-
-interface ErrorDisplayProps {
-  /** Populated SDK error information, which may contain detailed errors */
-  error: LookerSDKError
-  /** callback function to show documentation url, or content derived from the documentation url */
-  showDoc?: (url?: string) => Element
-}
-
-export const APIErrorDisplay: FC<ErrorDisplayProps> = ({
+export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
   error,
-  showDoc = docLinkHandler,
+  showDoc = standardDocLink,
 }) => {
   return (
     <>

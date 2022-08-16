@@ -25,21 +25,22 @@
  */
 
 import type { LookerSDKError } from '@looker/sdk-rtl'
-import { screen } from '@testing-library/react'
-import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
+import { screen } from '@testing-library/react'
 import { Heading } from '@looker/components'
+import React from 'react'
 import type { ShowErrorDocEvent } from './APIErrorDisplay'
-import { APIErrorDisplay } from './APIErrorDisplay'
+import { APIErrorDialog } from './APIErrorDialog'
 
-describe('APIErrorDisplay', () => {
+describe('APIErrorDialog', () => {
+  // TODO test closing the dialog
   it('shows simple errors', () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
-    renderWithTheme(<APIErrorDisplay error={simple} />)
+    renderWithTheme(<APIErrorDialog error={simple} />)
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()
     const link = screen.getByRole('link')
@@ -54,7 +55,7 @@ describe('APIErrorDisplay', () => {
       name: 'Error',
       message: 'simple error',
     }
-    renderWithTheme(<APIErrorDisplay error={simpler} />)
+    renderWithTheme(<APIErrorDialog error={simpler} />)
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()
     const link = screen.queryByRole('link')
@@ -73,7 +74,7 @@ describe('APIErrorDisplay', () => {
         <Heading type="h3">{`given: ${url}`}</Heading>
       </>
     )
-    renderWithTheme(<APIErrorDisplay error={simpler} showDoc={spoof} />)
+    renderWithTheme(<APIErrorDialog error={simpler} showDoc={spoof} />)
     const heading = screen.getByRole('heading', { name: 'spoof' })
     expect(heading).toBeInTheDocument()
     const override = screen.getByRole('heading', {
@@ -87,7 +88,7 @@ describe('APIErrorDisplay', () => {
       name: '',
       message: '',
     }
-    renderWithTheme(<APIErrorDisplay error={simpler} />)
+    renderWithTheme(<APIErrorDialog error={simpler} />)
     const heading = screen.getByRole('heading', { name: 'Unknown error' })
     expect(heading).toBeInTheDocument()
     const link = screen.queryByRole('link')
@@ -115,7 +116,7 @@ describe('APIErrorDisplay', () => {
         },
       ],
     }
-    renderWithTheme(<APIErrorDisplay error={detailed} />)
+    renderWithTheme(<APIErrorDialog error={detailed} />)
     const heading = screen.getByRole('heading', { name: 'detailed error' })
     expect(heading).toBeInTheDocument()
     const links = screen.getAllByRole('link')
