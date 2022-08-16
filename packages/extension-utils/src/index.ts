@@ -25,6 +25,7 @@
  */
 
 export * from './adaptorUtils'
+export * from './APIErrorDisplay'
 export * from './browserAdaptor'
 export * from './extensionAdaptor'
 export * from './authUtils'

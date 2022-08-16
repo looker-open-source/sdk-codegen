@@ -30,7 +30,7 @@
     "watch": "yarn lerna exec --scope @looker/run-it --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.5.5",
+    "@looker/components-test-utils": "^1.5.26",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
