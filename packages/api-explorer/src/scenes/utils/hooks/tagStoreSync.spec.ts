@@ -67,7 +67,7 @@ describe('useTagStoreSync', () => {
       })
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
         pathname: `/4.0/${tagType}/ApiAuth`,
-        search: `v=${verb}`,
+        search: `t=${verb}`,
       } as unknown as Location)
       jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
       const wrapper = ({ children }: any) => withReduxProvider(children, store)
@@ -88,7 +88,7 @@ describe('useTagStoreSync', () => {
       })
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
         pathname: `/4.0/${tagType}/ApiAuth`,
-        search: 'v=invalid',
+        search: 't=invalid',
       } as unknown as Location)
       jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
       const wrapper = ({ children }: any) => withReduxProvider(children, store)

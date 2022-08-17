@@ -35,7 +35,7 @@ jest.mock('react-router-dom', () => {
       push: mockHistoryPush,
       location: {
         pathname: '/3.1/methods/Auth',
-        search: 's=test&sdk=py&v=get',
+        search: 's=test&sdk=py&t=get',
       },
     }),
   }
@@ -45,7 +45,7 @@ describe('useNavigation', () => {
   const history = useHistory()
   const { navigate, navigateWithGlobalParams, buildPathWithGlobalParams } =
     useNavigation()
-  const curParams = new URLSearchParams(history.location.search) // 's=test&sdk=py&v=get'
+  const curParams = new URLSearchParams(history.location.search)
   const route = `/3.1`
 
   describe('navigate', () => {
@@ -53,7 +53,7 @@ describe('useNavigation', () => {
       navigate(route)
       expect(curParams.get('s')).toBe('test')
       expect(curParams.get('sdk')).toBe('py')
-      expect(curParams.get('v')).toBe('get')
+      expect(curParams.get('t')).toBe('get')
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
         search: curParams.toString(),
@@ -71,7 +71,7 @@ describe('useNavigation', () => {
       navigate(route, { s: null, sdk: 'test' })
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
-        search: 'sdk=test&v=get',
+        search: 'sdk=test&t=get',
       })
     })
 
@@ -79,11 +79,11 @@ describe('useNavigation', () => {
       const newParams = new URLSearchParams()
       newParams.set('s', 'newTest')
       newParams.set('sdk', 'kt')
-      newParams.set('v', 'post')
+      newParams.set('t', 'post')
       navigate(route, {
         s: newParams.get('s'),
         sdk: newParams.get('sdk'),
-        v: newParams.get('v'),
+        t: newParams.get('t'),
       })
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
@@ -92,18 +92,18 @@ describe('useNavigation', () => {
     })
   })
 
-  describe('buildPathWithGlobal', () => {
-    test('creates path with global parameters and excluding scene specific parameters', () => {
-      curParams.delete('v')
+  describe('buildPathWithGlobalParams', () => {
+    test('creates path with global parameters excluding scene specific parameters', () => {
+      curParams.delete('t')
       expect(buildPathWithGlobalParams(route)).toEqual(
         `${route}?${curParams.toString()}`
       )
     })
   })
 
-  describe('navigateWithGlobal', () => {
+  describe('navigateWithGlobalParams', () => {
     test('preserves global query params and removes scene specific parameters', () => {
-      curParams.delete('v')
+      curParams.delete('t')
       navigateWithGlobalParams(route)
       expect(curParams.get('s')).toEqual('test')
       expect(mockHistoryPush).lastCalledWith(`${route}?${curParams.toString()}`)

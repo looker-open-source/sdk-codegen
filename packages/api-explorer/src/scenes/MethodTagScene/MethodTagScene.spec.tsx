@@ -99,7 +99,7 @@ describe('MethodTagScene', () => {
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: location.pathname,
-        search: 'v=get',
+        search: 't=get',
       })
     })
     /** Filter by DELETE operation */
@@ -108,7 +108,7 @@ describe('MethodTagScene', () => {
       // eslint-disable-next-line jest-dom/prefer-in-document
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: location.pathname,
-        search: 'v=delete',
+        search: 't=delete',
       })
     })
   })

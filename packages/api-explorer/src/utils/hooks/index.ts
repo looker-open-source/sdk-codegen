@@ -23,11 +23,5 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { useNavigation, useGlobalStoreSync } from './hooks'
+export { useNavigation } from './navigation'
+export { useGlobalStoreSync } from './globalStoreSync'

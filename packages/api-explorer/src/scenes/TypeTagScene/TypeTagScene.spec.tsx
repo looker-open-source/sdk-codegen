@@ -98,7 +98,7 @@ describe('TypeTagScene', () => {
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: location.pathname,
-        search: 'v=specification',
+        search: 't=specification',
       })
     })
     /** Filter by REQUEST */
@@ -106,7 +106,7 @@ describe('TypeTagScene', () => {
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: location.pathname,
-        search: 'v=request',
+        search: 't=request',
       })
     })
   })

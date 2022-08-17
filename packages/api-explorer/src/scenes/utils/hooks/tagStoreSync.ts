@@ -36,7 +36,7 @@ import { isValidFilter, useNavigation } from '../../../utils'
 /**
  * Hook for syncing tag scene URL params with the Redux store
  *
- * Tag scene specific search parameters: 'v'
+ * Tag scene specific search parameters: 't'
  */
 export const useTagStoreSync = () => {
   const location = useLocation()
@@ -50,7 +50,7 @@ export const useTagStoreSync = () => {
       const params = new URLSearchParams(location.search)
 
       // syncing verb filter on tag scene page
-      const verbParam = params.get('v') || 'ALL'
+      const verbParam = params.get('t') || 'ALL'
       const validVerbParam = isValidFilter(location.pathname, verbParam)
       if (validVerbParam) {
         setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
@@ -60,7 +60,7 @@ export const useTagStoreSync = () => {
           ? selectedTagFilter
           : 'ALL'
         navigate(location.pathname, {
-          v: verb === 'ALL' ? null : verb.toLowerCase(),
+          t: verb === 'ALL' ? null : verb.toLowerCase(),
         })
       }
     }
