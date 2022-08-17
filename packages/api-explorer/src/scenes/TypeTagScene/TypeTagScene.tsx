@@ -32,7 +32,7 @@ import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath, isValidFilter, useNavigation } from '../../utils'
 import { selectTagFilter, useSettingActions } from '../../state'
-import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
+import { useTagStoreSync } from '../utils'
 import { getMetaTypes } from './utils'
 
 interface TypeTagSceneProps {
