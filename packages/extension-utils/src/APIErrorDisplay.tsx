@@ -90,7 +90,7 @@ export const DetailedErrors: FC<APIErrorDisplayProps> = ({
               <Span>{message}</Span>
             </TableDataCell>
             <TableDataCell p="xsmall">
-              {showDoc(documentation_url ?? '')}
+              {showDoc(documentation_url)}
             </TableDataCell>
           </TableRow>
         ))}
