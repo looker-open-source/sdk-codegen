@@ -63,6 +63,7 @@ describe('ErrorDoc', () => {
   const internal = 'https://docs.looker.com/r/err/internal/422/post/bogus/bulk'
   const badLogin = 'https://docs.looker.com/r/err/4.0/404/post/login'
   const another404 = 'https://docs.looker.com/r/err/4.0/404/post/another'
+  const partial404 = '/err/4.0/404/post/another'
   const hostname = 'https://looker.sdk'
   const settings = { base_url: hostname } as IApiSettings
   const transport = new BrowserTransport(settings)
@@ -111,6 +112,7 @@ describe('ErrorDoc', () => {
     it.each<[string, string, number]>([
       [badLogin, '## API Response 404 for `login`', 2], // valid mock url and content so load will be called twice
       [another404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
+      [partial404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
       [internal, `${no}422/post/bogus/bulk`, 1], // invalid, default to not found
       [external, `${no}429/delete/bogus/{namespace}/purge`, 1], // invalid, default to not found
       ['', `${no}bad error code link`, 0], // just bad all around
@@ -152,6 +154,7 @@ describe('ErrorDoc', () => {
         apiPath: '/post/bogus/bulk',
       })
     })
+
     it('resolves external paths', () => {
       const actual = errDoc.parse(external)
       expect(actual).toBeDefined()
@@ -160,6 +163,17 @@ describe('ErrorDoc', () => {
         apiVersion: '4.0',
         statusCode: '429',
         apiPath: '/delete/bogus/:namespace/purge',
+      })
+    })
+
+    it('handles partial urls', () => {
+      const actual = errDoc.parse(partial404)
+      expect(actual).toBeDefined()
+      expect(actual).toEqual({
+        redirector: '/err/',
+        apiVersion: '4.0',
+        statusCode: '404',
+        apiPath: '/post/another',
       })
     })
   })
