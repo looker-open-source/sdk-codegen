@@ -33,7 +33,7 @@ import type {
   IMethodResponse,
 } from '@looker/sdk-codegen'
 
-import { ExploreType } from '..'
+import { ExploreType } from '../../../../components'
 
 interface DocResponseTypesProps {
   api: ApiModel
