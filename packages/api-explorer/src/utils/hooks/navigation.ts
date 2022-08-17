@@ -25,6 +25,8 @@
  */
 import { useHistory } from 'react-router-dom'
 
+const globalParams = ['s', 'sdk']
+
 interface QueryParamProps {
   /** Search Query **/
   s?: string | null
@@ -77,7 +79,7 @@ export const useNavigation = () => {
   const buildPathWithGlobalParams = (path: string) => {
     const params = new URLSearchParams(history.location.search)
     for (const key of params.keys()) {
-      if (key !== 's' && key !== 'sdk') {
+      if (!globalParams.includes(key)) {
         params.delete(key)
       }
     }
