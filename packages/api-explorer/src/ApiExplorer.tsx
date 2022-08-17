@@ -60,16 +60,15 @@ import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
 import {
   useSettingActions,
-  useSettingStoreState,
   useLodeActions,
   useLodesStoreState,
   useSpecActions,
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
-  selectSdkLanguage,
+  useSettingStoreState,
 } from './state'
-import { getSpecKey, diffPath, useNavigation, findSdk, allAlias } from './utils'
+import { getSpecKey, diffPath, findSdk, useGlobalStoreSync } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -86,23 +85,21 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  const { initialized } = useSettingStoreState()
   useLodesStoreState()
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const { initLodesAction } = useLodeActions()
+  const { initialized } = useSettingStoreState()
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
     useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
-  const navigate = useNavigation()
+  useGlobalStoreSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
-  const searchParams = new URLSearchParams(location.search)
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
@@ -122,29 +119,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   }, [])
 
   useEffect(() => {
-    // reconcile local storage state with URL or vice versa
-    if (initialized) {
-      const sdkParam = searchParams.get('sdk') || ''
-      const sdk = findSdk(sdkParam)
-      const validSdkParam =
-        !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
-        !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
-      if (validSdkParam) {
-        // sync store with URL
-        setSdkLanguageAction({
-          sdkLanguage: sdk.language,
-        })
-      } else {
-        // sync URL with store
-        const { alias } = findSdk(selectedSdkLanguage)
-        navigate(location.pathname, {
-          sdk: alias === allAlias ? null : alias,
-        })
-      }
-    }
-  }, [initialized])
-
-  useEffect(() => {
     const maybeSpec = location.pathname?.split('/')[1]
     if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
@@ -153,6 +127,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     if (!initialized) return
+    const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
     const sdkParam = searchParams.get('sdk') || 'all'
     const { language: sdkLanguage } = findSdk(sdkParam)
