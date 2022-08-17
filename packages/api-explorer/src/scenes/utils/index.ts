@@ -23,32 +23,5 @@
  SOFTWARE.
 
  */
-import { api } from '../../test-data'
-import { buildResponseTree } from './utils'
 
-describe('DocResponses utils', () => {
-  describe('buildResponseTree', () => {
-    test('it builds a response tree', () => {
-      const method = api.methods.run_look
-      const responses = method.responses
-      const actual = buildResponseTree(responses)
-      const responseStatuses = [
-        '200: Look',
-        '400: Bad Request',
-        '404: Not Found',
-        '422: Validation Error',
-        '429: Too Many Requests',
-      ]
-      const mediaTypes = ['text', 'application/json', 'image/png', 'image/jpeg']
-      expect(Object.keys(actual)).toEqual(responseStatuses)
-
-      responseStatuses.forEach((status) => {
-        expect(Object.keys(actual[status])).toEqual(mediaTypes)
-      })
-
-      expect(actual['200: Look']['application/json']).toEqual(
-        method.primaryResponse
-      )
-    })
-  })
-})
+export { useTagStoreSync } from './hooks'

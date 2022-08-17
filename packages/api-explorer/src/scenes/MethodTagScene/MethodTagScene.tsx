@@ -32,7 +32,7 @@ import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
 import { buildMethodPath, isValidFilter, useNavigation } from '../../utils'
 import { selectTagFilter, useSettingActions } from '../../state'
-import { useTagStoreSync } from '../utils/hooks/tagStoreSync'
+import { useTagStoreSync } from '../utils'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -57,13 +57,13 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
 
   const handleChange = (filter: string) => {
     navigate(location.pathname, {
-      v: filter === 'ALL' ? null : filter.toLowerCase(),
+      t: filter === 'ALL' ? null : filter.toLowerCase(),
     })
   }
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
-    let verbParam = searchParams.get('v') || 'ALL'
+    let verbParam = searchParams.get('t') || 'ALL'
     verbParam = isValidFilter(location.pathname, verbParam)
       ? verbParam.toUpperCase()
       : 'ALL'

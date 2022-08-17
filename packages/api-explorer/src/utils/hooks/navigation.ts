@@ -25,13 +25,15 @@
  */
 import { useHistory } from 'react-router-dom'
 
+const globalParams = ['s', 'sdk']
+
 interface QueryParamProps {
   /** Search Query **/
   s?: string | null
   /** Chosen SDK Language **/
   sdk?: string | null
   /** Tag Scene Filter **/
-  v?: string | null
+  t?: string | null
   /** Diff Scene Options **/
   opts?: string | null
 }
@@ -79,7 +81,7 @@ export const useNavigation = () => {
   const buildPathWithGlobalParams = (path: string) => {
     const params = new URLSearchParams(history.location.search)
     for (const key of params.keys()) {
-      if (key !== 's' && key !== 'sdk') {
+      if (!globalParams.includes(key)) {
         params.delete(key)
       }
     }
