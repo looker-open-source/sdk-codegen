@@ -43,7 +43,7 @@ export type ErrorCodeIndex = Record<string, IErrorDocItem>
 export const ErrorDocNotFound = '### No documentation found for '
 
 /** API error document_url link pattern */
-const ErrorDocPatternExpression = String.raw`(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`
+const ErrorDocPatternExpression = String.raw`(?<redirector>(https:\/\/docs\.looker\.com\/r)?\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`
 export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i')
 
 export interface IErrorDocLink {
@@ -60,6 +60,9 @@ export interface IErrorDocLink {
 export interface IErrorDoc {
   /** Index of all know error codes. Call load() to populate it */
   index?: ErrorCodeIndex
+
+  /** Url of API error document index */
+  indexUrl: string
 
   /**
    * Extract error url into its parts

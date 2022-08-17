@@ -41,52 +41,11 @@ import type {
   ITransportSettings,
   Values,
 } from './transport'
+import { readFile, TestConfig } from './testUtils'
 
-const sampleIndex: ErrorCodeIndex = {
-  '404': {
-    url: '404.md',
-  },
-  '400/get/content_metadata/{content_metadata_id}': {
-    url: 'content_metadata_400.md',
-  },
-  '422/post/folders': {
-    url: 'create_folder_422.md',
-  },
-  '422/post/groups': {
-    url: 'create_group_422.md',
-  },
-  '404/get/dashboards/{dashboard_id}/dashboard_filters': {
-    url: 'dashboard_dashboard_filters_404.md',
-  },
-  '404/delete/alerts/{alert_id}': {
-    url: 'delete_alert_404.md',
-  },
-  '404/delete/boards/{board_id}': {
-    url: 'delete_board_404.md',
-  },
-  '404/delete/dashboard_filters/{dashboard_filter_id}': {
-    url: 'delete_dashboard_filter_404.md',
-  },
-  '404/delete/looks/{look_id}': {
-    url: 'delete_look_404.md',
-  },
-  '404/post/login': {
-    url: 'login_404.md',
-  },
-  '404/get/roles/{role_id}': {
-    url: 'role_404.md',
-  },
-  '404/post/queries/run/{result_format}': {
-    url: 'run_inline_query_404.md',
-  },
-  '422/post/queries/run/{result_format}': {
-    url: 'run_inline_query_422.md',
-  },
-  '404/get/looks/{look_id}/run/{result_format}': {
-    url: 'run_look_404.md',
-  },
-}
-
+const config = TestConfig()
+const errorIndex = `${config.testPath}errorCodesIndex.json`
+const sampleIndex: ErrorCodeIndex = JSON.parse(readFile(errorIndex))
 const generic404 = `## Generic 404`
 const badLoginMd = `## API Response 404 for \`login\`
 
@@ -104,6 +63,7 @@ describe('ErrorDoc', () => {
   const internal = 'https://docs.looker.com/r/err/internal/422/post/bogus/bulk'
   const badLogin = 'https://docs.looker.com/r/err/4.0/404/post/login'
   const another404 = 'https://docs.looker.com/r/err/4.0/404/post/another'
+  const partial404 = '/err/4.0/404/post/another'
   const hostname = 'https://looker.sdk'
   const settings = { base_url: hostname } as IApiSettings
   const transport = new BrowserTransport(settings)
@@ -152,6 +112,7 @@ describe('ErrorDoc', () => {
     it.each<[string, string, number]>([
       [badLogin, '## API Response 404 for `login`', 2], // valid mock url and content so load will be called twice
       [another404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
+      [partial404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
       [internal, `${no}422/post/bogus/bulk`, 1], // invalid, default to not found
       [external, `${no}429/delete/bogus/{namespace}/purge`, 1], // invalid, default to not found
       ['', `${no}bad error code link`, 0], // just bad all around
@@ -193,6 +154,7 @@ describe('ErrorDoc', () => {
         apiPath: '/post/bogus/bulk',
       })
     })
+
     it('resolves external paths', () => {
       const actual = errDoc.parse(external)
       expect(actual).toBeDefined()
@@ -203,13 +165,24 @@ describe('ErrorDoc', () => {
         apiPath: '/delete/bogus/:namespace/purge',
       })
     })
+
+    it('handles partial urls', () => {
+      const actual = errDoc.parse(partial404)
+      expect(actual).toBeDefined()
+      expect(actual).toEqual({
+        redirector: '/err/',
+        apiVersion: '4.0',
+        statusCode: '404',
+        apiPath: '/post/another',
+      })
+    })
   })
 
   describe('specPath', () => {
     it.each<[string, string]>([
       ['/x/:f/y/:z', '/x/{f}/y/{z}'],
       ['/x/{f}/y/{z}', '/x/{f}/y/{z}'],
-      ['/x/:foo/y/:zoo', '/x/{foo}/y/{zoo}'],
+      ['/x/:foo_bar/y/:zoo', '/x/{foo_bar}/y/{zoo}'],
       ['', ''],
     ])('path: "%s" should be "%s"', (path, expected) =>
       expect(errDoc.specPath(path)).toEqual(expected)
@@ -232,6 +205,7 @@ describe('ErrorDoc', () => {
       ['', ''],
       ['foo', ''],
       ['/foo.md', ''],
+      ['404.md', ''],
       ['login_404.md', 'login'],
       ['login_2_404.md', 'login_2'],
       ['and_another_404.md', 'and_another'],
