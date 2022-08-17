@@ -100,7 +100,7 @@ describe('useDiffStoreSync', () => {
       })
     })
 
-    test('filters invalid options out of from url options parameter if present', () => {
+    test('filters invalid options out of url options parameter if present', () => {
       const { push } = useHistory()
       const store = createTestStore({
         settings: {

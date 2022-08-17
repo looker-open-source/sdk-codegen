@@ -23,40 +23,73 @@
  SOFTWARE.
 
  */
-// import React from 'react'
-// import { screen } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
-//
-// import { getLoadedSpecs } from '../../test-data'
-// import { renderWithRouterAndReduxProvider } from '../../test-utils'
-// import { DiffScene } from './DiffScene'
-//
-// const mockHistoryPush = jest.fn()
-// jest.mock('react-router-dom', () => {
-//   const ReactRouterDOM = jest.requireActual('react-router-dom')
-//   return {
-//     ...ReactRouterDOM,
-//     useHistory: () => ({
-//       push: mockHistoryPush,
-//       location,
-//     }),
-//   }
-// })
-//
-// describe('DiffScene', () => {
-//   const specs = getLoadedSpecs()
-//   const toggleNavigation = () => false
-//   test('renders with comparison options', () => {
-//     renderWithRouterAndReduxProvider(
-//       <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
-//     )
-//
-//     userEvent.click(screen.getByRole('combobox'))
-//     userEvent.click(
-//       screen.getByRole('option', {
-//         name: 'Missing',
-//       })
-//     )
-//     expect(mockHistoryPush).toHaveBeenCalled()
-//   })
-// })
+import React from 'react'
+import { screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+
+import type { SpecItem } from '@looker/sdk-codegen'
+import { getLoadedSpecs } from '../../test-data'
+import {
+  createTestStore,
+  renderWithRouterAndReduxProvider,
+} from '../../test-utils'
+import { getApixAdaptor } from '../../utils'
+import { DiffScene } from './DiffScene'
+
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location,
+    }),
+  }
+})
+
+const specs = getLoadedSpecs()
+class MockApixAdaptor {
+  async fetchSpec(spec: SpecItem) {
+    return new Promise(() => specs[spec.key])
+  }
+}
+
+const mockApixAdaptor = new MockApixAdaptor()
+jest.mock('../../utils/apixAdaptor', () => {
+  const apixAdaptor = jest.requireActual('../../utils/apixAdaptor')
+  return {
+    ...apixAdaptor,
+    getApixAdaptor: jest.fn(),
+  }
+})
+
+describe('DiffScene', () => {
+  ;(getApixAdaptor as jest.Mock).mockReturnValue(mockApixAdaptor)
+  Element.prototype.scrollTo = jest.fn()
+  Element.prototype.scrollIntoView = jest.fn()
+  const store = createTestStore({
+    specs: { specs, currentSpecKey: '3.1' },
+  })
+  const toggleNavigation = () => false
+  test('toggling comparison option pushes it to url as param', async () => {
+    renderWithRouterAndReduxProvider(
+      <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
+      ['/diff/3.1'],
+      store
+    )
+
+    userEvent.click(screen.getByPlaceholderText('Comparison options'))
+    userEvent.click(
+      screen.getByRole('option', {
+        name: 'Missing',
+      })
+    )
+    await waitFor(() => {
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: '/',
+        search: 'opts=missing',
+      })
+    })
+  })
+})
