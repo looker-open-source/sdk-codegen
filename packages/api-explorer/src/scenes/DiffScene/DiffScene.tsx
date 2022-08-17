@@ -84,7 +84,7 @@ const validateParam = (specs: SpecList, specKey = '') => {
 
 export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const adaptor = getApixAdaptor()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const spec = useSelector(selectCurrentSpec)
   const currentSpecKey = spec.key
   const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)

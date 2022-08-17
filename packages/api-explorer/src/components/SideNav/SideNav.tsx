@@ -70,7 +70,7 @@ interface SideNavProps {
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const location = useLocation()
-  const navigate = useNavigation()
+  const { navigate, navigateWithGlobalParams } = useNavigation()
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -84,12 +84,12 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        navigate(parts.join('/'))
+        navigateWithGlobalParams(parts.join('/'))
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        navigate(parts.join('/'))
+        navigateWithGlobalParams(parts.join('/'))
       }
     }
   }

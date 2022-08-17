@@ -40,7 +40,7 @@ interface ApiSpecSelectorProps {
 
 export const ApiSpecSelector: FC<ApiSpecSelectorProps> = ({ spec }) => {
   const location = useLocation()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const specs = useSelector(selectSpecs)
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
