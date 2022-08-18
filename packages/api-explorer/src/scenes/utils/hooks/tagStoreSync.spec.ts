@@ -66,7 +66,7 @@ describe('useTagStoreSync', () => {
         },
       })
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
-        pathname: `/4.0/${tagType}/ApiAdiffstoreuth`,
+        pathname: `/4.0/${tagType}/ApiAuth`,
         search: `t=${verb}`,
       } as unknown as Location)
       jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)

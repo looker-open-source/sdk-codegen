@@ -71,7 +71,7 @@ describe('diffUtils', () => {
       expect(getDiffOptionsFromUrl(testOptionsParam)).toBeNull()
     })
 
-    test('omits non diffScene options from input', () => {
+    test('omits invalid diffScene options from input', () => {
       const testOptionsParam = 'INVALID,missing,type'
       expect(getDiffOptionsFromUrl(testOptionsParam)).toEqual([
         'missing',

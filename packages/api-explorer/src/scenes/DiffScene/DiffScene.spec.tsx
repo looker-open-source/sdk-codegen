@@ -28,6 +28,10 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type { SpecItem } from '@looker/sdk-codegen'
+import { useHistory } from 'react-router-dom'
+import * as routerLocation from 'react-router-dom'
+import type { Location } from 'history'
+import * as reactRedux from 'react-redux'
 import { getLoadedSpecs } from '../../test-data'
 import {
   createTestStore,
@@ -36,15 +40,12 @@ import {
 import { getApixAdaptor } from '../../utils'
 import { DiffScene } from './DiffScene'
 
-const mockHistoryPush = jest.fn()
-jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+jest.mock('react-router', () => {
+  const ReactRouter = jest.requireActual('react-router')
   return {
-    ...ReactRouterDOM,
-    useHistory: () => ({
-      push: mockHistoryPush,
-      location,
-    }),
+    ...ReactRouter,
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
   }
 })
 
@@ -65,20 +66,27 @@ jest.mock('../../utils/apixAdaptor', () => {
 })
 
 describe('DiffScene', () => {
+  const mockDispatch = jest.fn()
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
   ;(getApixAdaptor as jest.Mock).mockReturnValue(mockApixAdaptor)
   Element.prototype.scrollTo = jest.fn()
   Element.prototype.scrollIntoView = jest.fn()
-  const store = createTestStore({
-    specs: { specs, currentSpecKey: '3.1' },
-  })
+
   const toggleNavigation = () => false
-  test('toggling comparison option pushes it to url as param', async () => {
+  test('toggling comparison option pushes param to url', async () => {
+    const { push } = useHistory()
+    const store = createTestStore({
+      specs: { specs, currentSpecKey: '3.1' },
+      settings: { initialized: true },
+    })
     renderWithRouterAndReduxProvider(
       <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
       ['/diff/3.1'],
       store
     )
-
     userEvent.click(screen.getByPlaceholderText('Comparison options'))
     userEvent.click(
       screen.getByRole('option', {
@@ -86,10 +94,54 @@ describe('DiffScene', () => {
       })
     )
     await waitFor(() => {
-      expect(mockHistoryPush).toHaveBeenCalledWith({
+      expect(push).toHaveBeenCalledWith({
         pathname: '/',
         search: 'opts=missing',
       })
     })
+    // TODO: test URL change leads to store dispatch? - change mock history push implementation to change our location
+    // TODO: test that toggling another will push both options to store/url
   })
+
+  test.todo(
+    'rendering scene with opts param in url sets selected options in selector',
+    async () => {
+      jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+        pathname: `/`,
+        search: `opts=missing%2Ctype%2Cresponse`,
+      } as unknown as Location)
+      const store = createTestStore({
+        specs: { specs, currentSpecKey: '3.1' },
+        settings: { initialized: true, diffOptions: [] },
+      })
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+      renderWithRouterAndReduxProvider(
+        <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
+        ['/diff/3.1'],
+        store
+      )
+      expect(mockDispatch).toHaveBeenLastCalledWith({
+        payload: { diffOptions: ['missing', 'type', 'response'] },
+        type: 'settings/setDiffOptionsAction',
+      })
+      expect(
+        screen.getByRole('option', {
+          name: 'Missing',
+        })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('option', {
+          name: 'Type',
+        })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('option', {
+          name: 'Response',
+        })
+      ).toBeInTheDocument()
+    }
+  )
+
+  test.todo('unselecting comparison option will remove it from url opts param')
+  test.todo('selecting clear option will remove all params from url opts param')
 })
