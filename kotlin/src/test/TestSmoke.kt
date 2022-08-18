@@ -2,11 +2,11 @@ import com.looker.rtl.DelimArray
 import com.looker.rtl.SDKResponse
 import com.looker.sdk.*
 import org.junit.Test
+import java.io.Serializable
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import java.io.Serializable
 
 class TestSmoke {
     private val sdk by lazy { TestConfig().sdk }
@@ -218,7 +218,7 @@ class TestSmoke {
 /**
  * Dummy user data class based on [User] but with a subset of its properties.
  */
-data class DummyUser (
+data class DummyUser(
     var id: Long? = null,
     var credentials_api3: Array<CredentialsApi3>? = null,
     var display_name: String? = null,

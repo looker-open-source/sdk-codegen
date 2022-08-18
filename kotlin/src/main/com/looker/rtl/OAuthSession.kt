@@ -27,14 +27,17 @@ package com.looker.rtl
 import com.looker.sdk.AccessToken
 import java.security.MessageDigest
 import java.security.SecureRandom
-import java.util.Base64
+import java.util.*
 
 fun base64UrlEncode(bytes: ByteArray): String {
     return Base64.getUrlEncoder().encodeToString(bytes)
 }
 
 @ExperimentalUnsignedTypes
-class OAuthSession(override val apiSettings: ConfigurationProvider, override val transport: Transport = Transport(apiSettings)) :
+class OAuthSession(
+    override val apiSettings: ConfigurationProvider,
+    override val transport: Transport = Transport(apiSettings)
+) :
     AuthSession(apiSettings, transport) {
     private var random = SecureRandom()
     private var codeVerifier: String = ""

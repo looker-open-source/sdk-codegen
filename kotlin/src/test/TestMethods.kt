@@ -316,7 +316,7 @@ class TestMethods {
         prepBoard()
         listGetter<BoardItem, String, BoardItem>(
             { sdk.all_board_items() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board_item(id, fields) }
         )
     }
@@ -333,7 +333,7 @@ class TestMethods {
         prepBoard()
         listGetter<Board, String, Board>(
             { sdk.all_boards() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board(id, fields) }
         )
     }
@@ -343,7 +343,7 @@ class TestMethods {
         prepBoard()
         listGetter<BoardSection, String, BoardSection>(
             { sdk.all_board_sections() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board_section(id, fields) }
         )
     }
@@ -352,7 +352,7 @@ class TestMethods {
     fun testAllIntegrationHubs() {
         listGetter<IntegrationHub, String, IntegrationHub>(
             { sdk.all_integration_hubs() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.integration_hub(id, fields) }
         )
     }
