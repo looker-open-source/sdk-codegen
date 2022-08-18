@@ -22,22 +22,20 @@ This repository contains:
 
 We hope to help people who want to use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
 
-An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) describes the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
+The Looker SDK has several parts:
 
-A Looker SDK has several parts:
-
-- The **Looker API**, described by an OpenAPI specification (e.g., the Swagger 2.x representation found at
+- The **Looker API**, described by an [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) (e.g., the Swagger 2.x representation found at
   `https://<your-looker-domain>:19999/api/4.0/swagger.json`). The 4.0 API is our current & stable API. As of June 2022, [3.x is deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-- The **Looker API Docs viewer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available on each Looker server instance.
+- The **Looker API Explorer**, an interactive reference, accessible either stand-alone at [developers.looker.com/api/explorer/](https://developers.looker.com/api/explorer/), or installable into your Looker instance as an extension from the Looker Marketplace.
 
-- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages.
+- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Some SDKs are [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#support_levels) whereas others are community-supported.
 
 ## SDK multi-API-version support
 
 The 4.0 version of the API is the current and stable version of the API, in addition to the 3.x API which is now [deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-Many SDKs support and expose both API versions in the same SDK package, including all [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#looker_supported) SDKs other than Swift.
+Some SDKs support and expose both API versions in the same SDK package, including all [Looker-supported SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
 
 For SDKs that supports multiple API versions, there will be `methods.*` and `models.*` collections generated for each API version. Each API version is exposed under a distinct class name from which to instantiate an initial SDK object.
 
@@ -54,10 +52,10 @@ Please review the following table for a breakdown of the options to initialize t
 | -------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Python](python)           | `looker_sdk.init31()`                                                                           | `looker_sdk.init40()`                                                    |                                                                                                                                                            |
 | [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()`                       | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
-| [Kotlin](kotlin)           | Do not use                                                                                      | `LookerSDK()`                                                            | API 4.0 was created to better serve strongly-typed languages, like Kotlin. Kotlin only works with API 4.0. Also, the initializer uses an unversioned name. |
-| [Swift](swift/looker)      | Not applicable                                                                                  | `Looker40SDK()`                                                          | Swift only works with API 4.0.                                                                                                                             |
-| [Look#](csharp)            | `Looker31SDK()`                                                                                 | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker.                                                                                                                     |
-| [GoLook](go)               | Not applicable                                                                                  | `v4.NewLookerSDK()`                                                      | Community-supported Go SDK for Looker. Go only works with API 4.0.                                                                                         |
+| [Kotlin](kotlin)           | Not supported                                                                                   | `LookerSDK()`                                                            | Community-supported SDK. Uses API 4.0 exclusively. The initializer uses an unversioned name.                                                               |
+| [Swift](swift/looker)      | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
+| [Look#](csharp)            | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
+| [GoLook](go)               | Not supported                                                                                   | `v4.NewLookerSDK()`                                                      | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
 
@@ -170,16 +168,6 @@ python
 ```
 
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is self-signed and errors are thrown, you can explicitly turn off SSL verification by putting `verify_ssl=false` in the `looker.ini` file configuration section.
-
-### Using the Legacy generator
-
-To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
-
-- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts). Currently, only Go and C# have legacy language generation configured, and we now have a prototype Look# SDK that can be used instead of the legacy C# generator.
-
-- the legacy generator defaults to using the API 4.0 specification. To use deprecated API 3.1, specify `api_version=3.1` in the `Looker` section of your `looker.ini`
-
-- use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI generator to output files to the `./api/*` path
 
 ### Additional scripts
 
