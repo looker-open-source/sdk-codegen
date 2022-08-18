@@ -44,8 +44,9 @@ describe('Diff Scene', () => {
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)
   })
-  it('loads the default scene (/diff/3.1)', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1`)
+
+  it('loads the default scene (/3.1/diff)', async () => {
+    await goToPage(`${BASE_URL}/3.1/diff`)
     const body = await page.$('body')
 
     // "Base" input element
@@ -106,9 +107,8 @@ describe('Diff Scene', () => {
     }
   })
 
-  it('loads a comparison scene (/diff/3.1/4.0) and navigates from it', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1/4.0`)
-
+  it('loads a comparison scene (/3.1/diff/4.0) and navigates from it', async () => {
+    await goToPage(`${BASE_URL}/3.1/diff/4.0`)
     // "Base" input element
     {
       const baseInputElement = await page.$(baseInputSelector)
@@ -189,7 +189,7 @@ describe('Diff Scene', () => {
   })
 
   it('updates when a comparison is chosen or switched', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1`)
+    await goToPage(`${BASE_URL}/3.1/diff`)
 
     // "Base" input element
     const baseInputElement = await page.$(baseInputSelector)
@@ -219,7 +219,7 @@ describe('Diff Scene', () => {
     // Check the URL
     // Would like to do this earlier, but not sure what to wait on
     const compUrl = page.url()
-    expect(compUrl).toEqual(`${BASE_URL}/diff/3.1/4.0?sdk=py`)
+    expect(compUrl).toEqual(`${BASE_URL}/3.1/diff/4.0?sdk=py`)
 
     // Check the results
     const diffResultCards = await page.$$(resultCardsSelector)
@@ -247,7 +247,7 @@ describe('Diff Scene', () => {
     await page.waitForTimeout(150)
 
     const switchUrl = page.url()
-    expect(switchUrl).toEqual(`${BASE_URL}/diff/4.0/3.1?sdk=py`)
+    expect(switchUrl).toEqual(`${BASE_URL}/4.0/diff/3.1?sdk=py`)
 
     // Check the results again, even though they should be the same
     const diff40to31Page1Methods = await Promise.all(

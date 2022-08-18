@@ -93,6 +93,6 @@ describe('Header', () => {
           name: 'Compare Specifications',
         })
         .closest('a')
-    ).toHaveAttribute('href', `/diff/${spec.key}/`)
+    ).toHaveAttribute('href', `/${spec.key}/diff`)
   })
 })
