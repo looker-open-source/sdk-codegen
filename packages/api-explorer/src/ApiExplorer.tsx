@@ -68,7 +68,7 @@ import {
   selectCurrentSpec,
   useSettingStoreState,
 } from './state'
-import { getSpecKey, diffPath, findSdk, useGlobalStoreSync } from './utils'
+import { getSpecKey, findSdk, useGlobalStoreSync } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -120,7 +120,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const maybeSpec = location.pathname?.split('/')[1]
-    if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
+    if (spec && maybeSpec && maybeSpec !== spec.key) {
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
     }
   }, [location.pathname, spec])
@@ -149,7 +149,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const themeOverrides = adaptor.themeOverrides()
 
   let neededSpec = location.pathname?.split('/')[1]
-  if (!neededSpec || neededSpec === diffPath) {
+  if (!neededSpec) {
     neededSpec = spec?.key
   }
 
@@ -219,7 +219,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
                 <AppRouter
                   specKey={spec.key}
                   api={spec.api!}
-                  specs={specs}
                   toggleNavigation={toggleNavigation}
                 />
               </Layout>
