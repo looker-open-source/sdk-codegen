@@ -47,7 +47,7 @@ import {
   useSettingActions,
 } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
-import { useDiffStoreSync } from '../utils/hooks/diffStoreSync'
+import { useDiffStoreSync } from '../utils'
 import { diffSpecs, getDiffOptionsFromUrl } from './diffUtils'
 import { DocDiff } from './DocDiff'
 

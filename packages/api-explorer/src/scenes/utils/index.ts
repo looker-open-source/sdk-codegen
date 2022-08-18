@@ -25,3 +25,4 @@
  */
 
 export { useTagStoreSync } from './hooks'
+export { useDiffStoreSync } from './hooks'

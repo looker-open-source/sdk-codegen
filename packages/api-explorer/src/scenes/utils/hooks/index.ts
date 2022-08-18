@@ -25,3 +25,4 @@
  */
 
 export { useTagStoreSync } from './tagStoreSync'
+export { useDiffStoreSync } from './diffStoreSync'
