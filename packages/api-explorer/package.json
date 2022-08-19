@@ -83,6 +83,7 @@
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",
+    "eslint": "^8.22.0",
     "history": "^4.10.1",
     "lodash": "^4.17.19",
     "react": "^16.13.1",
