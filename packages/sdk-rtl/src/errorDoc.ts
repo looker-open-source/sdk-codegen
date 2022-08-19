@@ -24,7 +24,6 @@
 
  */
 
-import type { BaseTransport } from './baseTransport'
 import type { IAPIMethods } from './apiMethods'
 import { sdkOk } from './transport'
 
@@ -121,23 +120,34 @@ export interface IErrorDoc {
   methodName(errorMdUrl: string): string
 }
 
+export type SDKGetCallback = (sdk: IAPIMethods, url: string) => Promise<string>
+/**
+ * Default fetcher using the SDK
+ * @param url to get
+ * @private
+ */
+const sdkUrlGet = async (sdk: IAPIMethods, url: string) => {
+  return await sdkOk(
+    sdk.authSession.transport.request<string, Error>('GET', url)
+  )
+}
+
 export class ErrorDoc implements IErrorDoc {
   private _index?: ErrorCodeIndex = undefined
-  private transport: BaseTransport
   constructor(
     public sdk: IAPIMethods,
+    public getter: SDKGetCallback = sdkUrlGet,
     public readonly cdnUrl: string = ErrorCodesUrl
-  ) {
-    this.transport = sdk.authSession.transport as BaseTransport
-  }
+  ) {}
 
   public async load(): Promise<ErrorCodeIndex> {
     if (!this._index) {
       try {
-        const result = await sdkOk(
-          this.transport.request<ErrorCodeIndex, Error>('GET', this.indexUrl)
-        )
-        this._index = result
+        let result = await this.getter(this.sdk, this.indexUrl)
+        if (typeof result === 'string') {
+          result = JSON.parse(result)
+        }
+        this._index = result as unknown as ErrorCodeIndex
       } catch (e: any) {
         return Promise.resolve({})
       }
@@ -173,7 +183,7 @@ export class ErrorDoc implements IErrorDoc {
 
   async getContent(url: string): Promise<string> {
     try {
-      return await sdkOk(this.transport.request<string, Error>('GET', url))
+      return await this.getter(this.sdk, url)
     } catch (e: any) {
       return Promise.resolve(this.notFound(e.message))
     }

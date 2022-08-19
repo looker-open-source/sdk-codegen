@@ -27,8 +27,8 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { ExtMarkdown } from '@looker/extension-utils'
 import type { IProjectProps } from '../../../models'
-import { ExtMarkdown } from '../../../components'
 import { getTechnologies } from '../../../data/hack_session/selectors'
 import { getMembers, techDescriptions } from '../../utils'
 

@@ -28,8 +28,6 @@ import type { LookerSDKError } from '@looker/sdk-rtl'
 import { screen } from '@testing-library/react'
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { Heading } from '@looker/components'
-import type { ShowErrorDocEvent } from './APIErrorDisplay'
 import { APIErrorDisplay } from './APIErrorDisplay'
 
 describe('APIErrorDisplay', () => {
@@ -59,27 +57,6 @@ describe('APIErrorDisplay', () => {
     expect(heading).toBeInTheDocument()
     const link = screen.queryByRole('link')
     expect(link).not.toBeInTheDocument()
-  })
-
-  it('overrides showDoc', () => {
-    const documentation_url = 'https://docs.looker.com/r/err/4.0/404/post/login'
-    const simpler: LookerSDKError = {
-      name: 'Error',
-      message: 'spoof',
-      documentation_url,
-    }
-    const spoof: ShowErrorDocEvent = (url?: string) => (
-      <>
-        <Heading type="h3">{`given: ${url}`}</Heading>
-      </>
-    )
-    renderWithTheme(<APIErrorDisplay error={simpler} showDoc={spoof} />)
-    const heading = screen.getByRole('heading', { name: 'spoof' })
-    expect(heading).toBeInTheDocument()
-    const override = screen.getByRole('heading', {
-      name: `given: ${documentation_url}`,
-    })
-    expect(override).toBeInTheDocument()
   })
 
   it('defaults an empty error message', () => {

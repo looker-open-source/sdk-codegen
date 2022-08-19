@@ -27,7 +27,7 @@
 import type { FC, ReactNode } from 'react'
 import React from 'react'
 import { Markdown } from '@looker/code-editor'
-import { getEnvAdaptor } from '@looker/extension-utils'
+import { getEnvAdaptor } from './adaptorUtils'
 
 interface ExtMarkdownProps {
   source: string

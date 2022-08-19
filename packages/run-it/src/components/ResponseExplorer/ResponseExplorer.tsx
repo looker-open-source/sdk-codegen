@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Table,
   TableBody,
@@ -34,9 +34,12 @@ import {
   Span,
   TableHead,
   TableHeaderCell,
+  IconButton,
 } from '@looker/components'
 import styled from 'styled-components'
-import type { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse, LookerSDKError } from '@looker/sdk-rtl'
+import { Warning } from '@styled-icons/material/Warning'
+import { APIErrorDialog, APIErrorDisplay } from '@looker/extension-utils'
 import { ShowResponse } from '../ShowResponse'
 import { CollapserCard } from '../Collapser'
 import { DarkSpan, RunItHeading } from '../common'
@@ -139,13 +142,35 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
 }) => {
   // TODO make a badge for the verb.
   // Once we are satisfied with the badge in the api-explorer package it should be moved here
-
+  const [isOpen, setIsOpen] = useState(false)
+  const error: LookerSDKError =
+    response &&
+    response.statusCode >= 400 &&
+    response.contentType === 'application/json'
+      ? JSON.parse(response.body)
+      : undefined
   return (
     <>
       {!response && <DarkSpan>No response was received</DarkSpan>}
       {response && (
         <>
-          <RunItHeading as="h4">
+          <RunItHeading as="h4" color={error ? 'critical' : undefined}>
+            {error && (
+              <>
+                <APIErrorDialog
+                  error={error}
+                  isOpen={isOpen}
+                  setOpen={setIsOpen}
+                />
+                <IconButton
+                  size="xsmall"
+                  onClick={() => setIsOpen(true)}
+                  icon={<Warning />}
+                  aria-label="API error"
+                  label="API Error"
+                />
+              </>
+            )}
             {`${verb || ''} ${path || ''} (${response.statusCode}: ${
               response.statusMessage
             })`}
@@ -157,6 +182,11 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
           >
             <ShowResponse response={response} />
           </CollapserCard>
+          {error && (
+            <CollapserCard heading={'Error information'}>
+              <APIErrorDisplay error={error} showDoc={true} />
+            </CollapserCard>
+          )}
           <ResponseHeaders response={response} />
         </>
       )}

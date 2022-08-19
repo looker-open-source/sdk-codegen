@@ -29,6 +29,7 @@
     "@looker/extension-sdk": "^22.10.1",
     "@looker/extension-sdk-react": "^22.10.1",
     "@looker/sdk-rtl": "^21.3.4",
+    "@looker/code-editor": "^0.1.23",
     "react": "^16.13.1"
   },
   "devDependencies": {

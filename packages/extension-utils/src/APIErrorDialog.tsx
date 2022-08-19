@@ -25,21 +25,33 @@
  */
 
 import type { FC } from 'react'
-import React, { useState } from 'react'
-import { Dialog } from '@looker/components'
+import React from 'react'
+import { Dialog, Space } from '@looker/components'
 import type { APIErrorDisplayProps } from './APIErrorDisplay'
-import { APIErrorDisplay, standardDocLink } from './APIErrorDisplay'
+import { APIErrorDisplay } from './APIErrorDisplay'
 
-export const APIErrorDialog: FC<APIErrorDisplayProps> = ({
+interface APIErrorDialogProps extends APIErrorDisplayProps {
+  /** toggle for dialog being open */
+  isOpen?: boolean
+  /** callback for toggling the dialog display */
+  setOpen?: (open: boolean) => void
+}
+
+export const APIErrorDialog: FC<APIErrorDialogProps> = ({
   error,
-  showDoc = standardDocLink,
+  isOpen,
+  setOpen = (t) => !t,
+  showDoc = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(!!error)
   return (
     <Dialog
       isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
-      content={<APIErrorDisplay error={error} showDoc={showDoc} />}
+      onClose={() => setOpen(false)}
+      content={
+        <Space border>
+          <APIErrorDisplay error={error} showDoc={showDoc} />
+        </Space>
+      }
     ></Dialog>
   )
 }
