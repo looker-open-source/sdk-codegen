@@ -126,9 +126,10 @@ export const diffToSpec = (
 export const getDiffOptionsFromUrl = (opts: string | null) => {
   // expect input to be a comma-delimited list as a string
   if (!opts) return null
-  const diffOptions = []
+  const diffOptions: string[] = []
   for (const option of opts.split(',')) {
-    if (allDiffToggles.includes(option.toLowerCase())) {
+    const op = option.toLowerCase()
+    if (allDiffToggles.includes(op) && !diffOptions.includes(op)) {
       diffOptions.push(option.toLowerCase())
     }
   }

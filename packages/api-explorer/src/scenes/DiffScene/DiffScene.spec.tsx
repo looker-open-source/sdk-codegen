@@ -27,7 +27,7 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import type { SpecItem } from '@looker/sdk-codegen'
+import type { SpecItem, SpecList } from '@looker/sdk-codegen'
 import { useHistory } from 'react-router-dom'
 import * as routerLocation from 'react-router-dom'
 import type { Location } from 'history'
@@ -40,16 +40,38 @@ import {
 import { getApixAdaptor } from '../../utils'
 import { DiffScene } from './DiffScene'
 
+// jest.mock('react-router', () => {
+//   const ReactRouter = jest.requireActual('react-router')
+//   return {
+//     ...ReactRouter,
+//     useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+//     useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
+//   }
+// })
+
 jest.mock('react-router', () => {
+  const mockLocation = {
+    pathname: '/',
+    search: '',
+  }
   const ReactRouter = jest.requireActual('react-router')
   return {
     ...ReactRouter,
-    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
-    useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
+    useHistory: jest.fn().mockReturnValue({
+      push: jest.fn((location) => {
+        mockLocation.pathname = location.pathname
+        mockLocation.search = location.search
+      }),
+      location,
+    }),
+    useLocation: jest.fn(() => ({
+      pathname: jest.fn().mockReturnValue(mockLocation.pathname),
+      search: jest.fn().mockReturnValue(mockLocation.search),
+    })),
   }
 })
 
-const specs = getLoadedSpecs()
+const specs = getLoadedSpecs() as SpecList
 class MockApixAdaptor {
   async fetchSpec(spec: SpecItem) {
     return new Promise(() => specs[spec.key])
@@ -78,9 +100,10 @@ describe('DiffScene', () => {
   const toggleNavigation = () => false
   test('toggling comparison option pushes param to url', async () => {
     const { push } = useHistory()
+    jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
     const store = createTestStore({
       specs: { specs, currentSpecKey: '3.1' },
-      settings: { initialized: true },
+      settings: { initialized: true, diffOptions: [] },
     })
     renderWithRouterAndReduxProvider(
       <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
@@ -94,10 +117,14 @@ describe('DiffScene', () => {
       })
     )
     await waitFor(() => {
-      expect(push).toHaveBeenCalledWith({
+      expect(push).toHaveBeenLastCalledWith({
         pathname: '/',
         search: 'opts=missing',
       })
+    })
+    expect(mockDispatch).toHaveBeenLastCalledWith({
+      payload: { diffOptions: ['missing'] },
+      type: 'settings/setDiffOptionsAction',
     })
     // TODO: test URL change leads to store dispatch? - change mock history push implementation to change our location
     // TODO: test that toggling another will push both options to store/url
