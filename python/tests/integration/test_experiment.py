@@ -31,7 +31,21 @@ def test_crud_user(sdk: mtds.Looker40SDK):
     assert not user.is_disabled
     assert user.locale == "fr"
     
+    # sudo checks
     user_id = user.id
+    sudo_auth = sdk.login_user(user_id)
+    assert isinstance(sudo_auth.access_token, str)
+    assert sudo_auth.access_token != ""
+    sdk.auth.login_user(user_id)
+    user = sdk.me()
+    assert user.first_name == TEST_FIRST_NAME
+    assert user.last_name == TEST_LAST_NAME
+    sdk.auth.logout()
+    user = sdk.me()
+    assert user.first_name != TEST_FIRST_NAME
+    assert user.last_name != TEST_LAST_NAME
+    
+    # Try adding email creds
     sdk.create_user_credentials_email(
         user_id, ml.WriteCredentialsEmail(email="john.doe@looker.com")
     )
