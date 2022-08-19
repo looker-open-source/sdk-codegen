@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
+import React from 'react'
+import { Tab2, Tabs2 } from '@looker/components'
 import type { KeyedCollection } from '@looker/sdk-codegen'
 import type { FC } from 'react'
-import React from 'react'
 import { DocCode } from '../DocCode'
 
 interface DocDeclarationsProps {
@@ -37,23 +37,12 @@ interface DocDeclarationsProps {
  * Renders all provided declarations
  * @param declarations A collection of SDK declarations in various languages
  */
-export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => {
-  const tabs = useTabs()
-
-  return (
-    <>
-      <TabList {...tabs}>
-        {Object.keys(declarations).map((language) => (
-          <Tab key={language}>{language}</Tab>
-        ))}
-      </TabList>
-      <TabPanels {...tabs} pt="0">
-        {Object.entries(declarations).map(([language, code]) => (
-          <TabPanel key={language}>
-            <DocCode language={language} code={code} />
-          </TabPanel>
-        ))}
-      </TabPanels>
-    </>
-  )
-}
+export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => (
+  <Tabs2>
+    {Object.entries(declarations).map(([language, code]) => (
+      <Tab2 key={language} id={language} label={language}>
+        <DocCode code={code} language={language} />
+      </Tab2>
+    ))}
+  </Tabs2>
+)
