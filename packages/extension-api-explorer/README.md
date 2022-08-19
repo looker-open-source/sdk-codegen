@@ -18,13 +18,13 @@ The API Explorer extension can be manually installed and run with a Looker insta
          local_storage: yes
          navigation: no
          new_window: yes
-         new_window_external_urls: ["https://looker.com/*"]
+         new_window_external_urls: ["https://looker.com/*", "https://developer.mozilla.org/*", "https://docs.looker.com/*"]
          raw_api_request: yes
          use_form_submit: yes
          use_embeds: yes
          use_clipboard: yes
          core_api_methods: ["versions", "api_spec"]
-         external_api_urls : ["https://raw.githubusercontent.com","http://localhost:30000","https://localhost:8080","https://marketplace-api.looker.com"]
+         external_api_urls : ["https://raw.githubusercontent.com","http://localhost:30000","https://localhost:8080","https://marketplace-api.looker.com","https://docs.looker.com","https://developer.mozilla.org/"]
          oauth2_urls: []
       }
    }

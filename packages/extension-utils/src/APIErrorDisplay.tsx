@@ -106,10 +106,12 @@ export const DetailedErrors: FC<DetailedErrorProps> = ({ error }) => {
 }
 
 const fetcher = async (_sdk: IAPIMethods, url: string) => {
-  return (await fetch(url)).text()
-  // return Promise.resolve(
-  //   `how do I fetch ${url} for both browser and extension?`
-  // )
+  let result = await (await fetch(url)).text()
+  const stop = result.indexOf('## API Response Type')
+  if (stop > 0) {
+    result = result.substring(0, stop - 1).trim()
+  }
+  return result
 }
 
 export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
