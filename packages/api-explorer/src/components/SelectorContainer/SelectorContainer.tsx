@@ -55,7 +55,7 @@ export const SelectorContainer: FC<SelectorContainerProps> = ({
     <Space width="auto" {...spaceProps}>
       <SdkLanguageSelector />
       <ApiSpecSelector spec={spec} />
-      <Link to={buildPathWithGlobalParams(`/${diffPath}/${spec.key}/`)}>
+      <Link to={buildPathWithGlobalParams(`/${spec.key}/${diffPath}`)}>
         <IconButton
           toggle
           label="Compare Specifications"
