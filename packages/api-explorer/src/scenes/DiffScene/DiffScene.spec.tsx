@@ -24,13 +24,9 @@
 
  */
 import React from 'react'
-// import { screen, waitFor } from '@testing-library/react'
-// import userEvent from '@testing-library/user-event'
 
 import type { SpecItem, SpecList } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router-dom'
-// import * as routerLocation from 'react-router-dom'
-// import type { Location } from 'history'
 import { useDispatch } from 'react-redux'
 import { getLoadedSpecs } from '../../test-data'
 import {
@@ -90,12 +86,12 @@ describe('DiffScene', () => {
   Element.prototype.scrollIntoView = jest.fn()
 
   const toggleNavigation = () => false
-  test.only('toggling comparison option pushes param to unpm rl', () => {
+  test.only('toggling comparison option pushes param to url', () => {
     // const { push } = useHistory()
     ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
     const store = createTestStore({
       specs: { specs, currentSpecKey: '4.0' },
-      settings: { initialized: true, diffOptions: [] },
+      settings: { initialized: true },
     })
     const MockScene = <DiffScene toggleNavigation={toggleNavigation} />
     const { rerender } = renderWithRouterAndReduxProvider(
@@ -108,65 +104,9 @@ describe('DiffScene', () => {
       search: '?opts=missing',
     })
     rerender(MockScene)
-    // userEvent.click(screen.getByPlaceholderText('Comparison options'))
-    // userEvent.click(
-    //   screen.getByRole('option', {
-    //     name: 'Missing',
-    //   })
-    // )
-    // await waitFor(() => {
-    //   expect(push).toHaveBeenLastCalledWith({
-    //     pathname: '/',
-    //     search: 'opts=missing',
-    //   })
-    // })
     expect(mockDispatch).toHaveBeenLastCalledWith({
       payload: { diffOptions: ['missing'] },
       type: 'settings/setDiffOptionsAction',
     })
-    // TODO: test URL change leads to store dispatch? - change mock history push implementation to change our location
-    // TODO: test that toggling another will push both options to store/url
   })
-
-  // test.todo(
-  //   'rendering scene with opts param in url sets selected options in selector',
-  //   async () => {
-  //     jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
-  //       pathname: `/`,
-  //       search: `opts=missing%2Ctype%2Cresponse`,
-  //     } as unknown as Location)
-  //     const store = createTestStore({
-  //       specs: { specs, currentSpecKey: '3.1' },
-  //       settings: { initialized: true, diffOptions: [] },
-  //     })
-  //     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-  //     renderWithRouterAndReduxProvider(
-  //       <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
-  //       ['/diff/3.1'],
-  //       store
-  //     )
-  //     expect(mockDispatch).toHaveBeenLastCalledWith({
-  //       payload: { diffOptions: ['missing', 'type', 'response'] },
-  //       type: 'settings/setDiffOptionsAction',
-  //     })
-  //     expect(
-  //       screen.getByRole('option', {
-  //         name: 'Missing',
-  //       })
-  //     ).toBeInTheDocument()
-  //     expect(
-  //       screen.getByRole('option', {
-  //         name: 'Type',
-  //       })
-  //     ).toBeInTheDocument()
-  //     expect(
-  //       screen.getByRole('option', {
-  //         name: 'Response',
-  //       })
-  //     ).toBeInTheDocument()
-  //   }
-  // )
-  //
-  // test.todo('unselecting comparison option will remove it from url opts param')
-  // test.todo('selecting clear option will remove all params from url opts param')
 })
