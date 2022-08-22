@@ -90,13 +90,12 @@ def test_crud_user(sdk: mtds.Looker40SDK):
     assert resp == ""
     print(datetime.datetime.now())
 
-# def test_crud_user_dict(sdk):  # no typing
-#      """Test creating, retrieving, updating and deleting a user."""
+def test_crud_user_dict(sdk):  # no typing
+     """Test creating, retrieving, updating and deleting a user."""
     
-#      print(datetime.datetime.now())
-#      time.sleep(10)
-#      assert True
-#      print(datetime.datetime.now())
+     print(datetime.datetime.now())
+     assert True
+     print(datetime.datetime.now())
         
     # # Create user
     # new_user = sdk.create_user(
