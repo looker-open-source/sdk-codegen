@@ -26,6 +26,8 @@ TEST_LAST_NAME = "Doe"
 def test_crud_user(sdk: mtds.Looker40SDK):
     """Test creating, retrieving, updating and deleting a user."""
 
+    print(datetime.datetime.now())
+
     # Create user
     user = sdk.create_user(
         ml.WriteUser(
@@ -86,12 +88,15 @@ def test_crud_user(sdk: mtds.Looker40SDK):
     # Delete user
     resp = sdk.delete_user(user_id)
     assert resp == ""
+    print(datetime.datetime.now())
 
-# def test_crud_user_dict(sdk):  # no typing
-#     """Test creating, retrieving, updating and deleting a user."""
-
-#     time.sleep(10)
-#     assert True
+def test_crud_user_dict(sdk):  # no typing
+     """Test creating, retrieving, updating and deleting a user."""
+    
+     print(datetime.datetime.now())
+     time.sleep(10)
+     assert True
+     print(datetime.datetime.now())
         
     # # Create user
     # new_user = sdk.create_user(
