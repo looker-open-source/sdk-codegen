@@ -86,8 +86,8 @@ describe('DiffScene', () => {
   Element.prototype.scrollIntoView = jest.fn()
 
   const toggleNavigation = () => false
-  test.only('toggling comparison option pushes param to url', () => {
-    // const { push } = useHistory()
+  test.skip('updating url dispatches store action', () => {
+    // skipping test due to an issue with rerender callback returned from @looker/redux
     ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
     const store = createTestStore({
       specs: { specs, currentSpecKey: '4.0' },
