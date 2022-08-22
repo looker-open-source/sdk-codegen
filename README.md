@@ -37,7 +37,7 @@ The 4.0 version of the API is the current and stable version of the API, in addi
 
 Some SDKs support and expose both API versions in the same SDK package, including all [Looker-supported SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
 
-For SDKs that supports multiple API versions, there will be `methods.*` and `models.*` collections generated for each API version. Each API version is exposed under a distinct class name from which to instantiate an initial SDK object.
+For SDKs that support multiple API versions, there will be `methods.*` and `models.*` collections generated for each API version. Each API version is exposed under a distinct class name from which to instantiate an initial SDK object.
 
 API-version-specific files generally use shared Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
@@ -168,6 +168,14 @@ python
 ```
 
 **Note:** If you're unable to download the API specification file because you're using an instance of Looker that is self-signed and errors are thrown, you can explicitly turn off SSL verification by putting `verify_ssl=false` in the `looker.ini` file configuration section.
+
+### Using the Legacy generator
+
+To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
+
+- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts).
+
+- use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI generator to output files to the `./api/*` path
 
 ### Additional scripts
 
