@@ -105,8 +105,14 @@ export const DetailedErrors: FC<DetailedErrorProps> = ({ error }) => {
   )
 }
 
-const fetcher = async (_sdk: IAPIMethods, url: string) => {
-  let result = await (await fetch(url)).text()
+/**
+ * this callback function used by the ErrorDoc constructor gets and truncates
+ * API error documents for use within API Explorer
+ * @param _sdk required as a parameter, but it's ignored in this function
+ * @param url of document (either index.json or md) to fetch
+ */
+export const apiErrorDisplayFetch = async (_sdk: IAPIMethods, url: string) => {
+  let result = await (await fetch(url, { mode: 'cors' })).text()
   const stop = result.indexOf('## API Response Type')
   if (stop > 0) {
     result = result.substring(0, stop - 1).trim()
@@ -121,7 +127,7 @@ export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
   const [doc, setDoc] = useState<string>('')
   const getDoc = async (docUrl: string) => {
     const adaptor = getEnvAdaptor()
-    const errDoc = new ErrorDoc(adaptor.sdk, fetcher)
+    const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
     setDoc(await errDoc.content(docUrl))
   }
   useEffect(() => {

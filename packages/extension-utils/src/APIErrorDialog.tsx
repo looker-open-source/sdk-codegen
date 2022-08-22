@@ -39,7 +39,7 @@ interface APIErrorDialogProps extends APIErrorDisplayProps {
 
 export const APIErrorDialog: FC<APIErrorDialogProps> = ({
   error,
-  isOpen,
+  isOpen = true,
   setOpen = (t) => !t,
   showDoc = false,
 }) => {
