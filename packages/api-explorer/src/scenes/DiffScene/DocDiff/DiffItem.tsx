@@ -59,7 +59,7 @@ export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   method,
   specKey,
 }) => {
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
 
   if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
 

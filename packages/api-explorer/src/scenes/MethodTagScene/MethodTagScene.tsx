@@ -28,8 +28,11 @@ import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
+import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath, useNavigation } from '../../utils'
+import { buildMethodPath, isValidFilter, useNavigation } from '../../utils'
+import { selectTagFilter, useSettingActions } from '../../state'
+import { useTagStoreSync } from '../utils'
 import { getOperations } from './utils'
 
 interface MethodTagSceneProps {
@@ -44,19 +47,38 @@ interface MethodTagSceneParams {
 export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
   const history = useHistory()
-  const navigate = useNavigation()
-  const searchParams = new URLSearchParams(location.search)
-  const [value, setValue] = useState('ALL')
+  const methods = api.tags[methodTag]
+  const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
+    useNavigation()
+  const selectedTagFilter = useSelector(selectTagFilter)
+  const { setTagFilterAction } = useSettingActions()
+  const [tagFilter, setTagFilter] = useState(selectedTagFilter)
+  useTagStoreSync()
+
+  const handleChange = (filter: string) => {
+    navigate(location.pathname, {
+      t: filter === 'ALL' ? null : filter.toLowerCase(),
+    })
+  }
 
   useEffect(() => {
-    /** Reset ButtonToggle value on route change */
-    setValue('ALL')
-  }, [methodTag])
+    const searchParams = new URLSearchParams(location.search)
+    let verbParam = searchParams.get('t') || 'ALL'
+    verbParam = isValidFilter(location.pathname, verbParam)
+      ? verbParam.toUpperCase()
+      : 'ALL'
+    setTagFilterAction({
+      tagFilter: verbParam,
+    })
+  }, [location.search])
 
-  const methods = api.tags[methodTag]
+  useEffect(() => {
+    setTagFilter(selectedTagFilter)
+  }, [selectedTagFilter])
+
   useEffect(() => {
     if (!methods) {
-      navigate(`/${specKey}/methods`)
+      navigateWithGlobalParams(`/${specKey}/methods`)
     }
   }, [history, methods])
   if (!methods) {
@@ -70,7 +92,12 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
-      <ButtonToggle mb="small" mt="xlarge" value={value} onChange={setValue}>
+      <ButtonToggle
+        mb="small"
+        mt="xlarge"
+        value={tagFilter}
+        onChange={handleChange}
+      >
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
@@ -82,14 +109,12 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
       </ButtonToggle>
       {Object.values(methods).map(
         (method, index) =>
-          (value === 'ALL' || value === method.httpMethod) && (
+          (selectedTagFilter === 'ALL' ||
+            selectedTagFilter === method.httpMethod) && (
             <Link
               key={index}
-              to={buildMethodPath(
-                specKey,
-                tag.name,
-                method.name,
-                searchParams.toString()
+              to={buildPathWithGlobalParams(
+                buildMethodPath(specKey, tag.name, method.name)
               )}
             >
               <Grid columns={1} py="xsmall">

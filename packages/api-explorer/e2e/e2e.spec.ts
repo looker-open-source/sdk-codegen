@@ -40,15 +40,14 @@ describe('API Explorer', () => {
     await page.setDefaultNavigationTimeout(120000)
   })
 
+  afterEach(async () => {
+    await page.evaluate(() => {
+      localStorage.clear()
+    })
+  })
   describe('general', () => {
     beforeEach(async () => {
       await goToPage(v40)
-    })
-
-    afterEach(async () => {
-      await page.evaluate(() => {
-        localStorage.clear()
-      })
     })
 
     it('renders a method page', async () => {

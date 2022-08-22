@@ -35,7 +35,7 @@ import { allSdkLanguageOptions } from './utils'
  * Allows the user to select their preferred SDK language
  */
 export const SdkLanguageSelector: FC = () => {
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const [language, setLanguage] = useState(selectedSdkLanguage)
   const options = allSdkLanguageOptions()
