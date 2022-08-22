@@ -14,8 +14,8 @@ We introduced API 4.0 to guarantee the JSON payload response types match the API
 
 ## Lookering forward
 
-Current users of Looker SDKs may have noticed that some `id` properties are typed as `integer` and some are typed as `string`. For the stable (aka GA, generally available) release of API 4.0, all `id` references will be typed as `string`.
-Using strings for all ID references will allow Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value from a monolithic instance.
+Current users of Looker SDKs may have noticed that some `id` properties are typed as `integer` and some are typed as `string`. With the stable (aka GA, generally available) release of API 4.0, all `id` references have been typed as `string`.
+Using strings for all ID references allows Looker to scale out Looker services in the future, once ID generation does not require an auto-increment numeric ID value from a monolithic instance.
 
 We have worked to minimize the impact of this type change for all Looker-provided language SDKs. This document describes some JSON parsing requirements and how our SDKs support them.
 
