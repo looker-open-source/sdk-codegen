@@ -28,7 +28,8 @@ import type { FC } from 'react'
 import React from 'react'
 import type { IAPIMethods, LookerSDKError } from '@looker/sdk-rtl'
 import { Heading, SpaceVertical } from '@looker/components'
-import { APIErrorContent, errorHeading } from '.'
+import { APIErrorContent } from './APIErrorContent'
+import { errorHeading } from './utils'
 
 export interface APIErrorDisplayProps {
   /** Populated SDK error information, which may contain detailed errors */
@@ -52,6 +53,12 @@ export const apiErrorDisplayFetch = async (_sdk: IAPIMethods, url: string) => {
   return result
 }
 
+/**
+ * Show API error information in the parent React component
+ * @param error to display
+ * @param showDoc true to fetch the error document markdown. false for a clickable link
+ * @constructor
+ */
 export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
   error,
   showDoc = false,

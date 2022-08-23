@@ -29,8 +29,10 @@ import React, { useEffect, useState } from 'react'
 import { ErrorDoc } from '@looker/sdk-rtl'
 import { getEnvAdaptor } from '../adaptorUtils'
 import { ExtMarkdown } from '../ExtMarkdown'
-import type { APIErrorDisplayProps } from '.'
-import { APIErrorDetails, apiErrorDisplayFetch, APIErrorDocLink } from '.'
+import { APIErrorDetails } from './APIErrorDetails'
+import { APIErrorDocLink } from './APIErrorDocLink'
+import type { APIErrorDisplayProps } from './APIErrorDisplay'
+import { apiErrorDisplayFetch } from './APIErrorDisplay'
 
 /**
  * Shows available content of an API Error response
