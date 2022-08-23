@@ -42,7 +42,6 @@ export interface APIErrorDisplayProps {
  * Show API error information in the parent React component
  * @param error to display
  * @param showDoc true to fetch the error document markdown. false for a clickable link
- * @constructor
  */
 export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
   error,

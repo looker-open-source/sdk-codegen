@@ -38,7 +38,6 @@ import { apiErrorDisplayFetch } from './utils'
  * Shows available content of an API Error response
  * @param error to display
  * @param showDoc true to retrieve the corresponding error markdown
- * @constructor
  */
 export const APIErrorContent: FC<APIErrorDisplayProps> = ({
   error,
