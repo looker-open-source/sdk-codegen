@@ -25,14 +25,14 @@
  */
 
 import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ErrorDoc } from '@looker/sdk-rtl'
 import { getEnvAdaptor } from '../adaptorUtils'
 import { ExtMarkdown } from '../ExtMarkdown'
 import { APIErrorDetails } from './APIErrorDetails'
 import { APIErrorDocLink } from './APIErrorDocLink'
 import type { APIErrorDisplayProps } from './APIErrorDisplay'
-import { apiErrorDisplayFetch } from './APIErrorDisplay'
+import { apiErrorDisplayFetch } from './utils'
 
 /**
  * Shows available content of an API Error response
@@ -45,11 +45,15 @@ export const APIErrorContent: FC<APIErrorDisplayProps> = ({
   showDoc,
 }) => {
   const [doc, setDoc] = useState<string>('')
-  const getDoc = async (docUrl: string) => {
-    const adaptor = getEnvAdaptor()
-    const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
-    setDoc(await errDoc.content(docUrl))
-  }
+  const getDoc = useCallback(
+    async (docUrl: string) => {
+      const adaptor = getEnvAdaptor()
+      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
+      setDoc(await errDoc.content(docUrl))
+    },
+    [error]
+  )
+
   useEffect(() => {
     if (showDoc && error && error.documentation_url) {
       getDoc(error.documentation_url)
