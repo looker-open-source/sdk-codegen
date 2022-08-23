@@ -32,11 +32,7 @@ The API Explorer extension can be manually installed and run with a Looker insta
    the `http://localhost:30000` is for when you want to use the [API Explorer file server](/apix-files/README.md)
 4. save all changes and deploy to production
 5. in the root of `sdk-codegen`:
-   ```sh
-   yarn && yarn build
-   ```
-6. in `packages/extension-api-explorer`:
-   ```sh
-   yarn develop
-   ```
-7. on the Looker web page, click `Browse|API Explorer` to view the API Explorer
+```sh
+yarn && yarn build && yarn dev:xapix
+```
+6. on the Looker web page, click `Browse|API Explorer` to view the API Explorer

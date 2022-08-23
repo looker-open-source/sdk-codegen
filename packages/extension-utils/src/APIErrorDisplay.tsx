@@ -50,7 +50,7 @@ export interface APIErrorDisplayProps {
   showDoc?: boolean
 }
 
-export const standardDocLink = (docUrl?: string | null) => {
+const standardDocLink = (docUrl?: string | null) => {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     const adaptor = getEnvAdaptor()
@@ -78,7 +78,7 @@ interface DetailedErrorProps {
  * @param error to display
  * @constructor
  */
-export const DetailedErrors: FC<DetailedErrorProps> = ({ error }) => {
+const DetailedErrors: FC<DetailedErrorProps> = ({ error }) => {
   if (!error?.errors) return null
 
   return (
@@ -139,7 +139,7 @@ export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
   return (
     <>
       {error && (
-        <SpaceVertical margin="8px">
+        <SpaceVertical>
           <Heading type="h2">{error.message || 'Unknown error'}</Heading>
           <DetailedErrors error={error} />
           {!showDoc && standardDocLink(error.documentation_url ?? '')}

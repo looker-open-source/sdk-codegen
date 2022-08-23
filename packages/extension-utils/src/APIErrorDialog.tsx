@@ -26,7 +26,7 @@
 
 import type { FC } from 'react'
 import React from 'react'
-import { Dialog, Space } from '@looker/components'
+import { Button, Dialog, DialogFooter, SpaceVertical } from '@looker/components'
 import type { APIErrorDisplayProps } from './APIErrorDisplay'
 import { APIErrorDisplay } from './APIErrorDisplay'
 
@@ -48,9 +48,14 @@ export const APIErrorDialog: FC<APIErrorDialogProps> = ({
       isOpen={isOpen}
       onClose={() => setOpen(false)}
       content={
-        <Space border>
+        <SpaceVertical border>
           <APIErrorDisplay error={error} showDoc={showDoc} />
-        </Space>
+          <DialogFooter>
+            <Button size="xsmall" onClick={() => setOpen(false)}>
+              OK
+            </Button>
+          </DialogFooter>
+        </SpaceVertical>
       }
     ></Dialog>
   )

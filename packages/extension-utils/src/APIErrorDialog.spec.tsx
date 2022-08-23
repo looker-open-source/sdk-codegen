@@ -26,7 +26,11 @@
 
 import type { LookerSDKError } from '@looker/sdk-rtl'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
+import {
+  fireEvent,
+  screen,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
 import React from 'react'
 import { APIErrorDialog } from './APIErrorDialog'
 
@@ -45,17 +49,22 @@ describe('APIErrorDialog', () => {
     expect(link).not.toBeInTheDocument()
   })
 
-  it('is hidden if open is false', () => {
+  it('closes when ok is clicked', async () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
-    renderWithTheme(<APIErrorDialog error={simple} isOpen={false} />)
-    const heading = screen.queryByRole('heading', { name: 'simple error' })
-    expect(heading).not.toBeInTheDocument()
-    const link = screen.queryByRole('link')
-    expect(link).not.toBeInTheDocument()
+    renderWithTheme(<APIErrorDialog error={simple} />)
+    const heading = screen.getByRole('heading', { name: 'simple error' })
+    expect(heading).toBeInTheDocument()
+    const link = screen.getByRole('link')
+    expect(link).toBeInTheDocument()
+    const okButton = screen.getByRole('button', { name: 'OK' })
+    fireEvent.click(okButton)
+    await waitForElementToBeRemoved(() =>
+      screen.queryByRole('heading', { name: 'simple error' })
+    )
   })
 
   it('shows simple errors', () => {
