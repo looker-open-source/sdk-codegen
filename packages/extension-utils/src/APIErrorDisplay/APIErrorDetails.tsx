@@ -48,7 +48,6 @@ interface APIErrorDetailsProps {
  * it is not included in the table
  *
  * @param error to display
- * @constructor
  */
 export const APIErrorDetails: FC<APIErrorDetailsProps> = ({ error }) => {
   if (!error?.errors) return null
