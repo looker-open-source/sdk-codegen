@@ -116,14 +116,14 @@ def create_test_users(
 def sdk31(init_sdk):
     sdk = init_sdk(3.1)
     yield sdk
-    sdk.auth.logout()
+    sdk.logout()
 
 
 @pytest.fixture(scope="session")
 def sdk40(init_sdk):
     sdk = init_sdk(4.0)
     yield sdk
-    sdk.auth.logout()
+    sdk.logout()
 
 
 @pytest.fixture(scope="session")
