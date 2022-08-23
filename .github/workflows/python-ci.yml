@@ -92,10 +92,10 @@ jobs:
   #         name: python-test-results
   #         path: python/results/
 
-  setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
+  # setup:
+  #   uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
   integration:
-    needs: [setup]
+    needs: []
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -111,7 +111,8 @@ jobs:
       matrix:
         os:
           - ubuntu
-        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
+        looker:
+          - 22_12
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
@@ -188,6 +189,9 @@ jobs:
       - name: Check that Looker is ready
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
+      - name: Setup tmate session 
+        uses: mxschmitt/action-tmate@v3
 
       - name: Run Integration Tests
         run: tox -e integration
