@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,21 @@
 
  */
 
-export * from './adaptorUtils'
-export * from './APIErrorDisplay'
-export * from './browserAdaptor'
-export * from './extensionAdaptor'
-export * from './ExtMarkdown'
-export * from './authUtils'
-export * from './OAuthScene'
+import React from 'react'
+import { Link } from '@looker/components'
+import { getEnvAdaptor } from '../adaptorUtils'
+
+export const APIErrorDocLink = (docUrl?: string | null) => {
+  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const adaptor = getEnvAdaptor()
+    adaptor.openBrowserWindow(e.currentTarget.href)
+  }
+
+  if (!docUrl) return <></>
+  return (
+    <Link href={docUrl} key={docUrl} onClick={onClick}>
+      More information
+    </Link>
+  )
+}

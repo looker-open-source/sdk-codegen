@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,7 @@
 
  */
 
-export * from './adaptorUtils'
-export * from './APIErrorDisplay'
-export * from './browserAdaptor'
-export * from './extensionAdaptor'
-export * from './ExtMarkdown'
-export * from './authUtils'
-export * from './OAuthScene'
+import type { LookerSDKError } from '@looker/sdk-rtl'
+
+export const errorHeading = (error: LookerSDKError) =>
+  error.message || 'Unknown error'

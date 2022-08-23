@@ -24,39 +24,9 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Button, Dialog, DialogFooter, SpaceVertical } from '@looker/components'
-import type { APIErrorDisplayProps } from './APIErrorDisplay'
-import { APIErrorDisplay } from './APIErrorDisplay'
-
-interface APIErrorDialogProps extends APIErrorDisplayProps {
-  /** toggle for dialog being open */
-  isOpen?: boolean
-  /** callback for toggling the dialog display */
-  setOpen?: (open: boolean) => void
-}
-
-export const APIErrorDialog: FC<APIErrorDialogProps> = ({
-  error,
-  isOpen = true,
-  setOpen = (t) => !t,
-  showDoc = false,
-}) => {
-  return (
-    <Dialog
-      isOpen={isOpen}
-      onClose={() => setOpen(false)}
-      content={
-        <SpaceVertical border>
-          <APIErrorDisplay error={error} showDoc={showDoc} />
-          <DialogFooter>
-            <Button size="xsmall" onClick={() => setOpen(false)}>
-              OK
-            </Button>
-          </DialogFooter>
-        </SpaceVertical>
-      }
-    ></Dialog>
-  )
-}
+export * from './APIErrorContent'
+export * from './APIErrorDetails'
+export * from './APIErrorDialog'
+export * from './APIErrorDisplay'
+export * from './APIErrorDocLink'
+export * from './utils'
