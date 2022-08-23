@@ -63,6 +63,6 @@ export const APIErrorDialog: FC<APIErrorDialogProps> = ({
           <APIErrorContent error={error} showDoc={showDoc} />
         </DialogLayout>
       }
-    ></Dialog>
+    />
   )
 }
