@@ -39,63 +39,63 @@ jobs:
       - run: pip install mypy types-requests
       - run: mypy looker_sdk/
 
-  unit:
-    needs: typecheck
-    name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
-    env:
-      TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: python/
+  # unit:
+  #   needs: typecheck
+  #   name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
+  #   env:
+  #     TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
+  #   runs-on: ${{ matrix.os }}-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #       working-directory: python/
 
-    strategy:
-      # run all supported python versions on ubuntu
-      # run only latest supported python version on windows/mac
-      matrix:
-        os:
-          - ubuntu
-          - macos
-          - windows
-        python-version:
-          - '3.10'
-        include:
-          - python-version: '3.7'
-            os: ubuntu
-          - python-version: '3.8'
-            os: ubuntu
-          - python-version: '3.9'
-            os: ubuntu
+  #   strategy:
+  #     # run all supported python versions on ubuntu
+  #     # run only latest supported python version on windows/mac
+  #     matrix:
+  #       os:
+  #         - ubuntu
+  #         - macos
+  #         - windows
+  #       python-version:
+  #         - '3.10'
+  #       include:
+  #         - python-version: '3.7'
+  #           os: ubuntu
+  #         - python-version: '3.8'
+  #           os: ubuntu
+  #         - python-version: '3.9'
+  #           os: ubuntu
 
-    steps:
-      - name: Repo Checkout
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Repo Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+  #     - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-      - name: Install Tox and any other packages
-        run: |
-          python -m pip install --upgrade pip
-          pip install tox
+  #     - name: Install Tox and any other packages
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install tox
 
-      - name: Run Unit Tests
-        run: tox -e unit
+  #     - name: Run Unit Tests
+  #       run: tox -e unit
 
-      - name: Upload pytest test results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: python-test-results
-          path: python/results/
+  #     - name: Upload pytest test results
+  #       if: ${{ always() }}
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: python-test-results
+  #         path: python/results/
 
   setup:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
   integration:
-    needs: [unit,setup]
+    needs: [setup]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -219,7 +219,7 @@ jobs:
           twine check dist/*
 
   publish-test-results:
-    needs: [unit, integration, twine]
+    needs: [integration, twine]
     if: success() || failure()
     runs-on: ubuntu-latest
 
@@ -254,15 +254,15 @@ jobs:
             exit 1
           fi
 
-      - name: Publish Unit Test Results
-        if: steps.check-results-exist.outcome == 'success'
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
-        with:
-          # Cosmetic issue with `check_name` being associated to the wrong
-          # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
-          check_name: Python Tests
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          report_individual_runs: true
-          hide_comments: orphaned commits
-          check_run_annotations_branch: '*'
-          files: 'artifacts/python-test-results/*.xml'
+      # - name: Publish Unit Test Results
+      #   if: steps.check-results-exist.outcome == 'success'
+      #   uses: EnricoMi/publish-unit-test-result-action@v1.12
+      #   with:
+      #     # Cosmetic issue with `check_name` being associated to the wrong
+      #     # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
+      #     check_name: Python Tests
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     report_individual_runs: true
+      #     hide_comments: orphaned commits
+      #     check_run_annotations_branch: '*'
+      #     files: 'artifacts/python-test-results/*.xml'
