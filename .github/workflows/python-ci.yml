@@ -148,30 +148,6 @@ jobs:
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
 
-      - name: Install docker on macos
-        if: ${{ matrix.os == 'macos' }}
-        uses: docker-practice/actions-setup-docker@v1
-        with:
-          docker_channel: stable
-          docker_buildx: false
-          docker_cli_experimental: disabled
-
-      - name: Bump docker for mac memory
-        if: ${{ matrix.os == 'macos' }}
-        run: |
-          osascript -e 'quit app "Docker"'
-          sed -i'.original' -e's/  "memoryMiB" : 2048/  "memoryMiB" : 8192/' ~/Library/Group\ Containers/group.com.docker/settings.json
-          open -g /Applications/Docker.app
-          # re-run docker startup logic from docker-practice/actions-setup-docker action
-          sleep 60
-          i=0
-          while ! docker system info &>/dev/null; do
-          (( i++ == 0 )) && printf %s '-- Waiting for Docker to finish starting up...' || printf '.'
-          sleep 1
-          done
-          (( i )) && printf '\n'
-          echo "-- Docker is ready."
-
       - name: Pull and run Looker docker image
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
@@ -179,7 +155,7 @@ jobs:
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
-          docker logs -f looker-sdk-codegen-ci --until=30s &
+          docker logs -f looker-sdk-codegen-ci | tee ../server.log &
 
       - name: Install Tox and any other packages
         run: |
@@ -190,8 +166,8 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
-      - name: Setup tmate session 
-        uses: mxschmitt/action-tmate@v3
+      # - name: Setup tmate session 
+      #   uses: mxschmitt/action-tmate@v3
 
       - name: Run Integration Tests
         run: tox -e integration
@@ -202,6 +178,16 @@ jobs:
         with:
           name: python-test-results
           path: python/results/
+
+      - name: Shutdown docker
+        run: |
+          docker rm -f looker-sdk-codegen-ci
+
+      - name: Upload server log
+        uses: actions/upload-artifact@v2
+        with:
+          name: server.log
+          path: ../server.log
 
   twine:
     needs: integration
