@@ -46,6 +46,12 @@ import {
 import { specState } from '../test-data'
 import { renderWithRouter } from './router'
 
+export const preloadedState: RootState = {
+  settings: defaultSettingsState,
+  lodes: defaultLodesState,
+  specs: defaultSpecsState,
+}
+
 export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = createTestStore()
@@ -67,12 +73,6 @@ export const renderWithRouterAndReduxProvider = (
   options?: Omit<RenderOptions, 'queries'>
 ) =>
   renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
-
-export const preloadedState: RootState = {
-  settings: defaultSettingsState,
-  lodes: defaultLodesState,
-  specs: defaultSpecsState,
-}
 
 type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>

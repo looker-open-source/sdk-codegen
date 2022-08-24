@@ -24,50 +24,43 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import type { SpecItem, SpecList } from '@looker/sdk-codegen'
-import { useHistory } from 'react-router-dom'
-import * as routerLocation from 'react-router-dom'
-import type { Location } from 'history'
-import * as reactRedux from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { getLoadedSpecs } from '../../test-data'
 import {
   createTestStore,
+  renderWithRouter,
   renderWithRouterAndReduxProvider,
 } from '../../test-utils'
-import { getApixAdaptor } from '../../utils'
+import { getApixAdaptor, MockedProvider, mockHistory } from '../../utils'
 import { DiffScene } from './DiffScene'
 
-// jest.mock('react-router', () => {
-//   const ReactRouter = jest.requireActual('react-router')
-//   return {
-//     ...ReactRouter,
-//     useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
-//     useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
-//   }
-// })
-
-jest.mock('react-router', () => {
-  const mockLocation = {
-    pathname: '/',
-    search: '',
-  }
-  const ReactRouter = jest.requireActual('react-router')
+jest.mock('react-redux', () => {
+  const reactRedux = jest.requireActual('react-redux')
   return {
+    __esModule: true,
+    ...reactRedux,
+    useDispatch: jest.fn(reactRedux.useDispatch),
+  }
+})
+
+jest.mock('react-router-dom', () => {
+  const ReactRouter = jest.requireActual('react-router-dom')
+
+  return {
+    __esModule: true,
     ...ReactRouter,
     useHistory: jest.fn().mockReturnValue({
-      push: jest.fn((location) => {
-        mockLocation.pathname = location.pathname
-        mockLocation.search = location.search
-      }),
+      push: jest.fn(),
       location,
+      useLocation: jest
+        .fn()
+        .mockReturnValue({ pathname: '/4.0/diff/3.1', search: '' }),
     }),
-    useLocation: jest.fn(() => ({
-      pathname: jest.fn().mockReturnValue(mockLocation.pathname),
-      search: jest.fn().mockReturnValue(mockLocation.search),
-    })),
   }
 })
 
@@ -82,6 +75,7 @@ const mockApixAdaptor = new MockApixAdaptor()
 jest.mock('../../utils/apixAdaptor', () => {
   const apixAdaptor = jest.requireActual('../../utils/apixAdaptor')
   return {
+    __esModule: true,
     ...apixAdaptor,
     getApixAdaptor: jest.fn(),
   }
@@ -98,30 +92,24 @@ describe('DiffScene', () => {
   Element.prototype.scrollIntoView = jest.fn()
 
   const toggleNavigation = () => false
-  test('toggling comparison option pushes param to url', async () => {
-    const { push } = useHistory()
-    jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+  test.only('updating url dispatches store action', () => {
+    // skipping test due to an issue with rerender callback returned from @looker/redux
+    ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
     const store = createTestStore({
-      specs: { specs, currentSpecKey: '3.1' },
-      settings: { initialized: true, diffOptions: [] },
+      specs: { specs, currentSpecKey: '4.0' },
+      settings: { initialized: true },
     })
-    renderWithRouterAndReduxProvider(
-      <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
-      ['/diff/3.1'],
-      store
-    )
-    userEvent.click(screen.getByPlaceholderText('Comparison options'))
-    userEvent.click(
-      screen.getByRole('option', {
-        name: 'Missing',
-      })
-    )
-    await waitFor(() => {
-      expect(push).toHaveBeenLastCalledWith({
-        pathname: '/',
-        search: 'opts=missing',
-      })
+    const history = mockHistory({
+      initialEntries: ['/4.0/diff/3.1'],
     })
+    const MockScene = (
+      <MockedProvider history={history} store={store}>
+        <DiffScene toggleNavigation={toggleNavigation} />
+      </MockedProvider>
+    )
+    const { rerender } = renderWithRouterAndReduxProvider(MockScene)
+    history.push('/4.0/diff/3.1?opts=missing')
+    rerender(MockScene)
     expect(mockDispatch).toHaveBeenLastCalledWith({
       payload: { diffOptions: ['missing'] },
       type: 'settings/setDiffOptionsAction',
@@ -130,45 +118,45 @@ describe('DiffScene', () => {
     // TODO: test that toggling another will push both options to store/url
   })
 
-  test.todo(
-    'rendering scene with opts param in url sets selected options in selector',
-    async () => {
-      jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
-        pathname: `/`,
-        search: `opts=missing%2Ctype%2Cresponse`,
-      } as unknown as Location)
-      const store = createTestStore({
-        specs: { specs, currentSpecKey: '3.1' },
-        settings: { initialized: true, diffOptions: [] },
-      })
-      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-      renderWithRouterAndReduxProvider(
-        <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
-        ['/diff/3.1'],
-        store
-      )
-      expect(mockDispatch).toHaveBeenLastCalledWith({
-        payload: { diffOptions: ['missing', 'type', 'response'] },
-        type: 'settings/setDiffOptionsAction',
-      })
-      expect(
-        screen.getByRole('option', {
-          name: 'Missing',
-        })
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('option', {
-          name: 'Type',
-        })
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('option', {
-          name: 'Response',
-        })
-      ).toBeInTheDocument()
-    }
-  )
-
+  // test.todo(
+  //   'rendering scene with opts param in url sets selected options in selector',
+  //   async () => {
+  //     jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+  //       pathname: `/`,
+  //       search: `opts=missing%2Ctype%2Cresponse`,
+  //     } as unknown as Location)
+  //     const store = createTestStore({
+  //       specs: { specs, currentSpecKey: '3.1' },
+  //       settings: { initialized: true, diffOptions: [] },
+  //     })
+  //     jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
+  //     renderWithRouterAndReduxProvider(
+  //       <DiffScene specs={specs} toggleNavigation={toggleNavigation} />,
+  //       ['/diff/3.1'],
+  //       store
+  //     )
+  //     expect(mockDispatch).toHaveBeenLastCalledWith({
+  //       payload: { diffOptions: ['missing', 'type', 'response'] },
+  //       type: 'settings/setDiffOptionsAction',
+  //     })
+  //     expect(
+  //       screen.getByRole('option', {
+  //         name: 'Missing',
+  //       })
+  //     ).toBeInTheDocument()
+  //     expect(
+  //       screen.getByRole('option', {
+  //         name: 'Type',
+  //       })
+  //     ).toBeInTheDocument()
+  //     expect(
+  //       screen.getByRole('option', {
+  //         name: 'Response',
+  //       })
+  //     ).toBeInTheDocument()
+  //   }
+  // )
+  test.todo('toggling comparison option pushes value to url opts param')
   test.todo('unselecting comparison option will remove it from url opts param')
   test.todo('selecting clear option will remove all params from url opts param')
 })
