@@ -26,23 +26,20 @@
 
 import type { LookerSDKError } from '@looker/sdk-rtl'
 import { renderWithTheme } from '@looker/components-test-utils'
-import {
-  fireEvent,
-  screen,
-  waitForElementToBeRemoved,
-} from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import React from 'react'
 import { APIErrorDialog } from './APIErrorDialog'
 
 describe('APIErrorDialog', () => {
-  // TODO test closing the dialog
   it('is hidden if open is false', () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
-    renderWithTheme(<APIErrorDialog error={simple} isOpen={false} />)
+    renderWithTheme(
+      <APIErrorDialog error={simple} isOpen={false} setOpen={jest.fn()} />
+    )
     const heading = screen.queryByRole('heading', { name: 'simple error' })
     expect(heading).not.toBeInTheDocument()
     const link = screen.queryByRole('link')
@@ -56,7 +53,9 @@ describe('APIErrorDialog', () => {
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
     const toggle = jest.fn()
-    renderWithTheme(<APIErrorDialog error={simple} setOpen={toggle} />)
+    renderWithTheme(
+      <APIErrorDialog error={simple} isOpen={true} setOpen={toggle} />
+    )
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()
     const link = screen.getByRole('link')
@@ -66,31 +65,15 @@ describe('APIErrorDialog', () => {
     expect(toggle).toHaveBeenCalled()
   })
 
-  it.skip('ok button click closes by default', async () => {
-    const simple: LookerSDKError = {
-      name: 'Error',
-      message: 'simple error',
-      documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
-    }
-    renderWithTheme(<APIErrorDialog error={simple} />)
-    const heading = screen.getByRole('heading', { name: 'simple error' })
-    expect(heading).toBeInTheDocument()
-    const link = screen.getByRole('link')
-    expect(link).toBeInTheDocument()
-    const okButton = screen.getByRole('button', { name: 'OK' })
-    fireEvent.click(okButton)
-    await waitForElementToBeRemoved(() => {
-      screen.queryByText('simple error')
-    })
-  })
-
   it('shows simple errors', () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
-    renderWithTheme(<APIErrorDialog error={simple} />)
+    renderWithTheme(
+      <APIErrorDialog error={simple} isOpen={true} setOpen={jest.fn()} />
+    )
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()
     const link = screen.getByRole('link')
@@ -105,7 +88,9 @@ describe('APIErrorDialog', () => {
       name: 'Error',
       message: 'simple error',
     }
-    renderWithTheme(<APIErrorDialog error={simpler} />)
+    renderWithTheme(
+      <APIErrorDialog error={simpler} isOpen={true} setOpen={jest.fn()} />
+    )
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()
     const link = screen.queryByRole('link')
@@ -117,7 +102,9 @@ describe('APIErrorDialog', () => {
       name: '',
       message: '',
     }
-    renderWithTheme(<APIErrorDialog error={simpler} />)
+    renderWithTheme(
+      <APIErrorDialog error={simpler} isOpen={true} setOpen={jest.fn()} />
+    )
     const heading = screen.getByRole('heading', { name: 'Unknown error' })
     expect(heading).toBeInTheDocument()
     const link = screen.queryByRole('link')
@@ -145,7 +132,9 @@ describe('APIErrorDialog', () => {
         },
       ],
     }
-    renderWithTheme(<APIErrorDialog error={detailed} />)
+    renderWithTheme(
+      <APIErrorDialog error={detailed} isOpen={true} setOpen={jest.fn()} />
+    )
     const heading = screen.getByRole('heading', { name: 'detailed error' })
     expect(heading).toBeInTheDocument()
     const links = screen.getByRole('link')

@@ -24,11 +24,33 @@
 
  */
 
-import type { LookerSDKError } from '@looker/sdk-rtl'
-import { screen } from '@testing-library/react'
+import type { IAPIMethods, LookerSDKError } from '@looker/sdk-rtl'
+import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { APIErrorDisplay } from './APIErrorDisplay'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+import {
+  registerEnvAdaptor,
+  unregisterEnvAdaptor,
+} from '@looker/extension-utils'
+
+const sampleIndex = {
+  '404': {
+    url: '404.md',
+  },
+  '404/post/login': {
+    url: 'login_404.md',
+  },
+}
+
+const badLoginMd = `## API Response 404 for \`login\`
+
+## Description
+
+A 404 Error response from the /login endpoint most often means that an attempt to login at a valid Looker URL was made but the combination of client_id and client_secret provided do not match an existing valid credential on that instance.
+
+See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes/404) for general information about this HTTP response from Looker.`
 
 describe('APIErrorDisplay', () => {
   it('shows simple errors', () => {
@@ -44,6 +66,69 @@ describe('APIErrorDisplay', () => {
     expect(link).toHaveAttribute('href', simple.documentation_url)
     const table = screen.queryByRole('table')
     expect(table).not.toBeInTheDocument()
+  })
+
+  it('fetches error doc', async () => {
+    const mockResponse = async (val: string): Promise<Response> => {
+      const resp: Response = {
+        bodyUsed: false,
+        ok: true,
+        redirected: false,
+        statusText: '',
+        url: '',
+        text(): Promise<string> {
+          return Promise.resolve(val)
+        },
+        status: 200,
+        headers: {} as Headers,
+        type: 'basic',
+        clone: function (): Response {
+          throw new Error('Function not implemented.')
+        },
+        body: null,
+        arrayBuffer: function (): Promise<ArrayBuffer> {
+          throw new Error('Function not implemented.')
+        },
+        blob: function (): Promise<Blob> {
+          throw new Error('Function not implemented.')
+        },
+        formData: function (): Promise<FormData> {
+          throw new Error('Function not implemented.')
+        },
+        json: function (): Promise<any> {
+          throw new Error('Function not implemented.')
+        },
+      }
+      return Promise.resolve(resp)
+    }
+    const fetcher = global.fetch
+    global.fetch = jest.fn((input: RequestInfo, _init?: RequestInit) => {
+      const url = input.toString()
+      let result = 'I dunno'
+      if (url.endsWith('index.json')) {
+        result = JSON.stringify(sampleIndex)
+      }
+      if (url.endsWith('login_404.md')) {
+        result = badLoginMd
+      }
+      return mockResponse(result)
+    })
+
+    const simple: LookerSDKError = {
+      name: 'Error',
+      message: 'simple error',
+      documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
+    }
+    registerEnvAdaptor({ sdk: {} as IAPIMethods } as IEnvironmentAdaptor)
+    renderWithTheme(<APIErrorDisplay error={simple} showDoc={true} />)
+    const heading = screen.getByRole('heading', { name: 'simple error' })
+    expect(heading).toBeInTheDocument()
+    await waitFor(() => {
+      const md = screen.getByRole('heading', { name: 'Description' })
+      expect(md).toBeInTheDocument()
+    })
+    global.fetch = fetcher
+    unregisterEnvAdaptor()
   })
 
   it('skips empty documentation url', () => {

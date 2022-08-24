@@ -40,7 +40,8 @@ export const errorHeading = (error: LookerSDKError) =>
  * @param url of document (either index.json or md) to fetch
  */
 export const apiErrorDisplayFetch = async (_sdk: IAPIMethods, url: string) => {
-  let result = await (await fetch(url, { mode: 'cors' })).text()
+  const fetched = await fetch(url, { mode: 'cors' })
+  let result = await fetched.text()
   const stop = result.indexOf('## API Response Type')
   if (stop > 0) {
     result = result.substring(0, stop - 1).trim()

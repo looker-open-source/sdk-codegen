@@ -24,7 +24,6 @@
 
  */
 
-import type { FC } from 'react'
 import React from 'react'
 import type { LookerSDKError } from '@looker/sdk-rtl'
 import { Heading, SpaceVertical } from '@looker/components'
@@ -43,10 +42,10 @@ export interface APIErrorDisplayProps {
  * @param error to display
  * @param showDoc true to fetch the error document markdown. false for a clickable link
  */
-export const APIErrorDisplay: FC<APIErrorDisplayProps> = ({
+export const APIErrorDisplay = ({
   error,
   showDoc = false,
-}) => {
+}: APIErrorDisplayProps) => {
   return (
     <>
       {error && (

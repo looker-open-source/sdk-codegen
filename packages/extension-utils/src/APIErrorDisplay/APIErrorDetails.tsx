@@ -25,7 +25,6 @@
  */
 
 import type { LookerSDKError } from '@looker/sdk-rtl'
-import type { FC } from 'react'
 import React from 'react'
 import {
   Span,
@@ -49,7 +48,7 @@ interface APIErrorDetailsProps {
  *
  * @param error to display
  */
-export const APIErrorDetails: FC<APIErrorDetailsProps> = ({ error }) => {
+export const APIErrorDetails = ({ error }: APIErrorDetailsProps) => {
   if (!error?.errors) return <></>
 
   return (

@@ -24,7 +24,6 @@
 
  */
 
-import type { FC } from 'react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ErrorDoc } from '@looker/sdk-rtl'
 import { getEnvAdaptor } from '../adaptorUtils'
@@ -39,10 +38,7 @@ import { apiErrorDisplayFetch } from './utils'
  * @param error to display
  * @param showDoc true to retrieve the corresponding error markdown
  */
-export const APIErrorContent: FC<APIErrorDisplayProps> = ({
-  error,
-  showDoc,
-}) => {
+export const APIErrorContent = ({ error, showDoc }: APIErrorDisplayProps) => {
   const [doc, setDoc] = useState<string>('')
   const getDoc = useCallback(
     async (docUrl: string) => {

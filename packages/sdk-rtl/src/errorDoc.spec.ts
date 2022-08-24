@@ -55,8 +55,6 @@ A 404 Error response from the /login endpoint most often means that an attempt t
 
 See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes/404) for general information about this HTTP response from Looker.`
 
-// class ErrorDocAccess extends ErrorDoc {}
-
 describe('ErrorDoc', () => {
   const external =
     'https://docs.looker.com/r/err/4.0/429/delete/bogus/:namespace/purge'

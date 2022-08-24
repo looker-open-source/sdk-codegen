@@ -140,8 +140,6 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   verb,
   path,
 }) => {
-  // TODO make a badge for the verb.
-  // Once we are satisfied with the badge in the api-explorer package it should be moved here
   const [isOpen, setIsOpen] = useState(false)
   const error: LookerSDKError =
     response &&
@@ -154,7 +152,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
       {!response && <DarkSpan>No response was received</DarkSpan>}
       {response && (
         <>
-          <RunItHeading as="h4" color={error ? 'critical' : undefined}>
+          <RunItHeading as="h4">
             {error && (
               <>
                 <APIErrorDialog
@@ -163,7 +161,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
                   setOpen={setIsOpen}
                 />
                 <IconButton
-                  size="xsmall"
+                  size="small"
                   onClick={() => setIsOpen(true)}
                   icon={<Warning />}
                   aria-label="API error"
@@ -183,7 +181,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
             <ShowResponse response={response} />
           </CollapserCard>
           {error && (
-            <CollapserCard heading={'Error information'}>
+            <CollapserCard divider={false} heading={'Error information'}>
               <APIErrorDisplay error={error} showDoc={true} />
             </CollapserCard>
           )}
