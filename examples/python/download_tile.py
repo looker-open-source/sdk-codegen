@@ -5,8 +5,9 @@ import looker_sdk
 from looker_sdk import models
 from looker_sdk.rtl import transport
 
+class MyTransportOptions(transport.PTransportSettings): timeout = 300
 
-sdk = looker_sdk.init31("../../looker.ini")
+sdk = looker_sdk.init40("../../looker.ini")
 
 
 def get_dashboard(title: str):
@@ -65,7 +66,7 @@ def download_tile(tile: models.DashboardElement, format: str = "png"):
     result = sdk.render_task_results(
         task.id,
         # wait up to 300 seconds
-        transport_options=transport.TransportSettings(timeout=300),
+        transport_options=MyTransportOptions,
     )
     fileName = f"{tile.title}.{format}"
     with open(fileName, "wb") as f:
