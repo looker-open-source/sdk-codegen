@@ -155,7 +155,7 @@ jobs:
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
-          docker logs -f looker-sdk-codegen-ci | tee ../server.log &
+          docker logs -f looker-sdk-codegen-ci | tee server.log &
 
       - name: Install Tox and any other packages
         run: |
@@ -189,7 +189,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: server.log
-          path: ../server.log
+          path: server.log
 
   twine:
     needs: integration
