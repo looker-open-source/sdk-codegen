@@ -180,10 +180,12 @@ jobs:
           path: python/results/
 
       - name: Shutdown docker
+        if: ${{ always() }}
         run: |
           docker rm -f looker-sdk-codegen-ci
 
       - name: Upload server log
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
           name: server.log
