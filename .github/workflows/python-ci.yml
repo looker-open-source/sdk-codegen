@@ -112,6 +112,7 @@ jobs:
         os:
           - ubuntu
         looker:
+          - 22_10
           - 22_12
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
