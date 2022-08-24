@@ -113,6 +113,7 @@ jobs:
           - ubuntu
         looker:
           - 22_10
+          - 22_12
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
@@ -159,7 +160,7 @@ jobs:
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
-          docker logs -f looker-sdk-codegen-ci > ${{ github.workspace }}/serverlog/server.log &
+          docker logs -f looker-sdk-codegen-ci > ${{ github.workspace }}/serverlog/server_${{ matrix.looker }}.log &
 
       - name: Install Tox and any other packages
         run: |
@@ -180,8 +181,13 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.looker }}
           path: python/results/
+
+      - name: Log docker inspect
+        if: ${{ always() }}
+        run: |
+          docker container inspect looker-sdk-codegen-ci > ${{ github.workspace }}/serverlog/docker_${{ matrix.looker }}.json
 
       - name: Shutdown docker
         if: ${{ always() }}
@@ -192,7 +198,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: server-log
+          name: server-log-${{ matrix.looker }}
           path: ${{ github.workspace }}/serverlog
 
   twine:
