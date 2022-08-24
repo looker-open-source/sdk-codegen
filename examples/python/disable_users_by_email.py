@@ -11,7 +11,7 @@ be automatically disabled.
 """
 
 
-sdk = looker_sdk.init31("../../looker.ini")
+sdk = looker_sdk.init40("../../looker.ini")
 
 
 def disable_user(user):
