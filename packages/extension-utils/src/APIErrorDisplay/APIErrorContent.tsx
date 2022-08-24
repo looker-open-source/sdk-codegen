@@ -58,7 +58,7 @@ export const APIErrorContent = ({ error, showDoc }: APIErrorDisplayProps) => {
   return (
     <>
       <APIErrorDetails error={error} />
-      {!showDoc && APIErrorDocLink(error.documentation_url ?? '')}
+      {!showDoc && <APIErrorDocLink docUrl={error.documentation_url ?? ''} />}
       {showDoc && doc && <ExtMarkdown source={doc} />}
     </>
   )

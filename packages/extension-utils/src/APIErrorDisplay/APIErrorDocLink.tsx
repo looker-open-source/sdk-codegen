@@ -28,7 +28,11 @@ import React from 'react'
 import { Link } from '@looker/components'
 import { getEnvAdaptor } from '../adaptorUtils'
 
-export const APIErrorDocLink = (docUrl?: string | null) => {
+interface APIErrorDocLinkProps {
+  docUrl?: string
+}
+
+export const APIErrorDocLink = ({ docUrl }: APIErrorDocLinkProps) => {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
     const adaptor = getEnvAdaptor()
