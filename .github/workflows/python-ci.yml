@@ -113,7 +113,6 @@ jobs:
         os:
           - ubuntu
         looker:
-          - 22_10
           - 22_12
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
@@ -160,7 +159,7 @@ jobs:
         run: |
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci --env API_SERVER_MAX_THREADS=1 --env LOOKER_JVM_XMS=3600m --env LOOKER_JVM_XMX=3600m --env LOOKER_JVM_META_SPACE=800m -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker run --name looker-sdk-codegen-ci --env LOOKER_JVM_XMS=3600m --env LOOKER_JVM_XMX=3600m --env LOOKER_JVM_META_SPACE=800m -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci > ${{ github.workspace }}/serverlog/server_${{ matrix.looker }}.log &
 
       - name: Install Tox and any other packages
@@ -172,8 +171,8 @@ jobs:
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
-      # - name: Setup tmate session 
-      #   uses: mxschmitt/action-tmate@v3
+      - name: Setup tmate session 
+        uses: mxschmitt/action-tmate@v3
 
       - name: Run Integration Tests
         run: tox -e integration
