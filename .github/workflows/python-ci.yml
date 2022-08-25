@@ -108,6 +108,7 @@ jobs:
         working-directory: python/
 
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu
@@ -159,7 +160,7 @@ jobs:
         run: |
           docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci --memory-swappiness 100 -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker run --name looker-sdk-codegen-ci --env API_SERVER_MAX_THREADS=1 -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
           docker logs -f looker-sdk-codegen-ci > ${{ github.workspace }}/serverlog/server_${{ matrix.looker }}.log &
 
       - name: Install Tox and any other packages
