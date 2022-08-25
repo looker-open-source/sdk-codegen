@@ -39,7 +39,7 @@ else:
     from typing_extensions import Protocol, TypedDict
 
 
-AGENT_PREFIX = "PY SDK"
+AGENT_PREFIX = "TS-SDK"
 LOOKER_API_ID = "x-looker-appid"
 
 
