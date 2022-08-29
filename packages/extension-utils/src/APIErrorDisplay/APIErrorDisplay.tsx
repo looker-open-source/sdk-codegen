@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,4 +24,36 @@
 
  */
 
-export * from './ExtMarkdown'
+import React from 'react'
+import type { LookerSDKError } from '@looker/sdk-rtl'
+import { Heading, SpaceVertical } from '@looker/components'
+import { APIErrorContent } from './APIErrorContent'
+import { errorHeading } from './utils'
+
+export interface APIErrorDisplayProps {
+  /** Populated SDK error information, which may contain detailed errors */
+  error: LookerSDKError
+  /** true to retrieve the markdown error document from the CDN and display it instead of a link */
+  showDoc?: boolean
+}
+
+/**
+ * Show API error information in the parent React component
+ * @param error to display
+ * @param showDoc true to fetch the error document markdown. false for a clickable link
+ */
+export const APIErrorDisplay = ({
+  error,
+  showDoc = false,
+}: APIErrorDisplayProps) => {
+  return (
+    <>
+      {error && (
+        <SpaceVertical>
+          <Heading type="h2">{errorHeading(error)}</Heading>
+          <APIErrorContent error={error} showDoc={showDoc} />
+        </SpaceVertical>
+      )}
+    </>
+  )
+}

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,27 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { ExtMarkdown } from '@looker/extension-utils'
-import type { IProjectProps } from '../../../models'
-import { getTechnologies } from '../../../data/hack_session/selectors'
-import { getMembers, techDescriptions } from '../../utils'
+import type { LookerSDKError, IAPIMethods } from '@looker/sdk-rtl'
 
-interface ProjectViewProps {
-  project: IProjectProps
-}
+/**
+ * Default the heading to 'Unknown error' if error.message is blank for any reason
+ * @param error for heading
+ */
+export const errorHeading = (error: LookerSDKError) =>
+  error.message || 'Unknown error'
 
-export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
-  const availableTechnologies = useSelector(getTechnologies)
-
-  const tech = techDescriptions(project.technologies, availableTechnologies)
-  const members = getMembers(project.$members)
-  const view = `# ${project.title}
-by ${members}
-
-${project.description}
-
-**Uses**: ${tech}
-
-**Project type**: ${project.project_type}
-
-**Contestant**: ${project.contestant ? 'Yes' : 'No'}
-`
-  return <ExtMarkdown source={view} />
+/**
+ * this callback function used by the ErrorDoc constructor gets and truncates
+ * API error documents for use within API Explorer
+ * @param _sdk required as a parameter, but it's ignored in this function
+ * @param url of document (either index.json or md) to fetch
+ */
+export const apiErrorDisplayFetch = async (_sdk: IAPIMethods, url: string) => {
+  const fetched = await fetch(url, { mode: 'cors' })
+  let result = await fetched.text()
+  const stop = result.indexOf('## API Response Type')
+  if (stop > 0) {
+    result = result.substring(0, stop - 1).trim()
+  }
+  return result
 }

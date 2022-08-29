@@ -32,7 +32,7 @@
     "deploy-dev-portal": "rm -f ../../../developer-portal/static/apix/dist/*.js* && cp -R ./dist/*.js* ../../../developer-portal/static/apix/dist"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.5.5",
+    "@looker/components-test-utils": "^1.5.26",
     "@looker/sdk-codegen-scripts": "^21.4.2",
     "@looker/sdk-node": "^22.10.1",
     "@styled-icons/styled-icon": "^10.6.3",

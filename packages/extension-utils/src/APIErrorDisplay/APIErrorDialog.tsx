@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,38 @@
 
  */
 
-import type { FC } from 'react'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { ExtMarkdown } from '@looker/extension-utils'
-import type { IProjectProps } from '../../../models'
-import { getTechnologies } from '../../../data/hack_session/selectors'
-import { getMembers, techDescriptions } from '../../utils'
+import { Button, Dialog, DialogLayout } from '@looker/components'
+import type { APIErrorDisplayProps } from './APIErrorDisplay'
+import { APIErrorContent } from './APIErrorContent'
+import { errorHeading } from './utils'
 
-interface ProjectViewProps {
-  project: IProjectProps
+interface APIErrorDialogProps extends APIErrorDisplayProps {
+  /** toggle for dialog being open */
+  isOpen: boolean
+  /** callback for toggling the dialog display */
+  setOpen: (open: boolean) => void
 }
 
-export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
-  const availableTechnologies = useSelector(getTechnologies)
-
-  const tech = techDescriptions(project.technologies, availableTechnologies)
-  const members = getMembers(project.$members)
-  const view = `# ${project.title}
-by ${members}
-
-${project.description}
-
-**Uses**: ${tech}
-
-**Project type**: ${project.project_type}
-
-**Contestant**: ${project.contestant ? 'Yes' : 'No'}
-`
-  return <ExtMarkdown source={view} />
-}
+export const APIErrorDialog = ({
+  error,
+  isOpen,
+  setOpen,
+  showDoc = false,
+}: APIErrorDialogProps) => (
+  <Dialog
+    isOpen={isOpen}
+    content={
+      <DialogLayout
+        header={errorHeading(error)}
+        footer={
+          <Button size="xsmall" onClick={() => setOpen && setOpen(false)}>
+            OK
+          </Button>
+        }
+      >
+        <APIErrorContent error={error} showDoc={showDoc} />
+      </DialogLayout>
+    }
+  />
+)

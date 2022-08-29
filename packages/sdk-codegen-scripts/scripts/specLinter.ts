@@ -34,6 +34,7 @@ import {
   includeDiffs,
   mdDiffRow,
   mdHeaderRow,
+  upgradeSpecObject,
 } from '@looker/sdk-codegen'
 import { compareSpecs } from '@looker/sdk-codegen/src/specDiff'
 import { readFileSync } from '../src'
@@ -63,7 +64,6 @@ const getOptions = () => {
 format=csv|md
 status=beta|all
 `)
-  console.log(`defaults:\n${JSON.stringify(result, null, 2)}`)
   if (args.length > 1) {
     result.fileA = args[1]
   }
@@ -84,14 +84,20 @@ status=beta|all
     }
     result.status = args[4].toLowerCase()
   }
+  console.log(`using:\n${JSON.stringify(result, null, 2)}`)
 
   return result
 }
 
+function oaSpec(fileName: string) {
+  const spec = JSON.parse(readFileSync(fileName))
+  return ApiModel.fromJson(upgradeSpecObject(spec))
+}
+
 function checkSpecs() {
   const opt = getOptions()
-  const specA = ApiModel.fromString(readFileSync(opt.fileA))
-  const specB = ApiModel.fromString(readFileSync(opt.fileB))
+  const specA = oaSpec(opt.fileA)
+  const specB = oaSpec(opt.fileB)
 
   const filter: DiffFilter =
     opt.status === 'beta'

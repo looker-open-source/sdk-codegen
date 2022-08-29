@@ -299,10 +299,11 @@ export const compareResponses = (
 export const csvHeaderRow =
   'method name,"Op + URI",left status,right status,typeDiff,paramDiff,bodyDiff,responseDiff,diffCount'
 
-export const csvDiffRow = (diff: DiffRow) => `
-${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${
-  diff.paramsDiff
-},${diff.bodyDiff},${diff.responseDiff},${JSON.stringify(diff.diffCount)}`
+export const csvDiffRow = (diff: DiffRow) => {
+  const diffCount = JSON.stringify(diff.diffCount).replace(/"/g, `'`)
+  return `
+${diff.name},${diff.id},${diff.lStatus},${diff.rStatus},${diff.typeDiff},${diff.paramsDiff},${diff.bodyDiff},${diff.responseDiff},"${diffCount}"`
+}
 
 export const mdHeaderRow = `
 | method name  | Op + URI | 3.1 | 4.0 | typeDiff     | paramDiff | bodyDiff | responseDiff | diffCount |
