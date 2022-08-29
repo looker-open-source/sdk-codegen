@@ -63,7 +63,7 @@ export const DocDiff: FC<DocDiffProps> = ({
 
   if (delta.length === 0) return <Text>{'No differences found'}</Text>
 
-  const pageCount = Math.round((delta.length - 1) / pageSize)
+  const pageCount = Math.ceil(delta.length / pageSize)
   const pageItemData = delta.slice((page - 1) * pageSize, page * pageSize)
 
   return (
