@@ -211,11 +211,8 @@ describe('Simple Items', () => {
 
     test('it creates a datetime item', async () => {
       renderWithTheme(DateItem)
-      const button = screen.getByRole('button', { name: 'Choose' })
-      userEvent.click(button)
-      await waitFor(() => {
-        expect(screen.getByTestId('text-input')).toBeInTheDocument()
-      })
+      expect(screen.getByTestId('text-input')).toBeInTheDocument()
+      expect(screen.getByText('Open calendar')).toBeInTheDocument()
     })
   })
 

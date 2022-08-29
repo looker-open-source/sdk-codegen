@@ -30,17 +30,14 @@ import {
   ToggleSwitch,
   Label,
   FieldCheckbox,
-  ButtonOutline,
-  Box,
-  Popover,
   InputText,
   Tooltip,
   Icon,
+  InputDate,
   Space,
 } from '@looker/components'
 // eslint-disable-next-line no-restricted-imports
 import { Info } from '@styled-icons/material'
-import { DateFormat, InputDate } from '@looker/components-date'
 import { CodeEditor } from '@looker/code-editor'
 import type { RunItInput, RunItValues } from '../../RunIt'
 import { FormItem } from './FormItem'
@@ -59,31 +56,12 @@ const createDateItem = (
   requestContent: RunItValues
 ) => (
   <FormItem key={`${name}_fid`} id={name} label={name}>
-    <Popover
-      key={`${name}_pop`}
-      placement="bottom-start"
-      content={
-        <Box key={`${name}_popbox`} p="u3">
-          <InputDate
-            key={`datepick_${name}`}
-            defaultValue={
-              name in requestContent ? requestContent[name] : undefined
-            }
-            onChange={handleChange.bind(null, name)}
-          />
-        </Box>
-      }
-    >
-      <ButtonOutline type="button" key={`${name}_pop_button`}>
-        {name in requestContent ? (
-          <DateFormat key={`${name}_dateformat`}>
-            {name in requestContent ? requestContent[name] : undefined}
-          </DateFormat>
-        ) : (
-          'Choose'
-        )}
-      </ButtonOutline>
-    </Popover>
+    <InputDate
+      key={`datepick_${name}`}
+      data-testid={`datepick_${name}`}
+      defaultValue={name in requestContent ? requestContent[name] : undefined}
+      onChange={handleChange.bind(null, name)}
+    />
   </FormItem>
 )
 
