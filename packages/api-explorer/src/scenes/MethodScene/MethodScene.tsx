@@ -120,8 +120,7 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
 
   useEffect(() => {
     if (method.responses && errorCode) {
-      const maybe = true
-      if (maybe && docResponsesRef.current) {
+      if (docResponsesRef.current) {
         window.setTimeout(() => {
           docResponsesRef.current!.scrollIntoView()
         }, 300)

@@ -66,7 +66,7 @@ export const SideNavMethods = styled(
         ? defaultOpen || match.params.methodTag === tag
         : defaultOpen
       setIsOpen(status)
-    }, [match, defaultOpen])
+    }, [defaultOpen])
 
     /* TODO: Fix highlighting. It is applied but it is somehow being overridden */
     return (
