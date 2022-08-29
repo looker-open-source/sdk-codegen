@@ -99,6 +99,12 @@ describe('useNavigation', () => {
         `${route}?${curParams.toString()}`
       )
     })
+
+    test('adds other parameters if present', () => {
+      curParams.delete('t')
+      const actual = buildPathWithGlobalParams(route, { e: 400 })
+      expect(actual).toEqual(`${route}?${curParams.toString()}&e=400`)
+    })
   })
 
   describe('navigateWithGlobalParams', () => {

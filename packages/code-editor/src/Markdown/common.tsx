@@ -69,6 +69,7 @@ export const MDListItem = styled.li`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 4px;
+  line-height: 1.5;
 `
 
 export const MDTable = styled(Table).attrs(({ mb = 'large' }: TableProps) => ({

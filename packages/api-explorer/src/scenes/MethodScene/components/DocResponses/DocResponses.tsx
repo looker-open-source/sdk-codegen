@@ -24,46 +24,80 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Tab, TabList, TabPanel, TabPanels, useTabs } from '@looker/components'
-import type { IMethodResponse, ApiModel } from '@looker/sdk-codegen'
+import React, { useEffect, useState } from 'react'
+import { Tabs2, Tab2 } from '@looker/components'
+import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { CollapserCard } from '@looker/run-it'
+import { ErrorDoc } from '@looker/sdk-rtl'
+import {
+  apiErrorDisplayFetch,
+  ExtMarkdown,
+  getEnvAdaptor,
+} from '@looker/extension-utils'
 
 import { DocResponseTypes } from './DocResponseTypes'
 import { buildResponseTree } from './utils'
 
 interface DocResponsesProps {
-  responses: IMethodResponse[]
   api: ApiModel
+  method: IMethod
+  /** error code to display */
+  errorCode?: string
 }
 
 /**
  * Renders a tab list and tab panels for different method response types
  */
-export const DocResponses: FC<DocResponsesProps> = ({ api, responses }) => {
-  const tabs = useTabs()
+export const DocResponses = ({ api, method, errorCode }: DocResponsesProps) => {
+  const [errorContent, setErrorContent] = useState('')
+  const responses = method.responses
+
+  const responseTree = buildResponseTree(responses)
+  const tabNames = Object.keys(responseTree)
+
+  let defaultTabId = tabNames[0]
+
+  if (errorCode) {
+    const pattern = new RegExp(`${errorCode}: \\w+`)
+    tabNames.forEach((el) => {
+      if (pattern.test(el)) {
+        defaultTabId = el
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (!errorCode) return
+
+    const getErrorContent = async () => {
+      const docUrl = `/err/4.0/${errorCode}/${method.httpMethod.toLocaleLowerCase()}${
+        method.endpoint
+      }`
+      const adaptor = getEnvAdaptor()
+      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
+      const content = await errDoc.content(docUrl)
+      setErrorContent(content)
+    }
+    getErrorContent()
+  }, [errorCode])
 
   if (responses.length === 0) return <></>
 
-  const responseTree = buildResponseTree(responses)
-
   return (
     <CollapserCard heading="Response Models" id="response models">
-      <>
-        <TabList {...tabs}>
-          {Object.keys(responseTree).map((statusCode, index) => (
-            <Tab key={index}>{statusCode}</Tab>
-          ))}
-        </TabList>
-        <TabPanels {...tabs} pt="0">
-          {Object.values(responseTree).map((responses, index) => (
-            <TabPanel key={index}>
-              <DocResponseTypes api={api} responses={responses} />
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </>
+      <Tabs2 defaultTabId={defaultTabId}>
+        {Object.entries(responseTree).map(([statusCode, response]) => {
+          const errorTab = errorCode && statusCode === defaultTabId
+          return (
+            <Tab2 key={statusCode} id={statusCode} label={statusCode}>
+              <DocResponseTypes api={api} responses={response} />
+              {errorContent && errorTab && (
+                <ExtMarkdown source={errorContent} />
+              )}
+            </Tab2>
+          )
+        })}
+      </Tabs2>
     </CollapserCard>
   )
 }

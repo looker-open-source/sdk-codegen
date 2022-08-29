@@ -25,14 +25,12 @@
  */
 import '@testing-library/jest-dom'
 
-import { goToPage, pageReload, BASE_URL } from './helpers'
+import { goToPage, pageReload, v40Url as v40 } from './helpers'
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
 
 jest.setTimeout(120000)
-
-const v40 = `${BASE_URL}/4.0`
 
 describe('API Explorer', () => {
   beforeEach(async () => {
@@ -45,6 +43,7 @@ describe('API Explorer', () => {
       localStorage.clear()
     })
   })
+
   describe('general', () => {
     beforeEach(async () => {
       await goToPage(v40)
@@ -218,6 +217,30 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('h2', { text: 'Query' })
       await expect(page).toMatchElement('button', { text: 'Query' })
     })
+
+    it('redirects error routes to the correct method page', async () => {
+      const errorCode = 400
+      await goToPage(
+        `${v40}/err/${errorCode}/get/content_metadata/:content_metadata_id`
+      )
+
+      // confirm method scene loaded
+      await expect(page).toMatchElement('h2', { text: 'Get Content Metadata' })
+
+      // confirm url and query param are set correctly
+      await expect(page.url()).toEqual(
+        `${v40}/methods/Content/content_metadata?sdk=py&e=${errorCode}`
+      )
+
+      // confirm correct response tab is selected
+      await expect(page).toMatchElement('button[aria-selected=true]', {
+        text: '400: Bad Request',
+      })
+      // confirm error detail md file was fetched
+      await expect(page).toMatchElement('h2', {
+        text: `API Response ${errorCode} for `,
+      })
+    })
   })
 
   describe('outbound navigation', () => {
@@ -233,7 +256,7 @@ describe('API Explorer', () => {
       //   page.waitForNavigation({timeout:5000}),
       //   exampleLink.click()
       //   ])
-      await exampleLink.click()
+      await exampleLink?.click()
       await page.waitForTimeout(150)
 
       const body = await page.$('body')

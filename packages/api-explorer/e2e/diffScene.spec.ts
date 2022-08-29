@@ -45,13 +45,19 @@ describe('Diff Scene', () => {
     await page.setDefaultNavigationTimeout(120000)
   })
 
+  afterEach(async () => {
+    await page.evaluate(() => {
+      localStorage.clear()
+    })
+  })
+
   it('loads the default scene (/3.1/diff)', async () => {
     await goToPage(`${BASE_URL}/3.1/diff`)
     const body = await page.$('body')
 
     // "Base" input element
     {
-      await body.click()
+      await body?.click()
       const baseInputElement = await page.$(baseInputSelector)
       expect(baseInputElement).not.toBeNull()
       const baseInputValue = await page.evaluate(
@@ -63,18 +69,18 @@ describe('Diff Scene', () => {
       const baseOptionsOnLoad = await page.$(globalOptionsSelector)
       expect(baseOptionsOnLoad).toBeNull()
 
-      await baseInputElement.click()
+      await baseInputElement?.click()
       const baseOptionsOnClick = await page.$$(globalOptionsSelector)
       expect(baseOptionsOnClick).not.toHaveLength(0)
 
-      await body.click()
+      await body?.click()
       const baseOptionsOnClose = await page.$(globalOptionsSelector)
       expect(baseOptionsOnClose).toBeNull()
     }
 
     // "Comparison" input element
     {
-      await body.click()
+      await body?.click()
       const compInputElement = await page.$(compInputSelector)
       expect(compInputElement).not.toBeNull()
       const compInputValue = await page.evaluate(
@@ -86,11 +92,11 @@ describe('Diff Scene', () => {
       const compOptionsOnLoad = await page.$(globalOptionsSelector)
       expect(compOptionsOnLoad).toBeNull()
 
-      await compInputElement.click()
+      await compInputElement?.click()
       const compOptionsOnClick = await page.$$(globalOptionsSelector)
       expect(compOptionsOnClick).not.toHaveLength(0)
 
-      await body.click()
+      await body?.click()
       const compOptionsOnClose = await page.$(globalOptionsSelector)
       expect(compOptionsOnClose).toBeNull()
     }
@@ -151,7 +157,7 @@ describe('Diff Scene', () => {
           page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
         )
       )
-      expect(page1Methods).toHaveLength(16)
+      expect(page1Methods).toHaveLength(15)
       expect(page1Methods).toContain('delete_board_item')
     }
 
@@ -179,7 +185,7 @@ describe('Diff Scene', () => {
       expect(methodText).toMatch(`delete_alert for 4.0`)
 
       // Click and validate destination
-      await methodLink.click()
+      await methodLink?.click()
       await page.waitForSelector(`div[class*=MethodBadge]`, { timeout: 5000 })
       const compUrl = page.url()
       expect(compUrl).toEqual(
@@ -200,14 +206,14 @@ describe('Diff Scene', () => {
     expect(compInputElement).not.toBeNull()
 
     // Click comparison input
-    await compInputElement.click()
+    await compInputElement?.click()
     const compOptionsOnClick = await page.$$(globalOptionsSelector)
     expect(compOptionsOnClick).not.toHaveLength(0)
     expect(compOptionsOnClick).not.toHaveLength(1)
 
     // Find an option containing the text 4.0
     const option40Index = await page.$$eval(globalOptionsSelector, (els) =>
-      els.findIndex((el) => el.textContent.match(/4\.0/))
+      els.findIndex((el) => el?.textContent?.match(/4\.0/))
     )
     const option40 = compOptionsOnClick[option40Index]
     expect(option40).not.toBeUndefined()
@@ -230,7 +236,7 @@ describe('Diff Scene', () => {
       )
     )
 
-    expect(diff31to40Page1Methods).toHaveLength(16)
+    expect(diff31to40Page1Methods).toHaveLength(15)
     expect(diff31to40Page1Methods).toContain('delete_board_item')
 
     // Click the switch button
@@ -241,7 +247,7 @@ describe('Diff Scene', () => {
       switchButtonElement
     )
     expect(switchButtonDisabled).toEqual(false)
-    await switchButtonElement.click()
+    await switchButtonElement?.click()
 
     // A more precise timing mechanism would be better: https://github.com/puppeteer/puppeteer/issues/5328
     await page.waitForTimeout(150)
@@ -256,7 +262,7 @@ describe('Diff Scene', () => {
       )
     )
 
-    expect(diff40to31Page1Methods).toHaveLength(16)
+    expect(diff40to31Page1Methods).toHaveLength(15)
     expect(diff40to31Page1Methods).toContain('delete_board_item')
   })
 })
