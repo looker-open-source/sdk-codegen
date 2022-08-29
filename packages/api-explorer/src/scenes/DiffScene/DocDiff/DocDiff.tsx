@@ -76,9 +76,9 @@ export const DocDiff: FC<DocDiffProps> = ({
             <Heading as="h2">{`${delta.length} differences between ${leftKey} and ${rightKey}`}</Heading>
           </Space>
           <SpaceVertical mt="large" gap="xxsmall">
-            {pageItemData.map((item, index) => (
+            {pageItemData.map((item) => (
               <DiffItem
-                key={`page-${page} item-${index}`}
+                key={item.name}
                 item={item}
                 leftKey={leftKey}
                 leftSpec={leftSpec}
