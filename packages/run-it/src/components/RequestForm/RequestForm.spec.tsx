@@ -29,14 +29,12 @@ import { renderWithTheme } from '@looker/components-test-utils'
 import { act, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { formatDateString } from '@looker/components-date'
 import type { RunItInput } from '../..'
 import { runItNoSet } from '../..'
 import { RequestForm } from './RequestForm'
 
 describe('RequestForm', () => {
   const run = 'Run'
-  // const mockSdk = {} as unknown as IAPIMethods
   let requestContent = {}
   const setRequestContent = jest.fn((content) => {
     requestContent = content
@@ -45,6 +43,10 @@ describe('RequestForm', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+  })
+
+  afterEach(() => {
+    requestContent = {}
   })
 
   describe('validation messages', () => {
@@ -178,22 +180,9 @@ describe('RequestForm', () => {
     })
   })
 
-  /** Return time that matches day picker in calendar */
-  const noon = () => {
-    const now = new Date()
-    return new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      12,
-      0,
-      0,
-      0
-    )
-  }
-
   test('interacting with a date picker changes the request content', async () => {
     const name = 'date_item'
+    requestContent = { [name]: new Date('Aug 30, 2022') }
     renderWithTheme(
       <RequestForm
         inputs={[
@@ -215,17 +204,13 @@ describe('RequestForm', () => {
       />
     )
 
-    const button = screen.getByRole('button', { name: 'Choose' })
-    expect(button).toBeInTheDocument()
-    userEvent.click(button)
-    await waitFor(() => {
-      const today = noon()
-      const pickName = formatDateString(today, undefined, 'iii PP')
-      const cell = screen.getByRole('gridcell', {
-        name: pickName,
-      })
-      userEvent.click(cell)
-      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: today })
+    const calendar = screen.getByText('Open calendar')
+    userEvent.click(calendar)
+
+    const date = screen.getAllByText('15')[1]
+    userEvent.click(date)
+    expect(setRequestContent).toHaveBeenLastCalledWith({
+      [name]: new Date('Aug 15, 2022 00:00:00 AM'),
     })
   })
 
