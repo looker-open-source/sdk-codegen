@@ -44,7 +44,8 @@ interface MethodsProps {
 
 export const SideNavMethods = styled(
   ({ className, methods, tag, specKey, defaultOpen = false }: MethodsProps) => {
-    const { navigate, buildPathWithGlobalParams } = useNavigation()
+    const { buildPathWithGlobalParams, navigateWithGlobalParams } =
+      useNavigation()
     const searchPattern = useSelector(selectSearchPattern)
     const match = useRouteMatch<{ methodTag: string }>(
       `/:specKey/methods/:methodTag/:methodName?`
@@ -54,9 +55,9 @@ export const SideNavMethods = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        navigate(`/${specKey}/methods/${tag}`)
+        navigateWithGlobalParams(`/${specKey}/methods/${tag}`)
       } else {
-        navigate(`/${specKey}/methods`)
+        navigateWithGlobalParams(`/${specKey}/methods`)
       }
     }
 

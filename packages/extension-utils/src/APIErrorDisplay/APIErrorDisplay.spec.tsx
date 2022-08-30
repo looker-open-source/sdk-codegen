@@ -24,16 +24,13 @@
 
  */
 
-import type { IAPIMethods, LookerSDKError } from '@looker/sdk-rtl'
+import type { LookerSDKError } from '@looker/sdk-rtl'
 import { screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
+
+import { registerTestEnvAdaptor, unregisterEnvAdaptor } from '../adaptorUtils'
 import { APIErrorDisplay } from './APIErrorDisplay'
-import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import {
-  registerEnvAdaptor,
-  unregisterEnvAdaptor,
-} from '@looker/extension-utils'
 
 const sampleIndex = {
   '404': {
@@ -119,7 +116,7 @@ describe('APIErrorDisplay', () => {
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
     }
-    registerEnvAdaptor({ sdk: {} as IAPIMethods } as IEnvironmentAdaptor)
+    registerTestEnvAdaptor()
     renderWithTheme(<APIErrorDisplay error={simple} showDoc={true} />)
     const heading = screen.getByRole('heading', { name: 'simple error' })
     expect(heading).toBeInTheDocument()

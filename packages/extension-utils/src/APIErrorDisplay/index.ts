@@ -26,3 +26,4 @@
 
 export * from './APIErrorDialog'
 export * from './APIErrorDisplay'
+export { apiErrorDisplayFetch } from './utils'

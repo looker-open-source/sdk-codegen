@@ -24,7 +24,6 @@
 
  */
 
-import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import { ButtonToggle, ButtonItem } from '@looker/components'
 import type {
@@ -37,6 +36,7 @@ import { ExploreType } from '../../../../components'
 
 interface DocResponseTypesProps {
   api: ApiModel
+  /** responses to render */
   responses: KeyedCollection<IMethodResponse>
 }
 
@@ -45,10 +45,7 @@ interface DocResponseTypesProps {
  * toggling media type and render the response
  * @param response
  */
-export const DocResponseTypes: FC<DocResponseTypesProps> = ({
-  api,
-  responses,
-}) => {
+export const DocResponseTypes = ({ api, responses }: DocResponseTypesProps) => {
   const mediaTypes = Object.keys(responses)
   const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0])
   const [resps, setResps] = useState(responses)
