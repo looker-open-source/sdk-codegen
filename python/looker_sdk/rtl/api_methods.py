@@ -84,7 +84,13 @@ class APIMethods:
     def _return(self, response: transport.Response, structure: TStructure) -> TReturn:
         encoding = response.encoding
         if not response.ok:
-            raise error.SDKError(response.value.decode(encoding=encoding))
+            value = response.value.decode(encoding=encoding)
+            sdk_error: error.SDKError
+            try:
+                sdk_error = self.deserialize(data=value, structure=error.SDKError) # type: ignore
+            except serialize.DeserializeError:
+                raise error.SDKError(value)
+            raise sdk_error
         ret: TReturn
         if structure is None:
             ret = None
@@ -92,7 +98,7 @@ class APIMethods:
             ret = response.value
         else:
             value = response.value.decode(encoding=encoding)
-            if structure is Union[str, bytes] or structure is str:  # type: ignore
+            if structure is Union[str, bytes] or structure is str or value == "":  # type: ignore
                 ret = value
             else:
                 # ignore type: mypy bug doesn't recognized kwarg
