@@ -30,6 +30,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import type { ApiModel } from '@looker/sdk-codegen'
 
 import {
+  ErrorDetailScene,
   HomeScene,
   MethodScene,
   MethodTagScene,
@@ -52,6 +53,9 @@ export const AppRouter: FC<AppRouterProps> = ({
 }) => (
   <Switch>
     <Redirect from="/" to={`/${specKey}/`} exact />
+    <Route path="/:specKey/err/:statusCode/:verb/*">
+      <ErrorDetailScene api={api} />
+    </Route>
     <Route path={`/:specKey/${diffPath}/:compareSpecKey?`}>
       <DiffScene toggleNavigation={toggleNavigation} />
     </Route>
