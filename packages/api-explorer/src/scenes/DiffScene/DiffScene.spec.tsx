@@ -24,14 +24,22 @@
 
  */
 
-import { preloadedState } from '../../test-utils'
+import type { SpecList } from '@looker/sdk-codegen'
 import { getLoadedSpecs } from '../../test-data'
+import { createTestStore, preloadedState } from '../../test-utils'
 
 describe('DiffScene', () => {
   Element.prototype.scrollTo = jest.fn()
   Element.prototype.scrollIntoView = jest.fn()
-  const specs = getLoadedSpecs()
+
+  // NOTE: if call getLoadedSpecs, preloadedState = undefined
+  //       if comment out getLoadedSpecs, preloadedState = expected
+  const specs = getLoadedSpecs() as SpecList
   test('calling getLoadedSpecs should not affect preloadedState', () => {
     expect(preloadedState).toEqual({})
+    const store = createTestStore({
+      specs: { specs, currentSpecKey: '4.0' },
+      settings: { initialized: true },
+    })
   })
 })
