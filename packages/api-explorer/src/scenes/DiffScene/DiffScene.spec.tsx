@@ -25,12 +25,13 @@
  */
 
 import { preloadedState } from '../../test-utils'
+import { getLoadedSpecs } from '../../test-data'
 
 describe('DiffScene', () => {
   Element.prototype.scrollTo = jest.fn()
   Element.prototype.scrollIntoView = jest.fn()
-
-  test.only('updating url dispatches store action', () => {
+  const specs = getLoadedSpecs()
+  test('calling getLoadedSpecs should not affect preloadedState', () => {
     expect(preloadedState).toEqual({})
   })
 })
