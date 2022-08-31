@@ -29,8 +29,8 @@ import React from 'react'
 
 import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
+import { ExtMarkdown } from '@looker/extension-utils'
 import type { IHackerProps } from '../../models'
-import { ExtMarkdown } from '../../components'
 import { Agenda } from './components'
 import { localAgenda } from './agenda'
 

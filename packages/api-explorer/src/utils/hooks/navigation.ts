@@ -25,7 +25,7 @@
  */
 import { useHistory } from 'react-router-dom'
 
-const globalParams = ['s', 'sdk']
+const GLOBAL_PARAMS = ['s', 'sdk']
 
 interface QueryParamProps {
   /** Search Query **/
@@ -75,17 +75,35 @@ export const useNavigation = () => {
   /**
    * Builds path to a scene and removes any scene-specific URL parameters
    *
-   * @param path the destination path
+   * @param path        the destination path
+   * @param otherParams other query parameters to append to url
    * @returns a path excluding scene-specific search parameters
    */
-  const buildPathWithGlobalParams = (path: string) => {
+  const buildPathWithGlobalParams = (path: string, otherParams = {}) => {
     const params = new URLSearchParams(history.location.search)
+
     for (const key of params.keys()) {
-      if (!globalParams.includes(key)) {
+      if (!GLOBAL_PARAMS.includes(key)) {
         params.delete(key)
       }
     }
-    return `${path}?${params.toString()}`
+    const globalParams = params.toString()
+
+    let additionalParams = ''
+    Object.entries(otherParams).forEach(([key, value]) => {
+      additionalParams += `${key}=${value}`
+    })
+
+    let queryString = ''
+    if (globalParams) {
+      queryString = globalParams
+    }
+
+    if (additionalParams) {
+      queryString += globalParams ? `&${additionalParams}` : additionalParams
+    }
+
+    return `${path}${queryString ? `?${queryString}` : ''}`
   }
 
   /**

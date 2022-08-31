@@ -3,9 +3,13 @@ from looker_sdk import models
 import configparser
 import hashlib
 import csv
+from looker_sdk.rtl import transport
 
 config_file = "../../looker.ini"
-sdk = looker_sdk.init31(config_file)
+
+class MyTransportOptions(transport.PTransportSettings): timeout = 600
+
+sdk = looker_sdk.init40(config_file)
 
 
 def main():
@@ -17,15 +21,15 @@ def main():
     Use this script to test whether LookML changes
     will result in new broken content."""
     base_url = get_base_url()
-    space_data = get_space_data()
+    folder_data = get_folder_data()
     print("Checking for broken content in production.")
     broken_content_prod = parse_broken_content(
-        base_url, get_broken_content(), space_data
+        base_url, get_broken_content(), folder_data
     )
     checkout_dev_branch()
     print("Checking for broken content in dev branch.")
     broken_content_dev = parse_broken_content(
-        base_url, get_broken_content(), space_data
+        base_url, get_broken_content(), folder_data
     )
     new_broken_content = compare_broken_content(broken_content_prod, broken_content_dev)
     if new_broken_content:
@@ -43,21 +47,21 @@ def get_base_url():
     return base_url
 
 
-def get_space_data():
-    """Collect all space information"""
-    space_data = sdk.all_spaces(fields="id, parent_id, name")
-    return space_data
+def get_folder_data():
+    """Collect all folder information"""
+    folder_data = sdk.all_folders(fields="id, parent_id, name")
+    return folder_data
 
 
 def get_broken_content():
     """Collect broken content"""
     broken_content = sdk.content_validation(
-        transport_options={"timeout": 600}
+        transport_options=MyTransportOptions
     ).content_with_errors
     return broken_content
 
 
-def parse_broken_content(base_url, broken_content, space_data):
+def parse_broken_content(base_url, broken_content, folder_data):
     """Parse and return relevant data from content validator"""
     output = []
     for item in broken_content:
@@ -68,39 +72,39 @@ def parse_broken_content(base_url, broken_content, space_data):
         item_content_type = getattr(item, content_type)
         id = item_content_type.id
         name = item_content_type.title
-        space_id = item_content_type.space.id
-        space_name = item_content_type.space.name
+        folder_id = item_content_type.folder.id
+        folder_name = item_content_type.folder.name
         errors = item.errors
         url = f"{base_url}/{content_type}s/{id}"
-        space_url = "{}/spaces/{}".format(base_url, space_id)
+        folder_url = "{}/folders/{}".format(base_url, folder_id)
         if content_type == "look":
             element = None
         else:
             dashboard_element = item.dashboard_element
             element = dashboard_element.title if dashboard_element else None
-        # Lookup additional space information
-        space = next(i for i in space_data if str(i.id) == str(space_id))
-        parent_space_id = space.parent_id
-        # Old version of API  has issue with None type for all_space() call
-        if parent_space_id is None or parent_space_id == "None":
-            parent_space_url = None
-            parent_space_name = None
+        # Lookup additional folder information
+        folder = next(i for i in folder_data if str(i.id) == str(folder_id))
+        parent_folder_id = folder.parent_id
+        # Old version of API  has issue with None type for all_folders() call
+        if parent_folder_id is None or parent_folder_id == "None":
+            parent_folder_url = None
+            parent_folder_name = None
         else:
-            parent_space_url = "{}/spaces/{}".format(base_url, parent_space_id)
-            parent_space = next(
-                (i for i in space_data if str(i.id) == str(parent_space_id)), None
+            parent_folder_url = "{}/folders/{}".format(base_url, parent_folder_id)
+            parent_folder = next(
+                (i for i in folder_data if str(i.id) == str(parent_folder_id)), None
             )
-            # Handling an edge case where space has no name. This can happen
+            # Handling an edge case where folder has no name. This can happen
             # when users are improperly generated with the API
             try:
-                parent_space_name = parent_space.name
+                parent_folder_name = parent_folder.name
             except AttributeError:
-                parent_space_name = None
+                parent_folder_name = None
         # Create a unique hash for each record. This is used to compare
         # results across content validator runs
         unique_id = hashlib.md5(
             "-".join(
-                [str(id), str(element), str(name), str(errors), str(space_id)]
+                [str(id), str(element), str(name), str(errors), str(folder_id)]
             ).encode()
         ).hexdigest()
         data = {
@@ -109,10 +113,10 @@ def parse_broken_content(base_url, broken_content, space_data):
             "name": name,
             "url": url,
             "dashboard_element": element,
-            "space_name": space_name,
-            "space_url": space_url,
-            "parent_space_name": parent_space_name,
-            "parent_space_url": parent_space_url,
+            "folder_name": folder_name,
+            "folder_url": folder_url,
+            "parent_folder_name": parent_folder_name,
+            "parent_folder_url": parent_folder_url,
             "errors": str(errors),
         }
         output.append(data)

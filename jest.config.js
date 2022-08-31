@@ -36,7 +36,7 @@ module.exports = {
     '@looker/api-explorer/src/utils':
       '<rootDir>/packages/api-explorer/src/utils',
     '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components-test-utils|components|design|icons|chatty)(.+))$':
+    '@looker/((?!components-test-utils|components|design|icons|chatty|i18n)(.+))$':
       '<rootDir>/packages/$1/src',
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':

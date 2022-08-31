@@ -29,7 +29,7 @@
     "watch": "yarn lerna exec --scope @looker/code-editor --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.5.5",
+    "@looker/components-test-utils": "^1.5.26",
     "@looker/sdk-codegen": "^21.7.0",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -49,8 +49,8 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@looker/components": "^2.8.1",
-    "@looker/design-tokens": "^2.7.1",
+    "@looker/components": "^3.0.8",
+    "@looker/design-tokens": "^2.7.21",
     "prism-react-renderer": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

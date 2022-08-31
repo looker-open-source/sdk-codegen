@@ -18,13 +18,13 @@ The API Explorer extension can be manually installed and run with a Looker insta
          local_storage: yes
          navigation: no
          new_window: yes
-         new_window_external_urls: ["https://looker.com/*"]
+         new_window_external_urls: ["https://looker.com/*", "https://developer.mozilla.org/*", "https://docs.looker.com/*"]
          raw_api_request: yes
          use_form_submit: yes
          use_embeds: yes
          use_clipboard: yes
          core_api_methods: ["versions", "api_spec"]
-         external_api_urls: ["https://raw.githubusercontent.com", "http://localhost:30000"]
+         external_api_urls : ["https://raw.githubusercontent.com","http://localhost:30000","https://localhost:8080","https://marketplace-api.looker.com","https://docs.looker.com","https://developer.mozilla.org/"]
          oauth2_urls: []
       }
    }
@@ -32,11 +32,7 @@ The API Explorer extension can be manually installed and run with a Looker insta
    the `http://localhost:30000` is for when you want to use the [API Explorer file server](/apix-files/README.md)
 4. save all changes and deploy to production
 5. in the root of `sdk-codegen`:
-   ```sh
-   yarn && yarn build
-   ```
-6. in `packages/extension-api-explorer`:
-   ```sh
-   yarn develop
-   ```
-7. on the Looker web page, click `Browse|API Explorer` to view the API Explorer
+```sh
+yarn && yarn build && yarn dev:xapix
+```
+6. on the Looker web page, click `Browse|API Explorer` to view the API Explorer

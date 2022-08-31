@@ -27,9 +27,9 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { ExtMarkdown } from '@looker/extension-utils'
 import type { IJudgingProps } from '../../../models'
 import { getTechnologies } from '../../../data/hack_session/selectors'
-import { ExtMarkdown } from '../../../components'
 import { getMembers, techDescriptions } from '../../utils'
 
 interface JudgingViewProps {
