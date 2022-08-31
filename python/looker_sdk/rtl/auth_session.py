@@ -237,7 +237,7 @@ class AuthSession:
 
     def _ok(self, response: transport.Response) -> str:
         if not response.ok:
-            raise error.SDKError(response.value)
+            raise error.SDKError(response.value.decode(encoding="utf-8"))
         return response.value.decode(encoding="utf-8")
 
 
