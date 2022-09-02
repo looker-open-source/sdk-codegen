@@ -40,12 +40,14 @@ import {
 import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
+import isEqual from 'lodash/isEqual'
 import { ApixSection } from '../../components'
 import {
   selectCurrentSpec,
   selectSpecs,
   selectDiffOptions,
   useSettingActions,
+  useSettingStoreState,
 } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { useDiffStoreSync } from '../utils'
@@ -91,6 +93,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const adaptor = getApixAdaptor()
   const { navigate } = useNavigation()
   const selectedDiffOptions = useSelector(selectDiffOptions)
+  const { initialized } = useSettingStoreState()
   const { setDiffOptionsAction } = useSettingActions()
   const spec = useSelector(selectCurrentSpec)
   const specs = useSelector(selectSpecs)
@@ -164,14 +167,17 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   }
 
   useEffect(() => {
+    if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
     const diffOptionsParam = getDiffOptionsFromUrl(searchParams.get('opts'))
+    // if (isEqual(diffOptionsParam, selectedDiffOptions)) return
     setDiffOptionsAction({
       diffOptions: diffOptionsParam || [],
     })
   }, [location.search])
 
   useEffect(() => {
+    // if (isEqual(toggles, selectedDiffOptions)) return
     setToggles(selectedDiffOptions)
   }, [selectedDiffOptions])
 

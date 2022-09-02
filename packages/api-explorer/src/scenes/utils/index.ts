@@ -24,5 +24,4 @@
 
  */
 
-export { useTagStoreSync } from './hooks'
-export { useDiffStoreSync } from './hooks'
+export { useTagStoreSync, useDiffStoreSync } from './hooks'
