@@ -36,29 +36,24 @@ import {
 import { getApixAdaptor } from '../../utils'
 import { DiffScene } from './DiffScene'
 
-// jest.mock('react-redux', () => {
-//   const reactRedux = jest.requireActual('react-redux')
-//   return {
-//     __esModule: true,
-//     ...reactRedux,
-//     useDispatch: jest.fn(reactRedux.useDispatch),
-//   }
-// })
-
 const mockHistoryPush = jest.fn()
 jest.mock('react-router-dom', () => {
+  const location = {
+    pathname: '/3.1/diff',
+    search: '',
+    hash: '',
+    state: {},
+    key: '',
+  }
   const ReactRouter = jest.requireActual('react-router-dom')
-  const mockLocation = jest
-    .fn()
-    .mockReturnValue({ pathname: '/3.1/diff', search: '' })
   return {
     __esModule: true,
     ...ReactRouter,
     useHistory: () => ({
       push: mockHistoryPush,
-      location: mockLocation,
+      location,
     }),
-    useLocation: mockLocation,
+    useLocation: jest.fn().mockReturnValue(location),
   }
 })
 
@@ -89,7 +84,49 @@ describe('DiffScene', () => {
 
   const toggleNavigation = () => false
 
-  test('selecting comparison option pushes value to url opts param', async () => {
+  test('rendering with no url opts param results in default comparison options toggled', () => {
+    const store = createTestStore({
+      specs: { specs, currentSpecKey: '3.1' },
+    })
+    renderWithRouterAndReduxProvider(
+      <DiffScene toggleNavigation={toggleNavigation} />,
+      ['/3.1/diff'],
+      store
+    )
+
+    expect(
+      screen.getByRole('option', {
+        name: 'Missing Delete',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('option', {
+        name: 'Parameters Delete',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('option', {
+        name: 'Type Delete',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('option', {
+        name: 'Body Delete',
+      })
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('option', {
+        name: 'Status Delete',
+      })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.getByRole('option', {
+        name: 'Response Delete',
+      })
+    ).toBeInTheDocument()
+  })
+
+  test('selecting a comparison option pushes it to url opts param', async () => {
     const store = createTestStore({
       specs: { specs, currentSpecKey: '3.1' },
       settings: { diffOptions: [] },
@@ -157,56 +194,5 @@ describe('DiffScene', () => {
         search: '',
       })
     })
-  })
-
-  // TODO: the following test cases should be able to pass but face unique bugs to this spec file
-  test('rendering with no url opts param results in default comparison options toggled', () => {
-    const store = createTestStore({
-      specs: { specs, currentSpecKey: '3.1' },
-      settings: {
-        diffOptions: ['missing', 'params', 'type', 'body', 'response'],
-      },
-    })
-    renderWithRouterAndReduxProvider(
-      <DiffScene toggleNavigation={toggleNavigation} />,
-      ['/3.1/diff'],
-      store
-    )
-    /*
-     * If you uncomment out the following line, this test will err
-     * informing you that there are multiple elements with this role
-     *
-     * Yet if you try querying a specific option, say with a name of
-     * one of these comparison options, it will err saying it could not find
-     */
-    // expect(screen.getByRole('option')).toBeInTheDocument()
-    expect(
-      screen.getByRole('option', {
-        name: 'Missing',
-      })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('option', {
-        name: 'Parameters',
-      })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('option', {
-        name: 'Type',
-      })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('option', {
-        name: 'Body',
-      })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('option', {
-        name: 'Response',
-      })
-    ).toBeInTheDocument()
-  })
-  test.skip('updating url dispatches store action', () => {
-    // ;(useDispatch as jest.Mock).mockReturnValue(mockDispatch)
   })
 })

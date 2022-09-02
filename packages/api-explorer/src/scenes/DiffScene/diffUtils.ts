@@ -124,7 +124,6 @@ export const diffToSpec = (
  * @param opts url diff options parameter value
  */
 export const getDiffOptionsFromUrl = (opts: string | null) => {
-  // expect input to be a comma-delimited list as a string
   if (!opts) return null
   const diffOptions: string[] = []
   for (const option of opts.split(',')) {

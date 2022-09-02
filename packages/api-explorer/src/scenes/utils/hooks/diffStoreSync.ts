@@ -54,6 +54,7 @@ export const useDiffStoreSync = () => {
       const diffOptionsParam = getDiffOptionsFromUrl(params.get('opts'))
       if (diffOptionsParam) {
         setDiffOptionsAction({ diffOptions: diffOptionsParam })
+        // update url to reflect valid param entries
         navigate(location.pathname, { opts: diffOptionsParam.join(',') })
       } else {
         // must confirm store tag filter param is valid for tag type before updating

@@ -72,10 +72,28 @@ describe('diffUtils', () => {
     })
 
     test('omits invalid diffScene options from input', () => {
-      const testOptionsParam = 'INVALID,missing,type'
+      const testOptionsParam = 'INVALID,missing,INVALID,type,INVALID'
       expect(getDiffOptionsFromUrl(testOptionsParam)).toEqual([
         'missing',
         'type',
+      ])
+    })
+
+    test('omits duplicate diffScene options from input', () => {
+      const testOptionsParam = 'missing,missing,type,type,type'
+      expect(getDiffOptionsFromUrl(testOptionsParam)).toEqual([
+        'missing',
+        'type',
+      ])
+    })
+
+    test('disregards case sensitivity of options', () => {
+      const testOptionsParam = 'mIssInG,tYpE,PARAMS,boDy'
+      expect(getDiffOptionsFromUrl(testOptionsParam)).toEqual([
+        'missing',
+        'type',
+        'params',
+        'body',
       ])
     })
   })

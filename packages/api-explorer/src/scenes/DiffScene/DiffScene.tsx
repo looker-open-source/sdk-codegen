@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
+import { useLocation, useRouteMatch } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -40,7 +40,6 @@ import {
 import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
-import isEqual from 'lodash/isEqual'
 import { ApixSection } from '../../components'
 import {
   selectCurrentSpec,
@@ -92,6 +91,7 @@ const validateParam = (specs: SpecList, specKey = '') => {
 export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const adaptor = getApixAdaptor()
   const { navigate } = useNavigation()
+  const location = useLocation()
   const selectedDiffOptions = useSelector(selectDiffOptions)
   const { initialized } = useSettingStoreState()
   const { setDiffOptionsAction } = useSettingActions()
@@ -170,14 +170,12 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
     if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
     const diffOptionsParam = getDiffOptionsFromUrl(searchParams.get('opts'))
-    // if (isEqual(diffOptionsParam, selectedDiffOptions)) return
     setDiffOptionsAction({
       diffOptions: diffOptionsParam || [],
     })
   }, [location.search])
 
   useEffect(() => {
-    // if (isEqual(toggles, selectedDiffOptions)) return
     setToggles(selectedDiffOptions)
   }, [selectedDiffOptions])
 
