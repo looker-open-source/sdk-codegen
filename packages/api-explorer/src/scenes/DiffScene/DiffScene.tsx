@@ -50,8 +50,8 @@ import {
 } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { useDiffStoreSync } from '../utils'
-import { diffSpecs, getValidDiffOptions } from './diffUtils'
 import { DocDiff } from './DocDiff'
+import { diffSpecs, getValidDiffOptions } from './diffUtils'
 
 const diffToggles = [
   {
@@ -90,10 +90,10 @@ const validateParam = (specs: SpecList, specKey = '') => {
 
 export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const adaptor = getApixAdaptor()
+  const { initialized } = useSettingStoreState()
   const { navigate } = useNavigation()
   const location = useLocation()
   const selectedDiffOptions = useSelector(selectDiffOptions)
-  const { initialized } = useSettingStoreState()
   const { setDiffOptionsAction } = useSettingActions()
   const spec = useSelector(selectCurrentSpec)
   const specs = useSelector(selectSpecs)
@@ -135,10 +135,10 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const [delta, setDelta] = useState<DiffRow[]>([])
 
   const handleLeftChange = (newLeft: string) => {
-    navigate(`/${newLeft}/${diffPath}/${rightKey}`)
+    navigate(`/${newLeft}/${diffPath}/${rightKey}`, { m: null })
   }
   const handleRightChange = (newRight: string) => {
-    navigate(`/${leftKey}/${diffPath}/${newRight}`)
+    navigate(`/${leftKey}/${diffPath}/${newRight}`, { m: null })
   }
 
   const handleSwitch = () => {
@@ -167,7 +167,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   }
 
   useEffect(() => {
-    if (!initialized) return
+    if (!initialized || !(leftApi && rightApi)) return
     const searchParams = new URLSearchParams(location.search)
     const diffOptionsParam = getValidDiffOptions(searchParams.get('opts'))
     setDiffOptionsAction({

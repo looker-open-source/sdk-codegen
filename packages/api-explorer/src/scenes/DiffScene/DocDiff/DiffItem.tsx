@@ -31,7 +31,7 @@ import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
 import type { DiffRow } from '@looker/sdk-codegen/src'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
-import { selectSdkLanguage } from '../../../state'
+import { selectDiffMethod, selectSdkLanguage } from '../../../state'
 import { buildMethodPath, useNavigation } from '../../../utils'
 import { DiffBanner } from './DiffBanner'
 import { differ } from './docDiffUtils'
@@ -91,7 +91,10 @@ export const DiffItem: FC<DiffItemProps> = ({
   rightKey,
   rightSpec,
 }) => {
+  const { navigate } = useNavigation()
+
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const selectedDiffMethod = useSelector(selectDiffMethod)
   const [leftMethod, setLeftMethod] = useState<IMethod | undefined>(
     leftSpec.methods[item.name]
   )
@@ -114,8 +117,22 @@ export const DiffItem: FC<DiffItemProps> = ({
     setRightSide(rhs)
   }, [leftSpec, rightSpec, isOpen, selectedSdkLanguage])
 
+  useEffect(() => {
+    if (item.name === selectedDiffMethod) setIsOpen(true)
+  }, [selectedDiffMethod])
+
   const handleOpen = () => {
-    setIsOpen(!isOpen)
+    if (!isOpen) {
+      navigate(location.pathname, { m: item.name })
+    } else {
+      const params = new URLSearchParams(location.search)
+      const methodParamQuery = // we only remove the method param if closing that specific method
+        params.get('m') && params.get('m') === item.name
+          ? { m: null }
+          : undefined
+      navigate(location.pathname, methodParamQuery)
+      setIsOpen(false)
+    }
   }
 
   return (

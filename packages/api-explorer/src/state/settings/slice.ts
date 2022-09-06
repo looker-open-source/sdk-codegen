@@ -37,6 +37,7 @@ export interface UserDefinedSettings {
 
 export interface SettingState extends UserDefinedSettings {
   diffOptions: string[]
+  diffMethod: string
   searchPattern: string
   searchCriteria: SearchCriterionTerm[]
   tagFilter: string
@@ -46,6 +47,7 @@ export interface SettingState extends UserDefinedSettings {
 
 export const defaultSettings = {
   diffOptions: ['missing', 'params', 'type', 'body', 'response'],
+  diffMethod: '',
   sdkLanguage: 'Python',
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
@@ -61,6 +63,7 @@ type SetDiffOptionsAction = Pick<SettingState, 'diffOptions'>
 type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>
 type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
 type SetTagFilterAction = Pick<SettingState, 'tagFilter'>
+type SetDiffMethodAction = Pick<SettingState, 'diffMethod'>
 
 export type InitSuccessPayload = UserDefinedSettings
 
@@ -80,6 +83,9 @@ export const settingsSlice = createSlice({
     initSettingsFailureAction(state, action: PayloadAction<Error>) {
       state.error = action.payload
       state.initialized = false
+    },
+    setDiffMethodAction(state, action: PayloadAction<SetDiffMethodAction>) {
+      state.diffMethod = action.payload.diffMethod
     },
     setDiffOptionsAction(state, action: PayloadAction<SetDiffOptionsAction>) {
       state.diffOptions = action.payload.diffOptions

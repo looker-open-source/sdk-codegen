@@ -86,3 +86,15 @@ export const differ = (
   )
   return { lhs, rhs }
 }
+
+// TODO: document & test
+export const getPageNumber = (
+  method: string,
+  pageSize: number,
+  delta: DiffRow[]
+) => {
+  if (!method) return -1
+  const deltaIndex = delta.findIndex((item) => item.name === method)
+  if (deltaIndex === -1) return 1
+  return Math.floor(deltaIndex / pageSize) + 1
+}

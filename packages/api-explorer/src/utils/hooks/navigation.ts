@@ -36,6 +36,8 @@ interface QueryParamProps {
   t?: string | null
   /** Diff Scene Options **/
   opts?: string | null
+  /** Diff Method Option **/
+  m?: string | null
 }
 
 /**

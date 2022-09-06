@@ -134,3 +134,28 @@ export const getValidDiffOptions = (opts: string | null) => {
   }
   return diffOptions.length ? diffOptions : null
 }
+
+/**
+ * Returns all valid diff methods contained in list
+ * @param methods url diff scene methods value
+ */
+export const getValidDiffMethods = (
+  lApi: IApiModel,
+  rApi: IApiModel,
+  options: string[],
+  methods: string | null
+) => {
+  // expect input to be a comma-delimited list as a string
+  if (!methods) return null
+  const allMethods = [...diffSpecs(lApi, rApi, options)]
+  const diffMethods: string[] = []
+  for (const method of methods.split(',')) {
+    if (
+      allMethods.find((m) => m.name === method) &&
+      !diffMethods.includes(method)
+    ) {
+      diffMethods.push(method.toLowerCase())
+    }
+  }
+  return diffMethods.length ? diffMethods : null
+}

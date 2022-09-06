@@ -27,6 +27,9 @@ import type { RootState } from '../store'
 
 const selectSettingsState = (state: RootState) => state.settings
 
+export const selectDiffMethod = (state: RootState) =>
+  selectSettingsState(state).diffMethod
+
 export const selectDiffOptions = (state: RootState) =>
   selectSettingsState(state).diffOptions
 
