@@ -36,6 +36,7 @@ const resultCardsSelector =
   'section#top div[class*=SpaceVertical] div[class*=Card]'
 const baseInputSelector = 'input#listbox-input-base'
 const compInputSelector = 'input#listbox-input-compare'
+const compOptionsInputSelector = 'input#listbox-input-options'
 const globalOptionsSelector = '#modal-root [role=option] span'
 const switchButtonSelector = '.switch-button'
 
@@ -225,7 +226,9 @@ describe('Diff Scene', () => {
     // Check the URL
     // Would like to do this earlier, but not sure what to wait on
     const compUrl = page.url()
-    expect(compUrl).toEqual(`${BASE_URL}/3.1/diff/4.0?sdk=py`)
+    expect(compUrl).toEqual(
+      `${BASE_URL}/3.1/diff/4.0?sdk=py&opts=missing%2Cparams%2Ctype%2Cbody%2Cresponse`
+    )
 
     // Check the results
     const diffResultCards = await page.$$(resultCardsSelector)
@@ -253,7 +256,9 @@ describe('Diff Scene', () => {
     await page.waitForTimeout(150)
 
     const switchUrl = page.url()
-    expect(switchUrl).toEqual(`${BASE_URL}/4.0/diff/3.1?sdk=py`)
+    expect(switchUrl).toEqual(
+      `${BASE_URL}/4.0/diff/3.1?sdk=py&opts=missing%2Cparams%2Ctype%2Cbody%2Cresponse`
+    )
 
     // Check the results again, even though they should be the same
     const diff40to31Page1Methods = await Promise.all(
@@ -264,5 +269,71 @@ describe('Diff Scene', () => {
 
     expect(diff40to31Page1Methods).toHaveLength(15)
     expect(diff40to31Page1Methods).toContain('delete_board_item')
+  })
+
+  it('updates when a comparison option is toggled', async () => {
+    await goToPage(`${BASE_URL}/3.1/diff/4.0`)
+
+    // expect default diff options in url
+    expect(page.url()).toEqual(
+      `${BASE_URL}/3.1/diff/4.0?sdk=py&opts=missing%2Cparams%2Ctype%2Cbody%2Cresponse`
+    )
+
+    // "Base" input element
+    const baseInputElement = await page.$(baseInputSelector)
+    expect(baseInputElement).not.toBeNull()
+
+    // "Comparison" input element
+    const compInputElement = await page.$(compInputSelector)
+    expect(compInputElement).not.toBeNull()
+
+    // "Comparison Options" input element
+    const compOptionsInputElement = await page.$(compOptionsInputSelector)
+    expect(compOptionsInputElement).not.toBeNull()
+
+    // Check that initial results exist with default comparison options
+    const initDiffResults = await page.$$(resultCardsSelector)
+    expect(initDiffResults).not.toHaveLength(0)
+    const initDiff31to40Page1Methods = await Promise.all(
+      initDiffResults.map((resultCard) =>
+        page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
+      )
+    )
+    expect(initDiff31to40Page1Methods).toHaveLength(15)
+    expect(initDiff31to40Page1Methods).toContain('delete_alert')
+
+    // Click comparison input
+    await compOptionsInputElement!.click()
+    const compOptionsOnClick = await page.$$(globalOptionsSelector)
+    expect(compOptionsOnClick).toHaveLength(6)
+
+    // Find an option containing the text Missing
+    const missingOptionIndex = await page.$$eval(globalOptionsSelector, (els) =>
+      els.findIndex((el) => el?.textContent?.match('Missing'))
+    )
+    const missingOption = compOptionsOnClick[missingOptionIndex]
+    expect(missingOption).not.toBeUndefined()
+
+    // Click that option
+    await missingOption.click()
+    await page.waitForSelector(resultCardsSelector, { timeout: 5000 })
+
+    // Check the URL
+    // Would like to do this earlier, but not sure what to wait on
+    const compUrl = page.url()
+    expect(compUrl).toEqual(
+      `${BASE_URL}/3.1/diff/4.0?sdk=py&opts=params%2Ctype%2Cbody%2Cresponse`
+    )
+
+    // Check that there are new results
+    const newDiffResults = await page.$$(resultCardsSelector)
+    expect(newDiffResults).not.toHaveLength(0)
+    const newDiff31to40Page1Methods = await Promise.all(
+      newDiffResults.map((resultCard) =>
+        page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
+      )
+    )
+    expect(newDiff31to40Page1Methods).toHaveLength(15)
+    expect(newDiff31to40Page1Methods).not.toContain('delete_alert')
   })
 })
