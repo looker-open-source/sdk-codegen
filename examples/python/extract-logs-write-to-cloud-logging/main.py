@@ -20,13 +20,6 @@ def create_query():
                 "event.category",
                 "event.sudo_user_id",
                 "event.created_time",
-                "user.email",
-                "user.name",
-                "permission_set.permissions",
-                "permission_set.name",
-                "permission_set.id",
-                "model_set.models",
-                "model_set.name",
                 "event_attribute.name",
                 "event_attribute.value",
                 "event_attribute.id",
@@ -34,17 +27,17 @@ def create_query():
                 "group.name",
                 "group.external_group_id",
                 "model_set.id",
+                "model_set.models",
+                "model_set.name",
+                "permission_set.permissions",
+                "permission_set.name",
+                "permission_set.id",
+                "user.email",
+                "user.name",
                 "user.dev_branch_name"
             ],
             filters={"event.created_time": "10 minutes"},
-            sorts=["event.created_time desc"],
-            filter_config={"event.created_time": [{
-                "type": "past",
-                "values": [{
-                        "constant": "10",
-                        "unit": "min"
-                }]
-            }]}
+            sorts=["event.created_time desc"]
         ))
 
     return response
