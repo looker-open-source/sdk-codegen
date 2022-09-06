@@ -24,12 +24,23 @@
 
  */
 import { createTestStore, preloadedState } from '../../test-utils'
-import { selectSdkLanguage, isInitialized, selectTagFilter } from './selectors'
+import {
+  selectSdkLanguage,
+  isInitialized,
+  selectTagFilter,
+  selectDiffOptions,
+} from './selectors'
 
 const testStore = createTestStore()
 
 describe('Settings selectors', () => {
   const state = testStore.getState()
+
+  test('selectDiffOptions selects', () => {
+    expect(selectDiffOptions(state)).toEqual(
+      preloadedState.settings.diffOptions
+    )
+  })
 
   test('selectSdkLanguage selects', () => {
     expect(selectSdkLanguage(state)).toEqual(

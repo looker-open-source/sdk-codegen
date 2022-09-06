@@ -32,7 +32,7 @@ import {
   useSettingStoreState,
 } from '../../../state'
 import { useNavigation } from '../../../utils'
-import { getDiffOptionsFromUrl } from '../../DiffScene/diffUtils'
+import { getValidDiffOptions } from '../../DiffScene/diffUtils'
 
 /**
  * Hook for syncing diff scene URL params with the Redux store
@@ -49,15 +49,14 @@ export const useDiffStoreSync = () => {
   useEffect(() => {
     if (initialized) {
       const params = new URLSearchParams(location.search)
-
-      // syncing diff options on diff scene page
-      const diffOptionsParam = getDiffOptionsFromUrl(params.get('opts'))
+      // sync store with url opts param if valid
+      const diffOptionsParam = getValidDiffOptions(params.get('opts'))
       if (diffOptionsParam) {
         setDiffOptionsAction({ diffOptions: diffOptionsParam })
         // update url to reflect valid param entries
         navigate(location.pathname, { opts: diffOptionsParam.join(',') })
       } else {
-        // must confirm store tag filter param is valid for tag type before updating
+        // sync url opts param with store
         navigate(location.pathname, {
           opts: selectedDiffOptions ? selectedDiffOptions.join(',') : null,
         })

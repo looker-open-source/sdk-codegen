@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 
 import type { SpecItem } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'
@@ -75,7 +75,7 @@ jest.mock('../../utils/apixAdaptor', () => {
 })
 
 describe('DiffScene', () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks()
   })
   ;(getApixAdaptor as jest.Mock).mockReturnValue(mockApixAdaptor)
@@ -137,6 +137,9 @@ describe('DiffScene', () => {
       store
     )
     userEvent.click(screen.getByPlaceholderText('Comparison options'))
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument()
+    })
     userEvent.click(
       screen.getByRole('option', {
         name: 'Missing',
@@ -160,12 +163,10 @@ describe('DiffScene', () => {
       ['/3.1/diff'],
       store
     )
-    userEvent.click(screen.getByPlaceholderText('Comparison options'))
-    userEvent.click(
-      screen.getByRole('option', {
-        name: 'Missing',
-      })
-    )
+    const missingOption = screen.getByRole('option', {
+      name: 'Missing Delete',
+    })
+    userEvent.click(within(missingOption).getByRole('button'))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenLastCalledWith({
         pathname: '/3.1/diff',

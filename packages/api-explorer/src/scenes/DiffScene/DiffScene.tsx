@@ -50,7 +50,7 @@ import {
 } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { useDiffStoreSync } from '../utils'
-import { diffSpecs, getDiffOptionsFromUrl } from './diffUtils'
+import { diffSpecs, getValidDiffOptions } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
 const diffToggles = [
@@ -169,7 +169,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   useEffect(() => {
     if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
-    const diffOptionsParam = getDiffOptionsFromUrl(searchParams.get('opts'))
+    const diffOptionsParam = getValidDiffOptions(searchParams.get('opts'))
     setDiffOptionsAction({
       diffOptions: diffOptionsParam || [],
     })

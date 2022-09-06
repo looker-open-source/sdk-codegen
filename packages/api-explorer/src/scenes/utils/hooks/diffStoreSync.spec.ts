@@ -32,9 +32,9 @@ import { createTestStore, withReduxProvider } from '../../../test-utils'
 import { useDiffStoreSync } from './diffStoreSync'
 
 jest.mock('react-router', () => {
-  const ReactRouter = jest.requireActual('react-router')
+  const ReactRouterDom = jest.requireActual('react-router-dom')
   return {
-    ...ReactRouter,
+    ...ReactRouterDom,
     useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
     useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
   }
@@ -100,7 +100,7 @@ describe('useDiffStoreSync', () => {
       })
     })
 
-    test('filters invalid options out of url options parameter if present', () => {
+    test('filters invalid options out of url options parameter and updates url during sync', () => {
       const { push } = useHistory()
       const store = createTestStore({
         settings: {

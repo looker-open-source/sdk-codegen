@@ -120,10 +120,10 @@ export const diffToSpec = (
 }
 
 /**
- * Gets all valid diff options from the url opts parameter
+ * Returns all valid diff options contained in list
  * @param opts url diff options parameter value
  */
-export const getDiffOptionsFromUrl = (opts: string | null) => {
+export const getValidDiffOptions = (opts: string | null) => {
   if (!opts) return null
   const diffOptions: string[] = []
   for (const option of opts.split(',')) {
