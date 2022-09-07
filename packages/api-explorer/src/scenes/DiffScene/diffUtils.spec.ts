@@ -66,12 +66,12 @@ describe('diffUtils', () => {
 
   describe('getValidDiffOptions', () => {
     test('returns null if provided null input', () => {
-      expect(getValidDiffOptions(null)).toBeNull()
+      expect(getValidDiffOptions(null)).toHaveLength(0)
     })
 
     test('returns null if input contains no valid diffscene options', () => {
       const testOptionsParam = 'INVALID,INVALID1,INVALID2'
-      expect(getValidDiffOptions(testOptionsParam)).toBeNull()
+      expect(getValidDiffOptions(testOptionsParam)).toHaveLength(0)
     })
 
     test('omits invalid diffScene options given input with valid options', () => {

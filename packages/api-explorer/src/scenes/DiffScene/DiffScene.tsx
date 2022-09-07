@@ -171,7 +171,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
     const searchParams = new URLSearchParams(location.search)
     const diffOptionsParam = getValidDiffOptions(searchParams.get('opts'))
     setDiffOptionsAction({
-      diffOptions: diffOptionsParam || [],
+      diffOptions: diffOptionsParam,
     })
   }, [location.search])
 

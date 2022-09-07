@@ -51,7 +51,7 @@ export const useDiffStoreSync = () => {
       const params = new URLSearchParams(location.search)
       // sync store with url opts param if valid
       const diffOptionsParam = getValidDiffOptions(params.get('opts'))
-      if (diffOptionsParam) {
+      if (diffOptionsParam.length) {
         setDiffOptionsAction({ diffOptions: diffOptionsParam })
         // update url to reflect valid param entries
         navigate(location.pathname, { opts: diffOptionsParam.join(',') })

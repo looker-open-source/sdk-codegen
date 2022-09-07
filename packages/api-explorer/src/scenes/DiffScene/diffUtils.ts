@@ -124,7 +124,7 @@ export const diffToSpec = (
  * @param opts url diff options parameter value
  */
 export const getValidDiffOptions = (opts: string | null) => {
-  if (!opts) return null
+  if (!opts) return []
   const diffOptions: string[] = []
   for (const option of opts.split(',')) {
     const op = option.toLowerCase()
@@ -132,5 +132,5 @@ export const getValidDiffOptions = (opts: string | null) => {
       diffOptions.push(option.toLowerCase())
     }
   }
-  return diffOptions.length ? diffOptions : null
+  return diffOptions
 }
