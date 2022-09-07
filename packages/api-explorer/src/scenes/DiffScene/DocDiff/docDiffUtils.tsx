@@ -87,7 +87,12 @@ export const differ = (
   return { lhs, rhs }
 }
 
-// TODO: document & test
+/**
+ * Gets page number of method in paginated list of deltas
+ * @param method the method name
+ * @param pageSize number of deltas per page
+ * @param delta list of diff methods to display
+ */
 export const getPageNumber = (
   method: string,
   pageSize: number,

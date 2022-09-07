@@ -36,6 +36,7 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import isEqual from 'lodash/isEqual'
+import { useLocation } from 'react-router-dom'
 import {
   selectDiffMethod,
   selectDiffOptions,
@@ -71,6 +72,7 @@ export const DocDiff: FC<DocDiffProps> = ({
 }) => {
   const selectedDiffMethod = useSelector(selectDiffMethod)
   const selectedDiffOptions = useSelector(selectDiffOptions)
+  const location = useLocation()
   const { navigate } = useNavigation()
   const [page, setPage] = useState(1)
   const { setDiffMethodAction } = useSettingActions()
@@ -79,7 +81,7 @@ export const DocDiff: FC<DocDiffProps> = ({
     if (!(leftSpec && rightSpec)) return
     const pageNum = getPageNumber(selectedDiffMethod, pageSize, delta)
     if (pageNum === -1) {
-      setPage(page <= pageCount ? page : 1)
+      setPage(pageCount && page <= pageCount ? page : 1)
     } else {
       setPage(pageNum)
     }
@@ -89,7 +91,7 @@ export const DocDiff: FC<DocDiffProps> = ({
     if (!(leftSpec && rightSpec) || !delta.length) return
     const params = new URLSearchParams(location.search)
     const diffOptionsParam = getValidDiffOptions(params.get('opts'))
-    // TODO: discuss how this ensures opts drives state first, then method param
+    // check is needed to ensure opts is updated before we update method param
     if (!isEqual(selectedDiffOptions, diffOptionsParam || [])) return
     // syncing diff method on diff scene page
     const diffMethodsParam = getValidDiffMethods(
@@ -98,7 +100,7 @@ export const DocDiff: FC<DocDiffProps> = ({
       selectedDiffOptions,
       params.get('m')
     )
-    // TODO: discuss better URL cleanup approaches other than doing it here
+    // clean up url if needed
     if (!diffMethodsParam && params.get('m')) {
       navigate(location.pathname, { m: null })
     }
@@ -107,9 +109,6 @@ export const DocDiff: FC<DocDiffProps> = ({
     })
   }, [location.search, delta])
 
-  if (delta.length === 0) return <Text>{'No differences found'}</Text>
-
-  // const pageCount = Math.round((delta.length - 1) / pageSize)
   const pageCount = Math.ceil(delta.length / pageSize)
   const pageItemData = delta.slice((page - 1) * pageSize, page * pageSize)
 

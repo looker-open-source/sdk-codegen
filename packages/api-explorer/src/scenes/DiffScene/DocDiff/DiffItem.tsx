@@ -31,6 +31,7 @@ import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
 import type { DiffRow } from '@looker/sdk-codegen/src'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { selectDiffMethod, selectSdkLanguage } from '../../../state'
 import { buildMethodPath, useNavigation } from '../../../utils'
 import { DiffBanner } from './DiffBanner'
@@ -92,6 +93,7 @@ export const DiffItem: FC<DiffItemProps> = ({
   rightSpec,
 }) => {
   const { navigate } = useNavigation()
+  const location = useLocation()
 
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const selectedDiffMethod = useSelector(selectDiffMethod)

@@ -27,10 +27,39 @@ import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+import { useHistory } from 'react-router-dom'
+import type { Location } from 'history'
+import * as reactRedux from 'react-redux'
+import * as routerLocation from 'react-router-dom'
 import { getLoadedSpecs } from '../../../test-data'
 import { diffSpecs, standardDiffToggles } from '../diffUtils'
-import { renderWithReduxProvider } from '../../../test-utils'
+import {
+  renderWithReduxProvider,
+  renderWithRouterAndReduxProvider,
+} from '../../../test-utils'
 import { DocDiff } from './DocDiff'
+
+// jest.mock('react-router-dom', () => {
+//   const ReactRouterDom = jest.requireActual('react-router-dom')
+//   return {
+//     ...ReactRouterDom,
+//     useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+//     useLocation: jest
+//       .fn()
+//       .mockReturnValue({ pathname: '/3.1/diff/4.0', search: '' }),
+//   }
+// })
+
+jest.mock('react-router-dom', () => {
+  const ReactRouterDom = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDom,
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useLocation: jest
+      .fn()
+      .mockReturnValue({ pathname: '/3.1/diff/4.0', search: '' }),
+  }
+})
 
 describe('DocDiff', () => {
   const specs = getLoadedSpecs()
@@ -149,6 +178,57 @@ describe('DocDiff', () => {
     )
     const expectedPageCount = Math.ceil(delta.length / pageSize)
     expect(screen.getByText(`of ${expectedPageCount}`)).toBeInTheDocument()
+  })
+
+  // TODO: checking page number here needs to be more specific
+  it.skip('rendering with url method param goes to page containing method', () => {
+    const pageSize = 15
+    jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+      pathname: `/3.1/diff/4.0`,
+      search: 'opts=missing%2Cparams%2Ctype%2Cbody%2Cresponse&m=run_look',
+    } as unknown as Location)
+    renderWithRouterAndReduxProvider(
+      <DocDiff
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+        delta={delta}
+        pageSize={pageSize}
+      />
+    )
+    const pageNum = screen.getByText('8')
+    expect(pageNum).toBeInTheDocument()
+  })
+
+  it('clicking to next page removes method parameter from url', async () => {
+    const { push } = useHistory()
+    const pageSize = 5
+    jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
+      pathname: `/3.1/diff/4.0`,
+      search: `m=delete_alert`,
+    } as unknown as Location)
+    renderWithReduxProvider(
+      <DocDiff
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+        delta={delta}
+        pageSize={pageSize}
+      />
+    )
+
+    // go to page 2
+    userEvent.click(
+      screen.getByRole('button', { name: 'Next page of results' })
+    )
+    await waitFor(() => {
+      expect(push).toHaveBeenLastCalledWith({
+        pathname: '/3.1/diff/4.0',
+        search: '',
+      })
+    })
   })
 
   it('final diff entry of one page does not appear in next page', async () => {

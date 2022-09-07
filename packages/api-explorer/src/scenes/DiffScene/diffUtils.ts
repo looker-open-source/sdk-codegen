@@ -150,11 +150,12 @@ export const getValidDiffMethods = (
   const allMethods = [...diffSpecs(lApi, rApi, options)]
   const diffMethods: string[] = []
   for (const method of methods.split(',')) {
+    const m = method.toLowerCase()
     if (
-      allMethods.find((m) => m.name === method) &&
-      !diffMethods.includes(method)
+      allMethods.find((method) => method.name === m) &&
+      !diffMethods.includes(m)
     ) {
-      diffMethods.push(method.toLowerCase())
+      diffMethods.push(m)
     }
   }
   return diffMethods.length ? diffMethods : null

@@ -26,8 +26,13 @@
 
 import type { DiffRow } from '@looker/sdk-codegen'
 import { startCount } from '@looker/sdk-codegen'
-import { api, api40 } from '../../test-data'
-import { diffToSpec, getValidDiffOptions } from './diffUtils'
+import { api, api40, getLoadedSpecs } from '../../test-data'
+import {
+  diffToSpec,
+  getValidDiffMethods,
+  getValidDiffOptions,
+  standardDiffToggles,
+} from './diffUtils'
 
 describe('diffUtils', () => {
   test('builds a psuedo spec from diff', () => {
@@ -92,6 +97,72 @@ describe('diffUtils', () => {
         'params',
         'body',
       ])
+    })
+  })
+
+  describe('getValidDiffMethods', () => {
+    const specs = getLoadedSpecs()
+    const leftApi = specs['3.1'].api!
+    const rightApi = specs['4.0'].api!
+    test('returns null if provided null input', () => {
+      expect(
+        getValidDiffMethods(leftApi, rightApi, standardDiffToggles, null)
+      ).toBeNull()
+    })
+
+    test('returns null if method is not in list of diffs', () => {
+      expect(
+        getValidDiffMethods(
+          leftApi,
+          rightApi,
+          standardDiffToggles,
+          'NOT_IN_LIST'
+        )
+      ).toBeNull()
+    })
+
+    test('returns method if it exists in list of diffs', () => {
+      expect(
+        getValidDiffMethods(
+          leftApi,
+          rightApi,
+          standardDiffToggles,
+          'delete_alert'
+        )
+      ).toEqual(['delete_alert'])
+    })
+
+    test('returns list of methods if they exist in list of diffs', () => {
+      expect(
+        getValidDiffMethods(
+          leftApi,
+          rightApi,
+          standardDiffToggles,
+          'delete_alert,delete_board_item,delete_board_section'
+        )
+      ).toEqual(['delete_alert', 'delete_board_item', 'delete_board_section'])
+    })
+
+    test('ignores case sensitivity of input methods', () => {
+      expect(
+        getValidDiffMethods(
+          leftApi,
+          rightApi,
+          standardDiffToggles,
+          'deLetE_AlErT,delEtE_bOarD_item,dEleTe_bOard_section'
+        )
+      ).toEqual(['delete_alert', 'delete_board_item', 'delete_board_section'])
+    })
+
+    test('omits invalid methods from output', () => {
+      expect(
+        getValidDiffMethods(
+          leftApi,
+          rightApi,
+          standardDiffToggles,
+          'delete_alert,INVALID_METHOD,delete_board_section'
+        )
+      ).toEqual(['delete_alert', 'delete_board_section'])
     })
   })
 })

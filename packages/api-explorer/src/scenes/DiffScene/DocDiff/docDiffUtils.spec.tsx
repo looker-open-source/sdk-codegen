@@ -23,41 +23,32 @@
  SOFTWARE.
 
  */
-import { createTestStore, preloadedState } from '../../test-utils'
-import {
-  selectSdkLanguage,
-  isInitialized,
-  selectTagFilter,
-  selectDiffOptions,
-  selectDiffMethod,
-} from './selectors'
 
-const testStore = createTestStore()
+import type { DiffRow } from '@looker/sdk-codegen'
+import { getPageNumber } from './docDiffUtils'
 
-describe('Settings selectors', () => {
-  const state = testStore.getState()
+describe('docDiffUtils', () => {
+  const samplePageNumber = 1
+  const sampleDeltas = [
+    { name: 'sample_one' },
+    { name: 'sample_two' },
+    { name: 'sample_three' },
+  ] as DiffRow[]
+  describe('getPageNumber', () => {
+    test('returns -1 if empty string input', () => {
+      expect(getPageNumber('', samplePageNumber, sampleDeltas)).toEqual(-1)
+    })
 
-  test('selectDiffMethod selects', () => {
-    expect(selectDiffMethod(state)).toEqual(preloadedState.settings.diffMethod)
-  })
+    test('returns 1 if method does not exist in list', () => {
+      expect(
+        getPageNumber('NOT_FOUND', samplePageNumber, sampleDeltas)
+      ).toEqual(1)
+    })
 
-  test('selectDiffOptions selects', () => {
-    expect(selectDiffOptions(state)).toEqual(
-      preloadedState.settings.diffOptions
-    )
-  })
-
-  test('selectSdkLanguage selects', () => {
-    expect(selectSdkLanguage(state)).toEqual(
-      preloadedState.settings.sdkLanguage
-    )
-  })
-
-  test('selectTagFilter selects', () => {
-    expect(selectTagFilter(state)).toEqual(preloadedState.settings.tagFilter)
-  })
-
-  test('isInitialized selects', () => {
-    expect(isInitialized(state)).toEqual(preloadedState.settings.initialized)
+    test('returns correct page number if method does exist in list', () => {
+      expect(
+        getPageNumber('sample_three', samplePageNumber, sampleDeltas)
+      ).toEqual(3)
+    })
   })
 })
