@@ -24,7 +24,6 @@
 
  */
 
-export * from './ExtMarkdown'
 export * from './Header'
 export * from './Loading'
 export * from './Scroller'

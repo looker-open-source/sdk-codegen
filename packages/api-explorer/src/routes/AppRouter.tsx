@@ -27,9 +27,10 @@
 import type { FC } from 'react'
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import type { ApiModel, SpecList } from '@looker/sdk-codegen'
+import type { ApiModel } from '@looker/sdk-codegen'
 
 import {
+  ErrorDetailScene,
   HomeScene,
   MethodScene,
   MethodTagScene,
@@ -41,7 +42,6 @@ import { diffPath } from '../utils'
 
 interface AppRouterProps {
   specKey: string
-  specs: SpecList
   api: ApiModel
   toggleNavigation: (target?: boolean) => void
 }
@@ -49,13 +49,15 @@ interface AppRouterProps {
 export const AppRouter: FC<AppRouterProps> = ({
   api,
   specKey,
-  specs,
   toggleNavigation,
 }) => (
   <Switch>
     <Redirect from="/" to={`/${specKey}/`} exact />
-    <Route path={`/${diffPath}/:l?/:r?`}>
-      <DiffScene specs={specs} toggleNavigation={toggleNavigation} />
+    <Route path="/:specKey/err/:statusCode/:verb/*">
+      <ErrorDetailScene api={api} />
+    </Route>
+    <Route path={`/:specKey/${diffPath}/:compareSpecKey?`}>
+      <DiffScene toggleNavigation={toggleNavigation} />
     </Route>
     <Route path="/:specKey/(methods|types)?" exact>
       <HomeScene api={api} />

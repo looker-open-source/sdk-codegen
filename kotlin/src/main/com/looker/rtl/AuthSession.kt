@@ -24,8 +24,8 @@
 
 package com.looker.rtl
 
-import io.ktor.client.request.forms.FormDataContent
-import io.ktor.http.Parameters
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
@@ -140,8 +140,10 @@ open class AuthSession(
             val client_id = "client_id"
             val client_secret = "client_secret"
             val config = apiSettings.readConfig()
-            val clientId = unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_ID") ?: config[client_id])
-            val clientSecret = unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET") ?: config[client_secret])
+            val clientId =
+                unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_ID") ?: config[client_id])
+            val clientSecret =
+                unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET") ?: config[client_secret])
             val body = FormDataContent(
                 Parameters.build {
                     append(client_id, clientId)

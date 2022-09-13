@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Aside,
   Button,
@@ -33,6 +33,7 @@ import {
   Space,
   useToggle,
   ExtendComponentsThemeProvider,
+  Span,
 } from '@looker/components'
 import { Beaker } from '@looker/icons'
 import { useHistory, useParams } from 'react-router-dom'
@@ -42,14 +43,13 @@ import { typeRefs } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 
-import { getApixAdaptor, useNavigation } from '../../utils'
+import { getApixAdaptor, useNavigation, useQuery } from '../../utils'
 import {
   ApixSection,
   DocActivityType,
   DocMarkdown,
   DocRateLimited,
   DocReferences,
-  DocResponses,
   DocSDKs,
   DocSdkUsage,
   DocSource,
@@ -58,7 +58,7 @@ import {
   DocSchema,
 } from '../../components'
 import { selectSdkLanguage } from '../../state'
-import { DocOperation, DocRequestBody } from './components'
+import { DocOperation, DocRequestBody, DocResponses } from './components'
 
 interface MethodSceneProps {
   api: ApiModel
@@ -78,14 +78,16 @@ const showRunIt = async (adaptor: IEnvironmentAdaptor) => {
 export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
   const adaptor = getApixAdaptor()
   const history = useHistory()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const sdkLanguage = useSelector(selectSdkLanguage)
   const { specKey, methodTag, methodName } = useParams<MethodSceneParams>()
   const { value, toggle, setOn } = useToggle()
   const [method, setMethod] = useState(api.methods[methodName])
   const seeTypes = typeRefs(api, method?.customTypes)
-
+  const query = useQuery()
+  const errorCode = query.get('e') ?? undefined
   const RunItButton = value ? Button : ButtonOutline
+  const docResponsesRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const foundMethod = api.methods[methodName]
@@ -115,6 +117,16 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
     }
     checkRunIt()
   }, [adaptor, setOn])
+
+  useEffect(() => {
+    if (method.responses && errorCode) {
+      if (docResponsesRef.current) {
+        window.setTimeout(() => {
+          docResponsesRef.current!.scrollIntoView()
+        }, 300)
+      }
+    }
+  }, [method])
 
   const runItToggle = (
     <RunItButton
@@ -148,7 +160,9 @@ export const MethodScene: FC<MethodSceneProps> = ({ api }) => {
           <DocRequestBody api={api} method={method} />
           <DocSdkUsage method={method} />
           <DocReferences typesUsed={seeTypes} api={api} specKey={specKey} />
-          <DocResponses api={api} responses={method.responses} />
+          <Span ref={docResponsesRef}>
+            <DocResponses api={api} method={method} errorCode={errorCode} />
+          </Span>
           <DocSchema object={method.schema} />
         </ApixSection>
       )}

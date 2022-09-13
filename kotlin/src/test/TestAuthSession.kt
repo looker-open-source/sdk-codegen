@@ -25,11 +25,11 @@
 import com.looker.rtl.AuthSession
 import com.looker.rtl.OAuthSession
 import com.looker.rtl.Transport
+import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import org.junit.Test
 
 @ExperimentalUnsignedTypes
 class TestAuthSession {

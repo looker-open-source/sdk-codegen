@@ -34,6 +34,7 @@ import {
   TabPanels,
   useTabs,
   InputSearch,
+  Box2,
 } from '@looker/components'
 import type {
   SpecItem,
@@ -44,6 +45,7 @@ import type {
 } from '@looker/sdk-codegen'
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
+import { CopyLinkWrapper } from '@looker/run-it'
 import { useWindowSize, useNavigation } from '../../utils'
 import { HEADER_REM } from '../Header'
 import { selectSearchCriteria, selectSearchPattern } from '../../state'
@@ -68,7 +70,7 @@ interface SideNavProps {
 
 export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
   const location = useLocation()
-  const navigate = useNavigation()
+  const { navigate, navigateWithGlobalParams } = useNavigation()
   const specKey = spec.key
   const tabNames = ['methods', 'types']
   const pathParts = location.pathname.split('/')
@@ -82,12 +84,12 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     if (parts[1] === 'diff') {
       if (parts[3] !== tabNames[index]) {
         parts[3] = tabNames[index]
-        navigate(parts.join('/'))
+        navigateWithGlobalParams(parts.join('/'))
       }
     } else {
       if (parts[2] !== tabNames[index]) {
         parts[2] = tabNames[index]
-        navigate(parts.join('/'))
+        navigateWithGlobalParams(parts.join('/'))
       }
     }
   }
@@ -113,12 +115,14 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     const searchParams = new URLSearchParams(location.search)
     if (debouncedPattern && debouncedPattern !== searchParams.get('s')) {
       searchParams.set('s', debouncedPattern)
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: searchParams.get('s') })
     } else if (!debouncedPattern && searchParams.get('s')) {
       searchParams.delete('s')
-      navigate(location.pathname, { search: searchParams.toString() })
+      navigate(location.pathname, { s: null })
     }
-  }, [location.search, debouncedPattern])
+  }, [debouncedPattern])
+  // Removed location.search as dep to fix bug related to
+  // browser forward / backward navigation
 
   useEffect(() => {
     let results
@@ -126,6 +130,7 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     let newTypes
     let newTypeTags
     const api = spec.api || ({} as ApiModel)
+    setSearchPattern(searchPattern)
 
     if (searchPattern && api.search) {
       results = api.search(searchPattern, criteriaToSet(searchCriteria))
@@ -160,18 +165,25 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
 
   return (
     <nav>
-      <InputSearch
+      <Box2
         pl="large"
         pr="large"
         pb="large"
         pt={headless ? 'u3' : 'large'}
-        aria-label="Search"
-        onChange={handleInputChange}
-        placeholder="Search"
-        value={pattern}
-        isClearable
-      />
-      <SearchMessage search={searchResults} />
+        position={'relative'}
+        width={'100%'}
+      >
+        <CopyLinkWrapper visible={!!pattern}>
+          <InputSearch
+            aria-label="Search"
+            onChange={handleInputChange}
+            placeholder="Search"
+            value={pattern}
+            isClearable
+          />
+        </CopyLinkWrapper>
+        <SearchMessage search={searchResults} />
+      </Box2>
       <TabList {...tabs} distribute>
         <Tab>Methods ({methodCount})</Tab>
         <Tab>Types ({typeCount})</Tab>

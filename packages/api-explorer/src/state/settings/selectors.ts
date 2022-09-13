@@ -36,5 +36,8 @@ export const selectSearchPattern = (state: RootState) =>
 export const selectSearchCriteria = (state: RootState) =>
   selectSettingsState(state).searchCriteria
 
+export const selectTagFilter = (state: RootState) =>
+  selectSettingsState(state).tagFilter
+
 export const isInitialized = (state: RootState) =>
   selectSettingsState(state).initialized

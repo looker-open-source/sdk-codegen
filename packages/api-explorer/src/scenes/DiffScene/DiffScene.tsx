@@ -41,7 +41,7 @@ import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
 import { ApixSection } from '../../components'
-import { selectCurrentSpec } from '../../state'
+import { selectCurrentSpec, selectSpecs } from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
 import { diffSpecs, standardDiffToggles } from './diffUtils'
 import { DocDiff } from './DocDiff'
@@ -74,7 +74,6 @@ const diffToggles = [
 ]
 
 export interface DiffSceneProps {
-  specs: SpecList
   toggleNavigation: (target?: boolean) => void
 }
 
@@ -82,12 +81,13 @@ const validateParam = (specs: SpecList, specKey = '') => {
   return specs[specKey] ? specKey : ''
 }
 
-export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
+export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const adaptor = getApixAdaptor()
-  const navigate = useNavigation()
+  const { navigate } = useNavigation()
   const spec = useSelector(selectCurrentSpec)
+  const specs = useSelector(selectSpecs)
   const currentSpecKey = spec.key
-  const match = useRouteMatch<{ l: string; r: string }>(`/${diffPath}/:l?/:r?`)
+  const match = useRouteMatch<{ l: string; r: string }>(`/:l/${diffPath}/:r?`)
   const l = validateParam(specs, match?.params.l)
   const r = validateParam(specs, match?.params.r)
 
@@ -123,14 +123,14 @@ export const DiffScene: FC<DiffSceneProps> = ({ specs, toggleNavigation }) => {
   const [delta, setDelta] = useState<DiffRow[]>([])
 
   const handleLeftChange = (newLeft: string) => {
-    navigate(`/${diffPath}/${newLeft}/${rightKey}`)
+    navigate(`/${newLeft}/${diffPath}/${rightKey}`)
   }
   const handleRightChange = (newRight: string) => {
-    navigate(`/${diffPath}/${leftKey}/${newRight}`)
+    navigate(`/${leftKey}/${diffPath}/${newRight}`)
   }
 
   const handleSwitch = () => {
-    navigate(`/${diffPath}/${rightKey}/${leftKey}`)
+    navigate(`/${rightKey}/${diffPath}/${leftKey}`)
   }
 
   useEffect(() => {

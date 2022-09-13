@@ -60,15 +60,15 @@ import { AppRouter } from './routes'
 import { apixFilesHost } from './utils/lodeUtils'
 import {
   useSettingActions,
-  useSettingStoreState,
   useLodeActions,
   useLodesStoreState,
   useSpecActions,
   useSpecStoreState,
   selectSpecs,
   selectCurrentSpec,
+  useSettingStoreState,
 } from './state'
-import { getSpecKey, diffPath } from './utils'
+import { getSpecKey, findSdk, useGlobalStoreSync } from './utils'
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor
@@ -85,16 +85,18 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  useSettingStoreState()
   useLodesStoreState()
   const { working, description } = useSpecStoreState()
   const specs = useSelector(selectSpecs)
   const spec = useSelector(selectCurrentSpec)
   const { initLodesAction } = useLodeActions()
-  const { initSettingsAction, setSearchPatternAction } = useSettingActions()
+  const { initialized } = useSettingStoreState()
+  const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
+    useSettingActions()
   const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
 
   const location = useLocation()
+  useGlobalStoreSync()
   const [hasNavigation, setHasNavigation] = useState(true)
   const toggleNavigation = (target?: boolean) =>
     setHasNavigation(target || !hasNavigation)
@@ -118,15 +120,19 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   useEffect(() => {
     const maybeSpec = location.pathname?.split('/')[1]
-    if (spec && maybeSpec && maybeSpec !== diffPath && maybeSpec !== spec.key) {
+    if (spec && maybeSpec && maybeSpec !== spec.key) {
       setCurrentSpecAction({ currentSpecKey: maybeSpec })
     }
   }, [location.pathname, spec])
 
   useEffect(() => {
+    if (!initialized) return
     const searchParams = new URLSearchParams(location.search)
     const searchPattern = searchParams.get('s') || ''
-    setSearchPatternAction({ searchPattern: searchPattern! })
+    const sdkParam = searchParams.get('sdk') || 'all'
+    const { language: sdkLanguage } = findSdk(sdkParam)
+    setSearchPatternAction({ searchPattern })
+    setSdkLanguageAction({ sdkLanguage })
   }, [location.search])
 
   useEffect(() => {
@@ -143,7 +149,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   const themeOverrides = adaptor.themeOverrides()
 
   let neededSpec = location.pathname?.split('/')[1]
-  if (!neededSpec || neededSpec === diffPath) {
+  if (!neededSpec) {
     neededSpec = spec?.key
   }
 
@@ -213,7 +219,6 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
                 <AppRouter
                   specKey={spec.key}
                   api={spec.api!}
-                  specs={specs}
                   toggleNavigation={toggleNavigation}
                 />
               </Layout>

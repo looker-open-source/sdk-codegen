@@ -27,8 +27,8 @@
 import type { FC } from 'react'
 import React from 'react'
 import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
+import { ExtMarkdown } from '@looker/extension-utils'
 import type { IHackerProps } from '../../../models'
-import { ExtMarkdown } from '../../../components'
 import { gapDate, gapDiff, gapTime, zoneDate } from './agendaUtils'
 import type { AgendaTime, IAgendaItem } from './agendaUtils'
 

@@ -44,13 +44,20 @@ describe('Diff Scene', () => {
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)
   })
-  it('loads the default scene (/diff/3.1)', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1`)
+
+  afterEach(async () => {
+    await page.evaluate(() => {
+      localStorage.clear()
+    })
+  })
+
+  it('loads the default scene (/3.1/diff)', async () => {
+    await goToPage(`${BASE_URL}/3.1/diff`)
     const body = await page.$('body')
 
     // "Base" input element
     {
-      await body.click()
+      await body?.click()
       const baseInputElement = await page.$(baseInputSelector)
       expect(baseInputElement).not.toBeNull()
       const baseInputValue = await page.evaluate(
@@ -62,18 +69,18 @@ describe('Diff Scene', () => {
       const baseOptionsOnLoad = await page.$(globalOptionsSelector)
       expect(baseOptionsOnLoad).toBeNull()
 
-      await baseInputElement.click()
+      await baseInputElement?.click()
       const baseOptionsOnClick = await page.$$(globalOptionsSelector)
       expect(baseOptionsOnClick).not.toHaveLength(0)
 
-      await body.click()
+      await body?.click()
       const baseOptionsOnClose = await page.$(globalOptionsSelector)
       expect(baseOptionsOnClose).toBeNull()
     }
 
     // "Comparison" input element
     {
-      await body.click()
+      await body?.click()
       const compInputElement = await page.$(compInputSelector)
       expect(compInputElement).not.toBeNull()
       const compInputValue = await page.evaluate(
@@ -85,11 +92,11 @@ describe('Diff Scene', () => {
       const compOptionsOnLoad = await page.$(globalOptionsSelector)
       expect(compOptionsOnLoad).toBeNull()
 
-      await compInputElement.click()
+      await compInputElement?.click()
       const compOptionsOnClick = await page.$$(globalOptionsSelector)
       expect(compOptionsOnClick).not.toHaveLength(0)
 
-      await body.click()
+      await body?.click()
       const compOptionsOnClose = await page.$(globalOptionsSelector)
       expect(compOptionsOnClose).toBeNull()
     }
@@ -106,9 +113,8 @@ describe('Diff Scene', () => {
     }
   })
 
-  it('loads a comparison scene (/diff/3.1/4.0) and navigates from it', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1/4.0`)
-
+  it('loads a comparison scene (/3.1/diff/4.0) and navigates from it', async () => {
+    await goToPage(`${BASE_URL}/3.1/diff/4.0`)
     // "Base" input element
     {
       const baseInputElement = await page.$(baseInputSelector)
@@ -176,18 +182,20 @@ describe('Diff Scene', () => {
       const methodLink = await page.$(`${resultCardsSelector} a[role=link]`)
       expect(methodLink).not.toBeNull()
       const methodText = await page.evaluate((e) => e.innerText, methodLink)
-      expect(methodText).toMatch(`delete_board_item for 4.0`)
+      expect(methodText).toMatch(`delete_alert for 4.0`)
 
       // Click and validate destination
-      await methodLink.click()
+      await methodLink?.click()
       await page.waitForSelector(`div[class*=MethodBadge]`, { timeout: 5000 })
       const compUrl = page.url()
-      expect(compUrl).toEqual(`${BASE_URL}/4.0/methods/Board/delete_board_item`)
+      expect(compUrl).toEqual(
+        `${BASE_URL}/4.0/methods/Alert/delete_alert?sdk=py`
+      )
     }
   })
 
   it('updates when a comparison is chosen or switched', async () => {
-    await goToPage(`${BASE_URL}/diff/3.1`)
+    await goToPage(`${BASE_URL}/3.1/diff`)
 
     // "Base" input element
     const baseInputElement = await page.$(baseInputSelector)
@@ -198,14 +206,14 @@ describe('Diff Scene', () => {
     expect(compInputElement).not.toBeNull()
 
     // Click comparison input
-    await compInputElement.click()
+    await compInputElement?.click()
     const compOptionsOnClick = await page.$$(globalOptionsSelector)
     expect(compOptionsOnClick).not.toHaveLength(0)
     expect(compOptionsOnClick).not.toHaveLength(1)
 
     // Find an option containing the text 4.0
     const option40Index = await page.$$eval(globalOptionsSelector, (els) =>
-      els.findIndex((el) => el.textContent.match(/4\.0/))
+      els.findIndex((el) => el?.textContent?.match(/4\.0/))
     )
     const option40 = compOptionsOnClick[option40Index]
     expect(option40).not.toBeUndefined()
@@ -217,7 +225,7 @@ describe('Diff Scene', () => {
     // Check the URL
     // Would like to do this earlier, but not sure what to wait on
     const compUrl = page.url()
-    expect(compUrl).toEqual(`${BASE_URL}/diff/3.1/4.0`)
+    expect(compUrl).toEqual(`${BASE_URL}/3.1/diff/4.0?sdk=py`)
 
     // Check the results
     const diffResultCards = await page.$$(resultCardsSelector)
@@ -239,13 +247,13 @@ describe('Diff Scene', () => {
       switchButtonElement
     )
     expect(switchButtonDisabled).toEqual(false)
-    await switchButtonElement.click()
+    await switchButtonElement?.click()
 
     // A more precise timing mechanism would be better: https://github.com/puppeteer/puppeteer/issues/5328
     await page.waitForTimeout(150)
 
     const switchUrl = page.url()
-    expect(switchUrl).toEqual(`${BASE_URL}/diff/4.0/3.1`)
+    expect(switchUrl).toEqual(`${BASE_URL}/4.0/diff/3.1?sdk=py`)
 
     // Check the results again, even though they should be the same
     const diff40to31Page1Methods = await Promise.all(

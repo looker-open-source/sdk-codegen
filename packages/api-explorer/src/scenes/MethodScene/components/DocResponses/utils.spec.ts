@@ -23,38 +23,32 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-
-import { api } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
-import { DocResponses } from './DocResponses'
+import { api } from '../../../../test-data'
 import { buildResponseTree } from './utils'
 
-describe('DocResponses', () => {
-  test('it renders all response statuses and their types', async () => {
-    const responses = api.methods.run_look.responses
-    renderWithRouter(<DocResponses api={api} responses={responses} />)
+describe('DocResponses utils', () => {
+  describe('buildResponseTree', () => {
+    test('it builds a response tree', () => {
+      const method = api.methods.run_look
+      const responses = method.responses
+      const actual = buildResponseTree(responses)
+      const responseStatuses = [
+        '200: Look',
+        '400: Bad Request',
+        '404: Not Found',
+        '422: Validation Error',
+        '429: Too Many Requests',
+      ]
+      const mediaTypes = ['text', 'application/json', 'image/png', 'image/jpeg']
+      expect(Object.keys(actual)).toEqual(responseStatuses)
 
-    expect(screen.getByText('Response Models')).toBeInTheDocument()
-
-    const responseTree = buildResponseTree(responses)
-    const expectedRespStatuses = Object.keys(responseTree)
-    expect(
-      screen.getAllByRole('tab', {
-        name: new RegExp(`${expectedRespStatuses.join('|')}`),
+      responseStatuses.forEach((status) => {
+        expect(Object.keys(actual[status])).toEqual(mediaTypes)
       })
-    ).toHaveLength(expectedRespStatuses.length)
 
-    userEvent.click(screen.getByRole('tab', { name: '200: Look' }))
-    const successRespTypes = Object.keys(responseTree['200: Look'])
-    await waitFor(() => {
-      expect(
-        screen.getAllByRole('button', {
-          name: new RegExp(`${successRespTypes.join('|')}`),
-        })
-      ).toHaveLength(successRespTypes.length)
+      expect(actual['200: Look']['application/json']).toEqual(
+        method.primaryResponse
+      )
     })
   })
 })

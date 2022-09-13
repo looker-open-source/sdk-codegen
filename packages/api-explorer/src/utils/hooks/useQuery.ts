@@ -23,31 +23,14 @@
  SOFTWARE.
 
  */
-import { useHistory } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 
 /**
- * Hook for navigating to given route with specified query params
- *
- * @param path Pathname to navigate to
- * @param queryParams Hash of query param name/value pairs to include in the destination url
+ * Hook for retrieving query params
  */
+export const useQuery = () => {
+  const { search } = useLocation()
 
-export const useNavigation = () => {
-  const history = useHistory()
-
-  const navigate = (path: string, queryParams?: { search?: string } | null) => {
-    if (queryParams === undefined) {
-      // if params passed in is undefined, maintain existing parameters in the URL
-      const curParams = new URLSearchParams(history.location.search)
-      history.push({ pathname: path, search: curParams.toString() })
-    } else if (queryParams === null || Object.keys(queryParams).length === 0) {
-      // if params passed in is null or empty, remove all parameters from the URL
-      history.push({ pathname: path })
-    } else {
-      // if we have new parameters passed in, push them to the URL
-      history.push({ pathname: path, search: queryParams.search })
-    }
-  }
-
-  return navigate
+  return useMemo(() => new URLSearchParams(search), [search])
 }

@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-utils",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Looker Extension Utilities",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -25,13 +25,16 @@
     "watch": "yarn lerna exec --scope @looker/extension-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/components": "^2.8.1",
-    "@looker/extension-sdk": "^22.10.0",
-    "@looker/extension-sdk-react": "^22.10.0",
+    "@looker/components": "^3.0.8",
+    "@looker/extension-sdk": "^22.10.1",
+    "@looker/extension-sdk-react": "^22.10.1",
     "@looker/sdk-rtl": "^21.3.4",
+    "@looker/code-editor": "^0.1.23",
     "react": "^16.13.1"
   },
   "devDependencies": {
+    "@looker/components-test-utils": "^1.5.26",
+    "@testing-library/react": "^12.1.5",
     "@types/react-router": "^5.1.18",
     "@types/redux": "^3.6.0",
     "webpack-bundle-analyzer": "^4.2.0",
