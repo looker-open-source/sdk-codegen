@@ -20,10 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import attr
+from typing  import Optional, Sequence
+
 """API error class
 """
 
-
-class SDKError(Exception):
-    """API error class
+@attr.s(auto_attribs=True, kw_only=True)
+class ErrorDetail():
+    """Error detail:
+        documentation_url: documentation link
+        field: field with error
+        code: error code
+        message: error info message
     """
+    documentation_url: str
+    field: Optional[str] = ""
+    code: Optional[str] = ""
+    message: Optional[str] = ""
+
+
+@attr.s(auto_attribs=True)
+class SDKError(Exception):
+    """API error class:
+        message: main error info message
+        errors: array of error details
+        documentation_url: documentation link
+    """
+
+    message: str
+    errors: Optional[Sequence[ErrorDetail]] = attr.ib(default=[], kw_only=True)
+    documentation_url: Optional[str] = attr.ib(default="", kw_only=True)

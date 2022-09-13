@@ -647,3 +647,34 @@ def get_query_id(
     else:
         query_id = None
     return query_id
+
+def test_validate_theme(sdk: mtds.Looker40SDK):
+    
+    valid_theme_response = sdk.validate_theme(
+        body = ml.WriteTheme(
+            name = 'valid_theme',
+            settings = ml.ThemeSettings(
+                show_filters_bar = False,
+                show_title = False,
+                tile_shadow = False,
+                font_family = 'Arial',
+            )
+        )
+    )
+    assert valid_theme_response == ""
+    
+    try:
+        sdk.validate_theme(
+            body = ml.WriteTheme(
+                settings = ml.ThemeSettings(
+                    show_filters_bar = False,
+                    show_title = False,
+                    tile_shadow = False,
+                    font_family = 'Arial;',
+                )
+            )
+        )
+    except Exception as e:        
+        assert e.message is not None
+        assert e.message != ""
+        assert len(e.errors) == 3
