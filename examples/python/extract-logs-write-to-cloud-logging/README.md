@@ -8,8 +8,6 @@ A Python script that extracts [System Activity](https://docs.looker.com/admin-op
 - Looker Instance in which you have Admin or `see_system_activity` permission
 - Google Cloud Project with Cloud Logging API enabled
 - python 3.6+ installed
-- [pyenv](https://github.com/pyenv/pyenv#installation) installed
-- [gcloud](https://cloud.google.com/sdk/docs/install) installed
 
 ## Deployment
 
@@ -27,14 +25,12 @@ A Python script that extracts [System Activity](https://docs.looker.com/admin-op
 
 - Clone the repo
   ```
-  git clone https://github.com/itodotimothy6/extract-looker-logs.git
-  cd extract-looker-logs/
+  git clone https://github.com/looker-open-source/sdk-codegen.git
+  cd sdk-codegen/examples/python/extract-logs-write-to-cloud-logging
   ```
   
 - Setup python virtual environment 
   ```
-  pyenv install 3.8.2
-  pyenv local 3.8.2
   python -m venv .venv
   source .venv/bin/activate
   ```
