@@ -33,9 +33,10 @@ from . import models as mdls
 from looker_sdk.rtl import api_methods
 from looker_sdk.rtl import transport
 
+
 class Looker40SDK(api_methods.APIMethods):
 
-    #region Alert: Alert
+    # region Alert: Alert
 
     # Follow an alert.
     #
@@ -53,8 +54,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/alerts/{alert_id}/follow",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -74,8 +75,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/alerts/{alert_id}/follow",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -112,9 +113,20 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/alerts/search",
                 structure=Sequence[mdls.Alert],
-                query_params={"limit": limit, "offset": offset, "group_by": group_by, "fields": fields, "disabled": disabled, "frequency": frequency, "condition_met": condition_met, "last_run_start": last_run_start, "last_run_end": last_run_end, "all_owners": all_owners},
-                transport_options=transport_options
-            )
+                query_params={
+                    "limit": limit,
+                    "offset": offset,
+                    "group_by": group_by,
+                    "fields": fields,
+                    "disabled": disabled,
+                    "frequency": frequency,
+                    "condition_met": condition_met,
+                    "last_run_start": last_run_start,
+                    "last_run_end": last_run_end,
+                    "all_owners": all_owners,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -134,8 +146,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/alerts/{alert_id}",
                 structure=mdls.Alert,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -159,8 +171,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/alerts/{alert_id}",
                 structure=mdls.Alert,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -184,8 +196,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/alerts/{alert_id}",
                 structure=mdls.Alert,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -205,8 +217,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/alerts/{alert_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -259,8 +271,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/alerts",
                 structure=mdls.Alert,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -283,8 +295,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/alerts/{alert_id}/enqueue",
                 structure=None,
                 query_params={"force": force},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -307,8 +319,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/alert_notifications",
                 structure=Sequence[mdls.AlertNotifications],
                 query_params={"limit": limit, "offset": offset},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -329,14 +341,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.patch(
                 path=f"/alert_notifications/{alert_notification_id}",
                 structure=mdls.AlertNotifications,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region ApiAuth: API Authentication
+    # region ApiAuth: API Authentication
 
     # ### Present client credentials to obtain an authorization token
     #
@@ -383,8 +395,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/login",
                 structure=mdls.AccessToken,
                 query_params={"client_id": client_id, "client_secret": client_secret},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -416,15 +428,17 @@ class Looker40SDK(api_methods.APIMethods):
     ) -> mdls.AccessToken:
         """Login user"""
         user_id = self.encode_path_param(user_id)
-        warnings.warn("login_user behavior changed significantly in 21.4.0. See https://git.io/JOtH1")
+        warnings.warn(
+            "login_user behavior changed significantly in 21.4.0. See https://git.io/JOtH1"
+        )
         response = cast(
             mdls.AccessToken,
             self.post(
                 path=f"/login/{user_id}",
                 structure=mdls.AccessToken,
                 query_params={"associative": associative},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -439,16 +453,14 @@ class Looker40SDK(api_methods.APIMethods):
         response = cast(
             str,
             self.delete(
-                path="/logout",
-                structure=str,
-                transport_options=transport_options
-            )
+                path="/logout", structure=str, transport_options=transport_options
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Auth: Manage User Authentication Configuration
+    # region Auth: Manage User Authentication Configuration
 
     # ### Create an embed secret using the specified information.
     #
@@ -467,8 +479,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/embed_config/secrets",
                 structure=mdls.EmbedSecret,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -488,8 +500,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/embed_config/secrets/{embed_secret_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -541,8 +553,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/embed/sso_url",
                 structure=mdls.EmbedUrlResponse,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -585,8 +597,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/embed/token_url/me",
                 structure=mdls.EmbedUrlResponse,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -618,8 +630,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/ldap_config",
                 structure=mdls.LDAPConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -648,8 +660,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ldap_config",
                 structure=mdls.LDAPConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -685,8 +697,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ldap_config/test_connection",
                 structure=mdls.LDAPConfigTestResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -724,8 +736,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ldap_config/test_auth",
                 structure=mdls.LDAPConfigTestResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -752,8 +764,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ldap_config/test_user_info",
                 structure=mdls.LDAPConfigTestResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -780,8 +792,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ldap_config/test_user_auth",
                 structure=mdls.LDAPConfigTestResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -801,8 +813,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/mobile/device",
                 structure=mdls.MobileToken,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -822,8 +834,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.patch(
                 path=f"/mobile/device/{device_id}",
                 structure=mdls.MobileToken,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -843,8 +855,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/mobile/device/{device_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -870,8 +882,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/oauth_client_apps",
                 structure=Sequence[mdls.OauthClientApp],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -896,8 +908,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/oauth_client_apps/{client_guid}",
                 structure=mdls.OauthClientApp,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -927,8 +939,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.OauthClientApp,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -955,8 +967,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.OauthClientApp,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -984,8 +996,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/oauth_client_apps/{client_guid}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1008,8 +1020,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/oauth_client_apps/{client_guid}/tokens",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1041,8 +1053,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/oauth_client_apps/{client_guid}/users/{user_id}",
                 structure=str,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1077,8 +1089,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/oauth_client_apps/{client_guid}/users/{user_id}",
                 structure=str,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1106,8 +1118,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/oidc_config",
                 structure=mdls.OIDCConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1134,8 +1146,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/oidc_config",
                 structure=mdls.OIDCConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1155,8 +1167,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/oidc_test_configs/{test_slug}",
                 structure=mdls.OIDCConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1176,8 +1188,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/oidc_test_configs/{test_slug}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1196,8 +1208,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/oidc_test_configs",
                 structure=mdls.OIDCConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1214,8 +1226,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/password_config",
                 structure=mdls.PasswordConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1234,8 +1246,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/password_config",
                 structure=mdls.PasswordConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1252,8 +1264,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.put(
                 path="/password_config/force_password_reset_at_next_login_for_all_users",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1281,8 +1293,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/saml_config",
                 structure=mdls.SamlConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1309,8 +1321,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/saml_config",
                 structure=mdls.SamlConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1330,8 +1342,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/saml_test_configs/{test_slug}",
                 structure=mdls.SamlConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1351,8 +1363,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/saml_test_configs/{test_slug}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1371,8 +1383,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/saml_test_configs",
                 structure=mdls.SamlConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1391,8 +1403,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/parse_saml_idp_metadata",
                 structure=mdls.SamlMetadataParseResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1413,8 +1425,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/fetch_and_parse_saml_idp_metadata",
                 structure=mdls.SamlMetadataParseResult,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1431,8 +1443,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/session_config",
                 structure=mdls.SessionConfig,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1451,8 +1463,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/session_config",
                 structure=mdls.SessionConfig,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1474,8 +1486,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/support_access/allowlist",
                 structure=Sequence[mdls.SupportAccessAllowlistEntry],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1496,8 +1508,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/support_access/allowlist",
                 structure=Sequence[mdls.SupportAccessAllowlistEntry],
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1519,8 +1531,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/support_access/allowlist/{entry_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1541,8 +1553,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/support_access/enable",
                 structure=mdls.SupportAccessStatus,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1561,8 +1573,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.put(
                 path="/support_access/disable",
                 structure=mdls.SupportAccessStatus,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1581,8 +1593,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/support_access/status",
                 structure=mdls.SupportAccessStatus,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1602,8 +1614,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/user_login_lockouts",
                 structure=Sequence[mdls.UserLoginLockout],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1642,9 +1654,21 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/user_login_lockouts/search",
                 structure=Sequence[mdls.UserLoginLockout],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "auth_type": auth_type, "full_name": full_name, "email": email, "remote_id": remote_id, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "auth_type": auth_type,
+                    "full_name": full_name,
+                    "email": email,
+                    "remote_id": remote_id,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1664,14 +1688,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/user_login_lockout/{key}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Board: Manage Boards
+    # region Board: Manage Boards
 
     # ### Get information about all boards.
     #
@@ -1689,8 +1713,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/boards",
                 structure=Sequence[mdls.Board],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1712,8 +1736,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Board,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1777,9 +1801,23 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/boards/search",
                 structure=Sequence[mdls.Board],
-                query_params={"title": title, "created_at": created_at, "first_name": first_name, "last_name": last_name, "fields": fields, "favorited": favorited, "creator_id": creator_id, "sorts": sorts, "page": page, "per_page": per_page, "offset": offset, "limit": limit, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "title": title,
+                    "created_at": created_at,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "fields": fields,
+                    "favorited": favorited,
+                    "creator_id": creator_id,
+                    "sorts": sorts,
+                    "page": page,
+                    "per_page": per_page,
+                    "offset": offset,
+                    "limit": limit,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1802,8 +1840,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/boards/{board_id}",
                 structure=mdls.Board,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1828,8 +1866,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Board,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1849,8 +1887,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/boards/{board_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1873,9 +1911,13 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/board_items",
                 structure=Sequence[mdls.BoardItem],
-                query_params={"fields": fields, "sorts": sorts, "board_section_id": board_section_id},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "sorts": sorts,
+                    "board_section_id": board_section_id,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1897,8 +1939,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.BoardItem,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1921,8 +1963,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/board_items/{board_item_id}",
                 structure=mdls.BoardItem,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1947,8 +1989,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.BoardItem,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1968,8 +2010,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/board_items/{board_item_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -1991,8 +2033,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/board_sections",
                 structure=Sequence[mdls.BoardSection],
                 query_params={"fields": fields, "sorts": sorts},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2014,8 +2056,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.BoardSection,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2038,8 +2080,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/board_sections/{board_section_id}",
                 structure=mdls.BoardSection,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2064,8 +2106,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.BoardSection,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2085,14 +2127,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/board_sections/{board_section_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region ColorCollection: Manage Color Collections
+    # region ColorCollection: Manage Color Collections
 
     # ### Get an array of all existing Color Collections
     # Get a **single** color collection by id with [ColorCollection](#!/ColorCollection/color_collection)
@@ -2117,8 +2159,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/color_collections",
                 structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2145,8 +2187,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/color_collections",
                 structure=mdls.ColorCollection,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2171,8 +2213,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/color_collections/custom",
                 structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2197,8 +2239,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/color_collections/standard",
                 structure=Sequence[mdls.ColorCollection],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2219,8 +2261,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/color_collections/default",
                 structure=mdls.ColorCollection,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2243,8 +2285,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/color_collections/default",
                 structure=mdls.ColorCollection,
                 query_params={"collection_id": collection_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2276,8 +2318,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/color_collections/{collection_id}",
                 structure=mdls.ColorCollection,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2300,8 +2342,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/color_collections/{collection_id}",
                 structure=mdls.ColorCollection,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2328,14 +2370,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/color_collections/{collection_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Config: Manage General Configuration
+    # region Config: Manage General Configuration
 
     # Get the current Cloud Storage Configuration.
     #
@@ -2350,8 +2392,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/cloud_storage",
                 structure=mdls.BackupConfiguration,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2370,8 +2412,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/cloud_storage",
                 structure=mdls.BackupConfiguration,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2388,8 +2430,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/custom_welcome_email",
                 structure=mdls.CustomWelcomeEmail,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2411,8 +2453,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.CustomWelcomeEmail,
                 query_params={"send_test_welcome_email": send_test_welcome_email},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2424,15 +2466,15 @@ class Looker40SDK(api_methods.APIMethods):
         body: mdls.WelcomeEmailTest,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.WelcomeEmailTest:
-        """Send a test welcome email to the currently logged in user with the supplied content """
+        """Send a test welcome email to the currently logged in user with the supplied content"""
         response = cast(
             mdls.WelcomeEmailTest,
             self.put(
                 path="/custom_welcome_email_test",
                 structure=mdls.WelcomeEmailTest,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2449,8 +2491,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/digest_emails_enabled",
                 structure=mdls.DigestEmails,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2469,8 +2511,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/digest_emails_enabled",
                 structure=mdls.DigestEmails,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2489,8 +2531,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path="/digest_email_send",
                 structure=mdls.DigestEmailSend,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2509,8 +2551,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/public_egress_ip_addresses",
                 structure=mdls.EgressIpAddresses,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2527,8 +2569,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/internal_help_resources_content",
                 structure=mdls.InternalHelpResourcesContent,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2547,8 +2589,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/internal_help_resources_content",
                 structure=mdls.InternalHelpResourcesContent,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2565,8 +2607,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/internal_help_resources_enabled",
                 structure=mdls.InternalHelpResources,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2585,8 +2627,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/internal_help_resources",
                 structure=mdls.InternalHelpResources,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2603,8 +2645,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/legacy_features",
                 structure=Sequence[mdls.LegacyFeature],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2624,8 +2666,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/legacy_features/{legacy_feature_id}",
                 structure=mdls.LegacyFeature,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2647,8 +2689,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/legacy_features/{legacy_feature_id}",
                 structure=mdls.LegacyFeature,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2665,8 +2707,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/locales",
                 structure=Sequence[mdls.Locale],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2683,8 +2725,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/mobile/settings",
                 structure=mdls.MobileSettings,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2713,8 +2755,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/setting",
                 structure=mdls.Setting,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2747,8 +2789,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Setting,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2769,8 +2811,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/smtp_settings",
                 structure=None,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2790,8 +2832,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/smtp_status",
                 structure=mdls.SmtpStatus,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2808,8 +2850,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/timezones",
                 structure=Sequence[mdls.Timezone],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2829,8 +2871,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/versions",
                 structure=mdls.ApiVersion,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2855,8 +2897,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/api_spec/{api_version}/{specification}",
                 structure=Any,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2877,8 +2919,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/whitelabel_configuration",
                 structure=mdls.WhitelabelConfiguration,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2897,14 +2939,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/whitelabel_configuration",
                 structure=mdls.WhitelabelConfiguration,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Connection: Manage Database Connections
+    # region Connection: Manage Database Connections
 
     # ### Get information about all connections.
     #
@@ -2922,8 +2964,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/connections",
                 structure=Sequence[mdls.DBConnection],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2942,8 +2984,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/connections",
                 structure=mdls.DBConnection,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2966,8 +3008,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}",
                 structure=mdls.DBConnection,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -2989,8 +3031,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}",
                 structure=mdls.DBConnection,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3010,8 +3052,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/connections/{connection_name}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3034,8 +3076,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/connections/{connection_name}/connection_override/{override_context}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3065,8 +3107,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}/test",
                 structure=Sequence[mdls.DBConnectionTestResult],
                 query_params={"tests": tests},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3095,8 +3137,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=Sequence[mdls.DBConnectionTestResult],
                 query_params={"tests": tests},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3116,8 +3158,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/dialect_info",
                 structure=Sequence[mdls.DialectInfo],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3141,8 +3183,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/external_oauth_applications",
                 structure=Sequence[mdls.ExternalOauthApplication],
                 query_params={"name": name, "client_id": client_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3163,8 +3205,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/external_oauth_applications",
                 structure=mdls.ExternalOauthApplication,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3183,8 +3225,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/external_oauth_applications/user_state",
                 structure=mdls.CreateOAuthApplicationUserStateResponse,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3204,8 +3246,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ssh_servers",
                 structure=Sequence[mdls.SshServer],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3224,8 +3266,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ssh_servers",
                 structure=mdls.SshServer,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3245,8 +3287,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/ssh_server/{ssh_server_id}",
                 structure=mdls.SshServer,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3268,8 +3310,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/ssh_server/{ssh_server_id}",
                 structure=mdls.SshServer,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3289,8 +3331,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/ssh_server/{ssh_server_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3310,8 +3352,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/ssh_server/{ssh_server_id}/test",
                 structure=mdls.SshServer,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3331,8 +3373,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ssh_tunnels",
                 structure=Sequence[mdls.SshTunnel],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3351,8 +3393,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/ssh_tunnels",
                 structure=mdls.SshTunnel,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3372,8 +3414,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/ssh_tunnel/{ssh_tunnel_id}",
                 structure=mdls.SshTunnel,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3395,8 +3437,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/ssh_tunnel/{ssh_tunnel_id}",
                 structure=mdls.SshTunnel,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3416,8 +3458,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/ssh_tunnel/{ssh_tunnel_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3437,8 +3479,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/ssh_tunnel/{ssh_tunnel_id}/test",
                 structure=mdls.SshTunnel,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3457,14 +3499,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/ssh_public_key",
                 structure=mdls.SshPublicKey,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Content: Manage Content
+    # region Content: Manage Content
 
     # ### Search Favorite Content
     #
@@ -3522,9 +3564,21 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/content_favorite/search",
                 structure=Sequence[mdls.ContentFavorite],
-                query_params={"id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "id": id,
+                    "user_id": user_id,
+                    "content_metadata_id": content_metadata_id,
+                    "dashboard_id": dashboard_id,
+                    "look_id": look_id,
+                    "board_id": board_id,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "fields": fields,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3547,8 +3601,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/content_favorite/{content_favorite_id}",
                 structure=mdls.ContentFavorite,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3568,8 +3622,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/content_favorite/{content_favorite_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3588,8 +3642,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/content_favorite",
                 structure=mdls.ContentFavorite,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3611,8 +3665,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/content_metadata",
                 structure=Sequence[mdls.ContentMeta],
                 query_params={"parent_id": parent_id, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3635,8 +3689,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/content_metadata/{content_metadata_id}",
                 structure=mdls.ContentMeta,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3658,8 +3712,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/content_metadata/{content_metadata_id}",
                 structure=mdls.ContentMeta,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3680,9 +3734,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/content_metadata_access",
                 structure=Sequence[mdls.ContentMetaGroupUser],
-                query_params={"content_metadata_id": content_metadata_id, "fields": fields},
-                transport_options=transport_options
-            )
+                query_params={
+                    "content_metadata_id": content_metadata_id,
+                    "fields": fields,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3703,10 +3760,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path="/content_metadata_access",
                 structure=mdls.ContentMetaGroupUser,
-                query_params={"send_boards_notification_email": send_boards_notification_email},
+                query_params={
+                    "send_boards_notification_email": send_boards_notification_email
+                },
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3729,8 +3788,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/content_metadata_access/{content_metadata_access_id}",
                 structure=mdls.ContentMetaGroupUser,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3750,8 +3809,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/content_metadata_access/{content_metadata_access_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3785,9 +3844,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/content_thumbnail/{type}/{resource_id}",
                 structure=Union[str, bytes],  # type: ignore
-                query_params={"reload": reload, "format": format, "width": width, "height": height},
-                transport_options=transport_options
-            )
+                query_params={
+                    "reload": reload,
+                    "format": format,
+                    "width": width,
+                    "height": height,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3810,8 +3874,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/content_validation",
                 structure=mdls.ContentValidation,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3875,9 +3939,23 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/content_view/search",
                 structure=Sequence[mdls.ContentView],
-                query_params={"view_count": view_count, "group_id": group_id, "look_id": look_id, "dashboard_id": dashboard_id, "content_metadata_id": content_metadata_id, "start_of_week_date": start_of_week_date, "all_time": all_time, "user_id": user_id, "fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "view_count": view_count,
+                    "group_id": group_id,
+                    "look_id": look_id,
+                    "dashboard_id": dashboard_id,
+                    "content_metadata_id": content_metadata_id,
+                    "start_of_week_date": start_of_week_date,
+                    "all_time": all_time,
+                    "user_id": user_id,
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3908,14 +3986,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/vector_thumbnail/{type}/{resource_id}",
                 structure=str,
                 query_params={"reload": reload},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Dashboard: Manage Dashboards
+    # region Dashboard: Manage Dashboards
 
     # ### Get information about all active dashboards.
     #
@@ -3939,8 +4017,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/dashboards",
                 structure=Sequence[mdls.DashboardBase],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -3972,8 +4050,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/dashboards",
                 structure=mdls.Dashboard,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4056,9 +4134,29 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/dashboards/search",
                 structure=Sequence[mdls.Dashboard],
-                query_params={"id": id, "slug": slug, "title": title, "description": description, "content_favorite_id": content_favorite_id, "folder_id": folder_id, "deleted": deleted, "user_id": user_id, "view_count": view_count, "content_metadata_id": content_metadata_id, "curate": curate, "last_viewed_at": last_viewed_at, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "id": id,
+                    "slug": slug,
+                    "title": title,
+                    "description": description,
+                    "content_favorite_id": content_favorite_id,
+                    "folder_id": folder_id,
+                    "deleted": deleted,
+                    "user_id": user_id,
+                    "view_count": view_count,
+                    "content_metadata_id": content_metadata_id,
+                    "curate": curate,
+                    "last_viewed_at": last_viewed_at,
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4097,8 +4195,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Dashboard,
                 query_params={"raw_locale": raw_locale},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4131,8 +4229,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=Sequence[int],
                 query_params={"raw_locale": raw_locale},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4161,8 +4259,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}",
                 structure=mdls.Dashboard,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4193,8 +4291,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}",
                 structure=mdls.Dashboard,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4220,8 +4318,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/dashboards/{dashboard_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4243,8 +4341,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/dashboards/aggregate_table_lookml/{dashboard_id}",
                 structure=mdls.DashboardAggregateTableLookml,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4266,8 +4364,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/dashboards/lookml/{dashboard_id}",
                 structure=mdls.DashboardLookml,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4295,8 +4393,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}/move",
                 structure=mdls.Dashboard,
                 query_params={"folder_id": folder_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4329,8 +4427,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/dashboards/lookml",
                 structure=mdls.DashboardLookml,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4349,8 +4447,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/dashboards/from_lookml",
                 structure=mdls.DashboardLookml,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4381,8 +4479,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}/copy",
                 structure=mdls.Dashboard,
                 query_params={"folder_id": folder_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4436,9 +4534,17 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/dashboard_elements/search",
                 structure=Sequence[mdls.DashboardElement],
-                query_params={"dashboard_id": dashboard_id, "look_id": look_id, "title": title, "deleted": deleted, "fields": fields, "filter_or": filter_or, "sorts": sorts},
-                transport_options=transport_options
-            )
+                query_params={
+                    "dashboard_id": dashboard_id,
+                    "look_id": look_id,
+                    "title": title,
+                    "deleted": deleted,
+                    "fields": fields,
+                    "filter_or": filter_or,
+                    "sorts": sorts,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4461,8 +4567,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboard_elements/{dashboard_element_id}",
                 structure=mdls.DashboardElement,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4487,8 +4593,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardElement,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4508,8 +4614,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/dashboard_elements/{dashboard_element_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4532,8 +4638,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}/dashboard_elements",
                 structure=Sequence[mdls.DashboardElement],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4557,8 +4663,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardElement,
                 query_params={"fields": fields, "apply_filters": apply_filters},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4581,8 +4687,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboard_filters/{dashboard_filter_id}",
                 structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4607,8 +4713,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4628,8 +4734,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/dashboard_filters/{dashboard_filter_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4652,8 +4758,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}/dashboard_filters",
                 structure=Sequence[mdls.DashboardFilter],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4675,8 +4781,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardFilter,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4692,15 +4798,17 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.DashboardLayoutComponent:
         """Get DashboardLayoutComponent"""
-        dashboard_layout_component_id = self.encode_path_param(dashboard_layout_component_id)
+        dashboard_layout_component_id = self.encode_path_param(
+            dashboard_layout_component_id
+        )
         response = cast(
             mdls.DashboardLayoutComponent,
             self.get(
                 path=f"/dashboard_layout_components/{dashboard_layout_component_id}",
                 structure=mdls.DashboardLayoutComponent,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4717,7 +4825,9 @@ class Looker40SDK(api_methods.APIMethods):
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.DashboardLayoutComponent:
         """Update DashboardLayoutComponent"""
-        dashboard_layout_component_id = self.encode_path_param(dashboard_layout_component_id)
+        dashboard_layout_component_id = self.encode_path_param(
+            dashboard_layout_component_id
+        )
         response = cast(
             mdls.DashboardLayoutComponent,
             self.patch(
@@ -4725,8 +4835,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardLayoutComponent,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4749,8 +4859,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboard_layouts/{dashboard_layout_id}/dashboard_layout_components",
                 structure=Sequence[mdls.DashboardLayoutComponent],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4773,8 +4883,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboard_layouts/{dashboard_layout_id}",
                 structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4799,8 +4909,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4820,8 +4930,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/dashboard_layouts/{dashboard_layout_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4844,8 +4954,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/dashboards/{dashboard_id}/dashboard_layouts",
                 structure=Sequence[mdls.DashboardLayout],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4867,14 +4977,14 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.DashboardLayout,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region DataAction: Run Data Actions
+    # region DataAction: Run Data Actions
 
     # Perform a data action. The data action object can be obtained from query results, and used to perform an arbitrary action.
     #
@@ -4891,8 +5001,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/data_actions",
                 structure=mdls.DataActionResponse,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4911,14 +5021,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/data_actions/form",
                 structure=mdls.DataActionForm,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Datagroup: Manage Datagroups
+    # region Datagroup: Manage Datagroups
 
     # ### Get information about all datagroups.
     #
@@ -4933,8 +5043,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/datagroups",
                 structure=Sequence[mdls.Datagroup],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4954,8 +5064,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/datagroups/{datagroup_id}",
                 structure=mdls.Datagroup,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -4977,14 +5087,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/datagroups/{datagroup_id}",
                 structure=mdls.Datagroup,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region DerivedTable: View Derived Table graphs
+    # region DerivedTable: View Derived Table graphs
 
     # ### Discover information about derived tables
     #
@@ -5007,8 +5117,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/derived_table/graph/model/{model}",
                 structure=mdls.DependencyGraph,
                 query_params={"format": format, "color": color},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5033,8 +5143,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/derived_table/graph/view/{view}",
                 structure=mdls.DependencyGraph,
                 query_params={"models": models, "workspace": workspace},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5065,9 +5175,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/derived_table/{model_name}/{view_name}/start",
                 structure=mdls.MaterializePDT,
-                query_params={"force_rebuild": force_rebuild, "force_full_incremental": force_full_incremental, "workspace": workspace, "source": source},
-                transport_options=transport_options
-            )
+                query_params={
+                    "force_rebuild": force_rebuild,
+                    "force_full_incremental": force_full_incremental,
+                    "workspace": workspace,
+                    "source": source,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5087,8 +5202,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/derived_table/{materialization_id}/status",
                 structure=mdls.MaterializePDT,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5111,14 +5226,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/derived_table/{materialization_id}/stop",
                 structure=mdls.MaterializePDT,
                 query_params={"source": source},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Folder: Manage Folders
+    # region Folder: Manage Folders
 
     # Search for folders by creator id, parent id, name, etc
     #
@@ -5157,9 +5272,22 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/folders/search",
                 structure=Sequence[mdls.Folder],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "name": name,
+                    "id": id,
+                    "parent_id": parent_id,
+                    "creator_id": creator_id,
+                    "filter_or": filter_or,
+                    "is_shared_root": is_shared_root,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5182,8 +5310,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}",
                 structure=mdls.Folder,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5205,8 +5333,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}",
                 structure=mdls.Folder,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5227,8 +5355,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/folders/{folder_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5253,8 +5381,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/folders",
                 structure=Sequence[mdls.Folder],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5276,8 +5404,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/folders",
                 structure=mdls.Folder,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5309,9 +5437,16 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/folders/{folder_id}/children",
                 structure=Sequence[mdls.Folder],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5338,8 +5473,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}/children/search",
                 structure=Sequence[mdls.Folder],
                 query_params={"fields": fields, "sorts": sorts, "name": name},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5362,8 +5497,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}/parent",
                 structure=mdls.Folder,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5386,8 +5521,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}/ancestors",
                 structure=Sequence[mdls.Folder],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5412,8 +5547,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}/looks",
                 structure=Sequence[mdls.LookWithQuery],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5436,14 +5571,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/folders/{folder_id}/dashboards",
                 structure=Sequence[mdls.Dashboard],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Group: Manage Groups
+    # region Group: Manage Groups
 
     # ### Get information about all groups.
     #
@@ -5476,9 +5611,19 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/groups",
                 structure=Sequence[mdls.Group],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "ids": ids, "content_metadata_id": content_metadata_id, "can_add_to_content_metadata": can_add_to_content_metadata},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "ids": ids,
+                    "content_metadata_id": content_metadata_id,
+                    "can_add_to_content_metadata": can_add_to_content_metadata,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5500,8 +5645,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Group,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5561,9 +5706,20 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/groups/search",
                 structure=Sequence[mdls.Group],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or, "id": id, "name": name, "external_group_id": external_group_id, "externally_managed": externally_managed, "externally_orphaned": externally_orphaned},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                    "id": id,
+                    "name": name,
+                    "external_group_id": external_group_id,
+                    "externally_managed": externally_managed,
+                    "externally_orphaned": externally_orphaned,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5623,9 +5779,20 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/groups/search/with_roles",
                 structure=Sequence[mdls.GroupSearch],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or, "id": id, "name": name, "external_group_id": external_group_id, "externally_managed": externally_managed, "externally_orphaned": externally_orphaned},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                    "id": id,
+                    "name": name,
+                    "external_group_id": external_group_id,
+                    "externally_managed": externally_managed,
+                    "externally_orphaned": externally_orphaned,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5686,9 +5853,20 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/groups/search/with_hierarchy",
                 structure=Sequence[mdls.GroupHierarchy],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or, "id": id, "name": name, "external_group_id": external_group_id, "externally_managed": externally_managed, "externally_orphaned": externally_orphaned},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                    "id": id,
+                    "name": name,
+                    "external_group_id": external_group_id,
+                    "externally_managed": externally_managed,
+                    "externally_orphaned": externally_orphaned,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5711,8 +5889,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/groups/{group_id}",
                 structure=mdls.Group,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5737,8 +5915,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Group,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5758,8 +5936,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/groups/{group_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5782,8 +5960,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/groups/{group_id}/groups",
                 structure=Sequence[mdls.Group],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5806,8 +5984,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/groups/{group_id}/groups",
                 structure=mdls.Group,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5839,9 +6017,16 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/groups/{group_id}/users",
                 structure=Sequence[mdls.User],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5864,8 +6049,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/groups/{group_id}/users",
                 structure=mdls.User,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5888,8 +6073,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/groups/{group_id}/users/{user_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5912,8 +6097,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/groups/{group_id}/groups/{deleting_group_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5941,8 +6126,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/groups/{group_id}/attribute_values/{user_attribute_id}",
                 structure=mdls.UserAttributeGroupValue,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -5965,14 +6150,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/groups/{group_id}/attribute_values/{user_attribute_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Homepage: Manage Homepage
+    # region Homepage: Manage Homepage
 
     # ### Get information about the primary homepage's sections.
     #
@@ -5990,14 +6175,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/primary_homepage_sections",
                 structure=Sequence[mdls.HomepageSection],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Integration: Manage Integrations
+    # region Integration: Manage Integrations
 
     # ### Get information about all Integration Hubs.
     #
@@ -6015,8 +6200,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/integration_hubs",
                 structure=Sequence[mdls.IntegrationHub],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6040,8 +6225,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6064,8 +6249,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/integration_hubs/{integration_hub_id}",
                 structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6092,8 +6277,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.IntegrationHub,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6113,8 +6298,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/integration_hubs/{integration_hub_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6134,8 +6319,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/integration_hubs/{integration_hub_id}/accept_legal_agreement",
                 structure=mdls.IntegrationHub,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6156,9 +6341,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/integrations",
                 structure=Sequence[mdls.Integration],
-                query_params={"fields": fields, "integration_hub_id": integration_hub_id},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "integration_hub_id": integration_hub_id,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6181,8 +6369,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/integrations/{integration_id}",
                 structure=mdls.Integration,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6207,8 +6395,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Integration,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6230,8 +6418,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/integrations/{integration_id}/form",
                 structure=mdls.DataActionForm,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6251,14 +6439,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/integrations/{integration_id}/test",
                 structure=mdls.IntegrationTestResult,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Look: Run and Manage Looks
+    # region Look: Run and Manage Looks
 
     # ### Get information about all active Looks
     #
@@ -6282,8 +6470,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/looks",
                 structure=Sequence[mdls.Look],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6311,8 +6499,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6391,9 +6579,28 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/looks/search",
                 structure=Sequence[mdls.Look],
-                query_params={"id": id, "title": title, "description": description, "content_favorite_id": content_favorite_id, "folder_id": folder_id, "user_id": user_id, "view_count": view_count, "deleted": deleted, "query_id": query_id, "curate": curate, "last_viewed_at": last_viewed_at, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "id": id,
+                    "title": title,
+                    "description": description,
+                    "content_favorite_id": content_favorite_id,
+                    "folder_id": folder_id,
+                    "user_id": user_id,
+                    "view_count": view_count,
+                    "deleted": deleted,
+                    "query_id": query_id,
+                    "curate": curate,
+                    "last_viewed_at": last_viewed_at,
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6418,8 +6625,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/looks/{look_id}",
                 structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6463,8 +6670,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.LookWithQuery,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6490,8 +6697,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/looks/{look_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6555,9 +6762,22 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/looks/{look_id}/run/{result_format}",
                 structure=Union[str, bytes],  # type: ignore
-                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs},
-                transport_options=transport_options
-            )
+                query_params={
+                    "limit": limit,
+                    "apply_formatting": apply_formatting,
+                    "apply_vis": apply_vis,
+                    "cache": cache,
+                    "image_width": image_width,
+                    "image_height": image_height,
+                    "generate_drill_links": generate_drill_links,
+                    "force_production": force_production,
+                    "cache_only": cache_only,
+                    "path_prefix": path_prefix,
+                    "rebuild_pdts": rebuild_pdts,
+                    "server_table_calcs": server_table_calcs,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6586,8 +6806,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/looks/{look_id}/copy",
                 structure=mdls.LookWithQuery,
                 query_params={"folder_id": folder_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6615,14 +6835,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/looks/{look_id}/move",
                 structure=mdls.LookWithQuery,
                 query_params={"folder_id": folder_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region LookmlModel: Manage LookML Models
+    # region LookmlModel: Manage LookML Models
 
     # ### Get information about all lookml models.
     #
@@ -6644,8 +6864,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/lookml_models",
                 structure=Sequence[mdls.LookmlModel],
                 query_params={"fields": fields, "limit": limit, "offset": offset},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6664,8 +6884,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/lookml_models",
                 structure=mdls.LookmlModel,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6688,8 +6908,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/lookml_models/{lookml_model_name}",
                 structure=mdls.LookmlModel,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6711,8 +6931,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/lookml_models/{lookml_model_name}",
                 structure=mdls.LookmlModel,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6732,8 +6952,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/lookml_models/{lookml_model_name}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6759,14 +6979,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/lookml_models/{lookml_model_name}/explores/{explore_name}",
                 structure=mdls.LookmlModelExplore,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Metadata: Connection Metadata Features
+    # region Metadata: Connection Metadata Features
 
     # ### Field name suggestions for a model and view
     #
@@ -6813,8 +7033,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/models/{model_name}/views/{view_name}/fields/{field_name}/suggestions",
                 structure=mdls.ModelFieldSuggestions,
                 query_params={"term": term, "filters": filters},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6834,8 +7054,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/models/{model_name}",
                 structure=mdls.Model,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6863,8 +7083,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/connections/{connection_name}/databases",
                 structure=Sequence[str],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6889,8 +7109,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}/features",
                 structure=mdls.ConnectionFeatures,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6917,8 +7137,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}/schemas",
                 structure=Sequence[mdls.Schema],
                 query_params={"database": database, "cache": cache, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6955,9 +7175,16 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/connections/{connection_name}/tables",
                 structure=Sequence[mdls.SchemaTables],
-                query_params={"database": database, "schema_name": schema_name, "cache": cache, "fields": fields, "table_filter": table_filter, "table_limit": table_limit},
-                transport_options=transport_options
-            )
+                query_params={
+                    "database": database,
+                    "schema_name": schema_name,
+                    "cache": cache,
+                    "fields": fields,
+                    "table_filter": table_filter,
+                    "table_limit": table_limit,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -6989,9 +7216,16 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/connections/{connection_name}/columns",
                 structure=Sequence[mdls.SchemaColumns],
-                query_params={"database": database, "schema_name": schema_name, "cache": cache, "table_limit": table_limit, "table_names": table_names, "fields": fields},
-                transport_options=transport_options
-            )
+                query_params={
+                    "database": database,
+                    "schema_name": schema_name,
+                    "cache": cache,
+                    "table_limit": table_limit,
+                    "table_names": table_names,
+                    "fields": fields,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7018,8 +7252,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/connections/{connection_name}/search_columns",
                 structure=Sequence[mdls.ColumnSearch],
                 query_params={"column_name": column_name, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7049,14 +7283,14 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.CostEstimate,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Project: Manage Projects
+    # region Project: Manage Projects
 
     # ### Generate Lockfile for All LookML Dependencies
     #
@@ -7083,8 +7317,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/manifest/lock_all",
                 structure=str,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7106,8 +7340,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/git_branches",
                 structure=Sequence[mdls.GitBranch],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7129,8 +7363,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/git_branch",
                 structure=mdls.GitBranch,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7160,8 +7394,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/git_branch",
                 structure=mdls.GitBranch,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7190,8 +7424,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/git_branch",
                 structure=mdls.GitBranch,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7216,8 +7450,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/git_branch/{branch_name}",
                 structure=mdls.GitBranch,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7242,8 +7476,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/projects/{project_id}/git_branch/{branch_name}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7276,8 +7510,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/deploy_ref_to_production",
                 structure=str,
                 query_params={"branch": branch, "ref": ref},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7308,8 +7542,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/projects/{project_id}/deploy_to_production",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7331,8 +7565,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/projects/{project_id}/reset_to_production",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7354,8 +7588,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/projects/{project_id}/reset_to_remote",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7377,8 +7611,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/projects",
                 structure=Sequence[mdls.Project],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7403,8 +7637,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/projects",
                 structure=mdls.Project,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7429,8 +7663,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}",
                 structure=mdls.Project,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7476,8 +7710,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Project,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7499,8 +7733,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/manifest",
                 structure=mdls.Manifest,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7522,8 +7756,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/git/deploy_key",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7551,8 +7785,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/projects/{project_id}/git/deploy_key",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7586,8 +7820,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/validate",
                 structure=mdls.ProjectValidationCache,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7618,8 +7852,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/validate",
                 structure=mdls.ProjectValidation,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7644,8 +7878,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/current_workspace",
                 structure=mdls.ProjectWorkspace,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7670,8 +7904,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/files",
                 structure=Sequence[mdls.ProjectFile],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7698,8 +7932,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/files/file",
                 structure=mdls.ProjectFile,
                 query_params={"file_id": file_id, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7731,8 +7965,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/git_connection_tests",
                 structure=Sequence[mdls.GitConnectionTest],
                 query_params={"remote_url": remote_url},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7765,9 +7999,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{project_id}/git_connection_tests/{test_id}",
                 structure=mdls.GitConnectionTestResult,
-                query_params={"remote_url": remote_url, "use_production": use_production},
-                transport_options=transport_options
-            )
+                query_params={
+                    "remote_url": remote_url,
+                    "use_production": use_production,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7794,8 +8031,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/lookml_tests",
                 structure=Sequence[mdls.LookmlTest],
                 query_params={"file_id": file_id},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7824,8 +8061,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{project_id}/lookml_tests/run",
                 structure=Sequence[mdls.LookmlTestResult],
                 query_params={"file_id": file_id, "test": test, "model": model},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7854,10 +8091,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/projects/{project_id}/tag",
                 structure=mdls.Project,
-                query_params={"commit_sha": commit_sha, "tag_name": tag_name, "tag_message": tag_message},
+                query_params={
+                    "commit_sha": commit_sha,
+                    "tag_name": tag_name,
+                    "tag_message": tag_message,
+                },
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7887,8 +8128,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/projects/{root_project_id}/credential/{credential_id}",
                 structure=mdls.RepositoryCredential,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7916,8 +8157,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/projects/{root_project_id}/credential/{credential_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -7939,14 +8180,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/projects/{root_project_id}/credentials",
                 structure=Sequence[mdls.RepositoryCredential],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Query: Run and Manage Queries
+    # region Query: Run and Manage Queries
 
     # ### Create an async query task
     #
@@ -7993,10 +8234,24 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path="/query_tasks",
                 structure=mdls.QueryTask,
-                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs, "image_width": image_width, "image_height": image_height, "fields": fields},
+                query_params={
+                    "limit": limit,
+                    "apply_formatting": apply_formatting,
+                    "apply_vis": apply_vis,
+                    "cache": cache,
+                    "generate_drill_links": generate_drill_links,
+                    "force_production": force_production,
+                    "cache_only": cache_only,
+                    "path_prefix": path_prefix,
+                    "rebuild_pdts": rebuild_pdts,
+                    "server_table_calcs": server_table_calcs,
+                    "image_width": image_width,
+                    "image_height": image_height,
+                    "fields": fields,
+                },
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8022,8 +8277,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/query_tasks/multi_results",
                 structure=MutableMapping[str, Any],
                 query_params={"query_task_ids": query_task_ids},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8052,8 +8307,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/query_tasks/{query_task_id}",
                 structure=mdls.QueryTask,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8095,8 +8350,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/query_tasks/{query_task_id}/results",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8135,8 +8390,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/queries/{query_id}",
                 structure=mdls.Query,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8175,8 +8430,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/queries/slug/{slug}",
                 structure=mdls.Query,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8205,8 +8460,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.Query,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8275,9 +8530,23 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/queries/{query_id}/run/{result_format}",
                 structure=Union[str, bytes],  # type: ignore
-                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs, "source": source},
-                transport_options=transport_options
-            )
+                query_params={
+                    "limit": limit,
+                    "apply_formatting": apply_formatting,
+                    "apply_vis": apply_vis,
+                    "cache": cache,
+                    "image_width": image_width,
+                    "image_height": image_height,
+                    "generate_drill_links": generate_drill_links,
+                    "force_production": force_production,
+                    "cache_only": cache_only,
+                    "path_prefix": path_prefix,
+                    "rebuild_pdts": rebuild_pdts,
+                    "server_table_calcs": server_table_calcs,
+                    "source": source,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8371,10 +8640,23 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/queries/run/{result_format}",
                 structure=Union[str, bytes],  # type: ignore
-                query_params={"limit": limit, "apply_formatting": apply_formatting, "apply_vis": apply_vis, "cache": cache, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links, "force_production": force_production, "cache_only": cache_only, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts, "server_table_calcs": server_table_calcs},
+                query_params={
+                    "limit": limit,
+                    "apply_formatting": apply_formatting,
+                    "apply_vis": apply_vis,
+                    "cache": cache,
+                    "image_width": image_width,
+                    "image_height": image_height,
+                    "generate_drill_links": generate_drill_links,
+                    "force_production": force_production,
+                    "cache_only": cache_only,
+                    "path_prefix": path_prefix,
+                    "rebuild_pdts": rebuild_pdts,
+                    "server_table_calcs": server_table_calcs,
+                },
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8451,8 +8733,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/queries/models/{model_name}/views/{view_name}/run/{result_format}",
                 structure=Union[str, bytes],  # type: ignore
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8477,8 +8759,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/merge_queries/{merge_query_id}",
                 structure=mdls.MergeQuery,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8516,8 +8798,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.MergeQuery,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8534,8 +8816,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/running_queries",
                 structure=Sequence[mdls.RunningQueries],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8555,8 +8837,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/running_queries/{query_task_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8576,8 +8858,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/sql_queries/{slug}",
                 structure=mdls.SqlQuery,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8598,8 +8880,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/sql_queries",
                 structure=mdls.SqlQuery,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8625,14 +8907,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/sql_queries/{slug}/run/{result_format}",
                 structure=Union[str, bytes],  # type: ignore
                 query_params={"download": download},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region RenderTask: Manage Render Tasks
+    # region RenderTask: Manage Render Tasks
 
     # ### Create a new task to render a look to an image.
     #
@@ -8664,8 +8946,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/render_tasks/looks/{look_id}/{result_format}",
                 structure=mdls.RenderTask,
                 query_params={"width": width, "height": height, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8699,8 +8981,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/render_tasks/queries/{query_id}/{result_format}",
                 structure=mdls.RenderTask,
                 query_params={"width": width, "height": height, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8740,10 +9022,17 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/render_tasks/dashboards/{dashboard_id}/{result_format}",
                 structure=mdls.RenderTask,
-                query_params={"width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape, "long_tables": long_tables},
+                query_params={
+                    "width": width,
+                    "height": height,
+                    "fields": fields,
+                    "pdf_paper_size": pdf_paper_size,
+                    "pdf_landscape": pdf_landscape,
+                    "long_tables": long_tables,
+                },
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8770,8 +9059,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/render_tasks/{render_task_id}",
                 structure=mdls.RenderTask,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8807,8 +9096,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/render_tasks/{render_task_id}/results",
                 structure=bytes,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8842,14 +9131,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/render_tasks/dashboard_elements/{dashboard_element_id}/{result_format}",
                 structure=mdls.RenderTask,
                 query_params={"width": width, "height": height, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Role: Manage Roles
+    # region Role: Manage Roles
 
     # ### Search model sets
     # Returns all model set records that match the given search criteria.
@@ -8903,9 +9192,19 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/model_sets/search",
                 structure=Sequence[mdls.ModelSet],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access, "built_in": built_in, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "name": name,
+                    "all_access": all_access,
+                    "built_in": built_in,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8928,8 +9227,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/model_sets/{model_set_id}",
                 structure=mdls.ModelSet,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8951,8 +9250,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/model_sets/{model_set_id}",
                 structure=mdls.ModelSet,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8972,8 +9271,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/model_sets/{model_set_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -8993,8 +9292,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/model_sets",
                 structure=Sequence[mdls.ModelSet],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9013,8 +9312,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/model_sets",
                 structure=mdls.ModelSet,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9031,8 +9330,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/permissions",
                 structure=Sequence[mdls.Permission],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9088,9 +9387,19 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/permission_sets/search",
                 structure=Sequence[mdls.PermissionSet],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access, "built_in": built_in, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "name": name,
+                    "all_access": all_access,
+                    "built_in": built_in,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9113,8 +9422,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/permission_sets/{permission_set_id}",
                 structure=mdls.PermissionSet,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9136,8 +9445,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/permission_sets/{permission_set_id}",
                 structure=mdls.PermissionSet,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9157,8 +9466,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/permission_sets/{permission_set_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9178,8 +9487,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/permission_sets",
                 structure=Sequence[mdls.PermissionSet],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9198,8 +9507,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/permission_sets",
                 structure=mdls.PermissionSet,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9221,8 +9530,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/roles",
                 structure=Sequence[mdls.Role],
                 query_params={"fields": fields, "ids": ids},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9241,8 +9550,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/roles",
                 structure=mdls.Role,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9298,9 +9607,18 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/roles/search",
                 structure=Sequence[mdls.Role],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "name": name,
+                    "built_in": built_in,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9357,9 +9675,18 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/roles/search/with_user_count",
                 structure=Sequence[mdls.RoleSearch],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "name": name,
+                    "built_in": built_in,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9379,8 +9706,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/roles/{role_id}",
                 structure=mdls.Role,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9402,8 +9729,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/roles/{role_id}",
                 structure=mdls.Role,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9423,8 +9750,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/roles/{role_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9447,8 +9774,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/roles/{role_id}/groups",
                 structure=Sequence[mdls.Group],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9470,8 +9797,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/roles/{role_id}/groups",
                 structure=Sequence[mdls.Group],
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9495,9 +9822,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/roles/{role_id}/users",
                 structure=Sequence[mdls.User],
-                query_params={"fields": fields, "direct_association_only": direct_association_only},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "direct_association_only": direct_association_only,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9519,14 +9849,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/roles/{role_id}/users",
                 structure=Sequence[mdls.User],
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region ScheduledPlan: Manage Scheduled Plans
+    # region ScheduledPlan: Manage Scheduled Plans
 
     # ### Get Scheduled Plans for a Space
     #
@@ -9549,8 +9879,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/scheduled_plans/space/{space_id}",
                 structure=Sequence[mdls.ScheduledPlan],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9575,8 +9905,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/scheduled_plans/{scheduled_plan_id}",
                 structure=mdls.ScheduledPlan,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9639,8 +9969,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/scheduled_plans/{scheduled_plan_id}",
                 structure=mdls.ScheduledPlan,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9664,8 +9994,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/scheduled_plans/{scheduled_plan_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9698,9 +10028,13 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/scheduled_plans",
                 structure=Sequence[mdls.ScheduledPlan],
-                query_params={"user_id": user_id, "fields": fields, "all_users": all_users},
-                transport_options=transport_options
-            )
+                query_params={
+                    "user_id": user_id,
+                    "fields": fields,
+                    "all_users": all_users,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9776,8 +10110,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/scheduled_plans",
                 structure=mdls.ScheduledPlan,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9832,8 +10166,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/scheduled_plans/run_once",
                 structure=mdls.ScheduledPlan,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9869,9 +10203,13 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/scheduled_plans/look/{look_id}",
                 structure=Sequence[mdls.ScheduledPlan],
-                query_params={"user_id": user_id, "fields": fields, "all_users": all_users},
-                transport_options=transport_options
-            )
+                query_params={
+                    "user_id": user_id,
+                    "fields": fields,
+                    "all_users": all_users,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9907,9 +10245,13 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/scheduled_plans/dashboard/{dashboard_id}",
                 structure=Sequence[mdls.ScheduledPlan],
-                query_params={"user_id": user_id, "all_users": all_users, "fields": fields},
-                transport_options=transport_options
-            )
+                query_params={
+                    "user_id": user_id,
+                    "all_users": all_users,
+                    "fields": fields,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -9945,9 +10287,13 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/scheduled_plans/lookml_dashboard/{lookml_dashboard_id}",
                 structure=Sequence[mdls.ScheduledPlan],
-                query_params={"user_id": user_id, "fields": fields, "all_users": all_users},
-                transport_options=transport_options
-            )
+                query_params={
+                    "user_id": user_id,
+                    "fields": fields,
+                    "all_users": all_users,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10015,14 +10361,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/scheduled_plans/{scheduled_plan_id}/run_once",
                 structure=mdls.ScheduledPlan,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Session: Session Information
+    # region Session: Session Information
 
     # ### Get API Session
     #
@@ -10039,8 +10385,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/session",
                 structure=mdls.ApiSession,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10078,14 +10424,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/session",
                 structure=mdls.ApiSession,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Theme: Manage Themes
+    # region Theme: Manage Themes
 
     # ### Get an array of all existing themes
     #
@@ -10109,8 +10455,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes",
                 structure=Sequence[mdls.Theme],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10143,8 +10489,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes",
                 structure=mdls.Theme,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10216,9 +10562,19 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/themes/search",
                 structure=Sequence[mdls.Theme],
-                query_params={"id": id, "name": name, "begin_at": begin_at, "end_at": end_at, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "id": id,
+                    "name": name,
+                    "begin_at": begin_at,
+                    "end_at": end_at,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "fields": fields,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10244,8 +10600,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes/default",
                 structure=mdls.Theme,
                 query_params={"ts": ts},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10275,8 +10631,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes/default",
                 structure=mdls.Theme,
                 query_params={"name": name},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10308,8 +10664,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes/active",
                 structure=Sequence[mdls.Theme],
                 query_params={"name": name, "ts": ts, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10336,8 +10692,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes/theme_or_default",
                 structure=mdls.Theme,
                 query_params={"name": name, "ts": ts},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10362,8 +10718,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/themes/validate",
                 structure=mdls.ValidationError,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10390,8 +10746,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/themes/{theme_id}",
                 structure=mdls.Theme,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10415,8 +10771,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/themes/{theme_id}",
                 structure=mdls.Theme,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10444,14 +10800,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/themes/{theme_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region User: Manage Users
+    # region User: Manage Users
 
     # ### Search email credentials
     #
@@ -10505,9 +10861,18 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/credentials_email/search",
                 structure=Sequence[mdls.CredentialsEmailSearch],
-                query_params={"fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "email": email, "emails": emails, "filter_or": filter_or},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "email": email,
+                    "emails": emails,
+                    "filter_or": filter_or,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10527,8 +10892,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/user",
                 structure=mdls.User,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10559,9 +10924,17 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/users",
                 structure=Sequence[mdls.User],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "ids": ids},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "ids": ids,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10583,8 +10956,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.User,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10662,9 +11035,26 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/users/search",
                 structure=Sequence[mdls.User],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee, "embed_user": embed_user, "email": email, "is_disabled": is_disabled, "filter_or": filter_or, "content_metadata_id": content_metadata_id, "group_id": group_id},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "verified_looker_employee": verified_looker_employee,
+                    "embed_user": embed_user,
+                    "email": email,
+                    "is_disabled": is_disabled,
+                    "filter_or": filter_or,
+                    "content_metadata_id": content_metadata_id,
+                    "group_id": group_id,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10713,9 +11103,22 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/users/search/names/{pattern}",
                 structure=Sequence[mdls.User],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee, "email": email, "is_disabled": is_disabled},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "page": page,
+                    "per_page": per_page,
+                    "limit": limit,
+                    "offset": offset,
+                    "sorts": sorts,
+                    "id": id,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "verified_looker_employee": verified_looker_employee,
+                    "email": email,
+                    "is_disabled": is_disabled,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10742,8 +11145,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}",
                 structure=mdls.User,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10768,8 +11171,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.User,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10791,8 +11194,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10845,8 +11248,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/credential/{credential_type}/{credential_id}",
                 structure=mdls.User,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10869,8 +11272,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_email",
                 structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10895,8 +11298,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10921,8 +11324,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10942,8 +11345,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_email",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10966,8 +11369,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_totp",
                 structure=mdls.CredentialsTotp,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -10993,8 +11396,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.CredentialsTotp,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11014,8 +11417,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_totp",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11038,8 +11441,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_ldap",
                 structure=mdls.CredentialsLDAP,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11059,8 +11462,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_ldap",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11083,8 +11486,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_google",
                 structure=mdls.CredentialsGoogle,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11104,8 +11507,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_google",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11128,8 +11531,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_saml",
                 structure=mdls.CredentialsSaml,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11149,8 +11552,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_saml",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11173,8 +11576,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_oidc",
                 structure=mdls.CredentialsOIDC,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11194,8 +11597,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_oidc",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11221,8 +11624,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_api3/{credentials_api3_id}",
                 structure=mdls.CredentialsApi3,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11245,8 +11648,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_api3/{credentials_api3_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11269,8 +11672,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_api3",
                 structure=Sequence[mdls.CredentialsApi3],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11293,8 +11696,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_api3",
                 structure=mdls.CreateCredentialsApi3,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11320,8 +11723,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_embed/{credentials_embed_id}",
                 structure=mdls.CredentialsEmbed,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11344,8 +11747,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_embed/{credentials_embed_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11368,8 +11771,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_embed",
                 structure=Sequence[mdls.CredentialsEmbed],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11392,8 +11795,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_looker_openid",
                 structure=mdls.CredentialsLookerOpenid,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11413,8 +11816,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/credentials_looker_openid",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11440,8 +11843,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/sessions/{session_id}",
                 structure=mdls.Session,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11464,8 +11867,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/sessions/{session_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11488,8 +11891,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/sessions",
                 structure=Sequence[mdls.Session],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11522,8 +11925,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_email/password_reset",
                 structure=mdls.CredentialsEmail,
                 query_params={"expires": expires, "fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11547,9 +11950,12 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/users/{user_id}/roles",
                 structure=Sequence[mdls.Role],
-                query_params={"fields": fields, "direct_association_only": direct_association_only},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "direct_association_only": direct_association_only,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11574,8 +11980,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=Sequence[mdls.Role],
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11618,9 +12024,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/users/{user_id}/attribute_values",
                 structure=Sequence[mdls.UserAttributeWithValue],
-                query_params={"fields": fields, "user_attribute_ids": user_attribute_ids, "all_values": all_values, "include_unset": include_unset},
-                transport_options=transport_options
-            )
+                query_params={
+                    "fields": fields,
+                    "user_attribute_ids": user_attribute_ids,
+                    "all_values": all_values,
+                    "include_unset": include_unset,
+                },
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11647,8 +12058,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/attribute_values/{user_attribute_id}",
                 structure=mdls.UserAttributeWithValue,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11676,8 +12087,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/users/{user_id}/attribute_values/{user_attribute_id}",
                 structure=None,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11706,8 +12117,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/users/{user_id}/credentials_email/send_password_reset",
                 structure=mdls.CredentialsEmail,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11737,8 +12148,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.User,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11757,14 +12168,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/users/embed_user",
                 structure=mdls.UserPublic,
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region UserAttribute: Manage User Attributes
+    # region UserAttribute: Manage User Attributes
 
     # ### Get information about all user attributes.
     #
@@ -11784,8 +12195,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path="/user_attributes",
                 structure=Sequence[mdls.UserAttribute],
                 query_params={"fields": fields, "sorts": sorts},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11816,8 +12227,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.UserAttribute,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11840,8 +12251,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/user_attributes/{user_attribute_id}",
                 structure=mdls.UserAttribute,
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11866,8 +12277,8 @@ class Looker40SDK(api_methods.APIMethods):
                 structure=mdls.UserAttribute,
                 query_params={"fields": fields},
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11887,8 +12298,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.delete(
                 path=f"/user_attributes/{user_attribute_id}",
                 structure=str,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11917,8 +12328,8 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/user_attributes/{user_attribute_id}/group_values",
                 structure=Sequence[mdls.UserAttributeGroupValue],
                 query_params={"fields": fields},
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -11959,14 +12370,14 @@ class Looker40SDK(api_methods.APIMethods):
                 path=f"/user_attributes/{user_attribute_id}/group_values",
                 structure=Sequence[mdls.UserAttributeGroupValue],
                 body=body,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
 
-    #region Workspace: Manage Workspaces
+    # region Workspace: Manage Workspaces
 
     # ### Get All Workspaces
     #
@@ -11983,8 +12394,8 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/workspaces",
                 structure=Sequence[mdls.Workspace],
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
@@ -12032,9 +12443,9 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/workspaces/{workspace_id}",
                 structure=mdls.Workspace,
-                transport_options=transport_options
-            )
+                transport_options=transport_options,
+            ),
         )
         return response
 
-    #endregion
+    # endregion
