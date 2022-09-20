@@ -176,7 +176,7 @@ const regen = async (release) => {
     if (await pullci(release)) {
       return batch([
         'yarn gen',
-        'yarn test:sdk',
+        'bin/smoke typescript python kotlin',
         'git add -A',
         `git commit -m "feat: generate SDKs for Looker ${release}"`,
         `git push origin ${branch}`,

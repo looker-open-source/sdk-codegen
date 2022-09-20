@@ -142,7 +142,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     }
 
     private fun addSystemProperty(map: MutableMap<String, String>, key: String) {
-        System.getProperty("${environmentPrefix}_${key.toUpperCase()}").let { value ->
+        System.getProperty("${environmentPrefix}_${key.uppercase()}").let { value ->
             if (value !== null && value.isNotEmpty()) map[key] = value
         }
     }
