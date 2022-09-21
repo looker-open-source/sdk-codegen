@@ -2330,6 +2330,7 @@ export class Looker40SDKStream extends APIMethods {
         offset: request.offset,
         limit: request.limit,
         filter_or: request.filter_or,
+        permission: request.permission,
       },
       null,
       options
