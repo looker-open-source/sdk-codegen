@@ -448,7 +448,7 @@ describe('spec conversion', () => {
       expect(actual.looker_release_version).not.toEqual('')
       expect(actual.current_version.version).not.toEqual('')
       const supported = onlyPublic(actual.supported_versions)
-      expect(supported).toHaveLength(4)
+      expect(supported).toHaveLength(3)
     })
 
     it('gets spec links', async () => {
