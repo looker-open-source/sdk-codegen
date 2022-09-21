@@ -887,6 +887,7 @@ type DBConnection struct {
 	JdbcAdditionalParams     *string               `json:"jdbc_additional_params,omitempty"`       // Additional params to add to JDBC connection string
 	PoolTimeout              *int64                `json:"pool_timeout,omitempty"`                 // Connection Pool Timeout, in seconds
 	DialectName              *string               `json:"dialect_name,omitempty"`                 // (Read/Write) SQL Dialect name
+	SupportsDataStudioLink   *bool                 `json:"supports_data_studio_link,omitempty"`    // Database connection has the ability to support open data studio from explore
 	CreatedAt                *string               `json:"created_at,omitempty"`                   // Creation date for this connection
 	UserId                   *string               `json:"user_id,omitempty"`                      // Id of user who last modified this connection configuration
 	Example                  *bool                 `json:"example,omitempty"`                      // Is this an example connection?
@@ -2594,19 +2595,20 @@ type RequestSearchAlerts struct {
 
 // Dynamically generated request type for search_boards
 type RequestSearchBoards struct {
-	Title     *string `json:"title,omitempty"`      // Matches board title.
-	CreatedAt *string `json:"created_at,omitempty"` // Matches the timestamp for when the board was created.
-	FirstName *string `json:"first_name,omitempty"` // The first name of the user who created this board.
-	LastName  *string `json:"last_name,omitempty"`  // The last name of the user who created this board.
-	Fields    *string `json:"fields,omitempty"`     // Requested fields.
-	Favorited *bool   `json:"favorited,omitempty"`  // Return favorited boards when true.
-	CreatorId *string `json:"creator_id,omitempty"` // Filter on boards created by a particular user.
-	Sorts     *string `json:"sorts,omitempty"`      // The fields to sort the results by
-	Page      *int64  `json:"page,omitempty"`       // The page to return. DEPRECATED. Use offset instead.
-	PerPage   *int64  `json:"per_page,omitempty"`   // The number of items in the returned page. DEPRECATED. Use limit instead.
-	Offset    *int64  `json:"offset,omitempty"`     // The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
-	Limit     *int64  `json:"limit,omitempty"`      // The maximum number of items to return. (used with offset and takes priority over page and per_page)
-	FilterOr  *bool   `json:"filter_or,omitempty"`  // Combine given search criteria in a boolean OR expression
+	Title      *string `json:"title,omitempty"`      // Matches board title.
+	CreatedAt  *string `json:"created_at,omitempty"` // Matches the timestamp for when the board was created.
+	FirstName  *string `json:"first_name,omitempty"` // The first name of the user who created this board.
+	LastName   *string `json:"last_name,omitempty"`  // The last name of the user who created this board.
+	Fields     *string `json:"fields,omitempty"`     // Requested fields.
+	Favorited  *bool   `json:"favorited,omitempty"`  // Return favorited boards when true.
+	CreatorId  *string `json:"creator_id,omitempty"` // Filter on boards created by a particular user.
+	Sorts      *string `json:"sorts,omitempty"`      // The fields to sort the results by
+	Page       *int64  `json:"page,omitempty"`       // The page to return. DEPRECATED. Use offset instead.
+	PerPage    *int64  `json:"per_page,omitempty"`   // The number of items in the returned page. DEPRECATED. Use limit instead.
+	Offset     *int64  `json:"offset,omitempty"`     // The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
+	Limit      *int64  `json:"limit,omitempty"`      // The maximum number of items to return. (used with offset and takes priority over page and per_page)
+	FilterOr   *bool   `json:"filter_or,omitempty"`  // Combine given search criteria in a boolean OR expression
+	Permission *string `json:"permission,omitempty"` // Filter results based on permission, either show (default) or update
 }
 
 // Dynamically generated request type for search_content_favorites
@@ -3823,7 +3825,7 @@ type WriteDatagroup struct {
 }
 
 // Dynamic writeable type for DBConnection removes:
-// can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
 type WriteDBConnection struct {
 	Name                     *string                    `json:"name,omitempty"`                         // Name of the connection. Also used as the unique identifier
 	Host                     *string                    `json:"host,omitempty"`                         // Host name/address of server

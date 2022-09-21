@@ -6350,6 +6350,7 @@ public struct DBConnection: SDKModel {
         case _jdbc_additional_params = "jdbc_additional_params"
         case _pool_timeout = "pool_timeout"
         case _dialect_name = "dialect_name"
+        case supports_data_studio_link
         case _created_at = "created_at"
         case _user_id = "user_id"
         case example
@@ -6556,6 +6557,11 @@ public struct DBConnection: SDKModel {
         set { _dialect_name = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Database connection has the ability to support open data studio from explore (read-only)
+     */
+    public var supports_data_studio_link: Bool?
+
     private var _created_at: AnyString?
     /**
      * Creation date for this connection (read-only)
@@ -6693,7 +6699,7 @@ public struct DBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -6718,6 +6724,7 @@ public struct DBConnection: SDKModel {
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
+        self.supports_data_studio_link = supports_data_studio_link
         self._created_at = created_at.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.example = example
@@ -22822,7 +22829,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 public struct WriteDBConnection: SDKModel {
 

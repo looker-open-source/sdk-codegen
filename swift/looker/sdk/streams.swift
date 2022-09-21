@@ -1596,10 +1596,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {String} permission Filter results based on permission, either show (default) or update
+         */
+        permission: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/boards/search", 
-            ["title": title, "created_at": created_at, "first_name": first_name, "last_name": last_name, "fields": fields, "favorited": favorited as Any?, "creator_id": creator_id, "sorts": sorts, "page": page, "per_page": per_page, "offset": offset, "limit": limit, "filter_or": filter_or as Any?], nil, options)
+            ["title": title, "created_at": created_at, "first_name": first_name, "last_name": last_name, "fields": fields, "favorited": favorited as Any?, "creator_id": creator_id, "sorts": sorts, "page": page, "per_page": per_page, "offset": offset, "limit": limit, "filter_or": filter_or as Any?, "permission": permission], nil, options)
         return result
     }
 
