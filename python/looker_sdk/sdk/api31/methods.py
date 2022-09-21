@@ -8270,7 +8270,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ApiSession:
-        """Get Session"""
+        """Get Auth"""
         response = cast(
             mdls.ApiSession,
             self.get(
@@ -8308,7 +8308,7 @@ class Looker31SDK(api_methods.APIMethods):
         body: mdls.WriteApiSession,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ApiSession:
-        """Update Session"""
+        """Update Auth"""
         response = cast(
             mdls.ApiSession,
             self.patch(

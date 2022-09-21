@@ -6531,7 +6531,7 @@ namespace Looker.SDK.API31
   ///
   /// GET /session -> ApiSession
   ///
-  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  /// <returns><c>ApiSession</c> Auth (application/json)</returns>
   ///
   public async Task<SdkResponse<ApiSession, Exception>> session(
     ITransportSettings? options = null)
@@ -6562,7 +6562,7 @@ namespace Looker.SDK.API31
   ///
   /// PATCH /session -> ApiSession
   ///
-  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  /// <returns><c>ApiSession</c> Auth (application/json)</returns>
   ///
   public async Task<SdkResponse<ApiSession, Exception>> update_session(
     WriteApiSession body,
