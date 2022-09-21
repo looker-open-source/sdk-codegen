@@ -70,12 +70,25 @@ const run = (command) => {
   return result
 }
 
+/**
+ * Updates release-please-config.json to stamp the correct CalVer for the SDKs
+ * @param release Looker version
+ * @returns string describing calver action
+ */
 const releasePlease = (release) => {
   const config = JSON.parse(fs.readFileSync(releaseConfig, utf8))
-  config['release-as'] = `${release}.0`
+  let calVer = config['release-as']
+  if (calVer) {
+    const patch = parseInt(calVer.split('.')[2]) + 1
+    calVer = `${release}.${patch}`
+  } else {
+    calVer = `${release}.0`
+  }
+  config['release-as'] = calVer
   fs.writeFileSync(releaseConfig, JSON.stringify(config, null, 2), utf8)
-  // return `set release to ${release}.0`
-  throw new Error('Just testing')
+  const result = `set release please calVer to ${calVer}`
+  console.info(result)
+  return result
 }
 
 /**
@@ -86,12 +99,13 @@ const releasePlease = (release) => {
  * Commands should return a string for success and an Error object for failure
  *
  * @param commands list of commands to run in sequence
- * @param release SemVer of release, like 22.14
+ * @param release CalVer of release, like 22.14
  */
 const batch = (commands, release) => {
   let result = ''
   for (const command of commands) {
     if (command instanceof Function) {
+      console.info('running a function ...')
       result = command(release)
     } else if (typeof command == 'string') {
       result = run(command)
@@ -195,15 +209,15 @@ const regen = async (release) => {
     const branch = branchActive()
     if (await pullci(release)) {
       return batch([
+        (release) => releasePlease(release),
         'yarn gen',
         'bin/smoke typescript python kotlin',
-        (release) => releasePlease(release),
         'git add -A',
         `git commit -m "feat: generate SDKs for Looker ${release}"`,
         `git push origin ${branch}`,
         /* create PR
          */
-      ])
+      ], release)
     } else {
       console.error(`timed out waiting for Looker ${release}`)
     }
