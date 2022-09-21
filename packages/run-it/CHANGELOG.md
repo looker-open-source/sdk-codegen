@@ -1,5 +1,29 @@
 # Changelog
 
+### [0.9.37](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.36...run-it-v0.9.37) (2022-09-21)
+
+
+### Features
+
+* copy link button for search ([#1120](https://www.github.com/looker-open-source/sdk-codegen/issues/1120)) ([d6e0c37](https://www.github.com/looker-open-source/sdk-codegen/commit/d6e0c37ae36b1ff4129cf3bb30f8462f4aa49b0d))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+
+
+### Bug Fixes
+
+* whitespace under CollapserCard child components ([#1162](https://www.github.com/looker-open-source/sdk-codegen/issues/1162)) ([89fbf29](https://www.github.com/looker-open-source/sdk-codegen/commit/89fbf2911701b598bf9d673cef00e790a1bc8207))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.23 to ^0.1.24
+    * @looker/extension-utils bumped from ^0.1.13 to ^0.1.14
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+
 ### [0.9.36](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.35...run-it-v0.9.36) (2022-07-29)
 
 
