@@ -2164,6 +2164,7 @@ export const search_boards = async (
       offset: request.offset,
       limit: request.limit,
       filter_or: request.filter_or,
+      permission: request.permission,
     },
     null,
     options

@@ -1793,6 +1793,8 @@ class Looker40SDK(api_methods.APIMethods):
         limit: Optional[int] = None,
         # Combine given search criteria in a boolean OR expression
         filter_or: Optional[bool] = None,
+        # Filter results based on permission, either show (default) or update
+        permission: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Board]:
         """Search Boards"""
@@ -1815,6 +1817,7 @@ class Looker40SDK(api_methods.APIMethods):
                     "offset": offset,
                     "limit": limit,
                     "filter_or": filter_or,
+                    "permission": permission,
                 },
                 transport_options=transport_options,
             ),

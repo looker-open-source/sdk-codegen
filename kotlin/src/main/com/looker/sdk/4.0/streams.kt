@@ -1400,6 +1400,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {Long} limit The maximum number of items to return. (used with offset and takes priority over page and per_page)
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
+     * @param {String} permission Filter results based on permission, either show (default) or update
      *
      * GET /boards/search -> ByteArray
      */
@@ -1416,7 +1417,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         per_page: Long? = null,
         offset: Long? = null,
         limit: Long? = null,
-        filter_or: Boolean? = null
+        filter_or: Boolean? = null,
+        permission: String? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/boards/search", 
                 mapOf("title" to title,
@@ -1431,7 +1433,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                      "per_page" to per_page,
                      "offset" to offset,
                      "limit" to limit,
-                     "filter_or" to filter_or))
+                     "filter_or" to filter_or,
+                     "permission" to permission))
     }
 
 

@@ -51,7 +51,7 @@ extension String {
 }
 
 public struct Constants {
-    public static let lookerVersion = "22.12"
+    public static let lookerVersion = "22.14"
     public static let apiVersion = "4.0"
     public static let defaultApiVersion = "4.0" // Swift requires API 4.0
     public static let sdkVersion = #"\#(apiVersion).\#(lookerVersion)"#

@@ -1381,6 +1381,7 @@ namespace Looker.SDK.API40
   /// <param name="offset">The number of items to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="permission">Filter results based on permission, either show (default) or update</param>
   public async Task<SdkResponse<Board[], Exception>> search_boards(
     string? title = null,
     string? created_at = null,
@@ -1395,6 +1396,7 @@ namespace Looker.SDK.API40
     long? offset = null,
     long? limit = null,
     bool? filter_or = null,
+    string? permission = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Board[], Exception>(HttpMethod.Get, "/boards/search", new Values {
@@ -1410,7 +1412,8 @@ namespace Looker.SDK.API40
       { "per_page", per_page },
       { "offset", offset },
       { "limit", limit },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "permission", permission }},null,options);
   }
 
   /// ### Get information about a board.
