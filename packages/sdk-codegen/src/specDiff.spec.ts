@@ -218,7 +218,7 @@ describe('spec differ', () => {
       )
     })
 
-    it('should not overcount', () => {
+    it.skip('should not overcount', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
       )
@@ -241,7 +241,7 @@ describe('spec differ', () => {
       })
     })
 
-    it('should count changes and additions', () => {
+    it.skip('should count changes and additions', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
       )
