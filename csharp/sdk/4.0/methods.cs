@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 446 API methods
+/// 449 API methods
 
 #nullable enable
 using System;
@@ -488,6 +488,82 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Post, "/embed/token_url/me", null,body,options);
+  }
+
+  /// ### Acquire a cookieless embed session.
+  ///
+  /// The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+  /// to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
+  /// otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
+  /// attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+  ///
+  /// The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
+  /// and the credentials match the credentials for the embed session, a new authentication token will be
+  /// generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
+  /// the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+  ///
+  /// If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+  ///
+  /// If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+  /// 404 will be returned.
+  ///
+  /// The endpoint returns the following:
+  /// - Authentication token - a token that is passed to `/embed/login` endpoint that creates or attaches to the
+  ///   embed session. This token can be used once and has a lifetime of 30 seconds.
+  /// - Session reference token - a token that lives for the length of the session. This token is used to
+  ///   generate new api and navigation tokens OR create new embed IFRAMEs.
+  /// - Api token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into the
+  ///   iframe.
+  /// - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
+  ///   the iframe.
+  ///
+  /// POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
+  ///
+  /// <returns><c>EmbedCookielessSessionAcquireResponse</c> Embed cookieless acquire session response (application/json)</returns>
+  ///
+  public async Task<SdkResponse<EmbedCookielessSessionAcquireResponse, Exception>> acquire_embed_cookieless_session(
+    EmbedCookielessSessionAcquire body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EmbedCookielessSessionAcquireResponse, Exception>(HttpMethod.Post, "/embed/cookieless_session/acquire", null,body,options);
+  }
+
+  /// ### Delete cookieless embed session
+  ///
+  /// This will delete the session associated with the given session reference token. Calling this endpoint will result
+  /// in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
+  /// user out of the Looker instance.
+  ///
+  /// DELETE /embed/cookieless_session/{session_reference_token} -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="session_reference_token">Embed session reference token</param>
+  public async Task<SdkResponse<string, Exception>> delete_embed_cookieless_session(
+    string session_reference_token,
+    ITransportSettings? options = null)
+{  
+      session_reference_token = SdkUtils.EncodeParam(session_reference_token);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/embed/cookieless_session/{session_reference_token}", null,null,options);
+  }
+
+  /// ### Generate api and navigation tokens for a cookieless embed session
+  ///
+  /// The generate tokens endpoint is used to create new tokens of type:
+  /// - Api token.
+  /// - Navigation token.
+  /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
+  /// first time when the tokens returned by the acquire_session endpoint should be used).
+  ///
+  /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
+  ///
+  /// <returns><c>EmbedCookielessSessionGenerateTokensResponse</c> Generated api and navigations tokens for the cookieless embed session. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<EmbedCookielessSessionGenerateTokensResponse, Exception>> generate_tokens_for_cookieless_session(
+    EmbedCookielessSessionGenerateTokens body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EmbedCookielessSessionGenerateTokensResponse, Exception>(HttpMethod.Put, "/embed/cookieless_session/generate_tokens", null,body,options);
   }
 
   /// ### Get the LDAP configuration.
@@ -8195,7 +8271,7 @@ namespace Looker.SDK.API40
   ///
   /// GET /session -> ApiSession
   ///
-  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  /// <returns><c>ApiSession</c> Auth (application/json)</returns>
   ///
   public async Task<SdkResponse<ApiSession, Exception>> session(
     ITransportSettings? options = null)
@@ -8226,7 +8302,7 @@ namespace Looker.SDK.API40
   ///
   /// PATCH /session -> ApiSession
   ///
-  /// <returns><c>ApiSession</c> Session (application/json)</returns>
+  /// <returns><c>ApiSession</c> Auth (application/json)</returns>
   ///
   public async Task<SdkResponse<ApiSession, Exception>> update_session(
     WriteApiSession body,

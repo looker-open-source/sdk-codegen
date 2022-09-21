@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+/// 320 API models: 239 Spec, 0 Request, 60 Write, 21 Enum
 
 #nullable enable
 using System;
@@ -1804,6 +1804,80 @@ public class EgressIpAddresses : SdkModel
 {
   /// <summary>Egress IP addresses (read-only)</summary>
   public string[]? egress_ip_addresses { get; set; } = null;
+}
+
+public class EmbedCookielessSessionAcquire : SdkModel
+{
+  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  public long? session_length { get; set; } = null;
+  /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
+  public bool? force_logout_login { get; set; } = null;
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  public string? external_user_id { get; set; } = null;
+  /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
+  public string? first_name { get; set; } = null;
+  /// <summary>Last name of the embed user. Defaults to 'User' if not specified</summary>
+  public string? last_name { get; set; } = null;
+  /// <summary>Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.</summary>
+  public string? user_timezone { get; set; } = null;
+  /// <summary>List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.</summary>
+  public string[]? permissions { get; set; } = null;
+  /// <summary>List of model names that the embed user may access</summary>
+  public string[]? models { get; set; } = null;
+  /// <summary>List of Looker group ids in which to enroll the embed user</summary>
+  public string[]? group_ids { get; set; } = null;
+  /// <summary>A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.</summary>
+  public string? external_group_id { get; set; } = null;
+  /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
+  public StringDictionary<object>? user_attributes { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string? session_reference_token { get; set; } = null;
+}
+
+public class EmbedCookielessSessionAcquireResponse : SdkModel
+{
+  /// <summary>One time token used to create or to attach to an embedded session in the Looker application server.</summary>
+  public string? authentication_token { get; set; } = null;
+  /// <summary>Authentication token time to live in seconds.</summary>
+  public long? authentication_token_ttl { get; set; } = null;
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Navigation token time to live in seconds.</summary>
+  public long? navigation_token_ttl { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+  /// <summary>Api token time to live in seconds.</summary>
+  public long? api_token_ttl { get; set; } = null;
+  /// <summary>Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server. </summary>
+  public string? session_reference_token { get; set; } = null;
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  public long? session_reference_token_ttl { get; set; } = null;
+}
+
+public class EmbedCookielessSessionGenerateTokens : SdkModel
+{
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string session_reference_token { get; set; } = "";
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+}
+
+public class EmbedCookielessSessionGenerateTokensResponse : SdkModel
+{
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Navigation token time to live in seconds.</summary>
+  public long? navigation_token_ttl { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+  /// <summary>Api token time to live in seconds.</summary>
+  public long? api_token_ttl { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string session_reference_token { get; set; } = "";
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  public long? session_reference_token_ttl { get; set; } = null;
 }
 
 public class EmbedParams : SdkModel

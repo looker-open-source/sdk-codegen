@@ -25,7 +25,7 @@
  */
 
 /**
- * 446 API methods
+ * 449 API methods
  */
 
 
@@ -543,6 +543,90 @@ open class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/embed/token_url/me", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Acquire a cookieless embed session.
+     *
+     * The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+     * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
+     * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
+     * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+     *
+     * The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
+     * and the credentials match the credentials for the embed session, a new authentication token will be
+     * generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
+     * the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+     *
+     * If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+     *
+     * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+     * 404 will be returned.
+     *
+     * The endpoint returns the following:
+     * - Authentication token - a token that is passed to `/embed/login` endpoint that creates or attaches to the
+     *   embed session. This token can be used once and has a lifetime of 30 seconds.
+     * - Session reference token - a token that lives for the length of the session. This token is used to
+     *   generate new api and navigation tokens OR create new embed IFRAMEs.
+     * - Api token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into the
+     *   iframe.
+     * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
+     *   the iframe.
+     *
+     * POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
+     */
+    public func acquire_embed_cookieless_session(
+        /**
+         * @param {EmbedCookielessSessionAcquire} body
+         */
+        _ body: EmbedCookielessSessionAcquire,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/embed/cookieless_session/acquire", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete cookieless embed session
+     *
+     * This will delete the session associated with the given session reference token. Calling this endpoint will result
+     * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
+     * user out of the Looker instance.
+     *
+     * DELETE /embed/cookieless_session/{session_reference_token} -> String
+     */
+    public func delete_embed_cookieless_session(
+        /**
+         * @param {String} session_reference_token Embed session reference token
+         */
+        _ session_reference_token: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_session_reference_token = encodeParam(session_reference_token)
+        let result: SDKResponse<Data, SDKError> = self.delete("/embed/cookieless_session/\(path_session_reference_token)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Generate api and navigation tokens for a cookieless embed session
+     *
+     * The generate tokens endpoint is used to create new tokens of type:
+     * - Api token.
+     * - Navigation token.
+     * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
+     * first time when the tokens returned by the acquire_session endpoint should be used).
+     *
+     * PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
+     */
+    public func generate_tokens_for_cookieless_session(
+        /**
+         * @param {EmbedCookielessSessionGenerateTokens} body
+         */
+        _ body: EmbedCookielessSessionGenerateTokens,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.put("/embed/cookieless_session/generate_tokens", nil, try! self.encode(body), options)
         return result
     }
 

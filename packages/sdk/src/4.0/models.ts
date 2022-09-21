@@ -25,7 +25,7 @@
  */
 
 /**
- * 378 API models: 235 Spec, 62 Request, 60 Write, 21 Enum
+ * 382 API models: 239 Spec, 62 Request, 60 Write, 21 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -2997,6 +2997,134 @@ export interface IEgressIpAddresses {
    * Egress IP addresses (read-only)
    */
   egress_ip_addresses?: string[] | null
+}
+
+export interface IEmbedCookielessSessionAcquire {
+  /**
+   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   */
+  session_length?: number | null
+  /**
+   * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+   */
+  force_logout_login?: boolean
+  /**
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   */
+  external_user_id?: string | null
+  /**
+   * First name of the embed user. Defaults to 'Embed' if not specified
+   */
+  first_name?: string | null
+  /**
+   * Last name of the embed user. Defaults to 'User' if not specified
+   */
+  last_name?: string | null
+  /**
+   * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+   */
+  user_timezone?: string | null
+  /**
+   * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+   */
+  permissions?: string[] | null
+  /**
+   * List of model names that the embed user may access
+   */
+  models?: string[] | null
+  /**
+   * List of Looker group ids in which to enroll the embed user
+   */
+  group_ids?: string[] | null
+  /**
+   * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+   */
+  external_group_id?: string | null
+  /**
+   * A dictionary of name-value pairs associating a Looker user attribute name with a value.
+   */
+  user_attributes?: IDictionary<any> | null
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token?: string | null
+}
+
+export interface IEmbedCookielessSessionAcquireResponse {
+  /**
+   * One time token used to create or to attach to an embedded session in the Looker application server.
+   */
+  authentication_token?: string | null
+  /**
+   * Authentication token time to live in seconds.
+   */
+  authentication_token_ttl?: number | null
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Navigation token time to live in seconds.
+   */
+  navigation_token_ttl?: number | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+  /**
+   * Api token time to live in seconds.
+   */
+  api_token_ttl?: number | null
+  /**
+   * Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+   */
+  session_reference_token?: string | null
+  /**
+   * Session reference token time to live in seconds. Note that this is the same as actual session.
+   */
+  session_reference_token_ttl?: number | null
+}
+
+export interface IEmbedCookielessSessionGenerateTokens {
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token: string
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+}
+
+export interface IEmbedCookielessSessionGenerateTokensResponse {
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Navigation token time to live in seconds.
+   */
+  navigation_token_ttl?: number | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+  /**
+   * Api token time to live in seconds.
+   */
+  api_token_ttl?: number | null
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token: string
+  /**
+   * Session reference token time to live in seconds. Note that this is the same as actual session.
+   */
+  session_reference_token_ttl?: number | null
 }
 
 export interface IEmbedParams {

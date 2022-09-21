@@ -25,7 +25,7 @@
  */
 
 /**
- * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+ * 320 API models: 239 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -7462,6 +7462,361 @@ public struct EgressIpAddresses: SDKModel {
 
     public init(egress_ip_addresses: [String]? = nil) {
         if let v = egress_ip_addresses { _egress_ip_addresses = v.map { AnyString.init($0) } } else { _egress_ip_addresses = nil }
+    }
+
+}
+
+public struct EmbedCookielessSessionAcquire: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _session_length = "session_length"
+        case force_logout_login
+        case _external_user_id = "external_user_id"
+        case _first_name = "first_name"
+        case _last_name = "last_name"
+        case _user_timezone = "user_timezone"
+        case _permissions = "permissions"
+        case _models = "models"
+        case _group_ids = "group_ids"
+        case _external_group_id = "external_group_id"
+        case user_attributes
+        case _session_reference_token = "session_reference_token"
+    }
+    private var _session_length: AnyInt?
+    /**
+     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     */
+    public var session_length: Int64? {
+        get { _session_length?.value }
+        set { _session_length = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+     */
+    public var force_logout_login: Bool?
+
+    private var _external_user_id: AnyString?
+    /**
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     */
+    public var external_user_id: String? {
+        get { _external_user_id?.value }
+        set { _external_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _first_name: AnyString?
+    /**
+     * First name of the embed user. Defaults to 'Embed' if not specified
+     */
+    public var first_name: String? {
+        get { _first_name?.value }
+        set { _first_name = newValue.map(AnyString.init) }
+    }
+
+    private var _last_name: AnyString?
+    /**
+     * Last name of the embed user. Defaults to 'User' if not specified
+     */
+    public var last_name: String? {
+        get { _last_name?.value }
+        set { _last_name = newValue.map(AnyString.init) }
+    }
+
+    private var _user_timezone: AnyString?
+    /**
+     * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+     */
+    public var user_timezone: String? {
+        get { _user_timezone?.value }
+        set { _user_timezone = newValue.map(AnyString.init) }
+    }
+
+    private var _permissions: [AnyString]?
+    /**
+     * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+     */
+    public var permissions: [String]? {
+        get { if let v = _permissions { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil } }
+    }
+
+    private var _models: [AnyString]?
+    /**
+     * List of model names that the embed user may access
+     */
+    public var models: [String]? {
+        get { if let v = _models { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
+    }
+
+    private var _group_ids: [AnyString]?
+    /**
+     * List of Looker group ids in which to enroll the embed user
+     */
+    public var group_ids: [String]? {
+        get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil } }
+    }
+
+    private var _external_group_id: AnyString?
+    /**
+     * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+     */
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * A dictionary of name-value pairs associating a Looker user attribute name with a value.
+     */
+    public var user_attributes: StringDictionary<AnyCodable>?
+
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil) {
+        self._session_length = session_length.map(AnyInt.init)
+        self.force_logout_login = force_logout_login
+        self._external_user_id = external_user_id.map(AnyString.init)
+        self._first_name = first_name.map(AnyString.init)
+        self._last_name = last_name.map(AnyString.init)
+        self._user_timezone = user_timezone.map(AnyString.init)
+        if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
+        if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
+        if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
+        self._external_group_id = external_group_id.map(AnyString.init)
+        self.user_attributes = user_attributes
+        self._session_reference_token = session_reference_token.map(AnyString.init)
+    }
+
+}
+
+public struct EmbedCookielessSessionAcquireResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _authentication_token = "authentication_token"
+        case _authentication_token_ttl = "authentication_token_ttl"
+        case _navigation_token = "navigation_token"
+        case _navigation_token_ttl = "navigation_token_ttl"
+        case _api_token = "api_token"
+        case _api_token_ttl = "api_token_ttl"
+        case _session_reference_token = "session_reference_token"
+        case _session_reference_token_ttl = "session_reference_token_ttl"
+    }
+    private var _authentication_token: AnyString?
+    /**
+     * One time token used to create or to attach to an embedded session in the Looker application server.
+     */
+    public var authentication_token: String? {
+        get { _authentication_token?.value }
+        set { _authentication_token = newValue.map(AnyString.init) }
+    }
+
+    private var _authentication_token_ttl: AnyInt?
+    /**
+     * Authentication token time to live in seconds.
+     */
+    public var authentication_token_ttl: Int64? {
+        get { _authentication_token_ttl?.value }
+        set { _authentication_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _navigation_token_ttl: AnyInt?
+    /**
+     * Navigation token time to live in seconds.
+     */
+    public var navigation_token_ttl: Int64? {
+        get { _navigation_token_ttl?.value }
+        set { _navigation_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token_ttl: AnyInt?
+    /**
+     * Api token time to live in seconds.
+     */
+    public var api_token_ttl: Int64? {
+        get { _api_token_ttl?.value }
+        set { _api_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    private var _session_reference_token_ttl: AnyInt?
+    /**
+     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     */
+    public var session_reference_token_ttl: Int64? {
+        get { _session_reference_token_ttl?.value }
+        set { _session_reference_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    public init(authentication_token: String? = nil, authentication_token_ttl: Int64? = nil, navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, session_reference_token: String? = nil, session_reference_token_ttl: Int64? = nil) {
+        self._authentication_token = authentication_token.map(AnyString.init)
+        self._authentication_token_ttl = authentication_token_ttl.map(AnyInt.init)
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._navigation_token_ttl = navigation_token_ttl.map(AnyInt.init)
+        self._api_token = api_token.map(AnyString.init)
+        self._api_token_ttl = api_token_ttl.map(AnyInt.init)
+        self._session_reference_token = session_reference_token.map(AnyString.init)
+        self._session_reference_token_ttl = session_reference_token_ttl.map(AnyInt.init)
+    }
+
+}
+
+public struct EmbedCookielessSessionGenerateTokens: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _session_reference_token = "session_reference_token"
+        case _navigation_token = "navigation_token"
+        case _api_token = "api_token"
+    }
+    private var _session_reference_token: AnyString
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String {
+        get { _session_reference_token.value }
+        set { _session_reference_token = AnyString.init(newValue) }
+    }
+
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_reference_token: String, navigation_token: String? = nil, api_token: String? = nil) {
+        self._session_reference_token = AnyString.init(session_reference_token)
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._api_token = api_token.map(AnyString.init)
+    }
+
+    public init(_ session_reference_token: String, navigation_token: String? = nil, api_token: String? = nil) {
+        self.init(session_reference_token: session_reference_token, navigation_token: navigation_token, api_token: api_token)
+    }
+
+}
+
+public struct EmbedCookielessSessionGenerateTokensResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _navigation_token = "navigation_token"
+        case _navigation_token_ttl = "navigation_token_ttl"
+        case _api_token = "api_token"
+        case _api_token_ttl = "api_token_ttl"
+        case _session_reference_token = "session_reference_token"
+        case _session_reference_token_ttl = "session_reference_token_ttl"
+    }
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _navigation_token_ttl: AnyInt?
+    /**
+     * Navigation token time to live in seconds.
+     */
+    public var navigation_token_ttl: Int64? {
+        get { _navigation_token_ttl?.value }
+        set { _navigation_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token_ttl: AnyInt?
+    /**
+     * Api token time to live in seconds.
+     */
+    public var api_token_ttl: Int64? {
+        get { _api_token_ttl?.value }
+        set { _api_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _session_reference_token: AnyString
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String {
+        get { _session_reference_token.value }
+        set { _session_reference_token = AnyString.init(newValue) }
+    }
+
+    private var _session_reference_token_ttl: AnyInt?
+    /**
+     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     */
+    public var session_reference_token_ttl: Int64? {
+        get { _session_reference_token_ttl?.value }
+        set { _session_reference_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    public init(navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, session_reference_token: String, session_reference_token_ttl: Int64? = nil) {
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._navigation_token_ttl = navigation_token_ttl.map(AnyInt.init)
+        self._api_token = api_token.map(AnyString.init)
+        self._api_token_ttl = api_token_ttl.map(AnyInt.init)
+        self._session_reference_token = AnyString.init(session_reference_token)
+        self._session_reference_token_ttl = session_reference_token_ttl.map(AnyInt.init)
+    }
+
+    public init(navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, _ session_reference_token: String, session_reference_token_ttl: Int64? = nil) {
+        self.init(navigation_token: navigation_token, navigation_token_ttl: navigation_token_ttl, api_token: api_token, api_token_ttl: api_token_ttl, session_reference_token: session_reference_token, session_reference_token_ttl: session_reference_token_ttl)
     }
 
 }

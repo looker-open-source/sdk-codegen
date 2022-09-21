@@ -25,7 +25,7 @@
  */
 
 /**
- * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+ * 320 API models: 239 Spec, 0 Request, 60 Write, 21 Enum
  */
 
 
@@ -1908,6 +1908,84 @@ data class DiscretePalette (
  */
 data class EgressIpAddresses (
     var egress_ip_addresses: Array<String>? = null
+) : Serializable
+
+/**
+ * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+ * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+ * @property first_name First name of the embed user. Defaults to 'Embed' if not specified
+ * @property last_name Last name of the embed user. Defaults to 'User' if not specified
+ * @property user_timezone Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+ * @property permissions List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+ * @property models List of model names that the embed user may access
+ * @property group_ids List of Looker group ids in which to enroll the embed user
+ * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+ * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ */
+data class EmbedCookielessSessionAcquire (
+    var session_length: Long? = null,
+    var force_logout_login: Boolean? = null,
+    var external_user_id: String? = null,
+    var first_name: String? = null,
+    var last_name: String? = null,
+    var user_timezone: String? = null,
+    var permissions: Array<String>? = null,
+    var models: Array<String>? = null,
+    var group_ids: Array<String>? = null,
+    var external_group_id: String? = null,
+    var user_attributes: Map<String,Any>? = null,
+    var session_reference_token: String? = null
+) : Serializable
+
+/**
+ * @property authentication_token One time token used to create or to attach to an embedded session in the Looker application server.
+ * @property authentication_token_ttl Authentication token time to live in seconds.
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property navigation_token_ttl Navigation token time to live in seconds.
+ * @property api_token Token to used to call Looker APIs.
+ * @property api_token_ttl Api token time to live in seconds.
+ * @property session_reference_token Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+ * @property session_reference_token_ttl Session reference token time to live in seconds. Note that this is the same as actual session.
+ */
+data class EmbedCookielessSessionAcquireResponse (
+    var authentication_token: String? = null,
+    var authentication_token_ttl: Long? = null,
+    var navigation_token: String? = null,
+    var navigation_token_ttl: Long? = null,
+    var api_token: String? = null,
+    var api_token_ttl: Long? = null,
+    var session_reference_token: String? = null,
+    var session_reference_token_ttl: Long? = null
+) : Serializable
+
+/**
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property api_token Token to used to call Looker APIs.
+ */
+data class EmbedCookielessSessionGenerateTokens (
+    var session_reference_token: String,
+    var navigation_token: String? = null,
+    var api_token: String? = null
+) : Serializable
+
+/**
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property navigation_token_ttl Navigation token time to live in seconds.
+ * @property api_token Token to used to call Looker APIs.
+ * @property api_token_ttl Api token time to live in seconds.
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property session_reference_token_ttl Session reference token time to live in seconds. Note that this is the same as actual session.
+ */
+data class EmbedCookielessSessionGenerateTokensResponse (
+    var navigation_token: String? = null,
+    var navigation_token_ttl: Long? = null,
+    var api_token: String? = null,
+    var api_token_ttl: Long? = null,
+    var session_reference_token: String,
+    var session_reference_token_ttl: Long? = null
 ) : Serializable
 
 /**

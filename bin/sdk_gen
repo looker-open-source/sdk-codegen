@@ -15,7 +15,7 @@ const looker = require('@looker/sdk-node')
 const utf8 = { encoding: 'utf-8' }
 
 const root = path.join(__dirname, '/../')
-const sdk = looker.LookerNodeSDK.init40()
+let sdk = looker.LookerNodeSDK.init40()
 const releaseConfig = path.join(root, 'release-please-config.json')
 
 async function sleep(ms) {
@@ -30,6 +30,7 @@ const waitForLooker = async () => {
   let tries = 1
   while (tries <= max_tries && !alive) {
     try {
+      sdk = looker.LookerNodeSDK.init40() // re-init the SDK to make sure it's not a lingering instance
       const user = await sdk.ok(sdk.me()) // make any API call
       alive = sdk.authSession.isAuthenticated()
       console.info(`Hi, ${user.first_name} ${user.last_name}!`)
