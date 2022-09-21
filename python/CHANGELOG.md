@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v22.10.0...looker_sdk-v22.12.1) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.12 ([#1175](https://www.github.com/looker-open-source/sdk-codegen/issues/1175)) ([6f427a7](https://www.github.com/looker-open-source/sdk-codegen/commit/6f427a71dd30669afc901a47418decd59b977a7a))
+* generate SDKs for Looker 22.14 ([#1176](https://www.github.com/looker-open-source/sdk-codegen/issues/1176)) ([328d3e5](https://www.github.com/looker-open-source/sdk-codegen/commit/328d3e5710fc80caf5691b8d3ea3d8b8db358ad6))
+* regenerate Looker 22.12 SDKs ([#1177](https://www.github.com/looker-open-source/sdk-codegen/issues/1177)) ([b3a9b7b](https://www.github.com/looker-open-source/sdk-codegen/commit/b3a9b7bfff6366abce4802b819d19d00ee00cd60))
+
+
+### Bug Fixes
+
+* add error detail handling for Python SDK ([#1170](https://www.github.com/looker-open-source/sdk-codegen/issues/1170)) ([0db7157](https://www.github.com/looker-open-source/sdk-codegen/commit/0db715768deedbf3290cd29c5aa788d9546e64f0))
+
 ## [22.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v22.8.0...looker_sdk-v22.10.0) (2022-07-14)
 
 

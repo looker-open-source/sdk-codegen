@@ -1,5 +1,25 @@
 # Changelog
 
+### [22.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.10.1...hackathon-v22.12.1) (2022-09-21)
+
+
+### Features
+
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.23 to ^0.1.24
+    * @looker/extension-sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/extension-sdk-react bumped from ^22.10.1 to ^22.12.1
+    * @looker/extension-utils bumped from ^0.1.13 to ^0.1.14
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+    * @looker/wholly-sheet bumped from ^0.5.32 to ^0.5.33
+
 ### [22.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.10.0...hackathon-v22.10.1) (2022-07-29)
 
 

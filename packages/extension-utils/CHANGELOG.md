@@ -1,5 +1,24 @@
 # Changelog
 
+### [0.1.14](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.13...extension-utils-v0.1.14) (2022-09-21)
+
+
+### Features
+
+* copy link button for search ([#1120](https://www.github.com/looker-open-source/sdk-codegen/issues/1120)) ([d6e0c37](https://www.github.com/looker-open-source/sdk-codegen/commit/d6e0c37ae36b1ff4129cf3bb30f8462f4aa49b0d))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+* error documentation redirect and support for detailed error content ([#1167](https://www.github.com/looker-open-source/sdk-codegen/issues/1167)) ([5b4fc5b](https://www.github.com/looker-open-source/sdk-codegen/commit/5b4fc5b91e05ed4ccd9090724e4ac3f506b541fd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/extension-sdk-react bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+    * @looker/code-editor bumped from ^0.1.23 to ^0.1.24
+
 ### [0.1.13](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.12...extension-utils-v0.1.13) (2022-07-29)
 
 

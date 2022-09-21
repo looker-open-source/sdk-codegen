@@ -1,6 +1,6 @@
 {
   "name": "@looker/code-editor",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "description": "A syntax highlighter Viewer and Editor for Looker SDK supported languages.",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.26",
-    "@looker/sdk-codegen": "^21.7.0",
+    "@looker/sdk-codegen": "^21.7.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
