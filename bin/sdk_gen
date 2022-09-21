@@ -8,6 +8,7 @@
  * create pull request https://docs.github.com/en/rest/pulls/pulls#create-a-pull-request
  * */
 
+const fs = require('fs')
 const path = require('path')
 const proc = require('child_process')
 const looker = require('@looker/sdk-node')
@@ -15,6 +16,7 @@ const utf8 = { encoding: 'utf-8' }
 
 const root = path.join(__dirname, '/../')
 const sdk = looker.LookerNodeSDK.init40()
+const releaseConfig = path.join(root, 'release-please-config.json')
 
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -68,14 +70,32 @@ const run = (command) => {
   return result
 }
 
+const releasePlease = (release) => {
+  const config = JSON.parse(fs.readFileSync(releaseConfig, utf8))
+  config['release-as'] = `${release}.0`
+  fs.writeFileSync(releaseConfig, JSON.stringify(config, null, 2), utf8)
+  // return `set release to ${release}.0`
+  throw new Error('Just testing')
+}
+
 /**
  * Run multiple commands one after another, returning on first failure
- * @param commands
+ *
+ * Array can contain both strings (which will be run commands) or functions
+ *
+ * Commands should return a string for success and an Error object for failure
+ *
+ * @param commands list of commands to run in sequence
+ * @param release SemVer of release, like 22.14
  */
-const batch = (commands) => {
+const batch = (commands, release) => {
   let result = ''
   for (const command of commands) {
-    result = run(command)
+    if (command instanceof Function) {
+      result = command(release)
+    } else if (typeof command == 'string') {
+      result = run(command)
+    }
     if (!ok(result)) {
       console.error(`${command} failed.`)
       return result
@@ -177,6 +197,7 @@ const regen = async (release) => {
       return batch([
         'yarn gen',
         'bin/smoke typescript python kotlin',
+        (release) => releasePlease(release),
         'git add -A',
         `git commit -m "feat: generate SDKs for Looker ${release}"`,
         `git push origin ${branch}`,
