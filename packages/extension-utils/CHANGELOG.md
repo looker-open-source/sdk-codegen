@@ -1,5 +1,15 @@
 # Changelog
 
+### [0.1.16](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.15...extension-utils-v0.1.16) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^22.14.0 to ^22.16.0
+    * @looker/extension-sdk-react bumped from ^22.14.0 to ^22.16.0
+
 ### [0.1.15](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.14...extension-utils-v0.1.15) (2022-09-21)
 
 
