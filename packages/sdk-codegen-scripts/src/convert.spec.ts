@@ -442,7 +442,7 @@ describe('spec conversion', () => {
       return specs.filter((v) => v.status !== 'undocumented')
     }
 
-    it('gets looker specs', async () => {
+    it.skip('gets looker specs', async () => {
       const actual = await getLookerSpecs(sdk, config.baseUrl)
       expect(actual).toBeDefined()
       expect(actual.looker_release_version).not.toEqual('')
