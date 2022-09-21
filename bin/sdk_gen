@@ -72,21 +72,25 @@ const run = (command) => {
 
 /**
  * Updates release-please-config.json to stamp the correct CalVer for the SDKs
+ *
+ * if `release-as` is already set, CalVer patch will be bumped if the current
+ * version is the same as the requested release version. Otherwise, it will be
+ * set to CalVer.0
+ *
  * @param release Looker version
- * @returns string describing calver action
+ * @returns string describing CalVer action
  */
 const releasePlease = (release) => {
   const config = JSON.parse(fs.readFileSync(releaseConfig, utf8))
-  let calVer = config['release-as']
-  if (calVer) {
+  let newVer = `${release}.0`
+  const calVer = config[`release-as`]
+  if (calVer === newVer) {
     const patch = parseInt(calVer.split('.')[2]) + 1
-    calVer = `${release}.${patch}`
-  } else {
-    calVer = `${release}.0`
+    newVer = `${release}.${patch}`
   }
-  config['release-as'] = calVer
+  config['release-as'] = newVer
   fs.writeFileSync(releaseConfig, JSON.stringify(config, null, 2), utf8)
-  const result = `set release please calVer to ${calVer}`
+  const result = `set release please calVer to ${newVer}`
   console.info(result)
   return result
 }
@@ -107,7 +111,7 @@ const batch = (commands, release) => {
     if (command instanceof Function) {
       console.info('running a function ...')
       result = command(release)
-    } else if (typeof command == 'string') {
+    } else if (typeof command === 'string') {
       result = run(command)
     }
     if (!ok(result)) {
