@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.4.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.3.4...sdk-rtl-v21.4.0) (2022-09-21)
+
+
+### Features
+
+* error code document retrieval ([#1136](https://www.github.com/looker-open-source/sdk-codegen/issues/1136)) ([305966b](https://www.github.com/looker-open-source/sdk-codegen/commit/305966b943e8dc6fde08d58cbb36febcbae5733f))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+
+
+### Bug Fixes
+
+* add ErrorDoc class to the Kotlin SDK ([#1143](https://www.github.com/looker-open-source/sdk-codegen/issues/1143)) ([20fbd31](https://www.github.com/looker-open-source/sdk-codegen/commit/20fbd31939e0ff88b9be3fdcf260176069143925))
+* add field details for SDK error ([#1134](https://www.github.com/looker-open-source/sdk-codegen/issues/1134)) ([ef1c96d](https://www.github.com/looker-open-source/sdk-codegen/commit/ef1c96d9bc1ae7c27b6ec4b07c7d33f04930d2a7))
+* add field details for SDK error ([#1141](https://www.github.com/looker-open-source/sdk-codegen/issues/1141)) ([9af3092](https://www.github.com/looker-open-source/sdk-codegen/commit/9af30928417e773b6e23a539012bdf9381490a13))
+* IErrorDetail fields should not be null ([#1146](https://www.github.com/looker-open-source/sdk-codegen/issues/1146)) ([44274b4](https://www.github.com/looker-open-source/sdk-codegen/commit/44274b4a3974ff4b946a9a0f3209c70cd77b245e))
+
 ### [21.3.4](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.3.3...sdk-rtl-v21.3.4) (2022-07-07)
 
 

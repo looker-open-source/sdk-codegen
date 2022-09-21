@@ -1,5 +1,25 @@
 # Changelog
 
+### [22.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.10.1...extension-api-explorer-v22.12.1) (2022-09-21)
+
+
+### Features
+
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.36 to ^0.9.37
+    * @looker/extension-sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/extension-sdk-react bumped from ^22.10.1 to ^22.12.1
+    * @looker/extension-utils bumped from ^0.1.13 to ^0.1.14
+    * @looker/run-it bumped from ^0.9.36 to ^0.9.37
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+
 ### [22.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.10.0...extension-api-explorer-v22.10.1) (2022-07-29)
 
 
