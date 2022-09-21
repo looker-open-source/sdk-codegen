@@ -1554,8 +1554,6 @@ public class DBConnection : SdkModel
   public long? pool_timeout { get; set; } = null;
   /// <summary>(Read/Write) SQL Dialect name</summary>
   public string? dialect_name { get; set; } = null;
-  /// <summary>Database connection has the ability to support open data studio from explore (read-only)</summary>
-  public bool? supports_data_studio_link { get; set; } = null;
   /// <summary>Creation date for this connection (read-only)</summary>
   public string? created_at { get; set; } = null;
   /// <summary>Id of user who last modified this connection configuration (read-only)</summary>
@@ -5605,7 +5603,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+/// can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>

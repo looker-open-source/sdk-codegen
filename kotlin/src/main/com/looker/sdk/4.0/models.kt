@@ -1622,7 +1622,6 @@ data class Datagroup (
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property pool_timeout Connection Pool Timeout, in seconds
  * @property dialect_name (Read/Write) SQL Dialect name
- * @property supports_data_studio_link Database connection has the ability to support open data studio from explore (read-only)
  * @property created_at Creation date for this connection (read-only)
  * @property user_id Id of user who last modified this connection configuration (read-only)
  * @property example Is this an example connection? (read-only)
@@ -1669,7 +1668,6 @@ data class DBConnection (
     var jdbc_additional_params: String? = null,
     var pool_timeout: Long? = null,
     var dialect_name: String? = null,
-    var supports_data_studio_link: Boolean? = null,
     var created_at: String? = null,
     var user_id: String? = null,
     var example: Boolean? = null,
@@ -5858,7 +5856,7 @@ data class WriteDatagroup (
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
  *
  * @property name Name of the connection. Also used as the unique identifier
  * @property host Host name/address of server

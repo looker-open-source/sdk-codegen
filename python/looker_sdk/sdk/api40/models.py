@@ -3401,7 +3401,6 @@ class DBConnection(model.Model):
         jdbc_additional_params: Additional params to add to JDBC connection string
         pool_timeout: Connection Pool Timeout, in seconds
         dialect_name: (Read/Write) SQL Dialect name
-        supports_data_studio_link: Database connection has the ability to support open data studio from explore
         created_at: Creation date for this connection
         user_id: Id of user who last modified this connection configuration
         example: Is this an example connection?
@@ -3448,7 +3447,6 @@ class DBConnection(model.Model):
     jdbc_additional_params: Optional[str] = None
     pool_timeout: Optional[int] = None
     dialect_name: Optional[str] = None
-    supports_data_studio_link: Optional[bool] = None
     created_at: Optional[str] = None
     user_id: Optional[str] = None
     example: Optional[bool] = None
@@ -3497,7 +3495,6 @@ class DBConnection(model.Model):
         jdbc_additional_params: Optional[str] = None,
         pool_timeout: Optional[int] = None,
         dialect_name: Optional[str] = None,
-        supports_data_studio_link: Optional[bool] = None,
         created_at: Optional[str] = None,
         user_id: Optional[str] = None,
         example: Optional[bool] = None,
@@ -3543,7 +3540,6 @@ class DBConnection(model.Model):
         self.jdbc_additional_params = jdbc_additional_params
         self.pool_timeout = pool_timeout
         self.dialect_name = dialect_name
-        self.supports_data_studio_link = supports_data_studio_link
         self.created_at = created_at
         self.user_id = user_id
         self.example = example
@@ -12231,7 +12227,7 @@ class WriteDatagroup(model.Model):
 class WriteDBConnection(model.Model):
     """
         Dynamic writeable type for DBConnection removes:
-    can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+    can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
 
         Attributes:
             name: Name of the connection. Also used as the unique identifier
