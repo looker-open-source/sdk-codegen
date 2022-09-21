@@ -8,6 +8,7 @@
  * create pull request https://docs.github.com/en/rest/pulls/pulls#create-a-pull-request
  * */
 
+const fs = require('fs')
 const path = require('path')
 const proc = require('child_process')
 const looker = require('@looker/sdk-node')
@@ -15,6 +16,7 @@ const utf8 = { encoding: 'utf-8' }
 
 const root = path.join(__dirname, '/../')
 const sdk = looker.LookerNodeSDK.init40()
+const releaseConfig = path.join(root, 'release-please-config.json')
 
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -69,13 +71,49 @@ const run = (command) => {
 }
 
 /**
- * Run multiple commands one after another, returning on first failure
- * @param commands
+ * Updates release-please-config.json to stamp the correct CalVer for the SDKs
+ *
+ * if `release-as` is already set, CalVer patch will be bumped if the current
+ * version is the same as the requested release version. Otherwise, it will be
+ * set to CalVer.0
+ *
+ * @param release Looker version
+ * @returns string describing CalVer action
  */
-const batch = (commands) => {
+const releasePlease = (release) => {
+  const config = JSON.parse(fs.readFileSync(releaseConfig, utf8))
+  let newVer = `${release}.0`
+  const calVer = config[`release-as`]
+  if (calVer === newVer) {
+    const patch = parseInt(calVer.split('.')[2]) + 1
+    newVer = `${release}.${patch}`
+  }
+  config['release-as'] = newVer
+  fs.writeFileSync(releaseConfig, JSON.stringify(config, null, 2), utf8)
+  const result = `set release please calVer to ${newVer}`
+  console.info(result)
+  return result
+}
+
+/**
+ * Run multiple commands one after another, returning on first failure
+ *
+ * Array can contain both strings (which will be run commands) or functions
+ *
+ * Commands should return a string for success and an Error object for failure
+ *
+ * @param commands list of commands to run in sequence
+ * @param release CalVer of release, like 22.14
+ */
+const batch = (commands, release) => {
   let result = ''
   for (const command of commands) {
-    result = run(command)
+    if (command instanceof Function) {
+      console.info('running a function ...')
+      result = command(release)
+    } else if (typeof command === 'string') {
+      result = run(command)
+    }
     if (!ok(result)) {
       console.error(`${command} failed.`)
       return result
@@ -175,6 +213,7 @@ const regen = async (release) => {
     const branch = branchActive()
     if (await pullci(release)) {
       return batch([
+        (release) => releasePlease(release),
         'yarn gen',
         'bin/smoke typescript python kotlin',
         'git add -A',
@@ -182,7 +221,7 @@ const regen = async (release) => {
         `git push origin ${branch}`,
         /* create PR
          */
-      ])
+      ], release)
     } else {
       console.error(`timed out waiting for Looker ${release}`)
     }
