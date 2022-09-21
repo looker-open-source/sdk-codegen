@@ -4,7 +4,7 @@
   ],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
-  "release-as": "22.12.1",
+  "release-as": "22.14.0",
   "packages": {
     ".": {
       "release-as": ""

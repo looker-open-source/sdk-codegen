@@ -2597,6 +2597,10 @@ export interface IDBConnection {
    */
   dialect_name?: string | null
   /**
+   * Database connection has the ability to support open data studio from explore (read-only)
+   */
+  supports_data_studio_link?: boolean
+  /**
    * Creation date for this connection (read-only)
    */
   created_at?: string | null
@@ -7892,6 +7896,10 @@ export interface IRequestSearchBoards {
    * Combine given search criteria in a boolean OR expression
    */
   filter_or?: boolean | null
+  /**
+   * Filter results based on permission, either show (default) or update
+   */
+  permission?: string | null
 }
 
 /**
@@ -11502,7 +11510,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 export interface IWriteDBConnection {
   /**

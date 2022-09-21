@@ -1190,7 +1190,7 @@ func (l *LookerSDK) CreateBoard(
 func (l *LookerSDK) SearchBoards(request RequestSearchBoards,
 	options *rtl.ApiSettings) ([]Board, error) {
 	var result []Board
-	err := l.session.Do(&result, "GET", "/4.0", "/boards/search", map[string]interface{}{"title": request.Title, "created_at": request.CreatedAt, "first_name": request.FirstName, "last_name": request.LastName, "fields": request.Fields, "favorited": request.Favorited, "creator_id": request.CreatorId, "sorts": request.Sorts, "page": request.Page, "per_page": request.PerPage, "offset": request.Offset, "limit": request.Limit, "filter_or": request.FilterOr}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", "/boards/search", map[string]interface{}{"title": request.Title, "created_at": request.CreatedAt, "first_name": request.FirstName, "last_name": request.LastName, "fields": request.Fields, "favorited": request.Favorited, "creator_id": request.CreatorId, "sorts": request.Sorts, "page": request.Page, "per_page": request.PerPage, "offset": request.Offset, "limit": request.Limit, "filter_or": request.FilterOr, "permission": request.Permission}, nil, options)
 	return result, err
 
 }
