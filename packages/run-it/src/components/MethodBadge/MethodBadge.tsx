@@ -40,6 +40,7 @@ import styled, { css } from 'styled-components'
  * Status of endpoint method.
  */
 type MethodStatus =
+  | 'alpha'
   | 'beta'
   | 'stable'
   | 'experimental'
@@ -70,6 +71,7 @@ type ApixIntentNames =
 
 export const pickBadgeIntent = (type: HttpMethod | MethodStatus | string) => {
   switch (type) {
+    case 'alpha':
     case 'DELETE':
     case 'deprecated':
       return 'critical'
