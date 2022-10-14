@@ -176,7 +176,7 @@ describe('typescript generator', () => {
       const actual = gen.makeTheCall(method, inputs)
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(run_look(sdk))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.run_look())`
       expect(actual).toEqual(expected)
     })
@@ -187,7 +187,7 @@ let response = await sdk.ok(sdk.run_look())`
       const actual = gen.makeTheCall(method, inputs)
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(look(sdk,17))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.look(17))`
       expect(actual).toEqual(expected)
     })
@@ -199,7 +199,7 @@ let response = await sdk.ok(sdk.look(17))`
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(look(sdk,
   17, '${fields}'))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.look(
   17, '${fields}'))`
       expect(actual).toEqual(expected)
@@ -229,7 +229,7 @@ let response = await sdk.ok(update_look(sdk,
       total: true
     }
   }, 'id,user_id,title,description'))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.update_look(
   17, {
     title: 'test title',
@@ -253,7 +253,7 @@ let response = await sdk.ok(run_look(sdk,
     look_id: 17,
     result_format: 'png'
   }))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.run_look(
   {
     look_id: 17,
@@ -279,7 +279,7 @@ let response = await sdk.ok(create_query_task(sdk,
       result_format: ResultFormat.csv
     }
   }))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.create_query_task(
   {
     body: {
@@ -301,7 +301,7 @@ let response = await sdk.ok(all_users(sdk,
   {
     ids: new DelimArray<number>([1,2,3])
   }))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.all_users(
   {
     ids: new DelimArray<number>([1,2,3])
@@ -374,7 +374,7 @@ let response = await sdk.ok(create_merge_query(sdk,
     },
     fields: 'id,user_id,title,description'
   }))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.create_merge_query(
   {
     body: {
@@ -430,7 +430,7 @@ let response = await sdk.ok(create_sql_query(sdk,
       second: 'two'
     }
   }))
-// monolithic SDK syntax can be also used for Node apps
+// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.create_sql_query(
   {
     connection_name: 'looker',

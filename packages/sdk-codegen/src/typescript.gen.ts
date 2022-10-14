@@ -299,7 +299,7 @@ export class ${this.packageName}Stream extends APIMethods {
     const args = this.assignParams(method, inputs)
     const fun = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(${method.name}(sdk${args ? ',' : ''}`
-    const mono = `// monolithic SDK syntax can be also used for Node apps
+    const mono = `// monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.${method.name}(`
     return `${fun}${args}))\n${mono}${args}))`
   }
