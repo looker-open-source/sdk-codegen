@@ -37,16 +37,28 @@ const opBtnNames = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 const path = '/:specKey/types/:typeTag'
 
 const mockHistoryPush = jest.fn()
+
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
   return {
     ...ReactRouterDOM,
-    useHistory: () => ({
-      push: mockHistoryPush,
-      location,
+    useLocation: () => ({
+      pathname: '/4.0/types/Dashboard/DashboardBase',
     }),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
   }
 })
+
+// jest.mock('react-router-dom', () => {
+//   const ReactRouterDOM = jest.requireActual('react-router-dom')
+//   return {
+//     ...ReactRouterDOM,
+//     useHistory: () => ({
+//       push: mockHistoryPush,
+//       location,
+//     }),
+//   }
+// })
 
 describe('TypeTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
@@ -56,7 +68,7 @@ describe('TypeTagScene', () => {
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/types/Dashboard']
+      ['/4.0/types/Dashboard']
     )
     expect(
       screen.getAllByRole('button', {
@@ -68,7 +80,7 @@ describe('TypeTagScene', () => {
     )
     expect(screen.getByText('DashboardBase').closest('a')).toHaveAttribute(
       'href',
-      '/3.1/types/Dashboard/DashboardBase'
+      '/4.0/types/Dashboard/DashboardBase'
     )
   })
 
@@ -77,7 +89,7 @@ describe('TypeTagScene', () => {
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/types/DataAction']
+      ['/4.0/types/DataAction']
     )
     expect(
       screen.getAllByRole('button', {
@@ -91,7 +103,7 @@ describe('TypeTagScene', () => {
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
-      ['/3.1/types/Look']
+      ['/4.0/types/Look']
     )
     /** Filter by SPECIFICATION */
     userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
