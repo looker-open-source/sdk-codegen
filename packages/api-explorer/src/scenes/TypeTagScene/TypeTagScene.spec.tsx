@@ -35,33 +35,26 @@ import { TypeTagScene } from './TypeTagScene'
 const opBtnNames = /ALL|SPECIFICATION|WRITE|REQUEST|ENUMERATED/
 
 const path = '/:specKey/types/:typeTag'
-
 const mockHistoryPush = jest.fn()
-
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
   return {
     ...ReactRouterDOM,
     useLocation: () => ({
-      pathname: '/4.0/types/Dashboard/DashboardBase',
+      pathname: '/4.0/types/Look',
     }),
-    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location: {
+        pathname: '/4.0/types/Look',
+      },
+    }),
   }
 })
 
-// jest.mock('react-router-dom', () => {
-//   const ReactRouterDOM = jest.requireActual('react-router-dom')
-//   return {
-//     ...ReactRouterDOM,
-//     useHistory: () => ({
-//       push: mockHistoryPush,
-//       location,
-//     }),
-//   }
-// })
-
 describe('TypeTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
+  // const mockHistoryPush: jest.Mock = useHistory as jest.Mock
 
   test('it renders type buttons and all methods for a given type tag', () => {
     renderWithRouterAndReduxProvider(
@@ -99,17 +92,18 @@ describe('TypeTagScene', () => {
   })
 
   test('it pushes filter to URL on toggle', async () => {
+    const site = '/4.0/types/Look'
     renderWithRouterAndReduxProvider(
       <Route path={path}>
         <TypeTagScene api={api} />
       </Route>,
-      ['/4.0/types/Look']
+      [site]
     )
     /** Filter by SPECIFICATION */
     userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: location.pathname,
+        pathname: site,
         search: 't=specification',
       })
     })
@@ -117,7 +111,7 @@ describe('TypeTagScene', () => {
     userEvent.click(screen.getByRole('button', { name: 'REQUEST' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: location.pathname,
+        pathname: site,
         search: 't=request',
       })
     })
