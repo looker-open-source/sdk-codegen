@@ -27,6 +27,7 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { Select } from '@looker/components'
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { selectSdkLanguage } from '../../state'
 import { allAlias, useNavigation } from '../../utils'
 import { allSdkLanguageOptions } from './utils'
@@ -35,6 +36,7 @@ import { allSdkLanguageOptions } from './utils'
  * Allows the user to select their preferred SDK language
  */
 export const SdkLanguageSelector: FC = () => {
+  const location = useLocation()
   const { navigate } = useNavigation()
   const selectedSdkLanguage = useSelector(selectSdkLanguage)
   const [language, setLanguage] = useState(selectedSdkLanguage)
