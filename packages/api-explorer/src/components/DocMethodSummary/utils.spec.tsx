@@ -28,6 +28,7 @@ import { pickTooltipContent } from './utils'
 describe('DocMethodSummary utils', () => {
   test.each`
     status            | expected
+    ${'alpha'}        | ${'This alpha item is either for internal use, or not fully developed and may be significantly changed or completely removed in future releases.'}
     ${'beta'}         | ${'This beta item is under development and subject to change.'}
     ${'experimental'} | ${'This experimental item is not fully developed and may be significantly changed or completely removed in future releases.'}
     ${'deprecated'}   | ${'This item has been deprecated and will be removed in the future.'}
