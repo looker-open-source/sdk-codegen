@@ -2839,6 +2839,8 @@ class Looker40SDK(api_methods.APIMethods):
     #  - privatelabel_configuration
     #  - custom_welcome_email
     #  - onboarding_enabled
+    #  - timezone
+    #  - allow_user_timezones
     #
     # GET /setting -> mdls.Setting
     def get_setting(
@@ -2869,6 +2871,8 @@ class Looker40SDK(api_methods.APIMethods):
     #  - privatelabel_configuration
     #  - custom_welcome_email
     #  - onboarding_enabled
+    #  - timezone
+    #  - allow_user_timezones
     #
     # See the `Setting` type for more information on the specific values that can be configured.
     #

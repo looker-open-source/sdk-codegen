@@ -9682,6 +9682,7 @@ public struct Integration: SDKModel {
         case _icon_url = "icon_url"
         case uses_oauth
         case required_fields
+        case _privacy_link = "privacy_link"
         case delegate_oauth
         case _installed_delegate_oauth_targets = "installed_delegate_oauth_targets"
     }
@@ -9780,6 +9781,15 @@ public struct Integration: SDKModel {
      */
     public var required_fields: [IntegrationRequiredField]?
 
+    private var _privacy_link: AnyString?
+    /**
+     * Link to privacy policy for destination (read-only)
+     */
+    public var privacy_link: String? {
+        get { _privacy_link?.value }
+        set { _privacy_link = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
      */
@@ -9794,7 +9804,7 @@ public struct Integration: SDKModel {
         set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: String? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [String]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: String? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, privacy_link: String? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [String]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._integration_hub_id = integration_hub_id.map(AnyString.init)
@@ -9810,6 +9820,7 @@ public struct Integration: SDKModel {
         self._icon_url = icon_url.map(AnyString.init)
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
+        self._privacy_link = privacy_link.map(AnyString.init)
         self.delegate_oauth = delegate_oauth
         if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil }
     }
@@ -19106,6 +19117,18 @@ public struct SessionConfig: SDKModel {
 }
 
 public struct Setting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case extension_framework_enabled
+        case extension_load_url_enabled
+        case marketplace_auto_install_enabled
+        case marketplace_enabled
+        case privatelabel_configuration
+        case custom_welcome_email
+        case onboarding_enabled
+        case _timezone = "timezone"
+        case allow_user_timezones
+    }
     /**
      * Toggle extension framework on or off
      */
@@ -19135,7 +19158,21 @@ public struct Setting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    private var _timezone: AnyString?
+    /**
+     * Change instance-wide default timezone
+     */
+    public var timezone: String? {
+        get { _timezone?.value }
+        set { _timezone = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle user-specific timezones on or off
+     */
+    public var allow_user_timezones: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19143,6 +19180,8 @@ public struct Setting: SDKModel {
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self._timezone = timezone.map(AnyString.init)
+        self.allow_user_timezones = allow_user_timezones
     }
 
 }
@@ -23848,7 +23887,7 @@ public struct WriteGroup: SDKModel {
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  */
 public struct WriteIntegration: SDKModel {
 
@@ -26212,6 +26251,18 @@ public struct WriteSessionConfig: SDKModel {
  * Dynamic writeable type for Setting
  */
 public struct WriteSetting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case extension_framework_enabled
+        case extension_load_url_enabled
+        case marketplace_auto_install_enabled
+        case marketplace_enabled
+        case privatelabel_configuration
+        case custom_welcome_email
+        case onboarding_enabled
+        case _timezone = "timezone"
+        case allow_user_timezones
+    }
     /**
      * Toggle extension framework on or off
      */
@@ -26245,7 +26296,21 @@ public struct WriteSetting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    private var _timezone: AnyString?
+    /**
+     * Change instance-wide default timezone
+     */
+    public var timezone: String? {
+        get { _timezone?.value }
+        set { _timezone = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle user-specific timezones on or off
+     */
+    public var allow_user_timezones: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -26253,6 +26318,8 @@ public struct WriteSetting: SDKModel {
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self._timezone = timezone.map(AnyString.init)
+        self.allow_user_timezones = allow_user_timezones
     }
 
 }

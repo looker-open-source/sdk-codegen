@@ -2466,6 +2466,7 @@ data class ImportedProject (
  * @property icon_url URL to an icon for the integration. (read-only)
  * @property uses_oauth Whether the integration uses oauth. (read-only)
  * @property required_fields A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
+ * @property privacy_link Link to privacy policy for destination (read-only)
  * @property delegate_oauth Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
  * @property installed_delegate_oauth_targets Whether the integration is available to users.
  */
@@ -2485,6 +2486,7 @@ data class Integration (
     var icon_url: String? = null,
     var uses_oauth: Boolean? = null,
     var required_fields: Array<IntegrationRequiredField>? = null,
+    var privacy_link: String? = null,
     var delegate_oauth: Boolean? = null,
     var installed_delegate_oauth_targets: Array<String>? = null
 ) : Serializable
@@ -4811,6 +4813,8 @@ data class SessionConfig (
  * @property privatelabel_configuration
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
+ * @property timezone Change instance-wide default timezone
+ * @property allow_user_timezones Toggle user-specific timezones on or off
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4819,7 +4823,9 @@ data class Setting (
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
-    var onboarding_enabled: Boolean? = null
+    var onboarding_enabled: Boolean? = null,
+    var timezone: String? = null,
+    var allow_user_timezones: Boolean? = null
 ) : Serializable
 
 /**
@@ -6105,7 +6111,7 @@ data class WriteGroup (
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  *
  * @property enabled Whether the integration is available to users.
  * @property params Array of params for the integration.
@@ -6755,6 +6761,8 @@ data class WriteSessionConfig (
  * logo_url, favicon_url
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
+ * @property timezone Change instance-wide default timezone
+ * @property allow_user_timezones Toggle user-specific timezones on or off
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6763,7 +6771,9 @@ data class WriteSetting (
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
-    var onboarding_enabled: Boolean? = null
+    var onboarding_enabled: Boolean? = null,
+    var timezone: String? = null,
+    var allow_user_timezones: Boolean? = null
 ) : Serializable
 
 /**

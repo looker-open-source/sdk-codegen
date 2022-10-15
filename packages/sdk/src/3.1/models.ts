@@ -3035,6 +3035,10 @@ export interface IIntegration {
    */
   required_fields?: IIntegrationRequiredField[]
   /**
+   * Link to privacy policy for destination (read-only)
+   */
+  privacy_link?: string | null
+  /**
    * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
    */
   delegate_oauth?: boolean | null
@@ -10109,7 +10113,7 @@ export interface IWriteHomepageSection {
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  */
 export interface IWriteIntegration {
   /**

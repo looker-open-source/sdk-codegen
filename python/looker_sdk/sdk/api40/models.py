@@ -5167,6 +5167,7 @@ class Integration(model.Model):
         icon_url: URL to an icon for the integration.
         uses_oauth: Whether the integration uses oauth.
         required_fields: A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required.
+        privacy_link: Link to privacy policy for destination
         delegate_oauth: Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker.
         installed_delegate_oauth_targets: Whether the integration is available to users.
     """
@@ -5188,6 +5189,7 @@ class Integration(model.Model):
     icon_url: Optional[str] = None
     uses_oauth: Optional[bool] = None
     required_fields: Optional[Sequence["IntegrationRequiredField"]] = None
+    privacy_link: Optional[str] = None
     delegate_oauth: Optional[bool] = None
     installed_delegate_oauth_targets: Optional[Sequence[str]] = None
 
@@ -5213,6 +5215,7 @@ class Integration(model.Model):
         icon_url: Optional[str] = None,
         uses_oauth: Optional[bool] = None,
         required_fields: Optional[Sequence["IntegrationRequiredField"]] = None,
+        privacy_link: Optional[str] = None,
         delegate_oauth: Optional[bool] = None,
         installed_delegate_oauth_targets: Optional[Sequence[str]] = None
     ):
@@ -5231,6 +5234,7 @@ class Integration(model.Model):
         self.icon_url = icon_url
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
+        self.privacy_link = privacy_link
         self.delegate_oauth = delegate_oauth
         self.installed_delegate_oauth_targets = installed_delegate_oauth_targets
 
@@ -10101,6 +10105,8 @@ class Setting(model.Model):
         privatelabel_configuration:
         custom_welcome_email:
         onboarding_enabled: Toggle onboarding on or off
+        timezone: Change instance-wide default timezone
+        allow_user_timezones: Toggle user-specific timezones on or off
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -10110,6 +10116,8 @@ class Setting(model.Model):
     privatelabel_configuration: Optional["PrivatelabelConfiguration"] = None
     custom_welcome_email: Optional["CustomWelcomeEmail"] = None
     onboarding_enabled: Optional[bool] = None
+    timezone: Optional[str] = None
+    allow_user_timezones: Optional[bool] = None
 
     def __init__(
         self,
@@ -10120,7 +10128,9 @@ class Setting(model.Model):
         marketplace_enabled: Optional[bool] = None,
         privatelabel_configuration: Optional["PrivatelabelConfiguration"] = None,
         custom_welcome_email: Optional["CustomWelcomeEmail"] = None,
-        onboarding_enabled: Optional[bool] = None
+        onboarding_enabled: Optional[bool] = None,
+        timezone: Optional[str] = None,
+        allow_user_timezones: Optional[bool] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -10129,6 +10139,8 @@ class Setting(model.Model):
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self.timezone = timezone
+        self.allow_user_timezones = allow_user_timezones
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -12723,7 +12735,7 @@ class WriteGroup(model.Model):
 class WriteIntegration(model.Model):
     """
         Dynamic writeable type for Integration removes:
-    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 
         Attributes:
             enabled: Whether the integration is available to users.
@@ -13983,6 +13995,8 @@ class WriteSetting(model.Model):
     logo_url, favicon_url
             custom_welcome_email:
             onboarding_enabled: Toggle onboarding on or off
+            timezone: Change instance-wide default timezone
+            allow_user_timezones: Toggle user-specific timezones on or off
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -13992,6 +14006,8 @@ class WriteSetting(model.Model):
     privatelabel_configuration: Optional["WritePrivatelabelConfiguration"] = None
     custom_welcome_email: Optional["CustomWelcomeEmail"] = None
     onboarding_enabled: Optional[bool] = None
+    timezone: Optional[str] = None
+    allow_user_timezones: Optional[bool] = None
 
     def __init__(
         self,
@@ -14002,7 +14018,9 @@ class WriteSetting(model.Model):
         marketplace_enabled: Optional[bool] = None,
         privatelabel_configuration: Optional["WritePrivatelabelConfiguration"] = None,
         custom_welcome_email: Optional["CustomWelcomeEmail"] = None,
-        onboarding_enabled: Optional[bool] = None
+        onboarding_enabled: Optional[bool] = None,
+        timezone: Optional[str] = None,
+        allow_user_timezones: Optional[bool] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -14011,6 +14029,8 @@ class WriteSetting(model.Model):
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self.timezone = timezone
+        self.allow_user_timezones = allow_user_timezones
 
 
 @attr.s(auto_attribs=True, init=False)
