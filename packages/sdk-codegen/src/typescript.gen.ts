@@ -296,9 +296,12 @@ export class ${this.packageName}Stream extends APIMethods {
 
   makeTheCall(method: IMethod, inputs: ArgValues): string {
     inputs = trimInputs(inputs)
-    const resp = `let response = await sdk.ok(sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
-    return `${resp}${args}))`
+    const fun = `// functional SDK syntax is recommended for minimizing browser payloads
+let response = await sdk.ok(${method.name}(sdk${args ? ',' : ''}`
+    const mono = `// monolithic SDK syntax can also be used for Node apps
+let response = await sdk.ok(sdk.${method.name}(`
+    return `${fun}${args}))\n${mono}${args}))`
   }
 
   methodHeaderComment(method: IMethod, params: string[] = []) {

@@ -25,7 +25,7 @@
  */
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
@@ -46,6 +46,7 @@ interface MethodTagSceneParams {
 
 export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
   const { specKey, methodTag } = useParams<MethodTagSceneParams>()
+  const location = useLocation()
   const history = useHistory()
   const methods = api.tags[methodTag]
   const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =

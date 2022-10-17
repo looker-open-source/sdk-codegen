@@ -41,7 +41,9 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
-      location,
+      location: {
+        pathname: '/4.0/methods/Look',
+      },
     }),
   }
 })
@@ -54,7 +56,7 @@ describe('MethodTagScene', () => {
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ColorCollection']
+      ['/4.0/methods/ColorCollection']
     )
     expect(
       screen.getAllByRole('button', {
@@ -68,7 +70,7 @@ describe('MethodTagScene', () => {
       screen.getByText('/color_collections/standard').closest('a')
     ).toHaveAttribute(
       'href',
-      '/3.1/methods/ColorCollection/color_collections_standard'
+      '/4.0/methods/ColorCollection/color_collections_standard'
     )
   })
 
@@ -78,7 +80,7 @@ describe('MethodTagScene', () => {
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ApiAuth']
+      ['/4.0/methods/ApiAuth']
     )
     expect(
       screen.getAllByRole('button', {
@@ -88,17 +90,18 @@ describe('MethodTagScene', () => {
   })
 
   test('it pushes filter to URL on toggle', async () => {
+    const site = '/4.0/methods/Look'
     renderWithRouterAndReduxProvider(
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/Look']
+      [site]
     )
     /** Filter by GET operation */
     userEvent.click(screen.getByRole('button', { name: 'GET' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: location.pathname,
+        pathname: site,
         search: 't=get',
       })
     })
@@ -107,7 +110,7 @@ describe('MethodTagScene', () => {
     await waitFor(() => {
       // eslint-disable-next-line jest-dom/prefer-in-document
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: location.pathname,
+        pathname: site,
         search: 't=delete',
       })
     })
