@@ -2354,6 +2354,8 @@ public class Integration : SdkModel
   public bool? uses_oauth { get; set; } = null;
   /// <summary>A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)</summary>
   public IntegrationRequiredField[]? required_fields { get; set; } = null;
+  /// <summary>Link to privacy policy for destination (read-only)</summary>
+  public string? privacy_link { get; set; } = null;
   /// <summary>Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)</summary>
   public bool? delegate_oauth { get; set; } = null;
   /// <summary>Whether the integration is available to users.</summary>
@@ -4595,6 +4597,10 @@ public class Setting : SdkModel
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
+  /// <summary>Change instance-wide default timezone</summary>
+  public string? timezone { get; set; } = null;
+  /// <summary>Toggle user-specific timezones on or off</summary>
+  public bool? allow_user_timezones { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5836,7 +5842,7 @@ public class WriteGroup : SdkModel
 }
 
 /// Dynamic writeable type for Integration removes:
-/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 public class WriteIntegration : SdkModel
 {
   /// <summary>Whether the integration is available to users.</summary>
@@ -6455,6 +6461,10 @@ public class WriteSetting : SdkModel
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
+  /// <summary>Change instance-wide default timezone</summary>
+  public string? timezone { get; set; } = null;
+  /// <summary>Toggle user-specific timezones on or off</summary>
+  public bool? allow_user_timezones { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:

@@ -2465,6 +2465,8 @@ open class LookerSDK: APIMethods {
      *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
+     *  - timezone
+     *  - allow_user_timezones
      *
      * GET /setting -> Setting
      */
@@ -2491,6 +2493,8 @@ open class LookerSDK: APIMethods {
      *  - privatelabel_configuration
      *  - custom_welcome_email
      *  - onboarding_enabled
+     *  - timezone
+     *  - allow_user_timezones
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *

@@ -3919,6 +3919,7 @@ class Integration(model.Model):
         icon_url: URL to an icon for the integration.
         uses_oauth: Whether the integration uses oauth.
         required_fields: A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required.
+        privacy_link: Link to privacy policy for destination
         delegate_oauth: Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker.
         installed_delegate_oauth_targets: Whether the integration is available to users.
     """
@@ -3940,6 +3941,7 @@ class Integration(model.Model):
     icon_url: Optional[str] = None
     uses_oauth: Optional[bool] = None
     required_fields: Optional[Sequence["IntegrationRequiredField"]] = None
+    privacy_link: Optional[str] = None
     delegate_oauth: Optional[bool] = None
     installed_delegate_oauth_targets: Optional[Sequence[int]] = None
 
@@ -3965,6 +3967,7 @@ class Integration(model.Model):
         icon_url: Optional[str] = None,
         uses_oauth: Optional[bool] = None,
         required_fields: Optional[Sequence["IntegrationRequiredField"]] = None,
+        privacy_link: Optional[str] = None,
         delegate_oauth: Optional[bool] = None,
         installed_delegate_oauth_targets: Optional[Sequence[int]] = None
     ):
@@ -3983,6 +3986,7 @@ class Integration(model.Model):
         self.icon_url = icon_url
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
+        self.privacy_link = privacy_link
         self.delegate_oauth = delegate_oauth
         self.installed_delegate_oauth_targets = installed_delegate_oauth_targets
 
@@ -10683,7 +10687,7 @@ class WriteHomepageSection(model.Model):
 class WriteIntegration(model.Model):
     """
         Dynamic writeable type for Integration removes:
-    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 
         Attributes:
             enabled: Whether the integration is available to users.

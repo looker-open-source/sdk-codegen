@@ -150,37 +150,37 @@ func (l *LookerSDK) DeleteAlert(
 //
 // Example Request:
 // Run alert on dashboard element '103' at 5am every day. Send an email to 'test@test.com' if inventory for Los Angeles (using dashboard filter `Warehouse Name`) is lower than 1,000
-// “`
-// {
+// ```
 //
-//	"cron": "0 5 * * *",
-//	"custom_title": "Alert when LA inventory is low",
-//	"dashboard_element_id": 103,
-//	"applied_dashboard_filters": [
-//	  {
-//	    "filter_title": "Warehouse Name",
-//	    "field_name": "distribution_centers.name",
-//	    "filter_value": "Los Angeles CA",
-//	    "filter_description": "is Los Angeles CA"
-//	  }
-//	],
-//	"comparison_type": "LESS_THAN",
-//	"destinations": [
-//	  {
-//	    "destination_type": "EMAIL",
-//	    "email_address": "test@test.com"
-//	  }
-//	],
-//	"field": {
-//	  "title": "Number on Hand",
-//	  "name": "inventory_items.number_on_hand"
-//	},
-//	"is_disabled": false,
-//	"is_public": true,
-//	"threshold": 1000
+//	{
+//	  "cron": "0 5 * * *",
+//	  "custom_title": "Alert when LA inventory is low",
+//	  "dashboard_element_id": 103,
+//	  "applied_dashboard_filters": [
+//	    {
+//	      "filter_title": "Warehouse Name",
+//	      "field_name": "distribution_centers.name",
+//	      "filter_value": "Los Angeles CA",
+//	      "filter_description": "is Los Angeles CA"
+//	    }
+//	  ],
+//	  "comparison_type": "LESS_THAN",
+//	  "destinations": [
+//	    {
+//	      "destination_type": "EMAIL",
+//	      "email_address": "test@test.com"
+//	    }
+//	  ],
+//	  "field": {
+//	    "title": "Number on Hand",
+//	    "name": "inventory_items.number_on_hand"
+//	  },
+//	  "is_disabled": false,
+//	  "is_public": true,
+//	  "threshold": 1000
+//	}
 //
-// }
-// “`
+// ```
 //
 // POST /alerts -> Alert
 func (l *LookerSDK) CreateAlert(
@@ -245,21 +245,21 @@ func (l *LookerSDK) ReadAlertNotification(
 //
 // The access token returned by `login` must be used in the HTTP Authorization header of subsequent
 // API requests, like this:
-// “`
+// ```
 // Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4
-// “`
+// ```
 // Replace "4QDkCy..." with the `access_token` value returned by `login`.
 // The word `token` is a string literal and must be included exactly as shown.
 //
 // This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
 //
 // Example of passing credentials in the HTTP request body:
-// ““
+// ````
 // POST HTTP /login
 // Content-Type: application/x-www-form-urlencoded
 //
 // client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
-// ““
+// ````
 //
 // ### Best Practice:
 // Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
@@ -445,21 +445,14 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 // 404 will be returned.
 //
 // The endpoint returns the following:
-// - Authentication token - a token that is passed to `/embed/login` endpoint that creates or attaches to the
-//
-//	embed session. This token can be used once and has a lifetime of 30 seconds.
-//
-// - Session reference token - a token that lives for the length of the session. This token is used to
-//
-//	generate new api and navigation tokens OR create new embed IFRAMEs.
-//
-// - Api token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into the
-//
-//	iframe.
-//
-// - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
-//
-//	the iframe.
+//   - Authentication token - a token that is passed to `/embed/login` endpoint that creates or attaches to the
+//     embed session. This token can be used once and has a lifetime of 30 seconds.
+//   - Session reference token - a token that lives for the length of the session. This token is used to
+//     generate new api and navigation tokens OR create new embed IFRAMEs.
+//   - Api token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into the
+//     iframe.
+//   - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
+//     the iframe.
 //
 // POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
 func (l *LookerSDK) AcquireEmbedCookielessSession(
@@ -561,15 +554,15 @@ func (l *LookerSDK) UpdateLdapConfig(
 // **connection_host** and **connection_port** are required. **connection_tls** is optional.
 //
 // Example:
-// “`json
-// {
+// ```json
 //
-//	"connection_host": "ldap.example.com",
-//	"connection_port": "636",
-//	"connection_tls": true
+//	{
+//	  "connection_host": "ldap.example.com",
+//	  "connection_port": "636",
+//	  "connection_tls": true
+//	}
 //
-// }
-// “`
+// ```
 //
 // No authentication to the LDAP server is attempted.
 //
@@ -592,17 +585,17 @@ func (l *LookerSDK) TestLdapConfigConnection(
 // **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
 //
 // Example:
-// “`json
-// {
+// ```json
 //
-//	"connection_host": "ldap.example.com",
-//	"connection_port": "636",
-//	"connection_tls": true,
-//	"auth_username": "cn=looker,dc=example,dc=com",
-//	"auth_password": "secret"
+//	{
+//	  "connection_host": "ldap.example.com",
+//	  "connection_port": "636",
+//	  "connection_tls": true,
+//	  "auth_username": "cn=looker,dc=example,dc=com",
+//	  "auth_password": "secret"
+//	}
 //
-// }
-// “`
+// ```
 //
 // Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
 //
@@ -1845,6 +1838,8 @@ func (l *LookerSDK) MobileSettings(
 //   - privatelabel_configuration
 //   - custom_welcome_email
 //   - onboarding_enabled
+//   - timezone
+//   - allow_user_timezones
 //
 // GET /setting -> Setting
 func (l *LookerSDK) GetSetting(
@@ -1866,6 +1861,8 @@ func (l *LookerSDK) GetSetting(
 //   - privatelabel_configuration
 //   - custom_welcome_email
 //   - onboarding_enabled
+//   - timezone
+//   - allow_user_timezones
 //
 // See the `Setting` type for more information on the specific values that can be configured.
 //
@@ -4241,21 +4238,21 @@ func (l *LookerSDK) LookmlModelExplore(
 //
 // `filters` is a string hash of values, with the key as the field name and the string value as the filter expression:
 //
-// “`ruby
+// ```ruby
 // {'users.age': '>=60'}
-// “`
+// ```
 //
 // or
 //
-// “`ruby
+// ```ruby
 // {'users.age': '<30'}
-// “`
+// ```
 //
 // or
 //
-// “`ruby
+// ```ruby
 // {'users.age': '=50'}
-// “`
+// ```
 //
 // GET /models/{model_name}/views/{view_name}/fields/{field_name}/suggestions -> ModelFieldSuggestions
 func (l *LookerSDK) ModelFieldnameSuggestions(request RequestModelFieldnameSuggestions,
@@ -4552,14 +4549,12 @@ func (l *LookerSDK) DeployRefToProduction(request RequestDeployRefToProduction,
 //
 // Deploy is a two / three step process:
 //
-// 1. Push commits in current branch of dev mode project to the production branch (origin/master).
-//
-//	Note a. This step is skipped in read-only projects.
-//	Note b. If this step is unsuccessful for any reason (e.g. rejected non-fastforward because production branch has
-//	          commits not in current branch), subsequent steps will be skipped.
-//
-// 2. If this is the first deploy of this project, create the production project with git repository.
-// 3. Pull the production branch into the production project.
+//  1. Push commits in current branch of dev mode project to the production branch (origin/master).
+//     Note a. This step is skipped in read-only projects.
+//     Note b. If this step is unsuccessful for any reason (e.g. rejected non-fastforward because production branch has
+//     commits not in current branch), subsequent steps will be skipped.
+//  2. If this is the first deploy of this project, create the production project with git repository.
+//  3. Pull the production branch into the production project.
 //
 // POST /projects/{project_id}/deploy_to_production -> string
 func (l *LookerSDK) DeployToProduction(
@@ -5190,37 +5185,37 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 // the two actions of posting & running a query into one step.
 //
 // Here is an example body in json:
-// “`
-// {
+// ```
 //
-//	"model":"thelook",
-//	"view":"inventory_items",
-//	"fields":["category.name","inventory_items.days_in_inventory_tier","products.count"],
-//	"filters":{"category.name":"socks"},
-//	"sorts":["products.count desc 0"],
-//	"limit":"500",
-//	"query_timezone":"America/Los_Angeles"
+//	{
+//	  "model":"thelook",
+//	  "view":"inventory_items",
+//	  "fields":["category.name","inventory_items.days_in_inventory_tier","products.count"],
+//	  "filters":{"category.name":"socks"},
+//	  "sorts":["products.count desc 0"],
+//	  "limit":"500",
+//	  "query_timezone":"America/Los_Angeles"
+//	}
 //
-// }
-// “`
+// ```
 //
 // When using the Ruby SDK this would be passed as a Ruby hash like:
-// “`
-// {
+// ```
 //
-//	:model=>"thelook",
-//	:view=>"inventory_items",
-//	:fields=>
-//	 ["category.name",
-//	  "inventory_items.days_in_inventory_tier",
-//	  "products.count"],
-//	:filters=>{:"category.name"=>"socks"},
-//	:sorts=>["products.count desc 0"],
-//	:limit=>"500",
-//	:query_timezone=>"America/Los_Angeles",
+//	{
+//	 :model=>"thelook",
+//	 :view=>"inventory_items",
+//	 :fields=>
+//	  ["category.name",
+//	   "inventory_items.days_in_inventory_tier",
+//	   "products.count"],
+//	 :filters=>{:"category.name"=>"socks"},
+//	 :sorts=>["products.count desc 0"],
+//	 :limit=>"500",
+//	 :query_timezone=>"America/Los_Angeles",
+//	}
 //
-// }
-// “`
+// ```
 //
 // This will return the result of running the query in the format specified by the 'result_format' parameter.
 //
@@ -5267,26 +5262,26 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 //
 // Here is an example inline query URL:
 //
-// “`
+// ```
 // https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
-// “`
+// ```
 //
 // When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
 //
-// “`ruby
+// ```ruby
 // query_params =
-// {
 //
-//	fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
-//	:"f[category.name]" => "socks",
-//	sorts: "products.count desc 0",
-//	limit: "500",
-//	query_timezone: "America/Los_Angeles"
+//	{
+//	  fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
+//	  :"f[category.name]" => "socks",
+//	  sorts: "products.count desc 0",
+//	  limit: "500",
+//	  query_timezone: "America/Los_Angeles"
+//	}
 //
-// }
 // response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
 //
-// “`
+// ```
 //
 // Again, it is generally easier to use the variant of this method that passes the full query in the POST body.
 // This method is available for cases where other alternatives won't fit the need.

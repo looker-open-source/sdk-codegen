@@ -1329,6 +1329,7 @@ type Integration struct {
 	IconUrl                           *string                              `json:"icon_url,omitempty"`                            // URL to an icon for the integration.
 	UsesOauth                         *bool                                `json:"uses_oauth,omitempty"`                          // Whether the integration uses oauth.
 	RequiredFields                    *[]IntegrationRequiredField          `json:"required_fields,omitempty"`                     // A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required.
+	PrivacyLink                       *string                              `json:"privacy_link,omitempty"`                        // Link to privacy policy for destination
 	DelegateOauth                     *bool                                `json:"delegate_oauth,omitempty"`                      // Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker.
 	InstalledDelegateOauthTargets     *[]string                            `json:"installed_delegate_oauth_targets,omitempty"`    // Whether the integration is available to users.
 }
@@ -3247,7 +3248,9 @@ type Setting struct {
 	MarketplaceEnabled            *bool                      `json:"marketplace_enabled,omitempty"`              // Toggle marketplace on or off
 	PrivatelabelConfiguration     *PrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`
 	CustomWelcomeEmail            *CustomWelcomeEmail        `json:"custom_welcome_email,omitempty"`
-	OnboardingEnabled             *bool                      `json:"onboarding_enabled,omitempty"` // Toggle onboarding on or off
+	OnboardingEnabled             *bool                      `json:"onboarding_enabled,omitempty"`   // Toggle onboarding on or off
+	Timezone                      *string                    `json:"timezone,omitempty"`             // Change instance-wide default timezone
+	AllowUserTimezones            *bool                      `json:"allow_user_timezones,omitempty"` // Toggle user-specific timezones on or off
 }
 
 type SmtpNodeStatus struct {
@@ -3958,7 +3961,7 @@ type WriteGroup struct {
 }
 
 // Dynamic writeable type for Integration removes:
-// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 type WriteIntegration struct {
 	Enabled                       *bool               `json:"enabled,omitempty"`                          // Whether the integration is available to users.
 	Params                        *[]IntegrationParam `json:"params,omitempty"`                           // Array of params for the integration.
@@ -4314,7 +4317,9 @@ type WriteSetting struct {
 	PrivatelabelConfiguration     *WritePrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`       // Dynamic writeable type for PrivatelabelConfiguration removes:
 	// logo_url, favicon_url
 	CustomWelcomeEmail *CustomWelcomeEmail `json:"custom_welcome_email,omitempty"`
-	OnboardingEnabled  *bool               `json:"onboarding_enabled,omitempty"` // Toggle onboarding on or off
+	OnboardingEnabled  *bool               `json:"onboarding_enabled,omitempty"`   // Toggle onboarding on or off
+	Timezone           *string             `json:"timezone,omitempty"`             // Change instance-wide default timezone
+	AllowUserTimezones *bool               `json:"allow_user_timezones,omitempty"` // Toggle user-specific timezones on or off
 }
 
 // Dynamic writeable type for SshServer removes:
