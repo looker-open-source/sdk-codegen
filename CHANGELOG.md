@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.10.0...sdk-codegen-all-v2.11.0) (2022-10-17)
+
+
+### Features
+
+* generate SDKs for Looker 22.18 ([#1191](https://www.github.com/looker-open-source/sdk-codegen/issues/1191)) ([6d487be](https://www.github.com/looker-open-source/sdk-codegen/commit/6d487be80e89bda6feea446130ad2c318eb61d43))
+
+
+### Bug Fixes
+
+* various path navigation issues ([#1190](https://www.github.com/looker-open-source/sdk-codegen/issues/1190)) ([e73da3d](https://www.github.com/looker-open-source/sdk-codegen/commit/e73da3d39960cb528947c21202318b84d586ce1f))
+
 ## [2.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.9.0...sdk-codegen-all-v2.10.0) (2022-09-21)
 
 
