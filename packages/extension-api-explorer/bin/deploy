@@ -13,20 +13,23 @@ else
   commit_msg="$@"
 fi
 
+SRC=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "${SRC}"/../../..
+ROOT=$(pwd)
+
 echo "Installing all package dependencies"
-cd ../.. && yarn
+yarn
 echo "Rebuilding all packages"
 yarn build
 
-
-cd packages/extension-api-explorer
+cd "${ROOT}"/packages/extension-api-explorer
 echo "Removing existing bundle"
 rm -rf dist/
 echo "Creating extension-api-explorer production bundle"
 yarn bundle
-path_to_bundle=$(pwd)"/dist/bundle.js"
+BUNDLE=$(pwd)"/dist/bundle.js"
 
-cd ../../..
+cd "${ROOT}"/..
 if [ -d "extension-api-explorer" ]
 then
   cd extension-api-explorer && git branch --set-upstream-to=origin/main && git pull || exit 1
@@ -38,7 +41,7 @@ fi
 
 echo "Copying extension bundle into repo"
 git checkout main || { echo "Error checking out branch"; exit 1; }
-cp ${path_to_bundle} .
+cp "${BUNDLE}" .
 echo "Pushing changes to remote"
 git add bundle.js && git commit -m "${commit_msg}" && git push || { exit 1; }
 echo "The extension's bundle commit hash is:"
