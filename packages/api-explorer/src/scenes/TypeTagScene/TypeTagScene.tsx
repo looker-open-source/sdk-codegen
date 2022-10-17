@@ -27,7 +27,7 @@ import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
 import type { ApiModel } from '@looker/sdk-codegen'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
 import { buildTypePath, isValidFilter, useNavigation } from '../../utils'
@@ -46,6 +46,7 @@ interface TypeTagSceneParams {
 
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
   const { specKey, typeTag } = useParams<TypeTagSceneParams>()
+  const location = useLocation()
   const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
     useNavigation()
   const selectedTagFilter = useSelector(selectTagFilter)
