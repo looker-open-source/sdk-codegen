@@ -40,6 +40,7 @@
     "dedupe:dev": "yarn-deduplicate -s fewer yarn.lock && yarn",
     "dedupe:list": "yarn-deduplicate --list",
     "dedupe:ci": "yarn-deduplicate -s fewer --fail --list yarn.lock",
+    "deploy:apix": "packages/extension-api-explorer/bin/deploy",
     "dev:apix": "yarn workspace @looker/api-explorer develop",
     "dev:hack": "yarn workspace @looker/hackathon develop",
     "dev:xapix": "yarn workspace @looker/extension-api-explorer develop",
