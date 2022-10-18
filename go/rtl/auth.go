@@ -118,6 +118,10 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		return fmt.Errorf("response error. status=%s. error=%s", res.Status, string(b))
 	}
 
+	if res.StatusCode == 204 { // 204 No Content. DELETE endpoints returns response with no body
+		return nil
+	}
+
 	// TODO: Make parsing content-type aware. Requires change to go model generation to use interface{} for all union types.
 	// Github Issue: https://github.com/looker-open-source/sdk-codegen/issues/1022
 	switch v := result.(type) {
