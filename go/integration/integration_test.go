@@ -165,6 +165,66 @@ func TestIntegrationGoSDK(t *testing.T) {
 		}
 	})
 
+	t.Run("CRUD User Attribute Group Value", func(t *testing.T) {
+		name := "foo"
+		group, err := sdk.CreateGroup(v4.WriteGroup{
+			Name: &name,
+		}, "", nil)
+		if err != nil {
+			t.Errorf("CreateGroup() failed. error=%v", err)
+		}
+
+		groupId := group.Id
+		group, err = sdk.Group(*groupId, "", nil)
+		if err != nil {
+			t.Errorf("Group() failed. error=%v", err)
+		}
+
+		attributeName := "bar"
+		attributeLabel := "bar"
+		attributeType := "string"
+		ua, err := sdk.CreateUserAttribute(v4.WriteUserAttribute{
+			Name:  attributeName,
+			Label: attributeLabel,
+			Type:  attributeType,
+		}, "", nil)
+		if err != nil {
+			t.Errorf("CreateUserAttribute failed. error=%v", err)
+		}
+
+		uaId := ua.Id
+		ua, err = sdk.UserAttribute(*uaId, "", nil)
+		if err != nil {
+			t.Errorf("UserAttribute() failed. error=%v", err)
+		}
+
+		value := "baz"
+		_, err = sdk.UpdateUserAttributeGroupValue(*groupId, *uaId, v4.UserAttributeGroupValue{
+			GroupId:         groupId,
+			UserAttributeId: uaId,
+			Value:           &value,
+		}, nil)
+		if err != nil {
+			t.Errorf("UpdateUserAttributeGroupValue() failed. error=%v", err)
+		}
+
+		err = sdk.DeleteUserAttributeGroupValue(*groupId, *uaId, nil)
+		if err != nil {
+			t.Errorf("DeleteUserAttributeGroupValue() failed. error=%v", err)
+		}
+
+		_, err = sdk.DeleteUserAttribute(*uaId, nil)
+		if err != nil {
+			t.Errorf("DeleteUserAttribute() failed. error=%v", err)
+		}
+
+		_, err = sdk.DeleteGroup(*groupId, nil)
+		if err != nil {
+			t.Errorf("DeleteGroup() failed. error=%v", err)
+		}
+
+	})
+
 	t.Run("Me()", func(t *testing.T) {
 		user, err := sdk.Me("", nil)
 
