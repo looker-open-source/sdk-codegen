@@ -24,11 +24,10 @@
 
  */
 
-import type { ITabTable, SheetSDK, SheetValues } from './SheetSDK'
-import { SheetError } from './SheetSDK'
-
-import type { ColumnHeaders, IRowModel } from './RowModel'
+import { LookerSDKError } from '@looker/sdk-rtl'
+import type { ColumnHeaders, SheetValues, IRowModel } from './RowModel'
 import { RowAction, rowPosition, stringer } from './RowModel'
+import type { SheetSDK } from './SheetSDK'
 
 /**
  * Compare dates without running into numeric comparison problems
@@ -51,7 +50,7 @@ export interface IRowDelta<T extends IRowModel> {
 // TODO maybe get a technique from https://stackoverflow.com/a/34698946 or
 //  https://www.logicbig.com/tutorials/misc/typescript/generic-constraints.html
 
-// TODO refactor WhollySheet<T> into something a bit cleaner
+// TODO refactor WhollyArtifact<T> into something a bit cleaner
 //   ref https://www.smashingmagazine.com/2020/10/understanding-typescript-generics/
 export class TypedRows<T> {
   rows: T[] = []
@@ -95,10 +94,10 @@ export class TypedRows<T> {
   // ..
 }
 
-export interface IWhollySheet<T extends IRowModel, P> {
+export interface IWhollyArtifact<T extends IRowModel, P> {
   /** Initialized REST-based GSheets SDK */
-  sheets: SheetSDK
-  /** Name of the tab in the sheet */
+  sdk: SheetSDK
+  /** Name prefix of this collection */
   name: string
   /**
    * Header column names for reading from/writing to the sheet.
@@ -208,7 +207,7 @@ export interface IWhollySheet<T extends IRowModel, P> {
   delete<T extends IRowModel>(model: T, force?: boolean): Promise<boolean>
 
   /**
-   * If the row is out of date, it throws a SheetError
+   * If the row is out of date, it throws a LookerSDKError
    * @param model row for status check
    * @param source row to compare against
    */
@@ -250,7 +249,7 @@ export interface IWhollySheet<T extends IRowModel, P> {
   /**
    * Prepare a batch for processing
    *
-   * If `force` is false and update rows are outdated, a SheetError with outdated list is thrown
+   * If `force` is false and update rows are outdated, a LookerSDKError with outdated list is thrown
    * @param tab of sheet values to use for update checks (includes header row)
    * @param delta change to merge and purge
    * @param force prepare each row but don't worry about outdated rows
@@ -269,15 +268,26 @@ export interface IWhollySheet<T extends IRowModel, P> {
   batchUpdate<T extends IRowModel>(force?: boolean): Promise<T[]>
 }
 
+/**
+ * Keyed data for a tab, and the tab's header row
+ * TODO delete this bad boy
+ */
+export interface ITabTable {
+  /** Array of header names, in column order */
+  header: ColumnHeaders
+  /** Parsed data for the tab */
+  rows: IRowModel[]
+}
+
 /** CRUDS operations for a GSheet tab */
-export abstract class WhollySheet<T extends IRowModel, P>
+export abstract class WhollyArtifact<T extends IRowModel, P>
   extends TypedRows<T>
-  implements IWhollySheet<T, P>
+  implements IWhollyArtifact<T, P>
 {
   index: Record<string, T> = {}
 
   constructor(
-    public readonly sheets: SheetSDK,
+    public readonly sdk: SheetSDK,
     /** name of the tab in the GSheet document */
     public readonly name: string,
     public readonly table: ITabTable,
@@ -334,7 +344,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     const rowHeader = row.header().join()
     const tableHeader = this.table.header.join()
     if (tableHeader !== rowHeader)
-      throw new SheetError(
+      throw new LookerSDKError(
         `Expected ${this.name} header to be ${rowHeader} not ${tableHeader}`
       )
     return true
@@ -380,14 +390,14 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   checkId<T extends IRowModel>(model: T) {
     if (!model[this.keyColumn])
-      throw new SheetError(
+      throw new LookerSDKError(
         `"${this.keyColumn}" must be assigned for ${this.name} row ${model._row}`
       )
   }
 
   async create<T extends IRowModel>(model: T): Promise<T> {
     if (model._row > 0)
-      throw new SheetError(
+      throw new LookerSDKError(
         `create needs ${this.name} "${
           model[this.keyColumn]
         }" row to be < 1, not ${model._row}`
@@ -395,9 +405,11 @@ export abstract class WhollySheet<T extends IRowModel, P>
     model.prepare()
     this.checkId(model)
     const values = this.values(model)
-    const result = await this.sheets.rowCreate(this.name, this.nextRow, values)
+    const result = await this.sdk.rowCreate(this.name, this.nextRow, values)
     if (result.row < 1 || !result.values || result.values.length === 0)
-      throw new SheetError(`Could not create row for ${model[this.keyColumn]}`)
+      throw new LookerSDKError(
+        `Could not create row for ${model[this.keyColumn]}`
+      )
     // This returns an array of values with 1 entry per row value array
     const newRow = this.typeRow(result.values[0])
     newRow._row = result.row
@@ -415,7 +427,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   async update<T extends IRowModel>(model: T, force = false): Promise<T> {
     if (!model._row)
-      throw new SheetError(
+      throw new LookerSDKError(
         `${this.name} "${model[this.keyColumn]}" row must be > 0 to update`
       )
 
@@ -425,7 +437,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     this.checkId(model)
     const values = this.values(model)
     /** This will throw an error if the request fails */
-    const result = await this.sheets.rowUpdate(this.name, model._row, values)
+    const result = await this.sdk.rowUpdate(this.name, model._row, values)
     if (result.values) {
       // This returns an array of values with 1 entry per row value array
       const updateValues = result.values[0]
@@ -446,9 +458,9 @@ export abstract class WhollySheet<T extends IRowModel, P>
     }
     if (columnName === this.keyColumn) {
       // Find by index
-      return WhollySheet.toAT(this.index[value.toString()])
+      return WhollyArtifact.toAT(this.index[value.toString()])
     }
-    return WhollySheet.toAT(this.rows.find((r) => r[key] === value))
+    return WhollyArtifact.toAT(this.rows.find((r) => r[key] === value))
   }
 
   private _displayHeader: ColumnHeaders = []
@@ -463,7 +475,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   async delete<T extends IRowModel>(model: T, force = false) {
     if (!force) await this.checkOutdated(model)
-    const values = await this.sheets.rowDelete(this.name, model._row)
+    const values = await this.sdk.rowDelete(this.name, model._row)
     this.rows = this.typeRows(values)
     this.createIndex()
     return true
@@ -474,7 +486,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
   }
 
   async rowGet<T extends IRowModel>(row: number): Promise<T | undefined> {
-    const values = await this.sheets.rowGet(this.name, row)
+    const values = await this.sdk.rowGet(this.name, row)
     if (!values || values.length === 0) return undefined
     // Returns a nested array of values, 1 top element per row
     const typed = this.typeRow(values[0])
@@ -503,14 +515,14 @@ export abstract class WhollySheet<T extends IRowModel, P>
         )
     }
     if (errors.length > 0)
-      throw new SheetError(
+      throw new LookerSDKError(
         `${this.name} row ${model._row} is outdated: ${errors.join()}`
       )
     return false
   }
 
   async refresh<T extends IRowModel>(): Promise<T[]> {
-    let values = await this.sheets.tabValues(this.name)
+    let values = await this.sdk.tabValues(this.name)
     // trim header row
     values = values.slice(1)
     const rows = this.typeRows(values) as unknown as T[]
@@ -532,11 +544,11 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
     const delta = this.getDelta()
-    let values = await this.sheets.tabValues(this.name)
+    let values = await this.sdk.tabValues(this.name)
     this.prepareBatch(values, delta, force)
     values = this.mergePurge(values, delta)
-    if (delta.deletes.length > 0) await this.sheets.tabClear(this.name)
-    const response = await this.sheets.batchUpdate(this.name, values)
+    if (delta.deletes.length > 0) await this.sdk.tabClear(this.name)
+    const response = await this.sdk.batchUpdate(this.name, values)
     return this.loadRows(response)
   }
 
@@ -582,7 +594,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
       } catch (e: any) {
         errors.push(e.message)
       }
-      if (errors.length > 0) throw new SheetError(errors.join('\n'))
+      if (errors.length > 0) throw new LookerSDKError(errors.join('\n'))
     }
     delta.updates.forEach((u) => u.prepare())
     delta.creates.forEach((c) => c.prepare())

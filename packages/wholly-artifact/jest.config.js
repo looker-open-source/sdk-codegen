@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2020 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,13 @@
  SOFTWARE.
 
  */
+const base = require('../../jest.config')
+const packageName = require('./package.json').name.split('/')[1]
 
-export const sdkVersion = '22.19'
-export const environmentPrefix = 'LOOKERSDK'
+module.exports = {
+  ...base,
+  displayName: packageName,
+  name: packageName,
+  rootDir: '../..',
+  testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
+}
