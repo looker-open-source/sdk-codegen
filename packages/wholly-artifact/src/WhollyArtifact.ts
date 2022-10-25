@@ -25,9 +25,9 @@
  */
 
 import { LookerSDKError } from '@looker/sdk-rtl'
-import type { ColumnHeaders, SheetValues, IRowModel } from './RowModel'
+import type { ILooker40SDK } from '@looker/sdk'
+import type { ColumnHeaders, IRowModel, SheetValues } from './RowModel'
 import { RowAction, rowPosition, stringer } from './RowModel'
-import type { SheetSDK } from './SheetSDK'
 
 /**
  * Compare dates without running into numeric comparison problems
@@ -96,8 +96,8 @@ export class TypedRows<T> {
 
 export interface IWhollyArtifact<T extends IRowModel, P> {
   /** Initialized REST-based GSheets SDK */
-  sdk: SheetSDK
-  /** Name prefix of this collection */
+  sdk: ILooker40SDK
+  /** Namespace prefix of this collection. TODO rename to namespace */
   name: string
   /**
    * Header column names for reading from/writing to the sheet.
@@ -287,11 +287,11 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   index: Record<string, T> = {}
 
   constructor(
-    public readonly sdk: SheetSDK,
+    public readonly sdk: ILooker40SDK,
     /** name of the tab in the GSheet document */
     public readonly name: string,
     public readonly table: ITabTable,
-    public readonly keyColumn: string = '_id'
+    public readonly keyColumn: string = '_id' // TODO change to `key`
   ) {
     super([])
     this.loadRows(table.rows)
@@ -382,9 +382,20 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   }
 
   async save<T extends IRowModel>(model: T, force = false): Promise<T> {
-    // A model with a non-zero row is an update
-    if (model._row) return await this.update<T>(model, force)
-    // Create currently returns the row not the model
+    switch (model.$action) {
+      case RowAction.Delete: {
+        await this.sdk.ok(
+          this.sdk.delete_artifact(this.name, model[this.keyColumn])
+        )
+        return model
+      }
+      case RowAction.Update: {
+        return await this.update<T>(model, force)
+      }
+      case RowAction.None: {
+        return model
+      }
+    }
     return (await this.create<T>(model)) as unknown as T
   }
 
@@ -547,7 +558,6 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     let values = await this.sdk.tabValues(this.name)
     this.prepareBatch(values, delta, force)
     values = this.mergePurge(values, delta)
-    if (delta.deletes.length > 0) await this.sdk.tabClear(this.name)
     const response = await this.sdk.batchUpdate(this.name, values)
     return this.loadRows(response)
   }

@@ -24,14 +24,13 @@
 
  */
 
-import type { IAuthSession } from '@looker/sdk-rtl'
+import type { ILooker40SDK } from '@looker/sdk'
 import type { IRowModel } from './RowModel'
-import { addMinutes, noDate, stringer } from './RowModel'
+import { APP_JSON, noDate, stringer } from './RowModel'
+import type { ITabTable } from './WhollyArtifact'
 import { WhollyArtifact } from './WhollyArtifact'
 import type { ITestRowProps } from './RowModel.spec'
 import { TestRow, testRowObject } from './RowModel.spec'
-import type { ITabTable } from './SheetSDK'
-import { SheetSDK } from './SheetSDK'
 
 export class TestSheet extends WhollyArtifact<TestRow, ITestRowProps> {
   typeRow<T extends IRowModel>(values?: any): T {
@@ -39,8 +38,17 @@ export class TestSheet extends WhollyArtifact<TestRow, ITestRowProps> {
   }
 }
 
+const artiRow = (row: any) => {
+  return new TestRow({
+    key: `${row._id}`,
+    version: 1,
+    value: row,
+    content_type: APP_JSON,
+  })
+}
+
 const wait2Mins = 2 * 60 * 1000
-const testRow = new TestRow(testRowObject)
+const testRow = artiRow(testRowObject)
 const testRow2Object = {
   _row: 3,
   _id: '4',
@@ -52,16 +60,16 @@ const testRow2Object = {
   strArray: ['c', 'd'],
 }
 
-const testRow2 = new TestRow(testRow2Object)
+const testRow2 = artiRow(testRow2Object)
 
 const testTable: ITabTable = {
   header: testRow.header(),
   rows: [
-    testRow,
-    testRow2,
-    new TestRow({ _row: 4, _id: '5', _updated: new Date(), name: 'row 4' }),
-    new TestRow({ _row: 5, _id: '6', _updated: new Date(), name: 'row 5' }),
-    new TestRow({ _row: 6, _id: '7', _updated: new Date(), name: 'row 6' }),
+    artiRow(testRow),
+    artiRow(testRow2),
+    artiRow({ _row: 4, _id: '5', _updated: new Date(), name: 'row 4' }),
+    artiRow({ _row: 5, _id: '6', _updated: new Date(), name: 'row 5' }),
+    artiRow({ _row: 6, _id: '7', _updated: new Date(), name: 'row 6' }),
   ],
 }
 
@@ -70,10 +78,9 @@ const emptyTable: ITabTable = {
   rows: [],
 }
 
-const testSDK = new SheetSDK({ settings: {} } as IAuthSession, 'test sheet id')
+const testSDK = {} as ILooker40SDK
 const mockSheet = () => new TestSheet(testSDK, 'test', testTable)
 let sheet = mockSheet()
-let sheets: SheetSDK
 
 describe('WhollyArtifact', () => {
   beforeEach(() => {
@@ -169,52 +176,6 @@ describe('WhollyArtifact', () => {
       const sheet2 = new TestSheet(testSDK, 'test2', emptyTable)
       const rows2 = sheet2.fromObject(obj)
       expect(rows2).toEqual(sheet.rows)
-    })
-  })
-
-  // jest error handling discussed at https://jestjs.io/docs/en/asynchronous#resolves-rejects
-  describe('error checking', () => {
-    test('update errors on mismatched update', async () => {
-      expect(sheet.rows).toBeDefined()
-      expect(sheet.rows.length).toBeGreaterThan(0)
-      const row = sheet.rows[0]
-      const mockVals = sheet.values(row)
-      // _id = 0, _updated = 1
-      mockVals[1] = stringer(addMinutes(row._updated, 1))
-      jest.spyOn(testSDK, 'rowGet').mockReturnValue(Promise.resolve(mockVals))
-      // prepare will update _updated
-      row.prepare()
-      try {
-        await sheet.update(row)
-        expect('whoops').toEqual('We should never get here')
-      } catch (e: any) {
-        expect(e.message).toMatch(/Row 2 is outdated:/i)
-      }
-    })
-    describe('bad row value', () => {
-      test('update needs a non-zero row', async () => {
-        expect(sheet.rows).toBeDefined()
-        expect(sheet.rows.length).toBeGreaterThan(0)
-        const row = sheet.rows[0]
-        row._id = 'update_test'
-        row._row = 0
-        try {
-          await sheet.update(row)
-          expect('whoops').toEqual('We should never get here')
-        } catch (e: any) {
-          expect(e.message).toMatch(/row must be > 0 to update/i)
-        }
-      })
-      test('create needs a zero row', async () => {
-        expect(sheet.rows).toBeDefined()
-        expect(sheet.rows.length).toBeGreaterThan(0)
-        const row = sheet.rows[0]
-        row._id = 'create_test'
-        row._row = 2
-        await expect(sheet.create(row)).rejects.toThrow(
-          `create needs ${sheet.name} "${row._id}" row to be < 1, not ${row._row}`
-        )
-      })
     })
   })
 
@@ -361,11 +322,7 @@ describe('WhollyArtifact', () => {
     })
   })
 
-  describe('live sheet', () => {
-    beforeAll(async () => {
-      sheets = await initSheetSDK()
-    })
-
+  describe('artifact store', () => {
     const createSheet = async (data: TestSheet) => {
       const doc = await sheets.index()
       sheet = new TestSheet(sheets, 'test', doc.tabs.test)

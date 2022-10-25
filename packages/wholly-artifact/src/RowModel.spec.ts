@@ -25,8 +25,16 @@
  */
 
 import { LookerSDKError } from '@looker/sdk-rtl'
+import type { IArtifact } from '@looker/sdk'
 import type { IRowModel } from './RowModel'
-import { nilCell, noDate, RowAction, RowModel, stringer } from './RowModel'
+import {
+  APP_JSON,
+  nilCell,
+  noDate,
+  RowAction,
+  RowModel,
+  stringer,
+} from './RowModel'
 
 export interface ITestRowProps {
   name: string
@@ -84,8 +92,9 @@ const testArtifactObject = {
   updated_at: Date.now(),
   updated_by_userid: '',
   value_size: 10,
-  // key: 'TestRow:1',
-  content_type: 'application/json',
+  key: 'TestRow:1',
+  version: 1,
+  content_type: APP_JSON,
   value: JSON.stringify(testRowObject),
 }
 
@@ -123,7 +132,7 @@ describe('RowModel', () => {
     })
   })
 
-  test('header omits _row, IAttribute, and $ vars', () => {
+  test('header omits _row and $ vars', () => {
     const row = new TestRow()
     const expected = [
       '_id',
@@ -149,7 +158,8 @@ describe('RowModel', () => {
     test('inits with an artifact object', () => {
       const actual = new TestRow(testArtifactObject)
       expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('3')
+      // artifact key overrides an _id value
+      expect(actual._id).toEqual('TestRow:1')
       expect(actual.key).toEqual(actual._id)
       expect(actual._updated).toEqual(testRowNow)
       expect(actual.name).toEqual(testRowObject.name)
@@ -161,12 +171,33 @@ describe('RowModel', () => {
       expect(actual.$artifact).toBeDefined()
     })
 
+    test('assigns with fromArtifact and toArtifact', () => {
+      const actual = new TestRow()
+      actual.fromArtifact(testArtifactObject as IArtifact)
+      expect(actual._row).toEqual(2)
+      expect(actual._id).toEqual('TestRow:1')
+      expect(actual.key).toEqual(actual._id)
+      expect(actual._updated).toEqual(testRowNow)
+      expect(actual.name).toEqual(testRowObject.name)
+      expect(actual.toggle).toEqual(true)
+      expect(actual.score).toEqual(5)
+      expect(actual.average).toEqual(3.2)
+      expect(actual.strArray).toEqual(['a', 'b'])
+      expect(actual.$action).toEqual(RowAction.Create)
+      expect(actual.$artifact).toBeDefined()
+      const expected = actual.toArtifact()
+      const second = new TestRow()
+      second.fromArtifact(expected)
+      // ensure marshalled values are identical
+      expect(actual.toArtifact()).toEqual(second.toArtifact())
+    })
+
     test('throws JSON error with bad artifact value', () => {
       const bad = { ...testArtifactObject, ...{ value: '{ this is bad }' } }
       try {
         const actual = new TestRow(bad)
-        throw new Error('unexpected success')
-      } catch (e: ISDKError) {
+        expect(actual).toBeUndefined()
+      } catch (e: LookerSDKError) {
         expect(e).toBeInstanceOf(LookerSDKError)
         expect(e.message).toEqual(
           'SyntaxError: Unexpected token t in JSON at position 2'
@@ -196,7 +227,7 @@ describe('RowModel', () => {
       expect(actual.score).toEqual(5)
       expect(actual.average).toEqual(3.2)
       expect(actual.strArray).toEqual(['a', 'b'])
-      expect(actual.$action).toEqual(RowAction.None)
+      expect(actual.$action).toEqual(RowAction.Create)
     })
     test('inits with value array', () => {
       const actual = new TestRow(testRowValues)
@@ -305,37 +336,43 @@ describe('RowModel', () => {
       expect(actual.$action).toEqual(RowAction.Create)
     })
     test('setDelete marks delete action', () => {
-      const actual = new TestRow({ _row: 2 })
+      const actual = new TestRow(testArtifactObject)
       actual.setDelete()
       expect(actual.$action).toEqual(RowAction.Delete)
     })
     test('setUpdate marks update action', () => {
-      const actual = new TestRow({ _row: 2 })
+      const actual = new TestRow(testArtifactObject)
       actual.setUpdate()
       expect(actual.$action).toEqual(RowAction.Update)
     })
     test('Create action is rejected for existing row', () => {
-      const actual = new TestRow({ _row: 2 })
+      const actual = new TestRow(testArtifactObject)
       const expected = actual.$action
-      expect(actual.setCreate()).toEqual(false)
-      expect(actual.$action).toEqual(expected)
-      actual.$action = RowAction.Create
+      try {
+        expect(actual.setCreate()).toEqual(false)
+      } catch (e: LookerSDKError) {
+        expect(e.message).toMatch(/can't create/)
+      }
       expect(actual.$action).toEqual(expected)
     })
     test('Delete action is rejected for new row', () => {
       const actual = new TestRow({ _row: 0 })
       const expected = actual.$action
-      expect(actual.setDelete()).toEqual(false)
-      expect(actual.$action).toEqual(expected)
-      actual.$action = RowAction.Delete
+      try {
+        expect(actual.setDelete()).toEqual(false)
+      } catch (e: LookerSDKError) {
+        expect(e.message).toMatch(/can't delete/)
+      }
       expect(actual.$action).toEqual(expected)
     })
     test('Update action is rejected for new row', () => {
       const actual = new TestRow({ _row: 0 })
       const expected = actual.$action
-      expect(actual.setUpdate()).toEqual(false)
-      expect(actual.$action).toEqual(expected)
-      actual.$action = RowAction.Update
+      try {
+        expect(actual.setUpdate()).toEqual(false)
+      } catch (e: LookerSDKError) {
+        expect(e.message).toMatch(/can't update/)
+      }
       expect(actual.$action).toEqual(expected)
     })
   })

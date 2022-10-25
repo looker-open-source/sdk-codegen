@@ -31,6 +31,7 @@ import type { IArtifact } from '@looker/sdk'
 export type SheetValues = any[]
 
 export const noDate = new Date(-8640000000000000)
+export const APP_JSON = 'application/json'
 
 /** Signifies an empty cell */
 export const nilCell = '\0'
@@ -145,14 +146,35 @@ export interface IRowModel extends IRowModelProps {
    */
   fromObject(obj: Record<string, unknown>): IRowModel
 
-  /** Mark a row for update. Sets the $action and returns true if the row can be marked for updating */
+  /** Converts instance to IArtifact javascript object for storing in a Looker instance
+   * the required columns are:
+   * - key (unique key identifying this item, automatically managed)
+   * - value (IRowModel descendant nested properties with values from the `headers` keys)
+   * - version (of the artifact)
+   * - content_type (always "application/json")
+   */
+  toArtifact(): Partial<IArtifact>
+
+  /** Convers from IArtifact interface to class instance
+   *
+   * @param obj to assign to row
+   */
+  fromArtifact(obj: Partial<IArtifact>): IRowModel
+
+  /** Mark a row for update. Sets the $action and returns true if the row can be marked for updating. Throws error otherwise */
   setUpdate(): boolean
 
-  /** Mark a row for deletion. Sets the $action and returns true if the row can be marked for deleting */
+  /** Mark a row for deletion. Sets the $action and returns true if the row can be marked for deleting. Throws error otherwise */
   setDelete(): boolean
 
-  /** Mark a row for creation. Sets the $action and returns true if the row can be marked for creating */
+  /** Mark a row for creation. Sets the $action and returns true if the row can be marked for creating. Throws error otherwise */
   setCreate(): boolean
+
+  /** True if this item has NOT been saved to the artifact store. False otherwise */
+  isNew(): boolean
+
+  /** True if this item HAS been saved to the artifact store. False otherwise */
+  isStored(): boolean
 }
 
 export abstract class RowModel<T extends IRowModel> implements IRowModel {
@@ -160,11 +182,37 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   _id = ''
   _updated: Date = noDate
 
-  $artifact: Partial<IArtifact> = {}
+  $artifact: Partial<IArtifact> = {
+    version: 0,
+    created_by_userid: '',
+    updated_by_userid: '',
+  }
+
+  constructor(values?: any) {
+    this.initValues(values)
+    if (!this.key) {
+      this.key = this.makey()
+      this.$_action = RowAction.Create
+    }
+  }
+
+  isNew() {
+    return this.$artifact.version < 1
+  }
+
+  isStored() {
+    return !this.isNew()
+  }
+
   private $_action: RowAction = RowAction.None
 
   private static hide = new Set(['_row'])
 
+  /**
+   * initializes values by position, iterating the header keys
+   * @param values to initialize
+   * @private
+   */
   private initFromArray(values?: any) {
     if (Array.isArray(values)) {
       const keys = this.header()
@@ -182,6 +230,14 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     return false
   }
 
+  /**
+   * Initializes values from any of:
+   * - an array
+   * - a value object
+   * - an artifact object
+   * @param values to initialize
+   * @private
+   */
   private initValues(values?: any) {
     if (this.initFromArray(values)) return
     if (typeof values === 'object' && values !== null && values !== undefined) {
@@ -194,13 +250,12 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         try {
           value = JSON.parse(value)
         } catch (e: any) {
-          const appJson = 'application/json'
           if (
-            values.$artifact?.content_type?.localeCompare(appJson, 'en', {
+            values.$artifact?.content_type?.localeCompare(APP_JSON, 'en', {
               sensitivity: 'base',
             }) === 0
           ) {
-            throw new LookerSDKError(`Expected ${appJson} but got ${e}`)
+            throw new LookerSDKError(`Expected ${APP_JSON} but got ${e}`)
           } else {
             throw new LookerSDKError(e)
           }
@@ -213,11 +268,6 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       return true
     }
     return false
-  }
-
-  constructor(values?: any) {
-    this.initValues(values)
-    if (!this.key) this.key = this.makey()
   }
 
   /**
@@ -244,35 +294,56 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     this._id = value
   }
 
+  private oops(message: string) {
+    throw new LookerSDKError(`${this.key}: ${message}`)
+  }
+
   get $action(): RowAction {
-    if (this.$_action === RowAction.None && this._row === 0)
+    if (this.$_action === RowAction.None && this.isNew())
       return RowAction.Create
     return this.$_action
   }
 
   set $action(value: RowAction) {
-    // Can't create an existing row
-    if (value === RowAction.Create && this._row) return
-    // Can't update or delete a new row
-    if (value !== RowAction.None && !this._row) return
+    switch (value) {
+      case RowAction.Create: {
+        if (this.isStored()) this.oops(`can't create an existing item`)
+        break
+      }
+      case RowAction.Delete: {
+        if (this.isNew()) {
+          this.oops(`can't delete a new item`)
+        }
+        break
+      }
+      case RowAction.Update: {
+        if (this.isNew()) {
+          this.oops(`can't update a new item`)
+        }
+        break
+      }
+      case RowAction.None: {
+        if (this.isNew()) {
+          this.oops(`Action must be assigned for a new item`)
+        }
+        break
+      }
+    }
     this.$_action = value
   }
 
   setCreate(): boolean {
-    if (this._row) return false
-    this.$_action = RowAction.Create
+    this.$action = RowAction.Create
     return true
   }
 
   setUpdate(): boolean {
-    if (!this._row) return false
-    this.$_action = RowAction.Update
+    this.$action = RowAction.Update
     return true
   }
 
   setDelete(): boolean {
-    if (!this._row) return false
-    this.$_action = RowAction.Delete
+    this.$action = RowAction.Delete
     return true
   }
 
@@ -282,11 +353,6 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   header(): ColumnHeaders {
     const keys = this.keys()
-    if (keys.includes('undefined')) {
-      const out = JSON.stringify(this, null, 2)
-      console.log(out)
-    }
-    // remove `_row`
     const result = keys.filter(
       (v) => !(v.startsWith('$') || RowModel.hide.has(v))
     )
@@ -300,9 +366,10 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   prepare(): T {
-    if (!this._id) {
+    if (!this.key) {
       // Generate id if not assigned
-      this._id = this.makey()
+      this.key = this.makey()
+      this.$action = RowAction.Create
     }
     /** Always update the "updated" value before saving */
     this._updated = new Date()
@@ -369,6 +436,28 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   fromObject(obj: Record<string, unknown>): IRowModel {
     return this.assign(obj)
+  }
+
+  fromArtifact(obj: Partial<IArtifact>): IRowModel {
+    return this.assign(obj)
+  }
+
+  private headerValues() {
+    const result = {}
+    const keys = this.header()
+    for (const key of keys) {
+      result[key] = this[key]
+    }
+    return result
+  }
+
+  toArtifact(): Partial<IArtifact> {
+    return {
+      key: this.key,
+      value: this.headerValues(),
+      version: this.$artifact.version ?? 0,
+      content_type: APP_JSON,
+    } as Partial<IArtifact>
   }
 }
 
