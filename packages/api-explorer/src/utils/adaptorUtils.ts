@@ -101,10 +101,11 @@ export const fullify = (uri: string, baseUrl: string): string => {
     return uri
   }
   const url = new URL(uri, baseUrl)
+  console.log({ baseUrl, uri, url })
   return url.toString()
 }
 /**
- * parse spec url into version and name for api_spec cccall
+ * parse spec url into version and name for api_spec call
  * @param spec to parse
  */
 const apiSpecBits = (spec: SpecItem): string[] =>
@@ -129,6 +130,7 @@ export const specUrlFetch = async (url: string): Promise<ParsedSpec> => {
     const content = await getUrl(url)
     return makeApi(content)
   } catch (error) {
+    console.error({ url, fetch: 'failed' })
     return undefined
   }
 }

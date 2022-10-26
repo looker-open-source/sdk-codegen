@@ -99,8 +99,10 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const FETCH_INTENT = 'fetchIntent'
   const FETCH_RESULT = 'fetchResult'
   const CRITICAL: MessageBarIntent = 'critical'
-  const appConfig = `{
-  "client_guid": "looker.api-explorer",
+  const appConfig = `// Register as an OAuth client app
+// on your Looker instance 
+// with client_guid=looker.api-explorer
+{
   "redirect_uri": "${oauth}",
   "display_name": "CORS API Explorer",
   "description": "Looker API Explorer using CORS",
@@ -172,24 +174,32 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     updateMessage(CRITICAL, message)
   }
 
+  const saveConfig = (baseUrl: string, webUrl: string) => {
+    const data = { base_url: baseUrl, looker_url: webUrl }
+    updateFields({
+      [BASE_URL]: baseUrl,
+      [WEB_URL]: webUrl,
+    })
+    // TODO: replace when redux is introduced to run it
+    localStorage.setItem(RunItConfigKey, JSON.stringify(data))
+    if (setHasConfig) setHasConfig(true)
+    setSaved(data)
+    updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
+  }
+
   const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
     updateMessage('inform', '')
     const versionsUrl = `${fields.baseUrl}/versions`
     try {
       const { web_server_url: webUrl, api_server_url: baseUrl } =
         (await getVersions(versionsUrl)) as ILookerVersions
+      updateMessage(POSITIVE, 'Configuration is valid')
       updateFields({
         [BASE_URL]: baseUrl,
         [WEB_URL]: webUrl,
       })
-      updateMessage(POSITIVE, 'Configuration is valid')
       if (save) {
-        const data = { base_url: baseUrl, looker_url: webUrl }
-        // TODO: replace when redux is introduced to run it
-        localStorage.setItem(RunItConfigKey, JSON.stringify(data))
-        if (setHasConfig) setHasConfig(true)
-        setSaved(data)
-        updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
+        saveConfig(baseUrl, webUrl)
       }
     } catch (e: any) {
       fetchError(e.message)
