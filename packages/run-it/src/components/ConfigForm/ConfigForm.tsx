@@ -45,8 +45,15 @@ import { CodeCopy } from '@looker/code-editor'
 import { getEnvAdaptor } from '@looker/extension-utils'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 
+import { useLocation } from 'react-router-dom'
 import type { RunItValues } from '../..'
-import { CollapserCard, RunItHeading, DarkSpan, readyToLogin } from '../..'
+import {
+  CollapserCard,
+  RunItHeading,
+  DarkSpan,
+  readyToLogin,
+  appPath,
+} from '../..'
 import {
   getVersions,
   RunItConfigKey,
@@ -76,7 +83,7 @@ interface ConfigFormProps {
   requestContent: RunItValues
   /** Title for the config form */
   title?: string
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
+  /** A set state callback which allows for editing, setting or clearing OAuth configuration parameters if present */
   setHasConfig?: Dispatch<boolean>
 }
 
@@ -85,6 +92,8 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   requestContent,
   setHasConfig,
 }) => {
+  const location = useLocation()
+  const oauth = appPath(location.pathname, '/oauth')
   const BASE_URL = 'baseUrl'
   const WEB_URL = 'webUrl'
   const FETCH_INTENT = 'fetchIntent'
@@ -92,7 +101,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   const CRITICAL: MessageBarIntent = 'critical'
   const appConfig = `{
   "client_guid": "looker.api-explorer",
-  "redirect_uri": "${(window as any).location.origin}/oauth",
+  "redirect_uri": "${oauth}",
   "display_name": "CORS API Explorer",
   "description": "Looker API Explorer using CORS",
   "enabled": true
