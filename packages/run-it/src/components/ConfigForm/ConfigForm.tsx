@@ -93,17 +93,16 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   setHasConfig,
 }) => {
   const location = useLocation()
-  const oauth = appPath(location.pathname, '/oauth')
+  const redirect_uri = appPath(location.pathname, '/oauth')
+  const client_id = 'looker.api-explorer' // TODO make this configurable
   const BASE_URL = 'baseUrl'
   const WEB_URL = 'webUrl'
   const FETCH_INTENT = 'fetchIntent'
   const FETCH_RESULT = 'fetchResult'
   const CRITICAL: MessageBarIntent = 'critical'
-  const appConfig = `// Register as an OAuth client app
-// on your Looker instance 
-// with client_guid=looker.api-explorer
+  const appConfig = `// client_guid=${client_id}
 {
-  "redirect_uri": "${oauth}",
+  "redirect_uri": "${redirect_uri}",
   "display_name": "CORS API Explorer",
   "description": "Looker API Explorer using CORS",
   "enabled": true
@@ -175,7 +174,12 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   }
 
   const saveConfig = (baseUrl: string, webUrl: string) => {
-    const data = { base_url: baseUrl, looker_url: webUrl }
+    const data = {
+      base_url: baseUrl,
+      looker_url: webUrl,
+      client_id,
+      redirect_uri,
+    }
     updateFields({
       [BASE_URL]: baseUrl,
       [WEB_URL]: webUrl,
@@ -318,17 +322,25 @@ export const ConfigForm: FC<ConfigFormProps> = ({
               />
             </Fieldset>
           </Form>
-          <Paragraph fontSize="small">
-            The following configuration can be used to create a{' '}
-            <Link
-              href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
-              target="_blank"
-            >
-              Looker OAuth client
-            </Link>
-            .
-          </Paragraph>
-          <CodeCopy key="appConfig" language="json" code={appConfig} />
+          {!!fields.webUrl && (
+            <>
+              <Paragraph fontSize="small">
+                The following configuration can be used to create a{' '}
+                <Link
+                  href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+                  target="_blank"
+                >
+                  Looker OAuth client
+                </Link>{' '}
+                for your Looker server which also needs "
+                {(window as any).location.origin}" registered in the{' '}
+                <Link href={`${fields.webUrl}/admin/embed`} target="_blank">
+                  Embedded Domain Allowlist
+                </Link>
+              </Paragraph>
+              <CodeCopy key="appConfig" language="json" code={appConfig} />
+            </>
+          )}
           <Space>
             <Tooltip content="Clear the configuration values">
               <ButtonTransparent
