@@ -162,5 +162,10 @@ export const appPath = (location: HLocation, newPath: string) => {
   const wloc = (window as any).location
   const base = wloc.origin
   const wpath = wloc.pathname
-  return `${base}${wpath.substring(0, wpath.indexOf(reactPath))}${newPath}`
+  const result = `${base}${wpath.substring(
+    0,
+    wpath.indexOf(reactPath)
+  )}${newPath}`
+  console.error({ reactPath, base, wpath, result })
+  return result
 }

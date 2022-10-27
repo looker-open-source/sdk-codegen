@@ -52,12 +52,14 @@ export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
   const location = useLocation()
   const history = useHistory()
   const authSession = adaptor.sdk.authSession as BrowserSession
-  const oldUrl = appPath(location, authSession.returnUrl || `/`)
+  const retUrl = authSession.returnUrl
+  const oldUrl = appPath(location, retUrl || `/`)
 
   useEffect(() => {
     const maybeLogin = async () => {
       const token = await adaptor.login()
       if (token) {
+        console.error({ push: oldUrl, retUrl, location })
         history.push(oldUrl)
       }
     }
