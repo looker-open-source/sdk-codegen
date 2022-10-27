@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+import type { Location as HLocation } from 'history'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 
@@ -76,19 +77,4 @@ export const validateUrl = (url: string): string => {
   } catch {
     return ''
   }
-}
-
-/**
- * Get new application-level base path for react application
- * @param currentReactPath which is from useLocation()'s `location.pathname`
- * @param newPath new path to assign, like `/oauth`
- */
-export const appPath = (currentReactPath: string, newPath: string) => {
-  const wloc = (window as any).location
-  const base = wloc.origin
-  const wpath = wloc.pathname
-  return `${base}${wpath.substring(
-    0,
-    wpath.indexOf(currentReactPath)
-  )}${newPath}`
 }
