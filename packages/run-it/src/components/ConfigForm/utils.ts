@@ -23,7 +23,6 @@
  SOFTWARE.
 
  */
-import type { Location as HLocation } from 'history'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
 
