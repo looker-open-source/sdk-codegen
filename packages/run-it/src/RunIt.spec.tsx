@@ -60,6 +60,8 @@ describe('RunIt', () => {
         .mockReturnValue({
           base_url: 'https://foo:19999',
           looker_url: 'https://foo:9999',
+          client_id: 'looker.api-explorer',
+          redirect_uri: 'https://localhost:8080/oauth',
         })
     })
     afterEach(() => {
