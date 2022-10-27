@@ -39,12 +39,14 @@ function* initSaga(action: PayloadAction<InitSpecsAction>) {
   try {
     const specs: SpecList = yield* call([adaptor, 'fetchSpecList'])
     let currentSpecKey = action.payload.specKey
-    if (!currentSpecKey) {
+    if (!currentSpecKey || !specs[currentSpecKey]) {
+      // if current spec key is invalid or not assigned, default to the first "current" spec
       currentSpecKey = Object.values(specs).find(
         (spec) => spec.status === 'current'
       )!.key
     }
     const spec = yield* call([adaptor, 'fetchSpec'], specs[currentSpecKey])
+    console.error({ currentSpecKey, spec })
     specs[currentSpecKey] = spec
     yield* put(initSpecsSuccessAction({ specs, currentSpecKey }))
   } catch (error: any) {
