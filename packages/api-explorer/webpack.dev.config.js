@@ -35,7 +35,6 @@ module.exports = merge(base, browser, {
   },
   mode: 'development',
   devServer: {
-    hot: false,
     contentBase: path.join(__dirname, 'public'),
     historyApiFallback: {
       disableDotRule: true,
