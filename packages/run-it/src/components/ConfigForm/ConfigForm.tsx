@@ -319,7 +319,7 @@ export const ConfigForm: FC<ConfigFormProps> = ({
           {!!fields.webUrl && (
             <>
               <Paragraph fontSize="small">
-                Enable API Explorer as a{' '}
+                On {fields.webUrl}, enable API Explorer as a{' '}
                 <Link
                   href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
                   target="_blank"
@@ -330,15 +330,15 @@ export const ConfigForm: FC<ConfigFormProps> = ({
                 <Link href={`${fields.webUrl}/admin/embed`} target="_blank">
                   Embedded Domain Allowlist
                 </Link>
-                . If API Explorer is also installed on {fields.webUrl}, the
-                configuration below can be used to{' '}
+                . If API Explorer is also installed, the configuration below can
+                be used to{' '}
                 <Link
                   href={`${fields.webUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
                   target="_blank"
                 >
-                  register the API Explorer OAuth client
-                </Link>
-                .
+                  register this API Explorer instance
+                </Link>{' '}
+                as an OAuth client.
               </Paragraph>
               <CodeCopy key="appConfig" language="json" code={appConfig} />
             </>
