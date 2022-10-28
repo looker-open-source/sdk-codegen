@@ -38,7 +38,6 @@ import { useHistory } from 'react-router'
 
 import { useLocation } from 'react-router-dom'
 import type { IEnvironmentAdaptor } from './adaptorUtils'
-import { appPath } from './adaptorUtils'
 
 interface OAuthSceneProps {
   adaptor: IEnvironmentAdaptor
@@ -49,21 +48,21 @@ interface OAuthSceneProps {
  * route
  */
 export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
-  const location = useLocation()
-  const fullPath = (window as any).location.pathname
-  const extraPath = fullPath.substr(0, fullPath.indexOf(location.pathname))
   const history = useHistory()
+  const location = useLocation()
+  const reactPath = location.pathname
+  const fullPath = (window as any).location.pathname
+  const extraPath = fullPath.substr(0, fullPath.indexOf(reactPath))
   const authSession = adaptor.sdk.authSession as BrowserSession
   const retPath = authSession.returnUrl ?? '/'
   /** If this is a nested React app, remove extraPath to prevent recursive return pathing */
-  const fixPath = retPath.replace(extraPath, '')
-  const oldUrl = appPath(location, fixPath)
+  const oldUrl = retPath.replace(extraPath, '')
 
   useEffect(() => {
     const maybeLogin = async () => {
       const token = await adaptor.login()
       if (token) {
-        console.error({ push: oldUrl, retPath, extraPath, fixPath, location })
+        console.error({ push: oldUrl, retPath, extraPath, location })
         history.push(oldUrl)
       }
     }
