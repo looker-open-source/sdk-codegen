@@ -35,7 +35,6 @@ import {
   ProgressCircular,
 } from '@looker/components'
 import { useHistory } from 'react-router'
-
 import { useLocation } from 'react-router-dom'
 import type { IEnvironmentAdaptor } from './adaptorUtils'
 
