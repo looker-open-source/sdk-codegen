@@ -196,7 +196,6 @@ export const runRequest = async (
     await sdk.ok(sdk.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
-  console.log({ basePath, endpoint, url })
   const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,

@@ -101,7 +101,6 @@ export const fullify = (uri: string, baseUrl: string): string => {
     return uri
   }
   const url = new URL(uri, baseUrl)
-  console.log({ baseUrl, uri, url })
   return url.toString()
 }
 /**
