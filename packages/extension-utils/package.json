@@ -36,6 +36,7 @@
     "@looker/components-test-utils": "^1.5.26",
     "@testing-library/react": "^12.1.5",
     "@types/react-router": "^5.1.18",
+    "@types/react-router-dom": "^5.3.3",
     "@types/redux": "^3.6.0",
     "webpack-bundle-analyzer": "^4.2.0",
     "webpack-cli": "^4.6.0",

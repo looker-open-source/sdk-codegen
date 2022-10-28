@@ -42,9 +42,10 @@ import {
   Tooltip,
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
-import { getEnvAdaptor } from '@looker/extension-utils'
+import { appPath, getEnvAdaptor } from '@looker/extension-utils'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 
+import { useLocation } from 'react-router-dom'
 import type { RunItValues } from '../..'
 import { CollapserCard, RunItHeading, DarkSpan, readyToLogin } from '../..'
 import {
@@ -76,7 +77,7 @@ interface ConfigFormProps {
   requestContent: RunItValues
   /** Title for the config form */
   title?: string
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
+  /** A set state callback which allows for editing, setting or clearing OAuth configuration parameters if present */
   setHasConfig?: Dispatch<boolean>
 }
 
@@ -85,14 +86,17 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   requestContent,
   setHasConfig,
 }) => {
+  const location = useLocation()
+  const redirect_uri = appPath(location, '/oauth')
+  const client_id = 'looker.api-explorer' // TODO make this configurable
   const BASE_URL = 'baseUrl'
   const WEB_URL = 'webUrl'
   const FETCH_INTENT = 'fetchIntent'
   const FETCH_RESULT = 'fetchResult'
   const CRITICAL: MessageBarIntent = 'critical'
-  const appConfig = `{
-  "client_guid": "looker.api-explorer",
-  "redirect_uri": "${(window as any).location.origin}/oauth",
+  const appConfig = `// client_guid=${client_id}
+{
+  "redirect_uri": "${redirect_uri}",
   "display_name": "CORS API Explorer",
   "description": "Looker API Explorer using CORS",
   "enabled": true
@@ -163,24 +167,37 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     updateMessage(CRITICAL, message)
   }
 
+  const saveConfig = (baseUrl: string, webUrl: string) => {
+    const data = {
+      base_url: baseUrl,
+      looker_url: webUrl,
+      client_id,
+      redirect_uri,
+    }
+    updateFields({
+      [BASE_URL]: baseUrl,
+      [WEB_URL]: webUrl,
+    })
+    // TODO: replace when redux is introduced to run it
+    localStorage.setItem(RunItConfigKey, JSON.stringify(data))
+    if (setHasConfig) setHasConfig(true)
+    setSaved(data)
+    updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
+  }
+
   const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
     updateMessage('inform', '')
     const versionsUrl = `${fields.baseUrl}/versions`
     try {
       const { web_server_url: webUrl, api_server_url: baseUrl } =
         (await getVersions(versionsUrl)) as ILookerVersions
+      updateMessage(POSITIVE, 'Configuration is valid')
       updateFields({
         [BASE_URL]: baseUrl,
         [WEB_URL]: webUrl,
       })
-      updateMessage(POSITIVE, 'Configuration is valid')
       if (save) {
-        const data = { base_url: baseUrl, looker_url: webUrl }
-        // TODO: replace when redux is introduced to run it
-        localStorage.setItem(RunItConfigKey, JSON.stringify(data))
-        if (setHasConfig) setHasConfig(true)
-        setSaved(data)
-        updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
+        saveConfig(baseUrl, webUrl)
       }
     } catch (e: any) {
       fetchError(e.message)
@@ -299,17 +316,33 @@ export const ConfigForm: FC<ConfigFormProps> = ({
               />
             </Fieldset>
           </Form>
-          <Paragraph fontSize="small">
-            The following configuration can be used to create a{' '}
-            <Link
-              href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
-              target="_blank"
-            >
-              Looker OAuth client
-            </Link>
-            .
-          </Paragraph>
-          <CodeCopy key="appConfig" language="json" code={appConfig} />
+          {!!fields.webUrl && (
+            <>
+              <Paragraph fontSize="small">
+                On {fields.webUrl}, enable API Explorer as a{' '}
+                <Link
+                  href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+                  target="_blank"
+                >
+                  Looker OAuth client
+                </Link>{' '}
+                by adding "{(window as any).location.origin}" to the{' '}
+                <Link href={`${fields.webUrl}/admin/embed`} target="_blank">
+                  Embedded Domain Allowlist
+                </Link>
+                . If API Explorer is also installed, the configuration below can
+                be used to{' '}
+                <Link
+                  href={`${fields.webUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
+                  target="_blank"
+                >
+                  register this API Explorer instance
+                </Link>{' '}
+                as an OAuth client.
+              </Paragraph>
+              <CodeCopy key="appConfig" language="json" code={appConfig} />
+            </>
+          )}
           <Space>
             <Tooltip content="Clear the configuration values">
               <ButtonTransparent

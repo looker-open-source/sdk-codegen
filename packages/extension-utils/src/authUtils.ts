@@ -75,7 +75,12 @@ export class OAuthConfigProvider extends ApiSettings {
 
   getStoredConfig() {
     const storage = this.getStorage(this.configKey)
-    let config = { base_url: '', looker_url: '' }
+    let config = {
+      base_url: '',
+      looker_url: '',
+      client_id: '',
+      redirect_uri: '',
+    }
     if (storage.value) {
       config = JSON.parse(storage.value)
     }
@@ -97,10 +102,12 @@ export class OAuthConfigProvider extends ApiSettings {
       config = {
         base_url: this.base_url,
         looker_url: `${authServer}:9999`,
+        client_id: 'looker.api-explorer',
+        redirect_uri: `${window.location.origin}/oauth`,
       }
     }
 
-    const { base_url, looker_url } = config
+    const { base_url, looker_url, client_id, redirect_uri } = config
     /* update base_url to the dynamically determined value for standard transport requests */
     this.base_url = base_url
     return {
@@ -108,8 +115,8 @@ export class OAuthConfigProvider extends ApiSettings {
       ...{
         base_url,
         looker_url,
-        client_id: 'looker.api-explorer',
-        redirect_uri: `${window.location.origin}/oauth`,
+        client_id,
+        redirect_uri,
       },
     }
   }
