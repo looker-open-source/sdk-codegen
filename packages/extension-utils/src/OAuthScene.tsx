@@ -52,14 +52,19 @@ export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
   const location = useLocation()
   const history = useHistory()
   const authSession = adaptor.sdk.authSession as BrowserSession
-  const retUrl = authSession.returnUrl
-  const oldUrl = appPath(location, retUrl || `/`)
+  const retPath = authSession.returnUrl ?? ''
+  const newPath = retPath ?? '/'
+  let oldUrl = appPath(location, retPath)
+  if (newPath !== '/') {
+    // ensure we don't get nested path duplication
+    oldUrl = oldUrl.substring(0, oldUrl.indexOf(newPath)) + newPath
+  }
 
   useEffect(() => {
     const maybeLogin = async () => {
       const token = await adaptor.login()
       if (token) {
-        console.error({ push: oldUrl, retUrl, location })
+        console.error({ push: oldUrl, retPath, newPath, location })
         history.push(oldUrl)
       }
     }
