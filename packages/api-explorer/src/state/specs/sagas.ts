@@ -46,7 +46,6 @@ function* initSaga(action: PayloadAction<InitSpecsAction>) {
       )!.key
     }
     const spec = yield* call([adaptor, 'fetchSpec'], specs[currentSpecKey])
-    console.error({ currentSpecKey, spec })
     specs[currentSpecKey] = spec
     yield* put(initSpecsSuccessAction({ specs, currentSpecKey }))
   } catch (error: any) {

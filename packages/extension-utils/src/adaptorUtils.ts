@@ -166,6 +166,5 @@ export const appPath = (location: HLocation, newPath: string) => {
     0,
     wpath.indexOf(reactPath)
   )}${newPath}`
-  console.error({ reactPath, base, wpath, result })
   return result
 }

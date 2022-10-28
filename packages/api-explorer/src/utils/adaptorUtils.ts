@@ -130,7 +130,6 @@ export const specUrlFetch = async (url: string): Promise<ParsedSpec> => {
     const content = await getUrl(url)
     return makeApi(content)
   } catch (error) {
-    console.error({ url, fetch: 'failed' })
     return undefined
   }
 }

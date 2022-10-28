@@ -131,7 +131,6 @@ export const getSpecKey = (location: HLocation | Location): string | null => {
     match = pathname.match(/\/(?<specKey>\w+\.\w+).*/)
   }
   const result = match?.groups?.specKey || null
-  console.error({ location, match, result })
   return result
 }
 
