@@ -148,14 +148,15 @@ export interface IRowModel extends IRowModelProps {
 
   /** Converts instance to IArtifact javascript object for storing in a Looker instance
    * the required columns are:
-   * - key (unique key identifying this item, automatically managed)
-   * - value (IRowModel descendant nested properties with values from the `headers` keys)
-   * - version (of the artifact)
-   * - content_type (always "application/json")
+   * - namespace: storage bucket for this artifact
+   * - key: unique key identifying this item, automatically managed
+   * - value: IRowModel descendant nested properties with values from the `headers` keys
+   * - version: version number of the artifact
+   * - content_type: for WhollyArtifacts, always "application/json"
    */
   toArtifact(): Partial<IArtifact>
 
-  /** Convers from IArtifact interface to class instance
+  /** Converts from IArtifact interface to class instance
    *
    * @param obj to assign to row
    */
@@ -453,6 +454,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   toArtifact(): Partial<IArtifact> {
     return {
+      namespace: this.$artifact.namespace,
       key: this.key,
       value: this.headerValues(),
       version: this.$artifact.version ?? 0,

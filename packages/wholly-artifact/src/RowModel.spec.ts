@@ -197,7 +197,7 @@ describe('RowModel', () => {
       try {
         const actual = new TestRow(bad)
         expect(actual).toBeUndefined()
-      } catch (e: LookerSDKError) {
+      } catch (e: any) {
         expect(e).toBeInstanceOf(LookerSDKError)
         expect(e.message).toEqual(
           'SyntaxError: Unexpected token t in JSON at position 2'
@@ -350,7 +350,7 @@ describe('RowModel', () => {
       const expected = actual.$action
       try {
         expect(actual.setCreate()).toEqual(false)
-      } catch (e: LookerSDKError) {
+      } catch (e: any) {
         expect(e.message).toMatch(/can't create/)
       }
       expect(actual.$action).toEqual(expected)
@@ -360,7 +360,7 @@ describe('RowModel', () => {
       const expected = actual.$action
       try {
         expect(actual.setDelete()).toEqual(false)
-      } catch (e: LookerSDKError) {
+      } catch (e: any) {
         expect(e.message).toMatch(/can't delete/)
       }
       expect(actual.$action).toEqual(expected)
@@ -370,7 +370,7 @@ describe('RowModel', () => {
       const expected = actual.$action
       try {
         expect(actual.setUpdate()).toEqual(false)
-      } catch (e: LookerSDKError) {
+      } catch (e: any) {
         expect(e.message).toMatch(/can't update/)
       }
       expect(actual.$action).toEqual(expected)
