@@ -35,7 +35,7 @@ import {
   ProgressCircular,
 } from '@looker/components'
 import { useHistory } from 'react-router'
-
+import { useLocation } from 'react-router-dom'
 import type { IEnvironmentAdaptor } from './adaptorUtils'
 
 interface OAuthSceneProps {
@@ -48,13 +48,20 @@ interface OAuthSceneProps {
  */
 export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
   const history = useHistory()
+  const location = useLocation()
+  const reactPath = location.pathname
+  const fullPath = (window as any).location.pathname
+  const extraPath = fullPath.substr(0, fullPath.indexOf(reactPath))
   const authSession = adaptor.sdk.authSession as BrowserSession
-  const oldUrl = authSession.returnUrl || `/`
+  const retPath = authSession.returnUrl ?? '/'
+  /** If this is a nested React app, remove extraPath to prevent recursive return pathing */
+  const oldUrl = retPath.replace(extraPath, '')
 
   useEffect(() => {
     const maybeLogin = async () => {
       const token = await adaptor.login()
       if (token) {
+        console.error({ push: oldUrl, retPath, extraPath, location })
         history.push(oldUrl)
       }
     }
