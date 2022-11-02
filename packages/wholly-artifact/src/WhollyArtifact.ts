@@ -486,11 +486,11 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     if (!source) {
       const art = await this.sdk.ok(
         artifact(this.sdk, {
-          namespace: this.getNamespace(),
+          namespace: this.namespace(),
           key: model[this.keyColumn],
         })
       )
-      source = new T(art)
+      source = this.typeRow(art)
     }
     if (!source) {
       errors.push(`Row not found`)
@@ -510,19 +510,15 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     return false
   }
 
-  getNamespace<T extends IRowModel>() {
-    return new T().namespace
-  }
-
-  getPrefix<T extends IRowModel>() {
-    return new T().prefix()
+  namespace<T extends IRowModel>() {
+    return (this.typeRow() as T).namespace()
   }
 
   async refresh<T extends IRowModel>(): Promise<T[]> {
-    const meta = new T()
+    const meta = this.typeRow()
     const values = await this.sdk.ok(
       search_artifacts(this.sdk, {
-        namespace: meta.namespace,
+        namespace: meta.namespace(),
         key: `${meta.prefix()}:%`,
       })
     )

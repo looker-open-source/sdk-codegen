@@ -24,13 +24,28 @@
 
  */
 
+import path from 'path'
 import type { ILooker40SDK } from '@looker/sdk'
+import { environmentPrefix, Looker40SDK } from '@looker/sdk'
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
 import type { IRowModel } from './RowModel'
 import { APP_JSON, noDate, stringer } from './RowModel'
 import type { ITabTable } from './WhollyArtifact'
 import { WhollyArtifact } from './WhollyArtifact'
 import type { ITestRowProps } from './RowModel.spec'
 import { TestRow, testRowObject } from './RowModel.spec'
+
+const homeToRoost = '../../../../'
+
+export const getRootPath = () => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+const settings = new NodeSettingsIniFile(
+  environmentPrefix,
+  rootFile('looker.ini'),
+  'Looker'
+)
+const session = new NodeSession(settings)
+const sdk = new Looker40SDK(session)
 
 export class TestSheet extends WhollyArtifact<TestRow, ITestRowProps> {
   typeRow<T extends IRowModel>(values?: any): T {
@@ -325,7 +340,7 @@ describe('WhollyArtifact', () => {
   describe('artifact store', () => {
     const createSheet = async (data: TestSheet) => {
       const doc = await sheets.index()
-      sheet = new TestSheet(sheets, 'test', doc.tabs.test)
+      sheet = new TestSheet(sdk, 'test', doc.tabs.test)
       sheet.rows = data.rows
       sheet.rows.forEach((r) => {
         r._row = 0

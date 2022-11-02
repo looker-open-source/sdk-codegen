@@ -61,6 +61,10 @@ export class TestRow extends RowModel<ITestRow> {
     // constructor for the values array iteration can be incomplete
     if (values) this.assign(values)
   }
+
+  namespace(): string {
+    return 'test'
+  }
 }
 
 export const testRowNow = new Date()
@@ -152,6 +156,11 @@ describe('RowModel', () => {
     const expected = ['name', 'toggle', 'score', 'average', 'strArray']
     const actual = row.displayHeader()
     expect(actual).toEqual(expected)
+  })
+
+  test('namespace', () => {
+    const row = new TestRow()
+    expect(row.namespace()).toEqual('test')
   })
 
   describe('initialization', () => {
@@ -253,6 +262,7 @@ describe('RowModel', () => {
       expect(actual.strArray).toEqual([])
     })
   })
+
   describe('assign', () => {
     test('with value array', () => {
       const actual = new TestRow()
@@ -301,6 +311,7 @@ describe('RowModel', () => {
       expect(actual.strArray).toEqual(['a', 'b'])
     })
   })
+
   describe('prepare', () => {
     test('assigns new id and updated', () => {
       const actual = new TestRow()
@@ -329,6 +340,7 @@ describe('RowModel', () => {
       expect(actual._updated.getTime()).not.toEqual(updated.getTime())
     })
   })
+
   describe('actions', () => {
     test('setCreate marks create action', () => {
       const actual = new TestRow()

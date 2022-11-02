@@ -93,6 +93,7 @@ export interface IRowModelProps extends RowValues {
    * TODO remove this property entirely because the artifact `version` property performs the version locking
    */
   _updated: Date
+
   /** Batch update action. Defaults to RowAction.None, so the row is not part of the delta */
   $action: RowAction
   /** Looker API key/value store artifact object for managing this row */
@@ -176,6 +177,12 @@ export interface IRowModel extends IRowModelProps {
 
   /** True if this item HAS been saved to the artifact store. False otherwise */
   isStored(): boolean
+
+  /** Namespace of artifact storage bucket to use for this collection  */
+  namespace(): string
+
+  /** Prefix (table name, basically) to use for artifact key generation */
+  prefix(): string
 }
 
 export abstract class RowModel<T extends IRowModel> implements IRowModel {
@@ -461,6 +468,8 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       content_type: APP_JSON,
     } as Partial<IArtifact>
   }
+
+  abstract namespace(): string
 }
 
 // TODO figure out the TypeScript magic for this to work
