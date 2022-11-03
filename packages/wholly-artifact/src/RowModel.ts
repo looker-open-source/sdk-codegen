@@ -27,7 +27,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { boolDefault, LookerSDKError } from '@looker/sdk-rtl'
 import omit from 'lodash/omit'
-import type { IArtifact } from '@looker/sdk'
+import type { IArtifact, IUpdateArtifact } from '@looker/sdk'
 export type SheetValues = any[]
 
 export const noDate = new Date(-8640000000000000)
@@ -149,13 +149,12 @@ export interface IRowModel extends IRowModelProps {
 
   /** Converts instance to IArtifact javascript object for storing in a Looker instance
    * the required columns are:
-   * - namespace: storage bucket for this artifact
    * - key: unique key identifying this item, automatically managed
    * - value: IRowModel descendant nested properties with values from the `headers` keys
    * - version: version number of the artifact
    * - content_type: for WhollyArtifacts, always "application/json"
    */
-  toArtifact(): Partial<IArtifact>
+  toArtifact(): Partial<IUpdateArtifact>
 
   /** Converts from IArtifact interface to class instance
    *
@@ -450,20 +449,23 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     return this.assign(obj)
   }
 
-  private headerValues() {
+  /**
+   * Values to store in attribute
+   * @private
+   */
+  private storageValues() {
     const result = {}
-    const keys = this.header()
+    const keys = this.displayHeader()
     for (const key of keys) {
       result[key] = this[key]
     }
     return result
   }
 
-  toArtifact(): Partial<IArtifact> {
+  toArtifact(): Partial<IUpdateArtifact> {
     return {
-      namespace: this.$artifact.namespace,
       key: this.key,
-      value: this.headerValues(),
+      value: JSON.stringify(this.storageValues()),
       version: this.$artifact.version ?? 0,
       content_type: APP_JSON,
     } as Partial<IArtifact>

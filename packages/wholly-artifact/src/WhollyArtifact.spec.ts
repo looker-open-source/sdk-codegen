@@ -26,7 +26,12 @@
 
 import path from 'path'
 import type { ILooker40SDK } from '@looker/sdk'
-import { environmentPrefix, Looker40SDK } from '@looker/sdk'
+import {
+  artifact_namespaces,
+  environmentPrefix,
+  Looker40SDK,
+  purge_artifacts,
+} from '@looker/sdk'
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
 import type { IRowModel } from './RowModel'
 import { APP_JSON, noDate, stringer } from './RowModel'
@@ -35,15 +40,19 @@ import { WhollyArtifact } from './WhollyArtifact'
 import type { ITestRowProps } from './RowModel.spec'
 import { TestRow, testRowObject } from './RowModel.spec'
 
-const homeToRoost = '../../../../'
+const homeToRoost = '../../../'
 
-export const getRootPath = () => path.join(__dirname, homeToRoost)
-export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+const rootPath = path.join(__dirname, homeToRoost)
+const rootFile = (fileName = '') => path.join(rootPath, fileName)
 const settings = new NodeSettingsIniFile(
   environmentPrefix,
   rootFile('looker.ini'),
   'Looker'
 )
+
+const config = settings.readConfig()
+// secret agent tag to allow artifact API calls
+settings.agentTag = config.hallpass
 const session = new NodeSession(settings)
 const sdk = new Looker40SDK(session)
 
@@ -338,22 +347,49 @@ describe('WhollyArtifact', () => {
   })
 
   describe('artifact store', () => {
-    const createSheet = async (data: TestSheet) => {
-      const doc = await sheets.index()
-      sheet = new TestSheet(sdk, 'test', doc.tabs.test)
+    /**
+     * This function only works after purge() is called
+     *
+     * It updates the rows of the existing `sheet` variable
+     *
+     * @param data mock test rows to create
+     */
+    const createData = async (data: TestSheet) => {
+      sheet = new TestSheet(sdk, 'test', testTable)
       sheet.rows = data.rows
       sheet.rows.forEach((r) => {
-        r._row = 0
+        r.$artifact.version = 0
         r.setCreate()
       })
       return await sheet.batchUpdate()
     }
 
+    /**
+     * If the test namespace exists, this routine clears it
+     */
+    const purge = async () => {
+      const meta = new TestRow()
+      const ns = meta.namespace()
+      try {
+        const spaces = await sdk.ok(artifact_namespaces(sdk, {}))
+        const cruft = spaces.find((s) => s.namespace === ns && s.count > 0)
+        if (cruft) {
+          await sdk.ok(purge_artifacts(sdk, ns))
+        }
+      } catch (e: any) {
+        console.error({ e })
+      }
+    }
+
+    beforeEach(async () => {
+      await purge()
+    })
+
     test(
       'creates all rows',
       async () => {
         const data = mockSheet()
-        await createSheet(data)
+        await createData(data)
         expect(sheet.rows).toHaveLength(data.rows.length)
         sheet.rows.forEach((r, index) => {
           expect(r._id).toEqual(data.rows[index]._id)
@@ -367,15 +403,13 @@ describe('WhollyArtifact', () => {
     test(
       'updates all rows',
       async () => {
-        const doc = await sheets.index()
-        sheet = new TestSheet(sheets, 'test', doc.tabs.test)
         const data = mockSheet()
-        if (sheet.rows.length === 0) await createSheet(data)
+        await createData(data)
         sheet.rows.forEach((r, index) => {
           r.name = `u ${index}`
           r.setUpdate()
         })
-        const response = await sheet.batchUpdate()
+        const response = (await sheet.batchUpdate()) as TestRow[]
         expect(response).toHaveLength(sheet.rows.length)
         sheet.rows.forEach((r, index) => {
           expect(r.name).toEqual(`u ${index}`)
@@ -388,10 +422,8 @@ describe('WhollyArtifact', () => {
     test(
       'deletes all rows',
       async () => {
-        const doc = await sheets.index()
-        sheet = new TestSheet(sheets, 'test', doc.tabs.test)
         const data = mockSheet()
-        if (sheet.rows.length === 0) await createSheet(data)
+        await createData(data)
         expect(sheet.rows.length).toBeGreaterThan(0)
         sheet.rows.forEach((r) => r.setDelete())
         const delta = sheet.getDelta()

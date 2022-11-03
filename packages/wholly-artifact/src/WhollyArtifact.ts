@@ -600,24 +600,19 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
 
   async createUpdateBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
     if (items.length < 1) return Promise.resolve(this.rows)
+    const namespace = items[0].namespace()
     const arts: Partial<IArtifact>[] = items.map((i) => i.toArtifact())
-    const namespace = arts[0].namespace ?? ''
-    if (arts.some((a) => a.namespace !== namespace)) {
-      throw new LookerSDKError(
-        `All rows in the ${namespace} collection must have the same namespace`
-      )
-    }
     /** This will throw an error if the request fails */
     const result = await this.sdk.ok(
       update_artifacts(this.sdk, namespace, arts as IUpdateArtifact[])
     )
-    result.forEach((r) => (this.index[r[this.keyColumn]] = new T(r)))
+    result.forEach((r) => (this.index[r[this.keyColumn]] = this.typeRow(r)))
     return Promise.resolve(this.rows)
   }
 
   async deleteBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
     if (items.length < 1) return Promise.resolve(this.rows)
-    const namespace = items[0].toArtifact().namespace ?? ''
+    const namespace = items[0].namespace()
     const keys = items.map((r) => r[this.keyColumn])
     await this.sdk.ok(delete_artifact(this.sdk, namespace, keys.join()))
     // Remove deleted items from the collections
