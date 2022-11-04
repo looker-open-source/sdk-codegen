@@ -180,8 +180,17 @@ export interface IRowModel extends IRowModelProps {
   /** Namespace of artifact storage bucket to use for this collection  */
   namespace(): string
 
-  /** Prefix (table name, basically) to use for artifact key generation */
-  prefix(): string
+  /**
+   * Prefix (table name, basically) to use for artifact key generation.
+   * Based on the object constructor. No need to override, usually.
+   */
+  tableName(): string
+
+  /**
+   * Combines prefix() with a UUID to create a filterable key pattern
+   * makey makey!
+   */
+  makey(): string
 }
 
 export abstract class RowModel<T extends IRowModel> implements IRowModel {
@@ -204,7 +213,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   isNew() {
-    return this.$artifact.version < 1
+    return this?.$artifact?.version < 1
   }
 
   isStored() {
@@ -284,13 +293,12 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    * When using artifact collections like data tables, artifact key values are intended to be hidden from the UI.
    * This prefix is purely used for making it feasible to query an artifact collection by its prefix key value
    */
-  private prefix() {
+  tableName() {
     return this.constructor.name
   }
 
-  /** makey makey */
-  private makey() {
-    return `${this.prefix()}:${uuidv4()}`
+  makey() {
+    return `${this.tableName()}:${uuidv4()}`
   }
 
   get key() {
@@ -299,6 +307,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   set key(value) {
     this._id = value
+    this.$artifact.key = value
   }
 
   private oops(message: string) {
@@ -455,7 +464,9 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    */
   private storageValues() {
     const result = {}
-    const keys = this.displayHeader()
+    // TODO after migrating from sheets, use `key` as this.keyColumn rather than `_id` and use displayHeader()
+    // const keys = this.displayHeader()
+    const keys = this.header()
     for (const key of keys) {
       result[key] = this[key]
     }

@@ -103,8 +103,17 @@ export class TypedRows<T> {
 export interface IWhollyArtifact<T extends IRowModel, P> {
   /** Initialized REST-based GSheets SDK */
   sdk: ILooker40SDK
-  /** Namespace prefix of this collection. */
-  name: string
+
+  /** Namespace of this collection. Retrieved from IRowModel descendant */
+  namespace: string
+
+  /**
+   * Name of this artifact "table". Used for table-level processing of the artifacts in a namespace.
+   * Retrieved from IRowModel descendant
+   */
+  tableName: string
+
+  /**
   /**
    * Header column names for reading from/writing to the sheet.
    * The order of the column names **must** match the order of the columns in the sheet.
@@ -300,21 +309,36 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   implements IWhollyArtifact<T, P>
 {
   index: Record<string, T> = {}
+  namespace = ''
+  tableName = ''
 
   constructor(
     public readonly sdk: ILooker40SDK,
-    /** name of the tab in the GSheet document */
-    public readonly name: string,
     public readonly table: ITabTable,
     public readonly keyColumn: string = '_id' // TODO change to `key`
   ) {
     super([])
     this.loadRows(table.rows)
+    const meta = this.typeRow()
+    this.namespace = meta.namespace()
+    this.tableName = meta.tableName()
   }
 
   loadRows<T extends IRowModel>(rows: SheetValues): T[] {
     this.rows = this.typeRows(rows)
     this.checkHeader()
+    this.createIndex()
+    return this.rows as unknown as T[]
+  }
+
+  async refresh<T extends IRowModel>(): Promise<T[]> {
+    const values = await this.sdk.ok(
+      search_artifacts(this.sdk, {
+        namespace: this.namespace,
+        key: `${this.tableName}:%`,
+      })
+    )
+    this.rows = this.typeRows(values)
     this.createIndex()
     return this.rows as unknown as T[]
   }
@@ -360,7 +384,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     const tableHeader = this.table.header.join()
     if (tableHeader !== rowHeader)
       throw new LookerSDKError(
-        `Expected ${this.name} header to be ${rowHeader} not ${tableHeader}`
+        `Expected ${this.tableName} header to be ${rowHeader} not ${tableHeader}`
       )
     return true
   }
@@ -400,7 +424,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     switch (model.$action) {
       case RowAction.Delete: {
         await this.sdk.ok(
-          this.sdk.delete_artifact(this.name, model[this.keyColumn])
+          this.sdk.delete_artifact(this.namespace, model[this.keyColumn])
         )
         return model
       }
@@ -417,14 +441,14 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   checkId<T extends IRowModel>(model: T) {
     if (!model[this.keyColumn])
       throw new LookerSDKError(
-        `"${this.keyColumn}" must be assigned for ${this.name} row ${model._row}`
+        `"${this.keyColumn}" must be assigned for ${this.tableName} row ${model._row}`
       )
   }
 
   async create<T extends IRowModel>(model: T): Promise<T> {
     if (model._row > 0)
       throw new LookerSDKError(
-        `create needs ${this.name} "${
+        `create needs ${this.tableName} "${
           model[this.keyColumn]
         }" row to be < 1, not ${model._row}`
       )
@@ -437,7 +461,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   async update<T extends IRowModel>(model: T, _force = false): Promise<T> {
     if (!model._row)
       throw new LookerSDKError(
-        `${this.name} "${model[this.keyColumn]}" row must be > 0 to update`
+        `${this.tableName} "${model[this.keyColumn]}" row must be > 0 to update`
       )
 
     model.prepare()
@@ -481,16 +505,17 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   }
 
   async checkOutdated<T extends IRowModel>(model: T, source?: T) {
-    if (model._row < 1) return false
+    if (model[rowPosition] < 1) return false
     const errors: string[] = []
     if (!source) {
       const art = await this.sdk.ok(
         artifact(this.sdk, {
-          namespace: this.namespace(),
+          namespace: this.namespace,
           key: model[this.keyColumn],
         })
       )
-      source = this.typeRow(art)
+      // artifact returns an array, so get the one row this should be
+      if (art.length === 1) source = this.typeRow(art[0]) as unknown as T
     }
     if (!source) {
       errors.push(`Row not found`)
@@ -503,29 +528,11 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     }
     if (errors.length > 0)
       throw new LookerSDKError(
-        `${this.name} row ${
+        `${this.tableName} row ${
           model[this.keyColumn]
         } is outdated: ${errors.join()}`
       )
     return false
-  }
-
-  namespace<T extends IRowModel>() {
-    return (this.typeRow() as T).namespace()
-  }
-
-  async refresh<T extends IRowModel>(): Promise<T[]> {
-    const meta = this.typeRow()
-    const values = await this.sdk.ok(
-      search_artifacts(this.sdk, {
-        namespace: meta.namespace(),
-        key: `${meta.prefix()}:%`,
-      })
-    )
-    const rows = values.map((v) => new T(v)) as unknown as T[]
-    this.rows = rows
-    this.createIndex()
-    return rows
   }
 
   fromObject<T extends IRowModel>(obj: P[]): T[] {
@@ -546,7 +553,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
 
     await this.createUpdateBatch(updates)
     await this.deleteBatch(deletes)
-    return this.rows
+    return this.rows as unknown as T[]
   }
 
   getDelta<T extends IRowModel>(): IRowDelta<T> {
@@ -599,24 +606,44 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   }
 
   async createUpdateBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
-    if (items.length < 1) return Promise.resolve(this.rows)
+    if (items.length < 1) return Promise.resolve(this.rows as unknown as T[])
     const namespace = items[0].namespace()
     const arts: Partial<IArtifact>[] = items.map((i) => i.toArtifact())
     /** This will throw an error if the request fails */
     const result = await this.sdk.ok(
       update_artifacts(this.sdk, namespace, arts as IUpdateArtifact[])
     )
-    result.forEach((r) => (this.index[r[this.keyColumn]] = this.typeRow(r)))
-    return Promise.resolve(this.rows)
+    result.forEach((r) => {
+      const row: T = this.typeRow(r)
+      const key = row[this.keyColumn]
+      this.index[key] = row
+    })
+    this.updateRowsFromIndex()
+    return Promise.resolve(this.rows as unknown as T[])
+  }
+
+  /**
+   * Repopulates the row collection based exclusively on the values in the index
+   * @private
+   */
+  private updateRowsFromIndex<T extends IRowModel>(): T[] {
+    const result: any[] = []
+    Object.entries(this.index).forEach(([_key, row], index) => {
+      row[rowPosition] = index + 1
+      result.push(row)
+    })
+    this.rows = result as unknown as T[]
+    return this.rows as unknown as T[]
   }
 
   async deleteBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
-    if (items.length < 1) return Promise.resolve(this.rows)
+    if (items.length < 1) return Promise.resolve(this.rows as unknown as T[])
     const namespace = items[0].namespace()
     const keys = items.map((r) => r[this.keyColumn])
     await this.sdk.ok(delete_artifact(this.sdk, namespace, keys.join()))
     // Remove deleted items from the collections
     keys.forEach((k) => delete this.index[k])
-    return Promise.resolve(this.rows)
+    this.updateRowsFromIndex()
+    return Promise.resolve(this.rows as unknown as T[])
   }
 }

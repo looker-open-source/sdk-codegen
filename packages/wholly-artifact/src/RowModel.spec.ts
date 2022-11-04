@@ -182,7 +182,7 @@ describe('RowModel', () => {
 
     test('assigns with fromArtifact and toArtifact', () => {
       const actual = new TestRow()
-      actual.fromArtifact(testArtifactObject as IArtifact)
+      actual.fromArtifact(testArtifactObject as unknown as Partial<IArtifact>)
       expect(actual._row).toEqual(2)
       expect(actual._id).toEqual('TestRow:1')
       expect(actual.key).toEqual(actual._id)

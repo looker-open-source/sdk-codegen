@@ -33,6 +33,7 @@ import {
   purge_artifacts,
 } from '@looker/sdk'
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
+import cloneDeep from 'lodash/cloneDeep'
 import type { IRowModel } from './RowModel'
 import { APP_JSON, noDate, stringer } from './RowModel'
 import type { ITabTable } from './WhollyArtifact'
@@ -103,7 +104,14 @@ const emptyTable: ITabTable = {
 }
 
 const testSDK = {} as ILooker40SDK
-const mockSheet = () => new TestSheet(testSDK, 'test', testTable)
+const mockSheet = () => new TestSheet(testSDK, testTable)
+const keySheet = () => {
+  const meta = new TestRow()
+  const data = cloneDeep(testTable)
+  data.rows.forEach((r) => (r._id = meta.makey()))
+  return new TestSheet(testSDK, testTable)
+}
+
 let sheet = mockSheet()
 
 describe('WhollyArtifact', () => {
@@ -197,7 +205,7 @@ describe('WhollyArtifact', () => {
   describe('object conversion', () => {
     test('fromObject and toObject', () => {
       const obj = sheet.toObject()
-      const sheet2 = new TestSheet(testSDK, 'test2', emptyTable)
+      const sheet2 = new TestSheet(testSDK, emptyTable)
       const rows2 = sheet2.fromObject(obj)
       expect(rows2).toEqual(sheet.rows)
     })
@@ -355,8 +363,10 @@ describe('WhollyArtifact', () => {
      * @param data mock test rows to create
      */
     const createData = async (data: TestSheet) => {
-      sheet = new TestSheet(sdk, 'test', testTable)
-      sheet.rows = data.rows
+      sheet = new TestSheet(sdk, {
+        header: testRow.header(),
+        rows: data.rows as IRowModel[],
+      })
       sheet.rows.forEach((r) => {
         r.$artifact.version = 0
         r.setCreate()
@@ -370,69 +380,145 @@ describe('WhollyArtifact', () => {
     const purge = async () => {
       const meta = new TestRow()
       const ns = meta.namespace()
-      try {
-        const spaces = await sdk.ok(artifact_namespaces(sdk, {}))
-        const cruft = spaces.find((s) => s.namespace === ns && s.count > 0)
-        if (cruft) {
-          await sdk.ok(purge_artifacts(sdk, ns))
-        }
-      } catch (e: any) {
-        console.error({ e })
+      const spaces = await sdk.ok(artifact_namespaces(sdk, {}))
+      const cruft = spaces.find((s) => s.namespace === ns && s.count > 0)
+      if (cruft) {
+        await sdk.ok(purge_artifacts(sdk, ns))
       }
+      sheet.rows = []
+      sheet.index = {}
     }
 
     beforeEach(async () => {
       await purge()
     })
 
-    test(
-      'creates all rows',
-      async () => {
-        const data = mockSheet()
-        await createData(data)
-        expect(sheet.rows).toHaveLength(data.rows.length)
-        sheet.rows.forEach((r, index) => {
-          expect(r._id).toEqual(data.rows[index]._id)
-          expect(r._updated).not.toEqual(noDate)
-          expect(r.score).toBeDefined()
-        })
-      },
-      wait2Mins
-    )
+    describe('batches', () => {
+      test(
+        'creates all rows',
+        async () => {
+          const data = mockSheet()
+          await createData(data)
+          expect(sheet.rows).toHaveLength(data.rows.length)
+          sheet.rows.forEach((r, index) => {
+            expect(r._id).toEqual(data.rows[index]._id)
+            expect(r._updated).not.toEqual(noDate)
+            expect(r.score).toBeDefined()
+          })
+        },
+        wait2Mins
+      )
 
-    test(
-      'updates all rows',
-      async () => {
-        const data = mockSheet()
-        await createData(data)
-        sheet.rows.forEach((r, index) => {
-          r.name = `u ${index}`
-          r.setUpdate()
-        })
-        const response = (await sheet.batchUpdate()) as TestRow[]
-        expect(response).toHaveLength(sheet.rows.length)
-        sheet.rows.forEach((r, index) => {
-          expect(r.name).toEqual(`u ${index}`)
-          expect(response[index].name).toEqual(`u ${index}`)
-        })
-      },
-      wait2Mins
-    )
+      test(
+        'updates all rows',
+        async () => {
+          const data = mockSheet()
+          await createData(data)
+          sheet.rows.forEach((r, index) => {
+            r.name = `u ${index}`
+            r.setUpdate()
+          })
+          const response = (await sheet.batchUpdate()) as unknown as TestRow[]
+          expect(response).toHaveLength(sheet.rows.length)
+          sheet.rows.forEach((r, index) => {
+            expect(r.name).toEqual(`u ${index}`)
+            expect(response[index].name).toEqual(`u ${index}`)
+          })
+        },
+        wait2Mins
+      )
 
-    test(
-      'deletes all rows',
-      async () => {
+      test(
+        'deletes all rows',
+        async () => {
+          const data = mockSheet()
+          await createData(data)
+          expect(sheet.rows.length).toBeGreaterThan(0)
+          sheet.rows.forEach((r) => r.setDelete())
+          const delta = sheet.getDelta()
+          expect(delta.deletes).toHaveLength(sheet.rows.length)
+          const response = await sheet.batchUpdate()
+          expect(response).toHaveLength(0)
+          expect(sheet.rows).toHaveLength(0)
+        },
+        wait2Mins
+      )
+
+      test(
+        'refreshes all rows',
+        async () => {
+          const data = keySheet()
+          data.rows.forEach((r) => (r.key = r.makey()))
+          await createData(data)
+          expect(sheet.rows).toHaveLength(data.rows.length)
+          sheet.rows.forEach((r, index) => {
+            expect(r._id).toEqual(data.rows[index]._id)
+            expect(r._updated).not.toEqual(noDate)
+            expect(r.score).toBeDefined()
+          })
+          await sheet.refresh()
+          expect(sheet.rows).toHaveLength(data.rows.length)
+        },
+        wait2Mins
+      )
+    })
+
+    describe('CRUD', () => {
+      test('create', async () => {
         const data = mockSheet()
         await createData(data)
-        expect(sheet.rows.length).toBeGreaterThan(0)
-        sheet.rows.forEach((r) => r.setDelete())
-        const delta = sheet.getDelta()
-        expect(delta.deletes).toHaveLength(sheet.rows.length)
-        const response = await sheet.batchUpdate()
-        expect(response).toHaveLength(0)
-        expect(sheet.rows).toHaveLength(0)
-      },
-      wait2Mins
-    )
+        const row = new TestRow({
+          testRow2Object,
+          ...{ _id: 'created', name: 'new row' },
+        })
+        await sheet.create(row)
+        expect(sheet.index[row._id]).toBeDefined()
+        const actual = sheet.find(row._id)
+        expect(actual).toBeDefined()
+        if (actual) {
+          expect(actual.key).toEqual(row._id)
+          expect(actual.name).toEqual('new row')
+          expect(actual.$artifact.version).toEqual(1)
+        }
+      })
+
+      test('read', async () => {
+        const data = mockSheet()
+        await createData(data)
+        const actual = sheet.find('5')
+        expect(actual).toBeDefined()
+        expect(actual?._id).toEqual('5')
+      })
+
+      test('update', async () => {
+        const data = mockSheet()
+        await createData(data)
+        const key = '5'
+        const actual = sheet.find(key)
+        expect(actual).toBeDefined()
+        if (actual) {
+          expect(actual._id).toEqual(key)
+          const name = `updated ${actual.name}`
+          actual.name = name
+          await sheet.update(actual)
+          const updated = sheet.find(key)
+          expect(updated?.name).toEqual(name)
+        }
+      })
+
+      test('delete', async () => {
+        const data = mockSheet()
+        await createData(data)
+        const key = '5'
+        const actual = sheet.find(key)
+        expect(actual).toBeDefined()
+        if (actual) {
+          expect(actual._id).toEqual(key)
+          await sheet.delete(actual)
+          const updated = sheet.find(key)
+          expect(updated).toBeUndefined()
+        }
+      })
+    })
   })
 })
