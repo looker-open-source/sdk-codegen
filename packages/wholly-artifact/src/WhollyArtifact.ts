@@ -616,7 +616,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     result.forEach((r) => {
       const row: T = this.typeRow(r)
       const key = row[this.keyColumn]
-      this.index[key] = row
+      this.index[key] = row as any // TODO why is this the only thing that works?
     })
     this.updateRowsFromIndex()
     return Promise.resolve(this.rows as unknown as T[])
@@ -632,7 +632,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
       row[rowPosition] = index + 1
       result.push(row)
     })
-    this.rows = result as unknown as T[]
+    this.rows = result as any[] // TODO why is this the only thing that works?
     return this.rows as unknown as T[]
   }
 

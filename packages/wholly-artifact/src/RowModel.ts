@@ -200,8 +200,6 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   $artifact: Partial<IArtifact> = {
     version: 0,
-    created_by_userid: '',
-    updated_by_userid: '',
   }
 
   constructor(values?: any) {
@@ -213,7 +211,8 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   isNew() {
-    return this?.$artifact?.version < 1
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.$artifact.version! < 1
   }
 
   isStored() {
