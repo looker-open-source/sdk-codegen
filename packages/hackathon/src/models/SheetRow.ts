@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { IRowModel } from '@looker/wholly-sheet'
-import { RowModel } from '@looker/wholly-sheet'
+import type { IRowModel } from '@looker/wholly-artifact'
+import { RowModel } from '@looker/wholly-artifact'
 import type { IHacker } from './Hacker'
 
 export interface ISheetRow extends IRowModel {

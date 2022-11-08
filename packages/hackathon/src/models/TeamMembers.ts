@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { SheetError, WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { SheetData } from './SheetData'
@@ -60,7 +62,7 @@ export class TeamMember extends SheetRow<ITeamMember> {
 
   get $name() {
     if (!this.$user) {
-      throw new SheetError(`$user is not assigned for user_id ${this.user_id}`)
+      throw new Error(`$user is not assigned for user_id ${this.user_id}`)
     }
     return `${this.$user.first_name} ${this.$user.last_name}`
   }
@@ -68,18 +70,18 @@ export class TeamMember extends SheetRow<ITeamMember> {
   toObject(): ITeamMemberProps {
     return super.toObject() as ITeamMemberProps
   }
+
+  namespace() {
+    return 'team_members'
+  }
 }
 
-export class TeamMembers extends WhollySheet<TeamMember, ITeamMemberProps> {
+export class TeamMembers extends WhollyArtifact<TeamMember, ITeamMemberProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(
-      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
-      'team_members',
-      table
-    )
+    super(getCore40SDK(), table)
   }
 
   typeRow<TeamMember>(values?: any) {

@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { Project } from './Projects'
@@ -144,14 +146,18 @@ export class Judging extends SheetRow<IJudging> {
     this.load()
     return super.toObject() as IJudgingProps
   }
+
+  namespace() {
+    return 'judgings'
+  }
 }
 
-export class Judgings extends WhollySheet<Judging, IJudgingProps> {
+export class Judgings extends WhollyArtifact<Judging, IJudgingProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'judgings', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<Judging>(values?: any) {

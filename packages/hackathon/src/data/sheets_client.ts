@@ -26,7 +26,7 @@
 import omit from 'lodash/omit'
 import type { ValidationMessages } from '@looker/components'
 import { DefaultSettings } from '@looker/sdk-rtl'
-import type { ITabTable } from '@looker/wholly-sheet'
+import type { ITabTable } from '@looker/wholly-artifact'
 import { SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
@@ -48,6 +48,9 @@ import {
   Hackers,
   sheetHeader,
   Judging,
+  Hackathon,
+  Registration,
+  User,
 } from '../models'
 import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 import type {
@@ -306,12 +309,48 @@ class SheetsClient {
   ): Promise<IRegistrationProps> {
     const hackathon = await this.getSheetHackathon(hackathonId)
     if (hackathon) {
-      const data = await this.getSheetData()
-      const registration = await data.registerUser(hackathon, user)
+      const registration = await this.registerUser1(hackathon, user)
       return registration.toObject()
     } else {
       throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
+  }
+
+  async registerUser1(
+    hackathon: Hackathon,
+    hacker: Hacker
+  ): Promise<Registration> {
+    const data = await this.getSheetData()
+    let reg = data.registrations.rows.find(
+      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
+    )
+    let user = data.users.find(hacker.id)
+    if (!user) {
+      /** create the user tab row for this hacker */
+      user = new User({
+        _id: hacker.id,
+        first_name: hacker.firstName,
+        last_name: hacker.lastName,
+      })
+      await data.users.save(user)
+    } else {
+      if (
+        user.first_name !== hacker.firstName ||
+        user.last_name !== hacker.lastName
+      ) {
+        // Refresh the user's name
+        user.first_name = hacker.firstName
+        user.last_name = hacker.lastName
+        await data.users.save(user)
+      }
+    }
+    if (reg) {
+      hacker.registration = reg
+      return reg
+    }
+    reg = new Registration({ _user_id: hacker.id, hackathon_id: hackathon._id })
+    reg = await data.registrations.save(reg)
+    return reg
   }
 
   async getTechnologies(): Promise<ITechnologyProps[]> {

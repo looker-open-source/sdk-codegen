@@ -29,9 +29,9 @@ import type {
   IRowModelProps,
   ITabTable,
   RowValidationErrors,
-  SheetSDK,
-} from '@looker/wholly-sheet'
-import { noDate, SheetError, WhollySheet } from '@looker/wholly-sheet'
+} from '@looker/wholly-artifact'
+import { noDate, WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
 
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
@@ -91,6 +91,10 @@ export class Project extends SheetRow<Project> {
     // IMPORTANT: assign must be called after the super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but that pattern hasn't been found
     this.assign(values)
+  }
+
+  namespace() {
+    return 'projects'
   }
 
   get $team_count() {
@@ -155,7 +159,7 @@ export class Project extends SheetRow<Project> {
     super.prepare()
     const errors = this.validate()
     if (errors)
-      throw new SheetError(
+      throw new Error(
         Object.values(errors)
           .map((v) => v.message)
           .join()
@@ -231,9 +235,9 @@ export class Project extends SheetRow<Project> {
     const data = this.data()
     const hackathon = data.hackathons?.find(this._hackathon_id)
     if (!hackathon)
-      throw new SheetError(`Hackathon ${this._hackathon_id} was not found`)
+      throw new Error(`Hackathon ${this._hackathon_id} was not found`)
     if (this.$team.length >= hackathon.max_team_size)
-      throw new SheetError(
+      throw new Error(
         `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
       )
     let member = this.findMember(hacker)
@@ -258,7 +262,7 @@ export class Project extends SheetRow<Project> {
   }
 
   async addJudge(hacker: Hacker) {
-    if (!hacker.canJudge) throw new SheetError(`${hacker.name} is not a judge`)
+    if (!hacker.canJudge) throw new Error(`${hacker.name} is not a judge`)
     if (this.findJudging(hacker)) return this
     const judging = new Judging({ user_id: hacker.id, project_id: this._id })
     await this.data().judgings.save(judging)
@@ -275,12 +279,12 @@ export class Project extends SheetRow<Project> {
   }
 }
 
-export class Projects extends WhollySheet<Project, IProjectProps> {
+export class Projects extends WhollyArtifact<Project, IProjectProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<Project>(values?: any) {

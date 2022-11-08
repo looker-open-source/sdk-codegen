@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { SheetData } from './SheetData'
@@ -65,14 +67,18 @@ export class User extends SheetRow<IUser> {
   toObject(): IUserProps {
     return super.toObject() as IUserProps
   }
+
+  namespace() {
+    return 'users'
+  }
 }
 
-export class Users extends WhollySheet<User, IUserProps> {
+export class Users extends WhollyArtifact<User, IUserProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'users', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<User>(values?: any) {

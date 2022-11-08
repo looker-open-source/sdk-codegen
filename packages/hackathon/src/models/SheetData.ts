@@ -55,47 +55,6 @@ export class SheetData {
     return this.hackathons.currentHackathon
   }
 
-  /**
-   * Optionally create and get registration and user record for user in Hackathon
-   * @param hackathon to register
-   * @param hacker to register
-   */
-  async registerUser(
-    hackathon: Hackathon,
-    hacker: Hacker
-  ): Promise<Registration> {
-    let reg = this.registrations.rows.find(
-      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
-    )
-    let user = this.users.find(hacker.id)
-    if (!user) {
-      /** create the user tab row for this hacker */
-      user = new User({
-        _id: hacker.id,
-        first_name: hacker.firstName,
-        last_name: hacker.lastName,
-      })
-      await this.users.save(user)
-    } else {
-      if (
-        user.first_name !== hacker.firstName ||
-        user.last_name !== hacker.lastName
-      ) {
-        // Refresh the user's name
-        user.first_name = hacker.firstName
-        user.last_name = hacker.lastName
-        await this.users.save(user)
-      }
-    }
-    if (reg) {
-      hacker.registration = reg
-      return reg
-    }
-    reg = new Registration({ _user_id: hacker.id, hackathon_id: hackathon._id })
-    reg = await this.registrations.save(reg)
-    return reg
-  }
-
   get sheet() {
     return this._sheet
   }
@@ -128,12 +87,6 @@ export class SheetData {
     this.projects = new Projects(this, data.tabs.projects)
     this.projects.rows.forEach((p) => p.load(this))
     this.judgings.rows.forEach((j) => j.load(this))
-    return this
-  }
-
-  async refresh() {
-    const data = await this.sheetSDK.index()
-    this.load(data)
     return this
   }
 }
