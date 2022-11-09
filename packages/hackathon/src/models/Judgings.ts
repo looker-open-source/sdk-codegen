@@ -90,6 +90,7 @@ export class Judging extends SheetRow<IJudging> {
   }
 
   private data() {
+    console.log('CALLED?')
     return getActiveSheet()
   }
 
@@ -145,10 +146,6 @@ export class Judging extends SheetRow<IJudging> {
   toObject(): IJudgingProps {
     this.load()
     return super.toObject() as IJudgingProps
-  }
-
-  namespace() {
-    return 'judgings'
   }
 }
 

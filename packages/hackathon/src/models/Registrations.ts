@@ -67,10 +67,6 @@ export class Registration extends SheetRow<IRegistration> {
   toObject(): IRegistrationProps {
     return super.toObject() as IRegistrationProps
   }
-
-  namespace() {
-    return 'registrations'
-  }
 }
 
 export class Registrations extends WhollyArtifact<

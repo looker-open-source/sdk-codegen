@@ -67,10 +67,6 @@ export class User extends SheetRow<IUser> {
   toObject(): IUserProps {
     return super.toObject() as IUserProps
   }
-
-  namespace() {
-    return 'users'
-  }
 }
 
 export class Users extends WhollyArtifact<User, IUserProps> {

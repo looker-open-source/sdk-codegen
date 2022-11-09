@@ -75,10 +75,6 @@ export class Hackathon extends SheetRow<IHackathon> {
   toObject(): IHackathonProps {
     return super.toObject() as IHackathonProps
   }
-
-  namespace() {
-    return 'hackathons'
-  }
 }
 
 export class Hackathons extends WhollyArtifact<Hackathon, IHackathonProps> {

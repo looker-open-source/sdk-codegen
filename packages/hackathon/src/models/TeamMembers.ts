@@ -70,10 +70,6 @@ export class TeamMember extends SheetRow<ITeamMember> {
   toObject(): ITeamMemberProps {
     return super.toObject() as ITeamMemberProps
   }
-
-  namespace() {
-    return 'team_members'
-  }
 }
 
 export class TeamMembers extends WhollyArtifact<TeamMember, ITeamMemberProps> {

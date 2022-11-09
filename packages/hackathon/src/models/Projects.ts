@@ -93,10 +93,6 @@ export class Project extends SheetRow<Project> {
     this.assign(values)
   }
 
-  namespace() {
-    return 'projects'
-  }
-
   get $team_count() {
     return `${this.$team.length}/${this.$hackathon?.max_team_size || 5}`
   }

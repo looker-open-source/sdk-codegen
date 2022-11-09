@@ -30,8 +30,7 @@ import type { ITabTable } from '@looker/wholly-artifact'
 import { SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
-import type { SheetData } from '../models/SheetData'
-import { initActiveSheet } from '../models/SheetData'
+import { initActiveSheet, SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
 import type {
   IProjectProps,
@@ -493,22 +492,9 @@ class SheetsClient {
 
   private async getSheetData(): Promise<SheetData> {
     if (this.sheetData) return this.sheetData
-    // Values required
-    const extSDK = getExtensionSDK()
-    const tokenServerUrl =
-      (await extSDK.userAttributeGetItem('token_server_url')) || ''
-    const sheetId = (await extSDK.userAttributeGetItem('sheet_id')) || ''
-
-    const options = {
-      ...DefaultSettings(),
-      ...{ base_url: tokenServerUrl },
-    }
-
-    const transport = new ExtensionProxyTransport(extSDK, options)
-    const gSession = new GAuthSession(extSDK, options, transport)
-    const sheetSDK = new SheetSDK(gSession, sheetId)
-    const doc = await sheetSDK.index()
-    this.sheetData = initActiveSheet(sheetSDK, doc)
+    const sheetData = initActiveSheet(new SheetData())
+    await sheetData.init()
+    this.sheetData = sheetData
     return this.sheetData
   }
 

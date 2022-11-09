@@ -25,7 +25,7 @@
  */
 
 import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
-import { SheetError, TypedRows } from '@looker/wholly-sheet'
+import { TypedRows } from '@looker/wholly-artifact'
 import type { SheetData, Registration, Hackathon } from '.'
 
 export type UserPermission = 'delete' | 'create' | 'update'
@@ -250,7 +250,7 @@ export class Hackers extends TypedRows<Hacker> {
       this.sdk.search_groups({ name: groupName })
     )
     if (!groups || groups.length === 0)
-      throw new SheetError(`Group ${groupName} was not found`)
+      throw new Error(`Group ${groupName} was not found`)
     const group = groups[0]
     return await this.sdk.ok(
       this.sdk.search_users({

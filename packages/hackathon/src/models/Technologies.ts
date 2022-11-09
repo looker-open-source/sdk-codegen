@@ -52,10 +52,6 @@ export class Technology extends SheetRow<ITechnology> {
   toObject(): ITechnologyProps {
     return super.toObject() as ITechnologyProps
   }
-
-  namespace() {
-    return 'technologies'
-  }
 }
 
 export class Technologies extends WhollyArtifact<Technology, ITechnologyProps> {
