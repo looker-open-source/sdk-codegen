@@ -51,9 +51,6 @@ const settings = new NodeSettingsIniFile(
   'Looker'
 )
 
-const config = settings.readConfig()
-// secret agent tag to allow artifact API calls
-settings.agentTag = config.hallpass
 const session = new NodeSession(settings)
 const sdk = new Looker40SDK(session)
 
