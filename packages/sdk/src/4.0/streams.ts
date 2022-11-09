@@ -25,7 +25,7 @@
  */
 
 /**
- * 449 API methods
+ * 459 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -49,6 +49,9 @@ import type {
   IAlertPatch,
   IApiSession,
   IApiVersion,
+  IArtifact,
+  IArtifactNamespace,
+  IArtifactUsage,
   IBackupConfiguration,
   IBoard,
   IBoardItem,
@@ -167,6 +170,8 @@ import type {
   IRequestAllScheduledPlans,
   IRequestAllUserAttributes,
   IRequestAllUsers,
+  IRequestArtifact,
+  IRequestArtifactNamespaces,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
@@ -193,6 +198,7 @@ import type {
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
   IRequestSearchAlerts,
+  IRequestSearchArtifacts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -241,6 +247,7 @@ import type {
   ISupportAccessStatus,
   ITheme,
   ITimezone,
+  IUpdateArtifact,
   IUpdateFolder,
   IUser,
   IUserAttribute,
@@ -785,6 +792,296 @@ export class Looker40SDKStream extends APIMethods {
 
   //#endregion ApiAuth: API Authentication
 
+  //#region Artifact: Artifact Storage
+
+  /**
+   * Get the maximum configured size of the entire artifact store, and the currently used storage in bytes.
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * GET /artifact/usage -> IArtifactUsage
+   *
+   * @param callback streaming output function
+   * @param fields Comma-delimited names of fields to return in responses. Omit for all fields
+   * @param options one-time API call overrides
+   *
+   */
+  async artifact_usage(
+    callback: (readable: Readable) => Promise<IArtifactUsage>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IArtifactUsage>(
+      callback,
+      'GET',
+      '/artifact/usage',
+      { fields },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Get all artifact namespaces and the count of artifacts in each namespace
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * GET /artifact/namespaces -> IArtifactNamespace[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async artifact_namespaces(
+    callback: (readable: Readable) => Promise<IArtifactNamespace[]>,
+    request: IRequestArtifactNamespaces,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IArtifactNamespace[]>(
+      callback,
+      'GET',
+      '/artifact/namespaces',
+      { fields: request.fields, limit: request.limit, offset: request.offset },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Return the value of an artifact
+   *
+   * The MIME type for the API response is set to the `content_type` of the value
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * GET /artifact/{namespace}/value -> string
+   *
+   * @param callback streaming output function
+   * @param namespace Artifact storage namespace
+   * @param key Artifact storage key. Namespace + Key must be unique
+   * @param options one-time API call overrides
+   *
+   */
+  async artifact_value(
+    callback: (readable: Readable) => Promise<string>,
+    namespace: string,
+    key?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    namespace = encodeParam(namespace)
+    return this.authStream<string>(
+      callback,
+      'GET',
+      `/artifact/${namespace}/value`,
+      { key },
+      null,
+      options
+    )
+  }
+
+  /**
+   * Remove *all* artifacts from a namespace. Purged artifacts are permanently deleted
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * DELETE /artifact/{namespace}/purge -> void
+   *
+   * @param callback streaming output function
+   * @param namespace Artifact storage namespace
+   * @param options one-time API call overrides
+   *
+   */
+  async purge_artifacts(
+    callback: (readable: Readable) => Promise<void>,
+    namespace: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    namespace = encodeParam(namespace)
+    return this.authStream<void>(
+      callback,
+      'DELETE',
+      `/artifact/${namespace}/purge`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Search all key/value pairs in a namespace for matching criteria.
+   *
+   * Returns an array of artifacts matching the specified search criteria.
+   *
+   * Key search patterns use case-insensitive matching and can contain `%` and `_` as SQL LIKE pattern match wildcard expressions.
+   *
+   * The parameters `min_size` and `max_size` can be used individually or together.
+   *
+   * - `min_size` finds artifacts with sizes greater than or equal to its value
+   * - `max_size` finds artifacts with sizes less than or equal to its value
+   * - using both parameters restricts the minimum and maximum size range for artifacts
+   *
+   * **NOTE**: Artifacts are always returned in alphanumeric order by key.
+   *
+   * Get a **single artifact** by namespace and key with [`artifact`](#!/Artifact/artifact)
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * GET /artifact/{namespace}/search -> IArtifact[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestSearchArtifacts" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_artifacts(
+    callback: (readable: Readable) => Promise<IArtifact[]>,
+    request: IRequestSearchArtifacts,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.namespace = encodeParam(request.namespace)
+    return this.authStream<IArtifact[]>(
+      callback,
+      'GET',
+      `/artifact/${request.namespace}/search`,
+      {
+        fields: request.fields,
+        key: request.key,
+        user_ids: request.user_ids,
+        min_size: request.min_size,
+        max_size: request.max_size,
+        limit: request.limit,
+        offset: request.offset,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Get one or more artifacts
+   *
+   * Returns an array of artifacts matching the specified key value(s).
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * GET /artifact/{namespace} -> IArtifact[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestArtifact" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async artifact(
+    callback: (readable: Readable) => Promise<IArtifact[]>,
+    request: IRequestArtifact,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.namespace = encodeParam(request.namespace)
+    return this.authStream<IArtifact[]>(
+      callback,
+      'GET',
+      `/artifact/${request.namespace}`,
+      {
+        key: request.key,
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+      },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Delete one or more artifacts
+   *
+   * To avoid rate limiting on deletion requests, multiple artifacts can be deleted at the same time by using a comma-delimited list of artifact keys.
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * DELETE /artifact/{namespace} -> void
+   *
+   * @param callback streaming output function
+   * @param namespace Artifact storage namespace
+   * @param key Comma-delimited list of keys. Wildcards not allowed.
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_artifact(
+    callback: (readable: Readable) => Promise<void>,
+    namespace: string,
+    key: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    namespace = encodeParam(namespace)
+    return this.authStream<void>(
+      callback,
+      'DELETE',
+      `/artifact/${namespace}`,
+      { key },
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create or update one or more artifacts
+   *
+   * Only `key` and `value` are required to _create_ an artifact.
+   * To _update_ an artifact, its current `version` value must be provided.
+   *
+   * In the following example `body` payload, `one` and `two` are existing artifacts, and `three` is new:
+   *
+   * ```json
+   * [
+   *   { "key": "one", "value": "[ \"updating\", \"existing\", \"one\" ]", "version": 10, "content_type": "application/json" },
+   *   { "key": "two", "value": "updating existing two", "version": 20 },
+   *   { "key": "three", "value": "creating new three" },
+   * ]
+   * ```
+   *
+   * Notes for this body:
+   *
+   * - The `value` for `key` **one** is a JSON payload, so a `content_type` override is needed. This override must be done **every** time a JSON value is set.
+   * - The `version` values for **one** and **two** mean they have been saved 10 and 20 times, respectively.
+   * - If `version` is **not** provided for an existing artifact, the entire request will be refused and a `Bad Request` response will be sent.
+   * - If `version` is provided for an artifact, it is only used for helping to prevent inadvertent data overwrites. It cannot be used to **set** the version of an artifact. The Looker server controls `version`.
+   * - We suggest encoding binary values as base64. Because the MIME content type for base64 is detected as plain text, also provide `content_type` to correctly indicate the value's type for retrieval and client-side processing.
+   *
+   * Because artifacts are stored encrypted, the same value can be written multiple times (provided the correct `version` number is used). Looker does not examine any values stored in the artifact store, and only decrypts when sending artifacts back in an API response.
+   *
+   * **Note**: The artifact storage API can only be used by Looker-built extensions.
+   *
+   * PUT /artifacts/{namespace} -> IArtifact[]
+   *
+   * @param callback streaming output function
+   * @param namespace Artifact storage namespace
+   * @param body Partial<IUpdateArtifact[]>
+   * @param fields Comma-delimited names of fields to return in responses. Omit for all fields
+   * @param options one-time API call overrides
+   *
+   */
+  async update_artifacts(
+    callback: (readable: Readable) => Promise<IArtifact[]>,
+    namespace: string,
+    body: Partial<IUpdateArtifact[]>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    namespace = encodeParam(namespace)
+    return this.authStream<IArtifact[]>(
+      callback,
+      'PUT',
+      `/artifacts/${namespace}`,
+      { fields },
+      body,
+      options
+    )
+  }
+
+  //#endregion Artifact: Artifact Storage
+
   //#region Auth: Manage User Authentication Configuration
 
   /**
@@ -950,7 +1247,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Acquire a cookieless embed session.
    *
-   * The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+   * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
    * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
    * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
    * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
@@ -3152,6 +3449,31 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Looker Configuration Refresh
+   *
+   * This is an endpoint for manually calling refresh on Configuration manager.
+   *
+   * PUT /configuration_force_refresh -> any
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async configuration_force_refresh(
+    callback: (readable: Readable) => Promise<any>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<any>(
+      callback,
+      'PUT',
+      '/configuration_force_refresh',
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
    * ### Get the current status and content of custom welcome emails
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
@@ -3551,15 +3873,16 @@ export class Looker40SDKStream extends APIMethods {
    * ### Get Looker Settings
    *
    * Available settings are:
+   *  - allow_user_timezones
+   *  - custom_welcome_email
+   *  - data_connector_default_enabled
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - privatelabel_configuration
-   *  - custom_welcome_email
    *  - onboarding_enabled
+   *  - privatelabel_configuration
    *  - timezone
-   *  - allow_user_timezones
    *
    * GET /setting -> ISetting
    *
@@ -3587,15 +3910,16 @@ export class Looker40SDKStream extends APIMethods {
    * ### Configure Looker Settings
    *
    * Available settings are:
+   *  - allow_user_timezones
+   *  - custom_welcome_email
+   *  - data_connector_default_enabled
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - privatelabel_configuration
-   *  - custom_welcome_email
    *  - onboarding_enabled
+   *  - privatelabel_configuration
    *  - timezone
-   *  - allow_user_timezones
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *

@@ -25,7 +25,7 @@
  */
 
 /**
- * 320 API models: 239 Spec, 0 Request, 60 Write, 21 Enum
+ * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -239,6 +239,49 @@ data class ApiVersionElement (
     var full_version: String? = null,
     var status: String? = null,
     var swagger_url: String? = null
+) : Serializable
+
+/**
+ * @property key Key of value to store. Namespace + Key must be unique.
+ * @property value Value to store.
+ * @property content_type MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+ * @property version Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+ * @property namespace Artifact storage namespace. (read-only)
+ * @property created_at Timestamp when this artifact was created. (read-only)
+ * @property updated_at Timestamp when this artifact was updated. (read-only)
+ * @property value_size Size (in bytes) of the stored value. (read-only)
+ * @property created_by_userid User id of the artifact creator. (read-only)
+ * @property updated_by_userid User id of the artifact updater. (read-only)
+ */
+data class Artifact (
+    var key: String,
+    var value: String,
+    var content_type: String? = null,
+    var version: Long? = null,
+    var namespace: String,
+    var created_at: Date,
+    var updated_at: Date,
+    var value_size: Long,
+    var created_by_userid: String,
+    var updated_by_userid: String
+) : Serializable
+
+/**
+ * @property namespace Artifact storage namespace. (read-only)
+ * @property count The number of artifacts stored in the namespace. (read-only)
+ */
+data class ArtifactNamespace (
+    var namespace: String,
+    var count: Long
+) : Serializable
+
+/**
+ * @property max_size The configured maximum size in bytes of the entire artifact store. (read-only)
+ * @property usage The currently used storage size in bytes of the entire artifact store. (read-only)
+ */
+data class ArtifactUsage (
+    var max_size: Long,
+    var usage: Long
 ) : Serializable
 
 /**
@@ -1193,6 +1236,7 @@ data class CustomWelcomeEmail (
  * @property deleted_at Time that the Dashboard was 'soft' deleted. (read-only)
  * @property deleter_id Id of User that 'soft' deleted the dashboard. (read-only)
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
+ * @property enable_viz_full_screen Allow visualizations to be viewed in full screen mode
  * @property favorite_count Number of times favorited (read-only)
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
@@ -1243,6 +1287,7 @@ data class Dashboard (
     var deleted_at: Date? = null,
     var deleter_id: String? = null,
     var edit_uri: String? = null,
+    var enable_viz_full_screen: Boolean? = null,
     var favorite_count: Long? = null,
     var filters_bar_collapsed: Boolean? = null,
     var filters_location_top: Boolean? = null,
@@ -2006,6 +2051,7 @@ data class EmbedParams (
  * @property id Unique Id (read-only)
  * @property secret Secret for use with SSO embedding (read-only)
  * @property user_id Id of user who created this secret (read-only)
+ * @property secret_type Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
  */
 data class EmbedSecret (
     var algorithm: String? = null,
@@ -2013,7 +2059,8 @@ data class EmbedSecret (
     var enabled: Boolean? = null,
     var id: String? = null,
     var secret: String? = null,
-    var user_id: String? = null
+    var user_id: String? = null,
+    var secret_type: SecretType? = null
 ) : Serializable
 
 /**
@@ -4754,6 +4801,14 @@ data class SchemaTables (
 ) : Serializable
 
 /**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+enum class SecretType : Serializable {
+    SSO,
+    JWT
+}
+
+/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property ip_address IP address of user when this session was initiated (read-only)
@@ -4815,6 +4870,7 @@ data class SessionConfig (
  * @property onboarding_enabled Toggle onboarding on or off
  * @property timezone Change instance-wide default timezone
  * @property allow_user_timezones Toggle user-specific timezones on or off
+ * @property data_connector_default_enabled Toggle default future connectors on or off
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4825,7 +4881,8 @@ data class Setting (
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,
     var timezone: String? = null,
-    var allow_user_timezones: Boolean? = null
+    var allow_user_timezones: Boolean? = null,
+    var data_connector_default_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -5122,6 +5179,8 @@ data class Theme (
  * @property warn_button_color Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
  * @property tile_shadow Toggles the tile shadow (not supported)
+ * @property show_last_updated_indicator Toggle to show the dashboard last updated indicator. Defaults to true.
+ * @property show_reload_data_icon Toggle to show reload data icon/button. Defaults to true.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5140,7 +5199,9 @@ data class ThemeSettings (
     var title_color: String? = null,
     var warn_button_color: String? = null,
     var tile_title_alignment: String? = null,
-    var tile_shadow: Boolean? = null
+    var tile_shadow: Boolean? = null,
+    var show_last_updated_indicator: Boolean? = null,
+    var show_reload_data_icon: Boolean? = null
 ) : Serializable
 
 /**
@@ -5152,6 +5213,19 @@ data class Timezone (
     var value: String? = null,
     var label: String? = null,
     var group: String? = null
+) : Serializable
+
+/**
+ * @property key Key of value to store. Namespace + Key must be unique.
+ * @property value Value to store.
+ * @property content_type MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+ * @property version Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+ */
+data class UpdateArtifact (
+    var key: String,
+    var value: String,
+    var content_type: String? = null,
+    var version: Long? = null
 ) : Serializable
 
 /**
@@ -5746,6 +5820,7 @@ data class WriteCredentialsEmail (
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property enable_viz_full_screen Allow visualizations to be viewed in full screen mode
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
@@ -5772,6 +5847,7 @@ data class WriteDashboard (
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
+    var enable_viz_full_screen: Boolean? = null,
     var filters_bar_collapsed: Boolean? = null,
     var filters_location_top: Boolean? = null,
     var load_configuration: String? = null,
@@ -6051,10 +6127,12 @@ data class WriteDBConnectionOverride (
  *
  * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
  * @property enabled Is this secret currently enabled
+ * @property secret_type Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
  */
 data class WriteEmbedSecret (
     var algorithm: String? = null,
-    var enabled: Boolean? = null
+    var enabled: Boolean? = null,
+    var secret_type: SecretType? = null
 ) : Serializable
 
 /**
@@ -6763,6 +6841,7 @@ data class WriteSessionConfig (
  * @property onboarding_enabled Toggle onboarding on or off
  * @property timezone Change instance-wide default timezone
  * @property allow_user_timezones Toggle user-specific timezones on or off
+ * @property data_connector_default_enabled Toggle default future connectors on or off
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6773,7 +6852,8 @@ data class WriteSetting (
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,
     var timezone: String? = null,
-    var allow_user_timezones: Boolean? = null
+    var allow_user_timezones: Boolean? = null,
+    var data_connector_default_enabled: Boolean? = null
 ) : Serializable
 
 /**
