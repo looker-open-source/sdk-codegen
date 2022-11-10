@@ -25,7 +25,7 @@
  */
 
 /**
- * 458 API methods
+ * 459 API methods
  */
 
 import type {
@@ -909,7 +909,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Acquire a cookieless embed session.
    *
-   * The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+   * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
    * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
    * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
    * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
@@ -2255,6 +2255,20 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IBackupConfiguration, IError | IValidationError>>
 
   /**
+   * ### Looker Configuration Refresh
+   *
+   * This is an endpoint for manually calling refresh on Configuration manager.
+   *
+   * PUT /configuration_force_refresh -> any
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  configuration_force_refresh(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<any, IError | IValidationError>>
+
+  /**
    * ### Get the current status and content of custom welcome emails
    *
    * GET /custom_welcome_email -> ICustomWelcomeEmail
@@ -2478,15 +2492,16 @@ export interface ILooker40SDK extends IAPIMethods {
    * ### Get Looker Settings
    *
    * Available settings are:
+   *  - allow_user_timezones
+   *  - custom_welcome_email
+   *  - data_connector_default_enabled
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - privatelabel_configuration
-   *  - custom_welcome_email
    *  - onboarding_enabled
+   *  - privatelabel_configuration
    *  - timezone
-   *  - allow_user_timezones
    *
    * GET /setting -> ISetting
    *
@@ -2503,15 +2518,16 @@ export interface ILooker40SDK extends IAPIMethods {
    * ### Configure Looker Settings
    *
    * Available settings are:
+   *  - allow_user_timezones
+   *  - custom_welcome_email
+   *  - data_connector_default_enabled
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
    *  - marketplace_enabled
-   *  - privatelabel_configuration
-   *  - custom_welcome_email
    *  - onboarding_enabled
+   *  - privatelabel_configuration
    *  - timezone
-   *  - allow_user_timezones
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *

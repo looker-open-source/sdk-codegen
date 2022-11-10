@@ -25,7 +25,7 @@
  */
 
 /**
- * 389 API models: 243 Spec, 65 Request, 60 Write, 21 Enum
+ * 390 API models: 243 Spec, 65 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -1949,6 +1949,10 @@ export interface IDashboard {
    */
   edit_uri?: string | null
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Number of times favorited (read-only)
    */
   favorite_count?: number | null
@@ -3232,6 +3236,10 @@ export interface IEmbedSecret {
    * Id of user who created this secret (read-only)
    */
   user_id?: string | null
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType
 }
 
 export interface IEmbedSsoParams {
@@ -9968,6 +9976,14 @@ export interface ISchemaTables {
   table_limit_hit?: boolean
 }
 
+/**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+export enum SecretType {
+  SSO = 'SSO',
+  JWT = 'JWT',
+}
+
 export interface ISession {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -10089,6 +10105,10 @@ export interface ISetting {
    * Toggle user-specific timezones on or off
    */
   allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 export interface ISmtpNodeStatus {
@@ -10543,6 +10563,14 @@ export interface IThemeSettings {
    * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
+  /**
+   * Toggle to show the dashboard last updated indicator. Defaults to true.
+   */
+  show_last_updated_indicator?: boolean
+  /**
+   * Toggle to show reload data icon/button. Defaults to true.
+   */
+  show_reload_data_icon?: boolean
 }
 
 export interface ITimezone {
@@ -11527,6 +11555,10 @@ export interface IWriteDashboard {
    */
   deleted?: boolean
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Sets the default state of the filters bar to collapsed or open
    */
   filters_bar_collapsed?: boolean
@@ -12018,6 +12050,10 @@ export interface IWriteEmbedSecret {
    * Is this secret currently enabled
    */
   enabled?: boolean
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType | null
 }
 
 /**
@@ -13172,6 +13208,10 @@ export interface IWriteSetting {
    * Toggle user-specific timezones on or off
    */
   allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 /**

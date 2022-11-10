@@ -1246,6 +1246,10 @@ export interface IDashboard {
    */
   edit_uri?: Url | null
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Number of times favorited (read-only)
    */
   favorite_count?: number | null
@@ -8692,6 +8696,14 @@ export interface IThemeSettings {
    * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
+  /**
+   * Toggle to show the dashboard last updated indicator. Defaults to true.
+   */
+  show_last_updated_indicator?: boolean
+  /**
+   * Toggle to show reload data icon/button. Defaults to true.
+   */
+  show_reload_data_icon?: boolean
 }
 
 export interface ITimezone {
@@ -9512,6 +9524,10 @@ export interface IWriteDashboard {
    * Whether or not a dashboard is 'soft' deleted.
    */
   deleted?: boolean
+  /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
   /**
    * Sets the default state of the filters bar to collapsed or open
    */

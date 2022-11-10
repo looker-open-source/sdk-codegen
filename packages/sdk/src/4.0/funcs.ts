@@ -25,7 +25,7 @@
  */
 
 /**
- * 458 API methods
+ * 459 API methods
  */
 
 import type {
@@ -1180,7 +1180,7 @@ export const create_embed_url_as_me = async (
 /**
  * ### Acquire a cookieless embed session.
  *
- * The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+ * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
  * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
  * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
  * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
@@ -3207,6 +3207,29 @@ export const update_cloud_storage_configuration = async (
 }
 
 /**
+ * ### Looker Configuration Refresh
+ *
+ * This is an endpoint for manually calling refresh on Configuration manager.
+ *
+ * PUT /configuration_force_refresh -> any
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const configuration_force_refresh = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<any, IError | IValidationError>> => {
+  return sdk.put<any, IError | IValidationError>(
+    '/configuration_force_refresh',
+    null,
+    null,
+    options
+  )
+}
+
+/**
  * ### Get the current status and content of custom welcome emails
  *
  * GET /custom_welcome_email -> ICustomWelcomeEmail
@@ -3571,15 +3594,16 @@ export const mobile_settings = async (
  * ### Get Looker Settings
  *
  * Available settings are:
+ *  - allow_user_timezones
+ *  - custom_welcome_email
+ *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - privatelabel_configuration
- *  - custom_welcome_email
  *  - onboarding_enabled
+ *  - privatelabel_configuration
  *  - timezone
- *  - allow_user_timezones
  *
  * GET /setting -> ISetting
  *
@@ -3605,15 +3629,16 @@ export const get_setting = async (
  * ### Configure Looker Settings
  *
  * Available settings are:
+ *  - allow_user_timezones
+ *  - custom_welcome_email
+ *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - privatelabel_configuration
- *  - custom_welcome_email
  *  - onboarding_enabled
+ *  - privatelabel_configuration
  *  - timezone
- *  - allow_user_timezones
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
