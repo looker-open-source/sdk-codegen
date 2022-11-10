@@ -25,7 +25,7 @@
  */
 
 /**
- * 382 API models: 239 Spec, 62 Request, 60 Write, 21 Enum
+ * 390 API models: 243 Spec, 65 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -336,6 +336,71 @@ export interface IApiVersionElement {
    * Url for swagger.json for this version (read-only)
    */
   swagger_url?: string | null
+}
+
+export interface IArtifact {
+  /**
+   * Key of value to store. Namespace + Key must be unique.
+   */
+  key: string
+  /**
+   * Value to store.
+   */
+  value: string
+  /**
+   * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+   */
+  content_type?: string | null
+  /**
+   * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+   */
+  version?: number
+  /**
+   * Artifact storage namespace. (read-only)
+   */
+  namespace: string
+  /**
+   * Timestamp when this artifact was created. (read-only)
+   */
+  created_at: Date
+  /**
+   * Timestamp when this artifact was updated. (read-only)
+   */
+  updated_at: Date
+  /**
+   * Size (in bytes) of the stored value. (read-only)
+   */
+  value_size: number
+  /**
+   * User id of the artifact creator. (read-only)
+   */
+  created_by_userid: string
+  /**
+   * User id of the artifact updater. (read-only)
+   */
+  updated_by_userid: string
+}
+
+export interface IArtifactNamespace {
+  /**
+   * Artifact storage namespace. (read-only)
+   */
+  namespace: string
+  /**
+   * The number of artifacts stored in the namespace. (read-only)
+   */
+  count: number
+}
+
+export interface IArtifactUsage {
+  /**
+   * The configured maximum size in bytes of the entire artifact store. (read-only)
+   */
+  max_size: number
+  /**
+   * The currently used storage size in bytes of the entire artifact store. (read-only)
+   */
+  usage: number
 }
 
 export interface IBackupConfiguration {
@@ -1884,6 +1949,10 @@ export interface IDashboard {
    */
   edit_uri?: string | null
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Number of times favorited (read-only)
    */
   favorite_count?: number | null
@@ -3167,6 +3236,10 @@ export interface IEmbedSecret {
    * Id of user who created this secret (read-only)
    */
   user_id?: string | null
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType
 }
 
 export interface IEmbedSsoParams {
@@ -7181,6 +7254,50 @@ export interface IRequestAllUsers {
 }
 
 /**
+ * Dynamically generated request type for artifact
+ */
+export interface IRequestArtifact {
+  /**
+   * Artifact storage namespace
+   */
+  namespace: string
+  /**
+   * Comma-delimited list of keys. Wildcards not allowed.
+   */
+  key: string
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
+}
+
+/**
+ * Dynamically generated request type for artifact_namespaces
+ */
+export interface IRequestArtifactNamespaces {
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
+}
+
+/**
  * Dynamically generated request type for connection_columns
  */
 export interface IRequestConnectionColumns {
@@ -7970,6 +8087,44 @@ export interface IRequestSearchAlerts {
    * (Admin only) (Optional) Filter for all owners.
    */
   all_owners?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_artifacts
+ */
+export interface IRequestSearchArtifacts {
+  /**
+   * Artifact storage namespace
+   */
+  namespace: string
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Key pattern to match
+   */
+  key?: string | null
+  /**
+   * Ids of users who created or updated the artifact (comma-delimited list)
+   */
+  user_ids?: string | null
+  /**
+   * Minimum storage size of the artifact
+   */
+  min_size?: number | null
+  /**
+   * Maximum storage size of the artifact
+   */
+  max_size?: number | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
 }
 
 /**
@@ -9821,6 +9976,14 @@ export interface ISchemaTables {
   table_limit_hit?: boolean
 }
 
+/**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+export enum SecretType {
+  SSO = 'SSO',
+  JWT = 'JWT',
+}
+
 export interface ISession {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -9942,6 +10105,10 @@ export interface ISetting {
    * Toggle user-specific timezones on or off
    */
   allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 export interface ISmtpNodeStatus {
@@ -10396,6 +10563,14 @@ export interface IThemeSettings {
    * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
+  /**
+   * Toggle to show the dashboard last updated indicator. Defaults to true.
+   */
+  show_last_updated_indicator?: boolean
+  /**
+   * Toggle to show reload data icon/button. Defaults to true.
+   */
+  show_reload_data_icon?: boolean
 }
 
 export interface ITimezone {
@@ -10411,6 +10586,25 @@ export interface ITimezone {
    * Timezone group (e.g Common, Other, etc.) (read-only)
    */
   group?: string | null
+}
+
+export interface IUpdateArtifact {
+  /**
+   * Key of value to store. Namespace + Key must be unique.
+   */
+  key: string
+  /**
+   * Value to store.
+   */
+  value: string
+  /**
+   * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+   */
+  content_type?: string | null
+  /**
+   * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+   */
+  version?: number
 }
 
 export interface IUpdateFolder {
@@ -11361,6 +11555,10 @@ export interface IWriteDashboard {
    */
   deleted?: boolean
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Sets the default state of the filters bar to collapsed or open
    */
   filters_bar_collapsed?: boolean
@@ -11852,6 +12050,10 @@ export interface IWriteEmbedSecret {
    * Is this secret currently enabled
    */
   enabled?: boolean
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType | null
 }
 
 /**
@@ -13006,6 +13208,10 @@ export interface IWriteSetting {
    * Toggle user-specific timezones on or off
    */
   allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 /**

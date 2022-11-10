@@ -25,7 +25,7 @@
  */
 
 /**
- * 320 API models: 239 Spec, 0 Request, 60 Write, 21 Enum
+ * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -805,6 +805,191 @@ public struct ApiVersionElement: SDKModel {
         self._full_version = full_version.map(AnyString.init)
         self._status = status.map(AnyString.init)
         self._swagger_url = swagger_url.map(AnyString.init)
+    }
+
+}
+
+public struct Artifact: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case _value = "value"
+        case _content_type = "content_type"
+        case _version = "version"
+        case _namespace = "namespace"
+        case created_at
+        case updated_at
+        case _value_size = "value_size"
+        case _created_by_userid = "created_by_userid"
+        case _updated_by_userid = "updated_by_userid"
+    }
+    private var _key: AnyString
+    /**
+     * Key of value to store. Namespace + Key must be unique.
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    private var _value: AnyString
+    /**
+     * Value to store.
+     */
+    public var value: String {
+        get { _value.value }
+        set { _value = AnyString.init(newValue) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _version: AnyInt?
+    /**
+     * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+     */
+    public var version: Int64? {
+        get { _version?.value }
+        set { _version = newValue.map(AnyInt.init) }
+    }
+
+    private var _namespace: AnyString
+    /**
+     * Artifact storage namespace. (read-only)
+     */
+    public var namespace: String {
+        get { _namespace.value }
+        set { _namespace = AnyString.init(newValue) }
+    }
+
+    /**
+     * Timestamp when this artifact was created. (read-only)
+     */
+    public var created_at: Date
+
+    /**
+     * Timestamp when this artifact was updated. (read-only)
+     */
+    public var updated_at: Date
+
+    private var _value_size: AnyInt
+    /**
+     * Size (in bytes) of the stored value. (read-only)
+     */
+    public var value_size: Int64 {
+        get { _value_size.value }
+        set { _value_size = AnyInt.init(newValue) }
+    }
+
+    private var _created_by_userid: AnyString
+    /**
+     * User id of the artifact creator. (read-only)
+     */
+    public var created_by_userid: String {
+        get { _created_by_userid.value }
+        set { _created_by_userid = AnyString.init(newValue) }
+    }
+
+    private var _updated_by_userid: AnyString
+    /**
+     * User id of the artifact updater. (read-only)
+     */
+    public var updated_by_userid: String {
+        get { _updated_by_userid.value }
+        set { _updated_by_userid = AnyString.init(newValue) }
+    }
+
+    public init(key: String, value: String, content_type: String? = nil, version: Int64? = nil, namespace: String, created_at: Date, updated_at: Date, value_size: Int64, created_by_userid: String, updated_by_userid: String) {
+        self._key = AnyString.init(key)
+        self._value = AnyString.init(value)
+        self._content_type = content_type.map(AnyString.init)
+        self._version = version.map(AnyInt.init)
+        self._namespace = AnyString.init(namespace)
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self._value_size = AnyInt.init(value_size)
+        self._created_by_userid = AnyString.init(created_by_userid)
+        self._updated_by_userid = AnyString.init(updated_by_userid)
+    }
+
+    public init(_ key: String, _ value: String, content_type: String? = nil, version: Int64? = nil, _ namespace: String, _ created_at: Date, _ updated_at: Date, _ value_size: Int64, _ created_by_userid: String, _ updated_by_userid: String) {
+        self.init(key: key, value: value, content_type: content_type, version: version, namespace: namespace, created_at: created_at, updated_at: updated_at, value_size: value_size, created_by_userid: created_by_userid, updated_by_userid: updated_by_userid)
+    }
+
+}
+
+public struct ArtifactNamespace: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _namespace = "namespace"
+        case _count = "count"
+    }
+    private var _namespace: AnyString
+    /**
+     * Artifact storage namespace. (read-only)
+     */
+    public var namespace: String {
+        get { _namespace.value }
+        set { _namespace = AnyString.init(newValue) }
+    }
+
+    private var _count: AnyInt
+    /**
+     * The number of artifacts stored in the namespace. (read-only)
+     */
+    public var count: Int64 {
+        get { _count.value }
+        set { _count = AnyInt.init(newValue) }
+    }
+
+    public init(namespace: String, count: Int64) {
+        self._namespace = AnyString.init(namespace)
+        self._count = AnyInt.init(count)
+    }
+
+    public init(_ namespace: String, _ count: Int64) {
+        self.init(namespace: namespace, count: count)
+    }
+
+}
+
+public struct ArtifactUsage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _max_size = "max_size"
+        case _usage = "usage"
+    }
+    private var _max_size: AnyInt
+    /**
+     * The configured maximum size in bytes of the entire artifact store. (read-only)
+     */
+    public var max_size: Int64 {
+        get { _max_size.value }
+        set { _max_size = AnyInt.init(newValue) }
+    }
+
+    private var _usage: AnyInt
+    /**
+     * The currently used storage size in bytes of the entire artifact store. (read-only)
+     */
+    public var usage: Int64 {
+        get { _usage.value }
+        set { _usage = AnyInt.init(newValue) }
+    }
+
+    public init(max_size: Int64, usage: Int64) {
+        self._max_size = AnyInt.init(max_size)
+        self._usage = AnyInt.init(usage)
+    }
+
+    public init(_ max_size: Int64, _ usage: Int64) {
+        self.init(max_size: max_size, usage: usage)
     }
 
 }
@@ -4533,6 +4718,7 @@ public struct Dashboard: SDKModel {
         case deleted_at
         case _deleter_id = "deleter_id"
         case _edit_uri = "edit_uri"
+        case enable_viz_full_screen
         case _favorite_count = "favorite_count"
         case filters_bar_collapsed
         case filters_location_top
@@ -4740,6 +4926,11 @@ public struct Dashboard: SDKModel {
         set { _edit_uri = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Allow visualizations to be viewed in full screen mode
+     */
+    public var enable_viz_full_screen: Bool?
+
     private var _favorite_count: AnyInt?
     /**
      * Number of times favorited (read-only)
@@ -4894,7 +5085,7 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -4922,6 +5113,7 @@ public struct Dashboard: SDKModel {
         self.deleted_at = deleted_at
         self._deleter_id = deleter_id.map(AnyString.init)
         self._edit_uri = edit_uri.map(AnyString.init)
+        self.enable_viz_full_screen = enable_viz_full_screen
         self._favorite_count = favorite_count.map(AnyInt.init)
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
@@ -7872,6 +8064,7 @@ public struct EmbedSecret: SDKModel {
         case _id = "id"
         case _secret = "secret"
         case _user_id = "user_id"
+        case secret_type
     }
     private var _algorithm: AnyString?
     /**
@@ -7923,13 +8116,19 @@ public struct EmbedSecret: SDKModel {
         set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: String? = nil, secret: String? = nil, user_id: String? = nil) {
+    /**
+     * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+     */
+    public var secret_type: SecretType?
+
+    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: String? = nil, secret: String? = nil, user_id: String? = nil, secret_type: SecretType? = nil) {
         self._algorithm = algorithm.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.enabled = enabled
         self._id = id.map(AnyString.init)
         self._secret = secret.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
+        self.secret_type = secret_type
     }
 
 }
@@ -18891,6 +19090,14 @@ public struct SchemaTables: SDKModel {
 
 }
 
+/**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+public enum SecretType: String, Codable {
+    case SSO = "SSO"
+    case JWT = "JWT"
+}
+
 public struct Session: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -19128,6 +19335,7 @@ public struct Setting: SDKModel {
         case onboarding_enabled
         case _timezone = "timezone"
         case allow_user_timezones
+        case data_connector_default_enabled
     }
     /**
      * Toggle extension framework on or off
@@ -19172,7 +19380,12 @@ public struct Setting: SDKModel {
      */
     public var allow_user_timezones: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil) {
+    /**
+     * Toggle default future connectors on or off
+     */
+    public var data_connector_default_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19182,6 +19395,7 @@ public struct Setting: SDKModel {
         self.onboarding_enabled = onboarding_enabled
         self._timezone = timezone.map(AnyString.init)
         self.allow_user_timezones = allow_user_timezones
+        self.data_connector_default_enabled = data_connector_default_enabled
     }
 
 }
@@ -20100,6 +20314,8 @@ public struct ThemeSettings: SDKModel {
         case _warn_button_color = "warn_button_color"
         case _tile_title_alignment = "tile_title_alignment"
         case tile_shadow
+        case show_last_updated_indicator
+        case show_reload_data_icon
     }
     private var _background_color: AnyString?
     /**
@@ -20242,7 +20458,17 @@ public struct ThemeSettings: SDKModel {
      */
     public var tile_shadow: Bool?
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil) {
+    /**
+     * Toggle to show the dashboard last updated indicator. Defaults to true.
+     */
+    public var show_last_updated_indicator: Bool?
+
+    /**
+     * Toggle to show reload data icon/button. Defaults to true.
+     */
+    public var show_reload_data_icon: Bool?
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -20260,6 +20486,8 @@ public struct ThemeSettings: SDKModel {
         self._warn_button_color = warn_button_color.map(AnyString.init)
         self._tile_title_alignment = tile_title_alignment.map(AnyString.init)
         self.tile_shadow = tile_shadow
+        self.show_last_updated_indicator = show_last_updated_indicator
+        self.show_reload_data_icon = show_reload_data_icon
     }
 
 }
@@ -20302,6 +20530,63 @@ public struct Timezone: SDKModel {
         self._value = value.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._group = group.map(AnyString.init)
+    }
+
+}
+
+public struct UpdateArtifact: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case _value = "value"
+        case _content_type = "content_type"
+        case _version = "version"
+    }
+    private var _key: AnyString
+    /**
+     * Key of value to store. Namespace + Key must be unique.
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    private var _value: AnyString
+    /**
+     * Value to store.
+     */
+    public var value: String {
+        get { _value.value }
+        set { _value = AnyString.init(newValue) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _version: AnyInt?
+    /**
+     * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+     */
+    public var version: Int64? {
+        get { _version?.value }
+        set { _version = newValue.map(AnyInt.init) }
+    }
+
+    public init(key: String, value: String, content_type: String? = nil, version: Int64? = nil) {
+        self._key = AnyString.init(key)
+        self._value = AnyString.init(value)
+        self._content_type = content_type.map(AnyString.init)
+        self._version = version.map(AnyInt.init)
+    }
+
+    public init(_ key: String, _ value: String, content_type: String? = nil, version: Int64? = nil) {
+        self.init(key: key, value: value, content_type: content_type, version: version)
     }
 
 }
@@ -22433,6 +22718,7 @@ public struct WriteDashboard: SDKModel {
         case _background_color = "background_color"
         case crossfilter_enabled
         case deleted
+        case enable_viz_full_screen
         case filters_bar_collapsed
         case filters_location_top
         case _load_configuration = "load_configuration"
@@ -22536,6 +22822,11 @@ public struct WriteDashboard: SDKModel {
     public var deleted: Bool?
 
     /**
+     * Allow visualizations to be viewed in full screen mode
+     */
+    public var enable_viz_full_screen: Bool?
+
+    /**
      * Sets the default state of the filters bar to collapsed or open
      */
     public var filters_bar_collapsed: Bool?
@@ -22620,7 +22911,7 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -22633,6 +22924,7 @@ public struct WriteDashboard: SDKModel {
         self._background_color = background_color.map(AnyString.init)
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
+        self.enable_viz_full_screen = enable_viz_full_screen
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
         self._load_configuration = load_configuration.map(AnyString.init)
@@ -23701,6 +23993,7 @@ public struct WriteEmbedSecret: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _algorithm = "algorithm"
         case enabled
+        case secret_type
     }
     private var _algorithm: AnyString?
     /**
@@ -23716,9 +24009,15 @@ public struct WriteEmbedSecret: SDKModel {
      */
     public var enabled: Bool?
 
-    public init(algorithm: String? = nil, enabled: Bool? = nil) {
+    /**
+     * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+     */
+    public var secret_type: SecretType?
+
+    public init(algorithm: String? = nil, enabled: Bool? = nil, secret_type: SecretType? = nil) {
         self._algorithm = algorithm.map(AnyString.init)
         self.enabled = enabled
+        self.secret_type = secret_type
     }
 
 }
@@ -26262,6 +26561,7 @@ public struct WriteSetting: SDKModel {
         case onboarding_enabled
         case _timezone = "timezone"
         case allow_user_timezones
+        case data_connector_default_enabled
     }
     /**
      * Toggle extension framework on or off
@@ -26310,7 +26610,12 @@ public struct WriteSetting: SDKModel {
      */
     public var allow_user_timezones: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil) {
+    /**
+     * Toggle default future connectors on or off
+     */
+    public var data_connector_default_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -26320,6 +26625,7 @@ public struct WriteSetting: SDKModel {
         self.onboarding_enabled = onboarding_enabled
         self._timezone = timezone.map(AnyString.init)
         self.allow_user_timezones = allow_user_timezones
+        self.data_connector_default_enabled = data_connector_default_enabled
     }
 
 }
