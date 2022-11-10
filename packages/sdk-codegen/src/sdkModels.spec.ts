@@ -150,7 +150,7 @@ describe('sdkModels', () => {
       const api4 = readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
       const api = ApiModel.fromString(api4)
       const actual = Object.keys(api.typeTags)
-      expect(actual).toHaveLength(29)
+      expect(actual).toHaveLength(30)
     })
 
     describe('ordering', () => {
