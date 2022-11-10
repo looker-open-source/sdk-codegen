@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 449 API methods
+/// 459 API methods
 
 #nullable enable
 using System;
@@ -375,6 +375,238 @@ namespace Looker.SDK.API40
 
   #endregion ApiAuth: API Authentication
 
+  #region Artifact: Artifact Storage
+
+  /// Get the maximum configured size of the entire artifact store, and the currently used storage in bytes.
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// GET /artifact/usage -> ArtifactUsage
+  ///
+  /// <returns><c>ArtifactUsage</c> Artifact store statistics (application/json)</returns>
+  ///
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  public async Task<SdkResponse<ArtifactUsage, Exception>> artifact_usage(
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ArtifactUsage, Exception>(HttpMethod.Get, "/artifact/usage", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// Get all artifact namespaces and the count of artifacts in each namespace
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// GET /artifact/namespaces -> ArtifactNamespace[]
+  ///
+  /// <returns><c>ArtifactNamespace[]</c> Artifact store namespace counts (application/json)</returns>
+  ///
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  public async Task<SdkResponse<ArtifactNamespace[], Exception>> artifact_namespaces(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ArtifactNamespace[], Exception>(HttpMethod.Get, "/artifact/namespaces", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset }},null,options);
+  }
+
+  /// ### Return the value of an artifact
+  ///
+  /// The MIME type for the API response is set to the `content_type` of the value
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// GET /artifact/{namespace}/value -> string
+  ///
+  /// <returns><c>string</c> Artifact value (application/json)</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="key">Artifact storage key. Namespace + Key must be unique</param>
+  public async Task<SdkResponse<string, Exception>> artifact_value(
+    string @namespace,
+    string? key = null,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/artifact/{namespace}/value", new Values {
+      { "key", key }},null,options);
+  }
+
+  /// Remove *all* artifacts from a namespace. Purged artifacts are permanently deleted
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// DELETE /artifact/{namespace}/purge -> void
+  ///
+  /// <returns><c>void</c> All artifacts are purged. ()</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  public async Task<SdkResponse<string, Exception>> purge_artifacts(
+    string @namespace,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{namespace}/purge", null,null,options);
+  }
+
+  /// ### Search all key/value pairs in a namespace for matching criteria.
+  ///
+  /// Returns an array of artifacts matching the specified search criteria.
+  ///
+  /// Key search patterns use case-insensitive matching and can contain `%` and `_` as SQL LIKE pattern match wildcard expressions.
+  ///
+  /// The parameters `min_size` and `max_size` can be used individually or together.
+  ///
+  /// - `min_size` finds artifacts with sizes greater than or equal to its value
+  /// - `max_size` finds artifacts with sizes less than or equal to its value
+  /// - using both parameters restricts the minimum and maximum size range for artifacts
+  ///
+  /// **NOTE**: Artifacts are always returned in alphanumeric order by key.
+  ///
+  /// Get a **single artifact** by namespace and key with [`artifact`](#!/Artifact/artifact)
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// GET /artifact/{namespace}/search -> Artifact[]
+  ///
+  /// <returns><c>Artifact[]</c> Artifacts (application/json)</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  /// <param name="key">Key pattern to match</param>
+  /// <param name="user_ids">Ids of users who created or updated the artifact (comma-delimited list)</param>
+  /// <param name="min_size">Minimum storage size of the artifact</param>
+  /// <param name="max_size">Maximum storage size of the artifact</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  public async Task<SdkResponse<Artifact[], Exception>> search_artifacts(
+    string @namespace,
+    string? fields = null,
+    string? key = null,
+    string? user_ids = null,
+    long? min_size = null,
+    long? max_size = null,
+    long? limit = null,
+    long? offset = null,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{namespace}/search", new Values {
+      { "fields", fields },
+      { "key", key },
+      { "user_ids", user_ids },
+      { "min_size", min_size },
+      { "max_size", max_size },
+      { "limit", limit },
+      { "offset", offset }},null,options);
+  }
+
+  /// ### Get one or more artifacts
+  ///
+  /// Returns an array of artifacts matching the specified key value(s).
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// GET /artifact/{namespace} -> Artifact[]
+  ///
+  /// <returns><c>Artifact[]</c> Created or updated artifacts (application/json)</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  public async Task<SdkResponse<Artifact[], Exception>> artifact(
+    string @namespace,
+    string key,
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{namespace}", new Values {
+      { "key", key },
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset }},null,options);
+  }
+
+  /// ### Delete one or more artifacts
+  ///
+  /// To avoid rate limiting on deletion requests, multiple artifacts can be deleted at the same time by using a comma-delimited list of artifact keys.
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// DELETE /artifact/{namespace} -> void
+  ///
+  /// <returns><c>void</c> The artifact is deleted. ()</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
+  public async Task<SdkResponse<string, Exception>> delete_artifact(
+    string @namespace,
+    string key,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{namespace}", new Values {
+      { "key", key }},null,options);
+  }
+
+  /// ### Create or update one or more artifacts
+  ///
+  /// Only `key` and `value` are required to _create_ an artifact.
+  /// To _update_ an artifact, its current `version` value must be provided.
+  ///
+  /// In the following example `body` payload, `one` and `two` are existing artifacts, and `three` is new:
+  ///
+  /// ```json
+  /// [
+  ///   { "key": "one", "value": "[ \"updating\", \"existing\", \"one\" ]", "version": 10, "content_type": "application/json" },
+  ///   { "key": "two", "value": "updating existing two", "version": 20 },
+  ///   { "key": "three", "value": "creating new three" },
+  /// ]
+  /// ```
+  ///
+  /// Notes for this body:
+  ///
+  /// - The `value` for `key` **one** is a JSON payload, so a `content_type` override is needed. This override must be done **every** time a JSON value is set.
+  /// - The `version` values for **one** and **two** mean they have been saved 10 and 20 times, respectively.
+  /// - If `version` is **not** provided for an existing artifact, the entire request will be refused and a `Bad Request` response will be sent.
+  /// - If `version` is provided for an artifact, it is only used for helping to prevent inadvertent data overwrites. It cannot be used to **set** the version of an artifact. The Looker server controls `version`.
+  /// - We suggest encoding binary values as base64. Because the MIME content type for base64 is detected as plain text, also provide `content_type` to correctly indicate the value's type for retrieval and client-side processing.
+  ///
+  /// Because artifacts are stored encrypted, the same value can be written multiple times (provided the correct `version` number is used). Looker does not examine any values stored in the artifact store, and only decrypts when sending artifacts back in an API response.
+  ///
+  /// **Note**: The artifact storage API can only be used by Looker-built extensions.
+  ///
+  /// PUT /artifacts/{namespace} -> Artifact[]
+  ///
+  /// <returns><c>Artifact[]</c> Created or updated artifacts (application/json)</returns>
+  ///
+  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  public async Task<SdkResponse<Artifact[], Exception>> update_artifacts(
+    string @namespace,
+    UpdateArtifact[] body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      namespace = SdkUtils.EncodeParam(namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Put, $"/artifacts/{namespace}", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  #endregion Artifact: Artifact Storage
+
   #region Auth: Manage User Authentication Configuration
 
   /// ### Create an embed secret using the specified information.
@@ -492,7 +724,7 @@ namespace Looker.SDK.API40
 
   /// ### Acquire a cookieless embed session.
   ///
-  /// The acquire session endpoint negates the need for signing the embed url and passing it as a paramemter
+  /// The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
   /// to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
   /// otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
   /// attributes if the embed user already exists. This is the same behavior as the embed SSO login.
@@ -1935,6 +2167,20 @@ namespace Looker.SDK.API40
     return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Patch, "/cloud_storage", null,body,options);
   }
 
+  /// ### Looker Configuration Refresh
+  ///
+  /// This is an endpoint for manually calling refresh on Configuration manager.
+  ///
+  /// PUT /configuration_force_refresh -> object
+  ///
+  /// <returns><c>object</c> Refresh Looker Configuration (application/json)</returns>
+  ///
+  public async Task<SdkResponse<object, Exception>> configuration_force_refresh(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<object, Exception>(HttpMethod.Put, "/configuration_force_refresh", null,null,options);
+  }
+
   /// ### Get the current status and content of custom welcome emails
   ///
   /// GET /custom_welcome_email -> CustomWelcomeEmail
@@ -2151,15 +2397,16 @@ namespace Looker.SDK.API40
   /// ### Get Looker Settings
   ///
   /// Available settings are:
+  ///  - allow_user_timezones
+  ///  - custom_welcome_email
+  ///  - data_connector_default_enabled
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
-  ///  - privatelabel_configuration
-  ///  - custom_welcome_email
   ///  - onboarding_enabled
+  ///  - privatelabel_configuration
   ///  - timezone
-  ///  - allow_user_timezones
   ///
   /// GET /setting -> Setting
   ///
@@ -2177,15 +2424,16 @@ namespace Looker.SDK.API40
   /// ### Configure Looker Settings
   ///
   /// Available settings are:
+  ///  - allow_user_timezones
+  ///  - custom_welcome_email
+  ///  - data_connector_default_enabled
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_enabled
-  ///  - privatelabel_configuration
-  ///  - custom_welcome_email
   ///  - onboarding_enabled
+  ///  - privatelabel_configuration
   ///  - timezone
-  ///  - allow_user_timezones
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///

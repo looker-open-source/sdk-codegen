@@ -1624,6 +1624,7 @@ class Dashboard(model.Model):
         deleted_at: Time that the Dashboard was 'soft' deleted.
         deleter_id: Id of User that 'soft' deleted the dashboard.
         edit_uri: Relative path of URI of LookML file to edit the dashboard (LookML dashboard only).
+        enable_viz_full_screen: Allow visualizations to be viewed in full screen mode
         favorite_count: Number of times favorited
         filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
         filters_location_top: Sets the default state of the filters location to top(true) or right(false)
@@ -1675,6 +1676,7 @@ class Dashboard(model.Model):
     deleted_at: Optional[datetime.datetime] = None
     deleter_id: Optional[int] = None
     edit_uri: Optional[str] = None
+    enable_viz_full_screen: Optional[bool] = None
     favorite_count: Optional[int] = None
     filters_bar_collapsed: Optional[bool] = None
     filters_location_top: Optional[bool] = None
@@ -1728,6 +1730,7 @@ class Dashboard(model.Model):
         deleted_at: Optional[datetime.datetime] = None,
         deleter_id: Optional[int] = None,
         edit_uri: Optional[str] = None,
+        enable_viz_full_screen: Optional[bool] = None,
         favorite_count: Optional[int] = None,
         filters_bar_collapsed: Optional[bool] = None,
         filters_location_top: Optional[bool] = None,
@@ -1780,6 +1783,7 @@ class Dashboard(model.Model):
         self.deleted_at = deleted_at
         self.deleter_id = deleter_id
         self.edit_uri = edit_uri
+        self.enable_viz_full_screen = enable_viz_full_screen
         self.favorite_count = favorite_count
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
@@ -8826,6 +8830,8 @@ class ThemeSettings(model.Model):
         warn_button_color: Warning button color
         tile_title_alignment: The text alignment of tile titles (New Dashboards)
         tile_shadow: Toggles the tile shadow (not supported)
+        show_last_updated_indicator: Toggle to show the dashboard last updated indicator. Defaults to true.
+        show_reload_data_icon: Toggle to show reload data icon/button. Defaults to true.
     """
 
     background_color: Optional[str] = None
@@ -8845,6 +8851,8 @@ class ThemeSettings(model.Model):
     warn_button_color: Optional[str] = None
     tile_title_alignment: Optional[str] = None
     tile_shadow: Optional[bool] = None
+    show_last_updated_indicator: Optional[bool] = None
+    show_reload_data_icon: Optional[bool] = None
 
     def __init__(
         self,
@@ -8865,7 +8873,9 @@ class ThemeSettings(model.Model):
         title_color: Optional[str] = None,
         warn_button_color: Optional[str] = None,
         tile_title_alignment: Optional[str] = None,
-        tile_shadow: Optional[bool] = None
+        tile_shadow: Optional[bool] = None,
+        show_last_updated_indicator: Optional[bool] = None,
+        show_reload_data_icon: Optional[bool] = None
     ):
         self.background_color = background_color
         self.base_font_size = base_font_size
@@ -8884,6 +8894,8 @@ class ThemeSettings(model.Model):
         self.warn_button_color = warn_button_color
         self.tile_title_alignment = tile_title_alignment
         self.tile_shadow = tile_shadow
+        self.show_last_updated_indicator = show_last_updated_indicator
+        self.show_reload_data_icon = show_reload_data_icon
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9918,6 +9930,7 @@ class WriteDashboard(model.Model):
             background_color: Background color
             crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
             deleted: Whether or not a dashboard is 'soft' deleted.
+            enable_viz_full_screen: Allow visualizations to be viewed in full screen mode
             filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
             filters_location_top: Sets the default state of the filters location to top(true) or right(false)
             load_configuration: configuration option that governs how dashboard loading will happen.
@@ -9946,6 +9959,7 @@ class WriteDashboard(model.Model):
     background_color: Optional[str] = None
     crossfilter_enabled: Optional[bool] = None
     deleted: Optional[bool] = None
+    enable_viz_full_screen: Optional[bool] = None
     filters_bar_collapsed: Optional[bool] = None
     filters_location_top: Optional[bool] = None
     load_configuration: Optional[str] = None
@@ -9976,6 +9990,7 @@ class WriteDashboard(model.Model):
         background_color: Optional[str] = None,
         crossfilter_enabled: Optional[bool] = None,
         deleted: Optional[bool] = None,
+        enable_viz_full_screen: Optional[bool] = None,
         filters_bar_collapsed: Optional[bool] = None,
         filters_location_top: Optional[bool] = None,
         load_configuration: Optional[str] = None,
@@ -10005,6 +10020,7 @@ class WriteDashboard(model.Model):
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
+        self.enable_viz_full_screen = enable_viz_full_screen
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
         self.load_configuration = load_configuration
