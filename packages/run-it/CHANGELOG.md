@@ -1,5 +1,22 @@
 # Changelog
 
+### [0.9.41](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.40...run-it-v0.9.41) (2022-11-10)
+
+
+### Bug Fixes
+
+* oauth support in APIX when embedded in another app ([#1198](https://www.github.com/looker-open-source/sdk-codegen/issues/1198)) ([c464d2f](https://www.github.com/looker-open-source/sdk-codegen/commit/c464d2f24c7f8e7d282208efd00feaaba216fe3e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.25 to ^0.1.26
+    * @looker/extension-utils bumped from ^0.1.17 to ^0.1.18
+    * @looker/sdk bumped from ^22.18.0 to ^22.20.0
+    * @looker/sdk-codegen bumped from ^21.7.2 to ^21.7.3
+
 ### [0.9.40](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.39...run-it-v0.9.40) (2022-10-17)
 
 
