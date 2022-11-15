@@ -1,0 +1,53 @@
+{
+  "name": "@looker/wholly-artifact",
+  "version": "0.1.0",
+  "description": "Looker Artifact API as a Table SDK",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": false,
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/wholly-artifact"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --mode file --out docs",
+    "watch": "yarn lerna exec --scope @looker/wholly-artifact --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch:cjs": "yarn lerna exec --scope @looker/wholly-artifact --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5.5.1"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/wholly-artifact",
+  "devDependencies": {
+    "@looker/sdk-node": "*",
+    "@types/uuid": "^8.3.4"
+  },
+  "dependencies": {
+    "@looker/sdk-rtl": "*",
+    "@looker/sdk": "*",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.0"
+  },
+  "keywords": [
+    "Looker", "Artifact", "API",
+    "SDK"
+  ]
+}

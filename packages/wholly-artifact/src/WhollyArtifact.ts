@@ -24,10 +24,15 @@
 
  */
 
-import type { ITabTable, SheetSDK, SheetValues } from './SheetSDK'
-import { SheetError } from './SheetSDK'
-
-import type { ColumnHeaders, IRowModel } from './RowModel'
+import { LookerSDKError } from '@looker/sdk-rtl'
+import type { IArtifact, ILooker40SDK, IUpdateArtifact } from '@looker/sdk'
+import {
+  artifact,
+  delete_artifact,
+  search_artifacts,
+  update_artifacts,
+} from '@looker/sdk'
+import type { ColumnHeaders, IRowModel, SheetValues } from './RowModel'
 import { RowAction, rowPosition, stringer } from './RowModel'
 
 /**
@@ -51,7 +56,7 @@ export interface IRowDelta<T extends IRowModel> {
 // TODO maybe get a technique from https://stackoverflow.com/a/34698946 or
 //  https://www.logicbig.com/tutorials/misc/typescript/generic-constraints.html
 
-// TODO refactor WhollySheet<T> into something a bit cleaner
+// TODO refactor WhollyArtifact<T> into something a bit cleaner
 //   ref https://www.smashingmagazine.com/2020/10/understanding-typescript-generics/
 export class TypedRows<T> {
   rows: T[] = []
@@ -95,11 +100,20 @@ export class TypedRows<T> {
   // ..
 }
 
-export interface IWhollySheet<T extends IRowModel, P> {
+export interface IWhollyArtifact<T extends IRowModel, P> {
   /** Initialized REST-based GSheets SDK */
-  sheets: SheetSDK
-  /** Name of the tab in the sheet */
-  name: string
+  sdk: ILooker40SDK
+
+  /** Namespace of this collection. Retrieved from IRowModel descendant */
+  namespace: string
+
+  /**
+   * Name of this artifact "table". Used for table-level processing of the artifacts in a namespace.
+   * Retrieved from IRowModel descendant
+   */
+  tableName: string
+
+  /**
   /**
    * Header column names for reading from/writing to the sheet.
    * The order of the column names **must** match the order of the columns in the sheet.
@@ -195,12 +209,6 @@ export interface IWhollySheet<T extends IRowModel, P> {
   update<T extends IRowModel>(model: T, force?: boolean): Promise<T>
 
   /**
-   * Reads the specified row directly from the sheet
-   * @param row
-   */
-  rowGet<T extends IRowModel>(row: number): Promise<T | undefined>
-
-  /**
    * Delete a row if it still exists
    * @param model to delete
    * @param force true to skip checking for outdated values. Defaults to false.
@@ -208,7 +216,7 @@ export interface IWhollySheet<T extends IRowModel, P> {
   delete<T extends IRowModel>(model: T, force?: boolean): Promise<boolean>
 
   /**
-   * If the row is out of date, it throws a SheetError
+   * If the row is out of date, it throws a LookerSDKError
    * @param model row for status check
    * @param source row to compare against
    */
@@ -250,7 +258,7 @@ export interface IWhollySheet<T extends IRowModel, P> {
   /**
    * Prepare a batch for processing
    *
-   * If `force` is false and update rows are outdated, a SheetError with outdated list is thrown
+   * If `force` is false and update rows are outdated, a LookerSDKError with outdated list is thrown
    * @param tab of sheet values to use for update checks (includes header row)
    * @param delta change to merge and purge
    * @param force prepare each row but don't worry about outdated rows
@@ -262,6 +270,21 @@ export interface IWhollySheet<T extends IRowModel, P> {
   ): boolean
 
   /**
+   * collect all rows to be updated or created and submit the request
+   * and returns the updated collection
+   *
+   * @param items list of items to update or create
+   */
+  createUpdateBatch<T extends IRowModel>(items: T[]): Promise<T[]>
+
+  /**
+   * removes all rows marked for deletion and returns the updated collection
+   *
+   * @param items list of items to delete
+   */
+  deleteBatch<T extends IRowModel>(items: T[]): Promise<T[]>
+
+  /**
    * Perform a batch update by retrieving the delta for the sheet, check for outdated update rows,
    * and update the entire tab sheet with the changes
    * @param force true to skip checking for outdated update rows
@@ -269,27 +292,53 @@ export interface IWhollySheet<T extends IRowModel, P> {
   batchUpdate<T extends IRowModel>(force?: boolean): Promise<T[]>
 }
 
+/**
+ * Keyed data for a tab, and the tab's header row
+ * TODO delete this bad boy
+ */
+export interface ITabTable {
+  /** Array of header names, in column order */
+  header: ColumnHeaders
+  /** Parsed data for the tab */
+  rows: IRowModel[]
+}
+
 /** CRUDS operations for a GSheet tab */
-export abstract class WhollySheet<T extends IRowModel, P>
+export abstract class WhollyArtifact<T extends IRowModel, P>
   extends TypedRows<T>
-  implements IWhollySheet<T, P>
+  implements IWhollyArtifact<T, P>
 {
   index: Record<string, T> = {}
+  namespace = ''
+  tableName = ''
 
   constructor(
-    public readonly sheets: SheetSDK,
-    /** name of the tab in the GSheet document */
-    public readonly name: string,
+    public readonly sdk: ILooker40SDK,
     public readonly table: ITabTable,
-    public readonly keyColumn: string = '_id'
+    public readonly keyColumn: string = '_id' // TODO change to `key`
   ) {
     super([])
     this.loadRows(table.rows)
+    const meta = this.typeRow()
+    this.namespace = meta.namespace()
+    this.tableName = meta.tableName()
   }
 
   loadRows<T extends IRowModel>(rows: SheetValues): T[] {
     this.rows = this.typeRows(rows)
     this.checkHeader()
+    this.createIndex()
+    return this.rows as unknown as T[]
+  }
+
+  async refresh<T extends IRowModel>(): Promise<T[]> {
+    const values = await this.sdk.ok(
+      search_artifacts(this.sdk, {
+        namespace: this.namespace,
+        key: `${this.tableName}:%`,
+      })
+    )
+    this.rows = this.typeRows(values)
     this.createIndex()
     return this.rows as unknown as T[]
   }
@@ -334,8 +383,8 @@ export abstract class WhollySheet<T extends IRowModel, P>
     const rowHeader = row.header().join()
     const tableHeader = this.table.header.join()
     if (tableHeader !== rowHeader)
-      throw new SheetError(
-        `Expected ${this.name} header to be ${rowHeader} not ${tableHeader}`
+      throw new LookerSDKError(
+        `Expected ${this.tableName} header to be ${rowHeader} not ${tableHeader}`
       )
     return true
   }
@@ -372,69 +421,53 @@ export abstract class WhollySheet<T extends IRowModel, P>
   }
 
   async save<T extends IRowModel>(model: T, force = false): Promise<T> {
-    // A model with a non-zero row is an update
-    if (model._row) return await this.update<T>(model, force)
-    // Create currently returns the row not the model
+    switch (model.$action) {
+      case RowAction.Delete: {
+        await this.sdk.ok(
+          this.sdk.delete_artifact(this.namespace, model[this.keyColumn])
+        )
+        return model
+      }
+      case RowAction.Update: {
+        return await this.update<T>(model, force)
+      }
+      case RowAction.None: {
+        return model
+      }
+    }
     return (await this.create<T>(model)) as unknown as T
   }
 
   checkId<T extends IRowModel>(model: T) {
     if (!model[this.keyColumn])
-      throw new SheetError(
-        `"${this.keyColumn}" must be assigned for ${this.name} row ${model._row}`
+      throw new LookerSDKError(
+        `"${this.keyColumn}" must be assigned for ${this.tableName} row ${model._row}`
       )
   }
 
   async create<T extends IRowModel>(model: T): Promise<T> {
     if (model._row > 0)
-      throw new SheetError(
-        `create needs ${this.name} "${
+      throw new LookerSDKError(
+        `create needs ${this.tableName} "${
           model[this.keyColumn]
         }" row to be < 1, not ${model._row}`
       )
     model.prepare()
     this.checkId(model)
-    const values = this.values(model)
-    const result = await this.sheets.rowCreate(this.name, this.nextRow, values)
-    if (result.row < 1 || !result.values || result.values.length === 0)
-      throw new SheetError(`Could not create row for ${model[this.keyColumn]}`)
-    // This returns an array of values with 1 entry per row value array
-    const newRow = this.typeRow(result.values[0])
-    newRow._row = result.row
-    if (result.row === this.nextRow) {
-      // No other rows have been added
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.rows.push(newRow as unknown as T)
-      this.createIndex()
-    } else {
-      await this.refresh()
-    }
-    return this.index[newRow[this.keyColumn]] as unknown as T
+    await this.createUpdateBatch([model])
+    return this.index[model[this.keyColumn]] as unknown as T
   }
 
-  async update<T extends IRowModel>(model: T, force = false): Promise<T> {
+  async update<T extends IRowModel>(model: T, _force = false): Promise<T> {
     if (!model._row)
-      throw new SheetError(
-        `${this.name} "${model[this.keyColumn]}" row must be > 0 to update`
+      throw new LookerSDKError(
+        `${this.tableName} "${model[this.keyColumn]}" row must be > 0 to update`
       )
 
-    if (!force) await this.checkOutdated(model)
-    let rowPos = -1
     model.prepare()
     this.checkId(model)
-    const values = this.values(model)
-    /** This will throw an error if the request fails */
-    const result = await this.sheets.rowUpdate(this.name, model._row, values)
-    if (result.values) {
-      // This returns an array of values with 1 entry per row value array
-      const updateValues = result.values[0]
-      rowPos = this.rows.findIndex((row) => (row._row = model._row))
-      this.rows[rowPos].assign(updateValues)
-    }
-    // ID may have changed?
-    this.createIndex()
-    return this.rows[rowPos] as unknown as T
+    await this.createUpdateBatch([model])
+    return this.index[model[this.keyColumn]] as unknown as T
   }
 
   find(value: any, columnName?: string): T | undefined {
@@ -446,9 +479,9 @@ export abstract class WhollySheet<T extends IRowModel, P>
     }
     if (columnName === this.keyColumn) {
       // Find by index
-      return WhollySheet.toAT(this.index[value.toString()])
+      return WhollyArtifact.toAT(this.index[value.toString()])
     }
-    return WhollySheet.toAT(this.rows.find((r) => r[key] === value))
+    return WhollyArtifact.toAT(this.rows.find((r) => r[key] === value))
   }
 
   private _displayHeader: ColumnHeaders = []
@@ -463,9 +496,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   async delete<T extends IRowModel>(model: T, force = false) {
     if (!force) await this.checkOutdated(model)
-    const values = await this.sheets.rowDelete(this.name, model._row)
-    this.rows = this.typeRows(values)
-    this.createIndex()
+    await this.deleteBatch([model])
     return true
   }
 
@@ -473,52 +504,35 @@ export abstract class WhollySheet<T extends IRowModel, P>
     return !(columnName.startsWith('_') || columnName.startsWith('$'))
   }
 
-  async rowGet<T extends IRowModel>(row: number): Promise<T | undefined> {
-    const values = await this.sheets.rowGet(this.name, row)
-    if (!values || values.length === 0) return undefined
-    // Returns a nested array of values, 1 top element per row
-    const typed = this.typeRow(values[0])
-    // ugly hack cheat for type conversion
-    return typed as unknown as T
-  }
-
   async checkOutdated<T extends IRowModel>(model: T, source?: T) {
-    if (model._row < 1) return false
+    if (model[rowPosition] < 1) return false
     const errors: string[] = []
-    if (!source) source = await this.rowGet<T>(model._row)
+    if (!source) {
+      const art = await this.sdk.ok(
+        artifact(this.sdk, {
+          namespace: this.namespace,
+          key: model[this.keyColumn],
+        })
+      )
+      // artifact returns an array, so get the one row this should be
+      if (art.length === 1) source = this.typeRow(art[0]) as unknown as T
+    }
     if (!source) {
       errors.push(`Row not found`)
     } else {
-      if (
-        source._updated !== undefined &&
-        compareDates(source._updated, model._updated) !== 0
-      ) {
-        errors.push(`update is ${source._updated} not ${model._updated}`)
-      }
-      if (source[this.keyColumn] !== model[this.keyColumn])
+      if (source.$artifact.version !== model.$artifact.version) {
         errors.push(
-          `${this.keyColumn} is "${source[this.keyColumn]}" not "${
-            model[this.keyColumn]
-          }"`
+          `version ${source.$artifact.version} != ${model.$artifact.version}`
         )
+      }
     }
     if (errors.length > 0)
-      throw new SheetError(
-        `${this.name} row ${model._row} is outdated: ${errors.join()}`
+      throw new LookerSDKError(
+        `${this.tableName} row ${
+          model[this.keyColumn]
+        } is outdated: ${errors.join()}`
       )
     return false
-  }
-
-  async refresh<T extends IRowModel>(): Promise<T[]> {
-    let values = await this.sheets.tabValues(this.name)
-    // trim header row
-    values = values.slice(1)
-    const rows = this.typeRows(values) as unknown as T[]
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.rows = rows
-    this.createIndex()
-    return rows
   }
 
   fromObject<T extends IRowModel>(obj: P[]): T[] {
@@ -530,14 +544,16 @@ export abstract class WhollySheet<T extends IRowModel, P>
     return this.rows.map((r) => r.toObject() as unknown as P)
   }
 
-  async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
-    const delta = this.getDelta()
-    let values = await this.sheets.tabValues(this.name)
-    this.prepareBatch(values, delta, force)
-    values = this.mergePurge(values, delta)
-    if (delta.deletes.length > 0) await this.sheets.tabClear(this.name)
-    const response = await this.sheets.batchUpdate(this.name, values)
-    return this.loadRows(response)
+  async batchUpdate<T extends IRowModel>(_force = false): Promise<T[]> {
+    // Updates and creates are processed in the same call
+    const updates = this.rows.filter(
+      (r) => r.$action === RowAction.Update || r.$action === RowAction.Create
+    )
+    const deletes = this.rows.filter((r) => r.$action === RowAction.Delete)
+
+    await this.createUpdateBatch(updates)
+    await this.deleteBatch(deletes)
+    return this.rows as unknown as T[]
   }
 
   getDelta<T extends IRowModel>(): IRowDelta<T> {
@@ -582,10 +598,52 @@ export abstract class WhollySheet<T extends IRowModel, P>
       } catch (e: any) {
         errors.push(e.message)
       }
-      if (errors.length > 0) throw new SheetError(errors.join('\n'))
+      if (errors.length > 0) throw new LookerSDKError(errors.join('\n'))
     }
     delta.updates.forEach((u) => u.prepare())
     delta.creates.forEach((c) => c.prepare())
     return true
+  }
+
+  async createUpdateBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
+    if (items.length < 1) return Promise.resolve(this.rows as unknown as T[])
+    const namespace = items[0].namespace()
+    const arts: Partial<IArtifact>[] = items.map((i) => i.toArtifact())
+    /** This will throw an error if the request fails */
+    const result = await this.sdk.ok(
+      update_artifacts(this.sdk, namespace, arts as IUpdateArtifact[])
+    )
+    result.forEach((r) => {
+      const row: T = this.typeRow(r)
+      const key = row[this.keyColumn]
+      this.index[key] = row as any // TODO why is this the only thing that works?
+    })
+    this.updateRowsFromIndex()
+    return Promise.resolve(this.rows as unknown as T[])
+  }
+
+  /**
+   * Repopulates the row collection based exclusively on the values in the index
+   * @private
+   */
+  private updateRowsFromIndex<T extends IRowModel>(): T[] {
+    const result: any[] = []
+    Object.entries(this.index).forEach(([_key, row], index) => {
+      row[rowPosition] = index + 1
+      result.push(row)
+    })
+    this.rows = result as any[] // TODO why is this the only thing that works?
+    return this.rows as unknown as T[]
+  }
+
+  async deleteBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
+    if (items.length < 1) return Promise.resolve(this.rows as unknown as T[])
+    const namespace = items[0].namespace()
+    const keys = items.map((r) => r[this.keyColumn])
+    await this.sdk.ok(delete_artifact(this.sdk, namespace, keys.join()))
+    // Remove deleted items from the collections
+    keys.forEach((k) => delete this.index[k])
+    this.updateRowsFromIndex()
+    return Promise.resolve(this.rows as unknown as T[])
   }
 }
