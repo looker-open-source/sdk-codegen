@@ -55,7 +55,7 @@ export const HackerList: FC<HackerListProps> = ({
   const columns = useSelector(getHackersHeadings)
 
   const hackHacker = (hacker: IHackerProps) => {
-    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.id}/edit`)
+    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.user.id}/edit`)
   }
 
   const takeAction = (

@@ -36,6 +36,7 @@ import type { SheetData } from './SheetData'
 export interface IUserProps extends IRowModelProps {
   first_name: string
   last_name: string
+  looker_id: string
   $name: string
 }
 
@@ -53,6 +54,7 @@ export interface IUser extends ISheetRow, IUserProps {}
 export class User extends SheetRow<IUser> {
   first_name = ''
   last_name = ''
+  looker_id = ''
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established

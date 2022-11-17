@@ -29,7 +29,7 @@ import { DefaultSettings } from '@looker/sdk-rtl'
 import type { ITabTable } from '@looker/wholly-artifact'
 import { SheetSDK } from '@looker/wholly-sheet'
 import { getExtensionSDK } from '@looker/extension-sdk'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import { getCore40SDK, getCoreSDK2 } from '@looker/extension-sdk-react'
 import { initActiveSheet, SheetData } from '../models/SheetData'
 import { GAuthSession } from '../authToken/gAuthSession'
 import type {
@@ -247,12 +247,13 @@ class SheetsClient {
     }
   }
 
+  // Actualy updates judging. Saving a new judging happens in Project class.
   async saveJudging(judgingProps: IJudgingProps): Promise<IJudgingProps> {
     const data = await this.getSheetData()
     const judging = data.judgings.find(judgingProps._id, '_id')
     if (judging) {
       judging.fromObject(judgingProps)
-      const updatedJudging = await data.judgings.save(judging)
+      const updatedJudging = await data.judgings.update(judging)
       return updatedJudging.toObject()
     } else {
       throw new Error(`judging not found for ${judgingProps._id}`)
@@ -261,17 +262,24 @@ class SheetsClient {
 
   async getHacker(): Promise<IHackerProps> {
     if (!this.hacker) {
-      const lookerSdk = getCore40SDK()
-      const hacker = new Hacker(lookerSdk)
-      await hacker.getMe()
-      try {
-        const data = await this.getSheetData()
-        await this.loadHackers(data)
-      } catch (error) {
-        console.warn(
-          'Error loading sheets data. Has hackathon application been configured?'
-        )
+      const sdk = getCore40SDK()
+      const lookerUser = await sdk.ok(sdk.me())
+
+      const data = await this.getSheetData()
+
+      await this.loadHackers(data)
+
+      const hacker: Hacker | undefined = this.hackers?.rows.find(
+        h => h.user.id === lookerUser.id
+      )
+
+      if (!hacker) {
+        throw new Error('Failed to load hacker')
       }
+
+      // Assigns rights, perms, and attributes like timezone
+      await hacker.getMe()
+
       this.hacker = this.decorateHacker(hacker.toObject(), hacker)
     }
     return this.hacker
@@ -307,49 +315,23 @@ class SheetsClient {
     hackathonId?: string
   ): Promise<IRegistrationProps> {
     const hackathon = await this.getSheetHackathon(hackathonId)
-    if (hackathon) {
-      const registration = await this.registerUser1(hackathon, user)
-      return registration.toObject()
-    } else {
+    if (!hackathon) {
       throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
-  }
 
-  async registerUser1(
-    hackathon: Hackathon,
-    hacker: Hacker
-  ): Promise<Registration> {
     const data = await this.getSheetData()
+
     let reg = data.registrations.rows.find(
-      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
+      (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
     )
-    let user = data.users.find(hacker.id)
-    if (!user) {
-      /** create the user tab row for this hacker */
-      user = new User({
-        _id: hacker.id,
-        first_name: hacker.firstName,
-        last_name: hacker.lastName,
-      })
-      await data.users.save(user)
-    } else {
-      if (
-        user.first_name !== hacker.firstName ||
-        user.last_name !== hacker.lastName
-      ) {
-        // Refresh the user's name
-        user.first_name = hacker.firstName
-        user.last_name = hacker.lastName
-        await data.users.save(user)
-      }
+
+    if (!reg) {
+      reg = new Registration({ _user_id: user.id, hackathon_id: hackathon._id })
+      reg = await data.registrations.save(reg)
     }
-    if (reg) {
-      hacker.registration = reg
-      return reg
-    }
-    reg = new Registration({ _user_id: hacker.id, hackathon_id: hackathon._id })
-    reg = await data.registrations.save(reg)
-    return reg
+
+    user.registration = reg
+    return reg.toObject()
   }
 
   async getTechnologies(): Promise<ITechnologyProps[]> {
@@ -404,11 +386,13 @@ class SheetsClient {
   }
 
   getHackersHeadings(): HackersHeadings {
-    const template = new Hacker()
-    const lookerSdk = getCore40SDK()
-    const hackersContainer = new Hackers(lookerSdk)
-    const headers = hackersContainer.displayHeaders
-    return sheetHeader(headers, template)
+    if (!this.hackers) {
+      throw new Error('Cannot get hackers heading. Hackers not loaded')
+    }
+    if (!this.hacker) {
+      throw new Error('Cannot get hackers heading. Hacker not loaded')
+    }
+    return sheetHeader(this.hackers.displayHeaders, this.hacker)
   }
 
   getJudgingsHeadings(): JudgingsHeadings {
@@ -535,18 +519,19 @@ class SheetsClient {
     })
   }
 
+  // Needs to match getter methods on Hacker class
   private decorateHacker(hackerProps: IHackerProps, _: Hacker): IHackerProps {
     if (hackerProps.id === undefined) {
-      hackerProps.id = String(hackerProps.user.id)
+      hackerProps.id = hackerProps.userRecord!._id
     }
     if (hackerProps.firstName === undefined) {
-      hackerProps.firstName = hackerProps.user.first_name!
+      hackerProps.firstName = hackerProps.userRecord!.first_name
     }
     if (hackerProps.firstName === undefined) {
-      hackerProps.lastName = hackerProps.user.last_name!
+      hackerProps.lastName = hackerProps.userRecord!.last_name
     }
     if (hackerProps.name === undefined) {
-      hackerProps.name = hackerProps.user.display_name!
+      hackerProps.name = `${hackerProps.userRecord!.first_name} ${hackerProps.userRecord!.last_name}`
     }
     if (hackerProps.registered === undefined && hackerProps.registration) {
       hackerProps.registered = hackerProps.registration.date_registered
