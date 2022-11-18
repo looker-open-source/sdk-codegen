@@ -65,8 +65,7 @@ export const HackerList: FC<HackerListProps> = ({
   const userCell = (hacker: IHackerProps, columnName: string) => {
     if (columnName !== 'id') {
       return sheetCell(hacker[columnName])
-    }
-    if (columnName === 'id') {
+    } else {
       return sheetCell(hacker.user.id)
     }
   }
