@@ -236,10 +236,11 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 label="Technologies"
                 required
                 options={availableTechnologies?.map((technology) => ({
+                  label: technology.description,
                   value: technology._id,
                 }))}
                 isFilterable
-                placeholder="Type values or select from the list"
+                placeholder="Select from the list"
                 values={project.technologies}
                 onChange={(values: string[] = []) => {
                   dispatch(

@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { IRowModel } from '@looker/wholly-sheet'
-import { RowModel } from '@looker/wholly-sheet'
+import type { IRowModel } from '@looker/wholly-artifact'
+import { RowModel } from '@looker/wholly-artifact'
 import type { IHacker } from './Hacker'
 
 export interface ISheetRow extends IRowModel {
@@ -36,7 +36,7 @@ export interface ISheetRow extends IRowModel {
   canDelete(user: IHacker): boolean
 }
 
-export class SheetRow<T extends ISheetRow> extends RowModel<T> {
+export abstract class SheetRow<T extends ISheetRow> extends RowModel<T> {
   constructor(values?: any) {
     super(values)
   }
@@ -56,5 +56,9 @@ export class SheetRow<T extends ISheetRow> extends RowModel<T> {
       user.canJudge ||
       user.permissions.has('update')
     )
+  }
+
+  namespace() {
+    return 'hackathon'
   }
 }

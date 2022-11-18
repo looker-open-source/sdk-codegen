@@ -55,7 +55,20 @@ export const HackerList: FC<HackerListProps> = ({
   const columns = useSelector(getHackersHeadings)
 
   const hackHacker = (hacker: IHackerProps) => {
-    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.id}/edit`)
+    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.user.id}/edit`)
+  }
+
+  // Super hacky. Override the 'id' value, which is the User class id,
+  // with the Looker user id
+  // Have to do this because we want to show `Id` in the column header,
+  // but actually show a different value.
+  const userCell = (hacker: IHackerProps, columnName: string) => {
+    if (columnName !== 'id') {
+      return sheetCell(hacker[columnName])
+    }
+    if (columnName === 'id') {
+      return sheetCell(hacker.user.id)
+    }
   }
 
   const takeAction = (
@@ -65,7 +78,7 @@ export const HackerList: FC<HackerListProps> = ({
   ) => {
     const key = `${idx}.${columnName}`
     return (
-      <DataTableCell key={key}>{sheetCell(hacker[columnName])}</DataTableCell>
+      <DataTableCell key={key}>{userCell(hacker, columnName)}</DataTableCell>
     )
   }
 

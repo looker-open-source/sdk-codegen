@@ -82,19 +82,6 @@ describe('SheetData', () => {
         )
       })
     })
-    test('registers a user', async () => {
-      const hackathon = data.currentHackathon
-      expect(hackathon).toBeDefined()
-      if (hackathon) {
-        const mockUser = mockAHacker('1')
-        const actual = await data.registerUser(hackathon, mockUser)
-        expect(actual._user_id).toEqual(mockUser.id)
-        expect(actual.hackathon_id).toEqual(hackathon._id)
-        expect(actual._updated).not.toEqual(noDate)
-        expect(actual.date_registered).not.toEqual(noDate)
-        expect(actual.attended).toEqual(true)
-      }
-    })
     test(
       'locks hackathon projects',
       async () => {
