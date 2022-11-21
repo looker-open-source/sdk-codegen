@@ -267,7 +267,9 @@ class SheetsClient {
       )
 
       if (!hacker) {
-        throw new Error('Failed to load hacker')
+        throw new Error(
+          'Failed to load hacker. Looker user id: ' + lookerUser.id
+        )
       }
 
       // Assigns rights, perms, and attributes like timezone
@@ -380,7 +382,7 @@ class SheetsClient {
 
   getHackersHeadings(): HackersHeadings {
     if (!this.hackers) {
-      throw new Error('Cannot get hackers heading. Hackers not loaded')
+      throw new Error('Cannot get hackers heading. All hackers not loaded')
     }
     if (!this.hacker) {
       throw new Error('Cannot get hackers heading. Hacker not loaded')

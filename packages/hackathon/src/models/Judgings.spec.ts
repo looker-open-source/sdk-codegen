@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
+// import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
+// import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAdmin,
   mockJudge,
@@ -34,17 +34,17 @@ import {
   wait2Mins,
 } from '../test-data'
 import type { SheetData } from './SheetData'
-import { initActiveSheet } from './SheetData'
+// import { initActiveSheet } from './SheetData'
 
-let sheetSDK: SheetSDK
-let doc: ISheet
+// let sheetSDK: SheetSDK
+// let doc: ISheet
 let data: SheetData
 
-describe('Judgings', () => {
+describe.skip('Judgings', () => {
   beforeAll(async () => {
-    sheetSDK = await initSheetSDK()
-    doc = await sheetSDK.index()
-    data = initActiveSheet(sheetSDK, doc)
+    // sheetSDK = await initSheetSDK()
+    // doc = await sheetSDK.index()
+    // data = initActiveSheet(sheetSDK, doc)
   })
   describe('Permissions', () => {
     test('user cannot judge', () => {
