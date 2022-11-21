@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-// import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
-// import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
+import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
+import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAdmin,
   mockJudge,
@@ -40,6 +40,9 @@ import type { SheetData } from './SheetData'
 // let doc: ISheet
 let data: SheetData
 
+// Multiple comments to pass lint. Skipped all tests.
+// TODO: With WhollyArtifact change,
+// need to setup `data` differently for tests.
 describe.skip('Judgings', () => {
   beforeAll(async () => {
     // sheetSDK = await initSheetSDK()

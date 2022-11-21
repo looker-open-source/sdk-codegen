@@ -39,7 +39,9 @@ import type { SheetData, ITeamMemberProps } from '.'
 // let sheetSDK: SheetSDK
 // let doc: ISheet
 let data: SheetData
-// Multiple comments to pass lint. TODO: With WhollyArtifact change,
+
+// Multiple comments to pass lint. Skipped all tests.
+// TODO: With WhollyArtifact change,
 // need to setup `data` differently for tests.
 describe.skip('SheetData', () => {
   describe('end to end tests', () => {
