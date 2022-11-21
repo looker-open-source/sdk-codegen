@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
-import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
+// import type { ISheet, SheetSDK } from '@looker/wholly-sheet'
+// import { initSheetSDK } from '../../../wholly-sheet/src/testUtils/testUtils'
 import {
   mockAdmin,
   mockJudge,
