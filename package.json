@@ -28,6 +28,7 @@
     "mine": "run-p -c mine:*",
     "mine:declarations": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineDeclarations.ts",
     "mine:examples": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineExamples.ts",
+    "vox": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/vox.ts",
     "example": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }'",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",

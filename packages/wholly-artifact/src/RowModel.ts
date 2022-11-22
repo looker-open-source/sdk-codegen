@@ -263,7 +263,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       }
       if (typeof value === 'string') {
         try {
-          value = JSON.parse(value)
+          value = JSON.parse(decodeURI(value))
         } catch (e: any) {
           if (
             values.$artifact?.content_type?.localeCompare(APP_JSON, 'en', {
@@ -459,6 +459,8 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   /**
    * Values to store in attribute
+   *
+   * All string values are stored with encodeURI to prevent character encoding issues
    * @private
    */
   private storageValues() {
@@ -467,7 +469,9 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     // const keys = this.displayHeader()
     const keys = this.header()
     for (const key of keys) {
-      result[key] = this[key]
+      const val =
+        typeof this[key] === 'string' ? encodeURI(this[key]) : this[key]
+      result[key] = val
     }
     return result
   }
