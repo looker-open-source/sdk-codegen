@@ -263,7 +263,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       }
       if (typeof value === 'string') {
         try {
-          value = JSON.parse(decodeURI(value))
+          value = JSON.parse(value)
         } catch (e: any) {
           if (
             values.$artifact?.content_type?.localeCompare(APP_JSON, 'en', {
@@ -277,6 +277,9 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         }
       }
       Object.keys(value).forEach((k) => {
+        if (typeof value[k] === 'string') {
+          value[k] = decodeURI(value[k])
+        }
         this[k] = this.typeCast(k, value[k])
       })
       if (values.key) this.key = values.key
