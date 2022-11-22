@@ -277,10 +277,10 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         }
       }
       Object.keys(value).forEach((k) => {
-        if (typeof value[k] === 'string') {
-          value[k] = decodeURI(value[k])
-        }
         this[k] = this.typeCast(k, value[k])
+        if (typeof this[k] === 'string') {
+          this[k] = decodeURI(this[k])
+        }
       })
       if (values.key) this.key = values.key
       return true
