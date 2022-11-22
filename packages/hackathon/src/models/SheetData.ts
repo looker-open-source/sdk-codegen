@@ -23,6 +23,8 @@
  SOFTWARE.
 
  */
+import type { IArtifact } from '@looker/sdk'
+import { search_artifacts } from '@looker/sdk'
 import {
   Projects,
   Registrations,
@@ -46,14 +48,21 @@ export class SheetData {
     return this.hackathons.currentHackathon
   }
 
+  private extract(artifacts: IArtifact[], name: string) {
+    return artifacts.filter((a) => a.key.startsWith(`${name}:`))
+  }
+
   async init() {
-    // Not ideal, should load all data and then instantiate each WhollyArtifact in correct order. Right now depends on refresh() to fetch data. The order of table loads is important.
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     this.users = new Users(this, {
       header: ['_id', '_updated', 'first_name', 'last_name'],
       rows: [],
     })
-    await this.users.refresh()
+    const sdk = this.users.sdk
+    const artifacts = await sdk.ok(
+      search_artifacts(sdk, { namespace: this.users.namespace, key: '%' })
+    )
+    await this.users.refresh(this.extract(artifacts, this.users.tableName))
     this.registrations = new Registrations(this, {
       header: [
         '_id',
@@ -65,12 +74,16 @@ export class SheetData {
       ],
       rows: [],
     })
-    await this.registrations.refresh()
+    await this.registrations.refresh(
+      this.extract(artifacts, this.registrations.tableName)
+    )
     this.technologies = new Technologies(this, {
       header: ['_id', '_updated', 'description'],
       rows: [],
     })
-    await this.technologies.refresh()
+    await this.technologies.refresh(
+      this.extract(artifacts, this.technologies.tableName)
+    )
     this.hackathons = new Hackathons(this, {
       header: [
         '_id',
@@ -87,12 +100,16 @@ export class SheetData {
       ],
       rows: [],
     })
-    await this.hackathons.refresh()
+    await this.hackathons.refresh(
+      this.extract(artifacts, this.hackathons.tableName)
+    )
     this.teamMembers = new TeamMembers(this, {
       header: ['_id', '_updated', 'user_id', 'project_id', 'responsibilities'],
       rows: [],
     })
-    await this.teamMembers.refresh()
+    await this.teamMembers.refresh(
+      this.extract(artifacts, this.teamMembers.tableName)
+    )
     this.judgings = new Judgings(this, {
       header: [
         '_id',
@@ -108,7 +125,9 @@ export class SheetData {
       ],
       rows: [],
     })
-    await this.judgings.refresh()
+    await this.judgings.refresh(
+      this.extract(artifacts, this.judgings.tableName)
+    )
     this.projects = new Projects(this, {
       header: [
         '_id',
@@ -126,7 +145,9 @@ export class SheetData {
       ],
       rows: [],
     })
-    await this.projects.refresh()
+    await this.projects.refresh(
+      this.extract(artifacts, this.projects.tableName)
+    )
     this.projects.rows.forEach((p) => p.load(this))
     this.judgings.rows.forEach((j) => j.load(this))
     return this
