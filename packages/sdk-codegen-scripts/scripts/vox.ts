@@ -45,7 +45,7 @@ const utf8 = { encoding: 'utf-8' }
 const content = fs.readFileSync(indexFile, utf8)
 const artifacts = JSON.parse(content) as IArtifact[]
 const sdk = LookerNodeSDK.init40()
-const groupName = 'Looker_hack: Hackathon:cloudbi'
+const groupName = 'Looker_hack: Hackathon:cloudbi_2022'
 const namespace = 'Hackathon'
 let group: IGroup
 
@@ -69,13 +69,16 @@ const findOrMakeGroup = async () => {
 
 /**
  * find all references for this user id in all artifact's value collection and update it
- * @param oldKey to match
- * @param newKey to use for replacement
+ * @param user artifact
+ * @param userId to use for replacement
  */
-const swapUserId = (oldKey: string, newKey: string) => {
+const swapUserId = (user: IArtifact, userId: string) => {
+  const oldKey = user.key
+  const newKey = `User:${userId}`
   if (oldKey === newKey) return // no swap required
   const _user_id = '_user_id'
   const user_id = 'user_id'
+
   artifacts.forEach((a) => {
     const val = JSON.parse(a.value)
     const uid = user_id in val ? user_id : _user_id
@@ -85,6 +88,12 @@ const swapUserId = (oldKey: string, newKey: string) => {
       a.value = JSON.stringify(val)
     }
   })
+  user.key = newKey
+  const val = JSON.parse(user.value)
+  val._id = newKey
+  val.looker_id = userId
+  user.value = JSON.stringify(val)
+  return user
 }
 
 /**
@@ -114,9 +123,7 @@ const findOrMakeUser = async (art: IArtifact) => {
   if (!user?.group_ids?.includes(group.id!)) {
     await sdk.ok(add_group_user(sdk, group.id!, { user_id: user.id! }))
   }
-  const newKey = `User:${user.id}`
-  swapUserId(art.key, newKey)
-  art.key = newKey
+  return swapUserId(art, user.id!)
 }
 
 // const removeHackUsers = async () => {

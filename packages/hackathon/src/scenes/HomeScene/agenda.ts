@@ -27,7 +27,7 @@
 import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
-const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
+const day1 = zonedTimeToUtc('2022-12-06 00:00:00', 'America/Los_Angeles')
 const day2 = add(day1, { days: 1 })
 let current = day1
 
