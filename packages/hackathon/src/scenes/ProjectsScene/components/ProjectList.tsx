@@ -175,7 +175,8 @@ export const ProjectList: FC<ProjectListProps> = () => {
     if (
       columnName !== 'locked' &&
       columnName !== '$team_count' &&
-      columnName !== '$judge_count'
+      columnName !== '$judge_count' &&
+      columnName !== '$techs'
     )
       return sheetCell(project[columnName])
 
@@ -201,6 +202,9 @@ export const ProjectList: FC<ProjectListProps> = () => {
           <Icon size="small" icon={<Lock />} />
         </Tooltip>
       )
+    }
+    if (columnName === '$techs') {
+      return sheetCell(project.$techs.join(','))
     }
 
     return ''

@@ -278,6 +278,9 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       }
       Object.keys(value).forEach((k) => {
         this[k] = this.typeCast(k, value[k])
+        if (typeof this[k] === 'string') {
+          this[k] = decodeURI(this[k])
+        }
       })
       if (values.key) this.key = values.key
       return true
@@ -459,6 +462,8 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
 
   /**
    * Values to store in attribute
+   *
+   * All string values are stored with encodeURI to prevent character encoding issues
    * @private
    */
   private storageValues() {
@@ -467,7 +472,9 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     // const keys = this.displayHeader()
     const keys = this.header()
     for (const key of keys) {
-      result[key] = this[key]
+      const val =
+        typeof this[key] === 'string' ? encodeURI(this[key]) : this[key]
+      result[key] = val
     }
     return result
   }

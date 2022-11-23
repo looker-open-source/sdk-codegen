@@ -27,8 +27,8 @@
 import type { Looker40SDK } from '@looker/sdk'
 import type { ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet'
 import { addMinutes } from '@looker/wholly-sheet'
-import type { SheetData } from '../models'
 import {
+  SheetData,
   Hackathon,
   Hackathons,
   Hacker,
@@ -198,7 +198,7 @@ export const mockUsers = () => {
 }
 
 export const mockSheetData = () => {
-  const result = initActiveSheet(mockSheetSDK, mockSheet)
+  const result = initActiveSheet(new SheetData())
   result.users = mockUsers()
   result.hackathons = mockHackathons()
   result.projects = mockProjects(result.hackathons.rows, result.users.rows)

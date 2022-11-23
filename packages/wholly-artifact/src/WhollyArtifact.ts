@@ -174,8 +174,11 @@ export interface IWhollyArtifact<T extends IRowModel, P> {
    */
   typeRows<T extends IRowModel>(rows: SheetValues): T[]
 
-  /** Reload the entire tab by fetching all its values from the GSheet */
-  refresh<T extends IRowModel>(): Promise<T[]>
+  /**
+   * Reload the entire tab by fetching all its values from the GSheet
+   * @param values to use for refresh. If not provided, artifacts for the namespace will be searched
+   */
+  refresh<T extends IRowModel>(values?: any): Promise<T[]>
 
   /**
    * Save the specified row to the sheet.
@@ -331,13 +334,15 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     return this.rows as unknown as T[]
   }
 
-  async refresh<T extends IRowModel>(): Promise<T[]> {
-    const values = await this.sdk.ok(
-      search_artifacts(this.sdk, {
-        namespace: this.namespace,
-        key: `${this.tableName}:%`,
-      })
-    )
+  async refresh<T extends IRowModel>(values?: any): Promise<T[]> {
+    if (!values) {
+      values = await this.sdk.ok(
+        search_artifacts(this.sdk, {
+          namespace: this.namespace,
+          key: `${this.tableName}:%`,
+        })
+      )
+    }
     this.rows = this.typeRows(values)
     this.createIndex()
     return this.rows as unknown as T[]
