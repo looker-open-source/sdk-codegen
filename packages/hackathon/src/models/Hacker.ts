@@ -312,7 +312,7 @@ export class Hackers extends TypedRows<Hacker> {
           // Refresh the user's name
           userRecord.first_name = u.first_name as string
           userRecord.last_name = u.last_name as string
-          userRecord = await data.users.save(userRecord)
+          userRecord = await data.users.update(userRecord)
         }
       }
       this.rows.push(new Hacker(this.sdk, u, userRecord))
