@@ -6,7 +6,7 @@ There are some items that need to be configured for the Hackathon extension to f
 
 ### Hackathon extension
 
-Until the Hackathon extension is available via the Looker Marketplace, a Hackathon manifest needs to be used. [Example Hackathon manifest]()
+Until the Hackathon extension is available via the Looker Marketplace, a Hackathon manifest needs to be used. [Example Hackathon manifest](manifest.lkml)
 
 Remember to add a model to the project that has a valid connection.
 

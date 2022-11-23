@@ -21,7 +21,6 @@ application: hackathon {
     use_embeds: no
     use_iframes: no
     use_clipboard: no
-    external_api_urls: ["http://localhost:8081/*"]
     core_api_methods: [
       "me",
       "all_roles",
