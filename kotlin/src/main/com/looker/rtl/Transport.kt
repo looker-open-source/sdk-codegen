@@ -321,7 +321,13 @@ class Transport(val options: TransportOptions) {
 
         val requestPath = makeUrl(path, queryParams, authenticator)
 
-        val auth = authenticator ?: ::defaultAuthenticator
+        var auth = authenticator ?: ::defaultAuthenticator
+        if (path.startsWith("http://", true) ||
+            path.startsWith("https://", true)) {
+            // if a full path is passed in, this is a straight fetch, not an API call
+            // so don't authenticate
+            auth = ::defaultAuthenticator
+        }
 
         val finishedRequest = auth(RequestSettings(method, requestPath, headers))
 
