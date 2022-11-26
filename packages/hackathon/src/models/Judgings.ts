@@ -89,6 +89,10 @@ export class Judging extends SheetRow<IJudging> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Judging'
+  }
+
   private data() {
     return getActiveSheet()
   }

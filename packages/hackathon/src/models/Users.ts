@@ -62,6 +62,10 @@ export class User extends SheetRow<IUser> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'User'
+  }
+
   get $name(): string {
     return `${this.first_name} ${this.last_name}`
   }
