@@ -60,6 +60,10 @@ export class TeamMember extends SheetRow<ITeamMember> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'TeamMember'
+  }
+
   get $name() {
     if (!this.$user) {
       throw new Error(`$user is not assigned for user_id ${this.user_id}`)

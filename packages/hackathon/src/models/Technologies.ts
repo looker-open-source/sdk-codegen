@@ -49,6 +49,10 @@ export class Technology extends SheetRow<ITechnology> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Technology'
+  }
+
   toObject(): ITechnologyProps {
     return super.toObject() as ITechnologyProps
   }
