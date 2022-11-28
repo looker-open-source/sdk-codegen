@@ -345,11 +345,7 @@ class SheetsClient {
     const projects = await this.getSheetProjects()
     const project = projects.find(projectId, '_id')
     if (project) {
-      // TODO for some reason hacker id not populated. Verify with JK
-      // TODO originally used users but ended using rows in order to add myself
-      const hacker = this.hackers!.rows.find(
-        (hacker) => String(hacker.user.id) === hackerId
-      )
+      const hacker = this.hackers!.rows.find(({ id }) => id === hackerId)
       if (hacker) {
         if (leave) {
           await project.leave(hacker)
@@ -395,8 +391,8 @@ class SheetsClient {
       '$judge_name',
       '$title',
       'execution',
-      'ambition',
-      'coolness',
+      'scope',
+      'novelty',
       'impact',
       'score',
       'notes',

@@ -90,7 +90,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
 
   const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
     const isMember = isProjectMember(hacker, project)
-    dispatch(changeMembership(project!._id, String(hacker.user.id), isMember))
+    dispatch(changeMembership(project!._id, hacker.id, isMember))
     dispatch(currentProjectsRequest())
   }
 
@@ -215,7 +215,12 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const rows = projects
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((project, idx) => (
-      <DataTableItem key={idx} id={idx.toString()} actions={actions(project)}>
+      <DataTableItem
+        key={idx}
+        id={idx.toString()}
+        actions={actions(project)}
+        onClick={handleView.bind(null, project)}
+      >
         {columns.map((column) => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {projectCell(project, column.id)}

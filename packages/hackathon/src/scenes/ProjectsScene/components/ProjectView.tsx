@@ -32,25 +32,35 @@ import type { IProjectProps } from '../../../models'
 import { getTechnologies } from '../../../data/hack_session/selectors'
 import { getMembers, techDescriptions } from '../../utils'
 
-interface ProjectViewProps {
-  project: IProjectProps
-}
+type ProjectViewProps = Pick<
+  IProjectProps,
+  | 'description'
+  | 'technologies'
+  | 'members'
+  | 'title'
+  | 'project_type'
+  | 'contestant'
+>
 
-export const ProjectView: FC<ProjectViewProps> = ({ project }) => {
+export const ProjectView: FC<ProjectViewProps> = ({
+  description,
+  technologies,
+  members,
+  title,
+  project_type,
+  contestant,
+}) => {
   const availableTechnologies = useSelector(getTechnologies)
+  const view = `# ${title}
+by ${getMembers(members)}
 
-  const tech = techDescriptions(project.technologies, availableTechnologies)
-  const members = getMembers(project.$members)
-  const view = `# ${project.title}
-by ${members}
+${description}
 
-${project.description}
+**Uses**: ${techDescriptions(technologies, availableTechnologies)}
 
-**Uses**: ${tech}
+**Project type**: ${project_type}
 
-**Project type**: ${project.project_type}
-
-**Contestant**: ${project.contestant ? 'Yes' : 'No'}
+**Contestant**: ${contestant ? 'Yes' : 'No'}
 `
   return <ExtMarkdown source={view} />
 }

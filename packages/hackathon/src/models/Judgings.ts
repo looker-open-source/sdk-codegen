@@ -42,8 +42,8 @@ export interface IJudgingProps extends IRowModelProps {
   user_id: string
   project_id: string
   execution: number
-  ambition: number
-  coolness: number
+  scope: number
+  novelty: number
   impact: number
   score: number
   notes: string
@@ -58,8 +58,8 @@ export interface IJudgingProps extends IRowModelProps {
 export interface IJudging extends IJudgingProps, ISheetRow {
   calculateScore(
     execution: number,
-    ambition: number,
-    coolness: number,
+    scope: number,
+    novelty: number,
     impact: number
   ): number
 }
@@ -69,8 +69,8 @@ export class Judging extends SheetRow<IJudging> {
   user_id = ''
   project_id = ''
   execution = 0
-  ambition = 0
-  coolness = 0
+  scope = 0
+  novelty = 0
   impact = 0
   score = 0
   notes = ''
@@ -116,11 +116,11 @@ export class Judging extends SheetRow<IJudging> {
 
   calculateScore(
     execution: number,
-    ambition: number,
-    coolness: number,
+    scope: number,
+    novelty: number,
     impact: number
   ) {
-    return 2 * execution + ambition + coolness + impact
+    return 2 * execution + scope + novelty + impact
   }
 
   canDelete(user: IHacker): boolean {
@@ -139,8 +139,8 @@ export class Judging extends SheetRow<IJudging> {
     super.prepare()
     this.score = this.calculateScore(
       this.execution,
-      this.ambition,
-      this.coolness,
+      this.scope,
+      this.novelty,
       this.impact
     )
     return this as unknown as IJudging

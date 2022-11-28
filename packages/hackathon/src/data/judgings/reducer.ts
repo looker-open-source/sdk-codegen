@@ -44,7 +44,7 @@ const defaultState: Readonly<JudgingsState> = Object.freeze({
 })
 
 const calculateScore = (judging: IJudgingProps): number =>
-  2 * judging.execution + judging.ambition + judging.coolness + judging.impact
+  2 * judging.execution + judging.scope + judging.novelty + judging.impact
 
 const normalizeValue = (value: number) => {
   return value > 0 ? value : 1
@@ -55,8 +55,8 @@ const normalizeJudgingData = (
 ): IJudgingProps | undefined => {
   const newJudging = judging
   if (newJudging) {
-    newJudging.ambition = normalizeValue(newJudging.ambition)
-    newJudging.coolness = normalizeValue(newJudging.coolness)
+    newJudging.scope = normalizeValue(newJudging.scope)
+    newJudging.novelty = normalizeValue(newJudging.novelty)
     newJudging.execution = normalizeValue(newJudging.execution)
     newJudging.impact = normalizeValue(newJudging.impact)
     newJudging.score = calculateScore(newJudging)
