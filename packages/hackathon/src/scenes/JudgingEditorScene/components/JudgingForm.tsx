@@ -145,7 +145,7 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
           <Space between>
             <Space>
               <ButtonOutline type="button" onClick={handleCancel}>
-                Return to judging
+                Return to judgings
               </ButtonOutline>
               <Button type="submit" onClick={handleSave} disabled={readonly}>
                 Save judging
