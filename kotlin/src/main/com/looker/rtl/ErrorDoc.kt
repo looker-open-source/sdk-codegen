@@ -116,7 +116,7 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl): IErrorD
 
         /** API error document_url link pattern */
         private const val ErrorDocPatternExpression =
-            """(?<redirector>https:\/\/docs\.looker\.com\/r\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)"""
+            """(?<redirector>https://docs\.looker\.com/r/err/|https://cloud\.google\.com/looker/docs/r/err/)(?<apiVersion>.*)/(?<statusCode>\d{3})(?<apiPath>.*)"""
         val ErrorDocRx = Regex(ErrorDocPatternExpression, RegexOption.IGNORE_CASE)
     }
 
