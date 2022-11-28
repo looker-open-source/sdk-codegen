@@ -47,6 +47,8 @@ export interface IJudgingProps extends IRowModelProps {
   impact: number
   score: number
   notes: string
+  // TODO: These fields are meant to display associated project/user info
+  // Should be removed and update react/redux to provide user/project for UI.
   $title: string
   $description: string
   $project_type: string
