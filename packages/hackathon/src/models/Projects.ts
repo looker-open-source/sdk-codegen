@@ -97,6 +97,10 @@ export class Project extends SheetRow<Project> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Project'
+  }
+
   get $team_count() {
     return `${this.$team.length}/${this.$hackathon?.max_team_size || 5}`
   }

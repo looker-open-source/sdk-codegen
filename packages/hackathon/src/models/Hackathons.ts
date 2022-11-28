@@ -67,6 +67,10 @@ export class Hackathon extends SheetRow<IHackathon> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Hackathon'
+  }
+
   isActive() {
     const now = new Date().getTime()
     return this.date.getTime() <= now && this.judging_stops.getTime() >= now

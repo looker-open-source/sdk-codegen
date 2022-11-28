@@ -56,6 +56,10 @@ export class Registration extends SheetRow<IRegistration> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Registration'
+  }
+
   prepare(): IRegistration {
     super.prepare()
     if (this.date_registered === noDate) this.date_registered = new Date()
