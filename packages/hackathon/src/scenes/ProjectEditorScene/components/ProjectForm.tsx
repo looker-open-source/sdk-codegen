@@ -174,6 +174,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 required
                 name="title"
                 label="Title"
+                description="DO NOT ENTER ANY PERSONALLY IDENTIFIABLE INFORMATION"
                 value={project.title}
                 onChange={(e: BaseSyntheticEvent) => {
                   dispatch(
@@ -186,6 +187,8 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 required
                 label="Description"
                 name="description"
+                detail="Markdown enabled"
+                description="DO NOT ENTER ANY PERSONALLY IDENTIFIABLE INFORMATION"
                 value={project.description}
                 onChange={(e: BaseSyntheticEvent) => {
                   dispatch(
@@ -281,7 +284,14 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
           </Form>
         </Tab2>
         <Tab2 id="preview" label="Preview" width="100%">
-          <ProjectView project={project} />
+          <ProjectView
+            description={project.description}
+            technologies={project.technologies}
+            members={project.$members}
+            title={project.title}
+            project_type={project.project_type}
+            contestant={project.contestant}
+          />
         </Tab2>
       </Tabs2>
       <Space between width="55vw">
