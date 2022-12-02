@@ -261,14 +261,16 @@ export class Project extends SheetRow<Project> {
       throw new Error(`Hackathon ${this._hackathon_id} was not found`)
     if (this.$team.length >= hackathon.max_team_size)
       throw new Error(
-        `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
+        `Cannot join project. Project already has ${hackathon.max_team_size} team members, the max allowed for ${hackathon.name}.`
       )
     let member = this.findMember(hacker)
     /** already in the project, nothing to do */
+
     if (member) return this
     member = new TeamMember({ user_id: hacker.id, project_id: this._id })
     await data.teamMembers.save(member)
     // Reload because maybe there's another different member now
+    // Regenerate members from TeamMember rows. THIS DOES NOT FETCH TEAM MEMBERS.
     this.getMembers()
     return this
   }
@@ -278,9 +280,8 @@ export class Project extends SheetRow<Project> {
     const member = this.findMember(hacker)
     if (!member) return this // nothing to do
     await this.data().teamMembers.delete(member)
-    // Reload because maybe there's another different member now
+    // Regenerate members from TeamMember rows. THIS DOES NOT FETCH TEAM MEMBERS.
     this.getMembers()
-
     return this
   }
 

@@ -25,7 +25,6 @@
  */
 import omit from 'lodash/omit'
 import type { ValidationMessages } from '@looker/components'
-import type { ITabTable } from '@looker/wholly-artifact'
 import { getCore40SDK } from '@looker/extension-sdk-react'
 import { initActiveSheet, SheetData } from '../models/SheetData'
 import type {
@@ -80,14 +79,17 @@ class SheetsClient {
 
   async getCurrentProjects(hackathonId?: string): Promise<IProjectProps[]> {
     const data = await this.getSheetData()
+    // Need to refresh teamMembers for latest team members
+    await data.teamMembers.refresh()
     await data.projects.refresh()
     const hackathon = await this.getSheetHackathon(hackathonId)
     const rows = data.projects.filterBy(hackathon)
-    // Create a projects object from the filtered rows
+    // Create a projects object fom the filtered rows
     const result = new Projects(data, {
       header: data.projects.header,
-      rows: rows,
-    } as ITabTable)
+      rows: [],
+    })
+    await result.refresh(rows)
     return this.decorateProjectObjects(result.toObject(), rows)
   }
 
@@ -509,6 +511,7 @@ class SheetsClient {
       if (!projectProps.$techs) {
         projectProps.$techs = projects[index].$techs
       }
+
       return projectProps
     })
   }
