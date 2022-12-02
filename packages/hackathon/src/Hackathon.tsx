@@ -83,14 +83,20 @@ export const Hackathon: FC<HackathonProps> = hot(() => {
       loadGoogleFonts={themeOverrides.loadGoogleFonts}
       themeCustomizations={themeOverrides.themeCustomizations}
     >
+      {message && (
+        <MessageBar
+          intent={message.intent}
+          onPrimaryClick={clearMessage}
+          // Styling to float message bar
+          style={{ position: 'fixed', zIndex: 99999, width: '100%' }}
+        >
+          {message.messageText}
+        </MessageBar>
+      )}
       <Background>
         <Page px="large">
           <Header text={headerText} />
-          {message && (
-            <MessageBar intent={message.intent} onPrimaryClick={clearMessage}>
-              {message.messageText}
-            </MessageBar>
-          )}
+
           <Layout hasAside>
             <Aside width="200px">
               <SideNav authorizedRoutes={authorizedRoutes} />

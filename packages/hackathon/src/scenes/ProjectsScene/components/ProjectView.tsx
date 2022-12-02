@@ -52,9 +52,10 @@ export const ProjectView: FC<ProjectViewProps> = ({
 }) => {
   const availableTechnologies = useSelector(getTechnologies)
   const view = `# ${title}
-by ${getMembers(members)}
 
 ${description}
+
+**Team members**: ${getMembers(members)} 
 
 **Uses**: ${techDescriptions(technologies, availableTechnologies)}
 

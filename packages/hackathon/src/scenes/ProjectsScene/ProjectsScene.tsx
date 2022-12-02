@@ -28,10 +28,18 @@ import type { FC } from 'react'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Button, ButtonOutline, Space, Heading, Span } from '@looker/components'
+import {
+  Button,
+  ButtonOutline,
+  Space,
+  Heading,
+  Span,
+  Icon,
+} from '@looker/components'
 import { Add } from '@styled-icons/material-outlined/Add'
 import { Create } from '@styled-icons/material-outlined/Create'
 import { Lock } from '@styled-icons/material-outlined/Lock'
+import { ArrowDownward } from '@styled-icons/material/ArrowDownward'
 import {
   currentProjectsRequest,
   lockProjects,
@@ -93,10 +101,17 @@ export const ProjectsScene: FC<ProjectSceneProps> = () => {
   return (
     <>
       <Space>
-        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Projects <ButtonOutline onClick={handleReload}>Reload</ButtonOutline>
-        </Heading>
-        {isLoading && <Loading message={'Processing projects...'} />}
+        <Space>
+          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+            Projects{' '}
+            <ButtonOutline onClick={handleReload}>Reload</ButtonOutline>
+          </Heading>
+          {isLoading && <Loading message={'Processing projects...'} />}
+        </Space>
+        <Span color={'inform'} style={{ whiteSpace: 'nowrap' }}>
+          Project options
+        </Span>
+        <Icon color={'inform'} pr="u1" icon={<ArrowDownward />} />
       </Space>
       <ProjectList />
       <Space pt="xlarge">

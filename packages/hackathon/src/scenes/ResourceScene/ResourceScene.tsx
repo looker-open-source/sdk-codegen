@@ -32,43 +32,61 @@ import {
   Grid,
   Link,
   Text,
-  ButtonGroup,
   Heading,
   CardContent,
-  ButtonItem,
   Paragraph,
   Field,
+  SelectMulti,
+  Space,
 } from '@looker/components'
 import { getExtensionSDK } from '@looker/extension-sdk'
 import { Routes } from '../../routes/AppRouter'
-import { resources, ResourceTag } from './resource_data'
+import { resources, ResourceTag, ResourceType } from './resource_data'
 
 interface ResourceSceneProps {}
+
+const DOMAIN_PARAM = 'domain'
+const TYPE_PARAM = 'type'
 
 export const ResourceScene: FC<ResourceSceneProps> = () => {
   const history = useHistory()
   const location = useLocation()
+  const urlParams = new URLSearchParams(location.search)
 
-  const filterValues = (
-    location.search
-      ? new URLSearchParams(location.search.slice(1)).get('fv') || ''
-      : ''
-  )
-    .split(',')
-    .filter((fv) => fv !== '')
+  const domainFilterValues: string[] = urlParams.get(DOMAIN_PARAM)
+    ? urlParams
+        .get(DOMAIN_PARAM)!
+        .split(',')
+        .filter((v) => v !== '')
+    : []
+  const typeFilterValues: string[] = urlParams.get(TYPE_PARAM)
+    ? urlParams
+        .get(TYPE_PARAM)!
+        .split(',')
+        .filter((v) => v !== '')
+    : []
 
-  const selectedResources =
-    filterValues.length === 0
-      ? resources
-      : resources.filter((resource) => {
-          return filterValues.includes(resource.tag)
-        })
+  let selectedResources = resources
 
-  const updateFilterValue = (values: string[]) => {
-    const search = values.length === 0 ? '' : `?fv=${values.join(',')}`
-    if (history.location.search !== search) {
-      history.push(`${Routes.RESOURCES}${search}`)
-    }
+  if (domainFilterValues.length !== 0) {
+    selectedResources = selectedResources.filter(({ tag }) => {
+      return domainFilterValues.includes(tag)
+    })
+  }
+
+  if (typeFilterValues.length !== 0) {
+    selectedResources = selectedResources.filter(({ type }) => {
+      return typeFilterValues.includes(type)
+    })
+  }
+
+  const updateFilterValues = (
+    parameter: string,
+    values: string[] | undefined
+  ) => {
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set(parameter, values ? values.join(',') : '')
+    history.push(`${Routes.RESOURCES}?${urlParams.toString()}`)
   }
 
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -85,19 +103,37 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
         Here are videos, tutorials, demos, apis, datasets, and dev tools for
         your hacking needs.
       </Paragraph>
-      <Field
-        label="Filter by areas of interest:"
-        description="Select 1 or more areas"
-      >
-        <ButtonGroup value={filterValues} onChange={updateFilterValue}>
-          {Object.keys(ResourceTag).map((k) => (
-            <ButtonItem key={k} value={ResourceTag[k]}>
-              {ResourceTag[k]}
-            </ButtonItem>
-          ))}
-        </ButtonGroup>
-      </Field>
-      <Grid pt="medium" columns={3}>
+      <Space>
+        <Field
+          label="Filter by type:"
+          description="Defaults to all types when none selected."
+          width="40vh"
+        >
+          <SelectMulti
+            options={Object.keys(ResourceType).map((k) => ({
+              value: ResourceType[k],
+              label: k,
+            }))}
+            values={typeFilterValues}
+            onChange={updateFilterValues.bind(null, TYPE_PARAM)}
+          />
+        </Field>
+        <Field
+          label="Filter by domain:"
+          description="Defaults to all domains when none selected."
+          width="40vh"
+        >
+          <SelectMulti
+            options={Object.keys(ResourceTag).map((k) => ({
+              value: ResourceTag[k],
+              label: k,
+            }))}
+            values={domainFilterValues}
+            onChange={updateFilterValues.bind(null, DOMAIN_PARAM)}
+          />
+        </Field>
+      </Space>
+      <Grid pt="medium" columns={4}>
         {selectedResources.map((_k, index) => (
           <Link
             href={selectedResources[index].shortenedLink}
@@ -107,7 +143,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
             <Card raised key={index} height="25vh">
               <CardContent>
                 <Text
-                  fontSize="xsmall"
+                  fontSize="xxsmall"
                   textTransform="uppercase"
                   fontWeight="semiBold"
                   color="subdued"
@@ -115,7 +151,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
                   {selectedResources[index].type} —{' '}
                   {selectedResources[index].tag}
                 </Text>
-                <Heading fontSize="xxxlarge">
+                <Heading fontSize="xlarge">
                   {selectedResources[index].title}
                 </Heading>
                 <Heading as="h4" fontSize="small">

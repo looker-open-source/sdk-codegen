@@ -91,7 +91,6 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
     const isMember = isProjectMember(hacker, project)
     dispatch(changeMembership(project!._id, hacker.id, isMember))
-    dispatch(currentProjectsRequest())
   }
 
   const lockCol = columns[0]
@@ -172,42 +171,34 @@ export const ProjectList: FC<ProjectListProps> = () => {
   }
 
   const projectCell = (project: IProjectProps, columnName: string) => {
-    if (
-      columnName !== 'locked' &&
-      columnName !== '$team_count' &&
-      columnName !== '$judge_count' &&
-      columnName !== '$techs'
-    )
-      return sheetCell(project[columnName])
-
-    if (columnName === '$team_count') {
-      return (
-        <Tooltip content={project.$members.join(',')}>
-          {sheetCell(project[columnName])}
-        </Tooltip>
-      )
-    }
-    if (columnName === '$judge_count') {
-      if (!hacker.canAdmin && !hacker.canStaff)
+    switch (columnName) {
+      case 'locked':
+        return (
+          project.locked && (
+            <Tooltip content={<>This project is locked.</>}>
+              <Icon size="small" icon={<Lock />} />
+            </Tooltip>
+          )
+        )
+      case '$team_count':
+        return (
+          <Tooltip content={project.$members.join(',')}>
+            {sheetCell(project[columnName])}
+          </Tooltip>
+        )
+      case '$judge_count':
+        if (!hacker.canAdmin && !hacker.canStaff)
+          return sheetCell(project[columnName])
+        return (
+          <Tooltip content={project.$judges.join(',')}>
+            {sheetCell(project[columnName])}
+          </Tooltip>
+        )
+      case '$techs':
+        return sheetCell(project.$techs.join(','))
+      default:
         return sheetCell(project[columnName])
-      return (
-        <Tooltip content={project.$judges.join(',')}>
-          {sheetCell(project[columnName])}
-        </Tooltip>
-      )
     }
-    if (project.locked) {
-      return (
-        <Tooltip content={<>This project is locked.</>}>
-          <Icon size="small" icon={<Lock />} />
-        </Tooltip>
-      )
-    }
-    if (columnName === '$techs') {
-      return sheetCell(project.$techs.join(','))
-    }
-
-    return ''
   }
 
   const totalPages = Math.ceil(projects.length / PAGE_SIZE)

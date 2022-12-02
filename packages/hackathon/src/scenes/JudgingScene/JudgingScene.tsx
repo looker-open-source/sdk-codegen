@@ -26,7 +26,8 @@
 import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Space, Heading } from '@looker/components'
+import { Space, Heading, Span, Icon } from '@looker/components'
+import { ArrowDownward } from '@styled-icons/material/ArrowDownward'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from './components'
@@ -39,10 +40,16 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
   return (
     <>
       <Space>
-        <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-          Judgings
-        </Heading>
-        {isLoading && <Loading message={'Processing judgings...'} />}
+        <Space>
+          <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
+            Judgings
+          </Heading>
+          {isLoading && <Loading message={'Processing judgings...'} />}
+        </Space>
+        <Span color={'inform'} style={{ whiteSpace: 'nowrap' }}>
+          Judging options
+        </Span>
+        <Icon color={'inform'} pr="u1" icon={<ArrowDownward />} />
       </Space>
       <JudgingList />
     </>

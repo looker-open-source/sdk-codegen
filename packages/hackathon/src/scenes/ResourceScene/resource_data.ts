@@ -25,7 +25,7 @@
  */
 
 // Enum serves as display strings too
-enum ResourceType {
+export enum ResourceType {
   Resource = 'Resource',
   Tutorial = 'Tutorial',
   Example = 'Example',

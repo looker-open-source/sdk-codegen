@@ -91,8 +91,8 @@ function* currentProjectsSaga(): SagaIterator<IProjectProps[]> {
   try {
     yield put(beginLoading())
     projects = yield call([sheetsClient, sheetsClient.getCurrentProjects])
-    yield put(endLoading())
     yield put(currentProjectsResponse(projects))
+    yield put(endLoading())
   } catch (err) {
     console.error(err)
     yield put(actionMessage('A problem occurred loading the data', 'critical'))
@@ -280,6 +280,8 @@ function* changeMembershipSaga(action: ChangeMembershipAction): SagaIterator {
       leave
     )
     yield put(saveProjectResponse(project, !leave))
+    const projects = yield call([sheetsClient, sheetsClient.getCurrentProjects])
+    yield put(currentProjectsResponse(projects))
     yield put(
       actionMessage(
         `You have ${leave ? 'left' : 'joined'} the project`,
@@ -289,12 +291,7 @@ function* changeMembershipSaga(action: ChangeMembershipAction): SagaIterator {
     yield put(endLoading())
   } catch (err) {
     console.error(err)
-    yield put(
-      actionMessage(
-        'A problem occurred while locking the hackathon projects',
-        'critical'
-      )
-    )
+    yield put(actionMessage((err as Error).message, 'critical'))
   }
 }
 

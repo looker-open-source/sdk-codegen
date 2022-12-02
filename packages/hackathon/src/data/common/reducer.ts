@@ -48,12 +48,14 @@ export const commonReducer = (
       return {
         ...state,
         message: { messageText: action.payload.message, intent: 'critical' },
+        // TODO: Remove. Error does not necessarily means loading is finished.
         loading: false,
       }
     case Actions.MESSAGE:
       return {
         ...state,
         message: action.payload,
+        // TODO: Remove. Message does not necessarily means loading is finished.
         loading: false,
       }
     case Actions.MESSAGE_CLEAR:
