@@ -256,12 +256,22 @@ export const resources: Array<Resource> = [
   },
   {
     content:
-      'Thinking of doing a data analysis project for your hack? Browse and explore BigQuery public datasets through the hackathon instance',
+      "Browse Google Cloud Marketplace's public datasets available via BigQuery",
     type: ResourceType.Resource,
     tag: ResourceTag.Datasets,
-    link: 'https://hack.looker.com/dashboards/16',
-    shortenedLink: 'https://bit.ly/3FX72yF',
-    title: 'Public Datasets',
+    link: 'https://console.cloud.google.com/marketplace/browse?filter=solution-type:dataset',
+    shortenedLink:
+      'https://console.cloud.google.com/marketplace/browse?filter=solution-type:dataset',
+    title: 'Google Cloud Public Datasets',
+  },
+  {
+    content: 'Explore additional public datasets shared via BigQuery',
+    type: ResourceType.Resource,
+    tag: ResourceTag.Datasets,
+    link: 'https://cloud.google.com/bigquery/public-data#other_public_datasets',
+    shortenedLink:
+      'https://cloud.google.com/bigquery/public-data#other_public_datasets',
+    title: 'Other BigQuery Public Datasets',
   },
   {
     content:
