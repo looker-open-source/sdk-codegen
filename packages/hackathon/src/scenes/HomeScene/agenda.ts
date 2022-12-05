@@ -44,7 +44,8 @@ export const agenda = [
     stop: later(day1, 15.5),
     description: {
       en: `## **Welcome & Kickoff**
-On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://meet.google.com/vjd-gsco-xzu
+)`,
     },
   },
   {
@@ -94,7 +95,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
       en: `## **Half-way Check In**
 Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**]()`,
       ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+[Slackの#lookerhack-helpチャネル](https://meet.google.com/kgg-bgjs-ucc
+)で質問を受けております`,
     },
   },
   {
@@ -112,7 +114,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 20),
     description: {
       en: `## **Break Time**
-Virtually chill out with your fellow Cloud BI Developers and play some trivia! <br>[**Live session link**]().`,
+Virtually chill out with your fellow Cloud BI Developers and play some trivia! <br>[**Live session link**](https://meet.google.com/jov-mmvf-vgd
+).`,
       ja_JP: `### サポート時間 (対応言語：英・日)
 [Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
     },
@@ -172,7 +175,8 @@ Projects → Add Project機能が使えなくなります<br>
     stop: later(day3, 15.75),
     description: {
       en: `## **Winners Ceremony with Demos**
-Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
+Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://meet.google.com/yif-qxfk-ejc
+).`,
       ja_JP: `## **クロウジング**
 優秀賞発表 & 優秀賞デモ <br>
 [生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
@@ -183,7 +187,7 @@ Checkout which projects made “Best Hack” and “Nearly Best Hack” and watc
     stop: later(day3, 17),
     description: {
       en: `## **~Happy~ Hacky Hour**
-Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[**Live session link**](https://meet.google.com/daw-pwci-gpm)`,
+Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[**Live session link**](https://meet.google.com/bmn-cepn-fws)`,
       ja_JP: `## **~Happy~ Hacky Hour(懇親会)**
 [生放送をご視ください](https://meet.google.com/daw-pwci-gpm)
 `,
