@@ -101,7 +101,11 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
       </Heading>
       <Paragraph mb="medium">
         Here are videos, tutorials, demos, apis, datasets, and dev tools for
-        your hacking needs.
+        your hacking needs. You can find more resources in our{' '}
+        <Link href={'https://developers.looker.com'} onClick={onClick}>
+          developer portal
+        </Link>
+        .
       </Paragraph>
       <Space>
         <Field
@@ -112,7 +116,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           <SelectMulti
             options={Object.keys(ResourceType).map((k) => ({
               value: ResourceType[k],
-              label: k,
+              label: ResourceType[k],
             }))}
             values={typeFilterValues}
             onChange={updateFilterValues.bind(null, TYPE_PARAM)}
@@ -126,7 +130,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           <SelectMulti
             options={Object.keys(ResourceTag).map((k) => ({
               value: ResourceTag[k],
-              label: k,
+              label: ResourceTag[k],
             }))}
             values={domainFilterValues}
             onChange={updateFilterValues.bind(null, DOMAIN_PARAM)}
