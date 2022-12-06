@@ -46,6 +46,8 @@ export const agenda = [
       en: `## **Welcome & Kickoff**
 On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://meet.google.com/vjd-gsco-xzu
 )`,
+      ja_JP: `## **ご挨拶とキックオフ**
+このチャンスを是非ご活用ください。ハッカソンの担当者による説明を聞いて、成功への一歩を踏み出しましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/vjd-gsco-xzu)`,
     },
   },
   {
@@ -54,8 +56,8 @@ On your mark, get set, GO! Meet you hackathon staff and get setup for success. <
     description: {
       en: `### Office Hours (AMER + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `## **開会 EMEA（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -64,8 +66,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     description: {
       en: `### Office Hours (AMER + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `## **開会 AMER（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -74,8 +76,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     description: {
       en: `### Office Hours (EMEA + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `### EMEA と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -84,8 +86,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     description: {
       en: `### Office Hours (EMEA + AMER)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `### EMEA と AMER のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -93,10 +95,9 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 15.5),
     description: {
       en: `## **Half-way Check In**
-Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**]()`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://meet.google.com/kgg-bgjs-ucc
-)で質問を受けております`,
+Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**](meet.google.com/kgg-bgjs-ucc)`,
+      ja_JP: `## **中間理解度チェック**
+ここまでが前半です。ここまでの進捗状況と判定の仕組みを確認しましょう。<br>[**ライブ セッション リンク**](meet.google.com/kgg-bgjs-ucc)`,
     },
   },
   {
@@ -105,8 +106,8 @@ Half way there! Let’s check in on how you’re doing and go over how judging w
     description: {
       en: `### Office Hours (AMER + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -116,8 +117,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
       en: `## **Break Time**
 Virtually chill out with your fellow Cloud BI Developers and play some trivia! <br>[**Live session link**](https://meet.google.com/jov-mmvf-vgd
 ).`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `## **休憩**
+他の Cloud BI 開発者たちとバーチャルでリラックスしながら、クイズを楽しみましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/jov-mmvf-vgd)`,
     },
   },
   {
@@ -126,8 +127,8 @@ Virtually chill out with your fellow Cloud BI Developers and play some trivia! <
     description: {
       en: `### Office Hours (AMER + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `## **開会 AMER（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -136,8 +137,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     description: {
       en: `### Office Hours (EMEA + APAC)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `### EMEA と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -146,8 +147,8 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     description: {
       en: `### Office Hours (EMEA + AMER)
 Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
+      ja_JP: `### EMEA と AMER のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
@@ -177,9 +178,8 @@ Projects → Add Project機能が使えなくなります<br>
       en: `## **Winners Ceremony with Demos**
 Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://meet.google.com/yif-qxfk-ejc
 ).`,
-      ja_JP: `## **クロウジング**
-優秀賞発表 & 優秀賞デモ <br>
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
+      ja_JP: `## **表彰式とデモ**
+「Best Hack」賞と「Nearly Best Hack」賞を獲得したプロジェクトを発表します。プロジェクト デモもご覧ください。<br>[**ライブ セッション リンク**](https://meet.google.com/yif-qxfk-ejc)`,
     },
   },
   {
@@ -188,9 +188,8 @@ Checkout which projects made “Best Hack” and “Nearly Best Hack” and watc
     description: {
       en: `## **~Happy~ Hacky Hour**
 Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[**Live session link**](https://meet.google.com/bmn-cepn-fws)`,
-      ja_JP: `## **~Happy~ Hacky Hour(懇親会)**
-[生放送をご視ください](https://meet.google.com/daw-pwci-gpm)
-`,
+      ja_JP: `## **ハッピーアワー**
+他の Cloud BI 開発者たちと飲み物を片手にバーチャルでリラックスしましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/bmn-cepn-fws)`,
     },
   },
 ]

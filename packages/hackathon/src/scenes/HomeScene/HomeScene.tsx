@@ -55,12 +55,14 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
 *Change your [account](${host}/account) timezone to display times in your timezone.*<br>
 *Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`
 
+  const headingText = hacker.locale === 'ja_JP' ? 'アジェンダ' : 'Agenda'
+
   return (
     <>
       <SpaceVertical gap="u5">
         <Span>
           <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-            Agenda
+            {headingText}
           </Heading>
           <Paragraph>
             <ExtMarkdown source={intro} linkClickHandler={onClick} />
