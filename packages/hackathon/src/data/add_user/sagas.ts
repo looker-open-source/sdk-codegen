@@ -115,7 +115,7 @@ function* addUsersSaga(action: ReturnType<typeof addUsers>): SagaIterator {
         yield call([lookerSdk, lookerSdk.ok], result)
       }
 
-      if (!user.credentials_api3) {
+      if (!user.credentials_api3 || user.credentials_api3.length === 0) {
         const result = yield call(
           [lookerSdk, lookerSdk.create_user_credentials_api3],
           user.id as string
