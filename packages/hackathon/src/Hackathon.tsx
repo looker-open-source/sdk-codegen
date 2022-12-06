@@ -98,7 +98,7 @@ export const Hackathon: FC<HackathonProps> = hot(() => {
           <Header text={headerText} />
 
           <Layout hasAside>
-            <Aside width="200px">
+            <Aside width="190px">
               <SideNav authorizedRoutes={authorizedRoutes} />
             </Aside>
             <Section>

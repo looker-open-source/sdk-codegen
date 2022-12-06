@@ -28,6 +28,7 @@ import type { FC } from 'react'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { ExtMarkdown } from '@looker/extension-utils'
+import { getExtensionSDK } from '@looker/extension-sdk'
 import type { IProjectProps } from '../../../models'
 import { getTechnologies } from '../../../data/hack_session/selectors'
 import { getMembers, techDescriptions } from '../../utils'
@@ -50,6 +51,9 @@ export const ProjectView: FC<ProjectViewProps> = ({
   project_type,
   contestant,
 }) => {
+  const onClick = (_: string, href: string) =>
+    getExtensionSDK().openBrowserWindow(href)
+
   const availableTechnologies = useSelector(getTechnologies)
   const view = `# ${title}
 
@@ -63,5 +67,5 @@ ${description}
 
 **Contestant**: ${contestant ? 'Yes' : 'No'}
 `
-  return <ExtMarkdown source={view} />
+  return <ExtMarkdown source={view} linkClickHandler={onClick} />
 }

@@ -38,30 +38,34 @@ interface HomeSceneProps {
   hacker: IHackerProps
 }
 
-const MARKDOWN_LINEBREAK = '  '
-
 export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
   const schedule = localAgenda(hacker.locale)
   const host = getExtensionSDK().lookerHostData?.hostUrl
+  const onClick = (_: string, href: string) =>
+    getExtensionSDK().openBrowserWindow(href)
+
   const intro =
     hacker.locale === 'ja_JP'
-      ? `### ハッカソン詳細については、[よくある質問記事](https://community.looker.com/hackathome-2021-1026/hackathome-2021-%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F-28518)をご確認いただけます。
-現地時間が表示されるため、[アカウント](${host}/account)の「タイムゾーン」を設定できます。${MARKDOWN_LINEBREAK}
+      ? `### ハッカソン詳細については、[よくある質問記事](https://docs.google.com/document/d/e/2PACX-1vTGRC2Y8FgJ0tFc6Uxc6ktV24lNgZPnNNvyyh3b4o0schX9VlL5AmNICuYzwKAB0xJl3xUQ8c4kuM9k/pub)をご確認いただけます。
+現地時間が表示されるため、[アカウント](${host}/account)の「タイムゾーン」を設定できます。<br>
 アジェンダが日本語で表示されるため、[アカウント](${host}/account)の「Locale」は「ja_JP」に指定できます。
 `
-      : `### Our [Hackathon FAQ](https://community.looker.com/hackathome-2021-1026/hackathome-2021-attendee-faq-28429) contains all event details!
-*Change your [account](${host}/account) timezone to display times in your timezone*${MARKDOWN_LINEBREAK}
+      : `### Our [Hackathon FAQ](https://docs.google.com/document/d/e/2PACX-1vTGRC2Y8FgJ0tFc6Uxc6ktV24lNgZPnNNvyyh3b4o0schX9VlL5AmNICuYzwKAB0xJl3xUQ8c4kuM9k/pub) contains all event details! 
+*By accessing this hackathon application, you accept the [official rules](https://docs.google.com/document/d/e/2PACX-1vTNdWv2e21BiTOspuyj8S_FN0mDmsT-bVyjr6OCMeWTbBvuA6UaoVSUy69OBy8WCElCl7_-L877WSb2/pub).*<br>
+*Change your [account](${host}/account) timezone to display times in your timezone.*<br>
 *Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`
+
+  const headingText = hacker.locale === 'ja_JP' ? 'アジェンダ' : 'Agenda'
 
   return (
     <>
       <SpaceVertical gap="u5">
         <Span>
           <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
-            Agenda
+            {headingText}
           </Heading>
           <Paragraph>
-            <ExtMarkdown source={intro} />
+            <ExtMarkdown source={intro} linkClickHandler={onClick} />
           </Paragraph>
         </Span>
         <Agenda schedule={schedule} hacker={hacker} />

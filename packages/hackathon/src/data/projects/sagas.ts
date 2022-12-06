@@ -50,17 +50,14 @@ import { getCurrentProjectsState, getIsProjectMemberState } from './selectors'
 const createNewProject = (): IProjectProps => {
   const newProject: unknown = {
     title: '',
-    description: `<Put a project overview here. Should be at least one paragraph.>
+    description: `ADD SHORT ONE PARAGRAPH OVERVIEW HERE
 
-Team name: **My fabulous team**
-- Pre-recorded demo video link. Keep it as short as possible. (preferably youtube)
-  - [demo video link](https://youtube.com)
-- Working demo link (optional). Provide any relevant start-up instructions for someone to run the demo.
-  - [demo link](https://looker.com)
-  - start-up instructions
-- Links to any other supporting resources(slides, images, etc.) (preferably google slides and imgur)
-  - [supporting resource link](https://docs.google.com)
-- Add your pictures/screenshots of your team hacking to the [Hack@Home 2021 shared folder](https://bit.ly/hack2021pics). Create your own team folder inside it if you'd like!
+<!-- Fill out additional details below -->
+- Team name: **My fabulous team**
+- [Demo video link](https://youtube.com) <!--Required pre-recorded demo video link. 3 minutes max. Youtube only-->
+- [Working demo link](https://looker.com) <!--Optional-->
+  - <!--Provide any instructions in sub bullet for someone to run the demo.-->
+- [Demo slides](https://slides.google.com)<!--Optional-->    
 `,
     project_type: 'Open',
     contestant: true,
