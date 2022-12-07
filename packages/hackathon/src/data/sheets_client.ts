@@ -282,6 +282,26 @@ class SheetsClient {
     return this.hacker
   }
 
+  firstNameSort(a: IHackerProps, b: IHackerProps): number {
+    if (a.firstName < b.firstName) {
+      return -1
+    }
+    if (a.firstName > b.firstName) {
+      return 1
+    }
+    return 0
+  }
+
+  attendedSort(a: IHackerProps, b: IHackerProps): number {
+    if (a.attended && !b.attended) {
+      return -1
+    }
+    if (!a.firstName && b.attended) {
+      return 1
+    }
+    return 0
+  }
+
   async getHackers(): Promise<{
     hackers: IHackerProps[]
     judges: IHackerProps[]
@@ -304,6 +324,15 @@ class SheetsClient {
       this.hackers?.staff?.map((hacker) =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || []
+
+    // Sort hackers by first name and attendance for
+    // convenience when navigating list.
+    hackers.sort(this.firstNameSort)
+    hackers.sort(this.attendedSort)
+    // Sort rest by first name for convenience
+    judges.sort(this.firstNameSort)
+    admins.sort(this.firstNameSort)
+    staff.sort(this.firstNameSort)
     return { hackers, judges, admins, staff }
   }
 
