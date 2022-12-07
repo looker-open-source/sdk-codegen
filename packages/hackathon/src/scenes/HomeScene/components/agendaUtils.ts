@@ -170,11 +170,12 @@ export const gapDiff = (
   locale: string
 ) => {
   if (now < start) {
-    return diff(now, start, locale)
+    // Prefixes not localized. TODO: fix
+    return 'starts ' + diff(now, start, locale)
   } else if (now < stop) {
-    return diff(now, stop, locale)
+    return 'ends ' + diff(now, stop, locale)
   }
-  return diff(now, stop, locale)
+  return 'ended ' + diff(now, stop, locale)
 }
 
 /**

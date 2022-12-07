@@ -44,6 +44,7 @@ export enum ResourceTag {
   Extensions = 'Extensions',
   Lookml = 'LookML',
   Other = 'Other',
+  Studio = 'Studio',
   StudioCommunityConnector = 'Studio Community Connector',
   StudioCommunityVisualizations = 'Studio Community Visualizations',
 }
@@ -190,7 +191,7 @@ export const resources: Array<Resource> = [
     type: ResourceType.Docs,
     tag: ResourceTag.Blocks,
     link: 'https://cloud.google.com/looker/docs/blocks',
-    shortenedLink: 'bit.ly',
+    shortenedLink: 'https://goo.gle/3VDSgEA',
     title: 'Blocks Documentation',
   },
   {
@@ -556,5 +557,48 @@ export const resources: Array<Resource> = [
     link: 'https://github.com/fishtown-analytics/dbtdocs-to-lookml',
     shortenedLink: 'https://goo.gle/3F7TvEQ',
     title: 'DBTdocs To LookML',
+  },
+  {
+    content:
+      'Configure and forward users directly to a Looker Studio report via a URL.',
+    type: ResourceType.Docs,
+    tag: ResourceTag.Studio,
+    link: 'https://developers.google.com/looker-studio/integrate/linking-api',
+    shortenedLink: 'https://goo.gle/3P3JH3v',
+    title: 'Studio Linking API Docs',
+  },
+  {
+    content:
+      'Enables direct connections from Looker Studio to any internet accessible data source.',
+    type: ResourceType.Docs,
+    tag: ResourceTag.StudioCommunityConnector,
+    link: 'https://developers.google.com/looker-studio/connector',
+    shortenedLink: 'https://goo.gle/3UxYdBr',
+    title: 'Studio Community Connector Docs',
+  },
+  {
+    content: 'Codelab tutorial on building a Studio Community Connector.',
+    type: ResourceType.Tutorial,
+    tag: ResourceTag.StudioCommunityConnector,
+    link: 'https://codelabs.developers.google.com/codelabs/community-connectors',
+    shortenedLink: 'https://goo.gle/3h3SmGq',
+    title: 'Studio Community Connector Codelab',
+  },
+  {
+    content:
+      'Allow you to build and use your own custom visualizations in Looker Studio.',
+    type: ResourceType.Docs,
+    tag: ResourceTag.StudioCommunityVisualizations,
+    link: 'https://developers.google.com/looker-studio/visualization',
+    shortenedLink: 'https://goo.gle/3XZScR4',
+    title: 'Studio Community Visualizations Docs',
+  },
+  {
+    content: 'Codelab tutorial on building a Studio Community Visualization.',
+    type: ResourceType.Tutorial,
+    tag: ResourceTag.StudioCommunityVisualizations,
+    link: 'https://codelabs.developers.google.com/codelabs/community-visualization/',
+    shortenedLink: 'https://goo.gle/3Y4yW52',
+    title: 'Studio Community Visualization Codelab',
   },
 ]
