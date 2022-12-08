@@ -431,14 +431,19 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     if (errorMessage) {
       return Promise.reject(new Error(errorMessage))
     }
-    return this.sendAndReceive(ExtensionRequestType.INVOKE_EXTERNAL_API, {
-      type: 'oauth2_authenticate',
-      payload: {
-        authEndpoint,
-        authParameters,
-        httpMethod,
+    return this.sendAndReceive(
+      ExtensionRequestType.INVOKE_EXTERNAL_API,
+      {
+        type: 'oauth2_authenticate',
+        payload: {
+          authEndpoint,
+          authParameters,
+          httpMethod,
+        },
       },
-    })
+      // Adding the signal disables the default timeout
+      new AbortController().signal
+    )
   }
 
   async oauth2ExchangeCodeForToken(
@@ -458,15 +463,23 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
-  private async sendAndReceive(type: string, payload?: any): Promise<any> {
+  private async sendAndReceive(
+    type: string,
+    payload?: any,
+    signal?: AbortSignal
+  ): Promise<any> {
     if (!this._lookerHostData) {
       return Promise.reject(new Error('Looker host connection not established'))
     }
+    const messagePayload = {
+      type,
+      payload,
+    }
+    const chattyPayload = signal
+      ? [messagePayload, { signal }]
+      : [messagePayload]
     return this.chattyHost
-      .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, {
-        type,
-        payload,
-      })
+      .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, ...chattyPayload)
       .then((values) => values[0])
   }
 

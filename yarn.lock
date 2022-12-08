@@ -2297,10 +2297,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@looker/chatty@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.3.0.tgz#380ff86bff34d8866f641fae3e53997266a3de3c"
-  integrity sha512-UO7pwQ+KU4UoV3+MSq7YVnWR74Pl1Jj15QO821W8Y+pW431KoHydiA7UUJmQnPEJDCgHLxepPs43jvJI/NMRhQ==
+"@looker/chatty@2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.3.7.tgz#8005af4c8aa3cd92b4f1c47caed44df8984e351e"
+  integrity sha512-M6WHWKFsnnk06hsgImZDfyu6fExbitcI/zzKQe87YzmJG5kGz9rqeBwkwsZhaWP5IxVh5TiqoXX9bReN4BEKFA==
   dependencies:
     core-js "^3.6.4"
     debug "^2.2.0"
@@ -5578,6 +5578,11 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+countries-states-json@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/countries-states-json/-/countries-states-json-1.2.3.tgz#3a3c4e0189cc8cd5747c6426dc5cfbc1282cfb62"
+  integrity sha512-c5uxZfjxbOEHdLN4wdtIoezkJgt7QQf6beS3p/WKV7xYyk4jiBq86tFtVpvy8uMupIGeJcaA0Lhq3mkTZEhrlA==
 
 create-emotion@^10.0.14, create-emotion@^10.0.27:
   version "10.0.27"
@@ -12297,6 +12302,15 @@ prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
+
+prop-types@^15.8.1:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.13.1"
 
 property-information@^5.0.0, property-information@^5.3.0:
   version "5.6.0"
