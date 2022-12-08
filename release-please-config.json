@@ -45,6 +45,5 @@
       "release-type": "python",
       "package-name": "looker_sdk"
     }
-  },
-  "release-as": "22.20.0"
+  }
 }

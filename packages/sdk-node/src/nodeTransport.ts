@@ -105,8 +105,12 @@ export class NodeTransport extends BaseTransport {
     )
     const req = rp(init).promise()
     let rawResponse: IRawResponse
+
+    const requestStarted = Date.now()
+    let responseCompleted
     try {
       const res = await req
+      responseCompleted = Date.now()
       const resTyped = res as rq.Response
       rawResponse = {
         method,
@@ -117,6 +121,8 @@ export class NodeTransport extends BaseTransport {
         statusCode: resTyped.statusCode,
         statusMessage: resTyped.statusMessage,
         headers: res.headers,
+        requestStarted,
+        responseCompleted,
       }
       // Update OK with response statusCode check
       rawResponse.ok = this.ok(rawResponse)
@@ -125,6 +131,7 @@ export class NodeTransport extends BaseTransport {
       let statusCode = 404
       let contentType = 'text'
       let body
+      responseCompleted = Date.now()
       if (e instanceof StatusCodeError) {
         statusCode = e.statusCode
         if (e.error instanceof Buffer) {
@@ -153,6 +160,8 @@ export class NodeTransport extends BaseTransport {
         statusCode,
         statusMessage,
         headers: {},
+        requestStarted,
+        responseCompleted,
       }
     }
     return this.observer ? this.observer(rawResponse) : rawResponse

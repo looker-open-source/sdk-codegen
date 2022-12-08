@@ -43,6 +43,8 @@ const response: IRawResponse = {
     link: 'nah, not really',
     'x-total-count': '0',
   },
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 describe('ResponseExplorer', () => {

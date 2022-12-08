@@ -96,6 +96,8 @@ const mockRawResponse = (url?: string, body?: any): IRawResponse => {
     statusMessage: 'Mocking',
     contentType: 'application/json',
     url: 'https://mocked',
+    requestStarted: 1000,
+    responseCompleted: 2000,
   }
   if (url) {
     result.url = url
