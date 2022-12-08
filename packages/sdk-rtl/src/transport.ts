@@ -181,6 +181,10 @@ export interface IRawResponse {
   startMark?: string
   /** Response headers */
   headers: IRequestHeaders
+  /** Request start time */
+  requestStarted: number
+  /** Completion time for request */
+  responseCompleted: number
 }
 
 /** IRawResponse observer function type */

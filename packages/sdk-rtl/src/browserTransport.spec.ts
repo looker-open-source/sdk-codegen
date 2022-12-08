@@ -77,6 +77,8 @@ describe('BrowserTransport', () => {
   "num4": 4
 }
 `,
+      requestStarted: 1000,
+      responseCompleted: 2000,
     }
     const untyped: any = await sdkOk(xp.parseResponse(resp))
     expect(untyped.string1).toBe(1)

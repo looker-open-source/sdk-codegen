@@ -126,7 +126,9 @@ export class ExtensionProxyTransport extends BaseTransport {
     }
     const req = this.extensionSDK.fetchProxy(props.url, fetchParams)
 
+    const requestStarted = Date.now()
     const res: FetchProxyDataResponse = await req
+    const responseCompleted = Date.now()
 
     const contentType = String(res.headers['content-type'])
     // const mode = responseMode(contentType)
@@ -141,6 +143,8 @@ export class ExtensionProxyTransport extends BaseTransport {
       statusCode: res.status,
       statusMessage: `${res.status} fetched`,
       headers: res.headers,
+      requestStarted,
+      responseCompleted,
     }
   }
 
