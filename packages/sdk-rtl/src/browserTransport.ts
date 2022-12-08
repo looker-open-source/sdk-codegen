@@ -188,7 +188,9 @@ export class BrowserTransport extends BaseTransport {
       props // Weird package issues with unresolved imports for RequestInit :(
     )
 
+    const requestStarted = Date.now()
     const res = await req
+    const responseCompleted = Date.now()
 
     // Start tracking the time it takes to convert the response
     const started = BrowserTransport.markStart(
@@ -214,6 +216,8 @@ export class BrowserTransport extends BaseTransport {
       statusMessage: res.statusText,
       startMark: started,
       headers,
+      requestStarted,
+      responseCompleted,
     }
     // Update OK with response statusCode check
     response.ok = this.ok(response)

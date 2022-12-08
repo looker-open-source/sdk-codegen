@@ -87,6 +87,8 @@ describe('NodeTransport', () => {
       statusCode: StatusCode.OK,
       statusMessage: 'Mocked success',
       body: 'body',
+      requestStarted: 1000,
+      responseCompleted: 2000,
     }
 
     test('ok is ok', () => {
