@@ -149,6 +149,7 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
       : undefined
 
   const timed = (response: IRawResponse) => {
+    if (!(response.responseCompleted || response.requestStarted)) return ''
     const diff = (response.responseCompleted - response.requestStarted) / 1000
     return `Seconds: ${diff.toFixed(3)}`
   }
