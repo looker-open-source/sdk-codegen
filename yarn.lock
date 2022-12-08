@@ -2297,10 +2297,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
-"@looker/chatty@2.3.7":
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.3.7.tgz#8005af4c8aa3cd92b4f1c47caed44df8984e351e"
-  integrity sha512-M6WHWKFsnnk06hsgImZDfyu6fExbitcI/zzKQe87YzmJG5kGz9rqeBwkwsZhaWP5IxVh5TiqoXX9bReN4BEKFA==
+"@looker/chatty@2.3.9":
+  version "2.3.9"
+  resolved "https://registry.yarnpkg.com/@looker/chatty/-/chatty-2.3.9.tgz#d2c65189410c881c81447522c9a68f165f4c964b"
+  integrity sha512-Zrixb6hOcEFjJ342cbrWQd7CMdaP6LmyOuzjUZvAW4l2UxNiUWh3bWN2Fpx+4FKIJhDghEl/fG3cszkFxtur4Q==
   dependencies:
     core-js "^3.6.4"
     debug "^2.2.0"
