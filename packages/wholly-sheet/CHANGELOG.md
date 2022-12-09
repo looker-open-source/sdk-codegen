@@ -1,5 +1,22 @@
 # Changelog
 
+### [0.5.38](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.37...wholly-sheet-v0.5.38) (2022-12-09)
+
+
+### Features
+
+* new WhollyArtifact package ([#1200](https://www.github.com/looker-open-source/sdk-codegen/issues/1200)) ([0d9d45d](https://www.github.com/looker-open-source/sdk-codegen/commit/0d9d45de07b461554739d847b7b312909228adf5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from * to ^22.20.1
+    * @looker/sdk-rtl bumped from * to ^21.5.0
+  * devDependencies
+    * @looker/sdk-node bumped from * to ^22.20.1
+
 ### [0.5.37](https://www.github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.36...wholly-sheet-v0.5.37) (2022-11-10)
 
 
