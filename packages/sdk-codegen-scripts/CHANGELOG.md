@@ -1,5 +1,22 @@
 # Changelog
 
+### [21.4.8](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.7...sdk-codegen-scripts-v21.4.8) (2022-12-09)
+
+
+### Bug Fixes
+
+* Hack App Wholly Artifact Refactor ([#1210](https://www.github.com/looker-open-source/sdk-codegen/issues/1210)) ([d508fa8](https://www.github.com/looker-open-source/sdk-codegen/commit/d508fa878ca23f6ed298359d3ec1b25a3f333fac))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+    * @looker/sdk-node bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
 ### [21.4.7](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.6...sdk-codegen-scripts-v21.4.7) (2022-11-10)
 
 

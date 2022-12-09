@@ -1,5 +1,25 @@
 # Changelog
 
+### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.20.0...extension-api-explorer-v22.20.1) (2022-12-09)
+
+
+### Features
+
+* add request time tracking ([#1223](https://www.github.com/looker-open-source/sdk-codegen/issues/1223)) ([2aefe06](https://www.github.com/looker-open-source/sdk-codegen/commit/2aefe064d668e02f3af95202e4667036cba01979))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.41 to ^0.9.42
+    * @looker/extension-sdk bumped from * to ^22.20.1
+    * @looker/extension-sdk-react bumped from * to ^22.20.1
+    * @looker/extension-utils bumped from ^0.1.18 to ^0.1.19
+    * @looker/run-it bumped from ^0.9.41 to ^0.9.42
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+
 ## [22.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.18.0...extension-api-explorer-v22.20.0) (2022-11-10)
 
 

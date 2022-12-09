@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.12.0...sdk-codegen-all-v2.13.0) (2022-12-09)
+
+
+### Features
+
+* add request time tracking ([#1223](https://www.github.com/looker-open-source/sdk-codegen/issues/1223)) ([2aefe06](https://www.github.com/looker-open-source/sdk-codegen/commit/2aefe064d668e02f3af95202e4667036cba01979))
+* new WhollyArtifact package ([#1200](https://www.github.com/looker-open-source/sdk-codegen/issues/1200)) ([0d9d45d](https://www.github.com/looker-open-source/sdk-codegen/commit/0d9d45de07b461554739d847b7b312909228adf5))
+
+
+### Bug Fixes
+
+* Fix admin add user to correctly generate API3 keys. ([#1218](https://www.github.com/looker-open-source/sdk-codegen/issues/1218)) ([6764236](https://www.github.com/looker-open-source/sdk-codegen/commit/67642366ce7e0d94d5185df3c9bc7be592a275af))
+* Hack app fixes ([#1219](https://www.github.com/looker-open-source/sdk-codegen/issues/1219)) ([7993d92](https://www.github.com/looker-open-source/sdk-codegen/commit/7993d9254f03f9f4f9d11d9f2c384b858e5dc6e1))
+* Hack App Wholly Artifact Refactor ([#1210](https://www.github.com/looker-open-source/sdk-codegen/issues/1210)) ([d508fa8](https://www.github.com/looker-open-source/sdk-codegen/commit/d508fa878ca23f6ed298359d3ec1b25a3f333fac))
+* Multiple hack app changes ([#1213](https://www.github.com/looker-open-source/sdk-codegen/issues/1213)) ([a2b7b0c](https://www.github.com/looker-open-source/sdk-codegen/commit/a2b7b0c3667d7b041ca8d546b08bd94040c275d3))
+* Multiple hack app fixes and changes [#1214](https://www.github.com/looker-open-source/sdk-codegen/issues/1214) ([9dbc204](https://www.github.com/looker-open-source/sdk-codegen/commit/9dbc2045b1702bdd98d4280f0d63518a5c21e8e2))
+* oauth timeout ([#1222](https://www.github.com/looker-open-source/sdk-codegen/issues/1222)) ([5ce073b](https://www.github.com/looker-open-source/sdk-codegen/commit/5ce073bd8171686451330abd4a25edbfb4756852))
+* Update agenda times with prefix and add studio resources ([#1220](https://www.github.com/looker-open-source/sdk-codegen/issues/1220)) ([f1296a8](https://www.github.com/looker-open-source/sdk-codegen/commit/f1296a813ee3ef0ef5e1095367b63a3c2adc5d91))
+* Updated hackapp agenda and resources and fixed markdown links ([#1217](https://www.github.com/looker-open-source/sdk-codegen/issues/1217)) ([3187766](https://www.github.com/looker-open-source/sdk-codegen/commit/318776640b9b9474d792aed53d70706be5cd45d2))
+* WhollyArtifact/Hack App table name fix ([#1212](https://www.github.com/looker-open-source/sdk-codegen/issues/1212)) ([2bba660](https://www.github.com/looker-open-source/sdk-codegen/commit/2bba660a6d9fa135eade144900bac5e5e5e180d7))
+
 ## [2.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.11.0...sdk-codegen-all-v2.12.0) (2022-11-10)
 
 

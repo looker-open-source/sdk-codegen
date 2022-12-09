@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v22.20.0...sdk-node-v22.20.1) (2022-12-09)
+
+
+### Features
+
+* add request time tracking ([#1223](https://www.github.com/looker-open-source/sdk-codegen/issues/1223)) ([2aefe06](https://www.github.com/looker-open-source/sdk-codegen/commit/2aefe064d668e02f3af95202e4667036cba01979))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
 ## [22.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-node-v22.18.0...sdk-node-v22.20.0) (2022-11-10)
 
 
