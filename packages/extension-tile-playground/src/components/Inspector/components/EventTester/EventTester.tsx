@@ -38,6 +38,7 @@ import { ExtensionContext40 } from '@looker/extension-sdk-react'
 
 export const EventTester: React.FC = () => {
   const {
+    extensionSDK,
     tileSDK,
     tileHostData: { dashboardFilters },
   } = useContext(ExtensionContext40)
@@ -130,6 +131,10 @@ export const EventTester: React.FC = () => {
     tileSDK.openScheduleDialog()
   }, [tileSDK])
 
+  const updateTileClick = useCallback(() => {
+    extensionSDK.updateTitle(`Update tile tilte ${new Date().getSeconds()}`)
+  }, [extensionSDK])
+
   return (
     <Card>
       <CardContent>
@@ -173,6 +178,9 @@ export const EventTester: React.FC = () => {
             </Space>
             <ButtonOutline onClick={openScheduleDialogClick} width="100%">
               Test open schedule dialog
+            </ButtonOutline>
+            <ButtonOutline onClick={updateTileClick} width="100%">
+              Update title title
             </ButtonOutline>
           </Grid>
         </Accordion2>
