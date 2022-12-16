@@ -1,10 +1,8 @@
 import com.looker.rtl.SDKResponse
+import com.looker.rtl.parseSDKError
 import com.looker.sdk.*
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 import org.junit.Test
+import kotlin.test.*
 
 class TestMethods {
     val sdk by lazy { TestConfig().sdk }
@@ -67,15 +65,6 @@ class TestMethods {
             "dashboard",
             arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
             limit = "100"
-        )
-    }
-
-    private fun slowQuery(): WriteQuery {
-        return WriteQuery(
-            "system__activity",
-            "dashboard",
-            arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
-            limit = "5000"
         )
     }
 
@@ -327,7 +316,7 @@ class TestMethods {
         prepBoard()
         listGetter<BoardItem, String, BoardItem>(
             { sdk.all_board_items() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board_item(id, fields) }
         )
     }
@@ -344,7 +333,7 @@ class TestMethods {
         prepBoard()
         listGetter<Board, String, Board>(
             { sdk.all_boards() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board(id, fields) }
         )
     }
@@ -354,7 +343,7 @@ class TestMethods {
         prepBoard()
         listGetter<BoardSection, String, BoardSection>(
             { sdk.all_board_sections() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.board_section(id, fields) }
         )
     }
@@ -363,7 +352,7 @@ class TestMethods {
     fun testAllIntegrationHubs() {
         listGetter<IntegrationHub, String, IntegrationHub>(
             { sdk.all_integration_hubs() },
-            { item -> item.id!!},
+            { item -> item.id!! },
             { id, fields -> sdk.integration_hub(id, fields) }
         )
     }
@@ -452,26 +441,6 @@ class TestMethods {
             { id, _ -> sdk.role(id) }
         )
     }
-
-// TODO figure out a reliable way to queue up some running queries
-//    @Test fun testAllRunningQueries() {
-//        var running = false
-//        GlobalScope.launch {
-//            running = true
-//            val json = sdk.ok<String>(sdk.run_inline_query("json_detail", slowQuery()))
-//            print("slow query complete")
-//            running = false
-//            assertNotNull(json)
-//        }
-//        var tries = 0
-//        var list: Array<RunningQueries>
-//        do {
-//            list = sdk.ok(sdk.all_running_queries())
-//            Thread.sleep(100L) // block main thread to ensure query is running
-//        } while (running && list.count() == 0 && tries++ < 99)
-// //        assertEquals(running, false, "Running should have completed")
-//        assertNotEquals(list.count(), 0, "List should have at least one query")
-//    }
 
     //    @Test
     fun testAllSchedulePlans() {
@@ -565,5 +534,25 @@ class TestMethods {
             { item -> item.id!! },
             { id, _ -> sdk.workspace(id) }
         )
+    }
+
+    @Test
+    fun testErrorReporting() {
+        try {
+            val props = ThemeSettings(
+                background_color = "invalid"
+            )
+            val theme = WriteTheme(
+                name = "'bogus!",
+                settings = props
+            )
+            val actual = sdk.ok<Theme>(sdk.validate_theme(theme))
+            assertNull(actual) // test should never get here
+        } catch (e: java.lang.Error) {
+            val error = parseSDKError(e.toString())
+            assertTrue(error.message.isNotEmpty())
+            assertTrue(error.errors.size == 2)
+            assertTrue(error.documentationUrl.isNotEmpty())
+        }
     }
 }

@@ -90,8 +90,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
 
   const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
     const isMember = isProjectMember(hacker, project)
-    dispatch(changeMembership(project!._id, String(hacker.user.id), isMember))
-    dispatch(currentProjectsRequest())
+    dispatch(changeMembership(project!._id, hacker.id, isMember))
   }
 
   const lockCol = columns[0]
@@ -172,38 +171,34 @@ export const ProjectList: FC<ProjectListProps> = () => {
   }
 
   const projectCell = (project: IProjectProps, columnName: string) => {
-    if (
-      columnName !== 'locked' &&
-      columnName !== '$team_count' &&
-      columnName !== '$judge_count'
-    )
-      return sheetCell(project[columnName])
-
-    if (columnName === '$team_count') {
-      return (
-        <Tooltip content={project.$members.join(',')}>
-          {sheetCell(project[columnName])}
-        </Tooltip>
-      )
-    }
-    if (columnName === '$judge_count') {
-      if (!hacker.canAdmin && !hacker.canStaff)
+    switch (columnName) {
+      case 'locked':
+        return (
+          project.locked && (
+            <Tooltip content={<>This project is locked.</>}>
+              <Icon size="small" icon={<Lock />} />
+            </Tooltip>
+          )
+        )
+      case '$team_count':
+        return (
+          <Tooltip content={project.$members.join(',')}>
+            {sheetCell(project[columnName])}
+          </Tooltip>
+        )
+      case '$judge_count':
+        if (!hacker.canAdmin && !hacker.canStaff)
+          return sheetCell(project[columnName])
+        return (
+          <Tooltip content={project.$judges.join(',')}>
+            {sheetCell(project[columnName])}
+          </Tooltip>
+        )
+      case '$techs':
+        return sheetCell(project.$techs.join(','))
+      default:
         return sheetCell(project[columnName])
-      return (
-        <Tooltip content={project.$judges.join(',')}>
-          {sheetCell(project[columnName])}
-        </Tooltip>
-      )
     }
-    if (project.locked) {
-      return (
-        <Tooltip content={<>This project is locked.</>}>
-          <Icon size="small" icon={<Lock />} />
-        </Tooltip>
-      )
-    }
-
-    return ''
   }
 
   const totalPages = Math.ceil(projects.length / PAGE_SIZE)
@@ -211,7 +206,12 @@ export const ProjectList: FC<ProjectListProps> = () => {
   const rows = projects
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((project, idx) => (
-      <DataTableItem key={idx} id={idx.toString()} actions={actions(project)}>
+      <DataTableItem
+        key={idx}
+        id={idx.toString()}
+        actions={actions(project)}
+        onClick={handleView.bind(null, project)}
+      >
         {columns.map((column) => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {projectCell(project, column.id)}

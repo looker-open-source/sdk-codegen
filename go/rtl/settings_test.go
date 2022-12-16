@@ -59,23 +59,23 @@ func TestNewSettingsFromEnv(t *testing.T) {
 	getEnv := func() []pair {
 		var pairs []pair
 
-		if v,present := os.LookupEnv(baseUrlEnvKey); present {
-			pairs = append(pairs, pair{ k: baseUrlEnvKey, v: v })
+		if v, present := os.LookupEnv(baseUrlEnvKey); present {
+			pairs = append(pairs, pair{k: baseUrlEnvKey, v: v})
 		}
-		if v,present := os.LookupEnv(apiVersionEnvKey); present {
-			pairs = append(pairs, pair{ k: apiVersionEnvKey, v: v })
+		if v, present := os.LookupEnv(apiVersionEnvKey); present {
+			pairs = append(pairs, pair{k: apiVersionEnvKey, v: v})
 		}
-		if v,present := os.LookupEnv(verifySslEnvKey); present {
-			pairs = append(pairs, pair{ k: verifySslEnvKey, v: v })
+		if v, present := os.LookupEnv(verifySslEnvKey); present {
+			pairs = append(pairs, pair{k: verifySslEnvKey, v: v})
 		}
-		if v,present := os.LookupEnv(timeoutEnvKey); present {
-			pairs = append(pairs, pair{ k: timeoutEnvKey, v: v })
+		if v, present := os.LookupEnv(timeoutEnvKey); present {
+			pairs = append(pairs, pair{k: timeoutEnvKey, v: v})
 		}
-		if v,present := os.LookupEnv(clientIdEnvKey); present {
-			pairs = append(pairs, pair{ k: clientIdEnvKey, v: v })
+		if v, present := os.LookupEnv(clientIdEnvKey); present {
+			pairs = append(pairs, pair{k: clientIdEnvKey, v: v})
 		}
-		if v,present := os.LookupEnv(clientSecretEnvKey); present {
-			pairs = append(pairs, pair{ k: clientSecretEnvKey, v: v })
+		if v, present := os.LookupEnv(clientSecretEnvKey); present {
+			pairs = append(pairs, pair{k: clientSecretEnvKey, v: v})
 		}
 
 		return pairs
@@ -90,21 +90,21 @@ func TestNewSettingsFromEnv(t *testing.T) {
 		os.Unsetenv(clientSecretEnvKey)
 	}
 
-	setEnv := func(pairs []pair ) {
+	setEnv := func(pairs []pair) {
 		clearEnv()
-		for _, pair  := range pairs {
+		for _, pair := range pairs {
 			os.Setenv(pair.k, pair.v)
 		}
 	}
 
 	tests := []struct {
-		name    string
-		env     []pair
-		want    ApiSettings
+		name string
+		env  []pair
+		want ApiSettings
 	}{
 		{
 			name: "NewSettingsFromEnv() returns settings when all environment variables set",
-			env: []pair {
+			env: []pair{
 				{baseUrlEnvKey, "url"},
 				{apiVersionEnvKey, "5.0"},
 				{verifySslEnvKey, "false"},
@@ -123,7 +123,7 @@ func TestNewSettingsFromEnv(t *testing.T) {
 		},
 		{
 			name: "NewSettingsFromEnv() sets defaults correctly if env vars not set for them",
-			env: []pair {
+			env: []pair{
 				{baseUrlEnvKey, "url"},
 				{clientIdEnvKey, "id"},
 				{clientSecretEnvKey, "secret"},

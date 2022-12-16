@@ -1,5 +1,103 @@
 # Changelog
 
+## [2.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.12.0...sdk-codegen-all-v2.13.0) (2022-12-09)
+
+
+### Features
+
+* add request time tracking ([#1223](https://www.github.com/looker-open-source/sdk-codegen/issues/1223)) ([2aefe06](https://www.github.com/looker-open-source/sdk-codegen/commit/2aefe064d668e02f3af95202e4667036cba01979))
+* new WhollyArtifact package ([#1200](https://www.github.com/looker-open-source/sdk-codegen/issues/1200)) ([0d9d45d](https://www.github.com/looker-open-source/sdk-codegen/commit/0d9d45de07b461554739d847b7b312909228adf5))
+
+
+### Bug Fixes
+
+* Fix admin add user to correctly generate API3 keys. ([#1218](https://www.github.com/looker-open-source/sdk-codegen/issues/1218)) ([6764236](https://www.github.com/looker-open-source/sdk-codegen/commit/67642366ce7e0d94d5185df3c9bc7be592a275af))
+* Hack app fixes ([#1219](https://www.github.com/looker-open-source/sdk-codegen/issues/1219)) ([7993d92](https://www.github.com/looker-open-source/sdk-codegen/commit/7993d9254f03f9f4f9d11d9f2c384b858e5dc6e1))
+* Hack App Wholly Artifact Refactor ([#1210](https://www.github.com/looker-open-source/sdk-codegen/issues/1210)) ([d508fa8](https://www.github.com/looker-open-source/sdk-codegen/commit/d508fa878ca23f6ed298359d3ec1b25a3f333fac))
+* Multiple hack app changes ([#1213](https://www.github.com/looker-open-source/sdk-codegen/issues/1213)) ([a2b7b0c](https://www.github.com/looker-open-source/sdk-codegen/commit/a2b7b0c3667d7b041ca8d546b08bd94040c275d3))
+* Multiple hack app fixes and changes [#1214](https://www.github.com/looker-open-source/sdk-codegen/issues/1214) ([9dbc204](https://www.github.com/looker-open-source/sdk-codegen/commit/9dbc2045b1702bdd98d4280f0d63518a5c21e8e2))
+* oauth timeout ([#1222](https://www.github.com/looker-open-source/sdk-codegen/issues/1222)) ([5ce073b](https://www.github.com/looker-open-source/sdk-codegen/commit/5ce073bd8171686451330abd4a25edbfb4756852))
+* Update agenda times with prefix and add studio resources ([#1220](https://www.github.com/looker-open-source/sdk-codegen/issues/1220)) ([f1296a8](https://www.github.com/looker-open-source/sdk-codegen/commit/f1296a813ee3ef0ef5e1095367b63a3c2adc5d91))
+* Updated hackapp agenda and resources and fixed markdown links ([#1217](https://www.github.com/looker-open-source/sdk-codegen/issues/1217)) ([3187766](https://www.github.com/looker-open-source/sdk-codegen/commit/318776640b9b9474d792aed53d70706be5cd45d2))
+* WhollyArtifact/Hack App table name fix ([#1212](https://www.github.com/looker-open-source/sdk-codegen/issues/1212)) ([2bba660](https://www.github.com/looker-open-source/sdk-codegen/commit/2bba660a6d9fa135eade144900bac5e5e5e180d7))
+
+## [2.12.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.11.0...sdk-codegen-all-v2.12.0) (2022-11-10)
+
+
+### Features
+
+* generate SDKs for Looker 22.20 ([#1203](https://www.github.com/looker-open-source/sdk-codegen/issues/1203)) ([ba4595e](https://www.github.com/looker-open-source/sdk-codegen/commit/ba4595ee47895ec11ed1e1a74d87748285210d64))
+
+
+### Bug Fixes
+
+* Handle Go SDK 204 no responses correctly ([#1193](https://www.github.com/looker-open-source/sdk-codegen/issues/1193)) ([ba7ded8](https://www.github.com/looker-open-source/sdk-codegen/commit/ba7ded84a9a09da2ef63362792656cbd57d9aae1))
+* oauth support in APIX when embedded in another app ([#1198](https://www.github.com/looker-open-source/sdk-codegen/issues/1198)) ([c464d2f](https://www.github.com/looker-open-source/sdk-codegen/commit/c464d2f24c7f8e7d282208efd00feaaba216fe3e))
+* spec parsing unit tests ([#1207](https://www.github.com/looker-open-source/sdk-codegen/issues/1207)) ([4e86291](https://www.github.com/looker-open-source/sdk-codegen/commit/4e862913b555c6294798d11eaa012b7f72736ecb))
+
+## [2.11.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.10.0...sdk-codegen-all-v2.11.0) (2022-10-17)
+
+
+### Features
+
+* generate SDKs for Looker 22.18 ([#1191](https://www.github.com/looker-open-source/sdk-codegen/issues/1191)) ([6d487be](https://www.github.com/looker-open-source/sdk-codegen/commit/6d487be80e89bda6feea446130ad2c318eb61d43))
+
+
+### Bug Fixes
+
+* various path navigation issues ([#1190](https://www.github.com/looker-open-source/sdk-codegen/issues/1190)) ([e73da3d](https://www.github.com/looker-open-source/sdk-codegen/commit/e73da3d39960cb528947c21202318b84d586ce1f))
+
+## [2.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.9.0...sdk-codegen-all-v2.10.0) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.16 ([#1181](https://www.github.com/looker-open-source/sdk-codegen/issues/1181)) ([cf8ecdf](https://www.github.com/looker-open-source/sdk-codegen/commit/cf8ecdf53761193b575590aec21963ccc388b15a))
+
+## [2.9.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.8.0...sdk-codegen-all-v2.9.0) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.14 round 2 ([#1178](https://www.github.com/looker-open-source/sdk-codegen/issues/1178)) ([944bd10](https://www.github.com/looker-open-source/sdk-codegen/commit/944bd10a4f11046e374ab7d87b1a2e2f4b344398))
+
+## [2.8.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.7.0...sdk-codegen-all-v2.8.0) (2022-09-21)
+
+
+### Features
+
+* ability to share a tag scene with a filter applied ([#1142](https://www.github.com/looker-open-source/sdk-codegen/issues/1142)) ([135dce3](https://www.github.com/looker-open-source/sdk-codegen/commit/135dce3a3bf75ad79525a81b2e848e118cc340e4))
+* capture error details for the Kotlin SDK ([#1137](https://www.github.com/looker-open-source/sdk-codegen/issues/1137)) ([9909206](https://www.github.com/looker-open-source/sdk-codegen/commit/9909206e326b60a4465dbd50fbcf0ddb71749ae7))
+* change diff scene route ([#1159](https://www.github.com/looker-open-source/sdk-codegen/issues/1159)) ([180cf20](https://www.github.com/looker-open-source/sdk-codegen/commit/180cf204f767474a76ad7de2ee6fb5171f910eb0))
+* copy link button for search ([#1120](https://www.github.com/looker-open-source/sdk-codegen/issues/1120)) ([d6e0c37](https://www.github.com/looker-open-source/sdk-codegen/commit/d6e0c37ae36b1ff4129cf3bb30f8462f4aa49b0d))
+* error code document retrieval ([#1136](https://www.github.com/looker-open-source/sdk-codegen/issues/1136)) ([305966b](https://www.github.com/looker-open-source/sdk-codegen/commit/305966b943e8dc6fde08d58cbb36febcbae5733f))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+* error documentation redirect and support for detailed error content ([#1167](https://www.github.com/looker-open-source/sdk-codegen/issues/1167)) ([5b4fc5b](https://www.github.com/looker-open-source/sdk-codegen/commit/5b4fc5b91e05ed4ccd9090724e4ac3f506b541fd))
+* generate SDKs for Looker 22.12 ([#1175](https://www.github.com/looker-open-source/sdk-codegen/issues/1175)) ([6f427a7](https://www.github.com/looker-open-source/sdk-codegen/commit/6f427a71dd30669afc901a47418decd59b977a7a))
+* generate SDKs for Looker 22.14 ([#1176](https://www.github.com/looker-open-source/sdk-codegen/issues/1176)) ([328d3e5](https://www.github.com/looker-open-source/sdk-codegen/commit/328d3e5710fc80caf5691b8d3ea3d8b8db358ad6))
+* regenerate Looker 22.12 SDKs ([#1177](https://www.github.com/looker-open-source/sdk-codegen/issues/1177)) ([b3a9b7b](https://www.github.com/looker-open-source/sdk-codegen/commit/b3a9b7bfff6366abce4802b819d19d00ee00cd60))
+* SDK language selection as URL search parameter ([#1123](https://www.github.com/looker-open-source/sdk-codegen/issues/1123)) ([ae59b95](https://www.github.com/looker-open-source/sdk-codegen/commit/ae59b956a5f42dcdd5aa9b4c3d0da1836129a932))
+
+
+### Bug Fixes
+
+* add error detail handling for Python SDK ([#1170](https://www.github.com/looker-open-source/sdk-codegen/issues/1170)) ([0db7157](https://www.github.com/looker-open-source/sdk-codegen/commit/0db715768deedbf3290cd29c5aa788d9546e64f0))
+* add ErrorDoc class to the Kotlin SDK ([#1143](https://www.github.com/looker-open-source/sdk-codegen/issues/1143)) ([20fbd31](https://www.github.com/looker-open-source/sdk-codegen/commit/20fbd31939e0ff88b9be3fdcf260176069143925))
+* add field details for SDK error ([#1134](https://www.github.com/looker-open-source/sdk-codegen/issues/1134)) ([ef1c96d](https://www.github.com/looker-open-source/sdk-codegen/commit/ef1c96d9bc1ae7c27b6ec4b07c7d33f04930d2a7))
+* add field details for SDK error ([#1141](https://www.github.com/looker-open-source/sdk-codegen/issues/1141)) ([9af3092](https://www.github.com/looker-open-source/sdk-codegen/commit/9af30928417e773b6e23a539012bdf9381490a13))
+* DiffScene Page Displays Accurate Number of Diff Entries ([#1163](https://www.github.com/looker-open-source/sdk-codegen/issues/1163)) ([ee46932](https://www.github.com/looker-open-source/sdk-codegen/commit/ee469326783377a4ba382e1df915a30f1c503fd6))
+* IErrorDetail fields should not be null ([#1146](https://www.github.com/looker-open-source/sdk-codegen/issues/1146)) ([44274b4](https://www.github.com/looker-open-source/sdk-codegen/commit/44274b4a3974ff4b946a9a0f3209c70cd77b245e))
+* rerendering issues on DiffScene options change ([#1168](https://www.github.com/looker-open-source/sdk-codegen/issues/1168)) ([a4ac3bc](https://www.github.com/looker-open-source/sdk-codegen/commit/a4ac3bcf2b03ef427fe0fd13c72d1d7e3e939f90))
+* whitespace under CollapserCard child components ([#1162](https://www.github.com/looker-open-source/sdk-codegen/issues/1162)) ([89fbf29](https://www.github.com/looker-open-source/sdk-codegen/commit/89fbf2911701b598bf9d673cef00e790a1bc8207))
+
+## [2.7.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.6.0...sdk-codegen-all-v2.7.0) (2022-07-29)
+
+
+### Features
+
+* keep SDK request interfaces distinct ([#1125](https://www.github.com/looker-open-source/sdk-codegen/issues/1125)) ([50e925c](https://www.github.com/looker-open-source/sdk-codegen/commit/50e925c90eb3c5ffefc8e8535131471e2f2d0334))
+* URL Sharable Search in Explorer ([#1103](https://www.github.com/looker-open-source/sdk-codegen/issues/1103)) ([0eb10ee](https://www.github.com/looker-open-source/sdk-codegen/commit/0eb10ee5490e363baa3fd90561e417bd902cd50a))
+
 ## [2.6.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.5.0...sdk-codegen-all-v2.6.0) (2022-07-14)
 
 

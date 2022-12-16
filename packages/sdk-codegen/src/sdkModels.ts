@@ -2064,7 +2064,6 @@ export interface IApiModel extends IModel {
 }
 
 export class ApiModel implements ISymbolTable, IApiModel {
-  private requestTypes: TypeList = {}
   private enumTypes: TypeList = {}
   private refs: TypeList = {}
   methods: MethodList = {}
@@ -2326,9 +2325,13 @@ export class ApiModel implements ISymbolTable, IApiModel {
     )
   }
 
-  // add to this.requestTypes collection with hash as key
-  makeRequestType(hash: string, method: IMethod) {
-    const name = `${strRequest}${camelCase('_' + method.name)}`
+  private requestTypeName(method: IMethod) {
+    return `${strRequest}${camelCase('_' + method.name)}`
+  }
+
+  // add to this.types collection with name as key
+  makeRequestType(method: IMethod) {
+    const name = this.requestTypeName(method)
     const request = new RequestType(
       this,
       name,
@@ -2336,7 +2339,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
       `Dynamically generated request type for ${method.name}`
     )
     this.types[name] = request
-    this.requestTypes[hash] = request
     method.addType(this, request)
     return request
   }
@@ -2379,14 +2381,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
    */
   private _getRequestType(method: IMethod) {
     if (method.optionalParams.length <= 1) return undefined
-    // matches method params ONLY value hash against current request types
-    let paramHash = ''
-    method.allParams.forEach((p) => (paramHash += p.asHashString()))
-    const hash = md5(paramHash)
-    // if no match, creates the request type and increments its refCount for inclusion
-    // in generated imports
-    let result = this.requestTypes[hash]
-    if (!result) result = this.makeRequestType(hash, method)
+
+    let result = this.types[this.requestTypeName(method)]
+    if (!result) result = this.makeRequestType(method)
     return result
   }
 
@@ -2395,7 +2392,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
    *
    * updates refCount for the method
    *
-   * @param {IMethod} method for request type
+   * @param method for request type
    * @returns {IType | undefined} returns type if request type is needed, otherwise it doesn't
    */
   getRequestType(method: IMethod) {
@@ -2411,10 +2408,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return this.enumTypes
   }
 
-  makeWriteableType(hash: string, type: IType) {
+  makeWriteableType(type: IType) {
     const writer = new WriteType(this, type)
     this.types[writer.name] = writer
-    this.requestTypes[hash] = writer
     return writer
   }
 
@@ -2447,10 +2443,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       JSON.stringify(writes) === JSON.stringify(props)
     )
       return undefined // type is writeable
-    const hash = md5(type.asHashString())
-    let result = this.requestTypes[hash]
-    if (result) return result // writeable already registered for this type
-    result = this.makeWriteableType(hash, type)
+    const result = this.makeWriteableType(type)
     type.types.add(result.name)
     // Link the writeable type to its source type
     type.customTypes.add(result.name)
@@ -2469,7 +2462,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
   /**
    * Sort a keyed collection so its keys are in sorted order
-   * @param {KeyedCollection<T>} list to sort
+   * @param list to sort
    * @returns {KeyedCollection<T>} newly sorted list
    */
   sortList<T>(list: KeyedCollection<T>): KeyedCollection<T> {
@@ -2484,7 +2477,6 @@ export class ApiModel implements ISymbolTable, IApiModel {
   sortLists() {
     this.methods = this.sortList(this.methods)
     this.types = this.sortList(this.types)
-    // this.requestTypes = this.sortList(this.requestTypes)
     // this.refs = this.sortList(this.refs)
     this.tags = this.sortList(this.tags)
     this.typeTags = this.sortList(this.typeTags)

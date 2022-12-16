@@ -49,7 +49,16 @@ export const ProjectViewDialog: FC<ProjectViewDialogProps> = ({
     <Dialog isOpen={!!project} onClose={closeDialog}>
       <DialogHeader>{project?.title}</DialogHeader>
       <DialogContent>
-        {!!project && <ProjectView project={project} />}
+        {!!project && (
+          <ProjectView
+            title={project.title}
+            description={project.description}
+            technologies={project.technologies}
+            members={project.$members}
+            project_type={project.project_type}
+            contestant={project.contestant}
+          />
+        )}
       </DialogContent>
     </Dialog>
   )

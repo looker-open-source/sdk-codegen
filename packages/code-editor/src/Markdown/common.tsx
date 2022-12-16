@@ -50,11 +50,13 @@ export const MDParagraph = styled(Paragraph).attrs(
 `
 
 const OListInternal = styled.ol`
+  color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 20px;
 `
 
 const UListInternal = styled.ul`
+  color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 20px;
 `
@@ -64,8 +66,10 @@ export const MDList: React.FC<any> = ({ ordered, ...rest }) => {
 }
 
 export const MDListItem = styled.li`
+  color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 4px;
+  line-height: 1.5;
 `
 
 export const MDTable = styled(Table).attrs(({ mb = 'large' }: TableProps) => ({

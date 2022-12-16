@@ -10,7 +10,7 @@ cert = base64.b64encode(cert).decode("utf-8")
 """Base64 encoded Certificate body for server authentication"""
 
 
-sdk = looker_sdk.init31("looker.ini")
+sdk = looker_sdk.init40("looker.ini")
 
 
 sdk.create_connection(

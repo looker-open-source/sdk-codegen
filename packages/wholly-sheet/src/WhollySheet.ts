@@ -269,7 +269,7 @@ export interface IWhollySheet<T extends IRowModel, P> {
   batchUpdate<T extends IRowModel>(force?: boolean): Promise<T[]>
 }
 
-/** CRUDF operations for a GSheet tab */
+/** CRUDS operations for a GSheet tab */
 export abstract class WhollySheet<T extends IRowModel, P>
   extends TypedRows<T>
   implements IWhollySheet<T, P>

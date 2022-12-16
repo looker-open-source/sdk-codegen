@@ -25,7 +25,6 @@
  */
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router'
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 import styled from 'styled-components'
 import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
@@ -33,7 +32,7 @@ import type { DiffRow } from '@looker/sdk-codegen/src'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 import { useSelector } from 'react-redux'
 import { selectSdkLanguage } from '../../../state'
-import { buildMethodPath } from '../../../utils'
+import { buildMethodPath, useNavigation } from '../../../utils'
 import { DiffBanner } from './DiffBanner'
 import { differ } from './docDiffUtils'
 
@@ -60,7 +59,7 @@ export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   method,
   specKey,
 }) => {
-  const history = useHistory()
+  const { navigate } = useNavigation()
 
   if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
 
@@ -71,7 +70,7 @@ export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
     <DiffLink
       role="link"
       onClick={() => {
-        history.push(path)
+        navigate(path)
       }}
     >{`${method.name} for ${specKey}`}</DiffLink>
   )

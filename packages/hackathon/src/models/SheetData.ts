@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { SheetSDK, ISheet } from '@looker/wholly-sheet'
-import type { Hackathon, Hacker } from '.'
+import type { IArtifact } from '@looker/sdk'
+import { search_artifacts } from '@looker/sdk'
 import {
   Projects,
   Registrations,
@@ -32,13 +32,10 @@ import {
   Hackathons,
   TeamMembers,
   Judgings,
-  Registration,
   Users,
-  User,
 } from '.'
 
 export class SheetData {
-  protected _sheet!: ISheet
   users!: Users
   projects!: Projects
   technologies!: Technologies
@@ -47,93 +44,112 @@ export class SheetData {
   teamMembers!: TeamMembers
   judgings!: Judgings
 
-  constructor(public readonly sheetSDK: SheetSDK, data: ISheet) {
-    this.sheet = data
-  }
-
   get currentHackathon() {
     return this.hackathons.currentHackathon
   }
 
-  /**
-   * Optionally create and get registration and user record for user in Hackathon
-   * @param hackathon to register
-   * @param hacker to register
-   */
-  async registerUser(
-    hackathon: Hackathon,
-    hacker: Hacker
-  ): Promise<Registration> {
-    let reg = this.registrations.rows.find(
-      (r) => r._user_id === hacker.id && r.hackathon_id === hackathon._id
-    )
-    let user = this.users.find(hacker.id)
-    if (!user) {
-      /** create the user tab row for this hacker */
-      user = new User({
-        _id: hacker.id,
-        first_name: hacker.firstName,
-        last_name: hacker.lastName,
-      })
-      await this.users.save(user)
-    } else {
-      if (
-        user.first_name !== hacker.firstName ||
-        user.last_name !== hacker.lastName
-      ) {
-        // Refresh the user's name
-        user.first_name = hacker.firstName
-        user.last_name = hacker.lastName
-        await this.users.save(user)
-      }
-    }
-    if (reg) {
-      hacker.registration = reg
-      return reg
-    }
-    reg = new Registration({ _user_id: hacker.id, hackathon_id: hackathon._id })
-    reg = await this.registrations.save(reg)
-    return reg
+  private extract(artifacts: IArtifact[], name: string) {
+    return artifacts.filter((a) => a.key.startsWith(`${name}:`))
   }
 
-  get sheet() {
-    return this._sheet
-  }
-
-  /**
-   * Assigning the sheet assigns the typed collections
-   * @param value
-   */
-  set sheet(value: ISheet) {
-    this.load(value)
-  }
-
-  /**
-   * Loads the sheet into typed collections
-   * @param data entire sheet to load
-   */
-  load(data: ISheet) {
-    this._sheet = data
+  async init() {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    _activeSheet = this
-    if (Object.keys(data).length === 0) return this
-    // The initialization order is significant here, and should remain this way
-    // unless there's a specific reason to change it
-    this.users = new Users(this, data.tabs.users)
-    this.registrations = new Registrations(this, data.tabs.registrations)
-    this.technologies = new Technologies(this, data.tabs.technologies)
-    this.hackathons = new Hackathons(this, data.tabs.hackathons)
-    this.teamMembers = new TeamMembers(this, data.tabs.team_members)
-    this.judgings = new Judgings(this, data.tabs.judgings)
-    this.projects = new Projects(this, data.tabs.projects)
+    this.users = new Users(this, {
+      header: ['_id', '_updated', 'first_name', 'last_name'],
+      rows: [],
+    })
+    const sdk = this.users.sdk
+    const artifacts = await sdk.ok(
+      search_artifacts(sdk, { namespace: this.users.namespace, key: '%' })
+    )
+    await this.users.refresh(this.extract(artifacts, this.users.tableName))
+    this.registrations = new Registrations(this, {
+      header: [
+        '_id',
+        '_updated',
+        '_user_id',
+        'hackathon_id',
+        'date_registered',
+        'attended',
+      ],
+      rows: [],
+    })
+    await this.registrations.refresh(
+      this.extract(artifacts, this.registrations.tableName)
+    )
+    this.technologies = new Technologies(this, {
+      header: ['_id', '_updated', 'description'],
+      rows: [],
+    })
+    await this.technologies.refresh(
+      this.extract(artifacts, this.technologies.tableName)
+    )
+    this.hackathons = new Hackathons(this, {
+      header: [
+        '_id',
+        '_updated',
+        'name',
+        'description',
+        'location',
+        'date',
+        'duration_in_days',
+        'max_team_size',
+        'judging_starts',
+        'judging_stops',
+        'default',
+      ],
+      rows: [],
+    })
+    await this.hackathons.refresh(
+      this.extract(artifacts, this.hackathons.tableName)
+    )
+    this.teamMembers = new TeamMembers(this, {
+      header: ['_id', '_updated', 'user_id', 'project_id', 'responsibilities'],
+      rows: [],
+    })
+    await this.teamMembers.refresh(
+      this.extract(artifacts, this.teamMembers.tableName)
+    )
+    this.judgings = new Judgings(this, {
+      header: [
+        '_id',
+        '_updated',
+        'user_id',
+        'project_id',
+        'execution',
+        'ambition',
+        'coolness',
+        'impact',
+        'score',
+        'notes',
+      ],
+      rows: [],
+    })
+    await this.judgings.refresh(
+      this.extract(artifacts, this.judgings.tableName)
+    )
+    this.projects = new Projects(this, {
+      header: [
+        '_id',
+        '_updated',
+        '_user_id',
+        '_hackathon_id',
+        'title',
+        'description',
+        'date_created',
+        'project_type',
+        'contestant',
+        'locked',
+        'more_info',
+        'technologies',
+      ],
+      rows: [],
+    })
+    await this.projects.refresh(
+      this.extract(artifacts, this.projects.tableName)
+    )
     this.projects.rows.forEach((p) => p.load(this))
     this.judgings.rows.forEach((j) => j.load(this))
-    return this
-  }
-
-  async refresh() {
-    const data = await this.sheetSDK.index()
-    this.load(data)
     return this
   }
 }
@@ -141,11 +157,8 @@ export class SheetData {
 let _activeSheet: SheetData
 
 /** Initialize the globally available sheet */
-export const initActiveSheet = (
-  sheetSDK: SheetSDK,
-  data: ISheet
-): SheetData => {
-  _activeSheet = new SheetData(sheetSDK, data)
+export const initActiveSheet = (sheetData: SheetData): SheetData => {
+  _activeSheet = sheetData
   return _activeSheet
 }
 

@@ -27,6 +27,7 @@
 export * from './common'
 export * from './Collapser'
 export * from './ConfigForm'
+export * from './CopyLinkWrapper'
 export * from './DocSdkCalls'
 export * from './DataGrid'
 export * from './LoginForm'

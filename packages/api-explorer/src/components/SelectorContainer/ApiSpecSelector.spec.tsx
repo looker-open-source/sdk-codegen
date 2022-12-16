@@ -41,7 +41,7 @@ jest.mock('react-router-dom', () => {
     useLocation: () => ({
       pathname: '/4.0/methods/Dashboard/dashboard',
     }),
-    useHistory: jest.fn().mockReturnValue({ push: jest.fn() }),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
   }
 })
 
@@ -83,6 +83,9 @@ describe('ApiSpecSelector', () => {
     })
     const button = screen.getByText('3.1')
     userEvent.click(button)
-    expect(push).toHaveBeenCalledWith('/3.1/methods/Dashboard/dashboard')
+    expect(push).toHaveBeenCalledWith({
+      pathname: '/3.1/methods/Dashboard/dashboard',
+      search: '',
+    })
   })
 })

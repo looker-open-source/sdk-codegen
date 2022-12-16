@@ -25,7 +25,7 @@
  */
 
 /**
- * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+ * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -239,6 +239,49 @@ data class ApiVersionElement (
     var full_version: String? = null,
     var status: String? = null,
     var swagger_url: String? = null
+) : Serializable
+
+/**
+ * @property key Key of value to store. Namespace + Key must be unique.
+ * @property value Value to store.
+ * @property content_type MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+ * @property version Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+ * @property namespace Artifact storage namespace. (read-only)
+ * @property created_at Timestamp when this artifact was created. (read-only)
+ * @property updated_at Timestamp when this artifact was updated. (read-only)
+ * @property value_size Size (in bytes) of the stored value. (read-only)
+ * @property created_by_userid User id of the artifact creator. (read-only)
+ * @property updated_by_userid User id of the artifact updater. (read-only)
+ */
+data class Artifact (
+    var key: String,
+    var value: String,
+    var content_type: String? = null,
+    var version: Long? = null,
+    var namespace: String,
+    var created_at: Date,
+    var updated_at: Date,
+    var value_size: Long,
+    var created_by_userid: String,
+    var updated_by_userid: String
+) : Serializable
+
+/**
+ * @property namespace Artifact storage namespace. (read-only)
+ * @property count The number of artifacts stored in the namespace. (read-only)
+ */
+data class ArtifactNamespace (
+    var namespace: String,
+    var count: Long
+) : Serializable
+
+/**
+ * @property max_size The configured maximum size in bytes of the entire artifact store. (read-only)
+ * @property usage The currently used storage size in bytes of the entire artifact store. (read-only)
+ */
+data class ArtifactUsage (
+    var max_size: Long,
+    var usage: Long
 ) : Serializable
 
 /**
@@ -1193,6 +1236,7 @@ data class CustomWelcomeEmail (
  * @property deleted_at Time that the Dashboard was 'soft' deleted. (read-only)
  * @property deleter_id Id of User that 'soft' deleted the dashboard. (read-only)
  * @property edit_uri Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)
+ * @property enable_viz_full_screen Allow visualizations to be viewed in full screen mode
  * @property favorite_count Number of times favorited (read-only)
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
@@ -1243,6 +1287,7 @@ data class Dashboard (
     var deleted_at: Date? = null,
     var deleter_id: String? = null,
     var edit_uri: String? = null,
+    var enable_viz_full_screen: Boolean? = null,
     var favorite_count: Long? = null,
     var filters_bar_collapsed: Boolean? = null,
     var filters_location_top: Boolean? = null,
@@ -1622,6 +1667,7 @@ data class Datagroup (
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property pool_timeout Connection Pool Timeout, in seconds
  * @property dialect_name (Read/Write) SQL Dialect name
+ * @property supports_data_studio_link Database connection has the ability to support open data studio from explore (read-only)
  * @property created_at Creation date for this connection (read-only)
  * @property user_id Id of user who last modified this connection configuration (read-only)
  * @property example Is this an example connection? (read-only)
@@ -1668,6 +1714,7 @@ data class DBConnection (
     var jdbc_additional_params: String? = null,
     var pool_timeout: Long? = null,
     var dialect_name: String? = null,
+    var supports_data_studio_link: Boolean? = null,
     var created_at: String? = null,
     var user_id: String? = null,
     var example: Boolean? = null,
@@ -1909,6 +1956,84 @@ data class EgressIpAddresses (
 ) : Serializable
 
 /**
+ * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+ * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+ * @property first_name First name of the embed user. Defaults to 'Embed' if not specified
+ * @property last_name Last name of the embed user. Defaults to 'User' if not specified
+ * @property user_timezone Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+ * @property permissions List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+ * @property models List of model names that the embed user may access
+ * @property group_ids List of Looker group ids in which to enroll the embed user
+ * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+ * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ */
+data class EmbedCookielessSessionAcquire (
+    var session_length: Long? = null,
+    var force_logout_login: Boolean? = null,
+    var external_user_id: String? = null,
+    var first_name: String? = null,
+    var last_name: String? = null,
+    var user_timezone: String? = null,
+    var permissions: Array<String>? = null,
+    var models: Array<String>? = null,
+    var group_ids: Array<String>? = null,
+    var external_group_id: String? = null,
+    var user_attributes: Map<String,Any>? = null,
+    var session_reference_token: String? = null
+) : Serializable
+
+/**
+ * @property authentication_token One time token used to create or to attach to an embedded session in the Looker application server.
+ * @property authentication_token_ttl Authentication token time to live in seconds.
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property navigation_token_ttl Navigation token time to live in seconds.
+ * @property api_token Token to used to call Looker APIs.
+ * @property api_token_ttl Api token time to live in seconds.
+ * @property session_reference_token Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+ * @property session_reference_token_ttl Session reference token time to live in seconds. Note that this is the same as actual session.
+ */
+data class EmbedCookielessSessionAcquireResponse (
+    var authentication_token: String? = null,
+    var authentication_token_ttl: Long? = null,
+    var navigation_token: String? = null,
+    var navigation_token_ttl: Long? = null,
+    var api_token: String? = null,
+    var api_token_ttl: Long? = null,
+    var session_reference_token: String? = null,
+    var session_reference_token_ttl: Long? = null
+) : Serializable
+
+/**
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property api_token Token to used to call Looker APIs.
+ */
+data class EmbedCookielessSessionGenerateTokens (
+    var session_reference_token: String,
+    var navigation_token: String? = null,
+    var api_token: String? = null
+) : Serializable
+
+/**
+ * @property navigation_token Token used to load and navigate between Looker pages.
+ * @property navigation_token_ttl Navigation token time to live in seconds.
+ * @property api_token Token to used to call Looker APIs.
+ * @property api_token_ttl Api token time to live in seconds.
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property session_reference_token_ttl Session reference token time to live in seconds. Note that this is the same as actual session.
+ */
+data class EmbedCookielessSessionGenerateTokensResponse (
+    var navigation_token: String? = null,
+    var navigation_token_ttl: Long? = null,
+    var api_token: String? = null,
+    var api_token_ttl: Long? = null,
+    var session_reference_token: String,
+    var session_reference_token_ttl: Long? = null
+) : Serializable
+
+/**
  * @property target_url The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
  * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
@@ -1926,6 +2051,7 @@ data class EmbedParams (
  * @property id Unique Id (read-only)
  * @property secret Secret for use with SSO embedding (read-only)
  * @property user_id Id of user who created this secret (read-only)
+ * @property secret_type Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
  */
 data class EmbedSecret (
     var algorithm: String? = null,
@@ -1933,7 +2059,8 @@ data class EmbedSecret (
     var enabled: Boolean? = null,
     var id: String? = null,
     var secret: String? = null,
-    var user_id: String? = null
+    var user_id: String? = null,
+    var secret_type: SecretType? = null
 ) : Serializable
 
 /**
@@ -2386,6 +2513,7 @@ data class ImportedProject (
  * @property icon_url URL to an icon for the integration. (read-only)
  * @property uses_oauth Whether the integration uses oauth. (read-only)
  * @property required_fields A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
+ * @property privacy_link Link to privacy policy for destination (read-only)
  * @property delegate_oauth Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
  * @property installed_delegate_oauth_targets Whether the integration is available to users.
  */
@@ -2405,6 +2533,7 @@ data class Integration (
     var icon_url: String? = null,
     var uses_oauth: Boolean? = null,
     var required_fields: Array<IntegrationRequiredField>? = null,
+    var privacy_link: String? = null,
     var delegate_oauth: Boolean? = null,
     var installed_delegate_oauth_targets: Array<String>? = null
 ) : Serializable
@@ -4672,6 +4801,14 @@ data class SchemaTables (
 ) : Serializable
 
 /**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+enum class SecretType : Serializable {
+    SSO,
+    JWT
+}
+
+/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property ip_address IP address of user when this session was initiated (read-only)
@@ -4731,6 +4868,9 @@ data class SessionConfig (
  * @property privatelabel_configuration
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
+ * @property timezone Change instance-wide default timezone
+ * @property allow_user_timezones Toggle user-specific timezones on or off
+ * @property data_connector_default_enabled Toggle default future connectors on or off
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4739,7 +4879,10 @@ data class Setting (
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
-    var onboarding_enabled: Boolean? = null
+    var onboarding_enabled: Boolean? = null,
+    var timezone: String? = null,
+    var allow_user_timezones: Boolean? = null,
+    var data_connector_default_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -5036,6 +5179,8 @@ data class Theme (
  * @property warn_button_color Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
  * @property tile_shadow Toggles the tile shadow (not supported)
+ * @property show_last_updated_indicator Toggle to show the dashboard last updated indicator. Defaults to true.
+ * @property show_reload_data_icon Toggle to show reload data icon/button. Defaults to true.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5054,7 +5199,9 @@ data class ThemeSettings (
     var title_color: String? = null,
     var warn_button_color: String? = null,
     var tile_title_alignment: String? = null,
-    var tile_shadow: Boolean? = null
+    var tile_shadow: Boolean? = null,
+    var show_last_updated_indicator: Boolean? = null,
+    var show_reload_data_icon: Boolean? = null
 ) : Serializable
 
 /**
@@ -5066,6 +5213,19 @@ data class Timezone (
     var value: String? = null,
     var label: String? = null,
     var group: String? = null
+) : Serializable
+
+/**
+ * @property key Key of value to store. Namespace + Key must be unique.
+ * @property value Value to store.
+ * @property content_type MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+ * @property version Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+ */
+data class UpdateArtifact (
+    var key: String,
+    var value: String,
+    var content_type: String? = null,
+    var version: Long? = null
 ) : Serializable
 
 /**
@@ -5660,6 +5820,7 @@ data class WriteCredentialsEmail (
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
  * @property deleted Whether or not a dashboard is 'soft' deleted.
+ * @property enable_viz_full_screen Allow visualizations to be viewed in full screen mode
  * @property filters_bar_collapsed Sets the default state of the filters bar to collapsed or open
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
@@ -5686,6 +5847,7 @@ data class WriteDashboard (
     var background_color: String? = null,
     var crossfilter_enabled: Boolean? = null,
     var deleted: Boolean? = null,
+    var enable_viz_full_screen: Boolean? = null,
     var filters_bar_collapsed: Boolean? = null,
     var filters_location_top: Boolean? = null,
     var load_configuration: String? = null,
@@ -5856,7 +6018,7 @@ data class WriteDatagroup (
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  *
  * @property name Name of the connection. Also used as the unique identifier
  * @property host Host name/address of server
@@ -5965,10 +6127,12 @@ data class WriteDBConnectionOverride (
  *
  * @property algorithm Signing algorithm to use with this secret. Either `hmac/sha-256`(default) or `hmac/sha-1`
  * @property enabled Is this secret currently enabled
+ * @property secret_type Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
  */
 data class WriteEmbedSecret (
     var algorithm: String? = null,
-    var enabled: Boolean? = null
+    var enabled: Boolean? = null,
+    var secret_type: SecretType? = null
 ) : Serializable
 
 /**
@@ -6025,7 +6189,7 @@ data class WriteGroup (
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  *
  * @property enabled Whether the integration is available to users.
  * @property params Array of params for the integration.
@@ -6675,6 +6839,9 @@ data class WriteSessionConfig (
  * logo_url, favicon_url
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
+ * @property timezone Change instance-wide default timezone
+ * @property allow_user_timezones Toggle user-specific timezones on or off
+ * @property data_connector_default_enabled Toggle default future connectors on or off
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6683,7 +6850,10 @@ data class WriteSetting (
     var marketplace_enabled: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
-    var onboarding_enabled: Boolean? = null
+    var onboarding_enabled: Boolean? = null,
+    var timezone: String? = null,
+    var allow_user_timezones: Boolean? = null,
+    var data_connector_default_enabled: Boolean? = null
 ) : Serializable
 
 /**

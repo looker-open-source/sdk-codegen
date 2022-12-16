@@ -150,7 +150,7 @@ describe('sdkModels', () => {
       const api4 = readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
       const api = ApiModel.fromString(api4)
       const actual = Object.keys(api.typeTags)
-      expect(actual).toHaveLength(29)
+      expect(actual).toHaveLength(30)
     })
 
     describe('ordering', () => {
@@ -368,16 +368,18 @@ describe('sdkModels', () => {
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.title).toBeDefined()
+          expect(actual.name).toEqual('RequestSearchLooks')
         }
       })
 
-      it('search_spaces', () => {
+      it('search_folders', () => {
         const method = apiTestModel.methods.search_folders
         expect(method).toBeDefined()
         const actual = apiTestModel.getRequestType(method)
         expect(actual).toBeDefined()
         if (actual) {
           expect(actual.properties.fields).toBeDefined()
+          expect(actual.name).toEqual('RequestSearchFolders')
         }
       })
 

@@ -38,9 +38,9 @@ describe('DocDiff', () => {
   const rightKey = specs['4.0'].key
   const leftApi = specs['3.1'].api!
   const rightApi = specs['4.0'].api!
+  const delta = diffSpecs(leftApi, rightApi, standardDiffToggles)
 
   it('renders', () => {
-    const delta = diffSpecs(leftApi, rightApi, standardDiffToggles)
     renderWithReduxProvider(
       <DocDiff
         leftKey={leftKey}
@@ -61,6 +61,7 @@ describe('DocDiff', () => {
       screen.getByRole('button', { name: 'Next page of results' })
     ).toBeInTheDocument()
   })
+
   it('renders when there is no delta', () => {
     renderWithReduxProvider(
       <DocDiff
@@ -75,7 +76,6 @@ describe('DocDiff', () => {
   })
 
   it('paginates', async () => {
-    const delta = diffSpecs(leftApi, rightApi, standardDiffToggles)
     renderWithReduxProvider(
       <DocDiff
         leftKey={leftKey}
@@ -107,6 +107,77 @@ describe('DocDiff', () => {
       expect(
         screen.getByText(rightApi.methods[row2.name].summary)
       ).toBeInTheDocument()
+    })
+  })
+
+  it('paginates with correct number of entries per page', async () => {
+    const pageSize = 5
+    renderWithReduxProvider(
+      <DocDiff
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+        delta={delta}
+        pageSize={pageSize}
+      />
+    )
+
+    for (let i = 0; i < pageSize; i++) {
+      const row = delta[i]
+      expect(screen.getByText(row.name)).toBeInTheDocument()
+      expect(screen.getByText(row.id)).toBeInTheDocument()
+      expect(
+        screen.getByText(rightApi.methods[row.name].summary)
+      ).toBeInTheDocument()
+    }
+    const notDisplayedRow = delta[pageSize]
+    expect(screen.queryByText(notDisplayedRow.name)).not.toBeInTheDocument()
+  })
+
+  it('paginates with correct total page count', async () => {
+    const pageSize = 5
+    renderWithReduxProvider(
+      <DocDiff
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+        delta={delta}
+        pageSize={pageSize}
+      />
+    )
+    const expectedPageCount = Math.ceil(delta.length / pageSize)
+    expect(screen.getByText(`of ${expectedPageCount}`)).toBeInTheDocument()
+  })
+
+  it('final diff entry of one page does not appear in next page', async () => {
+    const pageSize = 5
+    renderWithReduxProvider(
+      <DocDiff
+        leftKey={leftKey}
+        leftSpec={leftApi}
+        rightKey={rightKey}
+        rightSpec={rightApi}
+        delta={delta}
+        pageSize={pageSize}
+      />
+    )
+    const lastPageEntry = delta[pageSize - 1]
+    expect(screen.getByText(lastPageEntry.name)).toBeInTheDocument()
+    expect(screen.getByText(lastPageEntry.id)).toBeInTheDocument()
+    expect(
+      screen.getByText(rightApi.methods[lastPageEntry.name].summary)
+    ).toBeInTheDocument()
+
+    // go to page 2
+    userEvent.click(
+      screen.getByRole('button', { name: 'Next page of results' })
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByText(lastPageEntry.name)).not.toBeInTheDocument()
+      expect(screen.queryByText(lastPageEntry.id)).not.toBeInTheDocument()
     })
   })
 })

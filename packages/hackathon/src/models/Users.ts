@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { SheetData } from './SheetData'
@@ -34,6 +36,7 @@ import type { SheetData } from './SheetData'
 export interface IUserProps extends IRowModelProps {
   first_name: string
   last_name: string
+  looker_id: string
   $name: string
 }
 
@@ -51,11 +54,16 @@ export interface IUser extends ISheetRow, IUserProps {}
 export class User extends SheetRow<IUser> {
   first_name = ''
   last_name = ''
+  looker_id = ''
   constructor(values?: any) {
     super()
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  tableName() {
+    return 'User'
   }
 
   get $name(): string {
@@ -67,12 +75,12 @@ export class User extends SheetRow<IUser> {
   }
 }
 
-export class Users extends WhollySheet<User, IUserProps> {
+export class Users extends WhollyArtifact<User, IUserProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'users', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<User>(values?: any) {

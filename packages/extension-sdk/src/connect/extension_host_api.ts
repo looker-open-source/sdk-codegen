@@ -24,7 +24,7 @@
 
  */
 
-import type { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection, Options } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
 import { logError } from '../util'
 import type {
@@ -493,14 +493,19 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     if (errorMessage) {
       return Promise.reject(new Error(errorMessage))
     }
-    return this.sendAndReceive(ExtensionRequestType.INVOKE_EXTERNAL_API, {
-      type: 'oauth2_authenticate',
-      payload: {
-        authEndpoint,
-        authParameters,
-        httpMethod,
+    return this.sendAndReceive(
+      ExtensionRequestType.INVOKE_EXTERNAL_API,
+      {
+        type: 'oauth2_authenticate',
+        payload: {
+          authEndpoint,
+          authParameters,
+          httpMethod,
+        },
       },
-    })
+      // Adding the signal disables the default timeout
+      { signal: new AbortController().signal }
+    )
   }
 
   async oauth2ExchangeCodeForToken(
@@ -524,15 +529,21 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     this.send(ExtensionRequestType.RENDERED, { failureMessage })
   }
 
-  async sendAndReceive(type: string, payload?: any): Promise<any> {
+  async sendAndReceive(
+    type: string,
+    payload?: any,
+    options?: Options
+  ): Promise<any> {
     if (!this._lookerHostData) {
       return Promise.reject(new Error('Looker host connection not established'))
     }
+    const messagePayload = {
+      type,
+      payload,
+    }
+    const chattyPayload = options ? [messagePayload, options] : [messagePayload]
     return this.chattyHost
-      .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, {
-        type,
-        payload,
-      })
+      .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, ...chattyPayload)
       .then((values) => values[0])
   }
 

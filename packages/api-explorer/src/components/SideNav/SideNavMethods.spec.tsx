@@ -42,6 +42,7 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
+      location,
     }),
   }
 })
@@ -50,6 +51,10 @@ describe('SideNavMethods', () => {
   const tag = 'Dashboard'
   const methods = api.tags[tag]
   const specKey = '3.1'
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   test('it renders provided methods', () => {
     renderWithRouterAndReduxProvider(

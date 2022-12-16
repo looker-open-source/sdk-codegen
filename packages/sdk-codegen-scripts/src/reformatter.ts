@@ -291,6 +291,21 @@ class GoFormatter extends BaseFormatter {
     super('Go')
   }
 
+  instructions =
+    'To reformat Go files, please install gofmt: https://go.dev/blog/gofmt'
+
+  reformat(files: string[]): string {
+    const gofmtExists = run('command', ['-v', 'gofmt'], this.instructions, true)
+    if (gofmtExists.includes('gofmt')) {
+      const list = files.join(' ')
+      // gofmt check completed without error
+      run('gofmt', ['-w', list], 'Go reformat', true)
+      return success(files)
+    } else {
+      return danger(this.instructions)
+    }
+  }
+
   versionStamp() {
     return warn('Skipping SDK version updating - not implemented for Go.')
   }

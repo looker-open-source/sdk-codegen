@@ -13,10 +13,10 @@
     "watch": "yarn lerna exec --scope @looker/extension-playground --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/extension-sdk": "^22.4.2",
-    "@looker/extension-sdk-react": "^22.4.2",
-    "@looker/sdk": "^22.4.2",
-    "@looker/components": "^2.8.1",
+    "@looker/extension-sdk": "^22.20.1",
+    "@looker/extension-sdk-react": "^22.20.1",
+    "@looker/sdk": "^22.20.1",
+    "@looker/components": "^3.0.8",
     "@looker/icons": "^1.5.3",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",

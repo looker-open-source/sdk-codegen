@@ -104,7 +104,7 @@ export const fullify = (uri: string, baseUrl: string): string => {
   return url.toString()
 }
 /**
- * parse spec url into version and name for api_spec cccall
+ * parse spec url into version and name for api_spec call
  * @param spec to parse
  */
 const apiSpecBits = (spec: SpecItem): string[] =>

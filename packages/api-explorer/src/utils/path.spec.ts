@@ -25,19 +25,48 @@
  */
 
 import { api } from '../test-data'
-import { buildMethodPath, buildPath, buildTypePath } from './path'
+import {
+  buildMethodPath,
+  buildPath,
+  buildTypePath,
+  getSceneType,
+  isValidFilter,
+} from './path'
 
 describe('path utils', () => {
+  const testParam = 's=test'
   describe('buildMethodPath', () => {
     test('it builds a method path', () => {
       const path = buildMethodPath('3.1', 'Dashboard', 'create_dashboard')
       expect(path).toEqual('/3.1/methods/Dashboard/create_dashboard')
     })
+    test('it builds a method path with params', () => {
+      const path = buildMethodPath(
+        '3.1',
+        'Dashboard',
+        'create_dashboard',
+        testParam
+      )
+      expect(path).toEqual(
+        `/3.1/methods/Dashboard/create_dashboard?${testParam}`
+      )
+    })
   })
 
   describe('buildTypePath', () => {
-    const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
-    expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
+    test('it builds a type path', () => {
+      const path = buildTypePath('3.1', 'Dashboard', 'WriteDashboard')
+      expect(path).toEqual('/3.1/types/Dashboard/WriteDashboard')
+    })
+    test('it builds a type path with params', () => {
+      const path = buildTypePath(
+        '3.1',
+        'Dashboard',
+        'create_dashboard',
+        testParam
+      )
+      expect(path).toEqual(`/3.1/types/Dashboard/create_dashboard?${testParam}`)
+    })
   })
 
   describe('buildPath', () => {
@@ -49,6 +78,66 @@ describe('path utils', () => {
     test('given a type it creates a type path', () => {
       const path = buildPath(api, api.types.Dashboard, '3.1')
       expect(path).toEqual('/3.1/types/Dashboard/Dashboard')
+    })
+  })
+
+  describe('getSceneType', () => {
+    test('returns correct scene type given location with pathname', () => {
+      const methodPath = '/3.1/methods/RandomMethod'
+      const typePath = '/3.1/types/RandomType'
+      expect(getSceneType(methodPath)).toEqual('methods')
+      expect(getSceneType(typePath)).toEqual('types')
+    })
+    test('returns empty string if there is no scene type', () => {
+      const noSceneTypePath = '/'
+      expect(getSceneType(noSceneTypePath)).toEqual('')
+    })
+  })
+
+  describe('isValidFilter', () => {
+    const methodPath = '/3.1/methods/RandomMethod'
+    const typePath = '/3.1/types/RandomType'
+
+    test("validates 'all' as a valid filter for methods and types", () => {
+      expect(isValidFilter(methodPath, 'ALL')).toBe(true)
+      expect(isValidFilter(typePath, 'ALL')).toBe(true)
+    })
+
+    const methodFilters = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+    const typeFilters = ['SPECIFICATION', 'WRITE', 'REQUEST', 'ENUMERATED']
+
+    test.each(methodFilters)(
+      'validates %s as a valid method filter',
+      (filter) => {
+        expect(isValidFilter(methodPath, filter)).toBe(true)
+      }
+    )
+
+    test.each(methodFilters)(
+      'invalidates %s when containing extra characters',
+      (filter) => {
+        expect(isValidFilter(methodPath, filter + 'x')).toBe(false)
+      }
+    )
+
+    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+      expect(isValidFilter(typePath, filter)).toBe(true)
+    })
+
+    test.each(typeFilters)(
+      'invalidates %s when containing extra characters',
+      (filter) => {
+        expect(isValidFilter(typePath, filter + 'x')).toBe(false)
+      }
+    )
+
+    test('invalidates wrong parameter for methods and types', () => {
+      expect(isValidFilter(methodPath, 'INVALID')).toBe(false)
+      expect(isValidFilter(typePath, 'INVALID')).toBe(false)
+    })
+
+    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+      expect(isValidFilter(typePath, filter)).toBe(true)
     })
   })
 })

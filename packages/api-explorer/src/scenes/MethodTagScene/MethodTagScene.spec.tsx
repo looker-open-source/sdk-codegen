@@ -29,20 +29,34 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { api } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
+import { renderWithRouterAndReduxProvider } from '../../test-utils'
 import { MethodTagScene } from './MethodTagScene'
 
 const opBtnNames = /ALL|GET|POST|PUT|PATCH|DELETE/
+
+const mockHistoryPush = jest.fn()
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useHistory: () => ({
+      push: mockHistoryPush,
+      location: {
+        pathname: '/4.0/methods/Look',
+      },
+    }),
+  }
+})
 
 describe('MethodTagScene', () => {
   Element.prototype.scrollTo = jest.fn()
 
   test('it renders operation buttons and all methods for a given method tag', () => {
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ColorCollection']
+      ['/4.0/methods/ColorCollection']
     )
     expect(
       screen.getAllByRole('button', {
@@ -56,17 +70,17 @@ describe('MethodTagScene', () => {
       screen.getByText('/color_collections/standard').closest('a')
     ).toHaveAttribute(
       'href',
-      '/3.1/methods/ColorCollection/color_collections_standard'
+      '/4.0/methods/ColorCollection/color_collections_standard'
     )
   })
 
   test('it only renders operation buttons for operations that exist under that tag', () => {
     /** ApiAuth contains two POST methods and a DELETE method */
-    renderWithRouter(
+    renderWithRouterAndReduxProvider(
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/ApiAuth']
+      ['/4.0/methods/ApiAuth']
     )
     expect(
       screen.getAllByRole('button', {
@@ -75,30 +89,30 @@ describe('MethodTagScene', () => {
     ).toHaveLength(3)
   })
 
-  test('it filters methods by operation type', async () => {
-    renderWithRouter(
+  test('it pushes filter to URL on toggle', async () => {
+    const site = '/4.0/methods/Look'
+    renderWithRouterAndReduxProvider(
       <Route path="/:specKey/methods/:methodTag">
         <MethodTagScene api={api} />
       </Route>,
-      ['/3.1/methods/Look']
+      [site]
     )
-    const allLookMethods = /^\/look.*/
-    expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
     /** Filter by GET operation */
     userEvent.click(screen.getByRole('button', { name: 'GET' }))
     await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(4)
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: site,
+        search: 't=get',
+      })
     })
     /** Filter by DELETE operation */
     userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
     await waitFor(() => {
       // eslint-disable-next-line jest-dom/prefer-in-document
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(1)
-    })
-    /** Restore original state */
-    userEvent.click(screen.getByRole('button', { name: 'ALL' }))
-    await waitFor(() => {
-      expect(screen.getAllByText(allLookMethods)).toHaveLength(7)
+      expect(mockHistoryPush).toHaveBeenCalledWith({
+        pathname: site,
+        search: 't=delete',
+      })
     })
   })
 })

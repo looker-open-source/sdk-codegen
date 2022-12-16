@@ -22,41 +22,40 @@ This repository contains:
 
 We hope to help people who want to use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
 
-An [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) describes the Looker API. This specification is used to produce both Looker's interactive API Explorer, and the Looker API language bindings for the Looker REST API.
+The Looker SDK has several parts:
 
-A Looker SDK has several parts:
+- The **Looker API**, described by an [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) (e.g., the Swagger 2.x representation found at
+  `https://<your-looker-domain>:19999/api/4.0/swagger.json`). The 4.0 API is our current & stable API. As of June 2022, [3.x is deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-- **Looker API** OpenAPI specification (e.g., found at
-  `https://<your-looker-endpoint>:19999/api/3.1/swagger.json`, although this is still the Swagger 2.x representation)
+- The **Looker API Explorer**, an interactive reference, accessible either stand-alone at [developers.looker.com/api/explorer/](https://developers.looker.com/api/explorer/), or installable into your Looker instance as an extension from the Looker Marketplace.
 
-- The **Looker API Docs viewer**, provided in the Looker web app directly from our version-specific OpenAPI specification, available on each Looker server instance.
+- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Some SDKs are [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#support_levels) whereas others are community-supported.
 
-- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages.
+## SDK multi-API-version support
 
-## Multi-API support with Looker 7.2 and later
+The 4.0 version of the API is the current and stable version of the API, in addition to the 3.x API which is now [deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-Looker 7.2 introduced an **Experimental** version of API 4.0. Since that release, some SDKs now support multiple API versions in the same SDK package.
+Some SDKs support and expose both API versions in the same SDK package, including all [Looker-supported SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
 
-For all SDKs but Swift, API-specific SDKs are now created and put in the same SDK package, and share the same run-time code.
+For SDKs that support multiple API versions, there will be `methods.*` and `models.*` collections generated for each API version. Each API version is exposed under a distinct class name from which to instantiate an initial SDK object.
 
-At the time of this writing, API 3.1 and API 4.0 are included in most SDK packages. For an SDK that supports multiple API versions, there will be a `methods.*` and `models.*` generated for each API version.
+API-version-specific files generally use shared Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
-The class names representing these API versions are distinct, with version-named constructors for creating initialized SDK objects.
+Regardless of which API version you use, API credentials are unchanged, and may continue to be referred to as "API3" credentials.
 
-These API-specific files still use all the same Run-Time Library (RTL) code in the SDK package to minimize code duplication.
 
 ### Looker SDKs
 
 Please review the following table for a breakdown of the options to initialize the desired SDK object.
 
-| SDK                        | API 3.1                                                                   | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
-| -------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Python](python)           | `looker_sdk.init31()`                                                     | `looker_sdk.init40()`                                                    | Both API 3.1 and 4.0 are supported, and can be initialized with the functions shown                                                                                                                                                            |
-| [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()` | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | Both API 3.1 and 4.0 are supported and can be initialized with the functions shown. **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
-| [Kotlin](kotlin)           | Do not use                                                                | `LookerSDK()`                                                            | API 4.0 was specifically created to correct the endpoint payloads for strongly-typed languages like Kotlin and Swift. Because Kotlin really requires API 4.0, API 4.0 is the default namespace for it                                          |
-| [Swift](swift/looker)      | Not applicable                                                            | `Looker40SDK()`                                                          | Swift only has SDK definitions for API 4.0                                                                                                                                                                                                     |
-| [Look#](csharp)            | `Looker31SDK()`                                                           | `Looker40SDK()`                                                          | Community-supported C# SDK for Looker                                                                                                                                                                                                          |
-| [GoLook](go)               | Not applicable                                                            | `v4.NewLookerSDK()`                                                      | Community-supported GO SDK for Looker                                                                                                                                                                                                          |
+| SDK                        | API 3.1 [(deprecated)](https://developers.looker.com/api/advanced-usage/version-3x-deprecation) | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
+| -------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Python](python)           | `looker_sdk.init31()`                                                                           | `looker_sdk.init40()`                                                    |                                                                                                                                                            |
+| [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()`                       | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
+| [Kotlin](kotlin)           | Not supported                                                                                   | `LookerSDK()`                                                            | Community-supported SDK. Uses API 4.0 exclusively. The initializer uses an unversioned name.                                                               |
+| [Swift](swift/looker)      | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
+| [Look#](csharp)            | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
+| [GoLook](go)               | Not supported                                                                                   | `v4.NewLookerSDK()`                                                      | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
 
 By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
 
@@ -174,9 +173,7 @@ python
 
 To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
 
-- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts). Currently, only Go and C# have legacy language generation configured, and we now have a prototype Look# SDK that can be used instead of the legacy C# generator.
-
-- the legacy generator defaults to using the API 4.0 specification, which is more accurate for strongly typed languages. To use API 3.1, put `api_version=3.1` in the `Looker` section of your `looker.ini`
+- configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts).
 
 - use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI generator to output files to the `./api/*` path
 
@@ -281,7 +278,6 @@ The following table describes the environment variables. By default, the SDK "na
 | Variable name           | Description                                                                                                                                                           |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LOOKERSDK_BASE_URL      | A URL like `https://my.looker.com:19999`. No default value.                                                                                                           |
-| LOOKERSDK_API_VERSION   | Version of the Looker API to use. Use `3.1` for now, which is the default and used to produce this SDK.                                                               |
 | LOOKERSDK_VERIFY_SSL    | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set.                  |
 | LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                     |
 | LOOKERSDK_CLIENT_ID     | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |

@@ -1,5 +1,56 @@
 # Changelog
 
+### [0.1.27](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.26...code-editor-v0.1.27) (2022-12-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+
+### [0.1.26](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.25...code-editor-v0.1.26) (2022-11-10)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.7.2 to ^21.7.3
+
+### [0.1.25](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.24...code-editor-v0.1.25) (2022-10-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.7.1 to ^21.7.2
+
+### [0.1.24](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.23...code-editor-v0.1.24) (2022-09-21)
+
+
+### Features
+
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+* error documentation redirect and support for detailed error content ([#1167](https://www.github.com/looker-open-source/sdk-codegen/issues/1167)) ([5b4fc5b](https://www.github.com/looker-open-source/sdk-codegen/commit/5b4fc5b91e05ed4ccd9090724e4ac3f506b541fd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+
+### [0.1.23](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.22...code-editor-v0.1.23) (2022-07-29)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.6.0 to ^21.7.0
+
 ### [0.1.22](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.21...code-editor-v0.1.22) (2022-07-07)
 
 

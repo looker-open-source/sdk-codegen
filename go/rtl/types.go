@@ -14,7 +14,8 @@ type DelimString []string
 // UnmarshalJSON is custom json unmarshaling for DelimString type
 // It expects json string as input, and split it by comma to multiple strings.
 // example:
-//     "one,two,three" -> DelimString{"one","two","three"}
+//
+//	"one,two,three" -> DelimString{"one","two","three"}
 func (s *DelimString) UnmarshalJSON(b []byte) error {
 	// unmarshal the original value, this supposed to be string
 	var orig *string
@@ -50,7 +51,8 @@ type DelimInt64 []int64
 // UnmarshalJSON is custom json unmarshaling for DelimInt64 type
 // It expects string as input, split the string by comma and convert it to DelimInt64 (slice of int64)
 // example:
-//     "1,2,3" -> DelimInt64{1,2,3}
+//
+//	"1,2,3" -> DelimInt64{1,2,3}
 func (i *DelimInt64) UnmarshalJSON(b []byte) error {
 	// unmarshal the provided value as string
 	var orig *string
@@ -84,7 +86,8 @@ func (i *DelimInt64) UnmarshalJSON(b []byte) error {
 // MarshalJSON is custom json marshaling for DelimInt64 type
 // It marshals the DelimInt64 (slice of int64) to comma separated json string value
 // example:
-//     DelimInt64{1,2,3} -> "1,2,3"
+//
+//	DelimInt64{1,2,3} -> "1,2,3"
 func (i DelimInt64) MarshalJSON() ([]byte, error) {
 	// convert to slice of ints
 	elems := []int64(i)

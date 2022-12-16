@@ -27,8 +27,9 @@
 import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
-const day1 = zonedTimeToUtc('2021-11-10 00:00:00', 'America/Los_Angeles')
+const day1 = zonedTimeToUtc('2022-12-06 00:00:00', 'America/Los_Angeles')
 const day2 = add(day1, { days: 1 })
+const day3 = add(day2, { days: 1 })
 let current = day1
 
 const later = (start: Date, hours: number) => {
@@ -36,243 +37,159 @@ const later = (start: Date, hours: number) => {
   return current
 }
 
-const MARKDOWN_LINEBREAK = '  '
-
-/**
- * from https://looker.com/events/join/agenda?agendaPath=session/616880
- */
+// NOTE: if stop values are not defined, they default to the start of the next agenda item. All other stop values can default. The final stop value is required.
 export const agenda = [
   {
-    start: later(day1, -4), // Nov 9th
-    // NOTE: if stop values are not defined, they default to the start of the next agenda item
-    stop: later(day1, -3.5), // Nov 9th
+    start: later(day1, 15),
+    stop: later(day1, 15.5),
     description: {
-      en: `## **Welcome Session** (APAC)
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **開会 APAC（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      en: `## **Welcome & Kickoff**
+On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://meet.google.com/vjd-gsco-xzu
+)`,
+      ja_JP: `## **ご挨拶とキックオフ**
+このチャンスを是非ご活用ください。ハッカソンの担当者による説明を聞いて、成功への一歩を踏み出しましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/vjd-gsco-xzu)`,
     },
   },
   {
-    start: later(day1, 1), // Nov 10th
-    stop: later(day1, 1.5), // Nov 10th
+    start: later(day1, 16),
+    stop: later(day1, 18),
     description: {
-      en: `## **Welcome Session** (EMEA)
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **開会 EMEA（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      en: `### Office Hours (AMER + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
-    start: later(day1, 10),
-    stop: later(day1, 10.5),
+    start: later(day1, 20),
+    stop: later(day1, 22),
     description: {
-      en: `## **Welcome Session** (AMER)
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **開会 AMER（ご案内・注意事項など)**
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-    },
-  },
-  {
-    start: later(day1, -3.5), // Nov 9th
-    stop: later(day1, -2),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 1.5), // Nov 10th
-    stop: later(day1, 3.5),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 5), // Nov 10th
-    stop: later(day1, 7),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English supported._`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 10.5),
-    stop: later(day1, 13),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English supported._`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 14.5),
-    stop: later(day1, 16),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 17),
-    stop: later(day1, 19),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day1, 19),
-    description: {
-      en: `### **Hack@Night session**
-Random fun little session!${MARKDOWN_LINEBREAK}
-[Live session link](https://meet.google.com/daw-pwci-gpm)`,
-      ja_JP: `**Hack@Night Session**
-アメリカの夜懇親会!${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://meet.google.com/daw-pwci-gpm)`, //
-    },
-  },
-  {
-    start: later(day2, -4),
-    stop: later(day2, -3.5),
-    description: {
-      en: `## **Check-In Session** (APAC)
-Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **ラウンドテーブル Check-in** (APAC)
-進捗、注意点、お知らせなど${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      en: `### Office Hours (AMER + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
     start: later(day2, 1),
-    stop: later(day2, 1.5),
+    stop: later(day2, 3),
     description: {
-      en: `## **Check-In Session** (EMEA)
-Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **ラウンドテーブル Check-in** (EMEA)
-進捗、注意点、お知らせなど${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      en: `### Office Hours (EMEA + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### EMEA と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
-    start: later(day2, 10),
-    stop: later(day2, 10.5),
+    start: later(day2, 9),
+    stop: later(day2, 11),
     description: {
-      en: `## **Check-In Session** (AMER)
-Day 2 check-in with important info.${MARKDOWN_LINEBREAK}
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
-      ja_JP: `## **ラウンドテーブル Check-in** (AMER)
-進捗、注意点、お知らせなど${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880)`,
+      en: `### Office Hours (EMEA + AMER)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### EMEA と AMER のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
     },
   },
   {
-    start: later(day2, -3.5),
-    stop: later(day2, -2),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day2, 1.5),
-    stop: later(day2, 3.0),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English and Japanese supported._`,
-      ja_JP: `### サポート時間 (対応言語：英・日)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day2, 5),
-    stop: later(day2, 7),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English supported._`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day2, 10.5),
-    stop: later(day2, 12),
-    description: {
-      en: `### Supported hacking hours
-Ask questions in [#lookerhack-help slack channel](https://app.slack.com/client/T0A4R5X0F/C02HPKQKSFM).${MARKDOWN_LINEBREAK}
-_English supported._`,
-      ja_JP: `### サポート時間 (対応言語：英)
-[Slackの#lookerhack-helpチャネル](https://app.slack.com/client/T0A4R5X0F/C02ELGL644F)で質問を受けております`,
-    },
-  },
-  {
-    start: later(day2, 13),
+    start: later(day2, 15),
     stop: later(day2, 15.5),
     description: {
-      en: `## **Project Judging**
-Projects will be locked.${MARKDOWN_LINEBREAK}
+      en: `## **Half-way Check In**
+Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**](meet.google.com/kgg-bgjs-ucc)`,
+      ja_JP: `## **中間理解度チェック**
+ここまでが前半です。ここまでの進捗状況と判定の仕組みを確認しましょう。<br>[**ライブ セッション リンク**](meet.google.com/kgg-bgjs-ucc)`,
+    },
+  },
+  {
+    start: later(day2, 16),
+    stop: later(day2, 18),
+    description: {
+      en: `### Office Hours (AMER + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
+    },
+  },
+  {
+    start: later(day2, 19),
+    stop: later(day2, 20),
+    description: {
+      en: `## **Break Time**
+Virtually chill out with your fellow Cloud BI Developers and play some trivia! <br>[**Live session link**](https://meet.google.com/jov-mmvf-vgd
+).`,
+      ja_JP: `## **休憩**
+他の Cloud BI 開発者たちとバーチャルでリラックスしながら、クイズを楽しみましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/jov-mmvf-vgd)`,
+    },
+  },
+  {
+    start: later(day2, 20),
+    stop: later(day2, 22),
+    description: {
+      en: `### Office Hours (AMER + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### AMER と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
+    },
+  },
+  {
+    start: later(day3, 1),
+    stop: later(day3, 3),
+    description: {
+      en: `### Office Hours (EMEA + APAC)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### EMEA と APAC のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
+    },
+  },
+  {
+    start: later(day3, 9),
+    stop: later(day3, 11),
+    description: {
+      en: `### Office Hours (EMEA + AMER)
+Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**#cloudbihack-help slack channel**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD).`,
+      ja_JP: `### EMEA と AMER のオフィスアワー
+ご不明な点がある場合は、Looker や Google データポータルなどの担当者に直接尋ねることができます。[**#cloudbihack-help Slack チャンネルでご質問をお寄せください。**](https://app.slack.com/client/T0A4R5X0F/C043T27QCMD)`,
+    },
+  },
+  {
+    start: later(day3, 13),
+    stop: later(day3, 13),
+    description: {
+      en: `## **Project Due**
+Projects will be locked.<br>
 Please update your project description with your deliverables beforehand.`,
       ja_JP: `## **プロジェクトの提出締め切り**
-Projects → Add Project機能が使えなくなります${MARKDOWN_LINEBREAK}
+Projects → Add Project機能が使えなくなります<br>
 締め切りまでにProjects最新情報やデモなどご変更をお願い致します`,
     },
   },
   {
-    start: later(day2, 14),
-    stop: later(day2, 14),
+    start: later(day3, 14),
+    stop: later(day3, 14),
     description: {
-      en: `## **Finalists announced**`,
+      en: `### Finalists announced`,
       ja_JP: '## ファイナリスト発表',
     },
   },
   {
-    start: later(day2, 15.5),
-    stop: later(day2, 16.5),
+    start: later(day3, 15),
+    stop: later(day3, 15.75),
     description: {
-      en: `## **Closing Session**
-Winners announced.${MARKDOWN_LINEBREAK}
-[Live session link](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
-      ja_JP: `## **クロウジング**
-優秀賞発表 & 優秀賞デモ ${MARKDOWN_LINEBREAK}
-[生放送をご視ください](https://looker.com/events/join/agenda?agendaPath=session/616880).`,
+      en: `## **Winners Ceremony with Demos**
+Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://meet.google.com/yif-qxfk-ejc
+).`,
+      ja_JP: `## **表彰式とデモ**
+「Best Hack」賞と「Nearly Best Hack」賞を獲得したプロジェクトを発表します。プロジェクト デモもご覧ください。<br>[**ライブ セッション リンク**](https://meet.google.com/yif-qxfk-ejc)`,
     },
   },
-  // NOTE: All other stop values can default. The final stop value is required.
   {
-    start: later(day2, 16.5),
-    stop: later(day2, 17.5),
+    start: later(day3, 16),
+    stop: later(day3, 17),
     description: {
       en: `## **~Happy~ Hacky Hour**
-Let's hang out and celebrate!${MARKDOWN_LINEBREAK}
-[Live session link](https://meet.google.com/daw-pwci-gpm)`,
-      ja_JP: `## **~Happy~ Hacky Hour(懇親会)**
-[生放送をご視ください](https://meet.google.com/daw-pwci-gpm)
-`,
+Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[**Live session link**](https://meet.google.com/bmn-cepn-fws)`,
+      ja_JP: `## **ハッピーアワー**
+他の Cloud BI 開発者たちと飲み物を片手にバーチャルでリラックスしましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/bmn-cepn-fws)`,
     },
   },
 ]

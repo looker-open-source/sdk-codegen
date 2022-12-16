@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+/// 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -229,6 +229,46 @@ public class ApiVersionElement : SdkModel
   public string? status { get; set; } = null;
   /// <summary>Url for swagger.json for this version (read-only)</summary>
   public string? swagger_url { get; set; } = null;
+}
+
+public class Artifact : SdkModel
+{
+  /// <summary>Key of value to store. Namespace + Key must be unique.</summary>
+  public string key { get; set; } = "";
+  /// <summary>Value to store.</summary>
+  public string value { get; set; } = "";
+  /// <summary>MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.</summary>
+  public string? content_type { get; set; } = null;
+  /// <summary>Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)</summary>
+  public long? version { get; set; } = null;
+  /// <summary>Artifact storage namespace. (read-only)</summary>
+  public string @namespace { get; set; } = "";
+  /// <summary>Timestamp when this artifact was created. (read-only)</summary>
+  public DateTime created_at { get; set; }
+  /// <summary>Timestamp when this artifact was updated. (read-only)</summary>
+  public DateTime updated_at { get; set; }
+  /// <summary>Size (in bytes) of the stored value. (read-only)</summary>
+  public long value_size { get; set; }
+  /// <summary>User id of the artifact creator. (read-only)</summary>
+  public string created_by_userid { get; set; } = "";
+  /// <summary>User id of the artifact updater. (read-only)</summary>
+  public string updated_by_userid { get; set; } = "";
+}
+
+public class ArtifactNamespace : SdkModel
+{
+  /// <summary>Artifact storage namespace. (read-only)</summary>
+  public string @namespace { get; set; } = "";
+  /// <summary>The number of artifacts stored in the namespace. (read-only)</summary>
+  public long count { get; set; }
+}
+
+public class ArtifactUsage : SdkModel
+{
+  /// <summary>The configured maximum size in bytes of the entire artifact store. (read-only)</summary>
+  public long max_size { get; set; }
+  /// <summary>The currently used storage size in bytes of the entire artifact store. (read-only)</summary>
+  public long usage { get; set; }
 }
 
 public class BackupConfiguration : SdkModel
@@ -1153,6 +1193,8 @@ public class Dashboard : SdkModel
   public string? deleter_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)</summary>
   public string? edit_uri { get; set; } = null;
+  /// <summary>Allow visualizations to be viewed in full screen mode</summary>
+  public bool? enable_viz_full_screen { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
@@ -1554,6 +1596,8 @@ public class DBConnection : SdkModel
   public long? pool_timeout { get; set; } = null;
   /// <summary>(Read/Write) SQL Dialect name</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>Database connection has the ability to support open data studio from explore (read-only)</summary>
+  public bool? supports_data_studio_link { get; set; } = null;
   /// <summary>Creation date for this connection (read-only)</summary>
   public string? created_at { get; set; } = null;
   /// <summary>Id of user who last modified this connection configuration (read-only)</summary>
@@ -1804,6 +1848,80 @@ public class EgressIpAddresses : SdkModel
   public string[]? egress_ip_addresses { get; set; } = null;
 }
 
+public class EmbedCookielessSessionAcquire : SdkModel
+{
+  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  public long? session_length { get; set; } = null;
+  /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
+  public bool? force_logout_login { get; set; } = null;
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  public string? external_user_id { get; set; } = null;
+  /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
+  public string? first_name { get; set; } = null;
+  /// <summary>Last name of the embed user. Defaults to 'User' if not specified</summary>
+  public string? last_name { get; set; } = null;
+  /// <summary>Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.</summary>
+  public string? user_timezone { get; set; } = null;
+  /// <summary>List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.</summary>
+  public string[]? permissions { get; set; } = null;
+  /// <summary>List of model names that the embed user may access</summary>
+  public string[]? models { get; set; } = null;
+  /// <summary>List of Looker group ids in which to enroll the embed user</summary>
+  public string[]? group_ids { get; set; } = null;
+  /// <summary>A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.</summary>
+  public string? external_group_id { get; set; } = null;
+  /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
+  public StringDictionary<object>? user_attributes { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string? session_reference_token { get; set; } = null;
+}
+
+public class EmbedCookielessSessionAcquireResponse : SdkModel
+{
+  /// <summary>One time token used to create or to attach to an embedded session in the Looker application server.</summary>
+  public string? authentication_token { get; set; } = null;
+  /// <summary>Authentication token time to live in seconds.</summary>
+  public long? authentication_token_ttl { get; set; } = null;
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Navigation token time to live in seconds.</summary>
+  public long? navigation_token_ttl { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+  /// <summary>Api token time to live in seconds.</summary>
+  public long? api_token_ttl { get; set; } = null;
+  /// <summary>Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server. </summary>
+  public string? session_reference_token { get; set; } = null;
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  public long? session_reference_token_ttl { get; set; } = null;
+}
+
+public class EmbedCookielessSessionGenerateTokens : SdkModel
+{
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string session_reference_token { get; set; } = "";
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+}
+
+public class EmbedCookielessSessionGenerateTokensResponse : SdkModel
+{
+  /// <summary>Token used to load and navigate between Looker pages.</summary>
+  public string? navigation_token { get; set; } = null;
+  /// <summary>Navigation token time to live in seconds.</summary>
+  public long? navigation_token_ttl { get; set; } = null;
+  /// <summary>Token to used to call Looker APIs. </summary>
+  public string? api_token { get; set; } = null;
+  /// <summary>Api token time to live in seconds.</summary>
+  public long? api_token_ttl { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string session_reference_token { get; set; } = "";
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  public long? session_reference_token_ttl { get; set; } = null;
+}
+
 public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
@@ -1828,6 +1946,9 @@ public class EmbedSecret : SdkModel
   public string? secret { get; set; } = null;
   /// <summary>Id of user who created this secret (read-only)</summary>
   public string? user_id { get; set; } = null;
+  /// <summary>Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SecretType? secret_type { get; set; }
 }
 
 public class EmbedSsoParams : SdkModel
@@ -2278,6 +2399,8 @@ public class Integration : SdkModel
   public bool? uses_oauth { get; set; } = null;
   /// <summary>A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)</summary>
   public IntegrationRequiredField[]? required_fields { get; set; } = null;
+  /// <summary>Link to privacy policy for destination (read-only)</summary>
+  public string? privacy_link { get; set; } = null;
   /// <summary>Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)</summary>
   public bool? delegate_oauth { get; set; } = null;
   /// <summary>Whether the integration is available to users.</summary>
@@ -4455,6 +4578,15 @@ public class SchemaTables : SdkModel
   public bool? table_limit_hit { get; set; } = null;
 }
 
+/// Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+public enum SecretType
+{
+  [EnumMember(Value = "SSO")]
+  SSO,
+  [EnumMember(Value = "JWT")]
+  JWT
+}
+
 public class Session : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4519,6 +4651,12 @@ public class Setting : SdkModel
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
+  /// <summary>Change instance-wide default timezone</summary>
+  public string? timezone { get; set; } = null;
+  /// <summary>Toggle user-specific timezones on or off</summary>
+  public bool? allow_user_timezones { get; set; } = null;
+  /// <summary>Toggle default future connectors on or off</summary>
+  public bool? data_connector_default_enabled { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -4837,6 +4975,10 @@ public class ThemeSettings : SdkModel
   public string? tile_title_alignment { get; set; } = null;
   /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
+  /// <summary>Toggle to show the dashboard last updated indicator. Defaults to true.</summary>
+  public bool? show_last_updated_indicator { get; set; } = null;
+  /// <summary>Toggle to show reload data icon/button. Defaults to true.</summary>
+  public bool? show_reload_data_icon { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -4847,6 +4989,18 @@ public class Timezone : SdkModel
   public string? label { get; set; } = null;
   /// <summary>Timezone group (e.g Common, Other, etc.) (read-only)</summary>
   public string? group { get; set; } = null;
+}
+
+public class UpdateArtifact : SdkModel
+{
+  /// <summary>Key of value to store. Namespace + Key must be unique.</summary>
+  public string key { get; set; } = "";
+  /// <summary>Value to store.</summary>
+  public string value { get; set; } = "";
+  /// <summary>MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.</summary>
+  public string? content_type { get; set; } = null;
+  /// <summary>Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)</summary>
+  public long? version { get; set; } = null;
 }
 
 public class UpdateFolder : SdkModel
@@ -5429,6 +5583,8 @@ public class WriteDashboard : SdkModel
   public bool? crossfilter_enabled { get; set; } = null;
   /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
+  /// <summary>Allow visualizations to be viewed in full screen mode</summary>
+  public bool? enable_viz_full_screen { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
@@ -5603,7 +5759,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+/// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -5713,6 +5869,9 @@ public class WriteEmbedSecret : SdkModel
   public string? algorithm { get; set; } = null;
   /// <summary>Is this secret currently enabled</summary>
   public bool? enabled { get; set; } = null;
+  /// <summary>Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public SecretType? secret_type { get; set; }
 }
 
 /// Dynamic writeable type for ExternalOauthApplication removes:
@@ -5760,7 +5919,7 @@ public class WriteGroup : SdkModel
 }
 
 /// Dynamic writeable type for Integration removes:
-/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 public class WriteIntegration : SdkModel
 {
   /// <summary>Whether the integration is available to users.</summary>
@@ -6379,6 +6538,12 @@ public class WriteSetting : SdkModel
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
   public bool? onboarding_enabled { get; set; } = null;
+  /// <summary>Change instance-wide default timezone</summary>
+  public string? timezone { get; set; } = null;
+  /// <summary>Toggle user-specific timezones on or off</summary>
+  public bool? allow_user_timezones { get; set; } = null;
+  /// <summary>Toggle default future connectors on or off</summary>
+  public bool? data_connector_default_enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:

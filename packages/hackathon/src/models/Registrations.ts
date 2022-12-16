@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { noDate, WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { noDate, WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { Hackathon } from './Hackathons'
@@ -54,6 +56,10 @@ export class Registration extends SheetRow<IRegistration> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Registration'
+  }
+
   prepare(): IRegistration {
     super.prepare()
     if (this.date_registered === noDate) this.date_registered = new Date()
@@ -67,7 +73,7 @@ export class Registration extends SheetRow<IRegistration> {
   }
 }
 
-export class Registrations extends WhollySheet<
+export class Registrations extends WhollyArtifact<
   Registration,
   IRegistrationProps
 > {
@@ -75,11 +81,7 @@ export class Registrations extends WhollySheet<
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(
-      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
-      'registrations',
-      table
-    )
+    super(getCore40SDK(), table)
   }
 
   typeRow<Registration>(values?: any) {

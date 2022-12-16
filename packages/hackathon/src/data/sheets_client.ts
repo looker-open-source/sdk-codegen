@@ -25,15 +25,10 @@
  */
 import omit from 'lodash/omit'
 import type { ValidationMessages } from '@looker/components'
-import { DefaultSettings } from '@looker/sdk-rtl'
-import type { ITabTable } from '@looker/wholly-sheet'
-import { SheetSDK } from '@looker/wholly-sheet'
-import { getExtensionSDK } from '@looker/extension-sdk'
 import { getCore40SDK } from '@looker/extension-sdk-react'
-import type { SheetData } from '../models/SheetData'
-import { initActiveSheet } from '../models/SheetData'
-import { GAuthSession } from '../authToken/gAuthSession'
+import { initActiveSheet, SheetData } from '../models/SheetData'
 import type {
+  Hacker,
   IProjectProps,
   IHackerProps,
   IHackathonProps,
@@ -42,14 +37,13 @@ import type {
   ITechnologyProps,
 } from '../models'
 import {
-  Hacker,
   Project,
   Projects,
   Hackers,
   sheetHeader,
   Judging,
+  Registration,
 } from '../models'
-import { ExtensionProxyTransport } from '../authToken/extensionProxyTransport'
 import type {
   ProjectsHeadings,
   HackersHeadings,
@@ -85,14 +79,17 @@ class SheetsClient {
 
   async getCurrentProjects(hackathonId?: string): Promise<IProjectProps[]> {
     const data = await this.getSheetData()
+    // Need to refresh teamMembers for latest team members
+    await data.teamMembers.refresh()
     await data.projects.refresh()
     const hackathon = await this.getSheetHackathon(hackathonId)
     const rows = data.projects.filterBy(hackathon)
-    // Create a projects object from the filtered rows
+    // Create a projects object fom the filtered rows
     const result = new Projects(data, {
       header: data.projects.header,
-      rows: rows,
-    } as ITabTable)
+      rows: [],
+    })
+    await result.refresh(rows)
     return this.decorateProjectObjects(result.toObject(), rows)
   }
 
@@ -245,12 +242,13 @@ class SheetsClient {
     }
   }
 
+  // Actualy updates judging. Saving a new judging happens in Project class.
   async saveJudging(judgingProps: IJudgingProps): Promise<IJudgingProps> {
     const data = await this.getSheetData()
     const judging = data.judgings.find(judgingProps._id, '_id')
     if (judging) {
       judging.fromObject(judgingProps)
-      const updatedJudging = await data.judgings.save(judging)
+      const updatedJudging = await data.judgings.update(judging)
       return updatedJudging.toObject()
     } else {
       throw new Error(`judging not found for ${judgingProps._id}`)
@@ -259,20 +257,49 @@ class SheetsClient {
 
   async getHacker(): Promise<IHackerProps> {
     if (!this.hacker) {
-      const lookerSdk = getCore40SDK()
-      const hacker = new Hacker(lookerSdk)
-      await hacker.getMe()
-      try {
-        const data = await this.getSheetData()
-        await this.loadHackers(data)
-      } catch (error) {
-        console.warn(
-          'Error loading sheets data. Has hackathon application been configured?'
+      const sdk = getCore40SDK()
+      const lookerUser = await sdk.ok(sdk.me())
+
+      const data = await this.getSheetData()
+
+      await this.loadHackers(data)
+
+      const hacker: Hacker | undefined = this.hackers?.rows.find(
+        (h) => h.user.id === lookerUser.id
+      )
+
+      if (!hacker) {
+        throw new Error(
+          'Failed to load hacker. Looker user id: ' + lookerUser.id
         )
       }
+
+      // Assigns rights, perms, and attributes like timezone
+      await hacker.getMe()
+
       this.hacker = this.decorateHacker(hacker.toObject(), hacker)
     }
     return this.hacker
+  }
+
+  firstNameSort(a: IHackerProps, b: IHackerProps): number {
+    if (a.firstName < b.firstName) {
+      return -1
+    }
+    if (a.firstName > b.firstName) {
+      return 1
+    }
+    return 0
+  }
+
+  attendedSort(a: IHackerProps, b: IHackerProps): number {
+    if (a.attended && !b.attended) {
+      return -1
+    }
+    if (!a.firstName && b.attended) {
+      return 1
+    }
+    return 0
   }
 
   async getHackers(): Promise<{
@@ -297,6 +324,15 @@ class SheetsClient {
       this.hackers?.staff?.map((hacker) =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || []
+
+    // Sort hackers by first name and attendance for
+    // convenience when navigating list.
+    hackers.sort(this.firstNameSort)
+    hackers.sort(this.attendedSort)
+    // Sort rest by first name for convenience
+    judges.sort(this.firstNameSort)
+    admins.sort(this.firstNameSort)
+    staff.sort(this.firstNameSort)
     return { hackers, judges, admins, staff }
   }
 
@@ -305,13 +341,23 @@ class SheetsClient {
     hackathonId?: string
   ): Promise<IRegistrationProps> {
     const hackathon = await this.getSheetHackathon(hackathonId)
-    if (hackathon) {
-      const data = await this.getSheetData()
-      const registration = await data.registerUser(hackathon, user)
-      return registration.toObject()
-    } else {
+    if (!hackathon) {
       throw new Error(this.getHackathonErrorMessage(hackathonId))
     }
+
+    const data = await this.getSheetData()
+
+    let reg = data.registrations.rows.find(
+      (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
+    )
+
+    if (!reg) {
+      reg = new Registration({ _user_id: user.id, hackathon_id: hackathon._id })
+      reg = await data.registrations.save(reg)
+    }
+
+    user.registration = reg
+    return reg.toObject()
   }
 
   async getTechnologies(): Promise<ITechnologyProps[]> {
@@ -330,11 +376,7 @@ class SheetsClient {
     const projects = await this.getSheetProjects()
     const project = projects.find(projectId, '_id')
     if (project) {
-      // TODO for some reason hacker id not populated. Verify with JK
-      // TODO originally used users but ended using rows in order to add myself
-      const hacker = this.hackers!.rows.find(
-        (hacker) => String(hacker.user.id) === hackerId
-      )
+      const hacker = this.hackers!.rows.find(({ id }) => id === hackerId)
       if (hacker) {
         if (leave) {
           await project.leave(hacker)
@@ -357,7 +399,7 @@ class SheetsClient {
       'title',
       'description',
       'project_type',
-      'technologies',
+      '$techs',
       '$team_count',
       '$judge_count',
     ]
@@ -366,11 +408,13 @@ class SheetsClient {
   }
 
   getHackersHeadings(): HackersHeadings {
-    const template = new Hacker()
-    const lookerSdk = getCore40SDK()
-    const hackersContainer = new Hackers(lookerSdk)
-    const headers = hackersContainer.displayHeaders
-    return sheetHeader(headers, template)
+    if (!this.hackers) {
+      throw new Error('Cannot get hackers heading. All hackers not loaded')
+    }
+    if (!this.hacker) {
+      throw new Error('Cannot get hackers heading. Hacker not loaded')
+    }
+    return sheetHeader(this.hackers.displayHeaders, this.hacker)
   }
 
   getJudgingsHeadings(): JudgingsHeadings {
@@ -378,8 +422,8 @@ class SheetsClient {
       '$judge_name',
       '$title',
       'execution',
-      'ambition',
-      'coolness',
+      'scope',
+      'novelty',
       'impact',
       'score',
       'notes',
@@ -454,22 +498,9 @@ class SheetsClient {
 
   private async getSheetData(): Promise<SheetData> {
     if (this.sheetData) return this.sheetData
-    // Values required
-    const extSDK = getExtensionSDK()
-    const tokenServerUrl =
-      (await extSDK.userAttributeGetItem('token_server_url')) || ''
-    const sheetId = (await extSDK.userAttributeGetItem('sheet_id')) || ''
-
-    const options = {
-      ...DefaultSettings(),
-      ...{ base_url: tokenServerUrl },
-    }
-
-    const transport = new ExtensionProxyTransport(extSDK, options)
-    const gSession = new GAuthSession(extSDK, options, transport)
-    const sheetSDK = new SheetSDK(gSession, sheetId)
-    const doc = await sheetSDK.index()
-    this.sheetData = initActiveSheet(sheetSDK, doc)
+    const sheetData = initActiveSheet(new SheetData())
+    await sheetData.init()
+    this.sheetData = sheetData
     return this.sheetData
   }
 
@@ -506,22 +537,29 @@ class SheetsClient {
       projectProps.technologies = projectProps.technologies.filter(
         (v) => v !== ''
       )
+      if (!projectProps.$techs) {
+        projectProps.$techs = projects[index].$techs
+      }
+
       return projectProps
     })
   }
 
+  // Needs to match getter methods on Hacker class
   private decorateHacker(hackerProps: IHackerProps, _: Hacker): IHackerProps {
     if (hackerProps.id === undefined) {
-      hackerProps.id = String(hackerProps.user.id)
+      hackerProps.id = hackerProps.userRecord!._id
     }
     if (hackerProps.firstName === undefined) {
-      hackerProps.firstName = hackerProps.user.first_name!
+      hackerProps.firstName = hackerProps.userRecord!.first_name
     }
     if (hackerProps.firstName === undefined) {
-      hackerProps.lastName = hackerProps.user.last_name!
+      hackerProps.lastName = hackerProps.userRecord!.last_name
     }
     if (hackerProps.name === undefined) {
-      hackerProps.name = hackerProps.user.display_name!
+      hackerProps.name = `${hackerProps.userRecord!.first_name} ${
+        hackerProps.userRecord!.last_name
+      }`
     }
     if (hackerProps.registered === undefined && hackerProps.registration) {
       hackerProps.registered = hackerProps.registration.date_registered

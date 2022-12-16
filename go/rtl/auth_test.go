@@ -2,11 +2,11 @@ package rtl
 
 import (
 	"encoding/json"
-	"reflect"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -19,8 +19,8 @@ type AccessToken struct {
 
 var foreverValidTestToken AccessToken = AccessToken{
 	AccessToken: "a_forever_valid_test_token_lol",
-	ExpiresIn: 2147483647, // max time
-	TokenType: "Bearer",
+	ExpiresIn:   2147483647, // max time
+	TokenType:   "Bearer",
 }
 
 func setupApi40Login(mux *http.ServeMux, token AccessToken, status int) {
@@ -33,7 +33,7 @@ func setupApi40Login(mux *http.ServeMux, token AccessToken, status int) {
 }
 
 func TestAuthSession_Do_Authorization(t *testing.T) {
-	const path  = "/someMethod"
+	const path = "/someMethod"
 	const apiVersion = "/4.0"
 
 	t.Run("Do() sets Authorization header with access token fetched from /login", func(t *testing.T) {
@@ -42,17 +42,17 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			authHeader := r.Header.Get("Authorization")
 			expectedHeader := foreverValidTestToken.TokenType + " " + foreverValidTestToken.AccessToken
-			if authHeader != expectedHeader  {
+			if authHeader != expectedHeader {
 				t.Errorf("Authorization header not correct. got=%v want=%v", authHeader, expectedHeader)
 			}
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var r string
@@ -71,11 +71,11 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 		recievedAuthHeaders := []string{}
 		nearExpiredToken := AccessToken{
 			AccessToken: "nearly_expired",
-			ExpiresIn: 1, // a second
-			TokenType: "Bearer",
+			ExpiresIn:   1, // a second
+			TokenType:   "Bearer",
 		}
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			authHeader := r.Header.Get("Authorization")
 			recievedAuthHeaders = append(recievedAuthHeaders, authHeader)
 		})
@@ -92,8 +92,8 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var r string
@@ -134,18 +134,18 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 
 	var numField int64 = 12345
 	var stringField = "12345"
-	const path  = "/someMethod"
+	const path = "/someMethod"
 	const apiVersion = "/4.0"
 	const maxTime int32 = 2147483647
 
-	t.Run("Do() unmarshals num type field to string type field",func(t *testing.T) {
+	t.Run("Do() unmarshals num type field to string type field", func(t *testing.T) {
 		mux := http.NewServeMux()
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			s, _ := json.Marshal(numStruct{
 				Field: &numField,
@@ -154,8 +154,8 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var result stringStruct
@@ -173,7 +173,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			s, _ := json.Marshal(stringStruct{
 				Field: &stringField,
@@ -182,8 +182,8 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var result numStruct
@@ -200,52 +200,51 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			var string1 int64 = 1
 			var num1 int64 = 1
 			string2 := "2"
-			num2:= "2"
+			num2 := "2"
 			string3 := "3"
 			var num3 int64 = 3
 			string4 := "4"
 			var num4 int64 = 4
 			originalStruct := struct {
-				String1 *int64 `json:"string1"`
-				Num1 *int64 `json:"num1"`
+				String1 *int64  `json:"string1"`
+				Num1    *int64  `json:"num1"`
 				String2 *string `json:"string2"`
-				Num2 *string `json:"num2"`
+				Num2    *string `json:"num2"`
 				String3 *string `json:"string3"`
-				Num3 *int64 `json:"num3"`
+				Num3    *int64  `json:"num3"`
 				String4 *string `json:"string4"`
-				Num4 *int64 `json:"num4"`
+				Num4    *int64  `json:"num4"`
 			}{
 				String1: &string1,
-				Num1: &num1,
+				Num1:    &num1,
 				String2: &string2,
-				Num2: &num2,
+				Num2:    &num2,
 				String3: &string3,
-				Num3: &num3,
+				Num3:    &num3,
 				String4: &string4,
-				Num4: &num4,
+				Num4:    &num4,
 			}
 			s, _ := json.Marshal(originalStruct)
 			fmt.Fprint(w, string(s))
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		type expectedStructType struct {
 			String1 *string `json:"string1"`
-			Num1 *int64 `json:"num1"`
+			Num1    *int64  `json:"num1"`
 			String2 *string `json:"string2"`
-			Num2 *int64 `json:"num2"`
+			Num2    *int64  `json:"num2"`
 			String3 *string `json:"string3"`
-			Num3 *int64 `json:"num3"`
+			Num3    *int64  `json:"num3"`
 		}
 
 		string1 := "1"
@@ -257,11 +256,11 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 
 		expectedStruct := expectedStructType{
 			String1: &string1,
-			Num1: &num1,
+			Num1:    &num1,
 			String2: &string2,
-			Num2: &num2,
+			Num2:    &num2,
 			String3: &string3,
-			Num3: &num3,
+			Num3:    &num3,
 		}
 
 		var result expectedStructType
@@ -279,14 +278,14 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			fmt.Fprint(w, "a response")
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var result string
@@ -308,7 +307,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			originalStruct := struct {
 				Field float64 `json:"field"`
@@ -320,8 +319,8 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		var result interface{}
@@ -344,11 +343,10 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-
-		mux.HandleFunc("/api" + apiVersion + path, func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			originalStruct := struct {
-				Field1 int64 `json:"field1"`
+				Field1 int64  `json:"field1"`
 				Field2 string `json:"field2"`
 			}{
 				Field1: 10,
@@ -359,12 +357,12 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		})
 
 		s := NewAuthSession(ApiSettings{
-			BaseUrl: server.URL,
-			ApiVersion:  apiVersion,
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
 		})
 
 		type expectedStructType struct {
-			Field1 *int64 `json:"field1"`
+			Field1 *int64  `json:"field1"`
 			Field2 *string `json:"field2"`
 		}
 

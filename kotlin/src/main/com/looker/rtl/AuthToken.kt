@@ -24,18 +24,12 @@
 
 package com.looker.rtl
 
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
 import com.google.gson.TypeAdapter
 import com.google.gson.annotations.SerializedName
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.looker.sdk.AccessToken
-import io.ktor.client.features.json.GsonSerializer
-import io.ktor.client.features.json.defaultSerializer
-import java.lang.reflect.Type
 import java.time.LocalDateTime
 
 data class AuthToken(
@@ -50,11 +44,17 @@ data class AuthToken(
 ) {
 
     var expiresAt: LocalDateTime = LocalDateTime.now()
+
     /** Lag time of 10 seconds */
     val lagTime: Long = 10
 
-//    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
-    constructor(token: AccessToken) : this(token.access_token!!, token.token_type!!, token.expires_in!!.toLong(), token.refresh_token)
+    //    constructor(token: AuthToken) : this(token.accessToken, token.tokenType, token.expiresIn, token.expiresAt, token.refreshToken)
+    constructor(token: AccessToken) : this(
+        token.access_token!!,
+        token.token_type!!,
+        token.expires_in!!.toLong(),
+        token.refresh_token
+    )
 
     init {
         expiresAt = LocalDateTime.now().plusSeconds(if (expiresIn > 0) expiresIn - lagTime else -lagTime)
@@ -99,7 +99,7 @@ data class AuthToken(
  *
  * This adapter mitigates this by calling the constructor with deserialized values.
  */
-class AuthTokenAdapter: TypeAdapter<AuthToken>() {
+class AuthTokenAdapter : TypeAdapter<AuthToken>() {
     override fun read(jsonReader: JsonReader?): AuthToken {
         val authToken = AuthToken()
         jsonReader?.beginObject()
@@ -118,6 +118,7 @@ class AuthTokenAdapter: TypeAdapter<AuthToken>() {
                             authToken.refreshToken = jsonReader.nextString()
                         }
                     }
+
                     else -> break
                 }
             }

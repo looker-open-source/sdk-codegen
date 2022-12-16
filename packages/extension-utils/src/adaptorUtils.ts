@@ -26,6 +26,7 @@
 
 import type { ThemeCustomizations } from '@looker/design-tokens'
 import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { Location as HLocation } from 'history'
 import { BrowserAdaptor } from './browserAdaptor'
 
 export interface IAuthAdaptor {
@@ -41,6 +42,11 @@ export interface IAuthAdaptor {
  * Examples include: local storage operations and various link navigation functions
  */
 export interface IEnvironmentAdaptor extends IAuthAdaptor {
+  /** Copy page URL to clipboard */
+  copyToClipboard: (location?: {
+    pathname: string
+    search: string
+  }) => Promise<void>
   /** Method for determining whether running in a browser or extension environment */
   isExtension(): boolean
   /** Method for retrieving a keyed value from local storage */
@@ -140,4 +146,25 @@ export const registerTestEnvAdaptor = <T extends IEnvironmentAdaptor>(
 ) => {
   const mockSdk = {} as unknown as IAPIMethods
   registerEnvAdaptor(adaptor || new BrowserAdaptor(mockSdk))
+}
+
+/**
+ * Get new application-level base path for react application
+ * This function compares the react-based location with the browser window location
+ * pathname to ensure that the newPath variable is assigned at the root of the
+ * React app path rather than potentially recursive nesting
+ *
+ * @param location which is usually from useLocation()
+ * @param newPath new path to assign, like `/oauth`
+ */
+export const appPath = (location: HLocation, newPath: string) => {
+  const reactPath = location.pathname
+  const wloc = (window as any).location
+  const base = wloc.origin
+  const wpath = wloc.pathname
+  const result = `${base}${wpath.substring(
+    0,
+    wpath.indexOf(reactPath)
+  )}${newPath}`
+  return result
 }

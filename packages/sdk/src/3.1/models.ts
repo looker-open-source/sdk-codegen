@@ -25,7 +25,7 @@
  */
 
 /**
- * 308 API models: 190 Spec, 50 Request, 51 Write, 17 Enum
+ * 311 API models: 190 Spec, 53 Request, 51 Write, 17 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -1246,6 +1246,10 @@ export interface IDashboard {
    */
   edit_uri?: Url | null
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Number of times favorited (read-only)
    */
   favorite_count?: number | null
@@ -1955,6 +1959,10 @@ export interface IDBConnection {
    * (Read/Write) SQL Dialect name
    */
   dialect_name?: string | null
+  /**
+   * Database connection has the ability to support open data studio from explore (read-only)
+   */
+  supports_data_studio_link?: boolean
   /**
    * Creation date for this connection (read-only)
    */
@@ -3030,6 +3038,10 @@ export interface IIntegration {
    * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
    */
   required_fields?: IIntegrationRequiredField[]
+  /**
+   * Link to privacy policy for destination (read-only)
+   */
+  privacy_link?: string | null
   /**
    * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
    */
@@ -5919,6 +5931,20 @@ export interface IRequestAllScheduledPlans {
 }
 
 /**
+ * Dynamically generated request type for all_user_attributes
+ */
+export interface IRequestAllUserAttributes {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Fields to order the results by. Sortable fields include: name, label
+   */
+  sorts?: string | null
+}
+
+/**
  * Dynamically generated request type for all_users
  */
 export interface IRequestAllUsers {
@@ -6791,6 +6817,60 @@ export interface IRequestSearchDashboards {
 }
 
 /**
+ * Dynamically generated request type for search_folders
+ */
+export interface IRequestSearchFolders {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Return only page N of paginated results
+   */
+  page?: number | null
+  /**
+   * Return N rows of data per page
+   */
+  per_page?: number | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match Space title.
+   */
+  name?: string | null
+  /**
+   * Match Space id
+   */
+  id?: number | null
+  /**
+   * Filter on a children of a particular folder.
+   */
+  parent_id?: string | null
+  /**
+   * Filter on folder created by a particular user.
+   */
+  creator_id?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match is shared root
+   */
+  is_shared_root?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_groups
  */
 export interface IRequestSearchGroups {
@@ -6994,6 +7074,48 @@ export interface IRequestSearchModelSets {
   all_access?: boolean | null
   /**
    * Match model sets by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_permission_sets
+ */
+export interface IRequestSearchPermissionSets {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match permission set id.
+   */
+  id?: number | null
+  /**
+   * Match permission set name.
+   */
+  name?: string | null
+  /**
+   * Match permission sets by all_access status.
+   */
+  all_access?: boolean | null
+  /**
+   * Match permission sets by built_in status.
    */
   built_in?: boolean | null
   /**
@@ -8574,6 +8696,14 @@ export interface IThemeSettings {
    * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
+  /**
+   * Toggle to show the dashboard last updated indicator. Defaults to true.
+   */
+  show_last_updated_indicator?: boolean
+  /**
+   * Toggle to show reload data icon/button. Defaults to true.
+   */
+  show_reload_data_icon?: boolean
 }
 
 export interface ITimezone {
@@ -9395,6 +9525,10 @@ export interface IWriteDashboard {
    */
   deleted?: boolean
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Sets the default state of the filters bar to collapsed or open
    */
   filters_bar_collapsed?: boolean
@@ -9678,7 +9812,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 export interface IWriteDBConnection {
   /**
@@ -9995,7 +10129,7 @@ export interface IWriteHomepageSection {
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  */
 export interface IWriteIntegration {
   /**

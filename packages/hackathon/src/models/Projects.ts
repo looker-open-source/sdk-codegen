@@ -29,9 +29,9 @@ import type {
   IRowModelProps,
   ITabTable,
   RowValidationErrors,
-  SheetSDK,
-} from '@looker/wholly-sheet'
-import { noDate, SheetError, WhollySheet } from '@looker/wholly-sheet'
+} from '@looker/wholly-artifact'
+import { noDate, WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
 
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
@@ -55,7 +55,10 @@ export interface IProjectProps extends IRowModelProps {
   contestant: boolean
   locked: boolean
   more_info: string
-  technologies: string[]
+  // TODO: Change technologies -> tech_ids and $techs -> $tech_names
+  // to be more descriptive and less confusing
+  technologies: string[] // Key TODO: Cl
+  $techs: string[] // Name/Description
   $team: ITeamMemberProps[]
   $judgings: IJudgingProps[]
   $hackathon: IHackathonProps
@@ -81,7 +84,8 @@ export class Project extends SheetRow<Project> {
   contestant = true
   locked = false
   more_info = ''
-  technologies: string[] = []
+  technologies: string[] = [] // Key
+  $techs: string[] = [] // Description/name of tech
   $team: ITeamMemberProps[] = []
   $judgings: IJudgingProps[] = []
   $hackathon!: IHackathonProps
@@ -91,6 +95,10 @@ export class Project extends SheetRow<Project> {
     // IMPORTANT: assign must be called after the super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but that pattern hasn't been found
     this.assign(values)
+  }
+
+  tableName() {
+    return 'Project'
   }
 
   get $team_count() {
@@ -155,7 +163,7 @@ export class Project extends SheetRow<Project> {
     super.prepare()
     const errors = this.validate()
     if (errors)
-      throw new SheetError(
+      throw new Error(
         Object.values(errors)
           .map((v) => v.message)
           .join()
@@ -202,6 +210,7 @@ export class Project extends SheetRow<Project> {
     if (!data) data = this.data()
     this.getJudgings()
     this.getMembers()
+    this.getTechs()
     const found = data.hackathons?.find(this._hackathon_id)
     if (found) this.$hackathon = found
     return this
@@ -226,22 +235,42 @@ export class Project extends SheetRow<Project> {
     return this
   }
 
+  getTechs(): Project {
+    const techs: string[] = []
+    this.technologies.forEach((key) => {
+      const tech = this.data().technologies.find(key)
+      if (!tech) {
+        throw new Error(
+          `Project's technology's key is not in technology table. tech key: ` +
+            key +
+            ' project: ' +
+            this.key
+        )
+      }
+      techs.push(tech.description)
+    })
+    this.$techs = techs
+    return this
+  }
+
   /** Join a project team if slots are available */
   async join(hacker: Hacker) {
     const data = this.data()
     const hackathon = data.hackathons?.find(this._hackathon_id)
     if (!hackathon)
-      throw new SheetError(`Hackathon ${this._hackathon_id} was not found`)
+      throw new Error(`Hackathon ${this._hackathon_id} was not found`)
     if (this.$team.length >= hackathon.max_team_size)
-      throw new SheetError(
-        `Hackathon ${hackathon.name} only allows ${hackathon.max_team_size} team members per project`
+      throw new Error(
+        `Cannot join project. Project already has ${hackathon.max_team_size} team members, the max allowed for ${hackathon.name}.`
       )
     let member = this.findMember(hacker)
     /** already in the project, nothing to do */
+
     if (member) return this
     member = new TeamMember({ user_id: hacker.id, project_id: this._id })
     await data.teamMembers.save(member)
     // Reload because maybe there's another different member now
+    // Regenerate members from TeamMember rows. THIS DOES NOT FETCH TEAM MEMBERS.
     this.getMembers()
     return this
   }
@@ -251,14 +280,13 @@ export class Project extends SheetRow<Project> {
     const member = this.findMember(hacker)
     if (!member) return this // nothing to do
     await this.data().teamMembers.delete(member)
-    // Reload because maybe there's another different member now
+    // Regenerate members from TeamMember rows. THIS DOES NOT FETCH TEAM MEMBERS.
     this.getMembers()
-
     return this
   }
 
   async addJudge(hacker: Hacker) {
-    if (!hacker.canJudge) throw new SheetError(`${hacker.name} is not a judge`)
+    if (!hacker.canJudge) throw new Error(`${hacker.name} is not a judge`)
     if (this.findJudging(hacker)) return this
     const judging = new Judging({ user_id: hacker.id, project_id: this._id })
     await this.data().judgings.save(judging)
@@ -275,12 +303,12 @@ export class Project extends SheetRow<Project> {
   }
 }
 
-export class Projects extends WhollySheet<Project, IProjectProps> {
+export class Projects extends WhollyArtifact<Project, IProjectProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'projects', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<Project>(values?: any) {

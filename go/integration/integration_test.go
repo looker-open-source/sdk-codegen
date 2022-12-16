@@ -1,23 +1,23 @@
 package integration
 
 import (
-	"io/ioutil"
-	"path/filepath"
-	"testing"
-	"strings"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"path/filepath"
+	"strings"
+	"testing"
 
-	"github.com/looker-open-source/sdk-codegen/go/rtl"
-	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 	json "github.com/json-iterator/go"
 	extra "github.com/json-iterator/go/extra"
+	"github.com/looker-open-source/sdk-codegen/go/rtl"
+	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
 type testDataStruct struct {
-	QueriesSystemActivity []v4.WriteQuery `json:"queries_system_activity"`
-	Looks []testLookStruct `json:"looks"`
-	Dashboards []testDashboardStruct `json:"dashabords"`
+	QueriesSystemActivity []v4.WriteQuery       `json:"queries_system_activity"`
+	Looks                 []testLookStruct      `json:"looks"`
+	Dashboards            []testDashboardStruct `json:"dashabords"`
 }
 
 type testLookStruct struct {
@@ -31,18 +31,18 @@ type testLookStruct struct {
 }
 
 type testDashboardStruct struct {
-	Title       string          `json:"title,omitempty"`
-	BackgroundColor string 	`json:"background_color,omitempty`
-	Filters []v4.CreateDashboardFilter  `json:"filters,omitempty"`
-	Tiles	[]testTilesStruct 	`json:"tiles,omitempty"`
+	Title           string                     `json:"title,omitempty"`
+	BackgroundColor string                     `json:"background_color,omitempty`
+	Filters         []v4.CreateDashboardFilter `json:"filters,omitempty"`
+	Tiles           []testTilesStruct          `json:"tiles,omitempty"`
 }
 
 type testTilesStruct struct {
-	BodyText           *string                                     `json:"body_text,omitempty"`              // Text tile body text
-	SubtitleText       *string                                     `json:"subtitle_text,omitempty"`          // Text tile subtitle text
-	Title              *string                                     `json:"title,omitempty"`                  // Title of dashboard element
-	TitleText          *string                                     `json:"title_text,omitempty"`             // Text tile title
-	Type               *string                                     `json:"type,omitempty"`                   // Type
+	BodyText     *string `json:"body_text,omitempty"`     // Text tile body text
+	SubtitleText *string `json:"subtitle_text,omitempty"` // Text tile subtitle text
+	Title        *string `json:"title,omitempty"`         // Title of dashboard element
+	TitleText    *string `json:"title_text,omitempty"`    // Text tile title
+	Type         *string `json:"type,omitempty"`          // Type
 }
 
 func getTestData(testData *testDataStruct) error {
@@ -85,26 +85,26 @@ func TestIntegrationGoSDK(t *testing.T) {
 		locale := "fr"
 
 		user, err := sdk.CreateUser(v4.WriteUser{
-			FirstName: &firstName,
-			LastName: &lastName,
+			FirstName:  &firstName,
+			LastName:   &lastName,
 			IsDisabled: &isDisabled,
-			Locale: &locale,
+			Locale:     &locale,
 		}, "", nil)
 
 		if err != nil {
 			t.Errorf("CreateUser() failed. error=%v", err)
 		}
 		if *user.FirstName != firstName {
-			t.Errorf("Create user FirstName not the same. got=%v want=%v", *user.FirstName, firstName )
+			t.Errorf("Create user FirstName not the same. got=%v want=%v", *user.FirstName, firstName)
 		}
 		if *user.LastName != lastName {
-			t.Errorf("Create user LastName not the same. got=%v want=%v", *user.LastName, lastName )
+			t.Errorf("Create user LastName not the same. got=%v want=%v", *user.LastName, lastName)
 		}
 		if *user.IsDisabled != isDisabled {
-			t.Errorf("Create user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, isDisabled )
+			t.Errorf("Create user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, isDisabled)
 		}
 		if *user.Locale != locale {
-			t.Errorf("Create user Locale not the same. got=%v want=%v", *user.Locale, locale )
+			t.Errorf("Create user Locale not the same. got=%v want=%v", *user.Locale, locale)
 		}
 
 		id := user.Id
@@ -115,16 +115,16 @@ func TestIntegrationGoSDK(t *testing.T) {
 			t.Errorf("User() failed. error=%v", err)
 		}
 		if *user.FirstName != firstName {
-			t.Errorf("Get user FirstName not the same. got=%v want=%v", *user.FirstName, firstName )
+			t.Errorf("Get user FirstName not the same. got=%v want=%v", *user.FirstName, firstName)
 		}
 		if *user.LastName != lastName {
-			t.Errorf("Get user LastName not the same. got=%v want=%v", *user.LastName, lastName )
+			t.Errorf("Get user LastName not the same. got=%v want=%v", *user.LastName, lastName)
 		}
 		if *user.IsDisabled != isDisabled {
-			t.Errorf("Get user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, isDisabled )
+			t.Errorf("Get user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, isDisabled)
 		}
 		if *user.Locale != locale {
-			t.Errorf("Get user Locale not the same. got=%v want=%v", *user.Locale, locale )
+			t.Errorf("Get user Locale not the same. got=%v want=%v", *user.Locale, locale)
 		}
 
 		newFirstName := "Jane"
@@ -132,26 +132,26 @@ func TestIntegrationGoSDK(t *testing.T) {
 		newIsDisabled := true
 
 		user, err = sdk.UpdateUser(*id, v4.WriteUser{
-			FirstName: &newFirstName,
-			LastName: &lastName,
+			FirstName:  &newFirstName,
+			LastName:   &lastName,
 			IsDisabled: &newIsDisabled,
-			Locale: &newLocale,
+			Locale:     &newLocale,
 		}, "", nil)
 
 		if err != nil {
 			t.Errorf("UpdateUser() failed. error=%v", err)
 		}
 		if *user.FirstName != newFirstName {
-			t.Errorf("Update user FirstName not the same. got=%v want=%v", *user.FirstName, newFirstName )
+			t.Errorf("Update user FirstName not the same. got=%v want=%v", *user.FirstName, newFirstName)
 		}
 		if *user.LastName != lastName {
-			t.Errorf("Update user LastName not the same. got=%v want=%v", *user.LastName, lastName )
+			t.Errorf("Update user LastName not the same. got=%v want=%v", *user.LastName, lastName)
 		}
 		if *user.IsDisabled != newIsDisabled {
-			t.Errorf("Update user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, newIsDisabled )
+			t.Errorf("Update user IsDisabled not the same. got=%v want=%v", *user.IsDisabled, newIsDisabled)
 		}
 		if *user.Locale != newLocale {
-			t.Errorf("Update user Locale not the same. got=%v want=%v", *user.Locale, newLocale )
+			t.Errorf("Update user Locale not the same. got=%v want=%v", *user.Locale, newLocale)
 		}
 
 		resp, err := sdk.DeleteUser(*id, nil)
@@ -165,6 +165,65 @@ func TestIntegrationGoSDK(t *testing.T) {
 		}
 	})
 
+	t.Run("CRUD User Attribute Group Value", func(t *testing.T) {
+		name := "foo"
+		group, err := sdk.CreateGroup(v4.WriteGroup{
+			Name: &name,
+		}, "", nil)
+		if err != nil {
+			t.Errorf("CreateGroup() failed. error=%v", err)
+		}
+
+		groupId := group.Id
+		group, err = sdk.Group(*groupId, "", nil)
+		if err != nil {
+			t.Errorf("Group() failed. error=%v", err)
+		}
+
+		attributeName := "bar"
+		attributeLabel := "bar"
+		attributeType := "string"
+		ua, err := sdk.CreateUserAttribute(v4.WriteUserAttribute{
+			Name:  attributeName,
+			Label: attributeLabel,
+			Type:  attributeType,
+		}, "", nil)
+		if err != nil {
+			t.Errorf("CreateUserAttribute failed. error=%v", err)
+		}
+
+		uaId := ua.Id
+		ua, err = sdk.UserAttribute(*uaId, "", nil)
+		if err != nil {
+			t.Errorf("UserAttribute() failed. error=%v", err)
+		}
+
+		value := "baz"
+		_, err = sdk.UpdateUserAttributeGroupValue(*groupId, *uaId, v4.UserAttributeGroupValue{
+			GroupId:         groupId,
+			UserAttributeId: uaId,
+			Value:           &value,
+		}, nil)
+		if err != nil {
+			t.Errorf("UpdateUserAttributeGroupValue() failed. error=%v", err)
+		}
+
+		err = sdk.DeleteUserAttributeGroupValue(*groupId, *uaId, nil)
+		if err != nil {
+			t.Errorf("DeleteUserAttributeGroupValue() failed. error=%v", err)
+		}
+
+		_, err = sdk.DeleteUserAttribute(*uaId, nil)
+		if err != nil {
+			t.Errorf("DeleteUserAttribute() failed. error=%v", err)
+		}
+
+		_, err = sdk.DeleteGroup(*groupId, nil)
+		if err != nil {
+			t.Errorf("DeleteGroup() failed. error=%v", err)
+		}
+
+	})
 
 	t.Run("Me()", func(t *testing.T) {
 		user, err := sdk.Me("", nil)
@@ -251,7 +310,7 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			sql, err := sdk.RunQuery(v4.RequestRunQuery{
-				QueryId: *query.Id,
+				QueryId:      *query.Id,
 				ResultFormat: "sql",
 			}, nil)
 
@@ -264,7 +323,7 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			jsonString, err := sdk.RunQuery(v4.RequestRunQuery{
-				QueryId: *query.Id,
+				QueryId:      *query.Id,
 				ResultFormat: "json",
 			}, nil)
 
@@ -283,7 +342,7 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			_, err = sdk.RunQuery(v4.RequestRunQuery{
-				QueryId: *query.Id,
+				QueryId:      *query.Id,
 				ResultFormat: "csv",
 			}, nil)
 
@@ -296,14 +355,13 @@ func TestIntegrationGoSDK(t *testing.T) {
 	t.Run("Create and Run Inline Query", func(t *testing.T) {
 		for _, q := range testData.QueriesSystemActivity {
 			jsonString, err := sdk.RunInlineQuery(v4.RequestRunInlineQuery{
-				Body: q,
+				Body:         q,
 				ResultFormat: "json",
 			}, nil)
 
 			if err != nil {
 				t.Errorf("RunInlineQuery() with json result format failed. error=%v", err)
 			}
-
 
 			var result []map[string]interface{}
 			json.Unmarshal([]byte(jsonString), &result)
@@ -329,13 +387,13 @@ func TestIntegrationGoSDK(t *testing.T) {
 
 			// Create
 			look, err := sdk.CreateLook(v4.WriteLookWithQuery{
-				Title: &testLook.Title,
+				Title:       &testLook.Title,
 				Description: &testLook.Description,
-				Deleted: &testLook.Deleted,
+				Deleted:     &testLook.Deleted,
 				IsRunOnLoad: &testLook.IsRunOnLoad,
-				Public: &testLook.Public,
-				QueryId: query.Id,
-				FolderId: &folderId,
+				Public:      &testLook.Public,
+				QueryId:     query.Id,
+				FolderId:    &folderId,
 			}, "", nil)
 
 			if err != nil {
@@ -359,7 +417,7 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			// Get
-			getLook, err:= sdk.Look(*look.Id, "", nil)
+			getLook, err := sdk.Look(*look.Id, "", nil)
 
 			if err != nil {
 				t.Errorf("Look() failed. error=%v", err)
@@ -413,11 +471,10 @@ func TestIntegrationGoSDK(t *testing.T) {
 		for _, testDashboard := range testData.Dashboards {
 			// Create
 			dashboard, err := sdk.CreateDashboard(v4.WriteDashboard{
-				Title: &testDashboard.Title,
+				Title:           &testDashboard.Title,
 				BackgroundColor: &testDashboard.BackgroundColor,
-				FolderId: &folderId,
+				FolderId:        &folderId,
 			}, nil)
-
 
 			if err != nil {
 				t.Errorf("CreateDashboard() failed. error=%v", err)
@@ -432,7 +489,7 @@ func TestIntegrationGoSDK(t *testing.T) {
 			}
 
 			// Get
-			getDashboard, err:= sdk.Dashboard(*dashboard.Id, "", nil)
+			getDashboard, err := sdk.Dashboard(*dashboard.Id, "", nil)
 
 			if err != nil {
 				t.Errorf("Dashboard() failed. error=%v", err)
@@ -463,17 +520,17 @@ func TestIntegrationGoSDK(t *testing.T) {
 			// Filter
 			for _, testFilter := range testDashboard.Filters {
 				filter, err := sdk.CreateDashboardFilter(v4.WriteCreateDashboardFilter{
-					DashboardId: *dashboard.Id,
-					Name: testFilter.Name,
-					Title: testFilter.Title,
-					Type: testFilter.Type,
-					DefaultValue: testFilter.DefaultValue,
-					Model: testFilter.Model,
-					Explore: testFilter.Explore,
-					Dimension: testFilter.Dimension,
-					Row: testFilter.Row,
+					DashboardId:         *dashboard.Id,
+					Name:                testFilter.Name,
+					Title:               testFilter.Title,
+					Type:                testFilter.Type,
+					DefaultValue:        testFilter.DefaultValue,
+					Model:               testFilter.Model,
+					Explore:             testFilter.Explore,
+					Dimension:           testFilter.Dimension,
+					Row:                 testFilter.Row,
 					AllowMultipleValues: testFilter.AllowMultipleValues,
-				},"", nil)
+				}, "", nil)
 
 				if err != nil {
 					t.Errorf("CreateDashboardFilter() failed. error=%v", err)
@@ -506,13 +563,13 @@ func TestIntegrationGoSDK(t *testing.T) {
 
 			for _, testTile := range testDashboard.Tiles {
 				tile, err := sdk.CreateDashboardElement(v4.RequestCreateDashboardElement{
-					Body:	v4.WriteDashboardElement{
-								BodyText: testTile.BodyText,
-								Type: testTile.Type,
-								TitleText: testTile.TitleText,
-								Title: testTile.Title,
-								SubtitleText: testTile.SubtitleText,
-								QueryId: query.Id,
+					Body: v4.WriteDashboardElement{
+						BodyText:     testTile.BodyText,
+						Type:         testTile.Type,
+						TitleText:    testTile.TitleText,
+						Title:        testTile.Title,
+						SubtitleText: testTile.SubtitleText,
+						QueryId:      query.Id,
 					},
 				}, nil)
 
@@ -589,8 +646,8 @@ func TestIntegrationGoSDK(t *testing.T) {
 
 		image, err := sdk.ContentThumbnail(v4.RequestContentThumbnail{
 			ResourceId: id,
-			Type: contentType,
-			Format: &format,
+			Type:       contentType,
+			Format:     &format,
 		}, nil)
 
 		if err != nil {
@@ -606,8 +663,8 @@ func TestIntegrationGoSDK(t *testing.T) {
 
 		image, err = sdk.ContentThumbnail(v4.RequestContentThumbnail{
 			ResourceId: id,
-			Type: contentType,
-			Format: &format,
+			Type:       contentType,
+			Format:     &format,
 		}, nil)
 
 		if err != nil {

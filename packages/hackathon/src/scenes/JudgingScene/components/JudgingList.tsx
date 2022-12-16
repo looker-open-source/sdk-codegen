@@ -75,7 +75,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
     dispatch(updateJudgingsPageNum(pageNum))
   }
 
-  const viewJudging = (judging: IJudgingProps) => {
+  const handleView = (judging: IJudgingProps) => {
     setCurrentJudging(judging)
   }
 
@@ -83,7 +83,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
     setCurrentJudging(undefined)
   }
 
-  const showJudging = (judgingId: string) => {
+  const handleUpdate = (judgingId: string) => {
     setTimeout(() => {
       history.push(`/judging/${judgingId}`)
     })
@@ -93,14 +93,14 @@ export const JudgingList: FC<JudgingListProps> = () => {
     return (
       <>
         <DataTableAction
-          onClick={viewJudging.bind(null, judging)}
+          onClick={handleView.bind(null, judging)}
           icon={<TextSnippet />}
         >
           View Judging
         </DataTableAction>
         {canDoJudgingAction(hacker, judging) && (
           <DataTableAction
-            onClick={showJudging.bind(null, judging._id)}
+            onClick={handleUpdate.bind(null, judging._id)}
             icon={<Create />}
             itemRole="link"
           >
@@ -117,7 +117,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const rows = judgings
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((judging, idx) => (
-      <DataTableItem key={idx} id={idx.toString()} actions={actions(judging)}>
+      <DataTableItem
+        key={idx}
+        id={idx.toString()}
+        actions={actions(judging)}
+        onClick={handleView.bind(null, judging)}
+      >
         {columns.map((column) => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {sheetCell(judging[column.id])}

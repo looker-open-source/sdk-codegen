@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { SheetData } from './SheetData'
@@ -47,21 +49,21 @@ export class Technology extends SheetRow<ITechnology> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Technology'
+  }
+
   toObject(): ITechnologyProps {
     return super.toObject() as ITechnologyProps
   }
 }
 
-export class Technologies extends WhollySheet<Technology, ITechnologyProps> {
+export class Technologies extends WhollyArtifact<Technology, ITechnologyProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(
-      data.sheetSDK ? data.sheetSDK : ({} as SheetSDK),
-      'technologies',
-      table
-    )
+    super(getCore40SDK(), table)
   }
 
   typeRow<Technology>(values?: any) {

@@ -1,6 +1,6 @@
 {
   "name": "@looker/hackathon",
-  "version": "22.10.0",
+  "version": "22.20.1",
   "description": "Looker Hackathon extension",
   "main": "lib/esm/index.js",
   "typings": "lib/index.d.ts",
@@ -33,15 +33,16 @@
     "develop": "webpack serve --hot --disable-host-check --port 8080 --https --config webpack.dev.config.js"
   },
   "dependencies": {
-    "@looker/code-editor": "^0.1.22",
-    "@looker/components": "^2.8.1",
-    "@looker/extension-sdk": "^22.10.0",
-    "@looker/extension-sdk-react": "^22.10.0",
-    "@looker/extension-utils": "^0.1.12",
+    "@looker/code-editor": "^0.1.27",
+    "@looker/components": "^3.0.8",
+    "@looker/extension-sdk": "^22.20.1",
+    "@looker/extension-sdk-react": "^22.20.1",
+    "@looker/extension-utils": "^0.1.19",
     "@looker/icons": "^1.5.3",
-    "@looker/sdk": "^22.10.0",
-    "@looker/sdk-rtl": "^21.3.4",
-    "@looker/wholly-sheet": "^0.5.31",
+    "@looker/sdk": "^22.20.1",
+    "@looker/sdk-rtl": "^21.5.0",
+    "@looker/wholly-artifact": "^0.1.0",
+    "@looker/wholly-sheet": "^0.5.38",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",
@@ -60,7 +61,7 @@
     "styled-system": "^5.1.2"
   },
   "devDependencies": {
-    "@looker/components-test-utils": "^1.5.5",
+    "@looker/components-test-utils": "^1.5.26",
     "@testing-library/react": "^12.1.2",
     "@types/react-redux": "^7.1.9",
     "@types/styled-components": "^5.1.7",

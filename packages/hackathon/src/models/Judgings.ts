@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { Project } from './Projects'
@@ -40,11 +42,13 @@ export interface IJudgingProps extends IRowModelProps {
   user_id: string
   project_id: string
   execution: number
-  ambition: number
-  coolness: number
+  scope: number
+  novelty: number
   impact: number
   score: number
   notes: string
+  // TODO: These fields are meant to display associated project/user info
+  // Should be removed and update react/redux to provide user/project for UI.
   $title: string
   $description: string
   $project_type: string
@@ -56,8 +60,8 @@ export interface IJudgingProps extends IRowModelProps {
 export interface IJudging extends IJudgingProps, ISheetRow {
   calculateScore(
     execution: number,
-    ambition: number,
-    coolness: number,
+    scope: number,
+    novelty: number,
     impact: number
   ): number
 }
@@ -67,8 +71,8 @@ export class Judging extends SheetRow<IJudging> {
   user_id = ''
   project_id = ''
   execution = 0
-  ambition = 0
-  coolness = 0
+  scope = 0
+  novelty = 0
   impact = 0
   score = 0
   notes = ''
@@ -85,6 +89,10 @@ export class Judging extends SheetRow<IJudging> {
     // IMPORTANT: assign must be called AFTER super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
     this.assign(values)
+  }
+
+  tableName() {
+    return 'Judging'
   }
 
   private data() {
@@ -110,11 +118,11 @@ export class Judging extends SheetRow<IJudging> {
 
   calculateScore(
     execution: number,
-    ambition: number,
-    coolness: number,
+    scope: number,
+    novelty: number,
     impact: number
   ) {
-    return 2 * execution + ambition + coolness + impact
+    return 2 * execution + scope + novelty + impact
   }
 
   canDelete(user: IHacker): boolean {
@@ -133,8 +141,8 @@ export class Judging extends SheetRow<IJudging> {
     super.prepare()
     this.score = this.calculateScore(
       this.execution,
-      this.ambition,
-      this.coolness,
+      this.scope,
+      this.novelty,
       this.impact
     )
     return this as unknown as IJudging
@@ -146,12 +154,12 @@ export class Judging extends SheetRow<IJudging> {
   }
 }
 
-export class Judgings extends WhollySheet<Judging, IJudgingProps> {
+export class Judgings extends WhollyArtifact<Judging, IJudgingProps> {
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'judgings', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<Judging>(values?: any) {

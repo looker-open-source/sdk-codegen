@@ -33,6 +33,17 @@ import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
 import { initRunItSdk } from '../..'
 import { ConfigForm, RunItConfigKey } from '.'
 
+jest.mock('react-router-dom', () => {
+  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  return {
+    ...ReactRouterDOM,
+    useLocation: () => ({
+      pathname: '/4.0/methods/Dashboard/dashboard',
+    }),
+    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+  }
+})
+
 describe('ConfigForm', () => {
   const adaptor = new BrowserAdaptor(initRunItSdk())
   registerTestEnvAdaptor(adaptor)

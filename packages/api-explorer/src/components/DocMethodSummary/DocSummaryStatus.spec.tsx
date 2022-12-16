@@ -33,7 +33,7 @@ import { DocSummaryStatus } from './DocSummaryStatus'
 describe('DocMethodSummaryStatus', () => {
   test.each`
     status          | method                              | expectedLabel        | expectedContent
-    ${'beta'}       | ${api40.methods.workspace}          | ${'beta item'}       | ${'This beta item is under development and subject to change.'}
+    ${'beta'}       | ${api40.methods.invalidate_tokens}  | ${'beta item'}       | ${'This beta item is under development and subject to change.'}
     ${'stable'}     | ${api.methods.login}                | ${'stable item'}     | ${'This item is considered stable for this API version.'}
     ${'deprecated'} | ${api.methods.backup_configuration} | ${'deprecated item'} | ${'This item has been deprecated and will be removed in the future.'}
   `(

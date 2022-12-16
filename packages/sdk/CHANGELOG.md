@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.20.0...sdk-v22.20.1) (2022-12-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
+## [22.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.18.0...sdk-v22.20.0) (2022-11-10)
+
+
+### Features
+
+* generate SDKs for Looker 22.20 ([#1203](https://www.github.com/looker-open-source/sdk-codegen/issues/1203)) ([ba4595e](https://www.github.com/looker-open-source/sdk-codegen/commit/ba4595ee47895ec11ed1e1a74d87748285210d64))
+
+## [22.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.16.0...sdk-v22.18.0) (2022-10-17)
+
+
+### Features
+
+* generate SDKs for Looker 22.18 ([#1191](https://www.github.com/looker-open-source/sdk-codegen/issues/1191)) ([6d487be](https://www.github.com/looker-open-source/sdk-codegen/commit/6d487be80e89bda6feea446130ad2c318eb61d43))
+
+## [22.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.14.0...sdk-v22.16.0) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.16 ([#1181](https://www.github.com/looker-open-source/sdk-codegen/issues/1181)) ([cf8ecdf](https://www.github.com/looker-open-source/sdk-codegen/commit/cf8ecdf53761193b575590aec21963ccc388b15a))
+
+## [22.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.12.1...sdk-v22.14.0) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.14 round 2 ([#1178](https://www.github.com/looker-open-source/sdk-codegen/issues/1178)) ([944bd10](https://www.github.com/looker-open-source/sdk-codegen/commit/944bd10a4f11046e374ab7d87b1a2e2f4b344398))
+
+### [22.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.10.1...sdk-v22.12.1) (2022-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 22.12 ([#1175](https://www.github.com/looker-open-source/sdk-codegen/issues/1175)) ([6f427a7](https://www.github.com/looker-open-source/sdk-codegen/commit/6f427a71dd30669afc901a47418decd59b977a7a))
+* generate SDKs for Looker 22.14 ([#1176](https://www.github.com/looker-open-source/sdk-codegen/issues/1176)) ([328d3e5](https://www.github.com/looker-open-source/sdk-codegen/commit/328d3e5710fc80caf5691b8d3ea3d8b8db358ad6))
+* regenerate Looker 22.12 SDKs ([#1177](https://www.github.com/looker-open-source/sdk-codegen/issues/1177)) ([b3a9b7b](https://www.github.com/looker-open-source/sdk-codegen/commit/b3a9b7bfff6366abce4802b819d19d00ee00cd60))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+
+### [22.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.10.0...sdk-v22.10.1) (2022-07-29)
+
+
+### Features
+
+* keep SDK request interfaces distinct ([#1125](https://www.github.com/looker-open-source/sdk-codegen/issues/1125)) ([50e925c](https://www.github.com/looker-open-source/sdk-codegen/commit/50e925c90eb3c5ffefc8e8535131471e2f2d0334))
+
 ## [22.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-v22.8.0...sdk-v22.10.0) (2022-07-14)
 
 

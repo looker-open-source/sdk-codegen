@@ -25,7 +25,7 @@
  */
 
 /**
- * 316 API models: 235 Spec, 0 Request, 60 Write, 21 Enum
+ * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -805,6 +805,191 @@ public struct ApiVersionElement: SDKModel {
         self._full_version = full_version.map(AnyString.init)
         self._status = status.map(AnyString.init)
         self._swagger_url = swagger_url.map(AnyString.init)
+    }
+
+}
+
+public struct Artifact: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case _value = "value"
+        case _content_type = "content_type"
+        case _version = "version"
+        case _namespace = "namespace"
+        case created_at
+        case updated_at
+        case _value_size = "value_size"
+        case _created_by_userid = "created_by_userid"
+        case _updated_by_userid = "updated_by_userid"
+    }
+    private var _key: AnyString
+    /**
+     * Key of value to store. Namespace + Key must be unique.
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    private var _value: AnyString
+    /**
+     * Value to store.
+     */
+    public var value: String {
+        get { _value.value }
+        set { _value = AnyString.init(newValue) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _version: AnyInt?
+    /**
+     * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+     */
+    public var version: Int64? {
+        get { _version?.value }
+        set { _version = newValue.map(AnyInt.init) }
+    }
+
+    private var _namespace: AnyString
+    /**
+     * Artifact storage namespace. (read-only)
+     */
+    public var namespace: String {
+        get { _namespace.value }
+        set { _namespace = AnyString.init(newValue) }
+    }
+
+    /**
+     * Timestamp when this artifact was created. (read-only)
+     */
+    public var created_at: Date
+
+    /**
+     * Timestamp when this artifact was updated. (read-only)
+     */
+    public var updated_at: Date
+
+    private var _value_size: AnyInt
+    /**
+     * Size (in bytes) of the stored value. (read-only)
+     */
+    public var value_size: Int64 {
+        get { _value_size.value }
+        set { _value_size = AnyInt.init(newValue) }
+    }
+
+    private var _created_by_userid: AnyString
+    /**
+     * User id of the artifact creator. (read-only)
+     */
+    public var created_by_userid: String {
+        get { _created_by_userid.value }
+        set { _created_by_userid = AnyString.init(newValue) }
+    }
+
+    private var _updated_by_userid: AnyString
+    /**
+     * User id of the artifact updater. (read-only)
+     */
+    public var updated_by_userid: String {
+        get { _updated_by_userid.value }
+        set { _updated_by_userid = AnyString.init(newValue) }
+    }
+
+    public init(key: String, value: String, content_type: String? = nil, version: Int64? = nil, namespace: String, created_at: Date, updated_at: Date, value_size: Int64, created_by_userid: String, updated_by_userid: String) {
+        self._key = AnyString.init(key)
+        self._value = AnyString.init(value)
+        self._content_type = content_type.map(AnyString.init)
+        self._version = version.map(AnyInt.init)
+        self._namespace = AnyString.init(namespace)
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self._value_size = AnyInt.init(value_size)
+        self._created_by_userid = AnyString.init(created_by_userid)
+        self._updated_by_userid = AnyString.init(updated_by_userid)
+    }
+
+    public init(_ key: String, _ value: String, content_type: String? = nil, version: Int64? = nil, _ namespace: String, _ created_at: Date, _ updated_at: Date, _ value_size: Int64, _ created_by_userid: String, _ updated_by_userid: String) {
+        self.init(key: key, value: value, content_type: content_type, version: version, namespace: namespace, created_at: created_at, updated_at: updated_at, value_size: value_size, created_by_userid: created_by_userid, updated_by_userid: updated_by_userid)
+    }
+
+}
+
+public struct ArtifactNamespace: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _namespace = "namespace"
+        case _count = "count"
+    }
+    private var _namespace: AnyString
+    /**
+     * Artifact storage namespace. (read-only)
+     */
+    public var namespace: String {
+        get { _namespace.value }
+        set { _namespace = AnyString.init(newValue) }
+    }
+
+    private var _count: AnyInt
+    /**
+     * The number of artifacts stored in the namespace. (read-only)
+     */
+    public var count: Int64 {
+        get { _count.value }
+        set { _count = AnyInt.init(newValue) }
+    }
+
+    public init(namespace: String, count: Int64) {
+        self._namespace = AnyString.init(namespace)
+        self._count = AnyInt.init(count)
+    }
+
+    public init(_ namespace: String, _ count: Int64) {
+        self.init(namespace: namespace, count: count)
+    }
+
+}
+
+public struct ArtifactUsage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _max_size = "max_size"
+        case _usage = "usage"
+    }
+    private var _max_size: AnyInt
+    /**
+     * The configured maximum size in bytes of the entire artifact store. (read-only)
+     */
+    public var max_size: Int64 {
+        get { _max_size.value }
+        set { _max_size = AnyInt.init(newValue) }
+    }
+
+    private var _usage: AnyInt
+    /**
+     * The currently used storage size in bytes of the entire artifact store. (read-only)
+     */
+    public var usage: Int64 {
+        get { _usage.value }
+        set { _usage = AnyInt.init(newValue) }
+    }
+
+    public init(max_size: Int64, usage: Int64) {
+        self._max_size = AnyInt.init(max_size)
+        self._usage = AnyInt.init(usage)
+    }
+
+    public init(_ max_size: Int64, _ usage: Int64) {
+        self.init(max_size: max_size, usage: usage)
     }
 
 }
@@ -4533,6 +4718,7 @@ public struct Dashboard: SDKModel {
         case deleted_at
         case _deleter_id = "deleter_id"
         case _edit_uri = "edit_uri"
+        case enable_viz_full_screen
         case _favorite_count = "favorite_count"
         case filters_bar_collapsed
         case filters_location_top
@@ -4740,6 +4926,11 @@ public struct Dashboard: SDKModel {
         set { _edit_uri = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Allow visualizations to be viewed in full screen mode
+     */
+    public var enable_viz_full_screen: Bool?
+
     private var _favorite_count: AnyInt?
     /**
      * Number of times favorited (read-only)
@@ -4894,7 +5085,7 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -4922,6 +5113,7 @@ public struct Dashboard: SDKModel {
         self.deleted_at = deleted_at
         self._deleter_id = deleter_id.map(AnyString.init)
         self._edit_uri = edit_uri.map(AnyString.init)
+        self.enable_viz_full_screen = enable_viz_full_screen
         self._favorite_count = favorite_count.map(AnyInt.init)
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
@@ -6350,6 +6542,7 @@ public struct DBConnection: SDKModel {
         case _jdbc_additional_params = "jdbc_additional_params"
         case _pool_timeout = "pool_timeout"
         case _dialect_name = "dialect_name"
+        case supports_data_studio_link
         case _created_at = "created_at"
         case _user_id = "user_id"
         case example
@@ -6556,6 +6749,11 @@ public struct DBConnection: SDKModel {
         set { _dialect_name = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Database connection has the ability to support open data studio from explore (read-only)
+     */
+    public var supports_data_studio_link: Bool?
+
     private var _created_at: AnyString?
     /**
      * Creation date for this connection (read-only)
@@ -6693,7 +6891,7 @@ public struct DBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -6718,6 +6916,7 @@ public struct DBConnection: SDKModel {
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
+        self.supports_data_studio_link = supports_data_studio_link
         self._created_at = created_at.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.example = example
@@ -7459,6 +7658,361 @@ public struct EgressIpAddresses: SDKModel {
 
 }
 
+public struct EmbedCookielessSessionAcquire: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _session_length = "session_length"
+        case force_logout_login
+        case _external_user_id = "external_user_id"
+        case _first_name = "first_name"
+        case _last_name = "last_name"
+        case _user_timezone = "user_timezone"
+        case _permissions = "permissions"
+        case _models = "models"
+        case _group_ids = "group_ids"
+        case _external_group_id = "external_group_id"
+        case user_attributes
+        case _session_reference_token = "session_reference_token"
+    }
+    private var _session_length: AnyInt?
+    /**
+     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     */
+    public var session_length: Int64? {
+        get { _session_length?.value }
+        set { _session_length = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+     */
+    public var force_logout_login: Bool?
+
+    private var _external_user_id: AnyString?
+    /**
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     */
+    public var external_user_id: String? {
+        get { _external_user_id?.value }
+        set { _external_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _first_name: AnyString?
+    /**
+     * First name of the embed user. Defaults to 'Embed' if not specified
+     */
+    public var first_name: String? {
+        get { _first_name?.value }
+        set { _first_name = newValue.map(AnyString.init) }
+    }
+
+    private var _last_name: AnyString?
+    /**
+     * Last name of the embed user. Defaults to 'User' if not specified
+     */
+    public var last_name: String? {
+        get { _last_name?.value }
+        set { _last_name = newValue.map(AnyString.init) }
+    }
+
+    private var _user_timezone: AnyString?
+    /**
+     * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+     */
+    public var user_timezone: String? {
+        get { _user_timezone?.value }
+        set { _user_timezone = newValue.map(AnyString.init) }
+    }
+
+    private var _permissions: [AnyString]?
+    /**
+     * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+     */
+    public var permissions: [String]? {
+        get { if let v = _permissions { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil } }
+    }
+
+    private var _models: [AnyString]?
+    /**
+     * List of model names that the embed user may access
+     */
+    public var models: [String]? {
+        get { if let v = _models { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _models = v.map { AnyString.init($0) } } else { _models = nil } }
+    }
+
+    private var _group_ids: [AnyString]?
+    /**
+     * List of Looker group ids in which to enroll the embed user
+     */
+    public var group_ids: [String]? {
+        get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil } }
+    }
+
+    private var _external_group_id: AnyString?
+    /**
+     * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+     */
+    public var external_group_id: String? {
+        get { _external_group_id?.value }
+        set { _external_group_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * A dictionary of name-value pairs associating a Looker user attribute name with a value.
+     */
+    public var user_attributes: StringDictionary<AnyCodable>?
+
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil) {
+        self._session_length = session_length.map(AnyInt.init)
+        self.force_logout_login = force_logout_login
+        self._external_user_id = external_user_id.map(AnyString.init)
+        self._first_name = first_name.map(AnyString.init)
+        self._last_name = last_name.map(AnyString.init)
+        self._user_timezone = user_timezone.map(AnyString.init)
+        if let v = permissions { _permissions = v.map { AnyString.init($0) } } else { _permissions = nil }
+        if let v = models { _models = v.map { AnyString.init($0) } } else { _models = nil }
+        if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
+        self._external_group_id = external_group_id.map(AnyString.init)
+        self.user_attributes = user_attributes
+        self._session_reference_token = session_reference_token.map(AnyString.init)
+    }
+
+}
+
+public struct EmbedCookielessSessionAcquireResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _authentication_token = "authentication_token"
+        case _authentication_token_ttl = "authentication_token_ttl"
+        case _navigation_token = "navigation_token"
+        case _navigation_token_ttl = "navigation_token_ttl"
+        case _api_token = "api_token"
+        case _api_token_ttl = "api_token_ttl"
+        case _session_reference_token = "session_reference_token"
+        case _session_reference_token_ttl = "session_reference_token_ttl"
+    }
+    private var _authentication_token: AnyString?
+    /**
+     * One time token used to create or to attach to an embedded session in the Looker application server.
+     */
+    public var authentication_token: String? {
+        get { _authentication_token?.value }
+        set { _authentication_token = newValue.map(AnyString.init) }
+    }
+
+    private var _authentication_token_ttl: AnyInt?
+    /**
+     * Authentication token time to live in seconds.
+     */
+    public var authentication_token_ttl: Int64? {
+        get { _authentication_token_ttl?.value }
+        set { _authentication_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _navigation_token_ttl: AnyInt?
+    /**
+     * Navigation token time to live in seconds.
+     */
+    public var navigation_token_ttl: Int64? {
+        get { _navigation_token_ttl?.value }
+        set { _navigation_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token_ttl: AnyInt?
+    /**
+     * Api token time to live in seconds.
+     */
+    public var api_token_ttl: Int64? {
+        get { _api_token_ttl?.value }
+        set { _api_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    private var _session_reference_token_ttl: AnyInt?
+    /**
+     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     */
+    public var session_reference_token_ttl: Int64? {
+        get { _session_reference_token_ttl?.value }
+        set { _session_reference_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    public init(authentication_token: String? = nil, authentication_token_ttl: Int64? = nil, navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, session_reference_token: String? = nil, session_reference_token_ttl: Int64? = nil) {
+        self._authentication_token = authentication_token.map(AnyString.init)
+        self._authentication_token_ttl = authentication_token_ttl.map(AnyInt.init)
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._navigation_token_ttl = navigation_token_ttl.map(AnyInt.init)
+        self._api_token = api_token.map(AnyString.init)
+        self._api_token_ttl = api_token_ttl.map(AnyInt.init)
+        self._session_reference_token = session_reference_token.map(AnyString.init)
+        self._session_reference_token_ttl = session_reference_token_ttl.map(AnyInt.init)
+    }
+
+}
+
+public struct EmbedCookielessSessionGenerateTokens: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _session_reference_token = "session_reference_token"
+        case _navigation_token = "navigation_token"
+        case _api_token = "api_token"
+    }
+    private var _session_reference_token: AnyString
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String {
+        get { _session_reference_token.value }
+        set { _session_reference_token = AnyString.init(newValue) }
+    }
+
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_reference_token: String, navigation_token: String? = nil, api_token: String? = nil) {
+        self._session_reference_token = AnyString.init(session_reference_token)
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._api_token = api_token.map(AnyString.init)
+    }
+
+    public init(_ session_reference_token: String, navigation_token: String? = nil, api_token: String? = nil) {
+        self.init(session_reference_token: session_reference_token, navigation_token: navigation_token, api_token: api_token)
+    }
+
+}
+
+public struct EmbedCookielessSessionGenerateTokensResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _navigation_token = "navigation_token"
+        case _navigation_token_ttl = "navigation_token_ttl"
+        case _api_token = "api_token"
+        case _api_token_ttl = "api_token_ttl"
+        case _session_reference_token = "session_reference_token"
+        case _session_reference_token_ttl = "session_reference_token_ttl"
+    }
+    private var _navigation_token: AnyString?
+    /**
+     * Token used to load and navigate between Looker pages.
+     */
+    public var navigation_token: String? {
+        get { _navigation_token?.value }
+        set { _navigation_token = newValue.map(AnyString.init) }
+    }
+
+    private var _navigation_token_ttl: AnyInt?
+    /**
+     * Navigation token time to live in seconds.
+     */
+    public var navigation_token_ttl: Int64? {
+        get { _navigation_token_ttl?.value }
+        set { _navigation_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _api_token: AnyString?
+    /**
+     * Token to used to call Looker APIs.
+     */
+    public var api_token: String? {
+        get { _api_token?.value }
+        set { _api_token = newValue.map(AnyString.init) }
+    }
+
+    private var _api_token_ttl: AnyInt?
+    /**
+     * Api token time to live in seconds.
+     */
+    public var api_token_ttl: Int64? {
+        get { _api_token_ttl?.value }
+        set { _api_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    private var _session_reference_token: AnyString
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String {
+        get { _session_reference_token.value }
+        set { _session_reference_token = AnyString.init(newValue) }
+    }
+
+    private var _session_reference_token_ttl: AnyInt?
+    /**
+     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     */
+    public var session_reference_token_ttl: Int64? {
+        get { _session_reference_token_ttl?.value }
+        set { _session_reference_token_ttl = newValue.map(AnyInt.init) }
+    }
+
+    public init(navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, session_reference_token: String, session_reference_token_ttl: Int64? = nil) {
+        self._navigation_token = navigation_token.map(AnyString.init)
+        self._navigation_token_ttl = navigation_token_ttl.map(AnyInt.init)
+        self._api_token = api_token.map(AnyString.init)
+        self._api_token_ttl = api_token_ttl.map(AnyInt.init)
+        self._session_reference_token = AnyString.init(session_reference_token)
+        self._session_reference_token_ttl = session_reference_token_ttl.map(AnyInt.init)
+    }
+
+    public init(navigation_token: String? = nil, navigation_token_ttl: Int64? = nil, api_token: String? = nil, api_token_ttl: Int64? = nil, _ session_reference_token: String, session_reference_token_ttl: Int64? = nil) {
+        self.init(navigation_token: navigation_token, navigation_token_ttl: navigation_token_ttl, api_token: api_token, api_token_ttl: api_token_ttl, session_reference_token: session_reference_token, session_reference_token_ttl: session_reference_token_ttl)
+    }
+
+}
+
 public struct EmbedParams: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -7510,6 +8064,7 @@ public struct EmbedSecret: SDKModel {
         case _id = "id"
         case _secret = "secret"
         case _user_id = "user_id"
+        case secret_type
     }
     private var _algorithm: AnyString?
     /**
@@ -7561,13 +8116,19 @@ public struct EmbedSecret: SDKModel {
         set { _user_id = newValue.map(AnyString.init) }
     }
 
-    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: String? = nil, secret: String? = nil, user_id: String? = nil) {
+    /**
+     * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+     */
+    public var secret_type: SecretType?
+
+    public init(algorithm: String? = nil, created_at: String? = nil, enabled: Bool? = nil, id: String? = nil, secret: String? = nil, user_id: String? = nil, secret_type: SecretType? = nil) {
         self._algorithm = algorithm.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.enabled = enabled
         self._id = id.map(AnyString.init)
         self._secret = secret.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
+        self.secret_type = secret_type
     }
 
 }
@@ -9320,6 +9881,7 @@ public struct Integration: SDKModel {
         case _icon_url = "icon_url"
         case uses_oauth
         case required_fields
+        case _privacy_link = "privacy_link"
         case delegate_oauth
         case _installed_delegate_oauth_targets = "installed_delegate_oauth_targets"
     }
@@ -9418,6 +9980,15 @@ public struct Integration: SDKModel {
      */
     public var required_fields: [IntegrationRequiredField]?
 
+    private var _privacy_link: AnyString?
+    /**
+     * Link to privacy policy for destination (read-only)
+     */
+    public var privacy_link: String? {
+        get { _privacy_link?.value }
+        set { _privacy_link = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
      */
@@ -9432,7 +10003,7 @@ public struct Integration: SDKModel {
         set { if let v = newValue { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: String? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [String]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, integration_hub_id: String? = nil, label: String? = nil, description: String? = nil, enabled: Bool? = nil, params: [IntegrationParam]? = nil, supported_formats: [SupportedFormats]? = nil, supported_action_types: [SupportedActionTypes]? = nil, supported_formattings: [SupportedFormattings]? = nil, supported_visualization_formattings: [SupportedVisualizationFormattings]? = nil, supported_download_settings: [SupportedDownloadSettings]? = nil, icon_url: String? = nil, uses_oauth: Bool? = nil, required_fields: [IntegrationRequiredField]? = nil, privacy_link: String? = nil, delegate_oauth: Bool? = nil, installed_delegate_oauth_targets: [String]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._integration_hub_id = integration_hub_id.map(AnyString.init)
@@ -9448,6 +10019,7 @@ public struct Integration: SDKModel {
         self._icon_url = icon_url.map(AnyString.init)
         self.uses_oauth = uses_oauth
         self.required_fields = required_fields
+        self._privacy_link = privacy_link.map(AnyString.init)
         self.delegate_oauth = delegate_oauth
         if let v = installed_delegate_oauth_targets { _installed_delegate_oauth_targets = v.map { AnyString.init($0) } } else { _installed_delegate_oauth_targets = nil }
     }
@@ -18518,6 +19090,14 @@ public struct SchemaTables: SDKModel {
 
 }
 
+/**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+public enum SecretType: String, Codable {
+    case SSO = "SSO"
+    case JWT = "JWT"
+}
+
 public struct Session: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -18744,6 +19324,19 @@ public struct SessionConfig: SDKModel {
 }
 
 public struct Setting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case extension_framework_enabled
+        case extension_load_url_enabled
+        case marketplace_auto_install_enabled
+        case marketplace_enabled
+        case privatelabel_configuration
+        case custom_welcome_email
+        case onboarding_enabled
+        case _timezone = "timezone"
+        case allow_user_timezones
+        case data_connector_default_enabled
+    }
     /**
      * Toggle extension framework on or off
      */
@@ -18773,7 +19366,26 @@ public struct Setting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    private var _timezone: AnyString?
+    /**
+     * Change instance-wide default timezone
+     */
+    public var timezone: String? {
+        get { _timezone?.value }
+        set { _timezone = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle user-specific timezones on or off
+     */
+    public var allow_user_timezones: Bool?
+
+    /**
+     * Toggle default future connectors on or off
+     */
+    public var data_connector_default_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -18781,6 +19393,9 @@ public struct Setting: SDKModel {
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self._timezone = timezone.map(AnyString.init)
+        self.allow_user_timezones = allow_user_timezones
+        self.data_connector_default_enabled = data_connector_default_enabled
     }
 
 }
@@ -19699,6 +20314,8 @@ public struct ThemeSettings: SDKModel {
         case _warn_button_color = "warn_button_color"
         case _tile_title_alignment = "tile_title_alignment"
         case tile_shadow
+        case show_last_updated_indicator
+        case show_reload_data_icon
     }
     private var _background_color: AnyString?
     /**
@@ -19841,7 +20458,17 @@ public struct ThemeSettings: SDKModel {
      */
     public var tile_shadow: Bool?
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil) {
+    /**
+     * Toggle to show the dashboard last updated indicator. Defaults to true.
+     */
+    public var show_last_updated_indicator: Bool?
+
+    /**
+     * Toggle to show reload data icon/button. Defaults to true.
+     */
+    public var show_reload_data_icon: Bool?
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -19859,6 +20486,8 @@ public struct ThemeSettings: SDKModel {
         self._warn_button_color = warn_button_color.map(AnyString.init)
         self._tile_title_alignment = tile_title_alignment.map(AnyString.init)
         self.tile_shadow = tile_shadow
+        self.show_last_updated_indicator = show_last_updated_indicator
+        self.show_reload_data_icon = show_reload_data_icon
     }
 
 }
@@ -19901,6 +20530,63 @@ public struct Timezone: SDKModel {
         self._value = value.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._group = group.map(AnyString.init)
+    }
+
+}
+
+public struct UpdateArtifact: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case _value = "value"
+        case _content_type = "content_type"
+        case _version = "version"
+    }
+    private var _key: AnyString
+    /**
+     * Key of value to store. Namespace + Key must be unique.
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    private var _value: AnyString
+    /**
+     * Value to store.
+     */
+    public var value: String {
+        get { _value.value }
+        set { _value = AnyString.init(newValue) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _version: AnyInt?
+    /**
+     * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+     */
+    public var version: Int64? {
+        get { _version?.value }
+        set { _version = newValue.map(AnyInt.init) }
+    }
+
+    public init(key: String, value: String, content_type: String? = nil, version: Int64? = nil) {
+        self._key = AnyString.init(key)
+        self._value = AnyString.init(value)
+        self._content_type = content_type.map(AnyString.init)
+        self._version = version.map(AnyInt.init)
+    }
+
+    public init(_ key: String, _ value: String, content_type: String? = nil, version: Int64? = nil) {
+        self.init(key: key, value: value, content_type: content_type, version: version)
     }
 
 }
@@ -22032,6 +22718,7 @@ public struct WriteDashboard: SDKModel {
         case _background_color = "background_color"
         case crossfilter_enabled
         case deleted
+        case enable_viz_full_screen
         case filters_bar_collapsed
         case filters_location_top
         case _load_configuration = "load_configuration"
@@ -22135,6 +22822,11 @@ public struct WriteDashboard: SDKModel {
     public var deleted: Bool?
 
     /**
+     * Allow visualizations to be viewed in full screen mode
+     */
+    public var enable_viz_full_screen: Bool?
+
+    /**
      * Sets the default state of the filters bar to collapsed or open
      */
     public var filters_bar_collapsed: Bool?
@@ -22219,7 +22911,7 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -22232,6 +22924,7 @@ public struct WriteDashboard: SDKModel {
         self._background_color = background_color.map(AnyString.init)
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
+        self.enable_viz_full_screen = enable_viz_full_screen
         self.filters_bar_collapsed = filters_bar_collapsed
         self.filters_location_top = filters_location_top
         self._load_configuration = load_configuration.map(AnyString.init)
@@ -22822,7 +23515,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 public struct WriteDBConnection: SDKModel {
 
@@ -23300,6 +23993,7 @@ public struct WriteEmbedSecret: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _algorithm = "algorithm"
         case enabled
+        case secret_type
     }
     private var _algorithm: AnyString?
     /**
@@ -23315,9 +24009,15 @@ public struct WriteEmbedSecret: SDKModel {
      */
     public var enabled: Bool?
 
-    public init(algorithm: String? = nil, enabled: Bool? = nil) {
+    /**
+     * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+     */
+    public var secret_type: SecretType?
+
+    public init(algorithm: String? = nil, enabled: Bool? = nil, secret_type: SecretType? = nil) {
         self._algorithm = algorithm.map(AnyString.init)
         self.enabled = enabled
+        self.secret_type = secret_type
     }
 
 }
@@ -23486,7 +24186,7 @@ public struct WriteGroup: SDKModel {
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  */
 public struct WriteIntegration: SDKModel {
 
@@ -25850,6 +26550,19 @@ public struct WriteSessionConfig: SDKModel {
  * Dynamic writeable type for Setting
  */
 public struct WriteSetting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case extension_framework_enabled
+        case extension_load_url_enabled
+        case marketplace_auto_install_enabled
+        case marketplace_enabled
+        case privatelabel_configuration
+        case custom_welcome_email
+        case onboarding_enabled
+        case _timezone = "timezone"
+        case allow_user_timezones
+        case data_connector_default_enabled
+    }
     /**
      * Toggle extension framework on or off
      */
@@ -25883,7 +26596,26 @@ public struct WriteSetting: SDKModel {
      */
     public var onboarding_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil) {
+    private var _timezone: AnyString?
+    /**
+     * Change instance-wide default timezone
+     */
+    public var timezone: String? {
+        get { _timezone?.value }
+        set { _timezone = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle user-specific timezones on or off
+     */
+    public var allow_user_timezones: Bool?
+
+    /**
+     * Toggle default future connectors on or off
+     */
+    public var data_connector_default_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -25891,6 +26623,9 @@ public struct WriteSetting: SDKModel {
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
+        self._timezone = timezone.map(AnyString.init)
+        self.allow_user_timezones = allow_user_timezones
+        self.data_connector_default_enabled = data_connector_default_enabled
     }
 
 }

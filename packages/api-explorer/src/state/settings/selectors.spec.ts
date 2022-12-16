@@ -24,7 +24,7 @@
 
  */
 import { createTestStore, preloadedState } from '../../test-utils'
-import { selectSdkLanguage, isInitialized } from './selectors'
+import { selectSdkLanguage, isInitialized, selectTagFilter } from './selectors'
 
 const testStore = createTestStore()
 
@@ -35,6 +35,10 @@ describe('Settings selectors', () => {
     expect(selectSdkLanguage(state)).toEqual(
       preloadedState.settings.sdkLanguage
     )
+  })
+
+  test('selectTagFilter selects', () => {
+    expect(selectTagFilter(state)).toEqual(preloadedState.settings.tagFilter)
   })
 
   test('isInitialized selects', () => {

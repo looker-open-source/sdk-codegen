@@ -25,19 +25,23 @@
  */
 import '@testing-library/jest-dom'
 
-import { goToPage, pageReload, BASE_URL } from './helpers'
+import { goToPage, pageReload, v40Url as v40 } from './helpers'
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
 
 jest.setTimeout(120000)
 
-const v40 = `${BASE_URL}/4.0`
-
 describe('API Explorer', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)
+  })
+
+  afterEach(async () => {
+    await page.evaluate(() => {
+      localStorage.clear()
+    })
   })
 
   describe('general', () => {
@@ -55,7 +59,7 @@ describe('API Explorer', () => {
         expect(page).toClick('h3', { text: 'Get All Dashboards' }),
       ])
       await expect(page.url()).toEqual(
-        `${v40}/methods/Dashboard/all_dashboards`
+        `${v40}/methods/Dashboard/all_dashboards?sdk=py`
       )
 
       // title
@@ -213,6 +217,30 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('h2', { text: 'Query' })
       await expect(page).toMatchElement('button', { text: 'Query' })
     })
+
+    it('redirects error routes to the correct method page', async () => {
+      const errorCode = 400
+      await goToPage(
+        `${v40}/err/${errorCode}/get/content_metadata/:content_metadata_id`
+      )
+
+      // confirm method scene loaded
+      await expect(page).toMatchElement('h2', { text: 'Get Content Metadata' })
+
+      // confirm url and query param are set correctly
+      await expect(page.url()).toEqual(
+        `${v40}/methods/Content/content_metadata?sdk=py&e=${errorCode}`
+      )
+
+      // confirm correct response tab is selected
+      await expect(page).toMatchElement('button[aria-selected=true]', {
+        text: '400: Bad Request',
+      })
+      // confirm error detail md file was fetched
+      await expect(page).toMatchElement('h2', {
+        text: `API Response ${errorCode} for `,
+      })
+    })
   })
 
   describe('outbound navigation', () => {
@@ -228,7 +256,7 @@ describe('API Explorer', () => {
       //   page.waitForNavigation({timeout:5000}),
       //   exampleLink.click()
       //   ])
-      await exampleLink.click()
+      await exampleLink?.click()
       await page.waitForTimeout(150)
 
       const body = await page.$('body')
@@ -245,6 +273,12 @@ describe('API Explorer', () => {
       await goToPage(v40)
     })
 
+    afterEach(async () => {
+      await page.evaluate(() => {
+        localStorage.clear()
+      })
+    })
+
     it('searches methods', async () => {
       await expect(page).toFill('input[aria-label="Search"]', 'get workspace')
       // TODO: find a better way to avoid the scenario where L215 executes before search returns
@@ -255,7 +289,9 @@ describe('API Explorer', () => {
       await expect(page).toMatchElement('button', { text: 'Types (0)' })
       await expect(page).toClick('a', { text: 'Get Workspace' })
       await expect(page).toMatchElement('h2', { text: 'Get Workspace' })
-      await expect(page.url()).toEqual(`${v40}/methods/Workspace/workspace`)
+      await expect(page.url()).toEqual(
+        `${v40}/methods/Workspace/workspace?sdk=py&s=get+workspace`
+      )
     })
 
     it('searches types', async () => {
@@ -267,7 +303,9 @@ describe('API Explorer', () => {
       await expect(page).toClick('button', { text: 'Types (1)' })
       await expect(page).toClick('a', { text: 'WriteTheme' })
       await expect(page).toMatchElement('h2', { text: 'WriteTheme' })
-      await expect(page.url()).toEqual(`${v40}/types/Theme/WriteTheme`)
+      await expect(page.url()).toEqual(
+        `${v40}/types/Theme/WriteTheme?sdk=py&s=writetheme`
+      )
     })
   })
 })

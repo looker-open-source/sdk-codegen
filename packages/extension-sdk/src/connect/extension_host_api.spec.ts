@@ -665,17 +665,21 @@ describe('extension_host_api tests', () => {
       response_type: 'token',
     }
     await hostApi.oauth2Authenticate(authEndpoint, authParameters)
-    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
-      payload: {
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith(
+      'EXTENSION_API_REQUEST',
+      {
         payload: {
-          authEndpoint,
-          authParameters,
-          httpMethod: 'POST',
+          payload: {
+            authEndpoint,
+            authParameters,
+            httpMethod: 'POST',
+          },
+          type: 'oauth2_authenticate',
         },
-        type: 'oauth2_authenticate',
+        type: 'INVOKE_EXTERNAL_API',
       },
-      type: 'INVOKE_EXTERNAL_API',
-    })
+      { signal: new AbortController().signal }
+    )
     done()
   })
 
@@ -688,17 +692,21 @@ describe('extension_host_api tests', () => {
       response_type: 'id_token',
     }
     await hostApi.oauth2Authenticate(authEndpoint, authParameters)
-    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
-      payload: {
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith(
+      'EXTENSION_API_REQUEST',
+      {
         payload: {
-          authEndpoint,
-          authParameters,
-          httpMethod: 'POST',
+          payload: {
+            authEndpoint,
+            authParameters,
+            httpMethod: 'POST',
+          },
+          type: 'oauth2_authenticate',
         },
-        type: 'oauth2_authenticate',
+        type: 'INVOKE_EXTERNAL_API',
       },
-      type: 'INVOKE_EXTERNAL_API',
-    })
+      { signal: new AbortController().signal }
+    )
     done()
   })
 
@@ -731,17 +739,21 @@ describe('extension_host_api tests', () => {
       response_type: 'token',
     }
     await hostApi.oauth2Authenticate(authEndpoint, authParameters, 'GET')
-    expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
-      payload: {
+    expect(sendAndReceiveSpy).toHaveBeenCalledWith(
+      'EXTENSION_API_REQUEST',
+      {
         payload: {
-          authEndpoint,
-          authParameters,
-          httpMethod: 'GET',
+          payload: {
+            authEndpoint,
+            authParameters,
+            httpMethod: 'GET',
+          },
+          type: 'oauth2_authenticate',
         },
-        type: 'oauth2_authenticate',
+        type: 'INVOKE_EXTERNAL_API',
       },
-      type: 'INVOKE_EXTERNAL_API',
-    })
+      { signal: new AbortController().signal }
+    )
     done()
   })
 

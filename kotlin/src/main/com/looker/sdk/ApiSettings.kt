@@ -24,11 +24,13 @@
 
 package com.looker.sdk
 
-import com.looker.rtl.*
+import com.looker.rtl.ConfigurationProvider
+import com.looker.rtl.DEFAULT_TIMEOUT
+import com.looker.rtl.asBoolean
+import com.looker.rtl.unQuote
 import org.ini4j.Ini
 import java.io.ByteArrayInputStream
 import java.io.File
-
 
 /** Structure read from an .INI file */
 typealias ApiSections = Map<String, Map<String, String>>
@@ -54,17 +56,19 @@ fun apiConfig(contents: String): ApiSections {
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
 
     companion object {
-        @JvmStatic fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
+        @JvmStatic
+        fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
             val file = File(filename)
             return if (!file.exists()) {
-                fromMap( emptyMap() )
+                fromMap(emptyMap())
             } else {
                 val contents = file.readText()
                 fromIniText(contents, section)
             }
         }
 
-        @JvmStatic fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
+        @JvmStatic
+        fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
             val config = apiConfig(contents)
             val firstSection = if (section.isNotBlank()) section else config.keys.first()
 
@@ -76,7 +80,8 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             return ApiSettings { settings }
         }
 
-        @JvmStatic fun fromMap(config: Map<String, String>): ConfigurationProvider {
+        @JvmStatic
+        fun fromMap(config: Map<String, String>): ConfigurationProvider {
             return ApiSettings { config }
         }
     }
@@ -117,7 +122,6 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
-
     }
 
     override fun isConfigured(): Boolean {
@@ -128,17 +132,17 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         // Load environment variables and possibly overwrite with explicitly declared map values
         val rawMap = readEnvironment().plus(rawReadConfig())
         return mapOf(
-                keyBaseUrl to baseUrl,
-                keyApiVersion to apiVersion,
-                keyEnvironmentPrefix to environmentPrefix,
-                keyVerifySSL to verifySSL.toString(),
-                keyTimeout to timeout.toString(),
-                "headers" to headers.toString()
-            ).plus(rawMap)
+            keyBaseUrl to baseUrl,
+            keyApiVersion to apiVersion,
+            keyEnvironmentPrefix to environmentPrefix,
+            keyVerifySSL to verifySSL.toString(),
+            keyTimeout to timeout.toString(),
+            "headers" to headers.toString()
+        ).plus(rawMap)
     }
 
-    private fun addSystemProperty(map: MutableMap<String,String>, key: String) {
-        System.getProperty("${environmentPrefix}_${key.toUpperCase()}").let { value ->
+    private fun addSystemProperty(map: MutableMap<String, String>, key: String) {
+        System.getProperty("${environmentPrefix}_${key.uppercase()}").let { value ->
             if (value !== null && value.isNotEmpty()) map[key] = value
         }
     }

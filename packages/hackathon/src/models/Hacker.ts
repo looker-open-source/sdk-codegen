@@ -25,8 +25,9 @@
  */
 
 import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
-import { SheetError, TypedRows } from '@looker/wholly-sheet'
+import { TypedRows } from '@looker/wholly-artifact'
 import type { SheetData, Registration, Hackathon } from '.'
+import { User } from '.'
 
 export type UserPermission = 'delete' | 'create' | 'update'
 /** This will probably need to change but it's a start at establishing user permissions for data operations */
@@ -36,6 +37,8 @@ export type UserRole = 'user' | 'staff' | 'judge' | 'admin'
 export interface IHackerProps {
   /** Looker user object */
   user: ILookerUser
+  /** User record */
+  userRecord?: User
   /** ID of the user */
   id: string
   /** First name of user */
@@ -91,8 +94,13 @@ export class Hacker implements IHacker {
   canAdmin = false
   canJudge = false
   canStaff = false
+  userRecord = undefined
 
-  constructor(public readonly sdk?: Looker40SDK, user?: ILookerUser) {
+  constructor(
+    public readonly sdk?: Looker40SDK,
+    user?: ILookerUser,
+    userRecord?: User
+  ) {
     if (user) {
       this.user = user
       if (
@@ -100,6 +108,10 @@ export class Hacker implements IHacker {
         user.credentials_api3.find((c) => !c.is_disabled)
       )
         this.api3 = true
+    }
+    if (userRecord) {
+      // Complains without `as any` even though I have a check
+      this.userRecord = userRecord as any
     }
   }
 
@@ -156,7 +168,7 @@ export class Hacker implements IHacker {
   async assignRoles() {
     if (this.sdk) {
       try {
-        await this.getRoles(this.sdk, this.id)
+        await this.getRoles(this.sdk, this.user.id!)
         if (this.staffRole) this.roles.add('staff')
         if (this.judgeRole) this.roles.add('judge')
         if (this.adminRole) this.roles.add('admin')
@@ -185,7 +197,8 @@ export class Hacker implements IHacker {
   }
 
   get id(): string {
-    return this.user.id?.toString() || 'no id'
+    if (this.userRecord) return (this.userRecord as User)._id
+    throw new Error('No User record associated with hacker')
   }
 
   get firstName(): string {
@@ -217,13 +230,13 @@ export class Hackers extends TypedRows<Hacker> {
   staff!: Hacker[]
   admins!: Hacker[]
 
-  constructor(public sdk: Looker40SDK, users?: ILookerUser[]) {
+  constructor(public sdk: Looker40SDK) {
     super([])
-    if (users) this.assign(users)
   }
 
   get displayHeaders() {
     return [
+      // Super hacky. We want to show `Id` in column header. Actual value in displayed row will be Looker user id. This is done in HackerList.tsx
       'id',
       'name',
       'roles',
@@ -250,7 +263,7 @@ export class Hackers extends TypedRows<Hacker> {
       this.sdk.search_groups({ name: groupName })
     )
     if (!groups || groups.length === 0)
-      throw new SheetError(`Group ${groupName} was not found`)
+      throw new Error(`Group ${groupName} was not found`)
     const group = groups[0]
     return await this.sdk.ok(
       this.sdk.search_users({
@@ -273,28 +286,52 @@ export class Hackers extends TypedRows<Hacker> {
    * @param data all loaded tabs
    * @param hackers to load. If not specified, the hackers for the currentHackathon will be loaded
    */
-  async load(data: SheetData, hackers?: ILookerUser[]) {
+  async load(data: SheetData) {
     const hackathon = data.currentHackathon
     if (!hackathon) throw new Error(`No current hackathon was found`)
-    if (!hackers && this.rows.length === 0) {
-      this.assign(await this.findHackUsers(hackathon))
-    } else if (hackers) {
-      this.assign(hackers)
+
+    this.rows = []
+
+    const hackathonLookerUsers = await this.findHackUsers(hackathon)
+
+    for (const u of hackathonLookerUsers) {
+      let userRecord = data.users.find(u.id, 'looker_id')
+      if (!userRecord) {
+        /** create the user tab row for this hacker */
+        const newUserRecord = new User({
+          looker_id: u.id,
+          first_name: u.first_name,
+          last_name: u.last_name,
+        })
+        userRecord = await data.users.save(newUserRecord)
+      } else {
+        if (
+          userRecord.first_name !== u.first_name ||
+          userRecord.last_name !== u.last_name
+        ) {
+          // Refresh the user's name
+          userRecord.first_name = u.first_name as string
+          userRecord.last_name = u.last_name as string
+          userRecord = await data.users.update(userRecord)
+        }
+      }
+      this.rows.push(new Hacker(this.sdk, u, userRecord))
     }
+
     const regs = data.registrations.rows.filter(
       (r) => r.hackathon_id === hackathon._id
     )
     const { admins, staff, judges } = await this.getSpecialUsers()
     for (const hacker of this.rows) {
-      if (admins.includes(hacker.id)) {
+      if (admins.includes(hacker.user.id as string)) {
         hacker.roles.add('admin')
         hacker.canAdmin = true
       }
-      if (staff.includes(hacker.id)) {
+      if (staff.includes(hacker.user.id as string)) {
         hacker.roles.add('staff')
         hacker.canStaff = true
       }
-      if (judges.includes(hacker.id)) {
+      if (judges.includes(hacker.user.id as string)) {
         hacker.roles.add('judge')
         hacker.canJudge = true
       }

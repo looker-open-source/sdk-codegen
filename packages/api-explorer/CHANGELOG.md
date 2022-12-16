@@ -5,6 +5,148 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [0.9.42](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.41...api-explorer-v0.9.42) (2022-12-09)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.26 to ^0.1.27
+    * @looker/extension-utils bumped from ^0.1.18 to ^0.1.19
+    * @looker/run-it bumped from ^0.9.41 to ^0.9.42
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.7 to ^21.4.8
+    * @looker/sdk-node bumped from ^22.20.0 to ^22.20.1
+
+### [0.9.41](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.40...api-explorer-v0.9.41) (2022-11-10)
+
+
+### Bug Fixes
+
+* oauth support in APIX when embedded in another app ([#1198](https://www.github.com/looker-open-source/sdk-codegen/issues/1198)) ([c464d2f](https://www.github.com/looker-open-source/sdk-codegen/commit/c464d2f24c7f8e7d282208efd00feaaba216fe3e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.25 to ^0.1.26
+    * @looker/extension-utils bumped from ^0.1.17 to ^0.1.18
+    * @looker/run-it bumped from ^0.9.40 to ^0.9.41
+    * @looker/sdk bumped from ^22.18.0 to ^22.20.0
+    * @looker/sdk-codegen bumped from ^21.7.2 to ^21.7.3
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.6 to ^21.4.7
+    * @looker/sdk-node bumped from ^22.18.0 to ^22.20.0
+
+### [0.9.40](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.39...api-explorer-v0.9.40) (2022-10-17)
+
+
+### Bug Fixes
+
+* various path navigation issues ([#1190](https://www.github.com/looker-open-source/sdk-codegen/issues/1190)) ([e73da3d](https://www.github.com/looker-open-source/sdk-codegen/commit/e73da3d39960cb528947c21202318b84d586ce1f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.24 to ^0.1.25
+    * @looker/extension-utils bumped from ^0.1.16 to ^0.1.17
+    * @looker/run-it bumped from ^0.9.39 to ^0.9.40
+    * @looker/sdk bumped from ^22.16.0 to ^22.18.0
+    * @looker/sdk-codegen bumped from ^21.7.1 to ^21.7.2
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.5 to ^21.4.6
+    * @looker/sdk-node bumped from ^22.16.0 to ^22.18.0
+
+### [0.9.39](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.38...api-explorer-v0.9.39) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.15 to ^0.1.16
+    * @looker/run-it bumped from ^0.9.38 to ^0.9.39
+    * @looker/sdk bumped from ^22.14.0 to ^22.16.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.4 to ^21.4.5
+    * @looker/sdk-node bumped from ^22.14.0 to ^22.16.0
+
+### [0.9.38](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.37...api-explorer-v0.9.38) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.14 to ^0.1.15
+    * @looker/run-it bumped from ^0.9.37 to ^0.9.38
+    * @looker/sdk bumped from ^22.12.1 to ^22.14.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.3 to ^21.4.4
+    * @looker/sdk-node bumped from ^22.12.1 to ^22.14.0
+
+### [0.9.37](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.36...api-explorer-v0.9.37) (2022-09-21)
+
+
+### Features
+
+* ability to share a tag scene with a filter applied ([#1142](https://www.github.com/looker-open-source/sdk-codegen/issues/1142)) ([135dce3](https://www.github.com/looker-open-source/sdk-codegen/commit/135dce3a3bf75ad79525a81b2e848e118cc340e4))
+* change diff scene route ([#1159](https://www.github.com/looker-open-source/sdk-codegen/issues/1159)) ([180cf20](https://www.github.com/looker-open-source/sdk-codegen/commit/180cf204f767474a76ad7de2ee6fb5171f910eb0))
+* copy link button for search ([#1120](https://www.github.com/looker-open-source/sdk-codegen/issues/1120)) ([d6e0c37](https://www.github.com/looker-open-source/sdk-codegen/commit/d6e0c37ae36b1ff4129cf3bb30f8462f4aa49b0d))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+* error documentation redirect and support for detailed error content ([#1167](https://www.github.com/looker-open-source/sdk-codegen/issues/1167)) ([5b4fc5b](https://www.github.com/looker-open-source/sdk-codegen/commit/5b4fc5b91e05ed4ccd9090724e4ac3f506b541fd))
+* SDK language selection as URL search parameter ([#1123](https://www.github.com/looker-open-source/sdk-codegen/issues/1123)) ([ae59b95](https://www.github.com/looker-open-source/sdk-codegen/commit/ae59b956a5f42dcdd5aa9b4c3d0da1836129a932))
+
+
+### Bug Fixes
+
+* DiffScene Page Displays Accurate Number of Diff Entries ([#1163](https://www.github.com/looker-open-source/sdk-codegen/issues/1163)) ([ee46932](https://www.github.com/looker-open-source/sdk-codegen/commit/ee469326783377a4ba382e1df915a30f1c503fd6))
+* rerendering issues on DiffScene options change ([#1168](https://www.github.com/looker-open-source/sdk-codegen/issues/1168)) ([a4ac3bc](https://www.github.com/looker-open-source/sdk-codegen/commit/a4ac3bcf2b03ef427fe0fd13c72d1d7e3e939f90))
+* whitespace under CollapserCard child components ([#1162](https://www.github.com/looker-open-source/sdk-codegen/issues/1162)) ([89fbf29](https://www.github.com/looker-open-source/sdk-codegen/commit/89fbf2911701b598bf9d673cef00e790a1bc8207))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.23 to ^0.1.24
+    * @looker/extension-utils bumped from ^0.1.13 to ^0.1.14
+    * @looker/run-it bumped from ^0.9.36 to ^0.9.37
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.2 to ^21.4.3
+    * @looker/sdk-node bumped from ^22.10.1 to ^22.12.1
+
+### [0.9.36](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.35...api-explorer-v0.9.36) (2022-07-29)
+
+
+### Features
+
+* URL Sharable Search in Explorer ([#1103](https://www.github.com/looker-open-source/sdk-codegen/issues/1103)) ([0eb10ee](https://www.github.com/looker-open-source/sdk-codegen/commit/0eb10ee5490e363baa3fd90561e417bd902cd50a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.12 to ^0.1.13
+    * @looker/code-editor bumped from ^0.1.22 to ^0.1.23
+    * @looker/run-it bumped from ^0.9.35 to ^0.9.36
+    * @looker/sdk bumped from ^22.10.0 to ^22.10.1
+    * @looker/sdk-codegen bumped from ^21.6.0 to ^21.7.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.4.1 to ^21.4.2
+    * @looker/sdk-node bumped from ^22.10.0 to ^22.10.1
+
 ### [0.9.35](https://www.github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.34...api-explorer-v0.9.35) (2022-07-14)
 
 

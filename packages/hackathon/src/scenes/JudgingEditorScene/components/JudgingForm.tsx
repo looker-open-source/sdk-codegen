@@ -25,17 +25,16 @@
  */
 import type { BaseSyntheticEvent, FC } from 'react'
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import {
-  Slider,
   Button,
-  Heading,
   ButtonOutline,
   Space,
   Span,
-  SpaceVertical,
   FieldTextArea,
+  Form,
+  FieldSlider,
   Tabs2,
   Tab2,
 } from '@looker/components'
@@ -43,10 +42,9 @@ import {
   saveJudgingRequest,
   updateJudgingData,
 } from '../../../data/judgings/actions'
-import { getHackerState } from '../../../data/hack_session/selectors'
 import type { IJudgingProps } from '../../../models'
 import { Routes } from '../../../routes'
-import { JudgingView } from './JudgingView'
+import { ProjectView } from '../../ProjectsScene/components'
 
 interface JudgingFormProps {
   judging: IJudgingProps
@@ -56,7 +54,6 @@ interface JudgingFormProps {
 export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const hacker = useSelector(getHackerState)
 
   const onValueChange = (event: BaseSyntheticEvent) => {
     const newJudging = { ...judging }
@@ -71,111 +68,102 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
     history.push(Routes.JUDGING)
   }
 
-  const handleSave = () => {
+  const handleSave = (event: BaseSyntheticEvent) => {
+    // Prevent form POST request
+    event.preventDefault()
     dispatch(saveJudgingRequest(judging))
   }
 
   const execution = judging.execution
-  const ambition = judging.ambition
-  const coolness = judging.coolness
+  const scope = judging.scope
+  const novelty = judging.novelty
   const impact = judging.impact
 
   return (
-    <SpaceVertical>
-      <Tabs2>
-        <Tab2 id="form" label="Form">
-          {!hacker.canAdmin && judging.user_id !== hacker.id && (
-            <Span>You are not assigned to judge this project</Span>
-          )}
-          <SpaceVertical gap="xlarge" width="40vh">
-            <Heading as="h1">{judging.$title}</Heading>
-            <Span>{judging.$description}</Span>
-            <SpaceVertical gap="medium">
-              <Slider
-                name="execution"
-                onChange={onValueChange}
-                value={execution}
-                min={1}
-                max={10}
-                step={1}
-                disabled={readonly}
-              />
-              <Heading>
-                <strong>Execution:</strong> {execution}
-              </Heading>
-            </SpaceVertical>
-            <SpaceVertical gap="medium">
-              <Slider
-                name="ambition"
-                onChange={onValueChange}
-                value={ambition}
-                min={1}
-                max={10}
-                step={1}
-                disabled={readonly}
-              />
-              <Heading>
-                <strong>Ambition:</strong> {ambition}
-              </Heading>
-            </SpaceVertical>
-            <SpaceVertical gap="medium">
-              <Slider
-                name="coolness"
-                onChange={onValueChange}
-                value={coolness}
-                min={1}
-                max={10}
-                step={1}
-                disabled={readonly}
-              />
-              <Heading>
-                <strong>Coolness:</strong> {coolness}
-              </Heading>
-            </SpaceVertical>
-            <SpaceVertical gap="medium">
-              <Slider
-                name="impact"
-                onChange={onValueChange}
-                value={impact}
-                min={1}
-                max={10}
-                step={1}
-                disabled={readonly}
-              />
-              <Heading>
-                <strong>Impact:</strong> {impact}
-              </Heading>
-            </SpaceVertical>
-            <Heading>
-              <strong>Total Score: {judging.score}</strong>
-            </Heading>
-            <SpaceVertical gap="medium">
-              <FieldTextArea
-                name="notes"
-                resize="vertical"
-                label="Notes"
-                placeholder="Additional comments about this project (supports markdown)"
-                defaultValue={judging.notes}
-                onChange={onValueChange}
-                disabled={readonly}
-              />
-            </SpaceVertical>
-            <Space between>
-              <Space>
-                <ButtonOutline type="button" onClick={handleCancel}>
-                  Return to judging
-                </ButtonOutline>
-                <Button type="submit" onClick={handleSave} disabled={readonly}>
-                  Save judging
-                </Button>
-              </Space>
+    <Tabs2 defaultTabId="form">
+      <Tab2 id="form" label="Judging form">
+        {readonly && <Span>You cannot judge this project</Span>}
+        <Form width="70vh">
+          <FieldSlider
+            detail="How well does the project accomplish its goal?"
+            description="Scale from 1 to 10 with 1 the lowest and 10 the highest"
+            label="Execution"
+            min={1}
+            max={10}
+            step={1}
+            onChange={onValueChange}
+            value={execution}
+            disabled={readonly}
+            name="execution"
+          />
+          <FieldSlider
+            detail="How complex is the project's functionality?"
+            description="Scale from 1 to 10 with 1 the lowest and 10 the highest"
+            label="Scope"
+            min={1}
+            max={10}
+            step={1}
+            onChange={onValueChange}
+            value={scope}
+            disabled={readonly}
+            name="scope"
+          />
+          <FieldSlider
+            detail="How novel, unique, or interesting is the project?"
+            description="Scale from 1 to 10 with 1 the lowest and 10 the highest"
+            label="Novelty"
+            min={1}
+            max={10}
+            step={1}
+            onChange={onValueChange}
+            value={novelty}
+            disabled={readonly}
+            name="novelty"
+          />
+          <FieldSlider
+            detail="How useful could the project be to the developer population at large?"
+            description="Scale from 1 to 10 with 1 the lowest and 10 the highest"
+            label="Impact"
+            min={1}
+            max={10}
+            step={1}
+            onChange={onValueChange}
+            value={impact}
+            disabled={readonly}
+            name="impact"
+          />
+          <strong>Total Score: {judging.score}</strong>
+          <FieldTextArea
+            name="notes"
+            resize="vertical"
+            label="Notes"
+            placeholder="Additional comments about this project (supports markdown)"
+            defaultValue={judging.notes}
+            onChange={onValueChange}
+            disabled={readonly}
+          />
+          <Space between>
+            <Space>
+              <ButtonOutline type="button" onClick={handleCancel}>
+                Return to judgings
+              </ButtonOutline>
+              <Button type="submit" onClick={handleSave} disabled={readonly}>
+                Save judging
+              </Button>
             </Space>
-          </SpaceVertical>
-        </Tab2>
-        <Tab2 id="preview" label="Preview">
-          <JudgingView judging={judging} />
-        </Tab2>
-      </Tabs2>
-    </SpaceVertical>
+          </Space>
+        </Form>
+      </Tab2>
+      <Tab2 id="project" label="Project details">
+        <ProjectView
+          title={judging.$title}
+          description={judging.$description}
+          technologies={judging.$technologies}
+          members={judging.$members}
+          project_type={judging.$project_type}
+          contestant={judging.$contestant}
+        />
+      </Tab2>
+    </Tabs2>
   )
 }

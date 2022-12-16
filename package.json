@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "2.6.0",
+  "version": "2.13.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -17,7 +17,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "engines": {
-    "node": ">=16",
+    "node": ">=14",
     "yarn": ">=1.22.0"
   },
   "scripts": {
@@ -28,6 +28,7 @@
     "mine": "run-p -c mine:*",
     "mine:declarations": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineDeclarations.ts",
     "mine:examples": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/mineExamples.ts",
+    "vox": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/vox.ts",
     "example": "ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }'",
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",
@@ -40,6 +41,7 @@
     "dedupe:dev": "yarn-deduplicate -s fewer yarn.lock && yarn",
     "dedupe:list": "yarn-deduplicate --list",
     "dedupe:ci": "yarn-deduplicate -s fewer --fail --list yarn.lock",
+    "deploy:apix": "packages/extension-api-explorer/bin/deploy",
     "dev:apix": "yarn workspace @looker/api-explorer develop",
     "dev:hack": "yarn workspace @looker/hackathon develop",
     "dev:xapix": "yarn workspace @looker/extension-api-explorer develop",
@@ -60,6 +62,7 @@
     "register": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-codegen-scripts/scripts/register.ts",
     "test": "yarn jest",
     "test:ts": "yarn jest --reporters=default --reporters=jest-junit",
+    "test:art": "yarn jest packages/wholly-artifact/src",
     "test:apix": "yarn jest packages/api-explorer/src packages/extension-utils packages/run-it packages/code-editor  packages/extension-api-explorer",
     "test:apix-e2e": "yarn workspace @looker/api-explorer run test:e2e",
     "test:iphone": "xcodebuild test -project swift/looker/looker.xcodeproj -scheme looker-Package -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.4.1' | xcpretty --test --color",
@@ -97,6 +100,7 @@
     "@types/readable-stream": "2.3.9",
     "@types/request": "^2.48.3",
     "@types/request-promise-native": "^1.0.17",
+    "@types/uuid": "^8.3.4",
     "babel-core": "^7.0.0-bridge",
     "babel-loader-exclude-node-modules-except": "^1.1.2",
     "babel-plugin-styled-components": "^1.10.7",
@@ -115,7 +119,7 @@
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.7",
     "node-forge": "^1.0.0",
-    "node-uuid": "^1.4.8",
+    "uuid": "^9.0.0",
     "npm-run-all": "^4.1.5",
     "openapi3-ts": "^1.3.0",
     "pre-commit": "1.2.2",
@@ -130,8 +134,7 @@
     "webpack": "^5.10.0",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-merge": "^5.7.3",
-    "yarn-deduplicate": "^3.1.0",
-    "yarn-audit-fix": "^9.3.2"
+    "yarn-deduplicate": "^6.0.0"
   },
   "dependencies": {},
   "lint-staged": {

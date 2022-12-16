@@ -76,3 +76,7 @@ csharp/*.cache
 # apix indexes
 declarationsIndex.json
 /apix-files/yarn.lock
+
+# hackathon test files
+/hack*.json
+

@@ -1,5 +1,87 @@
 # Changelog
 
+### [21.4.8](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.7...sdk-codegen-scripts-v21.4.8) (2022-12-09)
+
+
+### Bug Fixes
+
+* Hack App Wholly Artifact Refactor ([#1210](https://www.github.com/looker-open-source/sdk-codegen/issues/1210)) ([d508fa8](https://www.github.com/looker-open-source/sdk-codegen/commit/d508fa878ca23f6ed298359d3ec1b25a3f333fac))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+    * @looker/sdk-node bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
+### [21.4.7](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.6...sdk-codegen-scripts-v21.4.7) (2022-11-10)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.18.0 to ^22.20.0
+    * @looker/sdk-codegen bumped from ^21.7.2 to ^21.7.3
+    * @looker/sdk-node bumped from ^22.18.0 to ^22.20.0
+
+### [21.4.6](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.5...sdk-codegen-scripts-v21.4.6) (2022-10-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.16.0 to ^22.18.0
+    * @looker/sdk-codegen bumped from ^21.7.1 to ^21.7.2
+    * @looker/sdk-node bumped from ^22.16.0 to ^22.18.0
+
+### [21.4.5](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.4...sdk-codegen-scripts-v21.4.5) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.14.0 to ^22.16.0
+    * @looker/sdk-node bumped from ^22.14.0 to ^22.16.0
+
+### [21.4.4](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.3...sdk-codegen-scripts-v21.4.4) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.12.1 to ^22.14.0
+    * @looker/sdk-node bumped from ^22.12.1 to ^22.14.0
+
+### [21.4.3](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.2...sdk-codegen-scripts-v21.4.3) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+    * @looker/sdk-node bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+
+### [21.4.2](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.1...sdk-codegen-scripts-v21.4.2) (2022-07-29)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.10.0 to ^22.10.1
+    * @looker/sdk-codegen bumped from ^21.6.0 to ^21.7.0
+    * @looker/sdk-node bumped from ^22.10.0 to ^22.10.1
+
 ### [21.4.1](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.0...sdk-codegen-scripts-v21.4.1) (2022-07-14)
 
 

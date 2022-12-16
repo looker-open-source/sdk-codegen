@@ -25,7 +25,7 @@
  */
 
 /**
- * 446 API methods
+ * 459 API methods
  */
 
 import type {
@@ -51,6 +51,9 @@ import type {
   IAlertPatch,
   IApiSession,
   IApiVersion,
+  IArtifact,
+  IArtifactNamespace,
+  IArtifactUsage,
   IBackupConfiguration,
   IBoard,
   IBoardItem,
@@ -100,6 +103,10 @@ import type {
   IDigestEmails,
   IDigestEmailSend,
   IEgressIpAddresses,
+  IEmbedCookielessSessionAcquire,
+  IEmbedCookielessSessionAcquireResponse,
+  IEmbedCookielessSessionGenerateTokens,
+  IEmbedCookielessSessionGenerateTokensResponse,
   IEmbedParams,
   IEmbedSecret,
   IEmbedSsoParams,
@@ -164,7 +171,10 @@ import type {
   IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
+  IRequestArtifact,
+  IRequestArtifactNamespaces,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
@@ -191,6 +201,7 @@ import type {
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
   IRequestSearchAlerts,
+  IRequestSearchArtifacts,
   IRequestSearchBoards,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
@@ -199,9 +210,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -235,6 +250,7 @@ import type {
   ISupportAccessStatus,
   ITheme,
   ITimezone,
+  IUpdateArtifact,
   IUpdateFolder,
   IUser,
   IUserAttribute,
@@ -733,6 +749,280 @@ export const logout = async (
 
 //#endregion ApiAuth: API Authentication
 
+//#region Artifact: Artifact Storage
+
+/**
+ * Get the maximum configured size of the entire artifact store, and the currently used storage in bytes.
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * GET /artifact/usage -> IArtifactUsage
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Comma-delimited names of fields to return in responses. Omit for all fields
+ * @param options one-time API call overrides
+ *
+ */
+export const artifact_usage = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IArtifactUsage, IError | IValidationError>> => {
+  return sdk.get<IArtifactUsage, IError | IValidationError>(
+    '/artifact/usage',
+    { fields },
+    null,
+    options
+  )
+}
+
+/**
+ * Get all artifact namespaces and the count of artifacts in each namespace
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * GET /artifact/namespaces -> IArtifactNamespace[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const artifact_namespaces = async (
+  sdk: IAPIMethods,
+  request: IRequestArtifactNamespaces,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>> => {
+  return sdk.get<IArtifactNamespace[], IError | IValidationError>(
+    '/artifact/namespaces',
+    { fields: request.fields, limit: request.limit, offset: request.offset },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Return the value of an artifact
+ *
+ * The MIME type for the API response is set to the `content_type` of the value
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * GET /artifact/{namespace}/value -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param namespace Artifact storage namespace
+ * @param key Artifact storage key. Namespace + Key must be unique
+ * @param options one-time API call overrides
+ *
+ */
+export const artifact_value = async (
+  sdk: IAPIMethods,
+  namespace: string,
+  key?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  namespace = encodeParam(namespace)
+  return sdk.get<string, IError | IValidationError>(
+    `/artifact/${namespace}/value`,
+    { key },
+    null,
+    options
+  )
+}
+
+/**
+ * Remove *all* artifacts from a namespace. Purged artifacts are permanently deleted
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * DELETE /artifact/{namespace}/purge -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param namespace Artifact storage namespace
+ * @param options one-time API call overrides
+ *
+ */
+export const purge_artifacts = async (
+  sdk: IAPIMethods,
+  namespace: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  namespace = encodeParam(namespace)
+  return sdk.delete<void, IError>(
+    `/artifact/${namespace}/purge`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Search all key/value pairs in a namespace for matching criteria.
+ *
+ * Returns an array of artifacts matching the specified search criteria.
+ *
+ * Key search patterns use case-insensitive matching and can contain `%` and `_` as SQL LIKE pattern match wildcard expressions.
+ *
+ * The parameters `min_size` and `max_size` can be used individually or together.
+ *
+ * - `min_size` finds artifacts with sizes greater than or equal to its value
+ * - `max_size` finds artifacts with sizes less than or equal to its value
+ * - using both parameters restricts the minimum and maximum size range for artifacts
+ *
+ * **NOTE**: Artifacts are always returned in alphanumeric order by key.
+ *
+ * Get a **single artifact** by namespace and key with [`artifact`](#!/Artifact/artifact)
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * GET /artifact/{namespace}/search -> IArtifact[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchArtifacts" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_artifacts = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchArtifacts,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IArtifact[], IError | IValidationError>> => {
+  request.namespace = encodeParam(request.namespace)
+  return sdk.get<IArtifact[], IError | IValidationError>(
+    `/artifact/${request.namespace}/search`,
+    {
+      fields: request.fields,
+      key: request.key,
+      user_ids: request.user_ids,
+      min_size: request.min_size,
+      max_size: request.max_size,
+      limit: request.limit,
+      offset: request.offset,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Get one or more artifacts
+ *
+ * Returns an array of artifacts matching the specified key value(s).
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * GET /artifact/{namespace} -> IArtifact[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestArtifact" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const artifact = async (
+  sdk: IAPIMethods,
+  request: IRequestArtifact,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IArtifact[], IError | IValidationError>> => {
+  request.namespace = encodeParam(request.namespace)
+  return sdk.get<IArtifact[], IError | IValidationError>(
+    `/artifact/${request.namespace}`,
+    {
+      key: request.key,
+      fields: request.fields,
+      limit: request.limit,
+      offset: request.offset,
+    },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Delete one or more artifacts
+ *
+ * To avoid rate limiting on deletion requests, multiple artifacts can be deleted at the same time by using a comma-delimited list of artifact keys.
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * DELETE /artifact/{namespace} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param namespace Artifact storage namespace
+ * @param key Comma-delimited list of keys. Wildcards not allowed.
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_artifact = async (
+  sdk: IAPIMethods,
+  namespace: string,
+  key: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  namespace = encodeParam(namespace)
+  return sdk.delete<void, IError>(
+    `/artifact/${namespace}`,
+    { key },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Create or update one or more artifacts
+ *
+ * Only `key` and `value` are required to _create_ an artifact.
+ * To _update_ an artifact, its current `version` value must be provided.
+ *
+ * In the following example `body` payload, `one` and `two` are existing artifacts, and `three` is new:
+ *
+ * ```json
+ * [
+ *   { "key": "one", "value": "[ \"updating\", \"existing\", \"one\" ]", "version": 10, "content_type": "application/json" },
+ *   { "key": "two", "value": "updating existing two", "version": 20 },
+ *   { "key": "three", "value": "creating new three" },
+ * ]
+ * ```
+ *
+ * Notes for this body:
+ *
+ * - The `value` for `key` **one** is a JSON payload, so a `content_type` override is needed. This override must be done **every** time a JSON value is set.
+ * - The `version` values for **one** and **two** mean they have been saved 10 and 20 times, respectively.
+ * - If `version` is **not** provided for an existing artifact, the entire request will be refused and a `Bad Request` response will be sent.
+ * - If `version` is provided for an artifact, it is only used for helping to prevent inadvertent data overwrites. It cannot be used to **set** the version of an artifact. The Looker server controls `version`.
+ * - We suggest encoding binary values as base64. Because the MIME content type for base64 is detected as plain text, also provide `content_type` to correctly indicate the value's type for retrieval and client-side processing.
+ *
+ * Because artifacts are stored encrypted, the same value can be written multiple times (provided the correct `version` number is used). Looker does not examine any values stored in the artifact store, and only decrypts when sending artifacts back in an API response.
+ *
+ * **Note**: The artifact storage API can only be used by Looker-built extensions.
+ *
+ * PUT /artifacts/{namespace} -> IArtifact[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param namespace Artifact storage namespace
+ * @param body Partial<IUpdateArtifact[]>
+ * @param fields Comma-delimited names of fields to return in responses. Omit for all fields
+ * @param options one-time API call overrides
+ *
+ */
+export const update_artifacts = async (
+  sdk: IAPIMethods,
+  namespace: string,
+  body: Partial<IUpdateArtifact[]>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IArtifact[], IError | IValidationError>> => {
+  namespace = encodeParam(namespace)
+  return sdk.put<IArtifact[], IError | IValidationError>(
+    `/artifacts/${namespace}`,
+    { fields },
+    body,
+    options
+  )
+}
+
+//#endregion Artifact: Artifact Storage
+
 //#region Auth: Manage User Authentication Configuration
 
 /**
@@ -885,6 +1175,114 @@ export const create_embed_url_as_me = async (
     body,
     options
   )
+}
+
+/**
+ * ### Acquire a cookieless embed session.
+ *
+ * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
+ * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
+ * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
+ * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+ *
+ * The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
+ * and the credentials match the credentials for the embed session, a new authentication token will be
+ * generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
+ * the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+ *
+ * If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+ *
+ * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+ * 404 will be returned.
+ *
+ * The endpoint returns the following:
+ * - Authentication token - a token that is passed to `/embed/login` endpoint that creates or attaches to the
+ *   embed session. This token can be used once and has a lifetime of 30 seconds.
+ * - Session reference token - a token that lives for the length of the session. This token is used to
+ *   generate new api and navigation tokens OR create new embed IFRAMEs.
+ * - Api token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into the
+ *   iframe.
+ * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
+ *   the iframe.
+ *
+ * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IEmbedCookielessSessionAcquire>
+ * @param options one-time API call overrides
+ *
+ */
+export const acquire_embed_cookieless_session = async (
+  sdk: IAPIMethods,
+  body: Partial<IEmbedCookielessSessionAcquire>,
+  options?: Partial<ITransportSettings>
+): Promise<
+  SDKResponse<IEmbedCookielessSessionAcquireResponse, IError | IValidationError>
+> => {
+  return sdk.post<
+    IEmbedCookielessSessionAcquireResponse,
+    IError | IValidationError
+  >('/embed/cookieless_session/acquire', null, body, options)
+}
+
+/**
+ * ### Delete cookieless embed session
+ *
+ * This will delete the session associated with the given session reference token. Calling this endpoint will result
+ * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
+ * user out of the Looker instance.
+ *
+ * DELETE /embed/cookieless_session/{session_reference_token} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param session_reference_token Embed session reference token
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_embed_cookieless_session = async (
+  sdk: IAPIMethods,
+  session_reference_token: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  session_reference_token = encodeParam(session_reference_token)
+  return sdk.delete<string, IError | IValidationError>(
+    `/embed/cookieless_session/${session_reference_token}`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Generate api and navigation tokens for a cookieless embed session
+ *
+ * The generate tokens endpoint is used to create new tokens of type:
+ * - Api token.
+ * - Navigation token.
+ * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
+ * first time when the tokens returned by the acquire_session endpoint should be used).
+ *
+ * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IEmbedCookielessSessionGenerateTokens>
+ * @param options one-time API call overrides
+ *
+ */
+export const generate_tokens_for_cookieless_session = async (
+  sdk: IAPIMethods,
+  body: Partial<IEmbedCookielessSessionGenerateTokens>,
+  options?: Partial<ITransportSettings>
+): Promise<
+  SDKResponse<
+    IEmbedCookielessSessionGenerateTokensResponse,
+    IError | IValidationError
+  >
+> => {
+  return sdk.put<
+    IEmbedCookielessSessionGenerateTokensResponse,
+    IError | IValidationError
+  >('/embed/cookieless_session/generate_tokens', null, body, options)
 }
 
 /**
@@ -2159,6 +2557,7 @@ export const search_boards = async (
       offset: request.offset,
       limit: request.limit,
       filter_or: request.filter_or,
+      permission: request.permission,
     },
     null,
     options
@@ -2808,6 +3207,29 @@ export const update_cloud_storage_configuration = async (
 }
 
 /**
+ * ### Looker Configuration Refresh
+ *
+ * This is an endpoint for manually calling refresh on Configuration manager.
+ *
+ * PUT /configuration_force_refresh -> any
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const configuration_force_refresh = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<any, IError | IValidationError>> => {
+  return sdk.put<any, IError | IValidationError>(
+    '/configuration_force_refresh',
+    null,
+    null,
+    options
+  )
+}
+
+/**
  * ### Get the current status and content of custom welcome emails
  *
  * GET /custom_welcome_email -> ICustomWelcomeEmail
@@ -3172,13 +3594,16 @@ export const mobile_settings = async (
  * ### Get Looker Settings
  *
  * Available settings are:
+ *  - allow_user_timezones
+ *  - custom_welcome_email
+ *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - privatelabel_configuration
- *  - custom_welcome_email
  *  - onboarding_enabled
+ *  - privatelabel_configuration
+ *  - timezone
  *
  * GET /setting -> ISetting
  *
@@ -3204,13 +3629,16 @@ export const get_setting = async (
  * ### Configure Looker Settings
  *
  * Available settings are:
+ *  - allow_user_timezones
+ *  - custom_welcome_email
+ *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
  *  - marketplace_enabled
- *  - privatelabel_configuration
- *  - custom_welcome_email
  *  - onboarding_enabled
+ *  - privatelabel_configuration
+ *  - timezone
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -6228,13 +6656,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6286,13 +6714,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithHierarchy,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -9786,13 +10214,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchPermissionSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10066,13 +10494,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRoles,
+  request: IRequestSearchRolesWithUserCount,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -12576,13 +13004,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+ * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardSections,
+  request: IRequestAllUserAttributes,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

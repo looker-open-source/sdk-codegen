@@ -138,6 +138,7 @@ import type {
   IRequestAllIntegrations,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
@@ -164,10 +165,12 @@ import type {
   IRequestSearchContentViews,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
+  IRequestSearchFolders,
   IRequestSearchGroups,
   IRequestSearchHomepages,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchSpaces,
   IRequestSearchThemes,
@@ -3756,13 +3759,13 @@ export const stop_pdt_build = async (
  * GET /folders/search -> IFolder[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchSpaces" for complex method parameters
+ * @param request composed interface "IRequestSearchFolders" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_folders = async (
   sdk: IAPIMethods,
-  request: IRequestSearchSpaces,
+  request: IRequestSearchFolders,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder[], IError>> => {
   return sdk.get<IFolder[], IError>(
@@ -7707,13 +7710,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchPermissionSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10610,13 +10613,13 @@ export const delete_user_attribute_user_value = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
+ * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllHomepageSections,
+  request: IRequestAllUserAttributes,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

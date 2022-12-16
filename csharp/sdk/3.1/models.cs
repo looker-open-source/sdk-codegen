@@ -769,6 +769,8 @@ public class Dashboard : SdkModel
   public long? deleter_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard (LookML dashboard only). (read-only)</summary>
   public Url? edit_uri { get; set; } = null;
+  /// <summary>Allow visualizations to be viewed in full screen mode</summary>
+  public bool? enable_viz_full_screen { get; set; } = null;
   /// <summary>Number of times favorited (read-only)</summary>
   public long? favorite_count { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
@@ -1169,6 +1171,8 @@ public class DBConnection : SdkModel
   public long? pool_timeout { get; set; } = null;
   /// <summary>(Read/Write) SQL Dialect name</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>Database connection has the ability to support open data studio from explore (read-only)</summary>
+  public bool? supports_data_studio_link { get; set; } = null;
   /// <summary>Creation date for this connection (read-only)</summary>
   public string? created_at { get; set; } = null;
   /// <summary>Id of user who last modified this connection configuration (read-only)</summary>
@@ -1795,6 +1799,8 @@ public class Integration : SdkModel
   public bool? uses_oauth { get; set; } = null;
   /// <summary>A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)</summary>
   public IntegrationRequiredField[]? required_fields { get; set; } = null;
+  /// <summary>Link to privacy policy for destination (read-only)</summary>
+  public string? privacy_link { get; set; } = null;
   /// <summary>Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)</summary>
   public bool? delegate_oauth { get; set; } = null;
   /// <summary>Whether the integration is available to users.</summary>
@@ -4078,6 +4084,10 @@ public class ThemeSettings : SdkModel
   public string? tile_title_alignment { get; set; } = null;
   /// <summary>Toggles the tile shadow (not supported)</summary>
   public bool? tile_shadow { get; set; } = null;
+  /// <summary>Toggle to show the dashboard last updated indicator. Defaults to true.</summary>
+  public bool? show_last_updated_indicator { get; set; } = null;
+  /// <summary>Toggle to show reload data icon/button. Defaults to true.</summary>
+  public bool? show_reload_data_icon { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -4590,6 +4600,8 @@ public class WriteDashboard : SdkModel
   public bool? crossfilter_enabled { get; set; } = null;
   /// <summary>Whether or not a dashboard is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
+  /// <summary>Allow visualizations to be viewed in full screen mode</summary>
+  public bool? enable_viz_full_screen { get; set; } = null;
   /// <summary>Sets the default state of the filters bar to collapsed or open</summary>
   public bool? filters_bar_collapsed { get; set; } = null;
   /// <summary>Sets the default state of the filters location to top(true) or right(false)</summary>
@@ -4761,7 +4773,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+/// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -4942,7 +4954,7 @@ public class WriteHomepageSection : SdkModel
 }
 
 /// Dynamic writeable type for Integration removes:
-/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+/// can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 public class WriteIntegration : SdkModel
 {
   /// <summary>Whether the integration is available to users.</summary>

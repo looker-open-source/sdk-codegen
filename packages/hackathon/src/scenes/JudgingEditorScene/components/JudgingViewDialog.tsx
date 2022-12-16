@@ -46,7 +46,9 @@ export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
 
   return (
     <Dialog isOpen={!!judging} onClose={closeDialog}>
-      <DialogHeader>Judging {judging?.$title}</DialogHeader>
+      <DialogHeader>
+        {judging?.$judge_name}'s judging of {judging?.$title}
+      </DialogHeader>
       <DialogContent>
         {!!judging && <JudgingView judging={judging} />}
       </DialogContent>

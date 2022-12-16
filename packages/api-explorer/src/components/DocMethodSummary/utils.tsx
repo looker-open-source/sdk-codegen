@@ -68,6 +68,8 @@ export const pickStatus = (status: string) => {
  */
 export const pickTooltipContent = (status: string) => {
   switch (status.toLowerCase()) {
+    case 'alpha':
+      return 'This alpha item is either for internal use, or not fully developed and may be significantly changed or completely removed in future releases.'
     case 'beta':
       return 'This beta item is under development and subject to change.'
     case 'experimental':

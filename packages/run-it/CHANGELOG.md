@@ -1,5 +1,108 @@
 # Changelog
 
+### [0.9.42](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.41...run-it-v0.9.42) (2022-12-09)
+
+
+### Features
+
+* add request time tracking ([#1223](https://www.github.com/looker-open-source/sdk-codegen/issues/1223)) ([2aefe06](https://www.github.com/looker-open-source/sdk-codegen/commit/2aefe064d668e02f3af95202e4667036cba01979))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.26 to ^0.1.27
+    * @looker/extension-utils bumped from ^0.1.18 to ^0.1.19
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-codegen bumped from ^21.7.3 to ^21.7.4
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
+### [0.9.41](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.40...run-it-v0.9.41) (2022-11-10)
+
+
+### Bug Fixes
+
+* oauth support in APIX when embedded in another app ([#1198](https://www.github.com/looker-open-source/sdk-codegen/issues/1198)) ([c464d2f](https://www.github.com/looker-open-source/sdk-codegen/commit/c464d2f24c7f8e7d282208efd00feaaba216fe3e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.25 to ^0.1.26
+    * @looker/extension-utils bumped from ^0.1.17 to ^0.1.18
+    * @looker/sdk bumped from ^22.18.0 to ^22.20.0
+    * @looker/sdk-codegen bumped from ^21.7.2 to ^21.7.3
+
+### [0.9.40](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.39...run-it-v0.9.40) (2022-10-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.24 to ^0.1.25
+    * @looker/extension-utils bumped from ^0.1.16 to ^0.1.17
+    * @looker/sdk bumped from ^22.16.0 to ^22.18.0
+    * @looker/sdk-codegen bumped from ^21.7.1 to ^21.7.2
+
+### [0.9.39](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.38...run-it-v0.9.39) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.15 to ^0.1.16
+    * @looker/sdk bumped from ^22.14.0 to ^22.16.0
+
+### [0.9.38](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.37...run-it-v0.9.38) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.14 to ^0.1.15
+    * @looker/sdk bumped from ^22.12.1 to ^22.14.0
+
+### [0.9.37](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.36...run-it-v0.9.37) (2022-09-21)
+
+
+### Features
+
+* copy link button for search ([#1120](https://www.github.com/looker-open-source/sdk-codegen/issues/1120)) ([d6e0c37](https://www.github.com/looker-open-source/sdk-codegen/commit/d6e0c37ae36b1ff4129cf3bb30f8462f4aa49b0d))
+* error document retrieval in API Explorer ([#1161](https://www.github.com/looker-open-source/sdk-codegen/issues/1161)) ([89a94e1](https://www.github.com/looker-open-source/sdk-codegen/commit/89a94e167b8a3e1aa662c0b5de7c585b3eac2f13))
+
+
+### Bug Fixes
+
+* whitespace under CollapserCard child components ([#1162](https://www.github.com/looker-open-source/sdk-codegen/issues/1162)) ([89fbf29](https://www.github.com/looker-open-source/sdk-codegen/commit/89fbf2911701b598bf9d673cef00e790a1bc8207))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.23 to ^0.1.24
+    * @looker/extension-utils bumped from ^0.1.13 to ^0.1.14
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-codegen bumped from ^21.7.0 to ^21.7.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+
+### [0.9.36](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.35...run-it-v0.9.36) (2022-07-29)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.22 to ^0.1.23
+    * @looker/extension-utils bumped from ^0.1.12 to ^0.1.13
+    * @looker/sdk bumped from ^22.10.0 to ^22.10.1
+    * @looker/sdk-codegen bumped from ^21.6.0 to ^21.7.0
+
 ### [0.9.35](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.34...run-it-v0.9.35) (2022-07-14)
 
 

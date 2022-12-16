@@ -32,7 +32,7 @@ import { DocStatus } from './DocStatus'
 
 describe('DocStatus', () => {
   test('it renders a badge with the status and a tooltip on hover', async () => {
-    renderWithTheme(<DocStatus method={api40.methods.create_dashboard} />)
+    renderWithTheme(<DocStatus method={api40.methods.invalidate_tokens} />)
     const badge = screen.getByText('BETA')
     fireEvent.mouseOver(badge)
     await waitFor(() => {

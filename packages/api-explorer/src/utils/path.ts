@@ -27,29 +27,40 @@
 import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
 import { firstMethodRef } from '@looker/sdk-codegen'
 import type { Location as HLocation } from 'history'
+import { matchPath } from 'react-router'
+
+export const methodFilterOptions = /GET$|POST$|PUT$|PATCH$|DELETE$/i
+export const typeFilterOptions = /SPECIFICATION$|WRITE$|REQUEST$|ENUMERATED$/i
 
 /**
  * Builds a path matching the route used by MethodScene
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding method tag
  * @param methodName A method name
+ * @param params Hash of query param name/value pairs to include in the destination url
  * @returns a Method path
  */
 export const buildMethodPath = (
   specKey: string,
   tag: string,
-  methodName: string
-) => `/${specKey}/methods/${tag}/${methodName}`
+  methodName: string,
+  params?: string
+) => `/${specKey}/methods/${tag}/${methodName}${params ? `?${params}` : ''}`
 
 /**
  * Builds a path matching the route used by TypeScene
  * @param specKey A string to identify the spec in the URL
  * @param tag Corresponding type tag
  * @param typeName A type name
+ * @param params Hash of query param name/value pairs to include in the destination url
  * @returns a Type path
  */
-export const buildTypePath = (specKey: string, tag: string, typeName: string) =>
-  `/${specKey}/types/${tag}/${typeName}`
+export const buildTypePath = (
+  specKey: string,
+  tag: string,
+  typeName: string,
+  params?: string
+) => `/${specKey}/types/${tag}/${typeName}${params ? `?${params}` : ''}`
 
 export const diffPath = 'diff'
 export const oAuthPath = 'oauth'
@@ -119,5 +130,37 @@ export const getSpecKey = (location: HLocation | Location): string | null => {
   } else {
     match = pathname.match(/\/(?<specKey>\w+\.\w+).*/)
   }
-  return match?.groups?.specKey || null
+  const result = match?.groups?.specKey || null
+  return result
+}
+
+/**
+ * Gets the scene type of the current page
+ * @param path path of browser location
+ * @returns string representing the scene type
+ */
+export const getSceneType = (path: string) => {
+  const match = matchPath<{ tagType: string }>(path, {
+    path: '/:specKey/:tagType',
+  })
+  return match ? match!.params.tagType : ''
+}
+
+/**
+ * Confirms if filter is valid for a given method/type tag
+ * @param path browser location pathname
+ * @param filter filter tag for page
+ */
+export const isValidFilter = (path: string, filter: string) => {
+  let isValid
+  const sceneType = getSceneType(path)
+  if (!sceneType) isValid = false
+  else if (!filter.localeCompare('all', 'en', { sensitivity: 'base' }))
+    isValid = true
+  else if (sceneType === 'methods') {
+    isValid = methodFilterOptions.test(filter)
+  } else {
+    isValid = typeFilterOptions.test(filter)
+  }
+  return isValid
 }

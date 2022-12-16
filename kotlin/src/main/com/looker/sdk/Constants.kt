@@ -28,7 +28,7 @@ package com.looker.sdk
 
 const val ENVIRONMENT_PREFIX = "LOOKERSDK"
 const val SDK_TAG = "KT-SDK"
-const val LOOKER_VERSION = "22.10"
+const val LOOKER_VERSION = "22.20"
 const val API_VERSION = "4.0"
 const val AGENT_TAG = "$SDK_TAG $LOOKER_VERSION"
 const val LOOKER_APPID = "x-looker-appid"

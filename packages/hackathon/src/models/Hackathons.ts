@@ -24,8 +24,10 @@
 
  */
 
-import type { IRowModelProps, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { compareDates, noDate, WhollySheet } from '@looker/wholly-sheet'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
+import { compareDates, noDate, WhollyArtifact } from '@looker/wholly-artifact'
+import { getCore40SDK } from '@looker/extension-sdk-react'
+
 import type { ISheetRow } from './SheetRow'
 import { SheetRow } from './SheetRow'
 import type { SheetData } from './SheetData'
@@ -65,6 +67,10 @@ export class Hackathon extends SheetRow<IHackathon> {
     this.assign(values)
   }
 
+  tableName() {
+    return 'Hackathon'
+  }
+
   isActive() {
     const now = new Date().getTime()
     return this.date.getTime() <= now && this.judging_stops.getTime() >= now
@@ -75,14 +81,14 @@ export class Hackathon extends SheetRow<IHackathon> {
   }
 }
 
-export class Hackathons extends WhollySheet<Hackathon, IHackathonProps> {
+export class Hackathons extends WhollyArtifact<Hackathon, IHackathonProps> {
   private _hackathon: Hackathon | undefined
 
   constructor(
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(data.sheetSDK ? data.sheetSDK : ({} as SheetSDK), 'hackathons', table)
+    super(getCore40SDK(), table)
   }
 
   typeRow<Hackathon>(values?: any) {

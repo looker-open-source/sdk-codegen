@@ -35,6 +35,8 @@ export const testJsonResponse: IRawResponse = {
   statusCode: 200,
   statusMessage: 'OK',
   body: Buffer.from('[{"key1": "value1" }]'),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testOneRowComplexJson: IRawResponse = {
@@ -97,6 +99,8 @@ export const testOneRowComplexJson: IRawResponse = {
     "schedule": true
   }
 }`),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testTextResponse: IRawResponse = {
@@ -108,6 +112,8 @@ export const testTextResponse: IRawResponse = {
   statusCode: 200,
   statusMessage: 'OK',
   body: Buffer.from('some text data'),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testHtmlResponse: IRawResponse = {
@@ -124,6 +130,8 @@ export const testHtmlResponse: IRawResponse = {
       '<tr><td>2019-12-22</td><td>39</td></tr>\n' +
       '</table>'
   ),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testSqlResponse: IRawResponse = {
@@ -139,6 +147,8 @@ export const testSqlResponse: IRawResponse = {
 FROM demo_db.inventory_items  AS inventory_items
 LEFT JOIN demo_db.products  AS products ON inventory_items.product_id = products.id
 LIMIT 500`),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
@@ -150,6 +160,8 @@ export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   statusCode: 200,
   statusMessage: 'OK',
   body: Buffer.from('some image data'),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 })
 
 export const testUnknownResponse: IRawResponse = {
@@ -161,6 +173,8 @@ export const testUnknownResponse: IRawResponse = {
   statusCode: 200,
   statusMessage: 'OK',
   body: Buffer.from('some data'),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testErrorResponse: IRawResponse = {
@@ -174,6 +188,8 @@ export const testErrorResponse: IRawResponse = {
   ok: false,
   statusCode: 404,
   statusMessage: 'some status message',
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }
 
 export const testBogusJsonResponse: IRawResponse = {
@@ -185,4 +201,6 @@ export const testBogusJsonResponse: IRawResponse = {
   statusCode: 200,
   statusMessage: 'OK',
   body: Buffer.from('<html><body>I AM A LYING JSON RESPONSE</body></html>'),
+  requestStarted: 1000,
+  responseCompleted: 2000,
 }

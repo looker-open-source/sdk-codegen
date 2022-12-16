@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,14 @@
  SOFTWARE.
 
  */
-import { api } from '../../test-data'
-import { buildResponseTree } from './utils'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 
-describe('DocResponses utils', () => {
-  describe('buildResponseTree', () => {
-    test('it builds a response tree', () => {
-      const method = api.methods.run_look
-      const responses = method.responses
-      const actual = buildResponseTree(responses)
-      const responseStatuses = [
-        '200: Look',
-        '400: Bad Request',
-        '404: Not Found',
-        '422: Validation Error',
-        '429: Too Many Requests',
-      ]
-      const mediaTypes = ['text', 'application/json', 'image/png', 'image/jpeg']
-      expect(Object.keys(actual)).toEqual(responseStatuses)
+/**
+ * Hook for retrieving query params
+ */
+export const useQuery = () => {
+  const { search } = useLocation()
 
-      responseStatuses.forEach((status) => {
-        expect(Object.keys(actual[status])).toEqual(mediaTypes)
-      })
-
-      expect(actual['200: Look']['application/json']).toEqual(
-        method.primaryResponse
-      )
-    })
-  })
-})
+  return useMemo(() => new URLSearchParams(search), [search])
+}

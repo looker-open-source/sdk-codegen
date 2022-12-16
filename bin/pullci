@@ -10,12 +10,22 @@ fi
 VERSION=$1
 NAME=looker-sdk-codegen-ci
 DOCK=us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/$VERSION
+WEBPORT=10000
+APIPORT=20000
 
-function dock_stop() {
-  docker kill $(docker ps -a -q) 1> /dev/null
+# stop_port 10000
+# will stop the Docker image running on the specific port
+function stop_port() {
+  for id in $(docker ps -q)
+  do
+      if [[ $(docker port "${id}") == *"${1}"* ]]; then
+          echo "stopping container ${id}"
+          docker stop "${id}"
+      fi
+  done
 }
 
-dock_stop
+stop_port $WEBPORT
 docker rm -f "$NAME" 1> /dev/null
 docker pull "$DOCK"
-docker run --name "$NAME" -d -p 10000:9999 -p 20000:19999 "$DOCK"
+docker run --name "$NAME" -d -p $WEBPORT:9999 -p $APIPORT:19999 "$DOCK"

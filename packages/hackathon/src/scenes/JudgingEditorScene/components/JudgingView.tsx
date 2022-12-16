@@ -25,44 +25,46 @@
  */
 
 import type { FC } from 'react'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { Fragment } from 'react'
+import { ExtMarkdown } from '@looker/extension-utils'
 import type { IJudgingProps } from '../../../models'
-import { getTechnologies } from '../../../data/hack_session/selectors'
-import { ExtMarkdown } from '../../../components'
-import { getMembers, techDescriptions } from '../../utils'
+import { ProjectView } from '../../ProjectsScene/components'
 
 interface JudgingViewProps {
   judging: IJudgingProps
 }
 
 export const JudgingView: FC<JudgingViewProps> = ({ judging }) => {
-  const availableTechnologies = useSelector(getTechnologies)
-
-  const tech = techDescriptions(judging.$technologies, availableTechnologies)
-  const members = getMembers(judging.$members)
-  const view = `# ${judging.$title}
-by ${members}
-
-${judging.$description}
-
+  // Hack using markdown to display a table. There's not docs for Looker component's Table.
+  const markdown = `
 | Criteria | Score |
 | :-------- | -----: |
 | Execution | ${judging.execution} |
-| Ambition | ${judging.ambition} |
-| Coolness | ${judging.coolness} |
+| Scope | ${judging.scope} |
+| Novelty | ${judging.novelty} |
 | Impact | ${judging.impact} |
 | **Score** | **${judging.score}** |
 
-## Judge's notes
+### Judge's notes
 
-${judging.notes}
-
-**Uses**: ${tech}
-
-**Project type**: ${judging.$project_type}
-
-**Contestant**: ${judging.$contestant ? 'Yes' : 'No'}
+${judging.notes.length !== 0 ? judging.notes : 'N/A'}
 `
-  return <ExtMarkdown source={view} />
+  const view = <ExtMarkdown source={markdown} />
+  const projectView = (
+    <ProjectView
+      title={judging.$title}
+      description={judging.$description}
+      technologies={judging.$technologies}
+      members={judging.$members}
+      project_type={judging.$project_type}
+      contestant={judging.$contestant}
+    />
+  )
+
+  return (
+    <Fragment>
+      {view}
+      {projectView}
+    </Fragment>
+  )
 }

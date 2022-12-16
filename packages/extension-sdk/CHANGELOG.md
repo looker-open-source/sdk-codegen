@@ -5,6 +5,76 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.20.0...extension-sdk-v22.20.1) (2022-12-09)
+
+
+### Bug Fixes
+
+* oauth timeout ([#1222](https://www.github.com/looker-open-source/sdk-codegen/issues/1222)) ([5ce073b](https://www.github.com/looker-open-source/sdk-codegen/commit/5ce073bd8171686451330abd4a25edbfb4756852))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.20.0 to ^22.20.1
+    * @looker/sdk-rtl bumped from ^21.4.0 to ^21.5.0
+
+## [22.20.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.18.0...extension-sdk-v22.20.0) (2022-11-10)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.18.0 to ^22.20.0
+
+## [22.18.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.16.0...extension-sdk-v22.18.0) (2022-10-17)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.16.0 to ^22.18.0
+
+## [22.16.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.14.0...extension-sdk-v22.16.0) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.14.0 to ^22.16.0
+
+## [22.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.12.1...extension-sdk-v22.14.0) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.12.1 to ^22.14.0
+
+### [22.12.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.10.1...extension-sdk-v22.12.1) (2022-09-21)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.10.1 to ^22.12.1
+    * @looker/sdk-rtl bumped from ^21.3.4 to ^21.4.0
+
+### [22.10.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.10.0...extension-sdk-v22.10.1) (2022-07-29)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.10.0 to ^22.10.1
+
 ## [22.10.0](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v22.8.0...extension-sdk-v22.10.0) (2022-07-14)
 
 

@@ -25,7 +25,7 @@
  */
 
 /**
- * 373 API models: 235 Spec, 57 Request, 60 Write, 21 Enum
+ * 390 API models: 243 Spec, 65 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -336,6 +336,71 @@ export interface IApiVersionElement {
    * Url for swagger.json for this version (read-only)
    */
   swagger_url?: string | null
+}
+
+export interface IArtifact {
+  /**
+   * Key of value to store. Namespace + Key must be unique.
+   */
+  key: string
+  /**
+   * Value to store.
+   */
+  value: string
+  /**
+   * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+   */
+  content_type?: string | null
+  /**
+   * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+   */
+  version?: number
+  /**
+   * Artifact storage namespace. (read-only)
+   */
+  namespace: string
+  /**
+   * Timestamp when this artifact was created. (read-only)
+   */
+  created_at: Date
+  /**
+   * Timestamp when this artifact was updated. (read-only)
+   */
+  updated_at: Date
+  /**
+   * Size (in bytes) of the stored value. (read-only)
+   */
+  value_size: number
+  /**
+   * User id of the artifact creator. (read-only)
+   */
+  created_by_userid: string
+  /**
+   * User id of the artifact updater. (read-only)
+   */
+  updated_by_userid: string
+}
+
+export interface IArtifactNamespace {
+  /**
+   * Artifact storage namespace. (read-only)
+   */
+  namespace: string
+  /**
+   * The number of artifacts stored in the namespace. (read-only)
+   */
+  count: number
+}
+
+export interface IArtifactUsage {
+  /**
+   * The configured maximum size in bytes of the entire artifact store. (read-only)
+   */
+  max_size: number
+  /**
+   * The currently used storage size in bytes of the entire artifact store. (read-only)
+   */
+  usage: number
 }
 
 export interface IBackupConfiguration {
@@ -1884,6 +1949,10 @@ export interface IDashboard {
    */
   edit_uri?: string | null
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Number of times favorited (read-only)
    */
   favorite_count?: number | null
@@ -2597,6 +2666,10 @@ export interface IDBConnection {
    */
   dialect_name?: string | null
   /**
+   * Database connection has the ability to support open data studio from explore (read-only)
+   */
+  supports_data_studio_link?: boolean
+  /**
    * Creation date for this connection (read-only)
    */
   created_at?: string | null
@@ -2995,6 +3068,134 @@ export interface IEgressIpAddresses {
   egress_ip_addresses?: string[] | null
 }
 
+export interface IEmbedCookielessSessionAcquire {
+  /**
+   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   */
+  session_length?: number | null
+  /**
+   * When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
+   */
+  force_logout_login?: boolean
+  /**
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   */
+  external_user_id?: string | null
+  /**
+   * First name of the embed user. Defaults to 'Embed' if not specified
+   */
+  first_name?: string | null
+  /**
+   * Last name of the embed user. Defaults to 'User' if not specified
+   */
+  last_name?: string | null
+  /**
+   * Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
+   */
+  user_timezone?: string | null
+  /**
+   * List of Looker permission names to grant to the embed user. Requested permissions will be filtered to permissions allowed for embed sessions.
+   */
+  permissions?: string[] | null
+  /**
+   * List of model names that the embed user may access
+   */
+  models?: string[] | null
+  /**
+   * List of Looker group ids in which to enroll the embed user
+   */
+  group_ids?: string[] | null
+  /**
+   * A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
+   */
+  external_group_id?: string | null
+  /**
+   * A dictionary of name-value pairs associating a Looker user attribute name with a value.
+   */
+  user_attributes?: IDictionary<any> | null
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token?: string | null
+}
+
+export interface IEmbedCookielessSessionAcquireResponse {
+  /**
+   * One time token used to create or to attach to an embedded session in the Looker application server.
+   */
+  authentication_token?: string | null
+  /**
+   * Authentication token time to live in seconds.
+   */
+  authentication_token_ttl?: number | null
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Navigation token time to live in seconds.
+   */
+  navigation_token_ttl?: number | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+  /**
+   * Api token time to live in seconds.
+   */
+  api_token_ttl?: number | null
+  /**
+   * Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server.
+   */
+  session_reference_token?: string | null
+  /**
+   * Session reference token time to live in seconds. Note that this is the same as actual session.
+   */
+  session_reference_token_ttl?: number | null
+}
+
+export interface IEmbedCookielessSessionGenerateTokens {
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token: string
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+}
+
+export interface IEmbedCookielessSessionGenerateTokensResponse {
+  /**
+   * Token used to load and navigate between Looker pages.
+   */
+  navigation_token?: string | null
+  /**
+   * Navigation token time to live in seconds.
+   */
+  navigation_token_ttl?: number | null
+  /**
+   * Token to used to call Looker APIs.
+   */
+  api_token?: string | null
+  /**
+   * Api token time to live in seconds.
+   */
+  api_token_ttl?: number | null
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token: string
+  /**
+   * Session reference token time to live in seconds. Note that this is the same as actual session.
+   */
+  session_reference_token_ttl?: number | null
+}
+
 export interface IEmbedParams {
   /**
    * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
@@ -3035,6 +3236,10 @@ export interface IEmbedSecret {
    * Id of user who created this secret (read-only)
    */
   user_id?: string | null
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType
 }
 
 export interface IEmbedSsoParams {
@@ -3822,6 +4027,10 @@ export interface IIntegration {
    * A list of descriptions of required fields that this integration is compatible with. If there are multiple entries in this list, the integration requires more than one field. If unspecified, no fields will be required. (read-only)
    */
   required_fields?: IIntegrationRequiredField[]
+  /**
+   * Link to privacy policy for destination (read-only)
+   */
+  privacy_link?: string | null
   /**
    * Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker. (read-only)
    */
@@ -6997,6 +7206,20 @@ export interface IRequestAllScheduledPlans {
 }
 
 /**
+ * Dynamically generated request type for all_user_attributes
+ */
+export interface IRequestAllUserAttributes {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Fields to order the results by. Sortable fields include: name, label
+   */
+  sorts?: string | null
+}
+
+/**
  * Dynamically generated request type for all_users
  */
 export interface IRequestAllUsers {
@@ -7028,6 +7251,50 @@ export interface IRequestAllUsers {
    * Optional list of ids to get specific users.
    */
   ids?: DelimArray<string> | null
+}
+
+/**
+ * Dynamically generated request type for artifact
+ */
+export interface IRequestArtifact {
+  /**
+   * Artifact storage namespace
+   */
+  namespace: string
+  /**
+   * Comma-delimited list of keys. Wildcards not allowed.
+   */
+  key: string
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
+}
+
+/**
+ * Dynamically generated request type for artifact_namespaces
+ */
+export interface IRequestArtifactNamespaces {
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
 }
 
 /**
@@ -7823,6 +8090,44 @@ export interface IRequestSearchAlerts {
 }
 
 /**
+ * Dynamically generated request type for search_artifacts
+ */
+export interface IRequestSearchArtifacts {
+  /**
+   * Artifact storage namespace
+   */
+  namespace: string
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null
+  /**
+   * Key pattern to match
+   */
+  key?: string | null
+  /**
+   * Ids of users who created or updated the artifact (comma-delimited list)
+   */
+  user_ids?: string | null
+  /**
+   * Minimum storage size of the artifact
+   */
+  min_size?: number | null
+  /**
+   * Maximum storage size of the artifact
+   */
+  max_size?: number | null
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null
+}
+
+/**
  * Dynamically generated request type for search_boards
  */
 export interface IRequestSearchBoards {
@@ -7878,6 +8183,10 @@ export interface IRequestSearchBoards {
    * Combine given search criteria in a boolean OR expression
    */
   filter_or?: boolean | null
+  /**
+   * Filter results based on permission, either show (default) or update
+   */
+  permission?: string | null
 }
 
 /**
@@ -8243,6 +8552,98 @@ export interface IRequestSearchGroups {
 }
 
 /**
+ * Dynamically generated request type for search_groups_with_hierarchy
+ */
+export interface IRequestSearchGroupsWithHierarchy {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match group id.
+   */
+  id?: string | null
+  /**
+   * Match group name.
+   */
+  name?: string | null
+  /**
+   * Match group external_group_id.
+   */
+  external_group_id?: string | null
+  /**
+   * Match group externally_managed.
+   */
+  externally_managed?: boolean | null
+  /**
+   * Match group externally_orphaned.
+   */
+  externally_orphaned?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_groups_with_roles
+ */
+export interface IRequestSearchGroupsWithRoles {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match group id.
+   */
+  id?: string | null
+  /**
+   * Match group name.
+   */
+  name?: string | null
+  /**
+   * Match group external_group_id.
+   */
+  external_group_id?: string | null
+  /**
+   * Match group externally_managed.
+   */
+  externally_managed?: boolean | null
+  /**
+   * Match group externally_orphaned.
+   */
+  externally_orphaned?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_looks
  */
 export interface IRequestSearchLooks {
@@ -8363,9 +8764,89 @@ export interface IRequestSearchModelSets {
 }
 
 /**
+ * Dynamically generated request type for search_permission_sets
+ */
+export interface IRequestSearchPermissionSets {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match permission set id.
+   */
+  id?: string | null
+  /**
+   * Match permission set name.
+   */
+  name?: string | null
+  /**
+   * Match permission sets by all_access status.
+   */
+  all_access?: boolean | null
+  /**
+   * Match permission sets by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match role id.
+   */
+  id?: string | null
+  /**
+   * Match role name.
+   */
+  name?: string | null
+  /**
+   * Match roles by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_roles_with_user_count
+ */
+export interface IRequestSearchRolesWithUserCount {
   /**
    * Requested fields.
    */
@@ -9495,6 +9976,14 @@ export interface ISchemaTables {
   table_limit_hit?: boolean
 }
 
+/**
+ * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT". (Enum defined in EmbedSecret)
+ */
+export enum SecretType {
+  SSO = 'SSO',
+  JWT = 'JWT',
+}
+
 export interface ISession {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -9608,6 +10097,18 @@ export interface ISetting {
    * Toggle onboarding on or off
    */
   onboarding_enabled?: boolean
+  /**
+   * Change instance-wide default timezone
+   */
+  timezone?: string
+  /**
+   * Toggle user-specific timezones on or off
+   */
+  allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 export interface ISmtpNodeStatus {
@@ -10062,6 +10563,14 @@ export interface IThemeSettings {
    * Toggles the tile shadow (not supported)
    */
   tile_shadow?: boolean
+  /**
+   * Toggle to show the dashboard last updated indicator. Defaults to true.
+   */
+  show_last_updated_indicator?: boolean
+  /**
+   * Toggle to show reload data icon/button. Defaults to true.
+   */
+  show_reload_data_icon?: boolean
 }
 
 export interface ITimezone {
@@ -10077,6 +10586,25 @@ export interface ITimezone {
    * Timezone group (e.g Common, Other, etc.) (read-only)
    */
   group?: string | null
+}
+
+export interface IUpdateArtifact {
+  /**
+   * Key of value to store. Namespace + Key must be unique.
+   */
+  key: string
+  /**
+   * Value to store.
+   */
+  value: string
+  /**
+   * MIME type of content. This can only be used to override content that is detected as text/plain. Needed to set application/json content types, which are analyzed as plain text.
+   */
+  content_type?: string | null
+  /**
+   * Version number of the stored value. The version must be provided for any updates to an existing artifact. (read-only)
+   */
+  version?: number
 }
 
 export interface IUpdateFolder {
@@ -11027,6 +11555,10 @@ export interface IWriteDashboard {
    */
   deleted?: boolean
   /**
+   * Allow visualizations to be viewed in full screen mode
+   */
+  enable_viz_full_screen?: boolean
+  /**
    * Sets the default state of the filters bar to collapsed or open
    */
   filters_bar_collapsed?: boolean
@@ -11316,7 +11848,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  */
 export interface IWriteDBConnection {
   /**
@@ -11518,6 +12050,10 @@ export interface IWriteEmbedSecret {
    * Is this secret currently enabled
    */
   enabled?: boolean
+  /**
+   * Field to distinguish between SSO secrets and JWT secrets Valid values are: "SSO", "JWT".
+   */
+  secret_type?: SecretType | null
 }
 
 /**
@@ -11590,7 +12126,7 @@ export interface IWriteGroup {
 
 /**
  * Dynamic writeable type for Integration removes:
- * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, delegate_oauth
+ * can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
  */
 export interface IWriteIntegration {
   /**
@@ -12664,6 +13200,18 @@ export interface IWriteSetting {
    * Toggle onboarding on or off
    */
   onboarding_enabled?: boolean
+  /**
+   * Change instance-wide default timezone
+   */
+  timezone?: string
+  /**
+   * Toggle user-specific timezones on or off
+   */
+  allow_user_timezones?: boolean
+  /**
+   * Toggle default future connectors on or off
+   */
+  data_connector_default_enabled?: boolean
 }
 
 /**
