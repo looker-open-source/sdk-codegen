@@ -132,7 +132,7 @@ export const EventTester: React.FC = () => {
   }, [tileSDK])
 
   const updateTileClick = useCallback(() => {
-    extensionSDK.updateTitle(`Update tile tilte ${new Date().getSeconds()}`)
+    extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`)
   }, [extensionSDK])
 
   return (
