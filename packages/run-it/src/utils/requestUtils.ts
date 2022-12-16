@@ -196,6 +196,7 @@ export const runRequest = async (
     await sdk.ok(sdk.authSession.login())
   }
   const url = `${basePath}${pathify(endpoint, pathParams)}`
+  const requestStarted = Date.now()
   const raw = await sdk.authSession.transport.rawRequest(
     httpMethod,
     url,
@@ -203,6 +204,10 @@ export const runRequest = async (
     body,
     (props) => sdk.authSession.authenticate(props)
   )
+  const responseCompleted = Date.now()
+  // populate timing info if it's not already provided by the transport
+  if (!raw.requestStarted) raw.requestStarted = requestStarted
+  if (!raw.responseCompleted) raw.responseCompleted = responseCompleted
   return raw
 }
 
