@@ -17,6 +17,7 @@
     "@looker/extension-sdk-react": "^22.20.1",
     "@looker/sdk": "^22.20.1",
     "@looker/components": "^3.0.8",
+    "@looker/components-providers": "1.5.26",
     "@looker/icons": "^1.5.3",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
