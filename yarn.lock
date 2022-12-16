@@ -2306,7 +2306,7 @@
     debug "^2.2.0"
     es6-promise "^4.2.8"
 
-"@looker/components-providers@^1.5.18", "@looker/components-providers@^1.5.26":
+"@looker/components-providers@^1.5.26":
   version "1.5.28"
   resolved "https://registry.yarnpkg.com/@looker/components-providers/-/components-providers-1.5.28.tgz#44d4a1342edfd2ac60ef5b114f8e9dd9bb6ec9d7"
   integrity sha512-Jo+kivDlljtTR+xG0OvIACCd1ABOgPgWmQV+a4GgflKifnPFI3GDb2NfcqBwY8q3+SXkiZanEDwmmt4559Rwwg==
@@ -2322,27 +2322,6 @@
   version "1.5.26"
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-1.5.26.tgz#ed3b20e260577b255fe30f5683e57b32b71dab86"
   integrity sha512-1gDeeO0mpEzEaqkfDfa9T0LYXOAr/R8gcDsptoL6HfPvwV6bVj8A9+0xBcHYfF3b/wCBE1k7Wo8W/SEuf74rww==
-
-"@looker/components@^2.8.1":
-  version "2.8.14"
-  resolved "https://registry.yarnpkg.com/@looker/components/-/components-2.8.14.tgz#3e7f29f0e80118dd3c7e7d0bfbf1e62a6da94cd2"
-  integrity sha512-+P/wzOQg3m8xf+TyTscmAgy+aQqN8ZP01+LLY0oK13Ym17TEvguG00gV9t5GGXry5hGYpvJc54el9J+oaONJoA==
-  dependencies:
-    "@looker/components-providers" "^1.5.18"
-    "@looker/design-tokens" "^2.7.13"
-    "@popperjs/core" "^2.6.0"
-    "@styled-icons/material" "10.34.0"
-    "@styled-icons/material-outlined" "10.34.0"
-    "@styled-icons/material-rounded" "10.34.0"
-    "@styled-icons/styled-icon" "^10.6.3"
-    d3-color "^2.0.0"
-    d3-hsv "^0.1.0"
-    hotkeys-js "^3.8.3"
-    i18next "20.3.1"
-    react-hotkeys-hook "2.3.1"
-    react-i18next "11.8.15"
-    resize-observer-polyfill "^1.5.1"
-    uuid "^8.3.2"
 
 "@looker/components@^3.0.8":
   version "3.0.8"
@@ -2378,7 +2357,7 @@
     polished "^4.1.2"
     styled-system "*"
 
-"@looker/design-tokens@^2.7.13", "@looker/design-tokens@^2.7.21":
+"@looker/design-tokens@^2.7.21":
   version "2.7.21"
   resolved "https://registry.yarnpkg.com/@looker/design-tokens/-/design-tokens-2.7.21.tgz#42894307b3451f206f7445b4bfeaa1649081c0c0"
   integrity sha512-Bmd0pk9Vn29INsgvhZD69xjnMs+sG2SadHwZZObpn6jC4nNJBv1jnivvrEiSQUdsbLOgLH0k2UUVIxKfQAA1mw==
