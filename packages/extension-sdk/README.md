@@ -33,7 +33,6 @@ import {
   connectExtensionHost,
   LookerExtensionSDK40,
 } from '@looker/extension-sdk'
-
 ;(async () => {
   // This `extensionSDK` can perform extension-specific actions
   const extensionSdk = await connectExtensionHost()
@@ -412,6 +411,15 @@ Eventually, entitlements will be required for all extensions.
 An extension can be viewed in full screen mode (no Looker chrome) at /spartan/{extension_project::application_id}. If a Looker user is assigned to the group "Extensions Only" the only parts of Looker the user can access are extensions under the /spartan/ path. As there is no Looker chrome in this mode, the extension should provide a Logout mechanism.
 
 **Note:** this call only works when the extension is running in /spartan mode.
+
+## Mount Points
+
+Extensions can be mounted in the following locations:
+
+- Standalone.
+- Dashboard tile.
+- Explore visualization mounted as a dashboard tile.
+- Dashboard popup launched from a tile settings menu.
 
 ```ts
 extensionSDK.spartanLogout()
