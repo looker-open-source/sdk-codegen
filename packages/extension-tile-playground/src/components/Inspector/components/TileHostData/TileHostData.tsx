@@ -39,6 +39,8 @@ export const TileHostData: React.FC = () => {
   const {
     dashboardId,
     elementId,
+    queryId,
+    querySlug,
     isExploring,
     isDashboardEditing,
     dashboardRunState,
@@ -53,6 +55,10 @@ export const TileHostData: React.FC = () => {
   const dashboardIdMessage = `Dashboard id is "${
     dashboardId || ''
   }". Element id is "${elementId || ''}".`
+
+  const queryIdMessage = `Query id is "${queryId || ''}". Query slug is "${
+    querySlug || ''
+  }".`
 
   const dashboardPrintingMessage =
     lookerHostData?.isRendering && dashboardId
@@ -104,6 +110,7 @@ export const TileHostData: React.FC = () => {
             {!isExploring && (
               <>
                 <Paragraph>{dashboardIdMessage}</Paragraph>
+                <Paragraph>{queryIdMessage}</Paragraph>
                 <Paragraph>{dashboardPrintingMessage}</Paragraph>
                 <Paragraph>{dashboardEditingMessage}</Paragraph>
                 <Paragraph>{dashboardRunStateMessage}</Paragraph>

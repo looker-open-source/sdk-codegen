@@ -60,6 +60,18 @@ export interface TileHostData {
    */
   elementId?: string
   /**
+   * The query id of the tile being rendered if it is associated with
+   * a visualization. If the tile is being configured as an explore
+   * this will not be populated.
+   */
+  queryId?: string
+  /**
+   * The query slug of the tile being rendered if it is associated with
+   * a visualization. If the tile is being configured as an explore
+   * this will not be populated.
+   */
+  querySlug?: string
+  /**
    * The filters being applied to the dashboard. If the tile
    * is being configured as an explore this will not be populated.
    */
