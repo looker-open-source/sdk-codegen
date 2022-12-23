@@ -87,7 +87,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     return (
       !!this._lookerHostData?.extensionDashboardTileEnabled &&
       (this.lookerHostData?.mountPoint === MountPoint.dashboardTile ||
-        this.lookerHostData?.mountPoint === MountPoint.dashboardVisualization)
+        this.lookerHostData?.mountPoint === MountPoint.dashboardVisualization ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardTilePopup)
     )
   }
 

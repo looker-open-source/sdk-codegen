@@ -73,6 +73,12 @@ export const VisualizationTile: React.FC = () => {
             valueFormat={valueFormat}
           />
         )}
+        {!value && (
+          <Text>
+            Unfortunately there is not a valid value to render in the
+            visualization.
+          </Text>
+        )}
       </SpaceVertical>
     </Layout>
   )

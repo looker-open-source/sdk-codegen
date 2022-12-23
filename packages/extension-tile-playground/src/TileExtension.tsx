@@ -33,6 +33,20 @@ import { DashboardTile } from './components/DashboardTile/DashboardTile'
 import { Inspector } from './components/Inspector/Inspector'
 import { Unsupported } from './components/Unsupported/Unsupported'
 
+const getDefaultRouteComponent = (mountPoint?: MountPoint) => {
+  if (mountPoint === MountPoint.dashboardVisualization) {
+    return <VisualizationTile />
+  }
+  if (mountPoint === MountPoint.dashboardTilePopup) {
+    // TODO create component specifically for dashboard tile popup
+    return <VisualizationTile />
+  }
+  if (mountPoint === MountPoint.dashboardTile) {
+    return <DashboardTile />
+  }
+  return <Unsupported mountPoint={mountPoint} />
+}
+
 export const TileExtension: React.FC = () => {
   const { lookerHostData } = useContext(ExtensionContext40)
 
@@ -42,17 +56,7 @@ export const TileExtension: React.FC = () => {
         <Route path="/inspect">
           <Inspector />
         </Route>
-        <Route>
-          {lookerHostData?.mountPoint === MountPoint.dashboardVisualization && (
-            <VisualizationTile />
-          )}
-          {lookerHostData?.mountPoint === MountPoint.dashboardTile && (
-            <DashboardTile />
-          )}
-          {lookerHostData?.mountPoint === MountPoint.standalone && (
-            <Unsupported />
-          )}
-        </Route>
+        <Route>{getDefaultRouteComponent(lookerHostData?.mountPoint)}</Route>
       </Switch>
     </ComponentsProvider>
   )

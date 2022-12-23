@@ -40,6 +40,9 @@ export const getValueAndFormat = (
   const { data } = queryResponse
 
   const datumField = queryResponse.fieldMeasureLike[0]
+  if (!datumField) {
+    return { value: undefined, valueFormat: undefined }
+  }
   const valueFormat = visConfig.displayPercent ? null : datumField.value_format
   const datum = data[0][datumField.name]
   let value = datum.value

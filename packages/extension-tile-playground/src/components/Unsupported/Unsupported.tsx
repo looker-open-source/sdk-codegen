@@ -26,15 +26,19 @@
 import React from 'react'
 import { Box, Flex } from '@looker/components'
 import styled from 'styled-components'
+import type { MountPoint } from '@looker/extension-sdk'
 import { UnsupportedGraphic } from './components/UnsupportedGraphic'
 
-export const Unsupported: React.FC = () => (
+export const Unsupported: React.FC<{ mountPoint?: MountPoint }> = ({
+  mountPoint,
+}) => (
   <OuterFlex>
     <UnsupportedGraphic altText="This component must be mounted in a dashboard!" />
     <HeaderText>Unsupported mount point</HeaderText>
     <Box width={520}>
       <ActionMessage>
-        This component must be mounted in a dashboard!
+        This extension does not support the {mountPoint || 'standalone'} mount
+        point!
       </ActionMessage>
     </Box>
   </OuterFlex>

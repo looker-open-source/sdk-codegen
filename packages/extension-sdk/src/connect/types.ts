@@ -379,6 +379,7 @@ export enum MountPoint {
   standalone = 'standalone',
   dashboardVisualization = 'dashboard-visualization',
   dashboardTile = 'dashboard-tile',
+  dashboardTilePopup = 'dashboard-tile-popup',
 }
 
 /**
