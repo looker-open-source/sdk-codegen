@@ -240,7 +240,7 @@ export const createComplexItem = (
       label={
         <Space>
           {input.name}
-          <Tooltip content="Empty values are automatically removed from the request.">
+          <Tooltip content="Empty values are automatically removed from the request, except for properties with `false` boolean values, which must be completely removed from the JSON body if they should not be passed.">
             <Icon
               data-testid="body-param-tooltip"
               icon={<Info />}
