@@ -260,7 +260,7 @@ describe('Complex Item', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'Empty values are automatically removed from the request.'
+          'Empty values are automatically removed from the request, except for properties with `false` boolean values, which must be completely removed from the JSON body if they should not be passed.'
         )
       ).toBeInTheDocument()
     })
