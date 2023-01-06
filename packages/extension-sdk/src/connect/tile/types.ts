@@ -63,12 +63,26 @@ export interface TileHostData {
    * The query id of the tile being rendered if it is associated with
    * a visualization. If the tile is being configured as an explore
    * this will not be populated.
+   *
+   * Note that queryId is that of the query created when the visualization
+   * is built in the Looker explore. It does not contain any filters or
+   * cross filtering applied to the dashboard. Filters and cross filters
+   * will need to be applied and a new query generated in order to reflect
+   * the data shown in the QueryResponse. As such the queryId may not be
+   * that useful.
    */
   queryId?: string
   /**
    * The query slug of the tile being rendered if it is associated with
    * a visualization. If the tile is being configured as an explore
    * this will not be populated.
+   *
+   * Note that querySlug is that of the query created when the visualization
+   * is built in the Looker explore. It does not contain any filters or
+   * cross filtering applied to the dashboard. Filters and cross filters
+   * will need to be applied and a new query generated in order to reflect
+   * the data shown in the QueryResponse. As such the queryId may not be
+   * that useful.
    */
   querySlug?: string
   /**
