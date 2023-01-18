@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.14.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.13.0...sdk-codegen-all-v2.14.0) (2023-01-18)
+
+
+### Features
+
+* generate SDKs for Looker 23.0 ([#1237](https://www.github.com/looker-open-source/sdk-codegen/issues/1237)) ([2ade858](https://www.github.com/looker-open-source/sdk-codegen/commit/2ade85815c43383169263659f5dddd783c062c09))
+* show Looker release version providing API specification ([#1233](https://www.github.com/looker-open-source/sdk-codegen/issues/1233)) ([a2be9ee](https://www.github.com/looker-open-source/sdk-codegen/commit/a2be9ee4736ce88336a27b78989763ecb2c57e00))
+* track request time if the transport doesn't ([#1231](https://www.github.com/looker-open-source/sdk-codegen/issues/1231)) ([a0e31a4](https://www.github.com/looker-open-source/sdk-codegen/commit/a0e31a41c1075b653fc8a2bf44b297ff98b41c72))
+
 ## [2.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.12.0...sdk-codegen-all-v2.13.0) (2022-12-09)
 
 

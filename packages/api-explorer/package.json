@@ -1,6 +1,6 @@
 {
   "name": "@looker/api-explorer",
-  "version": "0.9.42",
+  "version": "0.9.43",
   "description": "Looker API Explorer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.26",
-    "@looker/sdk-codegen-scripts": "^21.4.8",
+    "@looker/sdk-codegen-scripts": "^21.5.0",
     "@looker/sdk-node": "^22.20.1",
     "@styled-icons/styled-icon": "^10.6.3",
     "@testing-library/jest-dom": "^5.11.6",
@@ -74,7 +74,7 @@
     "@looker/extension-utils": "^0.1.19",
     "@looker/icons": "^1.5.3",
     "@looker/redux": "0.0.0",
-    "@looker/run-it": "^0.9.42",
+    "@looker/run-it": "^0.9.43",
     "@looker/sdk": "^22.20.1",
     "@looker/sdk-codegen": "^21.7.4",
     "@looker/sdk-rtl": "^21.5.0",

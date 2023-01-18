@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.9.43](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.42...run-it-v0.9.43) (2023-01-18)
+
+
+### Features
+
+* track request time if the transport doesn't ([#1231](https://www.github.com/looker-open-source/sdk-codegen/issues/1231)) ([a0e31a4](https://www.github.com/looker-open-source/sdk-codegen/commit/a0e31a41c1075b653fc8a2bf44b297ff98b41c72))
+
 ### [0.9.42](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.41...run-it-v0.9.42) (2022-12-09)
 
 
