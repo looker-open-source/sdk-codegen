@@ -30,7 +30,7 @@
     "Files"
   ],
   "dependencies": {
-    "http-server": "^0.12.3"
+    "http-server": "^14.1.1"
   },
   "scripts": {
     "serve": "http-server ../ -p 30000 --cors"

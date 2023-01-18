@@ -59,13 +59,29 @@ export interface IAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
   cron: string
+  /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
   /**
    * An optional, user-defined title for the alert
    */
@@ -152,7 +168,7 @@ export interface IAlertAppliedDashboardFilter {
    */
   field_name: string
   /**
-   * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+   * Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
    */
   filter_value: string
   /**
@@ -197,7 +213,7 @@ export interface IAlertField {
    */
   title: string
   /**
-   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
    */
   name: string
   /**
@@ -212,11 +228,11 @@ export interface IAlertFieldFilter {
    */
   field_name: string
   /**
-   * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+   * Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
    */
   field_value: any
   /**
-   * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+   * Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string | null
 }
@@ -707,7 +723,7 @@ export interface IColumnSearch {
 }
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 export enum ComparisonType {
   EQUAL_TO = 'EQUAL_TO',
@@ -942,6 +958,22 @@ export interface IContentValidationAlert {
    */
   lookml_link_id?: string | null
   /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
+  /**
    * An optional, user-defined title for the alert
    */
   custom_title?: string | null
@@ -1028,6 +1060,10 @@ export interface IContentValidationDashboardElement {
    * JSON with all the properties required for rich editor and buttons elements
    */
   rich_content_json?: string | null
+  /**
+   * Extension ID
+   */
+  extension_id?: string | null
 }
 
 export interface IContentValidationDashboardFilter {
@@ -1502,6 +1538,10 @@ export interface ICredentialsEmail {
    */
   forced_password_reset_at_next_login?: boolean
   /**
+   * Unique Id of the user (read-only)
+   */
+  user_id?: string | null
+  /**
    * Has this credential been disabled? (read-only)
    */
   is_disabled?: boolean
@@ -1513,6 +1553,10 @@ export interface ICredentialsEmail {
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
   password_reset_url?: string | null
+  /**
+   * Url with one-time use secret token that the user can use to setup account (read-only)
+   */
+  account_setup_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -1545,6 +1589,10 @@ export interface ICredentialsEmailSearch {
    */
   forced_password_reset_at_next_login?: boolean
   /**
+   * Unique Id of the user (read-only)
+   */
+  user_id?: string | null
+  /**
    * Has this credential been disabled? (read-only)
    */
   is_disabled?: boolean
@@ -1556,6 +1604,10 @@ export interface ICredentialsEmailSearch {
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
   password_reset_url?: string | null
+  /**
+   * Url with one-time use secret token that the user can use to setup account (read-only)
+   */
+  account_setup_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -1997,7 +2049,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -2247,7 +2299,7 @@ export interface IDashboardElement {
    */
   subtitle_text_as_html?: string | null
   /**
-   * Extension ID (read-only)
+   * Extension ID
    */
   extension_id?: string | null
 }
@@ -2991,27 +3043,63 @@ export interface IDialectInfoOptions {
    */
   additional_params?: boolean
   /**
+   * Has support for issuing statements after connecting to the database (read-only)
+   */
+  after_connect_statements?: boolean
+  /**
+   * Has analytical view support (read-only)
+   */
+  analytical_view_dataset?: boolean
+  /**
    * Has auth support (read-only)
    */
   auth?: boolean
   /**
-   * Has host support (read-only)
+   * Has configurable cost estimation (read-only)
+   */
+  cost_estimate?: boolean
+  /**
+   * Can disable query context comments (read-only)
+   */
+  disable_context_comment?: boolean
+  /**
+   * Host is required (read-only)
    */
   host?: boolean
+  /**
+   * Instance name is required (read-only)
+   */
+  instance_name?: boolean
+  /**
+   * Has max billing gigabytes support (read-only)
+   */
+  max_billing_gigabytes?: boolean
   /**
    * Has support for a service account (read-only)
    */
   oauth_credentials?: boolean
   /**
+   * Has OAuth for PDT support (read-only)
+   */
+  pdts_for_oauth?: boolean
+  /**
+   * Port can be specified (read-only)
+   */
+  port?: boolean
+  /**
    * Has project name support (read-only)
    */
   project_name?: boolean
   /**
-   * Has schema support (read-only)
+   * Schema can be specified (read-only)
    */
   schema?: boolean
   /**
-   * Has SSL support (read-only)
+   * Has support for a service account (read-only)
+   */
+  service_account_credentials?: boolean
+  /**
+   * Has TLS/SSL support (read-only)
    */
   ssl?: boolean
   /**
@@ -3022,6 +3110,14 @@ export interface IDialectInfoOptions {
    * Has tmp table support (read-only)
    */
   tmp_table?: boolean
+  /**
+   * Has Oracle TNS support (read-only)
+   */
+  tns?: boolean
+  /**
+   * Username can be specified (read-only)
+   */
+  username?: boolean
   /**
    * Username is required (read-only)
    */
@@ -9760,6 +9856,22 @@ export interface IScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -10109,6 +10221,18 @@ export interface ISetting {
    * Toggle default future connectors on or off
    */
   data_connector_default_enabled?: boolean
+  /**
+   * Change the base portion of your Looker instance URL setting
+   */
+  host_url?: string
+  /**
+   * (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+   */
+  override_warnings?: boolean
+  /**
+   * An array of Email Domain Allowlist of type string for Scheduled Content
+   */
+  email_domain_allowlist?: string[]
 }
 
 export interface ISmtpNodeStatus {
@@ -10155,6 +10279,10 @@ export interface ISmtpSettings {
    * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
    */
   ssl_version?: SslVersion | null
+  /**
+   * Whether to enable built-in Looker SMTP
+   */
+  default_smtp?: boolean | null
 }
 
 export interface ISmtpStatus {
@@ -10339,7 +10467,7 @@ export interface ISshTunnel {
    */
   last_attempt?: string
   /**
-   * Localhost Port used by the Looker instance to connect to the remote DB (read-only)
+   * Localhost Port used by the Looker instance to connect to the remote DB
    */
   local_host_port?: number
   /**
@@ -10544,6 +10672,10 @@ export interface IThemeSettings {
    */
   tile_background_color?: string
   /**
+   * Background color for text tiles
+   */
+  text_tile_background_color?: string
+  /**
    * Text color for tiles
    */
   tile_text_color?: string
@@ -10571,6 +10703,18 @@ export interface IThemeSettings {
    * Toggle to show reload data icon/button. Defaults to true.
    */
   show_reload_data_icon?: boolean
+  /**
+   * Toggle to show the dashboard actions menu. Defaults to true.
+   */
+  show_dashboard_menu?: boolean
+  /**
+   * Toggle to show the filters icon/toggle. Defaults to true.
+   */
+  show_filters_toggle?: boolean
+  /**
+   * Toggle to show the dashboard header. Defaults to true.
+   */
+  show_dashboard_header?: boolean
 }
 
 export interface ITimezone {
@@ -11126,13 +11270,29 @@ export interface IWriteAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType | null
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
   cron: string
+  /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
   /**
    * An optional, user-defined title for the alert
    */
@@ -11487,7 +11647,7 @@ export interface IWriteCreateQueryTask {
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
   /**
@@ -11575,7 +11735,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -11619,7 +11779,7 @@ export interface IWriteDashboardBase {
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 export interface IWriteDashboardElement {
   /**
@@ -11701,6 +11861,10 @@ export interface IWriteDashboardElement {
    * JSON with all the properties required for rich editor and buttons elements
    */
   rich_content_json?: string | null
+  /**
+   * Extension ID
+   */
+  extension_id?: string | null
 }
 
 /**
@@ -13118,6 +13282,22 @@ export interface IWriteScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -13212,6 +13392,18 @@ export interface IWriteSetting {
    * Toggle default future connectors on or off
    */
   data_connector_default_enabled?: boolean
+  /**
+   * Change the base portion of your Looker instance URL setting
+   */
+  host_url?: string
+  /**
+   * (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+   */
+  override_warnings?: boolean
+  /**
+   * An array of Email Domain Allowlist of type string for Scheduled Content
+   */
+  email_domain_allowlist?: string[] | null
 }
 
 /**
@@ -13239,13 +13431,17 @@ export interface IWriteSshServer {
 
 /**
  * Dynamic writeable type for SshTunnel removes:
- * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
+ * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, status
  */
 export interface IWriteSshTunnel {
   /**
    * SSH Server ID
    */
   ssh_server_id?: string
+  /**
+   * Localhost Port used by the Looker instance to connect to the remote DB
+   */
+  local_host_port?: number
   /**
    * Hostname or IP Address of the Database Server
    */
@@ -13283,7 +13479,7 @@ export interface IWriteTheme {
 export interface IWriteUser {
   /**
    * Dynamic writeable type for CredentialsEmail removes:
-   * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+   * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
    */
   credentials_email?: IWriteCredentialsEmail | null
   /**

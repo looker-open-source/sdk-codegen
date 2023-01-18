@@ -23,6 +23,7 @@
  SOFTWARE.
 
  */
+
 import path from 'path'
 import type { DeclarationNuggets, IDeclarationMine } from '@looker/sdk-codegen'
 
