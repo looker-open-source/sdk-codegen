@@ -470,12 +470,20 @@ class ContentValidationAlert(model.Model):
         id: ID of the alert
         lookml_dashboard_id: ID of the LookML dashboard associated with the alert
         lookml_link_id: ID of the LookML dashboard element associated with the alert
+        custom_url_base: Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+        custom_url_params: Parameters and path for the custom url defined by the alert creator
+        custom_url_label: Label for the custom url defined by the alert creator
+        show_custom_url: Boolean to determine if the custom url should be used
         custom_title: An optional, user-defined title for the alert
     """
 
     id: Optional[int] = None
     lookml_dashboard_id: Optional[str] = None
     lookml_link_id: Optional[str] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     custom_title: Optional[str] = None
 
     def __init__(
@@ -484,11 +492,19 @@ class ContentValidationAlert(model.Model):
         id: Optional[int] = None,
         lookml_dashboard_id: Optional[str] = None,
         lookml_link_id: Optional[str] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         custom_title: Optional[str] = None
     ):
         self.id = id
         self.lookml_dashboard_id = lookml_dashboard_id
         self.lookml_link_id = lookml_link_id
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.custom_title = custom_title
 
 
@@ -1189,9 +1205,11 @@ class CredentialsEmail(model.Model):
         created_at: Timestamp for the creation of this credential
         email: EMail address used for user login
         forced_password_reset_at_next_login: Force the user to change their password upon their next login
+        user_id: Unique Id of the user
         is_disabled: Has this credential been disabled?
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
+        account_setup_url: Url with one-time use secret token that the user can use to setup account
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
@@ -1201,9 +1219,11 @@ class CredentialsEmail(model.Model):
     created_at: Optional[str] = None
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
+    user_id: Optional[str] = None
     is_disabled: Optional[bool] = None
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
+    account_setup_url: Optional[str] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
@@ -1215,9 +1235,11 @@ class CredentialsEmail(model.Model):
         created_at: Optional[str] = None,
         email: Optional[str] = None,
         forced_password_reset_at_next_login: Optional[bool] = None,
+        user_id: Optional[str] = None,
         is_disabled: Optional[bool] = None,
         logged_in_at: Optional[str] = None,
         password_reset_url: Optional[str] = None,
+        account_setup_url: Optional[str] = None,
         type: Optional[str] = None,
         url: Optional[str] = None,
         user_url: Optional[str] = None
@@ -1226,9 +1248,11 @@ class CredentialsEmail(model.Model):
         self.created_at = created_at
         self.email = email
         self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.user_id = user_id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
+        self.account_setup_url = account_setup_url
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -1636,7 +1660,7 @@ class Dashboard(model.Model):
         user_name: Name of User that created the dashboard.
         load_configuration: configuration option that governs how dashboard loading will happen.
         lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
         show_title: Show title
         space_id: Id of Space
         folder_id: Id of folder
@@ -2980,27 +3004,49 @@ class DialectInfoOptions(model.Model):
     """
     Attributes:
         additional_params: Has additional params support
+        after_connect_statements: Has support for issuing statements after connecting to the database
+        analytical_view_dataset: Has analytical view support
         auth: Has auth support
-        host: Has host support
+        cost_estimate: Has configurable cost estimation
+        disable_context_comment: Can disable query context comments
+        host: Host is required
+        instance_name: Instance name is required
+        max_billing_gigabytes: Has max billing gigabytes support
         oauth_credentials: Has support for a service account
+        pdts_for_oauth: Has OAuth for PDT support
+        port: Port can be specified
         project_name: Has project name support
-        schema: Has schema support
-        ssl: Has SSL support
+        schema: Schema can be specified
+        service_account_credentials: Has support for a service account
+        ssl: Has TLS/SSL support
         timezone: Has timezone support
         tmp_table: Has tmp table support
+        tns: Has Oracle TNS support
+        username: Username can be specified
         username_required: Username is required
         can: Operations the current user is able to perform on this object
     """
 
     additional_params: Optional[bool] = None
+    after_connect_statements: Optional[bool] = None
+    analytical_view_dataset: Optional[bool] = None
     auth: Optional[bool] = None
+    cost_estimate: Optional[bool] = None
+    disable_context_comment: Optional[bool] = None
     host: Optional[bool] = None
+    instance_name: Optional[bool] = None
+    max_billing_gigabytes: Optional[bool] = None
     oauth_credentials: Optional[bool] = None
+    pdts_for_oauth: Optional[bool] = None
+    port: Optional[bool] = None
     project_name: Optional[bool] = None
     schema: Optional[bool] = None
+    service_account_credentials: Optional[bool] = None
     ssl: Optional[bool] = None
     timezone: Optional[bool] = None
     tmp_table: Optional[bool] = None
+    tns: Optional[bool] = None
+    username: Optional[bool] = None
     username_required: Optional[bool] = None
     can: Optional[MutableMapping[str, bool]] = None
 
@@ -3008,26 +3054,48 @@ class DialectInfoOptions(model.Model):
         self,
         *,
         additional_params: Optional[bool] = None,
+        after_connect_statements: Optional[bool] = None,
+        analytical_view_dataset: Optional[bool] = None,
         auth: Optional[bool] = None,
+        cost_estimate: Optional[bool] = None,
+        disable_context_comment: Optional[bool] = None,
         host: Optional[bool] = None,
+        instance_name: Optional[bool] = None,
+        max_billing_gigabytes: Optional[bool] = None,
         oauth_credentials: Optional[bool] = None,
+        pdts_for_oauth: Optional[bool] = None,
+        port: Optional[bool] = None,
         project_name: Optional[bool] = None,
         schema: Optional[bool] = None,
+        service_account_credentials: Optional[bool] = None,
         ssl: Optional[bool] = None,
         timezone: Optional[bool] = None,
         tmp_table: Optional[bool] = None,
+        tns: Optional[bool] = None,
+        username: Optional[bool] = None,
         username_required: Optional[bool] = None,
         can: Optional[MutableMapping[str, bool]] = None
     ):
         self.additional_params = additional_params
+        self.after_connect_statements = after_connect_statements
+        self.analytical_view_dataset = analytical_view_dataset
         self.auth = auth
+        self.cost_estimate = cost_estimate
+        self.disable_context_comment = disable_context_comment
         self.host = host
+        self.instance_name = instance_name
+        self.max_billing_gigabytes = max_billing_gigabytes
         self.oauth_credentials = oauth_credentials
+        self.pdts_for_oauth = pdts_for_oauth
+        self.port = port
         self.project_name = project_name
         self.schema = schema
+        self.service_account_credentials = service_account_credentials
         self.ssl = ssl
         self.timezone = timezone
         self.tmp_table = tmp_table
+        self.tns = tns
+        self.username = username
         self.username_required = username_required
         self.can = can
 
@@ -8040,6 +8108,10 @@ class ScheduledPlan(model.Model):
         scheduled_plan_destination: Scheduled plan destinations
         run_once: Whether the plan in question should only be run once (usually for testing)
         include_links: Whether links back to Looker should be included in this ScheduledPlan
+        custom_url_base: Custom url domain for the scheduled entity
+        custom_url_params: Custom url path and parameters for the scheduled entity
+        custom_url_label: Custom url label for the scheduled entity
+        show_custom_url: Whether to show custom link back instead of standard looker link
         pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
         pdf_landscape: Whether the PDF should be formatted for landscape orientation
         embed: Whether this schedule is in an embed context or not
@@ -8076,6 +8148,10 @@ class ScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -8116,6 +8192,10 @@ class ScheduledPlan(model.Model):
         ] = None,
         run_once: Optional[bool] = None,
         include_links: Optional[bool] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         pdf_paper_size: Optional[str] = None,
         pdf_landscape: Optional[bool] = None,
         embed: Optional[bool] = None,
@@ -8151,6 +8231,10 @@ class ScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -8345,6 +8429,7 @@ class SmtpSettings(model.Model):
         port: SMTP Server's port
         enable_starttls_auto: Is TLS encryption enabled?
         ssl_version: TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+        default_smtp: Whether to enable built-in Looker SMTP
     """
 
     address: Optional[str] = None
@@ -8354,6 +8439,7 @@ class SmtpSettings(model.Model):
     port: Optional[int] = None
     enable_starttls_auto: Optional[bool] = None
     ssl_version: Optional["SslVersion"] = None
+    default_smtp: Optional[bool] = None
 
     def __init__(
         self,
@@ -8364,7 +8450,8 @@ class SmtpSettings(model.Model):
         password: Optional[str] = None,
         port: Optional[int] = None,
         enable_starttls_auto: Optional[bool] = None,
-        ssl_version: Optional["SslVersion"] = None
+        ssl_version: Optional["SslVersion"] = None,
+        default_smtp: Optional[bool] = None
     ):
         self.address = address
         self.from_ = from_
@@ -8373,6 +8460,7 @@ class SmtpSettings(model.Model):
         self.port = port
         self.enable_starttls_auto = enable_starttls_auto
         self.ssl_version = ssl_version
+        self.default_smtp = default_smtp
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8825,6 +8913,7 @@ class ThemeSettings(model.Model):
         show_title: Toggle to show the title. Defaults to true.
         text_tile_text_color: Text color for text tiles
         tile_background_color: Background color for tiles
+        text_tile_background_color: Background color for text tiles
         tile_text_color: Text color for tiles
         title_color: Color for titles
         warn_button_color: Warning button color
@@ -8832,6 +8921,9 @@ class ThemeSettings(model.Model):
         tile_shadow: Toggles the tile shadow (not supported)
         show_last_updated_indicator: Toggle to show the dashboard last updated indicator. Defaults to true.
         show_reload_data_icon: Toggle to show reload data icon/button. Defaults to true.
+        show_dashboard_menu: Toggle to show the dashboard actions menu. Defaults to true.
+        show_filters_toggle: Toggle to show the filters icon/toggle. Defaults to true.
+        show_dashboard_header: Toggle to show the dashboard header. Defaults to true.
     """
 
     background_color: Optional[str] = None
@@ -8846,6 +8938,7 @@ class ThemeSettings(model.Model):
     show_title: Optional[bool] = None
     text_tile_text_color: Optional[str] = None
     tile_background_color: Optional[str] = None
+    text_tile_background_color: Optional[str] = None
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
     warn_button_color: Optional[str] = None
@@ -8853,6 +8946,9 @@ class ThemeSettings(model.Model):
     tile_shadow: Optional[bool] = None
     show_last_updated_indicator: Optional[bool] = None
     show_reload_data_icon: Optional[bool] = None
+    show_dashboard_menu: Optional[bool] = None
+    show_filters_toggle: Optional[bool] = None
+    show_dashboard_header: Optional[bool] = None
 
     def __init__(
         self,
@@ -8869,13 +8965,17 @@ class ThemeSettings(model.Model):
         show_title: Optional[bool] = None,
         text_tile_text_color: Optional[str] = None,
         tile_background_color: Optional[str] = None,
+        text_tile_background_color: Optional[str] = None,
         tile_text_color: Optional[str] = None,
         title_color: Optional[str] = None,
         warn_button_color: Optional[str] = None,
         tile_title_alignment: Optional[str] = None,
         tile_shadow: Optional[bool] = None,
         show_last_updated_indicator: Optional[bool] = None,
-        show_reload_data_icon: Optional[bool] = None
+        show_reload_data_icon: Optional[bool] = None,
+        show_dashboard_menu: Optional[bool] = None,
+        show_filters_toggle: Optional[bool] = None,
+        show_dashboard_header: Optional[bool] = None
     ):
         self.background_color = background_color
         self.base_font_size = base_font_size
@@ -8889,6 +8989,7 @@ class ThemeSettings(model.Model):
         self.show_title = show_title
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
+        self.text_tile_background_color = text_tile_background_color
         self.tile_text_color = tile_text_color
         self.title_color = title_color
         self.warn_button_color = warn_button_color
@@ -8896,6 +8997,9 @@ class ThemeSettings(model.Model):
         self.tile_shadow = tile_shadow
         self.show_last_updated_indicator = show_last_updated_indicator
         self.show_reload_data_icon = show_reload_data_icon
+        self.show_dashboard_menu = show_dashboard_menu
+        self.show_filters_toggle = show_filters_toggle
+        self.show_dashboard_header = show_dashboard_header
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9856,7 +9960,7 @@ class WriteCreateQueryTask(model.Model):
 class WriteCredentialsEmail(model.Model):
     """
         Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 
         Attributes:
             email: EMail address used for user login
@@ -9935,7 +10039,7 @@ class WriteDashboard(model.Model):
             filters_location_top: Sets the default state of the filters location to top(true) or right(false)
             load_configuration: configuration option that governs how dashboard loading will happen.
             lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
             show_title: Show title
             space_id: Id of Space
             folder_id: Id of folder
@@ -11687,6 +11791,10 @@ class WriteScheduledPlan(model.Model):
             scheduled_plan_destination: Scheduled plan destinations
             run_once: Whether the plan in question should only be run once (usually for testing)
             include_links: Whether links back to Looker should be included in this ScheduledPlan
+            custom_url_base: Custom url domain for the scheduled entity
+            custom_url_params: Custom url path and parameters for the scheduled entity
+            custom_url_label: Custom url label for the scheduled entity
+            show_custom_url: Whether to show custom link back instead of standard looker link
             pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
             pdf_landscape: Whether the PDF should be formatted for landscape orientation
             embed: Whether this schedule is in an embed context or not
@@ -11715,6 +11823,10 @@ class WriteScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -11747,6 +11859,10 @@ class WriteScheduledPlan(model.Model):
         ] = None,
         run_once: Optional[bool] = None,
         include_links: Optional[bool] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         pdf_paper_size: Optional[str] = None,
         pdf_landscape: Optional[bool] = None,
         embed: Optional[bool] = None,
@@ -11774,6 +11890,10 @@ class WriteScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -11877,7 +11997,7 @@ class WriteUser(model.Model):
 
         Attributes:
             credentials_email: Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
             first_name: First name
             home_space_id: ID string for user's home space
             home_folder_id: ID string for user's home folder

@@ -341,6 +341,22 @@ export interface IContentValidationAlert {
    */
   lookml_link_id?: string | null
   /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
+  /**
    * An optional, user-defined title for the alert
    */
   custom_title?: string | null
@@ -837,6 +853,10 @@ export interface ICredentialsEmail {
    */
   forced_password_reset_at_next_login?: boolean
   /**
+   * Unique Id of the user (read-only)
+   */
+  user_id?: string | null
+  /**
    * Has this credential been disabled? (read-only)
    */
   is_disabled?: boolean
@@ -848,6 +868,10 @@ export interface ICredentialsEmail {
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
   password_reset_url?: string | null
+  /**
+   * Url with one-time use secret token that the user can use to setup account (read-only)
+   */
+  account_setup_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -1294,7 +1318,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**
@@ -2241,27 +2265,63 @@ export interface IDialectInfoOptions {
    */
   additional_params?: boolean
   /**
+   * Has support for issuing statements after connecting to the database (read-only)
+   */
+  after_connect_statements?: boolean
+  /**
+   * Has analytical view support (read-only)
+   */
+  analytical_view_dataset?: boolean
+  /**
    * Has auth support (read-only)
    */
   auth?: boolean
   /**
-   * Has host support (read-only)
+   * Has configurable cost estimation (read-only)
+   */
+  cost_estimate?: boolean
+  /**
+   * Can disable query context comments (read-only)
+   */
+  disable_context_comment?: boolean
+  /**
+   * Host is required (read-only)
    */
   host?: boolean
+  /**
+   * Instance name is required (read-only)
+   */
+  instance_name?: boolean
+  /**
+   * Has max billing gigabytes support (read-only)
+   */
+  max_billing_gigabytes?: boolean
   /**
    * Has support for a service account (read-only)
    */
   oauth_credentials?: boolean
   /**
+   * Has OAuth for PDT support (read-only)
+   */
+  pdts_for_oauth?: boolean
+  /**
+   * Port can be specified (read-only)
+   */
+  port?: boolean
+  /**
    * Has project name support (read-only)
    */
   project_name?: boolean
   /**
-   * Has schema support (read-only)
+   * Schema can be specified (read-only)
    */
   schema?: boolean
   /**
-   * Has SSL support (read-only)
+   * Has support for a service account (read-only)
+   */
+  service_account_credentials?: boolean
+  /**
+   * Has TLS/SSL support (read-only)
    */
   ssl?: boolean
   /**
@@ -2272,6 +2332,14 @@ export interface IDialectInfoOptions {
    * Has tmp table support (read-only)
    */
   tmp_table?: boolean
+  /**
+   * Has Oracle TNS support (read-only)
+   */
+  tns?: boolean
+  /**
+   * Username can be specified (read-only)
+   */
+  username?: boolean
   /**
    * Username is required (read-only)
    */
@@ -8082,6 +8150,22 @@ export interface IScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -8302,6 +8386,10 @@ export interface ISmtpSettings {
    * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
    */
   ssl_version?: SslVersion | null
+  /**
+   * Whether to enable built-in Looker SMTP
+   */
+  default_smtp?: boolean | null
 }
 
 export interface ISnippet {
@@ -8677,6 +8765,10 @@ export interface IThemeSettings {
    */
   tile_background_color?: string
   /**
+   * Background color for text tiles
+   */
+  text_tile_background_color?: string
+  /**
    * Text color for tiles
    */
   tile_text_color?: string
@@ -8704,6 +8796,18 @@ export interface IThemeSettings {
    * Toggle to show reload data icon/button. Defaults to true.
    */
   show_reload_data_icon?: boolean
+  /**
+   * Toggle to show the dashboard actions menu. Defaults to true.
+   */
+  show_dashboard_menu?: boolean
+  /**
+   * Toggle to show the filters icon/toggle. Defaults to true.
+   */
+  show_filters_toggle?: boolean
+  /**
+   * Toggle to show the dashboard header. Defaults to true.
+   */
+  show_dashboard_header?: boolean
 }
 
 export interface ITimezone {
@@ -9429,7 +9533,7 @@ export interface IWriteCreateQueryTask {
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
   /**
@@ -9545,7 +9649,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean
   /**
@@ -11018,6 +11122,22 @@ export interface IWriteScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -11112,7 +11232,7 @@ export interface IWriteTheme {
 export interface IWriteUser {
   /**
    * Dynamic writeable type for CredentialsEmail removes:
-   * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+   * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
    */
   credentials_email?: IWriteCredentialsEmail | null
   /**

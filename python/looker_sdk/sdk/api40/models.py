@@ -76,13 +76,17 @@ class AccessToken(model.Model):
 class Alert(model.Model):
     """
     Attributes:
-        comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+        comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
         cron: Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
         destinations: Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
         field:
         owner_id: User id of alert owner
         threshold: Value of the alert threshold
         applied_dashboard_filters: Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+        custom_url_base: Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+        custom_url_params: Parameters and path for the custom url defined by the alert creator
+        custom_url_label: Label for the custom url defined by the alert creator
+        show_custom_url: Boolean to determine if the custom url should be used
         custom_title: An optional, user-defined title for the alert
         dashboard_element_id: ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
         description: An optional description for the alert. This supplements the title
@@ -108,6 +112,10 @@ class Alert(model.Model):
     owner_id: str
     threshold: float
     applied_dashboard_filters: Optional[Sequence["AlertAppliedDashboardFilter"]] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     custom_title: Optional[str] = None
     dashboard_element_id: Optional[str] = None
     description: Optional[str] = None
@@ -132,6 +140,10 @@ class Alert(model.Model):
         "owner_id": str,
         "threshold": float,
         "applied_dashboard_filters": Optional[Sequence["AlertAppliedDashboardFilter"]],
+        "custom_url_base": Optional[str],
+        "custom_url_params": Optional[str],
+        "custom_url_label": Optional[str],
+        "show_custom_url": Optional[bool],
         "custom_title": Optional[str],
         "dashboard_element_id": Optional[str],
         "description": Optional[str],
@@ -162,6 +174,10 @@ class Alert(model.Model):
         applied_dashboard_filters: Optional[
             Sequence["AlertAppliedDashboardFilter"]
         ] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         custom_title: Optional[str] = None,
         dashboard_element_id: Optional[str] = None,
         description: Optional[str] = None,
@@ -186,6 +202,10 @@ class Alert(model.Model):
         self.owner_id = owner_id
         self.threshold = threshold
         self.applied_dashboard_filters = applied_dashboard_filters
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.custom_title = custom_title
         self.dashboard_element_id = dashboard_element_id
         self.description = description
@@ -210,7 +230,7 @@ class AlertAppliedDashboardFilter(model.Model):
     Attributes:
         filter_title: Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
         field_name: Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
-        filter_value: Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+        filter_value: Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
         filter_description: Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA`
     """
 
@@ -294,7 +314,7 @@ class AlertField(model.Model):
     """
     Attributes:
         title: Field's title. Usually auto-generated to reflect field name and its filters
-        name: Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+        name: Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
         filter: (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
     """
 
@@ -319,8 +339,8 @@ class AlertFieldFilter(model.Model):
     """
     Attributes:
         field_name: Field Name. Has format `<view>.<field>`
-        field_value: Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
-        filter_value: Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+        field_value: Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+        filter_value: Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
     """
 
     field_name: str
@@ -977,7 +997,7 @@ class ColumnSearch(model.Model):
 
 class ComparisonType(enum.Enum):
     """
-    This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+    This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
 
     """
 
@@ -1266,12 +1286,20 @@ class ContentValidationAlert(model.Model):
         id: ID of the alert
         lookml_dashboard_id: ID of the LookML dashboard associated with the alert
         lookml_link_id: ID of the LookML dashboard element associated with the alert
+        custom_url_base: Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+        custom_url_params: Parameters and path for the custom url defined by the alert creator
+        custom_url_label: Label for the custom url defined by the alert creator
+        show_custom_url: Boolean to determine if the custom url should be used
         custom_title: An optional, user-defined title for the alert
     """
 
     id: Optional[str] = None
     lookml_dashboard_id: Optional[str] = None
     lookml_link_id: Optional[str] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     custom_title: Optional[str] = None
 
     def __init__(
@@ -1280,11 +1308,19 @@ class ContentValidationAlert(model.Model):
         id: Optional[str] = None,
         lookml_dashboard_id: Optional[str] = None,
         lookml_link_id: Optional[str] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         custom_title: Optional[str] = None
     ):
         self.id = id
         self.lookml_dashboard_id = lookml_dashboard_id
         self.lookml_link_id = lookml_link_id
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.custom_title = custom_title
 
 
@@ -1340,6 +1376,7 @@ class ContentValidationDashboardElement(model.Model):
         title_text: Text tile title
         type: Type
         rich_content_json: JSON with all the properties required for rich editor and buttons elements
+        extension_id: Extension ID
     """
 
     body_text: Optional[str] = None
@@ -1357,6 +1394,7 @@ class ContentValidationDashboardElement(model.Model):
     title_text: Optional[str] = None
     type: Optional[str] = None
     rich_content_json: Optional[str] = None
+    extension_id: Optional[str] = None
 
     def __init__(
         self,
@@ -1375,7 +1413,8 @@ class ContentValidationDashboardElement(model.Model):
         title_hidden: Optional[bool] = None,
         title_text: Optional[str] = None,
         type: Optional[str] = None,
-        rich_content_json: Optional[str] = None
+        rich_content_json: Optional[str] = None,
+        extension_id: Optional[str] = None
     ):
         self.body_text = body_text
         self.dashboard_id = dashboard_id
@@ -1392,6 +1431,7 @@ class ContentValidationDashboardElement(model.Model):
         self.title_text = title_text
         self.type = type
         self.rich_content_json = rich_content_json
+        self.extension_id = extension_id
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -2098,9 +2138,11 @@ class CredentialsEmail(model.Model):
         created_at: Timestamp for the creation of this credential
         email: EMail address used for user login
         forced_password_reset_at_next_login: Force the user to change their password upon their next login
+        user_id: Unique Id of the user
         is_disabled: Has this credential been disabled?
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
+        account_setup_url: Url with one-time use secret token that the user can use to setup account
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
@@ -2110,9 +2152,11 @@ class CredentialsEmail(model.Model):
     created_at: Optional[str] = None
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
+    user_id: Optional[str] = None
     is_disabled: Optional[bool] = None
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
+    account_setup_url: Optional[str] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
@@ -2124,9 +2168,11 @@ class CredentialsEmail(model.Model):
         created_at: Optional[str] = None,
         email: Optional[str] = None,
         forced_password_reset_at_next_login: Optional[bool] = None,
+        user_id: Optional[str] = None,
         is_disabled: Optional[bool] = None,
         logged_in_at: Optional[str] = None,
         password_reset_url: Optional[str] = None,
+        account_setup_url: Optional[str] = None,
         type: Optional[str] = None,
         url: Optional[str] = None,
         user_url: Optional[str] = None
@@ -2135,9 +2181,11 @@ class CredentialsEmail(model.Model):
         self.created_at = created_at
         self.email = email
         self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.user_id = user_id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
+        self.account_setup_url = account_setup_url
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -2151,9 +2199,11 @@ class CredentialsEmailSearch(model.Model):
         created_at: Timestamp for the creation of this credential
         email: EMail address used for user login
         forced_password_reset_at_next_login: Force the user to change their password upon their next login
+        user_id: Unique Id of the user
         is_disabled: Has this credential been disabled?
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
+        account_setup_url: Url with one-time use secret token that the user can use to setup account
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
@@ -2163,9 +2213,11 @@ class CredentialsEmailSearch(model.Model):
     created_at: Optional[str] = None
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
+    user_id: Optional[str] = None
     is_disabled: Optional[bool] = None
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
+    account_setup_url: Optional[str] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
@@ -2177,9 +2229,11 @@ class CredentialsEmailSearch(model.Model):
         created_at: Optional[str] = None,
         email: Optional[str] = None,
         forced_password_reset_at_next_login: Optional[bool] = None,
+        user_id: Optional[str] = None,
         is_disabled: Optional[bool] = None,
         logged_in_at: Optional[str] = None,
         password_reset_url: Optional[str] = None,
+        account_setup_url: Optional[str] = None,
         type: Optional[str] = None,
         url: Optional[str] = None,
         user_url: Optional[str] = None
@@ -2188,9 +2242,11 @@ class CredentialsEmailSearch(model.Model):
         self.created_at = created_at
         self.email = email
         self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.user_id = user_id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
+        self.account_setup_url = account_setup_url
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -2593,7 +2649,7 @@ class Dashboard(model.Model):
         user_name: Name of User that created the dashboard.
         load_configuration: configuration option that governs how dashboard loading will happen.
         lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
         show_title: Show title
         folder_id: Id of folder
         text_tile_text_color: Color of text on text tiles
@@ -3992,51 +4048,95 @@ class DialectInfoOptions(model.Model):
     """
     Attributes:
         additional_params: Has additional params support
+        after_connect_statements: Has support for issuing statements after connecting to the database
+        analytical_view_dataset: Has analytical view support
         auth: Has auth support
-        host: Has host support
+        cost_estimate: Has configurable cost estimation
+        disable_context_comment: Can disable query context comments
+        host: Host is required
+        instance_name: Instance name is required
+        max_billing_gigabytes: Has max billing gigabytes support
         oauth_credentials: Has support for a service account
+        pdts_for_oauth: Has OAuth for PDT support
+        port: Port can be specified
         project_name: Has project name support
-        schema: Has schema support
-        ssl: Has SSL support
+        schema: Schema can be specified
+        service_account_credentials: Has support for a service account
+        ssl: Has TLS/SSL support
         timezone: Has timezone support
         tmp_table: Has tmp table support
+        tns: Has Oracle TNS support
+        username: Username can be specified
         username_required: Username is required
     """
 
     additional_params: Optional[bool] = None
+    after_connect_statements: Optional[bool] = None
+    analytical_view_dataset: Optional[bool] = None
     auth: Optional[bool] = None
+    cost_estimate: Optional[bool] = None
+    disable_context_comment: Optional[bool] = None
     host: Optional[bool] = None
+    instance_name: Optional[bool] = None
+    max_billing_gigabytes: Optional[bool] = None
     oauth_credentials: Optional[bool] = None
+    pdts_for_oauth: Optional[bool] = None
+    port: Optional[bool] = None
     project_name: Optional[bool] = None
     schema: Optional[bool] = None
+    service_account_credentials: Optional[bool] = None
     ssl: Optional[bool] = None
     timezone: Optional[bool] = None
     tmp_table: Optional[bool] = None
+    tns: Optional[bool] = None
+    username: Optional[bool] = None
     username_required: Optional[bool] = None
 
     def __init__(
         self,
         *,
         additional_params: Optional[bool] = None,
+        after_connect_statements: Optional[bool] = None,
+        analytical_view_dataset: Optional[bool] = None,
         auth: Optional[bool] = None,
+        cost_estimate: Optional[bool] = None,
+        disable_context_comment: Optional[bool] = None,
         host: Optional[bool] = None,
+        instance_name: Optional[bool] = None,
+        max_billing_gigabytes: Optional[bool] = None,
         oauth_credentials: Optional[bool] = None,
+        pdts_for_oauth: Optional[bool] = None,
+        port: Optional[bool] = None,
         project_name: Optional[bool] = None,
         schema: Optional[bool] = None,
+        service_account_credentials: Optional[bool] = None,
         ssl: Optional[bool] = None,
         timezone: Optional[bool] = None,
         tmp_table: Optional[bool] = None,
+        tns: Optional[bool] = None,
+        username: Optional[bool] = None,
         username_required: Optional[bool] = None
     ):
         self.additional_params = additional_params
+        self.after_connect_statements = after_connect_statements
+        self.analytical_view_dataset = analytical_view_dataset
         self.auth = auth
+        self.cost_estimate = cost_estimate
+        self.disable_context_comment = disable_context_comment
         self.host = host
+        self.instance_name = instance_name
+        self.max_billing_gigabytes = max_billing_gigabytes
         self.oauth_credentials = oauth_credentials
+        self.pdts_for_oauth = pdts_for_oauth
+        self.port = port
         self.project_name = project_name
         self.schema = schema
+        self.service_account_credentials = service_account_credentials
         self.ssl = ssl
         self.timezone = timezone
         self.tmp_table = tmp_table
+        self.tns = tns
+        self.username = username
         self.username_required = username_required
 
 
@@ -9731,6 +9831,10 @@ class ScheduledPlan(model.Model):
         scheduled_plan_destination: Scheduled plan destinations
         run_once: Whether the plan in question should only be run once (usually for testing)
         include_links: Whether links back to Looker should be included in this ScheduledPlan
+        custom_url_base: Custom url domain for the scheduled entity
+        custom_url_params: Custom url path and parameters for the scheduled entity
+        custom_url_label: Custom url label for the scheduled entity
+        show_custom_url: Whether to show custom link back instead of standard looker link
         pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
         pdf_landscape: Whether the PDF should be formatted for landscape orientation
         embed: Whether this schedule is in an embed context or not
@@ -9767,6 +9871,10 @@ class ScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -9807,6 +9915,10 @@ class ScheduledPlan(model.Model):
         ] = None,
         run_once: Optional[bool] = None,
         include_links: Optional[bool] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         pdf_paper_size: Optional[str] = None,
         pdf_landscape: Optional[bool] = None,
         embed: Optional[bool] = None,
@@ -9842,6 +9954,10 @@ class ScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -10216,6 +10332,9 @@ class Setting(model.Model):
         timezone: Change instance-wide default timezone
         allow_user_timezones: Toggle user-specific timezones on or off
         data_connector_default_enabled: Toggle default future connectors on or off
+        host_url: Change the base portion of your Looker instance URL setting
+        override_warnings: (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+        email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -10228,6 +10347,9 @@ class Setting(model.Model):
     timezone: Optional[str] = None
     allow_user_timezones: Optional[bool] = None
     data_connector_default_enabled: Optional[bool] = None
+    host_url: Optional[str] = None
+    override_warnings: Optional[bool] = None
+    email_domain_allowlist: Optional[Sequence[str]] = None
 
     def __init__(
         self,
@@ -10241,7 +10363,10 @@ class Setting(model.Model):
         onboarding_enabled: Optional[bool] = None,
         timezone: Optional[str] = None,
         allow_user_timezones: Optional[bool] = None,
-        data_connector_default_enabled: Optional[bool] = None
+        data_connector_default_enabled: Optional[bool] = None,
+        host_url: Optional[str] = None,
+        override_warnings: Optional[bool] = None,
+        email_domain_allowlist: Optional[Sequence[str]] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -10253,6 +10378,9 @@ class Setting(model.Model):
         self.timezone = timezone
         self.allow_user_timezones = allow_user_timezones
         self.data_connector_default_enabled = data_connector_default_enabled
+        self.host_url = host_url
+        self.override_warnings = override_warnings
+        self.email_domain_allowlist = email_domain_allowlist
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10291,6 +10419,7 @@ class SmtpSettings(model.Model):
         port: SMTP Server's port
         enable_starttls_auto: Is TLS encryption enabled?
         ssl_version: TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+        default_smtp: Whether to enable built-in Looker SMTP
     """
 
     address: Optional[str] = None
@@ -10300,6 +10429,7 @@ class SmtpSettings(model.Model):
     port: Optional[int] = None
     enable_starttls_auto: Optional[bool] = None
     ssl_version: Optional["SslVersion"] = None
+    default_smtp: Optional[bool] = None
 
     def __init__(
         self,
@@ -10310,7 +10440,8 @@ class SmtpSettings(model.Model):
         password: Optional[str] = None,
         port: Optional[int] = None,
         enable_starttls_auto: Optional[bool] = None,
-        ssl_version: Optional["SslVersion"] = None
+        ssl_version: Optional["SslVersion"] = None,
+        default_smtp: Optional[bool] = None
     ):
         self.address = address
         self.from_ = from_
@@ -10319,6 +10450,7 @@ class SmtpSettings(model.Model):
         self.port = port
         self.enable_starttls_auto = enable_starttls_auto
         self.ssl_version = ssl_version
+        self.default_smtp = default_smtp
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10834,6 +10966,7 @@ class ThemeSettings(model.Model):
         show_title: Toggle to show the title. Defaults to true.
         text_tile_text_color: Text color for text tiles
         tile_background_color: Background color for tiles
+        text_tile_background_color: Background color for text tiles
         tile_text_color: Text color for tiles
         title_color: Color for titles
         warn_button_color: Warning button color
@@ -10841,6 +10974,9 @@ class ThemeSettings(model.Model):
         tile_shadow: Toggles the tile shadow (not supported)
         show_last_updated_indicator: Toggle to show the dashboard last updated indicator. Defaults to true.
         show_reload_data_icon: Toggle to show reload data icon/button. Defaults to true.
+        show_dashboard_menu: Toggle to show the dashboard actions menu. Defaults to true.
+        show_filters_toggle: Toggle to show the filters icon/toggle. Defaults to true.
+        show_dashboard_header: Toggle to show the dashboard header. Defaults to true.
     """
 
     background_color: Optional[str] = None
@@ -10855,6 +10991,7 @@ class ThemeSettings(model.Model):
     show_title: Optional[bool] = None
     text_tile_text_color: Optional[str] = None
     tile_background_color: Optional[str] = None
+    text_tile_background_color: Optional[str] = None
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
     warn_button_color: Optional[str] = None
@@ -10862,6 +10999,9 @@ class ThemeSettings(model.Model):
     tile_shadow: Optional[bool] = None
     show_last_updated_indicator: Optional[bool] = None
     show_reload_data_icon: Optional[bool] = None
+    show_dashboard_menu: Optional[bool] = None
+    show_filters_toggle: Optional[bool] = None
+    show_dashboard_header: Optional[bool] = None
 
     def __init__(
         self,
@@ -10878,13 +11018,17 @@ class ThemeSettings(model.Model):
         show_title: Optional[bool] = None,
         text_tile_text_color: Optional[str] = None,
         tile_background_color: Optional[str] = None,
+        text_tile_background_color: Optional[str] = None,
         tile_text_color: Optional[str] = None,
         title_color: Optional[str] = None,
         warn_button_color: Optional[str] = None,
         tile_title_alignment: Optional[str] = None,
         tile_shadow: Optional[bool] = None,
         show_last_updated_indicator: Optional[bool] = None,
-        show_reload_data_icon: Optional[bool] = None
+        show_reload_data_icon: Optional[bool] = None,
+        show_dashboard_menu: Optional[bool] = None,
+        show_filters_toggle: Optional[bool] = None,
+        show_dashboard_header: Optional[bool] = None
     ):
         self.background_color = background_color
         self.base_font_size = base_font_size
@@ -10898,6 +11042,7 @@ class ThemeSettings(model.Model):
         self.show_title = show_title
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
+        self.text_tile_background_color = text_tile_background_color
         self.tile_text_color = tile_text_color
         self.title_color = title_color
         self.warn_button_color = warn_button_color
@@ -10905,6 +11050,9 @@ class ThemeSettings(model.Model):
         self.tile_shadow = tile_shadow
         self.show_last_updated_indicator = show_last_updated_indicator
         self.show_reload_data_icon = show_reload_data_icon
+        self.show_dashboard_menu = show_dashboard_menu
+        self.show_filters_toggle = show_filters_toggle
+        self.show_dashboard_header = show_dashboard_header
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -11632,13 +11780,17 @@ class WriteAlert(model.Model):
     followed, followable, id, investigative_content_title, owner_display_name
 
         Attributes:
-            comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+            comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
             cron: Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
             destinations: Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
             field:
             owner_id: User id of alert owner
             threshold: Value of the alert threshold
             applied_dashboard_filters: Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
+            custom_url_base: Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+            custom_url_params: Parameters and path for the custom url defined by the alert creator
+            custom_url_label: Label for the custom url defined by the alert creator
+            show_custom_url: Boolean to determine if the custom url should be used
             custom_title: An optional, user-defined title for the alert
             dashboard_element_id: ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
             description: An optional description for the alert. This supplements the title
@@ -11659,6 +11811,10 @@ class WriteAlert(model.Model):
     owner_id: str
     threshold: float
     applied_dashboard_filters: Optional[Sequence["AlertAppliedDashboardFilter"]] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     custom_title: Optional[str] = None
     dashboard_element_id: Optional[str] = None
     description: Optional[str] = None
@@ -11678,6 +11834,10 @@ class WriteAlert(model.Model):
         "owner_id": str,
         "threshold": float,
         "applied_dashboard_filters": Optional[Sequence["AlertAppliedDashboardFilter"]],
+        "custom_url_base": Optional[str],
+        "custom_url_params": Optional[str],
+        "custom_url_label": Optional[str],
+        "show_custom_url": Optional[bool],
         "custom_title": Optional[str],
         "dashboard_element_id": Optional[str],
         "description": Optional[str],
@@ -11703,6 +11863,10 @@ class WriteAlert(model.Model):
         applied_dashboard_filters: Optional[
             Sequence["AlertAppliedDashboardFilter"]
         ] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         custom_title: Optional[str] = None,
         dashboard_element_id: Optional[str] = None,
         description: Optional[str] = None,
@@ -11722,6 +11886,10 @@ class WriteAlert(model.Model):
         self.owner_id = owner_id
         self.threshold = threshold
         self.applied_dashboard_filters = applied_dashboard_filters
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.custom_title = custom_title
         self.dashboard_element_id = dashboard_element_id
         self.description = description
@@ -12125,7 +12293,7 @@ class WriteCreateQueryTask(model.Model):
 class WriteCredentialsEmail(model.Model):
     """
         Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 
         Attributes:
             email: EMail address used for user login
@@ -12170,7 +12338,7 @@ class WriteDashboard(model.Model):
             filters_location_top: Sets the default state of the filters location to top(true) or right(false)
             load_configuration: configuration option that governs how dashboard loading will happen.
             lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
             show_title: Show title
             folder_id: Id of folder
             text_tile_text_color: Color of text on text tiles
@@ -12285,7 +12453,7 @@ class WriteDashboardBase(model.Model):
 class WriteDashboardElement(model.Model):
     """
         Dynamic writeable type for DashboardElement removes:
-    can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
+    can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 
         Attributes:
             body_text: Text tile body text
@@ -12310,6 +12478,7 @@ class WriteDashboardElement(model.Model):
             title_text: Text tile title
             type: Type
             rich_content_json: JSON with all the properties required for rich editor and buttons elements
+            extension_id: Extension ID
     """
 
     body_text: Optional[str] = None
@@ -12331,6 +12500,7 @@ class WriteDashboardElement(model.Model):
     title_text: Optional[str] = None
     type: Optional[str] = None
     rich_content_json: Optional[str] = None
+    extension_id: Optional[str] = None
 
     def __init__(
         self,
@@ -12355,7 +12525,8 @@ class WriteDashboardElement(model.Model):
         title_hidden: Optional[bool] = None,
         title_text: Optional[str] = None,
         type: Optional[str] = None,
-        rich_content_json: Optional[str] = None
+        rich_content_json: Optional[str] = None,
+        extension_id: Optional[str] = None
     ):
         self.body_text = body_text
         self.dashboard_id = dashboard_id
@@ -12376,6 +12547,7 @@ class WriteDashboardElement(model.Model):
         self.title_text = title_text
         self.type = type
         self.rich_content_json = rich_content_json
+        self.extension_id = extension_id
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14010,6 +14182,10 @@ class WriteScheduledPlan(model.Model):
             scheduled_plan_destination: Scheduled plan destinations
             run_once: Whether the plan in question should only be run once (usually for testing)
             include_links: Whether links back to Looker should be included in this ScheduledPlan
+            custom_url_base: Custom url domain for the scheduled entity
+            custom_url_params: Custom url path and parameters for the scheduled entity
+            custom_url_label: Custom url label for the scheduled entity
+            show_custom_url: Whether to show custom link back instead of standard looker link
             pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
             pdf_landscape: Whether the PDF should be formatted for landscape orientation
             embed: Whether this schedule is in an embed context or not
@@ -14038,6 +14214,10 @@ class WriteScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -14070,6 +14250,10 @@ class WriteScheduledPlan(model.Model):
         ] = None,
         run_once: Optional[bool] = None,
         include_links: Optional[bool] = None,
+        custom_url_base: Optional[str] = None,
+        custom_url_params: Optional[str] = None,
+        custom_url_label: Optional[str] = None,
+        show_custom_url: Optional[bool] = None,
         pdf_paper_size: Optional[str] = None,
         pdf_landscape: Optional[bool] = None,
         embed: Optional[bool] = None,
@@ -14097,6 +14281,10 @@ class WriteScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -14158,6 +14346,9 @@ class WriteSetting(model.Model):
             timezone: Change instance-wide default timezone
             allow_user_timezones: Toggle user-specific timezones on or off
             data_connector_default_enabled: Toggle default future connectors on or off
+            host_url: Change the base portion of your Looker instance URL setting
+            override_warnings: (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+            email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -14170,6 +14361,9 @@ class WriteSetting(model.Model):
     timezone: Optional[str] = None
     allow_user_timezones: Optional[bool] = None
     data_connector_default_enabled: Optional[bool] = None
+    host_url: Optional[str] = None
+    override_warnings: Optional[bool] = None
+    email_domain_allowlist: Optional[Sequence[str]] = None
 
     def __init__(
         self,
@@ -14183,7 +14377,10 @@ class WriteSetting(model.Model):
         onboarding_enabled: Optional[bool] = None,
         timezone: Optional[str] = None,
         allow_user_timezones: Optional[bool] = None,
-        data_connector_default_enabled: Optional[bool] = None
+        data_connector_default_enabled: Optional[bool] = None,
+        host_url: Optional[str] = None,
+        override_warnings: Optional[bool] = None,
+        email_domain_allowlist: Optional[Sequence[str]] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -14195,6 +14392,9 @@ class WriteSetting(model.Model):
         self.timezone = timezone
         self.allow_user_timezones = allow_user_timezones
         self.data_connector_default_enabled = data_connector_default_enabled
+        self.host_url = host_url
+        self.override_warnings = override_warnings
+        self.email_domain_allowlist = email_domain_allowlist
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14233,15 +14433,17 @@ class WriteSshServer(model.Model):
 class WriteSshTunnel(model.Model):
     """
         Dynamic writeable type for SshTunnel removes:
-    tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
+    tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, status
 
         Attributes:
             ssh_server_id: SSH Server ID
+            local_host_port: Localhost Port used by the Looker instance to connect to the remote DB
             database_host: Hostname or IP Address of the Database Server
             database_port: Port that the Database Server is listening on
     """
 
     ssh_server_id: Optional[str] = None
+    local_host_port: Optional[int] = None
     database_host: Optional[str] = None
     database_port: Optional[int] = None
 
@@ -14249,10 +14451,12 @@ class WriteSshTunnel(model.Model):
         self,
         *,
         ssh_server_id: Optional[str] = None,
+        local_host_port: Optional[int] = None,
         database_host: Optional[str] = None,
         database_port: Optional[int] = None
     ):
         self.ssh_server_id = ssh_server_id
+        self.local_host_port = local_host_port
         self.database_host = database_host
         self.database_port = database_port
 
@@ -14297,7 +14501,7 @@ class WriteUser(model.Model):
 
         Attributes:
             credentials_email: Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
             first_name: First name
             home_folder_id: ID string for user's home folder
             is_disabled: Account has been disabled

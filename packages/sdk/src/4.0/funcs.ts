@@ -643,7 +643,7 @@ export const read_alert_notification = async (
 /**
  * ### Present client credentials to obtain an authorization token
  *
- * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
+ * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
  * The client credentials required for this login must be obtained by creating an API3 key on a user account
  * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
  *
@@ -1137,7 +1137,7 @@ export const create_sso_embed_url = async (
  * This embed URL can then be used to instantiate a Looker embed session in a
  * "Powered by Looker" (PBL) web application.
  *
- * This is similar to Private Embedding (https://docs.looker.com/r/admin/embed/private-embed). Instead of
+ * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
  * of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
  * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
  * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
@@ -1301,7 +1301,7 @@ export const generate_tokens_for_cookieless_session = async (
  *
  * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
  *
- * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+ * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
  *
  * GET /ldap_config -> ILDAPConfig
  *
@@ -1327,7 +1327,7 @@ export const ldap_config = async (
  *
  * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
  *
- * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+ * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
  *
  * PATCH /ldap_config -> ILDAPConfig
  *
@@ -3604,6 +3604,8 @@ export const mobile_settings = async (
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
+ *  - host_url
+ *  - email_domain_allowlist
  *
  * GET /setting -> ISetting
  *
@@ -3639,6 +3641,8 @@ export const get_setting = async (
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
+ *  - host_url
+ *  - email_domain_allowlist
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -10768,7 +10772,7 @@ export const scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -10908,7 +10912,7 @@ export const all_scheduled_plans = async (
  *
  * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
  * queries are run in the context of each recipient, so different recipients may see different
- * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
+ * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://cloud.google.com/looker/docs/r/admin/run-as-recipient).
  *
  * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
  * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -10916,7 +10920,7 @@ export const all_scheduled_plans = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -10975,7 +10979,7 @@ export const create_scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11154,7 +11158,7 @@ export const scheduled_plans_for_lookml_dashboard = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11311,7 +11315,7 @@ export const all_themes = async (
  *
  * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
  *
- * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
+ * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
  *
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
  *

@@ -236,6 +236,14 @@ public class ContentValidationAlert : SdkModel
   public string? lookml_dashboard_id { get; set; } = null;
   /// <summary>ID of the LookML dashboard element associated with the alert</summary>
   public string? lookml_link_id { get; set; } = null;
+  /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
+  public string? custom_url_base { get; set; } = null;
+  /// <summary>Parameters and path for the custom url defined by the alert creator</summary>
+  public string? custom_url_params { get; set; } = null;
+  /// <summary>Label for the custom url defined by the alert creator</summary>
+  public string? custom_url_label { get; set; } = null;
+  /// <summary>Boolean to determine if the custom url should be used</summary>
+  public bool? show_custom_url { get; set; } = null;
   /// <summary>An optional, user-defined title for the alert</summary>
   public string? custom_title { get; set; } = null;
 }
@@ -541,12 +549,16 @@ public class CredentialsEmail : SdkModel
   public string? email { get; set; } = null;
   /// <summary>Force the user to change their password upon their next login</summary>
   public bool? forced_password_reset_at_next_login { get; set; } = null;
+  /// <summary>Unique Id of the user (read-only)</summary>
+  public string? user_id { get; set; } = null;
   /// <summary>Has this credential been disabled? (read-only)</summary>
   public bool? is_disabled { get; set; } = null;
   /// <summary>Timestamp for most recent login using credential (read-only)</summary>
   public string? logged_in_at { get; set; } = null;
   /// <summary>Url with one-time use secret token that the user can use to reset password (read-only)</summary>
   public string? password_reset_url { get; set; } = null;
+  /// <summary>Url with one-time use secret token that the user can use to setup account (read-only)</summary>
+  public string? account_setup_url { get; set; } = null;
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -793,7 +805,7 @@ public class Dashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -1341,22 +1353,44 @@ public class DialectInfoOptions : SdkModel
 {
   /// <summary>Has additional params support (read-only)</summary>
   public bool? additional_params { get; set; } = null;
+  /// <summary>Has support for issuing statements after connecting to the database (read-only)</summary>
+  public bool? after_connect_statements { get; set; } = null;
+  /// <summary>Has analytical view support (read-only)</summary>
+  public bool? analytical_view_dataset { get; set; } = null;
   /// <summary>Has auth support (read-only)</summary>
   public bool? auth { get; set; } = null;
-  /// <summary>Has host support (read-only)</summary>
+  /// <summary>Has configurable cost estimation (read-only)</summary>
+  public bool? cost_estimate { get; set; } = null;
+  /// <summary>Can disable query context comments (read-only)</summary>
+  public bool? disable_context_comment { get; set; } = null;
+  /// <summary>Host is required (read-only)</summary>
   public bool? host { get; set; } = null;
+  /// <summary>Instance name is required (read-only)</summary>
+  public bool? instance_name { get; set; } = null;
+  /// <summary>Has max billing gigabytes support (read-only)</summary>
+  public bool? max_billing_gigabytes { get; set; } = null;
   /// <summary>Has support for a service account (read-only)</summary>
   public bool? oauth_credentials { get; set; } = null;
+  /// <summary>Has OAuth for PDT support (read-only)</summary>
+  public bool? pdts_for_oauth { get; set; } = null;
+  /// <summary>Port can be specified (read-only)</summary>
+  public bool? port { get; set; } = null;
   /// <summary>Has project name support (read-only)</summary>
   public bool? project_name { get; set; } = null;
-  /// <summary>Has schema support (read-only)</summary>
+  /// <summary>Schema can be specified (read-only)</summary>
   public bool? schema { get; set; } = null;
-  /// <summary>Has SSL support (read-only)</summary>
+  /// <summary>Has support for a service account (read-only)</summary>
+  public bool? service_account_credentials { get; set; } = null;
+  /// <summary>Has TLS/SSL support (read-only)</summary>
   public bool? ssl { get; set; } = null;
   /// <summary>Has timezone support (read-only)</summary>
   public bool? timezone { get; set; } = null;
   /// <summary>Has tmp table support (read-only)</summary>
   public bool? tmp_table { get; set; } = null;
+  /// <summary>Has Oracle TNS support (read-only)</summary>
+  public bool? tns { get; set; } = null;
+  /// <summary>Username can be specified (read-only)</summary>
+  public bool? username { get; set; } = null;
   /// <summary>Username is required (read-only)</summary>
   public bool? username_required { get; set; } = null;
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -3695,6 +3729,14 @@ public class ScheduledPlan : SdkModel
   public bool? run_once { get; set; } = null;
   /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
+  /// <summary>Custom url domain for the scheduled entity</summary>
+  public string? custom_url_base { get; set; } = null;
+  /// <summary>Custom url path and parameters for the scheduled entity</summary>
+  public string? custom_url_params { get; set; } = null;
+  /// <summary>Custom url label for the scheduled entity</summary>
+  public string? custom_url_label { get; set; } = null;
+  /// <summary>Whether to show custom link back instead of standard looker link</summary>
+  public bool? show_custom_url { get; set; } = null;
   /// <summary>The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".</summary>
   public string? pdf_paper_size { get; set; } = null;
   /// <summary>Whether the PDF should be formatted for landscape orientation</summary>
@@ -3817,6 +3859,8 @@ public class SmtpSettings : SdkModel
   /// <summary>TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public SslVersion? ssl_version { get; set; }
+  /// <summary>Whether to enable built-in Looker SMTP</summary>
+  public bool? default_smtp { get; set; } = null;
 }
 
 public class Snippet : SdkModel
@@ -4074,6 +4118,8 @@ public class ThemeSettings : SdkModel
   public string? text_tile_text_color { get; set; } = null;
   /// <summary>Background color for tiles</summary>
   public string? tile_background_color { get; set; } = null;
+  /// <summary>Background color for text tiles</summary>
+  public string? text_tile_background_color { get; set; } = null;
   /// <summary>Text color for tiles</summary>
   public string? tile_text_color { get; set; } = null;
   /// <summary>Color for titles</summary>
@@ -4088,6 +4134,12 @@ public class ThemeSettings : SdkModel
   public bool? show_last_updated_indicator { get; set; } = null;
   /// <summary>Toggle to show reload data icon/button. Defaults to true.</summary>
   public bool? show_reload_data_icon { get; set; } = null;
+  /// <summary>Toggle to show the dashboard actions menu. Defaults to true.</summary>
+  public bool? show_dashboard_menu { get; set; } = null;
+  /// <summary>Toggle to show the filters icon/toggle. Defaults to true.</summary>
+  public bool? show_filters_toggle { get; set; } = null;
+  /// <summary>Toggle to show the dashboard header. Defaults to true.</summary>
+  public bool? show_dashboard_header { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -4541,7 +4593,7 @@ public class WriteCreateQueryTask : SdkModel
 }
 
 /// Dynamic writeable type for CredentialsEmail removes:
-/// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+/// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 public class WriteCredentialsEmail : SdkModel
 {
   /// <summary>EMail address used for user login</summary>
@@ -4610,7 +4662,7 @@ public class WriteDashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -5464,6 +5516,14 @@ public class WriteScheduledPlan : SdkModel
   public bool? run_once { get; set; } = null;
   /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
+  /// <summary>Custom url domain for the scheduled entity</summary>
+  public string? custom_url_base { get; set; } = null;
+  /// <summary>Custom url path and parameters for the scheduled entity</summary>
+  public string? custom_url_params { get; set; } = null;
+  /// <summary>Custom url label for the scheduled entity</summary>
+  public string? custom_url_label { get; set; } = null;
+  /// <summary>Whether to show custom link back instead of standard looker link</summary>
+  public bool? show_custom_url { get; set; } = null;
   /// <summary>The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".</summary>
   public string? pdf_paper_size { get; set; } = null;
   /// <summary>Whether the PDF should be formatted for landscape orientation</summary>
@@ -5523,7 +5583,7 @@ public class WriteUser : SdkModel
 {
   /// <summary>
   /// Dynamic writeable type for CredentialsEmail removes:
-  /// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+  /// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
   /// </summary>
   public WriteCredentialsEmail? credentials_email { get; set; }
   /// <summary>First name</summary>

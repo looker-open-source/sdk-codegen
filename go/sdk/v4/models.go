@@ -47,8 +47,12 @@ type AccessToken struct {
 
 type Alert struct {
 	AppliedDashboardFilters   *[]AlertAppliedDashboardFilter `json:"applied_dashboard_filters,omitempty"` // Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
-	ComparisonType            ComparisonType                 `json:"comparison_type"`                     // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+	ComparisonType            ComparisonType                 `json:"comparison_type"`                     // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
 	Cron                      string                         `json:"cron"`                                // Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+	CustomUrlBase             *string                        `json:"custom_url_base,omitempty"`           // Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+	CustomUrlParams           *string                        `json:"custom_url_params,omitempty"`         // Parameters and path for the custom url defined by the alert creator
+	CustomUrlLabel            *string                        `json:"custom_url_label,omitempty"`          // Label for the custom url defined by the alert creator
+	ShowCustomUrl             *bool                          `json:"show_custom_url,omitempty"`           // Boolean to determine if the custom url should be used
 	CustomTitle               *string                        `json:"custom_title,omitempty"`              // An optional, user-defined title for the alert
 	DashboardElementId        *string                        `json:"dashboard_element_id,omitempty"`      // ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
 	Description               *string                        `json:"description,omitempty"`               // An optional description for the alert. This supplements the title
@@ -74,7 +78,7 @@ type Alert struct {
 type AlertAppliedDashboardFilter struct {
 	FilterTitle       string  `json:"filter_title"`                 // Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
 	FieldName         string  `json:"field_name"`                   // Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
-	FilterValue       string  `json:"filter_value"`                 // Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+	FilterValue       string  `json:"filter_value"`                 // Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
 	FilterDescription *string `json:"filter_description,omitempty"` // Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA`
 }
 
@@ -92,14 +96,14 @@ type AlertDestination struct {
 
 type AlertField struct {
 	Title  string              `json:"title"`            // Field's title. Usually auto-generated to reflect field name and its filters
-	Name   string              `json:"name"`             // Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+	Name   string              `json:"name"`             // Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
 	Filter *[]AlertFieldFilter `json:"filter,omitempty"` // (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
 }
 
 type AlertFieldFilter struct {
 	FieldName   string      `json:"field_name"`             // Field Name. Has format `<view>.<field>`
-	FieldValue  interface{} `json:"field_value"`            // Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
-	FilterValue *string     `json:"filter_value,omitempty"` // Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+	FieldValue  interface{} `json:"field_value"`            // Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+	FilterValue *string     `json:"filter_value,omitempty"` // Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
 }
 
 type AlertNotifications struct {
@@ -346,6 +350,10 @@ type ContentValidationAlert struct {
 	Id                *string `json:"id,omitempty"`                  // ID of the alert
 	LookmlDashboardId *string `json:"lookml_dashboard_id,omitempty"` // ID of the LookML dashboard associated with the alert
 	LookmlLinkId      *string `json:"lookml_link_id,omitempty"`      // ID of the LookML dashboard element associated with the alert
+	CustomUrlBase     *string `json:"custom_url_base,omitempty"`     // Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+	CustomUrlParams   *string `json:"custom_url_params,omitempty"`   // Parameters and path for the custom url defined by the alert creator
+	CustomUrlLabel    *string `json:"custom_url_label,omitempty"`    // Label for the custom url defined by the alert creator
+	ShowCustomUrl     *bool   `json:"show_custom_url,omitempty"`     // Boolean to determine if the custom url should be used
 	CustomTitle       *string `json:"custom_title,omitempty"`        // An optional, user-defined title for the alert
 }
 
@@ -373,6 +381,7 @@ type ContentValidationDashboardElement struct {
 	TitleText       *string `json:"title_text,omitempty"`        // Text tile title
 	Type            *string `json:"type,omitempty"`              // Type
 	RichContentJson *string `json:"rich_content_json,omitempty"` // JSON with all the properties required for rich editor and buttons elements
+	ExtensionId     *string `json:"extension_id,omitempty"`      // Extension ID
 }
 
 type ContentValidationDashboardFilter struct {
@@ -553,9 +562,11 @@ type CredentialsEmail struct {
 	CreatedAt                      *string          `json:"created_at,omitempty"`                          // Timestamp for the creation of this credential
 	Email                          *string          `json:"email,omitempty"`                               // EMail address used for user login
 	ForcedPasswordResetAtNextLogin *bool            `json:"forced_password_reset_at_next_login,omitempty"` // Force the user to change their password upon their next login
+	UserId                         *string          `json:"user_id,omitempty"`                             // Unique Id of the user
 	IsDisabled                     *bool            `json:"is_disabled,omitempty"`                         // Has this credential been disabled?
 	LoggedInAt                     *string          `json:"logged_in_at,omitempty"`                        // Timestamp for most recent login using credential
 	PasswordResetUrl               *string          `json:"password_reset_url,omitempty"`                  // Url with one-time use secret token that the user can use to reset password
+	AccountSetupUrl                *string          `json:"account_setup_url,omitempty"`                   // Url with one-time use secret token that the user can use to setup account
 	Type                           *string          `json:"type,omitempty"`                                // Short name for the type of this kind of credential
 	Url                            *string          `json:"url,omitempty"`                                 // Link to get this item
 	UserUrl                        *string          `json:"user_url,omitempty"`                            // Link to get this user
@@ -566,9 +577,11 @@ type CredentialsEmailSearch struct {
 	CreatedAt                      *string          `json:"created_at,omitempty"`                          // Timestamp for the creation of this credential
 	Email                          *string          `json:"email,omitempty"`                               // EMail address used for user login
 	ForcedPasswordResetAtNextLogin *bool            `json:"forced_password_reset_at_next_login,omitempty"` // Force the user to change their password upon their next login
+	UserId                         *string          `json:"user_id,omitempty"`                             // Unique Id of the user
 	IsDisabled                     *bool            `json:"is_disabled,omitempty"`                         // Has this credential been disabled?
 	LoggedInAt                     *string          `json:"logged_in_at,omitempty"`                        // Timestamp for most recent login using credential
 	PasswordResetUrl               *string          `json:"password_reset_url,omitempty"`                  // Url with one-time use secret token that the user can use to reset password
+	AccountSetupUrl                *string          `json:"account_setup_url,omitempty"`                   // Url with one-time use secret token that the user can use to setup account
 	Type                           *string          `json:"type,omitempty"`                                // Short name for the type of this kind of credential
 	Url                            *string          `json:"url,omitempty"`                                 // Link to get this item
 	UserUrl                        *string          `json:"user_url,omitempty"`                            // Link to get this user
@@ -701,7 +714,7 @@ type Dashboard struct {
 	UserName                            *string              `json:"user_name,omitempty"`                                // Name of User that created the dashboard.
 	LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                       // configuration option that governs how dashboard loading will happen.
 	LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                           // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-	ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                         // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+	ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                         // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
 	ShowTitle                           *bool                `json:"show_title,omitempty"`                               // Show title
 	FolderId                            *string              `json:"folder_id,omitempty"`                                // Id of folder
 	TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                     // Color of text on text tiles
@@ -1022,16 +1035,27 @@ type DialectInfo struct {
 }
 
 type DialectInfoOptions struct {
-	AdditionalParams *bool `json:"additional_params,omitempty"` // Has additional params support
-	Auth             *bool `json:"auth,omitempty"`              // Has auth support
-	Host             *bool `json:"host,omitempty"`              // Has host support
-	OauthCredentials *bool `json:"oauth_credentials,omitempty"` // Has support for a service account
-	ProjectName      *bool `json:"project_name,omitempty"`      // Has project name support
-	Schema           *bool `json:"schema,omitempty"`            // Has schema support
-	Ssl              *bool `json:"ssl,omitempty"`               // Has SSL support
-	Timezone         *bool `json:"timezone,omitempty"`          // Has timezone support
-	TmpTable         *bool `json:"tmp_table,omitempty"`         // Has tmp table support
-	UsernameRequired *bool `json:"username_required,omitempty"` // Username is required
+	AdditionalParams          *bool `json:"additional_params,omitempty"`           // Has additional params support
+	AfterConnectStatements    *bool `json:"after_connect_statements,omitempty"`    // Has support for issuing statements after connecting to the database
+	AnalyticalViewDataset     *bool `json:"analytical_view_dataset,omitempty"`     // Has analytical view support
+	Auth                      *bool `json:"auth,omitempty"`                        // Has auth support
+	CostEstimate              *bool `json:"cost_estimate,omitempty"`               // Has configurable cost estimation
+	DisableContextComment     *bool `json:"disable_context_comment,omitempty"`     // Can disable query context comments
+	Host                      *bool `json:"host,omitempty"`                        // Host is required
+	InstanceName              *bool `json:"instance_name,omitempty"`               // Instance name is required
+	MaxBillingGigabytes       *bool `json:"max_billing_gigabytes,omitempty"`       // Has max billing gigabytes support
+	OauthCredentials          *bool `json:"oauth_credentials,omitempty"`           // Has support for a service account
+	PdtsForOauth              *bool `json:"pdts_for_oauth,omitempty"`              // Has OAuth for PDT support
+	Port                      *bool `json:"port,omitempty"`                        // Port can be specified
+	ProjectName               *bool `json:"project_name,omitempty"`                // Has project name support
+	Schema                    *bool `json:"schema,omitempty"`                      // Schema can be specified
+	ServiceAccountCredentials *bool `json:"service_account_credentials,omitempty"` // Has support for a service account
+	Ssl                       *bool `json:"ssl,omitempty"`                         // Has TLS/SSL support
+	Timezone                  *bool `json:"timezone,omitempty"`                    // Has timezone support
+	TmpTable                  *bool `json:"tmp_table,omitempty"`                   // Has tmp table support
+	Tns                       *bool `json:"tns,omitempty"`                         // Has Oracle TNS support
+	Username                  *bool `json:"username,omitempty"`                    // Username can be specified
+	UsernameRequired          *bool `json:"username_required,omitempty"`           // Username is required
 }
 
 type DigestEmails struct {
@@ -3197,6 +3221,10 @@ type ScheduledPlan struct {
 	ScheduledPlanDestination *[]ScheduledPlanDestination `json:"scheduled_plan_destination,omitempty"` // Scheduled plan destinations
 	RunOnce                  *bool                       `json:"run_once,omitempty"`                   // Whether the plan in question should only be run once (usually for testing)
 	IncludeLinks             *bool                       `json:"include_links,omitempty"`              // Whether links back to Looker should be included in this ScheduledPlan
+	CustomUrlBase            *string                     `json:"custom_url_base,omitempty"`            // Custom url domain for the scheduled entity
+	CustomUrlParams          *string                     `json:"custom_url_params,omitempty"`          // Custom url path and parameters for the scheduled entity
+	CustomUrlLabel           *string                     `json:"custom_url_label,omitempty"`           // Custom url label for the scheduled entity
+	ShowCustomUrl            *bool                       `json:"show_custom_url,omitempty"`            // Whether to show custom link back instead of standard looker link
 	PdfPaperSize             *string                     `json:"pdf_paper_size,omitempty"`             // The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
 	PdfLandscape             *bool                       `json:"pdf_landscape,omitempty"`              // Whether the PDF should be formatted for landscape orientation
 	Embed                    *bool                       `json:"embed,omitempty"`                      // Whether this schedule is in an embed context or not
@@ -3310,6 +3338,9 @@ type Setting struct {
 	Timezone                      *string                    `json:"timezone,omitempty"`                       // Change instance-wide default timezone
 	AllowUserTimezones            *bool                      `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
 	DataConnectorDefaultEnabled   *bool                      `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
+	HostUrl                       *string                    `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
+	OverrideWarnings              *bool                      `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+	EmailDomainAllowlist          *[]string                  `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
 }
 
 type SmtpNodeStatus struct {
@@ -3326,6 +3357,7 @@ type SmtpSettings struct {
 	Port               *int64      `json:"port,omitempty"`                 // SMTP Server's port
 	EnableStarttlsAuto *bool       `json:"enable_starttls_auto,omitempty"` // Is TLS encryption enabled?
 	SslVersion         *SslVersion `json:"ssl_version,omitempty"`          // TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+	DefaultSmtp        *bool       `json:"default_smtp,omitempty"`         // Whether to enable built-in Looker SMTP
 }
 
 type SmtpStatus struct {
@@ -3483,6 +3515,7 @@ type ThemeSettings struct {
 	ShowTitle                *bool   `json:"show_title,omitempty"`                  // Toggle to show the title. Defaults to true.
 	TextTileTextColor        *string `json:"text_tile_text_color,omitempty"`        // Text color for text tiles
 	TileBackgroundColor      *string `json:"tile_background_color,omitempty"`       // Background color for tiles
+	TextTileBackgroundColor  *string `json:"text_tile_background_color,omitempty"`  // Background color for text tiles
 	TileTextColor            *string `json:"tile_text_color,omitempty"`             // Text color for tiles
 	TitleColor               *string `json:"title_color,omitempty"`                 // Color for titles
 	WarnButtonColor          *string `json:"warn_button_color,omitempty"`           // Warning button color
@@ -3490,6 +3523,9 @@ type ThemeSettings struct {
 	TileShadow               *bool   `json:"tile_shadow,omitempty"`                 // Toggles the tile shadow (not supported)
 	ShowLastUpdatedIndicator *bool   `json:"show_last_updated_indicator,omitempty"` // Toggle to show the dashboard last updated indicator. Defaults to true.
 	ShowReloadDataIcon       *bool   `json:"show_reload_data_icon,omitempty"`       // Toggle to show reload data icon/button. Defaults to true.
+	ShowDashboardMenu        *bool   `json:"show_dashboard_menu,omitempty"`         // Toggle to show the dashboard actions menu. Defaults to true.
+	ShowFiltersToggle        *bool   `json:"show_filters_toggle,omitempty"`         // Toggle to show the filters icon/toggle. Defaults to true.
+	ShowDashboardHeader      *bool   `json:"show_dashboard_header,omitempty"`       // Toggle to show the dashboard header. Defaults to true.
 }
 
 type Timezone struct {
@@ -3686,8 +3722,12 @@ type Workspace struct {
 // followed, followable, id, investigative_content_title, owner_display_name
 type WriteAlert struct {
 	AppliedDashboardFilters  *[]AlertAppliedDashboardFilter `json:"applied_dashboard_filters,omitempty"` // Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
-	ComparisonType           ComparisonType                 `json:"comparison_type"`                     // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+	ComparisonType           ComparisonType                 `json:"comparison_type"`                     // This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
 	Cron                     string                         `json:"cron"`                                // Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+	CustomUrlBase            *string                        `json:"custom_url_base,omitempty"`           // Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+	CustomUrlParams          *string                        `json:"custom_url_params,omitempty"`         // Parameters and path for the custom url defined by the alert creator
+	CustomUrlLabel           *string                        `json:"custom_url_label,omitempty"`          // Label for the custom url defined by the alert creator
+	ShowCustomUrl            *bool                          `json:"show_custom_url,omitempty"`           // Boolean to determine if the custom url should be used
 	CustomTitle              *string                        `json:"custom_title,omitempty"`              // An optional, user-defined title for the alert
 	DashboardElementId       *string                        `json:"dashboard_element_id,omitempty"`      // ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
 	Description              *string                        `json:"description,omitempty"`               // An optional description for the alert. This supplements the title
@@ -3814,7 +3854,7 @@ type WriteCreateQueryTask struct {
 }
 
 // Dynamic writeable type for CredentialsEmail removes:
-// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 type WriteCredentialsEmail struct {
 	Email                          *string `json:"email,omitempty"`                               // EMail address used for user login
 	ForcedPasswordResetAtNextLogin *bool   `json:"forced_password_reset_at_next_login,omitempty"` // Force the user to change their password upon their next login
@@ -3841,7 +3881,7 @@ type WriteDashboard struct {
 	FiltersLocationTop                  *bool                `json:"filters_location_top,omitempty"`                     // Sets the default state of the filters location to top(true) or right(false)
 	LoadConfiguration                   *string              `json:"load_configuration,omitempty"`                       // configuration option that governs how dashboard loading will happen.
 	LookmlLinkId                        *string              `json:"lookml_link_id,omitempty"`                           // Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-	ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                         // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+	ShowFiltersBar                      *bool                `json:"show_filters_bar,omitempty"`                         // Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
 	ShowTitle                           *bool                `json:"show_title,omitempty"`                               // Show title
 	FolderId                            *string              `json:"folder_id,omitempty"`                                // Id of folder
 	TextTileTextColor                   *string              `json:"text_tile_text_color,omitempty"`                     // Color of text on text tiles
@@ -3859,7 +3899,7 @@ type WriteDashboardBase struct {
 }
 
 // Dynamic writeable type for DashboardElement removes:
-// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
+// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 type WriteDashboardElement struct {
 	BodyText    *string             `json:"body_text,omitempty"`    // Text tile body text
 	DashboardId *string             `json:"dashboard_id,omitempty"` // Id of Dashboard
@@ -3883,6 +3923,7 @@ type WriteDashboardElement struct {
 	TitleText       *string `json:"title_text,omitempty"`        // Text tile title
 	Type            *string `json:"type,omitempty"`              // Type
 	RichContentJson *string `json:"rich_content_json,omitempty"` // JSON with all the properties required for rich editor and buttons elements
+	ExtensionId     *string `json:"extension_id,omitempty"`      // Extension ID
 }
 
 // Dynamic writeable type for DashboardFilter removes:
@@ -4360,6 +4401,10 @@ type WriteScheduledPlan struct {
 	ScheduledPlanDestination *[]ScheduledPlanDestination `json:"scheduled_plan_destination,omitempty"` // Scheduled plan destinations
 	RunOnce                  *bool                       `json:"run_once,omitempty"`                   // Whether the plan in question should only be run once (usually for testing)
 	IncludeLinks             *bool                       `json:"include_links,omitempty"`              // Whether links back to Looker should be included in this ScheduledPlan
+	CustomUrlBase            *string                     `json:"custom_url_base,omitempty"`            // Custom url domain for the scheduled entity
+	CustomUrlParams          *string                     `json:"custom_url_params,omitempty"`          // Custom url path and parameters for the scheduled entity
+	CustomUrlLabel           *string                     `json:"custom_url_label,omitempty"`           // Custom url label for the scheduled entity
+	ShowCustomUrl            *bool                       `json:"show_custom_url,omitempty"`            // Whether to show custom link back instead of standard looker link
 	PdfPaperSize             *string                     `json:"pdf_paper_size,omitempty"`             // The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
 	PdfLandscape             *bool                       `json:"pdf_landscape,omitempty"`              // Whether the PDF should be formatted for landscape orientation
 	Embed                    *bool                       `json:"embed,omitempty"`                      // Whether this schedule is in an embed context or not
@@ -4391,6 +4436,9 @@ type WriteSetting struct {
 	Timezone                    *string             `json:"timezone,omitempty"`                       // Change instance-wide default timezone
 	AllowUserTimezones          *bool               `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
 	DataConnectorDefaultEnabled *bool               `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
+	HostUrl                     *string             `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
+	OverrideWarnings            *bool               `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+	EmailDomainAllowlist        *[]string           `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
 }
 
 // Dynamic writeable type for SshServer removes:
@@ -4403,11 +4451,12 @@ type WriteSshServer struct {
 }
 
 // Dynamic writeable type for SshTunnel removes:
-// tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
+// tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, status
 type WriteSshTunnel struct {
-	SshServerId  *string `json:"ssh_server_id,omitempty"` // SSH Server ID
-	DatabaseHost *string `json:"database_host,omitempty"` // Hostname or IP Address of the Database Server
-	DatabasePort *int64  `json:"database_port,omitempty"` // Port that the Database Server is listening on
+	SshServerId   *string `json:"ssh_server_id,omitempty"`   // SSH Server ID
+	LocalHostPort *int64  `json:"local_host_port,omitempty"` // Localhost Port used by the Looker instance to connect to the remote DB
+	DatabaseHost  *string `json:"database_host,omitempty"`   // Hostname or IP Address of the Database Server
+	DatabasePort  *int64  `json:"database_port,omitempty"`   // Port that the Database Server is listening on
 }
 
 // Dynamic writeable type for Theme removes:
@@ -4423,7 +4472,7 @@ type WriteTheme struct {
 // can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
 type WriteUser struct {
 	CredentialsEmail *WriteCredentialsEmail `json:"credentials_email,omitempty"` // Dynamic writeable type for CredentialsEmail removes:
-	// can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+	// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 	FirstName          *string                 `json:"first_name,omitempty"`           // First name
 	HomeFolderId       *string                 `json:"home_folder_id,omitempty"`       // ID string for user's home folder
 	IsDisabled         *bool                   `json:"is_disabled,omitempty"`          // Account has been disabled
