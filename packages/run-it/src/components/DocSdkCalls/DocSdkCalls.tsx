@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React, { useEffect, useState } from 'react'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { getCodeGenerator, trimInputs } from '@looker/sdk-codegen'
+import { getCodeGenerator } from '@looker/sdk-codegen'
 import { Heading } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
 
@@ -56,7 +56,6 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   inputs,
   sdkLanguage = 'All',
 }) => {
-  const trimmedInputs = trimInputs(inputs)
   const [heading, setHeading] = useState('')
 
   useEffect(() => {
@@ -72,11 +71,11 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
     if (sdkLanguage === 'All') {
       const generators = getGenerators(api)
       Object.entries(generators).forEach(([language, gen]) => {
-        calls[language] = gen.makeTheCall(method, trimmedInputs)
+        calls[language] = gen.makeTheCall(method, inputs)
       })
     } else {
       const gen = getCodeGenerator(sdkLanguage, api)
-      calls[sdkLanguage] = gen!.makeTheCall(method, trimmedInputs)
+      calls[sdkLanguage] = gen!.makeTheCall(method, inputs)
     }
   } catch {
     return (

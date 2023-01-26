@@ -67,9 +67,11 @@ export interface IVersionInfo {
 /**
  * Removes all empty input values
  * @param inputs current inputs
+ * @param keepBody true to send body as is. false trims body values (default)
+ * @param depth recursion depth
  * @returns inputs with all "empty" values removed so the key no longer exists
  */
-export const trimInputs = (inputs: any, depth = 0): any => {
+export const trimInputs = (inputs: any, keepBody = false, depth = 0): any => {
   function isEmpty(value: any, depth: number): boolean {
     if (Array.isArray(value)) return value.length === 0
     if (value === undefined) return true
@@ -90,18 +92,22 @@ export const trimInputs = (inputs: any, depth = 0): any => {
   if (Array.isArray(inputs)) {
     result = []
     Object.values(inputs).forEach((v: any) =>
-      result.push(trimInputs(v, depth + 1))
+      result.push(trimInputs(v, keepBody, depth + 1))
     )
   } else if (inputs instanceof Object) {
-    result = {}
-    Object.entries(inputs).forEach(([key, value]) => {
-      const trimmed = trimInputs(value, depth + 1)
-      if (!isEmpty(trimmed, depth + 1)) {
-        result[key] = trimmed
-      }
-    })
+    if (keepBody && depth > 0) {
+      result = inputs
+    } else {
+      result = {}
+      Object.entries(inputs).forEach(([key, value]) => {
+        const trimmed = trimInputs(value, keepBody, depth + 1)
+        if (!isEmpty(trimmed, depth + 1)) {
+          result[key] = trimmed
+        }
+      })
+    }
   } else {
-    // Scalar value
+    // Scalar or preserved "body" value
     result = inputs
   }
   return result

@@ -34,7 +34,7 @@ import type {
 } from './sdkModels'
 import { describeParam, EnumType, strBody } from './sdkModels'
 import type { IMappedType, CodeAssignment } from './codeGen'
-import { CodeGen, trimInputs } from './codeGen'
+import { CodeGen } from './codeGen'
 
 export class PythonGen extends CodeGen {
   codePath = './python/'
@@ -264,7 +264,6 @@ ${this.hooks.join('\n')}
   makeTheCall(method: IMethod, inputs: ArgValues): string {
     const origDelim = this.argDelimiter
     this.argDelimiter = `,\n${this.indentStr}`
-    inputs = trimInputs(inputs)
     const resp = `response = sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
     this.argDelimiter = origDelim

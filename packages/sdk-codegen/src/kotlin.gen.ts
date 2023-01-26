@@ -35,7 +35,7 @@ import type {
 } from './sdkModels'
 import { describeParam, EnumType, mayQuote } from './sdkModels'
 import type { IMappedType, CodeAssignment } from './codeGen'
-import { CodeGen, commentBlock, trimInputs } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'
@@ -242,7 +242,6 @@ import java.util.*
 
   // overridden from CodeGen
   makeTheCall(method: IMethod, inputs: ArgValues): string {
-    inputs = trimInputs(inputs)
     const typeName = method.returnType?.type
       ? this.typeMap(method.returnType.type).name
       : 'String'

@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import type { BaseSyntheticEvent, FC, Dispatch, ChangeEvent } from 'react'
 import React from 'react'
 import {
   Button,
@@ -33,6 +33,7 @@ import {
   Tooltip,
   Fieldset,
   MessageBar,
+  FieldCheckbox,
 } from '@looker/components'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { LoginForm } from '../LoginForm'
@@ -62,12 +63,16 @@ interface RequestFormProps {
   hasConfig: boolean
   /** Handle config button click */
   handleConfig: (e: BaseSyntheticEvent) => void
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
+  /** A set state callback which, if present, allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Validation message to display */
   validationMessage?: string
   /** Validation message setter */
   setValidationMessage?: Dispatch<string>
+  /** Toggle for processing body inputs */
+  keepBody?: boolean
+  /** Toggle to keep all body inputs */
+  onChangeKeepBody?: ChangeEvent<HTMLInputElement>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -88,8 +93,12 @@ export const RequestForm: FC<RequestFormProps> = ({
   setHasConfig,
   validationMessage,
   setValidationMessage,
+  keepBody,
+  onChangeKeepBody,
   isExtension = false,
 }) => {
+  const hasBody = inputs.some((i) => i.location === 'body')
+
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
   }
@@ -152,6 +161,18 @@ export const RequestForm: FC<RequestFormProps> = ({
             : createComplexItem(input, handleComplexChange, requestContent)
         )}
         {httpMethod !== 'GET' && showDataChangeWarning()}
+        {hasBody && !!onChangeKeepBody && (
+          <FormItem key="keepbodych" id="keep_body">
+            <FieldCheckbox
+              name="keepbody"
+              key="warning"
+              label="Send the body parameter as is."
+              detail="Don't trim empty values from the body before submitting an API request"
+              value={keepBody}
+              onChange={onChangeKeepBody}
+            />
+          </FormItem>
+        )}
         <FormItem id="buttonbar">
           <>
             {hasConfig ? (

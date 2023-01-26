@@ -80,7 +80,7 @@ describe('typescript generator', () => {
         three: true,
         four: false,
         five: '',
-        six: { a: true, b: 0, c: null, d: {} },
+        six: { a: true, b: 0, c: null, d: {}, e: '' },
       }
       const expected = {
         zero: [0, 1, 2, 3],
@@ -90,6 +90,22 @@ describe('typescript generator', () => {
         six: { a: true, b: 0 },
       }
       const actual = trimInputs(inputs)
+      expect(actual).toEqual(expected)
+    })
+
+    it('keeps empty body values', () => {
+      const inputs = {
+        one: '1',
+        two: 2,
+        four: '',
+        body: { a: true, b: 0, c: null, d: {}, e: '' },
+      }
+      const expected = {
+        one: '1',
+        two: 2,
+        body: { a: true, b: 0, c: null, d: {}, e: '' },
+      }
+      const actual = trimInputs(inputs, true)
       expect(actual).toEqual(expected)
     })
   })
