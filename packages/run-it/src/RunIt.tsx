@@ -149,12 +149,6 @@ export const RunIt: FC<RunItProps> = ({
   const [validationMessage, setValidationMessage] = useState<string>('')
   const tabs = useTabs()
 
-  const onChangeKeepBody = (event: ChangeEvent<HTMLInputElement>) => {
-    const val = event.currentTarget.value
-    const toggle = !!val
-    setKeepBody(toggle)
-  }
-
   const perf = new PerfTimings()
 
   useEffect(() => {
@@ -246,7 +240,7 @@ export const RunIt: FC<RunItProps> = ({
                 validationMessage={validationMessage}
                 setValidationMessage={setValidationMessage}
                 keepBody={keepBody}
-                onChangeKeepBody={onChangeKeepBody}
+                setKeepBody={setKeepBody}
               />
             </TabPanel>
             <TabPanel key="response">

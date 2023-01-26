@@ -34,6 +34,8 @@ import {
   Fieldset,
   MessageBar,
   FieldCheckbox,
+  ToggleSwitch,
+  Label,
 } from '@looker/components'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { LoginForm } from '../LoginForm'
@@ -72,7 +74,7 @@ interface RequestFormProps {
   /** Toggle for processing body inputs */
   keepBody?: boolean
   /** Toggle to keep all body inputs */
-  onChangeKeepBody?: ChangeEvent<HTMLInputElement>
+  setKeepBody?: Dispatch<boolean>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -94,7 +96,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   validationMessage,
   setValidationMessage,
   keepBody,
-  onChangeKeepBody,
+  setKeepBody,
   isExtension = false,
 }) => {
   const hasBody = inputs.some((i) => i.location === 'body')
@@ -161,16 +163,18 @@ export const RequestForm: FC<RequestFormProps> = ({
             : createComplexItem(input, handleComplexChange, requestContent)
         )}
         {httpMethod !== 'GET' && showDataChangeWarning()}
-        {hasBody && !!onChangeKeepBody && (
-          <FormItem key="keepbodych" id="keep_body">
-            <FieldCheckbox
-              name="keepbody"
-              key="warning"
-              label="Send the body parameter as is."
-              detail="Don't trim empty values from the body before submitting an API request"
-              value={keepBody}
-              onChange={onChangeKeepBody}
-            />
+        {hasBody && !!setKeepBody && (
+          <FormItem key="keepbody_fib" id="keepBody" label="Send body as-is">
+            <>
+              <ToggleSwitch
+                key="keepBody"
+                id="keepBody"
+                name="keepBody"
+                onChange={setKeepBody}
+                on={keepBody}
+              />
+              <Label>Send the body parameter as entered</Label>
+            </>
           </FormItem>
         )}
         <FormItem id="buttonbar">
