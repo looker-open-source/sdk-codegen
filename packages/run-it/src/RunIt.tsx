@@ -24,7 +24,12 @@
 
  */
 
-import type { BaseSyntheticEvent, ChangeEvent, FC } from 'react'
+import type {
+  BaseSyntheticEvent,
+  ChangeEvent,
+  FC,
+  FormEventHandler,
+} from 'react'
 import React, { useContext, useState, useEffect } from 'react'
 import {
   Box,
@@ -156,6 +161,10 @@ export const RunIt: FC<RunItProps> = ({
     setInitialized(true)
   }, [])
 
+  const toggleKeepBody = (_event: FormEventHandler<HTMLInputElement>) => {
+    setKeepBody((prev) => !prev)
+  }
+
   const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
   }
@@ -240,7 +249,7 @@ export const RunIt: FC<RunItProps> = ({
                 validationMessage={validationMessage}
                 setValidationMessage={setValidationMessage}
                 keepBody={keepBody}
-                setKeepBody={setKeepBody}
+                toggleKeepBody={toggleKeepBody}
               />
             </TabPanel>
             <TabPanel key="response">

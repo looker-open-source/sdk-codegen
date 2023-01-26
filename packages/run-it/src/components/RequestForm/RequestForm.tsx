@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, Dispatch, ChangeEvent } from 'react'
+import type { BaseSyntheticEvent, FC, Dispatch, FormEventHandler } from 'react'
 import React from 'react'
 import {
   Button,
@@ -33,7 +33,6 @@ import {
   Tooltip,
   Fieldset,
   MessageBar,
-  FieldCheckbox,
   ToggleSwitch,
   Label,
 } from '@looker/components'
@@ -74,7 +73,7 @@ interface RequestFormProps {
   /** Toggle for processing body inputs */
   keepBody?: boolean
   /** Toggle to keep all body inputs */
-  setKeepBody?: Dispatch<boolean>
+  toggleKeepBody?: FormEventHandler<HTMLInputElement>
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -96,7 +95,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   validationMessage,
   setValidationMessage,
   keepBody,
-  setKeepBody,
+  toggleKeepBody,
   isExtension = false,
 }) => {
   const hasBody = inputs.some((i) => i.location === 'body')
@@ -163,14 +162,14 @@ export const RequestForm: FC<RequestFormProps> = ({
             : createComplexItem(input, handleComplexChange, requestContent)
         )}
         {httpMethod !== 'GET' && showDataChangeWarning()}
-        {hasBody && !!setKeepBody && (
+        {hasBody && !!toggleKeepBody && (
           <FormItem key="keepbody_fib" id="keepBody" label="Send body as-is">
             <>
               <ToggleSwitch
                 key="keepBody"
                 id="keepBody"
                 name="keepBody"
-                onChange={setKeepBody}
+                onChange={toggleKeepBody}
                 on={keepBody}
               />
               <Label>Send the body parameter as entered</Label>
