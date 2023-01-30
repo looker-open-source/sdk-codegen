@@ -180,7 +180,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
                         align="center"
                         py="u3"
                         px={hasNavigation ? 'u5' : '0'}
-                        justifyContent={
+                        justifyItems={
                           hasNavigation ? 'space-between' : 'center'
                         }
                       >

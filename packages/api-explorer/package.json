@@ -52,6 +52,7 @@
     "@types/redux": "^3.6.0",
     "@types/redux-saga-tester": "^1.0.3",
     "@types/styled-components": "^5.1.7",
+    "@types/styled-system": "5.1.13",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",
     "expect-puppeteer": "^5.0.4",
