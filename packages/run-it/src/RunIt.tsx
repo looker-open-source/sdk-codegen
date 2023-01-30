@@ -24,12 +24,7 @@
 
  */
 
-import type {
-  BaseSyntheticEvent,
-  ChangeEvent,
-  FC,
-  FormEventHandler,
-} from 'react'
+import type { BaseSyntheticEvent, FC, FormEventHandler } from 'react'
 import React, { useContext, useState, useEffect } from 'react'
 import {
   Box,

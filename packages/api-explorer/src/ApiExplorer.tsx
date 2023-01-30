@@ -177,7 +177,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
                   {headless && (
                     <>
                       <Space
-                        alignItems="center"
+                        align="center"
                         py="u3"
                         px={hasNavigation ? 'u5' : '0'}
                         justifyContent={

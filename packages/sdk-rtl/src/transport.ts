@@ -560,6 +560,7 @@ export function isErrorLike<T extends unknown>(
   if (typeof error !== 'object') return false
   if (!error) return false
   if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false
-  if (typeof (error as { message: unknown }).message !== 'string') return false
+  if (typeof (error as unknown as { message: unknown }).message !== 'string')
+    return false
   return true
 }
