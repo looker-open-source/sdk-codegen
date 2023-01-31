@@ -73,7 +73,7 @@ interface RequestFormProps {
   /** Toggle for processing body inputs */
   keepBody?: boolean
   /** Toggle to keep all body inputs */
-  toggleKeepBody?: FormEventHandler<HTMLInputElement>
+  toggleKeepBody?: (_event: FormEventHandler<HTMLInputElement>) => void
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -169,7 +169,7 @@ export const RequestForm: FC<RequestFormProps> = ({
                 key="keepBody"
                 id="keepBody"
                 name="keepBody"
-                onChange={toggleKeepBody}
+                onChange={toggleKeepBody as unknown as FormEventHandler}
                 on={keepBody}
               />
               <Label>Send the body parameter as entered</Label>

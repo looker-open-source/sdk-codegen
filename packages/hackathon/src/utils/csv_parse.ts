@@ -24,11 +24,10 @@
 
  */
 
-import Papa from 'papaparse'
-
 // Wrap Papa.parse in promise for async use.
 // Assumes header row in csv
 export async function parseCsv<T>(_csvFile: File): Promise<Array<T>> {
+  // import Papa from 'papaparse'
   const stub: Array<T> = []
   return new Promise<Array<T>>((resolve, _reject) => resolve(stub))
   // TODO fix this lint error
