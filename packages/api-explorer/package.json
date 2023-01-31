@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "@looker/code-editor": "^0.1.27",
-    "@looker/components": "^4.1.1",
+    "@looker/components": "^4.1.3",
     "@looker/design-tokens": "^3.1.0",
     "@looker/extension-utils": "^0.1.19",
     "@looker/icons": "^1.5.21",

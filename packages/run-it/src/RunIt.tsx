@@ -154,7 +154,7 @@ export const RunIt: FC<RunItProps> = ({
   useEffect(() => {
     registerEnvAdaptor(adaptor)
     setInitialized(true)
-  }, [])
+  }, [adaptor])
 
   const toggleKeepBody = (_event: FormEventHandler<HTMLInputElement>) => {
     setKeepBody((prev) => !prev)
