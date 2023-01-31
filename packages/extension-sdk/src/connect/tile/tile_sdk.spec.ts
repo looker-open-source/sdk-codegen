@@ -223,7 +223,7 @@ describe('TileSDK', () => {
     ({ method }) => {
       const tileSdk = makeTileSdk(false)
       expect(() => tileSdk[method]()).toThrow(
-        'Mounting dashboards in extensions is not supported'
+        'Mounting extensions in dashboards is not supported'
       )
     }
   )

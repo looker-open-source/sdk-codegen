@@ -24,5 +24,5 @@
 
  */
 export const NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR = new Error(
-  'Mounting dashboards in extensions is not supported'
+  'Mounting extensions in dashboards is not supported'
 )
