@@ -38,7 +38,7 @@ type ExtractState<T> = T extends Slice<infer S, any> ? S : never
  * @param saga The saga to register on the nearest store.
  */
 export const createSliceHooks = <T extends Slice>(slice: T, saga?: Saga) => ({
-  useActions: (): CaseReducerActions<ExtractReducer<T>> => {
+  useActions: (): CaseReducerActions<ExtractReducer<T>, string> => {
     return useActions(slice)
   },
   useStoreState: () => {
