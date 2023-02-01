@@ -3,7 +3,7 @@
 
 cd "$(dirname "$0")"/.. || exit
 rm -rf ./**/node_modules
-rm ./**/yarn.lock
+rm yarn.lock
 yarn install
 yarn build
 yarn dedupe:dev

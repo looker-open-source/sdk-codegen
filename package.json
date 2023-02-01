@@ -33,7 +33,6 @@
     "view": "yarn api-explorer",
     "wipe": "rm -rf api spec",
     "build": "rm -Rf packages/*/lib && run-p -c build:*",
-    "build:apix": "yarn workspace @looker/api-explorer build",
     "build:cjs": "lerna exec --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments'",
     "build:es": "lerna exec --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments'",
     "build:ts": "lerna exec --stream --sort 'tsc -b tsconfig.build.json'",
