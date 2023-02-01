@@ -25,7 +25,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues?q=is%3Aopen+is%3Aissue+project%3Alooker-open-source%2Fsdk-codegen%2F7"
   },
   "scripts": {
-    "play": "webpack-dev-server --https --disable-host-check --config webpack.dev.config.js --entry ./playground/index.tsx",
+    "play": "webpack-dev-server --https --no-firewall --config webpack.dev.config.js --entry ./playground/index.tsx",
     "test": "jest",
     "watch": "yarn lerna exec --scope @looker/run-it --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
