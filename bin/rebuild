@@ -1,0 +1,7 @@
+#!/bin/sh
+# clear all web stack artifacts and rebuild
+
+rm -rf ./**/node_modules
+rm ./**/yarn.lock
+yarn install
+yarn build
