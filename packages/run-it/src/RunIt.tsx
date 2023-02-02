@@ -266,6 +266,7 @@ export const RunIt: FC<RunItProps> = ({
                 api={api}
                 method={method}
                 inputs={prepareInputs(inputs, requestContent)}
+                keepBody={keepBody}
               />
             </TabPanel>
             {isExtension ? (
