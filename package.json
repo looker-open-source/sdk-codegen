@@ -292,12 +292,13 @@
   ],
   "keywords": [],
   "resolutions": {
+    "@types/react": "^16.14.2",
+    "react": "^16.14.0",
     "set-value": "^2.0.1",
     "trim": ">= 0.0.3",
     "trim-newlines": ">= 3.0.1",
     "glob-parent": ">= 5.1.2",
     "ws": ">= 7.4.6",
-    "**/url-parse": ">= 1.5.7",
-    "**/react": "^16.14.0"
+    "**/url-parse": ">= 1.5.7"
   }
 }
