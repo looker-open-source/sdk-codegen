@@ -43,8 +43,10 @@ import {
   createComplexItem,
   showDataChangeWarning,
   updateNullableProp,
+  BODY_HINT,
 } from './formUtils'
 import { FormItem } from './FormItem'
+import { DarkSpan } from './../common'
 
 /** Properties required by RequestForm */
 interface RequestFormProps {
@@ -163,18 +165,23 @@ export const RequestForm: FC<RequestFormProps> = ({
         )}
         {httpMethod !== 'GET' && showDataChangeWarning()}
         {hasBody && !!toggleKeepBody && (
-          <FormItem key="keepbody_fib" id="keepBody" label="Send body as-is">
-            <>
-              <ToggleSwitch
-                key="keepBody"
-                id="keepBody"
-                name="keepBody"
-                onChange={toggleKeepBody as unknown as FormEventHandler}
-                on={keepBody}
-              />
-              <Label>Send the body parameter as entered</Label>
-            </>
-          </FormItem>
+          <>
+            <FormItem key="keepbody_fib" id="keepBody" label="Send body as-is">
+              <>
+                <ToggleSwitch
+                  key="keepBody"
+                  id="keepBody"
+                  name="keepBody"
+                  onChange={toggleKeepBody as unknown as FormEventHandler}
+                  on={keepBody}
+                />
+                <Label>Send the body parameter as entered</Label>
+              </>
+            </FormItem>
+            <FormItem key="body_hint" id="bodyHint">
+              <DarkSpan fontSize="small">{BODY_HINT}</DarkSpan>
+            </FormItem>
+          </>
         )}
         <FormItem id="buttonbar">
           <>

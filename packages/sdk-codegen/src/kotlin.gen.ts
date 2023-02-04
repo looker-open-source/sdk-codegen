@@ -221,7 +221,8 @@ import java.util.*
     const args: string[] = []
     let hasComplexArg = false
     if (Object.keys(inputs).length > 0) {
-      method.allParams.forEach((p) => {
+      const params = method.allParams
+      params.forEach((p) => {
         const v = this.argValue(this.indentStr, p, inputs)
         if (v !== '') {
           // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
@@ -562,7 +563,11 @@ ${props.join(this.propDelimiter)}
           return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }
         }
         case 'DelimArrayType':
-          return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+          return {
+            default: this.nullStr,
+            name: `DelimArray<${map.name}>`,
+            asVal: (_, v) => `DelimArray<${map.name}>(arrayOf(${v}))`,
+          }
         case 'EnumType':
           return {
             default: '',

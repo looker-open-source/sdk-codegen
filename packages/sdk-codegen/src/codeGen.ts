@@ -942,7 +942,8 @@ export abstract class CodeGen implements ICodeGen {
         args.push(this.assignType(this.indentStr, requestType, inputs))
         hasComplexArg = true
       } else {
-        method.allParams.forEach((p) => {
+        const params = method.allParams
+        params.forEach((p) => {
           const v = this.argValue(this.indentStr, p, inputs)
           if (v !== '') {
             const arg = this.useNamedArguments ? `${p.name}=${v}` : v
@@ -976,20 +977,24 @@ export abstract class CodeGen implements ICodeGen {
     const args: string[] = []
     // child properties are indented one level
     const bump = this.bumper(indent)
-    Object.values(type.properties).forEach((p) => {
+    const props = Object.values(type.properties)
+    props.forEach((p) => {
       const v = this.argValue(bump, p, inputs)
       if (v) args.push(this.argSet(p.name, this.argSetSep, v))
     })
-    // Nothing to assign?
-    if (args.length === 0) return ''
-    // Otherwise, indent and join arguments
+
     const open = this.useModelClassForTypes
       ? `${mt.name}${this.typeOpen}`
       : this.typeOpen
     const nl = `,\n${bump}`
+    let joined = `\n${bump}${args.join(nl)}\n${indent}`
+    if (joined.trim().length === 0) {
+      // trim the structure new lines if there are no arguments
+      joined = ''
+    }
     // need a bump after `open` to account for the first argument
     // not getting the proper bump from args.join()
-    return `${open}\n${bump}${args.join(nl)}\n${indent}${this.typeClose}`
+    return `${open}${joined}${this.typeClose}`
   }
 
   /**

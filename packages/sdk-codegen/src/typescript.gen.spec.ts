@@ -108,6 +108,127 @@ describe('typescript generator', () => {
       const actual = trimInputs(inputs, true)
       expect(actual).toEqual(expected)
     })
+
+    it('keeps empty body objects', () => {
+      const inputs = {
+        one: '1',
+        two: 2,
+        four: '',
+        body: {
+          description: '',
+          hidden: false,
+          query_timezone: '',
+          refresh_interval: '',
+          folder: {},
+          title: '',
+          slug: '',
+          preferred_viewer: '',
+          space: {},
+          alert_sync_with_dashboard_filter_enabled: false,
+          background_color: '',
+          crossfilter_enabled: false,
+          deleted: false,
+          filters_bar_collapsed: false,
+          load_configuration: '',
+          lookml_link_id: '',
+          show_filters_bar: false,
+          show_title: false,
+          space_id: '',
+          folder_id: '',
+          text_tile_text_color: '',
+          tile_background_color: '',
+          tile_text_color: '',
+          title_color: '',
+          appearance: {
+            page_side_margins: 0,
+            page_background_color: '',
+            tile_title_alignment: '',
+            tile_space_between: 0,
+            tile_background_color: '',
+            tile_shadow: false,
+            key_color: '',
+          },
+        },
+      }
+      const expected = {
+        one: '1',
+        two: 2,
+        body: {
+          description: '',
+          hidden: false,
+          query_timezone: '',
+          refresh_interval: '',
+          folder: {},
+          title: '',
+          slug: '',
+          preferred_viewer: '',
+          space: {},
+          alert_sync_with_dashboard_filter_enabled: false,
+          background_color: '',
+          crossfilter_enabled: false,
+          deleted: false,
+          filters_bar_collapsed: false,
+          load_configuration: '',
+          lookml_link_id: '',
+          show_filters_bar: false,
+          show_title: false,
+          space_id: '',
+          folder_id: '',
+          text_tile_text_color: '',
+          tile_background_color: '',
+          tile_text_color: '',
+          title_color: '',
+          appearance: {
+            page_side_margins: 0,
+            page_background_color: '',
+            tile_title_alignment: '',
+            tile_space_between: 0,
+            tile_background_color: '',
+            tile_shadow: false,
+            key_color: '',
+          },
+        },
+      }
+      const actual = trimInputs(inputs, true)
+      expect(actual).toEqual(expected)
+    })
+    /**
+     * {
+     *   "description": "",
+     *   "hidden": false,
+     *   "query_timezone": "",
+     *   "refresh_interval": "",
+     *   "folder": {},
+     *   "title": "",
+     *   "slug": "",
+     *   "preferred_viewer": "",
+     *   "space": {},
+     *   "alert_sync_with_dashboard_filter_enabled": false,
+     *   "background_color": "",
+     *   "crossfilter_enabled": false,
+     *   "deleted": false,
+     *   "filters_bar_collapsed": false,
+     *   "load_configuration": "",
+     *   "lookml_link_id": "",
+     *   "show_filters_bar": false,
+     *   "show_title": false,
+     *   "space_id": "",
+     *   "folder_id": "",
+     *   "text_tile_text_color": "",
+     *   "tile_background_color": "",
+     *   "tile_text_color": "",
+     *   "title_color": "",
+     *   "appearance": {
+     *     "page_side_margins": 0,
+     *     "page_background_color": "",
+     *     "tile_title_alignment": "",
+     *     "tile_space_between": 0,
+     *     "tile_background_color": "",
+     *     "tile_shadow": false,
+     *     "key_color": ""
+     *   }
+     * }
+     */
   })
 
   it('comment header', () => {
@@ -460,6 +581,114 @@ let response = await sdk.ok(sdk.create_sql_query(
       expect(actual).toEqual(expected)
     })
 
+    it('includes empty objects', () => {
+      const inputs = {
+        dashboard_id: '10',
+        body: {
+          description: '',
+          hidden: false,
+          query_timezone: '',
+          refresh_interval: '',
+          folder: {},
+          title: '',
+          slug: '',
+          preferred_viewer: '',
+          alert_sync_with_dashboard_filter_enabled: false,
+          background_color: '',
+          crossfilter_enabled: false,
+          deleted: false,
+          filters_bar_collapsed: false,
+          load_configuration: '',
+          lookml_link_id: '',
+          show_filters_bar: false,
+          show_title: false,
+          folder_id: '',
+          text_tile_text_color: '',
+          tile_background_color: '',
+          tile_text_color: '',
+          title_color: '',
+          appearance: {
+            page_side_margins: 0,
+            page_background_color: '',
+            tile_title_alignment: '',
+            tile_space_between: 0,
+            tile_background_color: '',
+            tile_shadow: false,
+            key_color: '',
+          },
+        },
+      }
+      const method = apiTestModel.methods.update_dashboard
+      const expected = `// functional SDK syntax is recommended for minimizing browser payloads
+let response = await sdk.ok(update_dashboard(sdk,
+  '10', {
+    description: '',
+    hidden: false,
+    query_timezone: '',
+    refresh_interval: '',
+    folder: {},
+    title: '',
+    background_color: '',
+    crossfilter_enabled: false,
+    deleted: false,
+    load_configuration: '',
+    lookml_link_id: '',
+    show_filters_bar: false,
+    show_title: false,
+    slug: '',
+    folder_id: '',
+    text_tile_text_color: '',
+    tile_background_color: '',
+    tile_text_color: '',
+    title_color: '',
+    appearance: {
+      page_side_margins: 0,
+      page_background_color: '',
+      tile_title_alignment: '',
+      tile_space_between: 0,
+      tile_background_color: '',
+      tile_shadow: false,
+      key_color: ''
+    },
+    preferred_viewer: ''
+  }))
+// monolithic SDK syntax can also be used for Node apps
+let response = await sdk.ok(sdk.update_dashboard(
+  '10', {
+    description: '',
+    hidden: false,
+    query_timezone: '',
+    refresh_interval: '',
+    folder: {},
+    title: '',
+    background_color: '',
+    crossfilter_enabled: false,
+    deleted: false,
+    load_configuration: '',
+    lookml_link_id: '',
+    show_filters_bar: false,
+    show_title: false,
+    slug: '',
+    folder_id: '',
+    text_tile_text_color: '',
+    tile_background_color: '',
+    tile_text_color: '',
+    title_color: '',
+    appearance: {
+      page_side_margins: 0,
+      page_background_color: '',
+      tile_title_alignment: '',
+      tile_space_between: 0,
+      tile_background_color: '',
+      tile_shadow: false,
+      key_color: ''
+    },
+    preferred_viewer: ''
+  }))`
+      const actual = gen.makeTheCall(method, inputs)
+      expect(actual).toEqual(expected)
+    })
+
     describe('hashValue', () => {
       it('assigns a hash with heterogeneous values', () => {
         const token = {
@@ -529,6 +758,7 @@ let response = await sdk.ok(sdk.create_sql_query(
         expect(actual).toEqual(expected)
       })
     })
+
     describe('arrayValue', () => {
       it('assigns complex arrays', () => {
         const sourceQueries = [
