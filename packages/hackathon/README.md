@@ -2,7 +2,7 @@
 
 ## Configuration
 
-There are some items that need to be configured for the Hackathon extension to function.
+You need to configure some items for the Hackathon extension to function.
 
 ### Hackathon extension
 
