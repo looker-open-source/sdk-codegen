@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Create sdk_version branch if on main,
+ * Creagit te sdk_version branch if on main,
  * generate SDK bindings,
  * run smoke tests for TS and Python,
  * commit and push if everything passes
@@ -16,7 +16,6 @@ const utf8 = { encoding: 'utf-8' }
 
 const root = path.join(__dirname, '/../')
 let sdk = looker.LookerNodeSDK.init40()
-const releaseConfig = path.join(root, 'release-please-config.json')
 
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
