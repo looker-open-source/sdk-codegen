@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Creagit te sdk_version branch if on main,
+ * Create sdk_version branch if on main,
  * generate SDK bindings,
  * run smoke tests for TS and Python,
  * commit and push if everything passes
