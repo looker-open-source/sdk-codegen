@@ -78,13 +78,15 @@ type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }
 
-export const createTestStore = (overrides?: DeepPartial<RootState>) =>
-  createStore({
+export const createTestStore = (overrides?: DeepPartial<RootState>) => {
+  // TODO: revert back to implicit return after fixing default initialization issue
+  const settings = {
+    ...preloadedState.settings,
+    ...overrides?.settings,
+  } as SettingState
+  return createStore({
     preloadedState: {
-      settings: {
-        ...preloadedState.settings,
-        ...overrides?.settings,
-      } as SettingState,
+      settings,
       lodes: {
         ...defaultLodesState,
         ...overrides?.lodes,
@@ -100,3 +102,4 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
       specs: specsSlice.reducer,
     },
   })
+}

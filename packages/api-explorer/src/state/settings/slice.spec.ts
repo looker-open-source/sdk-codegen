@@ -23,12 +23,24 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { MockedProvider, mockHistory } from './testReduxUtils'
-export { useNavigation, useGlobalStoreSync, useQuery } from './hooks'
+import type { SearchCriterionTerm } from '@looker/sdk-codegen'
+import { SearchAll, setToCriteria } from '@looker/sdk-codegen'
+import { preloadedState } from '../../test-utils'
+import { defaultSettingsState } from './slice'
+
+describe('Settings Slice', () => {
+  test('defaultSettingsState contains the default initial settings state', () => {
+    expect(defaultSettingsState).toEqual({
+      diffOptions: ['missing', 'params', 'type', 'body', 'response'],
+      sdkLanguage: 'Python',
+      searchPattern: '',
+      searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
+      tagFilter: 'ALL',
+      initialized: false,
+    })
+  })
+
+  test('preloadedState settings initialized with default settings', () => {
+    expect(preloadedState.settings).toEqual(defaultSettingsState)
+  })
+})

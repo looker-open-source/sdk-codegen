@@ -23,12 +23,23 @@
  SOFTWARE.
 
  */
-export { highlightHTML } from './highlight'
-export * from './path'
-export * from './sdkLanguage'
-export { getLoded } from './lodeUtils'
-export { useWindowSize } from './useWindowSize'
-export * from './apixAdaptor'
-export * from './adaptorUtils'
-export { MockedProvider, mockHistory } from './testReduxUtils'
-export { useNavigation, useGlobalStoreSync, useQuery } from './hooks'
+
+import type { SpecList } from '@looker/sdk-codegen'
+import { getLoadedSpecs } from '../../test-data'
+import { createTestStore, preloadedState } from '../../test-utils'
+
+describe('DiffScene', () => {
+  Element.prototype.scrollTo = jest.fn()
+  Element.prototype.scrollIntoView = jest.fn()
+
+  // NOTE: if call getLoadedSpecs, preloadedState = undefined
+  //       if comment out getLoadedSpecs, preloadedState = expected
+  const specs = getLoadedSpecs() as SpecList
+  test('calling getLoadedSpecs should not affect preloadedState', () => {
+    expect(preloadedState).toEqual({})
+    const store = createTestStore({
+      specs: { specs, currentSpecKey: '4.0' },
+      settings: { initialized: true },
+    })
+  })
+})
