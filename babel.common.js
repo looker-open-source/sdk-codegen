@@ -35,6 +35,7 @@ const ownModules = [
   '@looker/components',
   '@looker/icons',
   '@looker/design-tokens',
+  'd3-color',
 ]
 
 const excludeNodeModulesExceptRegExp = excludeNodeModuleExcept([...ownModules])
