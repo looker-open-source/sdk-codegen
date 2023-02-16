@@ -24,7 +24,6 @@
 
  */
 
-const { ResizeObserver } = require('resize-observer-polyfill')
 const { excludeNodeModulesExcept } = require('./babel.common')
 
 process.env.TZ = 'UTC'
@@ -53,7 +52,7 @@ module.exports = {
   setupFiles: ['jest-localstorage-mock'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],
@@ -68,5 +67,3 @@ module.exports = {
     },
   },
 }
-
-globalThis.ResizeObserver = ResizeObserver

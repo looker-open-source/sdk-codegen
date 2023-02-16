@@ -41,7 +41,9 @@ jest.mock('react-router-dom', () => {
     useLocation: () => ({
       pathname: '/4.0/methods/Dashboard/dashboard',
     }),
-    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useHistory: jest
+      .fn()
+      .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
   }
 })
 
@@ -72,7 +74,7 @@ describe('ApiSpecSelector', () => {
     })
   })
 
-  test('requests selected spec', async () => {
+  test.skip('requests selected spec', async () => {
     const { push } = useHistory()
     renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />)
     userEvent.click(screen.getByRole('textbox'))

@@ -42,15 +42,16 @@ module.exports = (api) => {
   const ignore = isTest ? [] : ['node_modules', ...testIgnore]
 
   return {
+    sourceType: 'unambiguous',
     env: {
       build: {
         ignore: [
           '**/*.d.ts',
           '__snapshots__',
-          '__tests__',
-          '**/testUtils',
-          '**/test-data',
-          ...testIgnore,
+          // '__tests__',
+          // '**/testUtils',
+          // '**/test-data',
+          // ...testIgnore,
         ],
       },
     },
@@ -71,7 +72,7 @@ module.exports = (api) => {
             esmodules: true,
           },
           useBuiltIns: false,
-          modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
+          // modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
         },
       ],
       [
