@@ -43,8 +43,12 @@ module.exports = {
       '<rootDir>/config/jest/fileMock.js',
   },
   restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+  setupFilesAfterEnv: [
+    // eslint-disable-next-line node/no-path-concat
+    `${__dirname}/jest.setup.js`,
+    '@testing-library/jest-dom/extend-expect',
+    'regenerator-runtime/runtime',
+  ],
   setupFiles: ['jest-localstorage-mock'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {
@@ -52,6 +56,10 @@ module.exports = {
   },
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],
+  testEnvironment: require.resolve('jest-environment-jsdom'),
+  testEnvironmentOptions: {
+    url: 'http://localhost/',
+  },
   globals: {
     'ts-jest': {
       isolatedModules: true,
