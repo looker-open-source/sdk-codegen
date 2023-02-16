@@ -110,6 +110,7 @@ jobs:
         working-directory: python/
 
     strategy:
+      max-parallel: 2
       matrix:
         os:
           - ubuntu
@@ -207,7 +208,7 @@ jobs:
           path: python/results/
 
   twine:
-    needs: unit #integration
+    needs: [unit, integration]
     runs-on: ubuntu-latest
     defaults:
       run:
