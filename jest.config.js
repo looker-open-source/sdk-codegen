@@ -24,6 +24,7 @@
 
  */
 
+const { ResizeObserver } = require('resize-observer-polyfill')
 const { excludeNodeModulesExcept } = require('./babel.common')
 
 process.env.TZ = 'UTC'
@@ -67,3 +68,5 @@ module.exports = {
     },
   },
 }
+
+globalThis.ResizeObserver = ResizeObserver
