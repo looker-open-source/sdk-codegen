@@ -44,7 +44,10 @@ jobs:
     name: Unit - ${{ matrix.os }} / py${{ matrix.python-version }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.py${{ matrix.python-version }}
-    runs-on: ${{ matrix.os }}-latest
+#    runs-on: ${{ matrix.os }}-latest
+    runs-on:
+      group: bigger-runners
+      labels: Ubuntu20.04-4core-16gb
     defaults:
       run:
         shell: bash
