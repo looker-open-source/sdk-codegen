@@ -29,7 +29,7 @@ import * as React from 'react'
 import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
 import { ExtensionProvider40 } from './ExtensionProvider40'
 
-let failConnection = false
+let mockFailConnection = false
 const mockHost = {
   clientRouteChanged: () => {
     // noop
@@ -38,7 +38,7 @@ const mockHost = {
 
 jest.mock('@looker/extension-sdk', () => ({
   connectExtensionHost: () =>
-    failConnection
+    mockFailConnection
       ? Promise.reject(new Error('Extension failed to load'))
       : Promise.resolve(mockHost),
   LookerExtensionSDK31: {
@@ -52,7 +52,7 @@ describe('ExtensionProvider40 component', () => {
   beforeEach(() => {
     originalConsoleError = console.error
     console.error = jest.fn()
-    failConnection = false
+    mockFailConnection = false
     unregisterCore40SDK()
   })
 
