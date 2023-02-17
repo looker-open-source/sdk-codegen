@@ -69,7 +69,7 @@
     "test:sdk": "yarn jest packages/sdk",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
-    "test:hack": "yarn jest packages/wholly-artifact packages/hackathon",
+    "test:hack": "yarn jest packages/wholly-artifact/src packages/hackathon",
     "bootstrap": "lerna clean -y && lerna bootstrap",
     "watch": "lerna run --parallel watch",
     "watch:cjs": "lerna run --parallel watch:cjs"

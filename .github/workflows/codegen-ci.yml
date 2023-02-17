@@ -105,6 +105,7 @@ jobs:
         if: failure()
 
       - name: Run unit tests
+        # TODO can we use yarn test:gen with the reporters option added to it here?
         run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock

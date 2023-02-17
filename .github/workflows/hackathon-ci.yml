@@ -2,14 +2,14 @@ name: Hackathon CI
 on:
   pull_request:
     paths:
-      - packages/wholly-sheet/**
+      - packages/wholly-artifact/**
       - packages/hackathon/**
 
   push:
     branches:
       - main
     paths:
-      - packages/wholly-sheet/**
+      - packages/wholly-artifact/**
       - packages/hackathon/**
 
   workflow_dispatch:

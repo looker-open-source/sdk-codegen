@@ -216,8 +216,9 @@ export class OAuthSession extends AuthSession {
     // TODO: remove this comment when we remove hex backwards compatibility
     // in Looker API. For now it must not be 2^n so that Looker correctly
     // treats it as base64 encoded
-    this.code_verifier = this.crypto.secureRandom(33)
-    const code_challenge = await this.crypto.sha256Hash(this.code_verifier)
+    const verifier = this.crypto.secureRandom(33)
+    this.code_verifier = verifier
+    const code_challenge = await this.crypto.sha256Hash(verifier)
     const config = this.readConfig()
     const params: Record<string, string> = {
       client_id: config.client_id,
