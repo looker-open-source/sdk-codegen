@@ -35,11 +35,15 @@ module.exports = merge(base, browser, {
   },
   mode: 'development',
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
+    static: {
+      directory: path.join(__dirname, 'public'),
+    },
     historyApiFallback: {
       disableDotRule: true,
     },
-    publicPath: '/dist/',
+    devMiddleware: {
+      publicPath: '/dist/',
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': '*',

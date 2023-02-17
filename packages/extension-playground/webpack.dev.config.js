@@ -30,7 +30,9 @@ module.exports = {
   ...base,
   devServer: {
     historyApiFallback: true,
-    publicPath: '/dist/',
+    devMiddleware: {
+      publicPath: '/dist/',
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',

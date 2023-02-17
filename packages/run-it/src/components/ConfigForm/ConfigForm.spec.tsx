@@ -40,7 +40,9 @@ jest.mock('react-router-dom', () => {
     useLocation: () => ({
       pathname: '/4.0/methods/Dashboard/dashboard',
     }),
-    useHistory: jest.fn().mockReturnValue({ push: jest.fn(), location }),
+    useHistory: jest
+      .fn()
+      .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
   }
 })
 

@@ -8,5 +8,8 @@
       "@looker/*": ["packages/*/src"]
     }
   },
-  "include": ["packages/*/src"]
+  "include": [
+    "packages/*/src",
+    "node_modules/@types/node/globals.global.d.ts"
+  ]
 }

@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, ReactNode } from 'react'
+import type { BaseSyntheticEvent, ReactNode } from 'react'
 import React from 'react'
 import styled from 'styled-components'
 import ReactMarkdown from 'react-markdown'
@@ -47,13 +47,13 @@ interface MarkdownProps {
   paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
 }
 
-export const Markdown: FC<MarkdownProps> = ({
+export const Markdown = ({
   source,
   pattern = '',
   transformLinkUri,
   linkClickHandler,
   paragraphOverride,
-}) => {
+}: MarkdownProps) => {
   const findAnchor = (ele: HTMLElement): HTMLAnchorElement | undefined => {
     if (ele.tagName === 'A') return ele as HTMLAnchorElement
     if (ele.parentElement) {

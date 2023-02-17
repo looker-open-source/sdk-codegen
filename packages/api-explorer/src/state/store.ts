@@ -24,7 +24,7 @@
 
  */
 import { createStore } from '@looker/redux'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { DevToolsEnhancerOptions, PayloadAction } from '@reduxjs/toolkit'
 import type { Action } from 'redux'
 import map from 'lodash/map'
 import type { SpecList } from '@looker/sdk-codegen'
@@ -81,7 +81,7 @@ const sanitizeSpecs = (specList: SpecList) =>
 
 const devTools =
   process.env.NODE_ENV !== 'production'
-    ? { actionSanitizer, stateSanitizer }
+    ? ({ actionSanitizer, stateSanitizer } as DevToolsEnhancerOptions)
     : false
 
 export const store = createStore({

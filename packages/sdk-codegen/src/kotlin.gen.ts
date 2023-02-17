@@ -35,7 +35,7 @@ import type {
 } from './sdkModels'
 import { describeParam, EnumType, mayQuote } from './sdkModels'
 import type { IMappedType, CodeAssignment } from './codeGen'
-import { CodeGen, commentBlock, trimInputs } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
 
 export class KotlinGen extends CodeGen {
   codePath = './kotlin/src/main/com/'
@@ -221,7 +221,8 @@ import java.util.*
     const args: string[] = []
     let hasComplexArg = false
     if (Object.keys(inputs).length > 0) {
-      method.allParams.forEach((p) => {
+      const params = method.allParams
+      params.forEach((p) => {
         const v = this.argValue(this.indentStr, p, inputs)
         if (v !== '') {
           // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
@@ -242,7 +243,6 @@ import java.util.*
 
   // overridden from CodeGen
   makeTheCall(method: IMethod, inputs: ArgValues): string {
-    inputs = trimInputs(inputs)
     const typeName = method.returnType?.type
       ? this.typeMap(method.returnType.type).name
       : 'String'
@@ -563,7 +563,11 @@ ${props.join(this.propDelimiter)}
           return { default: this.nullStr, name: 'Map<String' + `,${mapName}>` }
         }
         case 'DelimArrayType':
-          return { default: this.nullStr, name: `DelimArray<${map.name}>` }
+          return {
+            default: this.nullStr,
+            name: `DelimArray<${map.name}>`,
+            asVal: (_, v) => `DelimArray<${map.name}>(arrayOf(${v}))`,
+          }
         case 'EnumType':
           return {
             default: '',

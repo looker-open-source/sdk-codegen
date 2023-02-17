@@ -52,7 +52,7 @@ export interface CreateStoreOptions<State>
 export const createStore = <State>({
   devTools = false,
   middleware = [],
-  preloadedState = {},
+  preloadedState,
   reducer = {
     // If no reducer is provided initially we
     // must start with at least one reducer

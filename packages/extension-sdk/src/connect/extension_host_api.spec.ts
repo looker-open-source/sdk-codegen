@@ -195,17 +195,16 @@ describe('extension_host_api tests', () => {
     }
   })
 
-  it('verifies host connection', async (done) => {
+  it('verifies host connection', async () => {
     const hostApi = createHostApi()
     await hostApi.verifyHostConnection()
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: undefined,
       type: 'VERIFY_HOST',
     })
-    done()
   })
 
-  it('invoke core sdk', async (done) => {
+  it('invoke core sdk', async () => {
     const hostApi = createHostApi()
     await hostApi.invokeCoreSdk(
       'POST',
@@ -225,10 +224,9 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_CORE_SDK',
     })
-    done()
   })
 
-  it('invoke raw core sdk', async (done) => {
+  it('invoke raw core sdk', async () => {
     const hostApi = createHostApi()
     await hostApi.invokeCoreSdkRaw(
       'POST',
@@ -247,7 +245,6 @@ describe('extension_host_api tests', () => {
       },
       type: 'RAW_INVOKE_CORE_SDK',
     })
-    done()
   })
 
   it('updates title', () => {
@@ -324,44 +321,40 @@ describe('extension_host_api tests', () => {
     })
   })
 
-  it('sets local storage', async (done) => {
+  it('sets local storage', async () => {
     const hostApi = createHostApi()
     await hostApi.localStorageSetItem('keyName', 'valueData')
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { type: 'set', name: 'keyName', value: 'valueData' },
       type: 'LOCAL_STORAGE',
     })
-    done()
   })
 
-  it('gets local storage', async (done) => {
+  it('gets local storage', async () => {
     const hostApi = createHostApi()
     await hostApi.localStorageGetItem('keyName')
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { type: 'get', name: 'keyName' },
       type: 'LOCAL_STORAGE',
     })
-    done()
   })
 
-  it('removes local storage', async (done) => {
+  it('removes local storage', async () => {
     const hostApi = createHostApi()
     await hostApi.localStorageRemoveItem('keyName')
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { type: 'remove', name: 'keyName' },
       type: 'LOCAL_STORAGE',
     })
-    done()
   })
 
-  it('writes to clipboard', async (done) => {
+  it('writes to clipboard', async () => {
     const hostApi = createHostApi({}, '21.7.0')
     await hostApi.clipboardWrite('ABCD')
     expect(sendAndReceiveSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { type: 'write', value: 'ABCD' },
       type: 'CLIPBOARD',
     })
-    done()
   })
 
   it('tracks an action', () => {
@@ -427,7 +420,7 @@ describe('extension_host_api tests', () => {
     }
   })
 
-  it('sends fetch proxy request', async (done) => {
+  it('sends fetch proxy request', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const body = JSON.stringify({
       title: 'My brand new post',
@@ -457,10 +450,9 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_EXTERNAL_API',
     })
-    done()
   })
 
-  it('appends include credentials', async (done) => {
+  it('appends include credentials', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const body = JSON.stringify({
       title: 'My brand new post',
@@ -494,7 +486,6 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_EXTERNAL_API',
     })
-    done()
   })
 
   it('prevents server proxy call for early Looker versions', async () => {
@@ -518,7 +509,7 @@ describe('extension_host_api tests', () => {
     }
   })
 
-  it('sends server proxy request', async (done) => {
+  it('sends server proxy request', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.11' })
     const body = JSON.stringify({
       title: 'My brand new post',
@@ -548,10 +539,9 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_EXTERNAL_API',
     })
-    done()
   })
 
-  it('prevents oauth2 requests for early versions of Looker', async (done) => {
+  it('prevents oauth2 requests for early versions of Looker', async () => {
     const hostApi = createHostApi()
     try {
       const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -566,11 +556,10 @@ describe('extension_host_api tests', () => {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.9, got 6.25.0'
       )
-      done()
     }
   })
 
-  it('sends oauth2 authenticate request', async (done) => {
+  it('sends oauth2 authenticate request', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
     const authParameters = {
@@ -594,10 +583,9 @@ describe('extension_host_api tests', () => {
       },
       { signal: new AbortController().signal }
     )
-    done()
   })
 
-  it('sends oauth2 authenticate request with response_type id_token', async (done) => {
+  it('sends oauth2 authenticate request with response_type id_token', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
     const authParameters = {
@@ -621,10 +609,9 @@ describe('extension_host_api tests', () => {
       },
       { signal: new AbortController().signal }
     )
-    done()
   })
 
-  it('rejects oauth2 authenticate request with invalid response_type', async (done) => {
+  it('rejects oauth2 authenticate request with invalid response_type', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
     const authParameters = {
@@ -641,10 +628,9 @@ describe('extension_host_api tests', () => {
       )
     }
     expect(sendAndReceiveSpy).not.toHaveBeenCalled()
-    done()
   })
 
-  it('overrides http method for oauth2Authenticate', async (done) => {
+  it('overrides http method for oauth2Authenticate', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     const authEndpoint = 'https://accounts.google.com/o/oauth2/v2/auth'
     const authParameters = {
@@ -668,10 +654,9 @@ describe('extension_host_api tests', () => {
       },
       { signal: new AbortController().signal }
     )
-    done()
   })
 
-  it('prevents oauth2 code exchange requests for early versions of Looker', async (done) => {
+  it('prevents oauth2 code exchange requests for early versions of Looker', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.9' })
     try {
       const exchangeEndpoint = 'https://github.com/login/oauth/authorize'
@@ -685,11 +670,10 @@ describe('extension_host_api tests', () => {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.11, got 7.9'
       )
-      done()
     }
   })
 
-  it('sends oauth2 code exchanged request', async (done) => {
+  it('sends oauth2 code exchanged request', async () => {
     const hostApi = createHostApi({ lookerVersion: '7.11' })
     const exchangeEndpoint = 'https://github.com/login/oauth/authorize'
     const exchangeParameters = {}
@@ -707,7 +691,6 @@ describe('extension_host_api tests', () => {
       },
       type: 'INVOKE_EXTERNAL_API',
     })
-    done()
   })
 
   it('prevents secret key tag name requests for early versions of Looker', () => {

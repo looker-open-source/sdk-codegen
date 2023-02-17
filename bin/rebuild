@@ -1,0 +1,9 @@
+#!/bin/sh
+# clear all web stack artifacts and rebuild
+
+cd "$(dirname "$0")"/.. || exit
+rm -rf ./**/node_modules
+rm yarn.lock
+yarn install
+yarn build
+yarn dedupe:dev

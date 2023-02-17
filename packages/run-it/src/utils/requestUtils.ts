@@ -143,16 +143,18 @@ export const initRequestContent = (
  * Takes all form input values and categorizes them based on their request location
  * @param inputs RunIt form inputs
  * @param requestContent Form input values
+ * @param keepBody true to keep body as is. false trims body values (default)
  * @returns path, query and body param objects
  */
 export const createRequestParams = (
   inputs: RunItInput[],
-  requestContent: RunItValues
+  requestContent: RunItValues,
+  keepBody = false
 ) => {
   const pathParams = {}
   const queryParams = {}
   const prepped = prepareInputs(inputs, requestContent)
-  const trimmed = trimInputs(prepped)
+  const trimmed = trimInputs(prepped, keepBody)
   let body
   for (const input of inputs) {
     const name = input.name
