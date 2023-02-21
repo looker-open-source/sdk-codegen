@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseSyntheticEvent, FC } from 'react'
+import type { BaseSyntheticEvent, FC, FormEventHandler } from 'react'
 import React, { useContext, useState, useEffect } from 'react'
 import {
   Box,
@@ -131,7 +131,8 @@ export const RunIt: FC<RunItProps> = ({
     initRequestContent(inputs)
   )
   const [activePathParams, setActivePathParams] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [keepBody, setKeepBody] = useState<boolean>(false)
   const [responseContent, setResponseContent] =
     useState<ResponseContent>(undefined)
 
@@ -153,7 +154,13 @@ export const RunIt: FC<RunItProps> = ({
   useEffect(() => {
     registerEnvAdaptor(adaptor)
     setInitialized(true)
-  }, [])
+  }, [adaptor])
+
+  const toggleKeepBody: (_event: FormEventHandler<HTMLInputElement>) => void = (
+    _event: FormEventHandler<HTMLInputElement>
+  ) => {
+    setKeepBody((prev) => !prev)
+  }
 
   const handleConfig = (_e: BaseSyntheticEvent) => {
     tabs.onSelectTab(4)
@@ -164,7 +171,8 @@ export const RunIt: FC<RunItProps> = ({
 
     const [pathParams, queryParams, body] = createRequestParams(
       inputs,
-      requestContent
+      requestContent,
+      keepBody
     )
     if (body) {
       const [bodyParam] = method.bodyParams
@@ -237,6 +245,8 @@ export const RunIt: FC<RunItProps> = ({
                 isExtension={isExtension}
                 validationMessage={validationMessage}
                 setValidationMessage={setValidationMessage}
+                keepBody={keepBody}
+                toggleKeepBody={toggleKeepBody}
               />
             </TabPanel>
             <TabPanel key="response">
@@ -256,6 +266,7 @@ export const RunIt: FC<RunItProps> = ({
                 api={api}
                 method={method}
                 inputs={prepareInputs(inputs, requestContent)}
+                keepBody={keepBody}
               />
             </TabPanel>
             {isExtension ? (

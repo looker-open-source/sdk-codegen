@@ -31,9 +31,13 @@ module.exports = {
   ...base,
   mode: 'development',
   devServer: {
-    contentBase: path.join(__dirname, 'playground'),
+    static: {
+      directory: path.join(__dirname, 'playground'),
+    },
     historyApiFallback: true,
-    publicPath: '/dist/',
+    devMiddleware: {
+      publicPath: '/dist/',
+    },
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': '*',

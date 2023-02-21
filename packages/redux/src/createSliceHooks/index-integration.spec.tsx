@@ -64,7 +64,7 @@ test('reducers and sagas', async () => {
   const Component = () => {
     const actions = hooks.useActions()
     const state = hooks.useStoreState()
-    return <button onClick={actions.getText}>{state.text}</button>
+    return <button onClick={() => actions.getText}>{state.text}</button>
   }
 
   const r = render(

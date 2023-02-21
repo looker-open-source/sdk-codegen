@@ -37,8 +37,8 @@ jest.mock('react-router-dom', () => {
   return {
     ...ReactRouterDOM,
     useLocation: () => ({
-      pathname: location.pathname,
-      search: location.search,
+      pathname: globalThis.location.pathname,
+      search: globalThis.location.search,
     }),
   }
 })

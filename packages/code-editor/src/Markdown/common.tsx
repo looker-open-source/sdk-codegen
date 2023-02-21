@@ -44,7 +44,7 @@ export const MDParagraph = styled(Paragraph).attrs(
   ({ mb = 'large' }: ParagraphProps) => ({
     mb,
   })
-)`
+)<ParagraphProps>`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
 `

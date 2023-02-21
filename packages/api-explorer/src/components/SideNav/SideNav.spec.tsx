@@ -46,7 +46,7 @@ describe('SideNav', () => {
   let saveLocation: Location
 
   beforeEach(() => {
-    saveLocation = window.location
+    saveLocation = globalThis.window.location
     window.location = {
       ...saveLocation,
       pathname: '/3.1',
@@ -98,7 +98,7 @@ jest.mock('react-router-dom', () => {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
-      location,
+      location: globalThis.location,
     }),
   }
 })

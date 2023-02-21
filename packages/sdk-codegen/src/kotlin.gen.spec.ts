@@ -205,18 +205,12 @@ data class HyphenType (
 
     it('assigns a DelimArray', () => {
       const inputs = {
-        tests: new DelimArray<string>(['1', '2', '3']),
+        ids: new DelimArray<number>([1, 2, 3]),
       }
-      const method = apiTestModel.methods.test_connection
+      const method = apiTestModel.methods.all_users
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok<Array<DBConnectionTestResult>>(sdk.test_connection(
-    tests = DelimArray<String>(
-        arrayOf(
-            "1",
-            "2",
-            "3"
-        )
-    )))`
+      const expected = `val response = await sdk.ok<Array<User>>(sdk.all_users(
+    ids = DelimArray<Long>(arrayOf(1,2,3))))`
       expect(actual).toEqual(expected)
     })
 
@@ -300,6 +294,80 @@ data class HyphenType (
             "first" to 1,
             "second" to "two"
         )
+    )))`
+      const actual = gen.makeTheCall(method, inputs)
+      expect(actual).toEqual(expected)
+    })
+
+    it('includes empty objects', () => {
+      const inputs = {
+        dashboard_id: '10',
+        body: {
+          description: '',
+          hidden: false,
+          query_timezone: '',
+          refresh_interval: '',
+          folder: {},
+          title: '',
+          slug: '',
+          preferred_viewer: '',
+          alert_sync_with_dashboard_filter_enabled: false,
+          background_color: '',
+          crossfilter_enabled: false,
+          deleted: false,
+          filters_bar_collapsed: false,
+          load_configuration: '',
+          lookml_link_id: '',
+          show_filters_bar: false,
+          show_title: false,
+          folder_id: '',
+          text_tile_text_color: '',
+          tile_background_color: '',
+          tile_text_color: '',
+          title_color: '',
+          appearance: {
+            page_side_margins: 0,
+            page_background_color: '',
+            tile_title_alignment: '',
+            tile_space_between: 0,
+            tile_background_color: '',
+            tile_shadow: false,
+            key_color: '',
+          },
+        },
+      }
+      const method = apiTestModel.methods.update_dashboard
+      const expected = `val response = await sdk.ok<Dashboard>(sdk.update_dashboard(
+    "10", WriteDashboard(
+        description = "",
+        hidden = false,
+        query_timezone = "",
+        refresh_interval = "",
+        folder = WriteFolderBase(),
+        title = "",
+        background_color = "",
+        crossfilter_enabled = false,
+        deleted = false,
+        load_configuration = "",
+        lookml_link_id = "",
+        show_filters_bar = false,
+        show_title = false,
+        slug = "",
+        folder_id = "",
+        text_tile_text_color = "",
+        tile_background_color = "",
+        tile_text_color = "",
+        title_color = "",
+        appearance = DashboardAppearance(
+            page_side_margins = 0,
+            page_background_color = "",
+            tile_title_alignment = "",
+            tile_space_between = 0,
+            tile_background_color = "",
+            tile_shadow = false,
+            key_color = ""
+        ),
+        preferred_viewer = ""
     )))`
       const actual = gen.makeTheCall(method, inputs)
       expect(actual).toEqual(expected)
