@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.20](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.19...extension-utils-v0.1.20) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/extension-sdk-react bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-rtl bumped from ^21.5.0 to ^21.6.0
+    * @looker/code-editor bumped from ^0.1.27 to ^0.1.28
+
 ### [0.1.19](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.18...extension-utils-v0.1.19) (2022-12-09)
 
 
