@@ -1,6 +1,6 @@
 {
   "name": "@looker/run-it",
-  "version": "0.9.42",
+  "version": "0.9.43",
   "description": "A dynamic REST request input form and response visualizer",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -53,15 +53,15 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "@looker/code-editor": "^0.1.27",
+    "@looker/code-editor": "^0.1.28",
     "@looker/components": "^4.1.1",
     "@looker/design-tokens": "^3.1.0",
-    "@looker/extension-utils": "^0.1.19",
+    "@looker/extension-utils": "^0.1.20",
     "@looker/icons": "^1.5.21",
-    "@looker/sdk": "^22.20.1",
-    "@looker/sdk-codegen": "^21.7.4",
+    "@looker/sdk": "^23.0.0",
+    "@looker/sdk-codegen": "^21.8.0",
     "@looker/sdk-codegen-utils": "^21.0.11",
-    "@looker/sdk-rtl": "^21.5.0",
+    "@looker/sdk-rtl": "^21.6.0",
     "@styled-icons/material": "^10.28.0",
     "@styled-icons/material-outlined": "^10.28.0",
     "@styled-icons/material-rounded": "^10.28.0",

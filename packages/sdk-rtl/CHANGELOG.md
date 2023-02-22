@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.5.0...sdk-rtl-v21.6.0) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+
 ## [21.5.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.4.0...sdk-rtl-v21.5.0) (2022-12-09)
 
 

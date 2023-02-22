@@ -1,5 +1,22 @@
 # Changelog
 
+## [21.5.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.8...sdk-codegen-scripts-v21.5.0) (2023-02-22)
+
+
+### Features
+
+* generate SDKs for Looker 23.0 ([#1237](https://github.com/looker-open-source/sdk-codegen/issues/1237)) ([2ade858](https://github.com/looker-open-source/sdk-codegen/commit/2ade85815c43383169263659f5dddd783c062c09))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-codegen bumped from ^21.7.4 to ^21.8.0
+    * @looker/sdk-node bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-rtl bumped from ^21.5.0 to ^21.6.0
+
 ### [21.4.8](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.7...sdk-codegen-scripts-v21.4.8) (2022-12-09)
 
 

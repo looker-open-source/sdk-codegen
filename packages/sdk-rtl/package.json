@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-rtl",
-  "version": "21.5.0",
+  "version": "21.6.0",
   "description": "Looker SDK Runtime Library",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
