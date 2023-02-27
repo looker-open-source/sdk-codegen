@@ -1,0 +1,45 @@
+{
+  "name": "@looker/embed-services",
+  "version": "0.0.1-alpha",
+  "description": "Looker Embed Services",
+  "main": "lib/index.js",
+  "module": "lib/esm/index.js",
+  "sideEffects": false,
+  "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "private"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/looker-open-source/sdk-codegen.git",
+    "directory": "packages/embed-services"
+  },
+  "author": "Looker",
+  "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --mode file --out docs",
+    "watch": "yarn lerna exec --scope @looker/embed-services --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch:cjs": "yarn lerna exec --scope @looker/embed-services --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "bugs": {
+    "url": "https://github.com/looker-open-source/sdk-codegen/issues"
+  },
+  "engines": {
+    "node": ">=12",
+    "npm": ">=5.5.1"
+  },
+  "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-services",
+  "devDependencies": {
+  },
+  "dependencies": {
+  },
+  "keywords": [
+    "Looker",
+    "Embed",
+    "Embed Services"
+  ]
+}
