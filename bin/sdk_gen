@@ -34,7 +34,7 @@ const waitForLooker = async () => {
       alive = sdk.authSession.isAuthenticated()
       console.info(`Hi, ${user.first_name} ${user.last_name}!`)
       await sdk.authSession.logout()
-    } catch (e) {
+    } catch {
       await sleep(delay * 1000)
       tries++
       console.info(`Waiting ${delay} seconds before attempt ${tries} of ${max_tries} (Total: ${delay * (tries - 1)})`)
