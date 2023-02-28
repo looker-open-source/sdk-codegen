@@ -3,12 +3,14 @@ on:
   pull_request:
     paths:
       - python/**
+      - .github/workflows/python-ci.yml
 
   push:
     branches:
       - main
     paths:
       - python/**
+      - .github/workflows/python-ci.yml
 
   workflow_dispatch:
 
