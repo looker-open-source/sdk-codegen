@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 460 API methods
  */
 
 
@@ -2754,6 +2754,7 @@ open class LookerSDKStream: APIMethods {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - sisu
      *
      * GET /setting -> Setting
      */
@@ -2785,6 +2786,7 @@ open class LookerSDKStream: APIMethods {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - sisu
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -3682,6 +3684,56 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_content_metadata_access_id = encodeParam(content_metadata_access_id)
         let result: SDKResponse<Data, SDKError> = self.delete("/content_metadata_access/\(path_content_metadata_access_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+     * title and description of the content and the closest results are returned. Content that has been frequently
+     * viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+     *
+     * This endpoint does not return a full description of these content types. For more specific information
+     * about each type please refer to the individual content specific API endpoints.
+     *
+     * Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+     * Get the **full details** of a specific look by id with [look()](#!/Look/look)
+     *
+     * GET /content/{terms} -> [ContentSearch]
+     */
+    public func search_content(
+        /**
+         * @param {String} terms Search terms
+         */
+        _ terms: String,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {String} types Content types requested (dashboard, look, lookml_dashboard).
+         */
+        types: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {Int64} page Requested page.
+         */
+        page: Int64? = nil,
+        /**
+         * @param {Int64} per_page Results per page.
+         */
+        per_page: Int64? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_terms = encodeParam(terms)
+        let result: SDKResponse<Data, SDKError> = self.get("/content/\(path_terms)", 
+            ["fields": fields, "types": types, "limit": limit, "offset": offset, "page": page, "per_page": per_page], nil, options)
         return result
     }
 
@@ -9535,7 +9587,7 @@ open class LookerSDKStream: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -9669,7 +9721,7 @@ open class LookerSDKStream: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -9721,7 +9773,7 @@ open class LookerSDKStream: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -9899,7 +9951,7 @@ open class LookerSDKStream: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats

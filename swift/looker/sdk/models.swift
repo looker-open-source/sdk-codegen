@@ -25,7 +25,7 @@
  */
 
 /**
- * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
+ * 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -2185,6 +2185,110 @@ public struct ContentMetaGroupUser: SDKModel {
         self.permission_type = permission_type
         self._group_id = group_id.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
+    }
+
+}
+
+public struct ContentSearch: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _content_id = "content_id"
+        case _type = "type"
+        case _title = "title"
+        case _description = "description"
+        case _folder_id = "folder_id"
+        case _folder_name = "folder_name"
+        case _view_count = "view_count"
+        case _preferred_viewer = "preferred_viewer"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _content_id: AnyString?
+    /**
+     * Primary id associated with the content (read-only)
+     */
+    public var content_id: String? {
+        get { _content_id?.value }
+        set { _content_id = newValue.map(AnyString.init) }
+    }
+
+    private var _type: AnyString?
+    /**
+     * Type of content (read-only)
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Content title (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Content description (read-only)
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _folder_id: AnyString?
+    /**
+     * Id of the folder where the content is saved (read-only)
+     */
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
+    private var _folder_name: AnyString?
+    /**
+     * Name of the folder where the content is saved (read-only)
+     */
+    public var folder_name: String? {
+        get { _folder_name?.value }
+        set { _folder_name = newValue.map(AnyString.init) }
+    }
+
+    private var _view_count: AnyInt?
+    /**
+     * Number of times the content has been viewed (read-only)
+     */
+    public var view_count: Int64? {
+        get { _view_count?.value }
+        set { _view_count = newValue.map(AnyInt.init) }
+    }
+
+    private var _preferred_viewer: AnyString?
+    /**
+     * Preferred way of viewing the content (only applies to dashboards) (read-only)
+     */
+    public var preferred_viewer: String? {
+        get { _preferred_viewer?.value }
+        set { _preferred_viewer = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil) {
+        self.can = can
+        self._content_id = content_id.map(AnyString.init)
+        self._type = type.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._folder_id = folder_id.map(AnyString.init)
+        self._folder_name = folder_name.map(AnyString.init)
+        self._view_count = view_count.map(AnyInt.init)
+        self._preferred_viewer = preferred_viewer.map(AnyString.init)
     }
 
 }
@@ -6691,7 +6795,9 @@ public struct DBConnection: SDKModel {
         case _after_connect_statements = "after_connect_statements"
         case pdt_context_override
         case managed
+        case _custom_local_port = "custom_local_port"
         case _tunnel_id = "tunnel_id"
+        case uses_tns
         case _pdt_concurrency = "pdt_concurrency"
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
@@ -6727,7 +6833,7 @@ public struct DBConnection: SDKModel {
 
     private var _host: AnyString?
     /**
-     * Host name/address of server
+     * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
      */
     public var host: String? {
         get { _host?.value }
@@ -6736,7 +6842,7 @@ public struct DBConnection: SDKModel {
 
     private var _port: AnyString?
     /**
-     * Port number on server
+     * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
      */
     public var port: String? {
         get { _port?.value }
@@ -6979,6 +7085,15 @@ public struct DBConnection: SDKModel {
      */
     public var managed: Bool?
 
+    private var _custom_local_port: AnyInt?
+    /**
+     * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+     */
+    public var custom_local_port: Int64? {
+        get { _custom_local_port?.value }
+        set { _custom_local_port = newValue.map(AnyInt.init) }
+    }
+
     private var _tunnel_id: AnyString?
     /**
      * The Id of the ssh tunnel this connection uses
@@ -6987,6 +7102,11 @@ public struct DBConnection: SDKModel {
         get { _tunnel_id?.value }
         set { _tunnel_id = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Enable Transparent Network Substrate (TNS) connections
+     */
+    public var uses_tns: Bool?
 
     private var _pdt_concurrency: AnyInt?
     /**
@@ -7026,7 +7146,7 @@ public struct DBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7065,7 +7185,9 @@ public struct DBConnection: SDKModel {
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
         self.pdt_context_override = pdt_context_override
         self.managed = managed
+        self._custom_local_port = custom_local_port.map(AnyInt.init)
         self._tunnel_id = tunnel_id.map(AnyString.init)
+        self.uses_tns = uses_tns
         self._pdt_concurrency = pdt_concurrency.map(AnyInt.init)
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
@@ -19580,6 +19702,7 @@ public struct Setting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case sisu
     }
     /**
      * Toggle extension framework on or off
@@ -19652,7 +19775,9 @@ public struct Setting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    public var sisu: SisuSetting?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, sisu: SisuSetting? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19666,6 +19791,92 @@ public struct Setting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.sisu = sisu
+    }
+
+}
+
+public struct SisuSetting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case enabled
+        case _extension_id = "extension_id"
+        case configured
+        case _api_key_id = "api_key_id"
+        case _api_user_id = "api_user_id"
+        case _installation_id = "installation_id"
+        case _listing_id_override = "listing_id_override"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    /**
+     * Whether the Sisu integration is enabled
+     */
+    public var enabled: Bool?
+
+    private var _extension_id: AnyString?
+    /**
+     * The extension ID of the installed Sisu extension
+     */
+    public var extension_id: String? {
+        get { _extension_id?.value }
+        set { _extension_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the Looker instance has been configured  with Sisu
+     */
+    public var configured: Bool?
+
+    private var _api_key_id: AnyString?
+    /**
+     * The API key ID generated for use with Sisu
+     */
+    public var api_key_id: String? {
+        get { _api_key_id?.value }
+        set { _api_key_id = newValue.map(AnyString.init) }
+    }
+
+    private var _api_user_id: AnyString?
+    /**
+     * The user ID associated with the API key generated for use with Sisu
+     */
+    public var api_user_id: String? {
+        get { _api_user_id?.value }
+        set { _api_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _installation_id: AnyString?
+    /**
+     * The marketplace installation id of the Sisu extension
+     */
+    public var installation_id: String? {
+        get { _installation_id?.value }
+        set { _installation_id = newValue.map(AnyString.init) }
+    }
+
+    private var _listing_id_override: AnyString?
+    /**
+     * An alternate marketplace listing id to use for the Sisu extension.
+     */
+    public var listing_id_override: String? {
+        get { _listing_id_override?.value }
+        set { _listing_id_override = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, extension_id: String? = nil, configured: Bool? = nil, api_key_id: String? = nil, api_user_id: String? = nil, installation_id: String? = nil, listing_id_override: String? = nil) {
+        self.can = can
+        self.enabled = enabled
+        self._extension_id = extension_id.map(AnyString.init)
+        self.configured = configured
+        self._api_key_id = api_key_id.map(AnyString.init)
+        self._api_user_id = api_user_id.map(AnyString.init)
+        self._installation_id = installation_id.map(AnyString.init)
+        self._listing_id_override = listing_id_override.map(AnyString.init)
     }
 
 }
@@ -20597,6 +20808,7 @@ public struct ThemeSettings: SDKModel {
         case show_dashboard_menu
         case show_filters_toggle
         case show_dashboard_header
+        case center_dashboard_title
     }
     private var _background_color: AnyString?
     /**
@@ -20773,7 +20985,12 @@ public struct ThemeSettings: SDKModel {
      */
     public var show_dashboard_header: Bool?
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil) {
+    /**
+     * Toggle to center the dashboard title. Defaults to false.
+     */
+    public var center_dashboard_title: Bool?
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -20797,6 +21014,7 @@ public struct ThemeSettings: SDKModel {
         self.show_dashboard_menu = show_dashboard_menu
         self.show_filters_toggle = show_filters_toggle
         self.show_dashboard_header = show_dashboard_header
+        self.center_dashboard_title = center_dashboard_title
     }
 
 }
@@ -21547,7 +21765,7 @@ public struct UserAttributeWithValue: SDKModel {
 
     private var _hidden_value_domain_whitelist: AnyString?
     /**
-     * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+     * If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
      */
     public var hidden_value_domain_whitelist: String? {
         get { _hidden_value_domain_whitelist?.value }
@@ -23906,7 +24124,9 @@ public struct WriteDBConnection: SDKModel {
         case sql_writing_with_info_schema
         case _after_connect_statements = "after_connect_statements"
         case pdt_context_override
+        case _custom_local_port = "custom_local_port"
         case _tunnel_id = "tunnel_id"
+        case uses_tns
         case _pdt_concurrency = "pdt_concurrency"
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
@@ -23925,7 +24145,7 @@ public struct WriteDBConnection: SDKModel {
 
     private var _host: AnyString?
     /**
-     * Host name/address of server
+     * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
      */
     public var host: String? {
         get { _host?.value }
@@ -23934,7 +24154,7 @@ public struct WriteDBConnection: SDKModel {
 
     private var _port: AnyString?
     /**
-     * Port number on server
+     * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
      */
     public var port: String? {
         get { _port?.value }
@@ -24125,6 +24345,15 @@ public struct WriteDBConnection: SDKModel {
      */
     public var pdt_context_override: WriteDBConnectionOverride?
 
+    private var _custom_local_port: AnyInt?
+    /**
+     * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+     */
+    public var custom_local_port: Int64? {
+        get { _custom_local_port?.value }
+        set { _custom_local_port = newValue.map(AnyInt.init) }
+    }
+
     private var _tunnel_id: AnyString?
     /**
      * The Id of the ssh tunnel this connection uses
@@ -24133,6 +24362,11 @@ public struct WriteDBConnection: SDKModel {
         get { _tunnel_id?.value }
         set { _tunnel_id = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Enable Transparent Network Substrate (TNS) connections
+     */
+    public var uses_tns: Bool?
 
     private var _pdt_concurrency: AnyInt?
     /**
@@ -24172,7 +24406,7 @@ public struct WriteDBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, tunnel_id: String? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -24199,7 +24433,9 @@ public struct WriteDBConnection: SDKModel {
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
         self.pdt_context_override = pdt_context_override
+        self._custom_local_port = custom_local_port.map(AnyInt.init)
         self._tunnel_id = tunnel_id.map(AnyString.init)
+        self.uses_tns = uses_tns
         self._pdt_concurrency = pdt_concurrency.map(AnyInt.init)
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
@@ -26965,6 +27201,7 @@ public struct WriteSetting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case sisu
     }
     /**
      * Toggle extension framework on or off
@@ -27041,7 +27278,13 @@ public struct WriteSetting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    /**
+     * Dynamic writeable type for SisuSetting removes:
+     * can
+     */
+    public var sisu: WriteSisuSetting?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, sisu: WriteSisuSetting? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -27055,6 +27298,89 @@ public struct WriteSetting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.sisu = sisu
+    }
+
+}
+
+/**
+ * Dynamic writeable type for SisuSetting removes:
+ * can
+ */
+public struct WriteSisuSetting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case enabled
+        case _extension_id = "extension_id"
+        case configured
+        case _api_key_id = "api_key_id"
+        case _api_user_id = "api_user_id"
+        case _installation_id = "installation_id"
+        case _listing_id_override = "listing_id_override"
+    }
+    /**
+     * Whether the Sisu integration is enabled
+     */
+    public var enabled: Bool?
+
+    private var _extension_id: AnyString?
+    /**
+     * The extension ID of the installed Sisu extension
+     */
+    public var extension_id: String? {
+        get { _extension_id?.value }
+        set { _extension_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the Looker instance has been configured  with Sisu
+     */
+    public var configured: Bool?
+
+    private var _api_key_id: AnyString?
+    /**
+     * The API key ID generated for use with Sisu
+     */
+    public var api_key_id: String? {
+        get { _api_key_id?.value }
+        set { _api_key_id = newValue.map(AnyString.init) }
+    }
+
+    private var _api_user_id: AnyString?
+    /**
+     * The user ID associated with the API key generated for use with Sisu
+     */
+    public var api_user_id: String? {
+        get { _api_user_id?.value }
+        set { _api_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _installation_id: AnyString?
+    /**
+     * The marketplace installation id of the Sisu extension
+     */
+    public var installation_id: String? {
+        get { _installation_id?.value }
+        set { _installation_id = newValue.map(AnyString.init) }
+    }
+
+    private var _listing_id_override: AnyString?
+    /**
+     * An alternate marketplace listing id to use for the Sisu extension.
+     */
+    public var listing_id_override: String? {
+        get { _listing_id_override?.value }
+        set { _listing_id_override = newValue.map(AnyString.init) }
+    }
+
+    public init(enabled: Bool? = nil, extension_id: String? = nil, configured: Bool? = nil, api_key_id: String? = nil, api_user_id: String? = nil, installation_id: String? = nil, listing_id_override: String? = nil) {
+        self.enabled = enabled
+        self._extension_id = extension_id.map(AnyString.init)
+        self.configured = configured
+        self._api_key_id = api_key_id.map(AnyString.init)
+        self._api_user_id = api_user_id.map(AnyString.init)
+        self._installation_id = installation_id.map(AnyString.init)
+        self._listing_id_override = listing_id_override.map(AnyString.init)
     }
 
 }

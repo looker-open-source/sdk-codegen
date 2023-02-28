@@ -34,7 +34,8 @@ const waitForLooker = async () => {
       alive = sdk.authSession.isAuthenticated()
       console.info(`Hi, ${user.first_name} ${user.last_name}!`)
       await sdk.authSession.logout()
-    } catch {
+    } catch (e) {
+      console.log(e)
       await sleep(delay * 1000)
       tries++
       console.info(`Waiting ${delay} seconds before attempt ${tries} of ${max_tries} (Total: ${delay * (tries - 1)})`)
@@ -191,7 +192,7 @@ const regen = async (release) => {
         'yarn gen',
         'bin/smoke typescript python kotlin',
         'git add -A',
-        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0`,
+        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
         `git push origin ${branch}`,
         /* create PR
          */

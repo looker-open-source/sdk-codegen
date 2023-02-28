@@ -25,7 +25,7 @@
  */
 
 /**
- * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
+ * 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -589,6 +589,29 @@ data class ContentMetaGroupUser (
     var permission_type: PermissionType? = null,
     var group_id: String? = null,
     var user_id: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_id Primary id associated with the content (read-only)
+ * @property type Type of content (read-only)
+ * @property title Content title (read-only)
+ * @property description Content description (read-only)
+ * @property folder_id Id of the folder where the content is saved (read-only)
+ * @property folder_name Name of the folder where the content is saved (read-only)
+ * @property view_count Number of times the content has been viewed (read-only)
+ * @property preferred_viewer Preferred way of viewing the content (only applies to dashboards) (read-only)
+ */
+data class ContentSearch (
+    var can: Map<String,Boolean>? = null,
+    var content_id: String? = null,
+    var type: String? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var folder_id: String? = null,
+    var folder_name: String? = null,
+    var view_count: Long? = null,
+    var preferred_viewer: String? = null
 ) : Serializable
 
 /**
@@ -1674,8 +1697,8 @@ data class Datagroup (
  * @property dialect
  * @property snippets SQL Runner snippets for this connection (read-only)
  * @property pdts_enabled True if PDTs are enabled on this connection (read-only)
- * @property host Host name/address of server
- * @property port Port number on server
+ * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+ * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
  * @property password (Write-Only) Password for server authentication
  * @property uses_oauth Whether the connection uses OAuth for authentication. (read-only)
@@ -1707,7 +1730,9 @@ data class Datagroup (
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  * @property pdt_context_override
  * @property managed Is this connection created and managed by Looker (read-only)
+ * @property custom_local_port This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
  * @property tunnel_id The Id of the ssh tunnel this connection uses
+ * @property uses_tns Enable Transparent Network Substrate (TNS) connections
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
@@ -1754,7 +1779,9 @@ data class DBConnection (
     var after_connect_statements: String? = null,
     var pdt_context_override: DBConnectionOverride? = null,
     var managed: Boolean? = null,
+    var custom_local_port: Long? = null,
     var tunnel_id: String? = null,
+    var uses_tns: Boolean? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
@@ -4930,6 +4957,7 @@ data class SessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property sisu
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4944,7 +4972,29 @@ data class Setting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var sisu: SisuSetting? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property enabled Whether the Sisu integration is enabled
+ * @property extension_id The extension ID of the installed Sisu extension
+ * @property configured Whether the Looker instance has been configured  with Sisu
+ * @property api_key_id The API key ID generated for use with Sisu
+ * @property api_user_id The user ID associated with the API key generated for use with Sisu
+ * @property installation_id The marketplace installation id of the Sisu extension
+ * @property listing_id_override An alternate marketplace listing id to use for the Sisu extension.
+ */
+data class SisuSetting (
+    var can: Map<String,Boolean>? = null,
+    var enabled: Boolean? = null,
+    var extension_id: String? = null,
+    var configured: Boolean? = null,
+    var api_key_id: String? = null,
+    var api_user_id: String? = null,
+    var installation_id: String? = null,
+    var listing_id_override: String? = null
 ) : Serializable
 
 /**
@@ -5249,6 +5299,7 @@ data class Theme (
  * @property show_dashboard_menu Toggle to show the dashboard actions menu. Defaults to true.
  * @property show_filters_toggle Toggle to show the filters icon/toggle. Defaults to true.
  * @property show_dashboard_header Toggle to show the dashboard header. Defaults to true.
+ * @property center_dashboard_title Toggle to center the dashboard title. Defaults to false.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5273,7 +5324,8 @@ data class ThemeSettings (
     var show_reload_data_icon: Boolean? = null,
     var show_dashboard_menu: Boolean? = null,
     var show_filters_toggle: Boolean? = null,
-    var show_dashboard_header: Boolean? = null
+    var show_dashboard_header: Boolean? = null,
+    var center_dashboard_title: Boolean? = null
 ) : Serializable
 
 /**
@@ -5462,7 +5514,7 @@ data class UserAttributeGroupValue (
  * @property value_is_hidden If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
  * @property user_attribute_id Id of User Attribute (read-only)
  * @property source How user got this value for this attribute (read-only)
- * @property hidden_value_domain_whitelist If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+ * @property hidden_value_domain_whitelist If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
  */
 data class UserAttributeWithValue (
     var can: Map<String,Boolean>? = null,
@@ -6103,8 +6155,8 @@ data class WriteDatagroup (
  * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  *
  * @property name Name of the connection. Also used as the unique identifier
- * @property host Host name/address of server
- * @property port Port number on server
+ * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+ * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
  * @property password (Write-Only) Password for server authentication
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
@@ -6129,7 +6181,9 @@ data class WriteDatagroup (
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  * @property pdt_context_override Dynamic writeable type for DBConnectionOverride removes:
  * has_password
+ * @property custom_local_port This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
  * @property tunnel_id The Id of the ssh tunnel this connection uses
+ * @property uses_tns Enable Transparent Network Substrate (TNS) connections
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
@@ -6164,7 +6218,9 @@ data class WriteDBConnection (
     var sql_writing_with_info_schema: Boolean? = null,
     var after_connect_statements: String? = null,
     var pdt_context_override: WriteDBConnectionOverride? = null,
+    var custom_local_port: Long? = null,
     var tunnel_id: String? = null,
+    var uses_tns: Boolean? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
@@ -6935,6 +6991,8 @@ data class WriteSessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property sisu Dynamic writeable type for SisuSetting removes:
+ * can
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6949,7 +7007,30 @@ data class WriteSetting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var sisu: WriteSisuSetting? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for SisuSetting removes:
+ * can
+ *
+ * @property enabled Whether the Sisu integration is enabled
+ * @property extension_id The extension ID of the installed Sisu extension
+ * @property configured Whether the Looker instance has been configured  with Sisu
+ * @property api_key_id The API key ID generated for use with Sisu
+ * @property api_user_id The user ID associated with the API key generated for use with Sisu
+ * @property installation_id The marketplace installation id of the Sisu extension
+ * @property listing_id_override An alternate marketplace listing id to use for the Sisu extension.
+ */
+data class WriteSisuSetting (
+    var enabled: Boolean? = null,
+    var extension_id: String? = null,
+    var configured: Boolean? = null,
+    var api_key_id: String? = null,
+    var api_user_id: String? = null,
+    var installation_id: String? = null,
+    var listing_id_override: String? = null
 ) : Serializable
 
 /**

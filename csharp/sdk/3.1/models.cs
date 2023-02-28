@@ -1145,9 +1145,9 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
-  /// <summary>Host name/address of server</summary>
+  /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
-  /// <summary>Port number on server</summary>
+  /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
   public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
@@ -1210,6 +1210,8 @@ public class DBConnection : SdkModel
   public DBConnectionOverride? pdt_context_override { get; set; }
   /// <summary>Is this connection created and managed by Looker (read-only)</summary>
   public bool? managed { get; set; } = null;
+  /// <summary>Enable Transparent Network Substrate (TNS) connections</summary>
+  public bool? uses_tns { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -4140,6 +4142,8 @@ public class ThemeSettings : SdkModel
   public bool? show_filters_toggle { get; set; } = null;
   /// <summary>Toggle to show the dashboard header. Defaults to true.</summary>
   public bool? show_dashboard_header { get; set; } = null;
+  /// <summary>Toggle to center the dashboard title. Defaults to false.</summary>
+  public bool? center_dashboard_title { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -4331,7 +4335,7 @@ public class UserAttributeWithValue : SdkModel
   public long? user_attribute_id { get; set; } = null;
   /// <summary>How user got this value for this attribute (read-only)</summary>
   public string? source { get; set; } = null;
-  /// <summary>If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)</summary>
+  /// <summary>If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
@@ -4830,9 +4834,9 @@ public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// <summary>Host name/address of server</summary>
+  /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
-  /// <summary>Port number on server</summary>
+  /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
   public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
@@ -4883,6 +4887,8 @@ public class WriteDBConnection : SdkModel
   /// has_password
   /// </summary>
   public WriteDBConnectionOverride? pdt_context_override { get; set; }
+  /// <summary>Enable Transparent Network Substrate (TNS) connections</summary>
+  public bool? uses_tns { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:

@@ -25,7 +25,7 @@
  */
 
 /**
- * 390 API models: 243 Spec, 65 Request, 60 Write, 22 Enum
+ * 394 API models: 245 Spec, 66 Request, 61 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -907,6 +907,45 @@ export interface IContentMetaGroupUser {
    * ID of associated user (read-only)
    */
   user_id?: string | null
+}
+
+export interface IContentSearch {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Primary id associated with the content (read-only)
+   */
+  content_id?: string | null
+  /**
+   * Type of content (read-only)
+   */
+  type?: string | null
+  /**
+   * Content title (read-only)
+   */
+  title?: string | null
+  /**
+   * Content description (read-only)
+   */
+  description?: string | null
+  /**
+   * Id of the folder where the content is saved (read-only)
+   */
+  folder_id?: string | null
+  /**
+   * Name of the folder where the content is saved (read-only)
+   */
+  folder_name?: string | null
+  /**
+   * Number of times the content has been viewed (read-only)
+   */
+  view_count?: number | null
+  /**
+   * Preferred way of viewing the content (only applies to dashboards) (read-only)
+   */
+  preferred_viewer?: string | null
 }
 
 export interface IContentValidation {
@@ -2642,11 +2681,11 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -2771,9 +2810,17 @@ export interface IDBConnection {
    */
   managed?: boolean
   /**
+   * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+   */
+  custom_local_port?: number | null
+  /**
    * The Id of the ssh tunnel this connection uses
    */
   tunnel_id?: string | null
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
@@ -8286,6 +8333,40 @@ export interface IRequestSearchBoards {
 }
 
 /**
+ * Dynamically generated request type for search_content
+ */
+export interface IRequestSearchContent {
+  /**
+   * Search terms
+   */
+  terms: string
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Content types requested (dashboard, look, lookml_dashboard).
+   */
+  types?: string | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
+  /**
+   * Requested page.
+   */
+  page?: number | null
+  /**
+   * Results per page.
+   */
+  per_page?: number | null
+}
+
+/**
  * Dynamically generated request type for search_content_favorites
  */
 export interface IRequestSearchContentFavorites {
@@ -10233,6 +10314,42 @@ export interface ISetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[]
+  sisu?: ISisuSetting
+}
+
+export interface ISisuSetting {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Whether the Sisu integration is enabled
+   */
+  enabled?: boolean
+  /**
+   * The extension ID of the installed Sisu extension
+   */
+  extension_id?: string | null
+  /**
+   * Whether the Looker instance has been configured  with Sisu
+   */
+  configured?: boolean
+  /**
+   * The API key ID generated for use with Sisu
+   */
+  api_key_id?: string | null
+  /**
+   * The user ID associated with the API key generated for use with Sisu
+   */
+  api_user_id?: string | null
+  /**
+   * The marketplace installation id of the Sisu extension
+   */
+  installation_id?: string | null
+  /**
+   * An alternate marketplace listing id to use for the Sisu extension.
+   */
+  listing_id_override?: string | null
 }
 
 export interface ISmtpNodeStatus {
@@ -10715,6 +10832,10 @@ export interface IThemeSettings {
    * Toggle to show the dashboard header. Defaults to true.
    */
   show_dashboard_header?: boolean
+  /**
+   * Toggle to center the dashboard title. Defaults to false.
+   */
+  center_dashboard_title?: boolean
 }
 
 export interface ITimezone {
@@ -11030,7 +11151,7 @@ export interface IUserAttributeWithValue {
    */
   source?: string | null
   /**
-   * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+   * If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
    */
   hidden_value_domain_whitelist?: string | null
 }
@@ -12020,11 +12141,11 @@ export interface IWriteDBConnection {
    */
   name?: string
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -12121,9 +12242,17 @@ export interface IWriteDBConnection {
    */
   pdt_context_override?: IWriteDBConnectionOverride | null
   /**
+   * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+   */
+  custom_local_port?: number | null
+  /**
    * The Id of the ssh tunnel this connection uses
    */
   tunnel_id?: string | null
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
@@ -13404,6 +13533,46 @@ export interface IWriteSetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[] | null
+  /**
+   * Dynamic writeable type for SisuSetting removes:
+   * can
+   */
+  sisu?: IWriteSisuSetting | null
+}
+
+/**
+ * Dynamic writeable type for SisuSetting removes:
+ * can
+ */
+export interface IWriteSisuSetting {
+  /**
+   * Whether the Sisu integration is enabled
+   */
+  enabled?: boolean
+  /**
+   * The extension ID of the installed Sisu extension
+   */
+  extension_id?: string | null
+  /**
+   * Whether the Looker instance has been configured  with Sisu
+   */
+  configured?: boolean
+  /**
+   * The API key ID generated for use with Sisu
+   */
+  api_key_id?: string | null
+  /**
+   * The user ID associated with the API key generated for use with Sisu
+   */
+  api_user_id?: string | null
+  /**
+   * The marketplace installation id of the Sisu extension
+   */
+  installation_id?: string | null
+  /**
+   * An alternate marketplace listing id to use for the Sisu extension.
+   */
+  listing_id_override?: string | null
 }
 
 /**

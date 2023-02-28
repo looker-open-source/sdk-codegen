@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 460 API methods
  */
 
 import type {
@@ -59,6 +59,7 @@ import type {
   IContentFavorite,
   IContentMeta,
   IContentMetaGroupUser,
+  IContentSearch,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -198,6 +199,7 @@ import type {
   IRequestSearchAlerts,
   IRequestSearchArtifacts,
   IRequestSearchBoards,
+  IRequestSearchContent,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
   IRequestSearchCredentialsEmail,
@@ -2504,6 +2506,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
+   *  - sisu
    *
    * GET /setting -> ISetting
    *
@@ -2532,6 +2535,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
+   *  - sisu
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -3238,6 +3242,28 @@ export interface ILooker40SDK extends IAPIMethods {
     content_metadata_access_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>
+
+  /**
+   * ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+   * title and description of the content and the closest results are returned. Content that has been frequently
+   * viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+   *
+   * This endpoint does not return a full description of these content types. For more specific information
+   * about each type please refer to the individual content specific API endpoints.
+   *
+   * Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+   * Get the **full details** of a specific look by id with [look()](#!/Look/look)
+   *
+   * GET /content/{terms} -> IContentSearch[]
+   *
+   * @param request composed interface "IRequestSearchContent" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_content(
+    request: IRequestSearchContent,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IContentSearch[], IError>>
 
   /**
    * ### Get an image representing the contents of a dashboard or look.
@@ -7151,7 +7177,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -7266,7 +7292,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -7316,7 +7342,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -7444,7 +7470,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
