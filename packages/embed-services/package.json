@@ -11,7 +11,7 @@
   ],
   "private": true,
   "publishConfig": {
-    "access": "private"
+    "access": "restricted"
   },
   "repository": {
     "type": "git",
