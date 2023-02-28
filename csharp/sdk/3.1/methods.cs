@@ -6154,7 +6154,7 @@ namespace Looker.SDK.API31
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -6275,7 +6275,7 @@ namespace Looker.SDK.API31
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -6324,7 +6324,7 @@ namespace Looker.SDK.API31
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -6479,7 +6479,7 @@ namespace Looker.SDK.API31
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats

@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 459 API methods
+/// 460 API methods
 
 #nullable enable
 using System;
@@ -2409,6 +2409,7 @@ namespace Looker.SDK.API40
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
+  ///  - sisu
   ///
   /// GET /setting -> Setting
   ///
@@ -2438,6 +2439,7 @@ namespace Looker.SDK.API40
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
+  ///  - sisu
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
@@ -3196,6 +3198,47 @@ namespace Looker.SDK.API40
 {  
       content_metadata_access_id = SdkUtils.EncodeParam(content_metadata_access_id);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/content_metadata_access/{content_metadata_access_id}", null,null,options);
+  }
+
+  /// ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+  /// title and description of the content and the closest results are returned. Content that has been frequently
+  /// viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+  ///
+  /// This endpoint does not return a full description of these content types. For more specific information
+  /// about each type please refer to the individual content specific API endpoints.
+  ///
+  /// Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+  /// Get the **full details** of a specific look by id with [look()](#!/Look/look)
+  ///
+  /// GET /content/{terms} -> ContentSearch[]
+  ///
+  /// <returns><c>ContentSearch[]</c> content (application/json)</returns>
+  ///
+  /// <param name="terms">Search terms</param>
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="types">Content types requested (dashboard, look, lookml_dashboard).</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
+  /// <param name="page">Requested page.</param>
+  /// <param name="per_page">Results per page.</param>
+  public async Task<SdkResponse<ContentSearch[], Exception>> search_content(
+    string terms,
+    string? fields = null,
+    string? types = null,
+    long? limit = null,
+    long? offset = null,
+    long? page = null,
+    long? per_page = null,
+    ITransportSettings? options = null)
+{  
+      terms = SdkUtils.EncodeParam(terms);
+    return await AuthRequest<ContentSearch[], Exception>(HttpMethod.Get, $"/content/{terms}", new Values {
+      { "fields", fields },
+      { "types", types },
+      { "limit", limit },
+      { "offset", offset },
+      { "page", page },
+      { "per_page", per_page }},null,options);
   }
 
   /// ### Get an image representing the contents of a dashboard or look.
@@ -8145,7 +8188,7 @@ namespace Looker.SDK.API40
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -8268,7 +8311,7 @@ namespace Looker.SDK.API40
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -8317,7 +8360,7 @@ namespace Looker.SDK.API40
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
@@ -8474,7 +8517,7 @@ namespace Looker.SDK.API40
   /// #### Email Permissions:
   ///
   /// For details about permissions required to schedule delivery to email and the safeguards
-  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+  /// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
   ///
   ///
   /// #### Scheduled Plan Destination Formats
