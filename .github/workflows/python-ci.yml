@@ -18,6 +18,9 @@ env:
   TOX_JUNIT_OUTPUT_DIR: results
 
 jobs:
+  setup:
+    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
+
   typecheck:
     name: Mypy
     runs-on: ubuntu-latest
@@ -92,9 +95,6 @@ jobs:
           name: python-test-results
           path: python/results/
 
-  setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
-
   integration:
     needs: [unit,setup]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
@@ -103,8 +103,8 @@ jobs:
       LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
       LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
       LOOKERSDK_TIMEOUT: 600
-    #runs-on: ${{ matrix.os }}-latest
-    runs-on: Ubuntu20.04-4core-16gb
+    runs-on: ${{ matrix.os }}
+    #runs-on: Ubuntu20.04-4core-16gb
     defaults:
       run:
         shell: bash
@@ -113,7 +113,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu
+          - Ubuntu20.04-4core-16gb
         looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
