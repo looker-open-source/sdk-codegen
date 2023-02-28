@@ -9,7 +9,7 @@
   "files": [
     "lib"
   ],
-  "private": false,
+  "private": true,
   "publishConfig": {
     "access": "private"
   },
