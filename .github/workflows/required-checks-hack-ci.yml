@@ -58,6 +58,7 @@ jobs:
               - packages/hackathon/**/*
             python:
               - python/**/*
+              - .github/workflows/python-ci.yml
             resources:
               - bin/looker-resources-index/**/*
               - docs/resources/**/*
