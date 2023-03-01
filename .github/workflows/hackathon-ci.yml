@@ -4,6 +4,7 @@ on:
     paths:
       - packages/wholly-artifact/**
       - packages/hackathon/**
+      - .github/workflows/hackathon-ci.yml
 
   push:
     branches:
@@ -11,6 +12,7 @@ on:
     paths:
       - packages/wholly-artifact/**
       - packages/hackathon/**
+      - .github/workflows/hackathon-ci.yml
 
   workflow_dispatch:
 

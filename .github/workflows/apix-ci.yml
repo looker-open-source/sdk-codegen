@@ -7,6 +7,7 @@ on:
       - packages/api-explorer/**
       - packages/extension-api-explorer/**
       - packages/extension-utils/**
+      - .github/workflows/apix-ci.yml
 
   push:
     branches:
@@ -17,6 +18,7 @@ on:
       - packages/api-explorer/**
       - packages/extension-api-explorer/**
       - packages/extension-utils/**
+      - .github/workflows/apix-ci.yml
 
   workflow_dispatch:
 

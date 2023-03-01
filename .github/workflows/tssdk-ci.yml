@@ -8,6 +8,7 @@ on:
       - packages/extension-sdk/**
       - packages/extension-sdk-react/**
       - packages/extension-utils/**
+      - .github/workflows/tssdk-ci.yml
 
   push:
     branches:
@@ -19,6 +20,7 @@ on:
       - packages/extension-sdk/**
       - packages/extension-sdk-react/**
       - packages/extension-utils/**
+      - .github/workflows/tssdk-ci.yml
 
   workflow_dispatch:
 

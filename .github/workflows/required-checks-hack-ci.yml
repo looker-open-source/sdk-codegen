@@ -49,19 +49,23 @@ jobs:
               - packages/api-explorer/**/*
               - packages/extension-api-explorer/**/*
               - packages/extension-utils/**/*
+              - .github/workflows/apix-ci.yml
             codegen:
               - packages/sdk-codegen/**/*
               - packages/sdk-codegen-utils/**/*
               - packages/sdk-codegen-scripts/**/*
+              - .github/workflows/codegen-ci.yml
             hackathon:
               - packages/wholly-sheet/**/*
               - packages/hackathon/**/*
+              - .github/workflows/hackathon-ci.yml
             python:
               - python/**/*
               - .github/workflows/python-ci.yml
             resources:
               - bin/looker-resources-index/**/*
               - docs/resources/**/*
+              - .github/workflows/resources-ci.yml
             tssdk:
               - packages/sdk/**/*
               - packages/sdk-rtl/**/*
@@ -69,8 +73,10 @@ jobs:
               - packages/extension-sdk/**/*
               - packages/extension-sdk-react/**/*
               - packages/extension-utils/**/*
+              - .github/workflows/tssdk-ci.yml
             gosdk:
               - packages/go/**/*
+              - .github/workflows/go-ci.yml
 
       - name: Debug info
         run: |
