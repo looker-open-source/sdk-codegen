@@ -12,6 +12,8 @@ on:
       - bin/looker-resources-index/**
       - docs/resources/**
 
+  workflow_dispatch:
+
 defaults:
   run:
     shell: bash
