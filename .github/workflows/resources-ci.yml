@@ -4,6 +4,7 @@ on:
     paths:
       - bin/looker-resources-index/**
       - docs/resources/**
+      - .github/workflows/resources-ci.yml
 
   push:
     branches:
@@ -11,6 +12,7 @@ on:
     paths:
       - bin/looker-resources-index/**
       - docs/resources/**
+      - .github/workflows/resources-ci.yml
 
   workflow_dispatch:
 
