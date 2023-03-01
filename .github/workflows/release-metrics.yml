@@ -6,12 +6,17 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1.0.0
         with:
+          credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_BQ_METRICS_KEY }}
-          export_default_credentials: true
+          create_credentials_file: true
+          export_environment_variables: true
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1.1.0
+
       - run: 'jq -c ''.release |
              {
                package_name: .name | split(" ")[0],

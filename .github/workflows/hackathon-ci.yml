@@ -4,6 +4,7 @@ on:
     paths:
       - packages/wholly-artifact/**
       - packages/hackathon/**
+      - .github/workflows/hackathon-ci.yml
 
   push:
     branches:
@@ -11,6 +12,7 @@ on:
     paths:
       - packages/wholly-artifact/**
       - packages/hackathon/**
+      - .github/workflows/hackathon-ci.yml
 
   workflow_dispatch:
 
@@ -33,15 +35,15 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Repo Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 

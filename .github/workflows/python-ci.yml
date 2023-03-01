@@ -105,7 +105,8 @@ jobs:
       LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
       LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
       LOOKERSDK_TIMEOUT: 600
-    runs-on: ${{ matrix.os }}
+    runs-on:
+      group: ${{ matrix.os }}
     #runs-on: Ubuntu20.04-4core-16gb
     defaults:
       run:
@@ -115,7 +116,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - Ubuntu20.04-4core-16gb
+          - large-ubuntu
         looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
