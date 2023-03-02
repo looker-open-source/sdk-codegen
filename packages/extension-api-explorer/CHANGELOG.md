@@ -1,5 +1,16 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.43 to ^0.9.44
+    * @looker/extension-sdk bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-sdk-react bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-utils bumped from ^0.1.20 to ^0.1.21
+    * @looker/run-it bumped from ^0.9.43 to ^0.9.44
+    * @looker/sdk bumped from ^23.0.0 to ^23.2.0
+
 ## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.20.1...extension-api-explorer-v22.21.0) (2023-02-22)
 
 
