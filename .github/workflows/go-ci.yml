@@ -3,12 +3,14 @@ on:
   pull_request:
     paths:
       - go/**
+      - .github/workflows/go-ci.yml
 
   push:
     branches:
       - main
     paths:
       - go/**
+      - .github/workflows/go-ci.yml
 
   workflow_dispatch:
 
@@ -36,15 +38,15 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Repo Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
 
@@ -59,7 +61,7 @@ jobs:
 
       - name: Upload Go unit test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.JUNIT_ARTIFACT_DIR }}
           path: ${{ env.JUNIT_OUTPUT_DIR }}
@@ -107,14 +109,18 @@ jobs:
           #  looker: '7_20'
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1.0.0
+        with:
+          credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          create_credentials_file: true
+          export_environment_variables: true
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
-          export_default_credentials: true
+        uses: google-github-actions/setup-gcloud@v1.1.0
 
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
@@ -153,7 +159,7 @@ jobs:
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - name: Install Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: 1.17.6
           check-latest: true
@@ -173,7 +179,7 @@ jobs:
 
       - name: Upload Go unit test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.JUNIT_ARTIFACT_DIR }}
           path: ${{ env.JUNIT_OUTPUT_DIR }}
@@ -185,7 +191,7 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: artifacts
 

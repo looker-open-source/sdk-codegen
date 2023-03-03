@@ -190,8 +190,8 @@ const regen = async (release) => {
       return batch([
         'yarn gen',
         'bin/smoke typescript python kotlin',
-        'git add -A',
-        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0`,
+        'git add -u',
+        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
         `git push origin ${branch}`,
         /* create PR
          */

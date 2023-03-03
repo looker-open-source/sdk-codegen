@@ -1,5 +1,27 @@
 # Changelog
 
+## [23.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.0.0...sdk-codegen-all-v23.2.0) (2023-03-01)
+
+
+### Features
+
+* generate SDKs for Looker 23.2 ([#1257](https://github.com/looker-open-source/sdk-codegen/issues/1257)) ([75346bc](https://github.com/looker-open-source/sdk-codegen/commit/75346bc0cc03224661a2986a44f5d670f872def4))
+
+## [23.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.13.0...sdk-codegen-all-v23.0.0) (2023-02-22)
+
+
+### Features
+
+* generate SDKs for Looker 23.0 ([#1237](https://github.com/looker-open-source/sdk-codegen/issues/1237)) ([2ade858](https://github.com/looker-open-source/sdk-codegen/commit/2ade85815c43383169263659f5dddd783c062c09))
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+* show Looker release version providing API specification ([#1233](https://github.com/looker-open-source/sdk-codegen/issues/1233)) ([a2be9ee](https://github.com/looker-open-source/sdk-codegen/commit/a2be9ee4736ce88336a27b78989763ecb2c57e00))
+* track request time if the transport doesn't ([#1231](https://github.com/looker-open-source/sdk-codegen/issues/1231)) ([a0e31a4](https://github.com/looker-open-source/sdk-codegen/commit/a0e31a41c1075b653fc8a2bf44b297ff98b41c72))
+
+
+### Miscellaneous Chores
+
+* Update sdk Readme and kickoff Release 23.0.0 ([#1247](https://github.com/looker-open-source/sdk-codegen/issues/1247)) ([4a8ef9d](https://github.com/looker-open-source/sdk-codegen/commit/4a8ef9dad45de28d222b35229fadd985aec06bfc))
+
 ## [2.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.12.0...sdk-codegen-all-v2.13.0) (2022-12-09)
 
 

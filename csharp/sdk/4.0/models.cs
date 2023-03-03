@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
+/// 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -573,6 +573,28 @@ public class ContentMetaGroupUser : SdkModel
   public string? group_id { get; set; } = null;
   /// <summary>ID of associated user (read-only)</summary>
   public string? user_id { get; set; } = null;
+}
+
+public class ContentSearch : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Primary id associated with the content (read-only)</summary>
+  public string? content_id { get; set; } = null;
+  /// <summary>Type of content (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Content title (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Content description (read-only)</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Id of the folder where the content is saved (read-only)</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>Name of the folder where the content is saved (read-only)</summary>
+  public string? folder_name { get; set; } = null;
+  /// <summary>Number of times the content has been viewed (read-only)</summary>
+  public long? view_count { get; set; } = null;
+  /// <summary>Preferred way of viewing the content (only applies to dashboards) (read-only)</summary>
+  public string? preferred_viewer { get; set; } = null;
 }
 
 public class ContentValidation : SdkModel
@@ -1584,9 +1606,9 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
-  /// <summary>Host name/address of server</summary>
+  /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
-  /// <summary>Port number on server</summary>
+  /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
   public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
@@ -1649,8 +1671,12 @@ public class DBConnection : SdkModel
   public DBConnectionOverride? pdt_context_override { get; set; }
   /// <summary>Is this connection created and managed by Looker (read-only)</summary>
   public bool? managed { get; set; } = null;
+  /// <summary>This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.</summary>
+  public long? custom_local_port { get; set; } = null;
   /// <summary>The Id of the ssh tunnel this connection uses</summary>
   public string? tunnel_id { get; set; } = null;
+  /// <summary>Enable Transparent Network Substrate (TNS) connections</summary>
+  public bool? uses_tns { get; set; } = null;
   /// <summary>Maximum number of threads to use to build PDTs in parallel</summary>
   public long? pdt_concurrency { get; set; } = null;
   /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
@@ -4719,6 +4745,27 @@ public class Setting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
+  public SisuSetting? sisu { get; set; }
+}
+
+public class SisuSetting : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Whether the Sisu integration is enabled</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>The extension ID of the installed Sisu extension</summary>
+  public string? extension_id { get; set; } = null;
+  /// <summary>Whether the Looker instance has been configured  with Sisu</summary>
+  public bool? configured { get; set; } = null;
+  /// <summary>The API key ID generated for use with Sisu</summary>
+  public string? api_key_id { get; set; } = null;
+  /// <summary>The user ID associated with the API key generated for use with Sisu</summary>
+  public string? api_user_id { get; set; } = null;
+  /// <summary>The marketplace installation id of the Sisu extension</summary>
+  public string? installation_id { get; set; } = null;
+  /// <summary>An alternate marketplace listing id to use for the Sisu extension.</summary>
+  public string? listing_id_override { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5051,6 +5098,8 @@ public class ThemeSettings : SdkModel
   public bool? show_filters_toggle { get; set; } = null;
   /// <summary>Toggle to show the dashboard header. Defaults to true.</summary>
   public bool? show_dashboard_header { get; set; } = null;
+  /// <summary>Toggle to center the dashboard title. Defaults to false.</summary>
+  public bool? center_dashboard_title { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -5244,7 +5293,7 @@ public class UserAttributeWithValue : SdkModel
   public string? user_attribute_id { get; set; } = null;
   /// <summary>How user got this value for this attribute (read-only)</summary>
   public string? source { get; set; } = null;
-  /// <summary>If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)</summary>
+  /// <summary>If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
 }
 
@@ -5846,9 +5895,9 @@ public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// <summary>Host name/address of server</summary>
+  /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
-  /// <summary>Port number on server</summary>
+  /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
   public string? port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
@@ -5899,8 +5948,12 @@ public class WriteDBConnection : SdkModel
   /// has_password
   /// </summary>
   public WriteDBConnectionOverride? pdt_context_override { get; set; }
+  /// <summary>This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.</summary>
+  public long? custom_local_port { get; set; } = null;
   /// <summary>The Id of the ssh tunnel this connection uses</summary>
   public string? tunnel_id { get; set; } = null;
+  /// <summary>Enable Transparent Network Substrate (TNS) connections</summary>
+  public bool? uses_tns { get; set; } = null;
   /// <summary>Maximum number of threads to use to build PDTs in parallel</summary>
   public long? pdt_concurrency { get; set; } = null;
   /// <summary>When disable_context_comment is true comment will not be added to SQL</summary>
@@ -6640,6 +6693,31 @@ public class WriteSetting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for SisuSetting removes:
+  /// can
+  /// </summary>
+  public WriteSisuSetting? sisu { get; set; }
+}
+
+/// Dynamic writeable type for SisuSetting removes:
+/// can
+public class WriteSisuSetting : SdkModel
+{
+  /// <summary>Whether the Sisu integration is enabled</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>The extension ID of the installed Sisu extension</summary>
+  public string? extension_id { get; set; } = null;
+  /// <summary>Whether the Looker instance has been configured  with Sisu</summary>
+  public bool? configured { get; set; } = null;
+  /// <summary>The API key ID generated for use with Sisu</summary>
+  public string? api_key_id { get; set; } = null;
+  /// <summary>The user ID associated with the API key generated for use with Sisu</summary>
+  public string? api_user_id { get; set; } = null;
+  /// <summary>The marketplace installation id of the Sisu extension</summary>
+  public string? installation_id { get; set; } = null;
+  /// <summary>An alternate marketplace listing id to use for the Sisu extension.</summary>
+  public string? listing_id_override { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:

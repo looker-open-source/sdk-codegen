@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 460 API methods
  */
 
 
@@ -2450,6 +2450,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - sisu
      *
      * @param {String} fields Requested fields
      *
@@ -2479,6 +2480,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - sisu
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -3251,6 +3253,47 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ) : SDKResponse {
         val path_content_metadata_access_id = encodeParam(content_metadata_access_id)
         return this.delete<String>("/content_metadata_access/${path_content_metadata_access_id}", mapOf())
+    }
+
+
+    /**
+     * ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+     * title and description of the content and the closest results are returned. Content that has been frequently
+     * viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+     *
+     * This endpoint does not return a full description of these content types. For more specific information
+     * about each type please refer to the individual content specific API endpoints.
+     *
+     * Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+     * Get the **full details** of a specific look by id with [look()](#!/Look/look)
+     *
+     * @param {String} terms Search terms
+     * @param {String} fields Requested fields.
+     * @param {String} types Content types requested (dashboard, look, lookml_dashboard).
+     * @param {Long} limit Number of results to return. (used with offset and takes priority over page and per_page)
+     * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+     * @param {Long} page Requested page.
+     * @param {Long} per_page Results per page.
+     *
+     * GET /content/{terms} -> Array<ContentSearch>
+     */
+    @JvmOverloads fun search_content(
+        terms: String,
+        fields: String? = null,
+        types: String? = null,
+        limit: Long? = null,
+        offset: Long? = null,
+        page: Long? = null,
+        per_page: Long? = null
+    ) : SDKResponse {
+        val path_terms = encodeParam(terms)
+        return this.get<Array<ContentSearch>>("/content/${path_terms}", 
+            mapOf("fields" to fields,
+                 "types" to types,
+                 "limit" to limit,
+                 "offset" to offset,
+                 "page" to page,
+                 "per_page" to per_page))
     }
 
 
@@ -8196,7 +8239,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -8320,7 +8363,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -8370,7 +8413,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -8528,7 +8571,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats

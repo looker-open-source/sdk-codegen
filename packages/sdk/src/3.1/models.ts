@@ -1908,11 +1908,11 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -2036,6 +2036,10 @@ export interface IDBConnection {
    * Is this connection created and managed by Looker (read-only)
    */
   managed?: boolean
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
 }
 
 export interface IDBConnectionBase {
@@ -8808,6 +8812,10 @@ export interface IThemeSettings {
    * Toggle to show the dashboard header. Defaults to true.
    */
   show_dashboard_header?: boolean
+  /**
+   * Toggle to center the dashboard title. Defaults to false.
+   */
+  center_dashboard_title?: boolean
 }
 
 export interface ITimezone {
@@ -9119,7 +9127,7 @@ export interface IUserAttributeWithValue {
    */
   source?: string | null
   /**
-   * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+   * If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
    */
   hidden_value_domain_whitelist?: string
 }
@@ -9924,11 +9932,11 @@ export interface IWriteDBConnection {
    */
   name?: string
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -10024,6 +10032,10 @@ export interface IWriteDBConnection {
    * has_password
    */
   pdt_context_override?: IWriteDBConnectionOverride | null
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
 }
 
 /**

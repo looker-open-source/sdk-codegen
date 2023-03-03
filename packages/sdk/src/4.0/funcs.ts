@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 460 API methods
  */
 
 import type {
@@ -64,6 +64,7 @@ import type {
   IContentFavorite,
   IContentMeta,
   IContentMetaGroupUser,
+  IContentSearch,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -203,6 +204,7 @@ import type {
   IRequestSearchAlerts,
   IRequestSearchArtifacts,
   IRequestSearchBoards,
+  IRequestSearchContent,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
   IRequestSearchCredentialsEmail,
@@ -3606,6 +3608,7 @@ export const mobile_settings = async (
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
+ *  - sisu
  *
  * GET /setting -> ISetting
  *
@@ -3643,6 +3646,7 @@ export const get_setting = async (
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
+ *  - sisu
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -4759,6 +4763,45 @@ export const delete_content_metadata_access = async (
   return sdk.delete<string, IError>(
     `/content_metadata_access/${content_metadata_access_id}`,
     null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+ * title and description of the content and the closest results are returned. Content that has been frequently
+ * viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+ *
+ * This endpoint does not return a full description of these content types. For more specific information
+ * about each type please refer to the individual content specific API endpoints.
+ *
+ * Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+ * Get the **full details** of a specific look by id with [look()](#!/Look/look)
+ *
+ * GET /content/{terms} -> IContentSearch[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchContent" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_content = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchContent,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IContentSearch[], IError>> => {
+  request.terms = encodeParam(request.terms)
+  return sdk.get<IContentSearch[], IError>(
+    `/content/${request.terms}`,
+    {
+      fields: request.fields,
+      types: request.types,
+      limit: request.limit,
+      offset: request.offset,
+      page: request.page,
+      per_page: request.per_page,
+    },
     null,
     options
   )
@@ -10772,7 +10815,7 @@ export const scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -10920,7 +10963,7 @@ export const all_scheduled_plans = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -10979,7 +11022,7 @@ export const create_scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11158,7 +11201,7 @@ export const scheduled_plans_for_lookml_dashboard = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
