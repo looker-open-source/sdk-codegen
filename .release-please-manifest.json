@@ -14,6 +14,7 @@
   "packages/sdk-codegen-utils": "21.0.11",
   "packages/sdk-node": "23.2.0",
   "packages/sdk-rtl": "21.6.0",
+  "packages/wholly-artifact": "0.1.0",
   "packages/wholly-sheet": "0.5.40",
   "python": "23.2.0",
   "packages/extension-playground": "1.0.1"
