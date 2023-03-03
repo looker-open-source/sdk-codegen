@@ -10,6 +10,12 @@
     * @looker/sdk bumped from ^23.0.0 to ^23.2.0
     * @looker/wholly-sheet bumped from ^0.5.39 to ^0.5.40
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/wholly-artifact bumped from ^0.1.0 to ^0.1.1
+
 ## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.20.1...hackathon-v22.21.0) (2023-02-22)
 
 
