@@ -1,5 +1,12 @@
 # Changelog
 
+## [23.2.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.0...sdk-codegen-all-v23.2.1) (2023-03-09)
+
+
+### Bug Fixes
+
+* correct documentation on WhollyArtifact construction ([#1269](https://github.com/looker-open-source/sdk-codegen/issues/1269)) ([bec902c](https://github.com/looker-open-source/sdk-codegen/commit/bec902c511c77e02d49239e94f68fd91d2c38106))
+
 ## [23.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.0.0...sdk-codegen-all-v23.2.0) (2023-03-01)
 
 
