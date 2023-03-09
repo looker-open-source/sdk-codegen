@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2](https://github.com/looker-open-source/sdk-codegen/compare/wholly-artifact-v0.1.1...wholly-artifact-v0.1.2) (2023-03-09)
+
+
+### Bug Fixes
+
+* correct documentation on WhollyArtifact construction ([#1269](https://github.com/looker-open-source/sdk-codegen/issues/1269)) ([bec902c](https://github.com/looker-open-source/sdk-codegen/commit/bec902c511c77e02d49239e94f68fd91d2c38106))
+
 ## [0.1.1](https://github.com/looker-open-source/sdk-codegen/compare/wholly-artifact-v0.1.0...wholly-artifact-v0.1.1) (2023-03-03)
 
 
