@@ -102,7 +102,7 @@ export class TypedRows<T> {
 }
 
 export interface IWhollyArtifact<T extends IRowModel, P> {
-  /** Initialized REST-based GSheets SDK */
+  /** Any initialized Looker TypeScript SDK  */
   sdk: IAPIMethods
 
   /** Namespace of this collection. Retrieved from IRowModel descendant */
