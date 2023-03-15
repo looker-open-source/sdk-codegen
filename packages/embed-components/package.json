@@ -22,8 +22,8 @@
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --mode file --out docs",
-    "watch": "yarn lerna exec --scope @looker/embed-components--stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
-    "watch:cjs": "yarn lerna exec --scope @looker/embed-components--stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+    "watch": "yarn lerna exec --scope @looker/embed-components --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
+    "watch:cjs": "yarn lerna exec --scope @looker/embed-components --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "bugs": {
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
