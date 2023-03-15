@@ -134,6 +134,10 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	// set query params
 	setQuery(req.URL, reqPars)
 
+	if options != nil && options.AgentTag != "" {
+		req.Header.Set("User-Agent", options.AgentTag)
+	}
+
 	// do the actual http call
 	res, err := s.Client.Do(req)
 	if err != nil {
