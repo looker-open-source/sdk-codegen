@@ -23,4 +23,10 @@
  SOFTWARE.
 
  */
-export default {}
+import styled from 'styled-components'
+import { Heading } from '@looker/components'
+import type { HeadingProps } from '@looker/components'
+
+export const ConfigHeading = styled(Heading).attrs(
+  ({ mb = 'xsmall', pt = 'xsmall' }: HeadingProps) => ({ mb, pt })
+)``

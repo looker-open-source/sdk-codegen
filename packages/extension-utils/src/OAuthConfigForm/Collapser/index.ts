@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export default {}
+export { CollapserCard } from './CollapserCard'

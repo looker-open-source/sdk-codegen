@@ -23,4 +23,31 @@
  SOFTWARE.
 
  */
-export default {}
+import React, { useState, useEffect } from 'react'
+import { ComponentsProvider } from '@looker/components'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+import { me } from '@looker/sdk'
+
+interface EmbedPlaygroundProps {
+  adaptor: IEnvironmentAdaptor
+  headless?: boolean
+}
+
+export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
+  const [greeting, setGreeting] = useState('Hello World!')
+  const sdk = adaptor.sdk
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const currentUser = await sdk.ok(me(sdk))
+      if (currentUser) {
+        const { first_name, last_name } = currentUser
+
+        setGreeting(`Hello ${first_name} ${last_name}!`)
+      }
+      return currentUser
+    }
+    getCurrentUser()
+  })
+
+  return <ComponentsProvider>{greeting}</ComponentsProvider>
+}
