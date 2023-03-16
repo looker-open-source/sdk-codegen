@@ -29,7 +29,7 @@ import io.ktor.http.*
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
-    open val transport: Transport = Transport(apiSettings)
+    open val transport: Transport = Transport(apiSettings),
 ) {
 
     var authToken: AuthToken = AuthToken()
@@ -148,15 +148,15 @@ open class AuthSession(
                 Parameters.build {
                     append(client_id, clientId)
                     append(client_secret, clientSecret)
-                }
+                },
             )
             val token = ok<AuthToken>(
                 transport.request<AuthToken>(
                     HttpMethod.POST,
                     "$apiPath/login",
                     emptyMap(),
-                    body
-                )
+                    body,
+                ),
             )
             authToken = token
         }
@@ -165,7 +165,7 @@ open class AuthSession(
             val token = activeToken()
             val sudoToken = transport.request<AuthToken>(
                 HttpMethod.POST,
-                "/login/$newId"
+                "/login/$newId",
             ) { requestSettings ->
                 val headers = requestSettings.headers.toMutableMap()
                 if (token.accessToken.isNotBlank()) {

@@ -38,15 +38,15 @@ val jsonDictType = object : TypeToken<jsonDict>() {}.type
 class TestSettingsIniFile(
     filename: String = "./looker.ini",
     section: String = "",
-    private val base: ConfigurationProvider = ApiSettings.fromIniFile(filename, section)
+    private val base: ConfigurationProvider = ApiSettings.fromIniFile(filename, section),
 ) : ConfigurationProvider by base {
 
     override fun readConfig(): Map<String, String> {
         return base.readConfig().plus(
             mapOf(
                 "client_id" to "test_client_id",
-                "redirect_uri" to "looker://"
-            )
+                "redirect_uri" to "looker://",
+            ),
         )
     }
 }
