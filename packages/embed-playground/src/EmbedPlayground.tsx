@@ -24,8 +24,18 @@
 
  */
 import React, { useState, useEffect } from 'react'
-import { ComponentsProvider } from '@looker/components'
+import {
+  ComponentsProvider,
+  Dialog,
+  IconButton,
+  Flex,
+  FlexItem,
+  Heading,
+} from '@looker/components'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
+import { Themes } from '@looker/embed-services'
+import { QuickEmbed } from '@looker/embed-components'
+import { FlashOn } from '@styled-icons/material-outlined/FlashOn'
 import { me } from '@looker/sdk'
 
 interface EmbedPlaygroundProps {
@@ -34,20 +44,45 @@ interface EmbedPlaygroundProps {
 }
 
 export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
-  const [greeting, setGreeting] = useState('Hello World!')
+  const [greeting, setGreeting] = useState('')
   const sdk = adaptor.sdk
   useEffect(() => {
     const getCurrentUser = async () => {
       const currentUser = await sdk.ok(me(sdk))
       if (currentUser) {
-        const { first_name, last_name } = currentUser
+        const { first_name } = currentUser
 
-        setGreeting(`Hello ${first_name} ${last_name}!`)
+        setGreeting(`Hi ${first_name}, are you ready to embed?`)
       }
       return currentUser
     }
     getCurrentUser()
   })
 
-  return <ComponentsProvider>{greeting}</ComponentsProvider>
+  const themeOverrides = adaptor.themeOverrides()
+
+  return (
+    <ComponentsProvider
+      loadGoogleFonts={themeOverrides.loadGoogleFonts}
+      themeCustomizations={themeOverrides.themeCustomizations}
+    >
+      <Flex flexDirection="column" justifyContent="center" mt="30%">
+        <FlexItem alignSelf="center">
+          <Heading as="h2" color="key" pb="large">
+            {greeting}
+          </Heading>
+        </FlexItem>
+        <Dialog content={<QuickEmbed service={new Themes(adaptor.sdk)} />}>
+          <FlexItem alignSelf="center">
+            <IconButton
+              label="Quick Embed"
+              type="button"
+              icon={<FlashOn />}
+              size="large"
+            />
+          </FlexItem>
+        </Dialog>
+      </Flex>
+    </ComponentsProvider>
+  )
 }

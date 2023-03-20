@@ -43,7 +43,7 @@ import {
 import { functionalSdk40 } from '@looker/sdk'
 import { store } from './state'
 import { Loader } from './components'
-import { EmbedPlayground } from '.'
+import { EmbedPlayground } from './EmbedPlayground'
 
 const ConfigKey = 'EPConfig'
 
@@ -72,7 +72,7 @@ export const StandaloneEmbedPlayground = () => {
     sdk.authSession.settings as OAuthConfigProvider
   ).authIsConfigured()
   const canLogin =
-    !authIsConfigured && !sdk.authSession.isAuthenticated() && !oauthReturn
+    authIsConfigured && !sdk.authSession.isAuthenticated() && !oauthReturn
 
   useEffect(() => {
     const login = async () => await adaptor.login()

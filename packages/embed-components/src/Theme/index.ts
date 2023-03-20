@@ -23,5 +23,4 @@
  SOFTWARE.
 
  */
-export * from './Theme'
-export * from './QuickEmbed'
+export { SelectTheme } from './SelectTheme'
