@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export default {}
+export * from './Loader'

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2023 Looker Data Sciences, Inc.
+ Copyright (c) 2020 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,4 +23,29 @@
  SOFTWARE.
 
  */
-export default {}
+
+const path = require('path')
+const base = require('../../webpack.base.config')(__dirname)
+
+module.exports = {
+  ...base,
+  mode: 'development',
+  entry: {
+    app: path.join(__dirname, 'src/App.tsx'),
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'src'),
+    },
+    historyApiFallback: true,
+    devMiddleware: {
+      publicPath: '/dist/',
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  },
+  devtool: 'inline-source-map',
+}

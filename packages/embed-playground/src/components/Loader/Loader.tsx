@@ -23,4 +23,32 @@
  SOFTWARE.
 
  */
-export default {}
+import React from 'react'
+import {
+  ComponentsProvider,
+  Flex,
+  FlexItem,
+  Heading,
+  ProgressCircular,
+} from '@looker/components'
+import type { ThemeOverrides } from '@looker/extension-utils'
+
+export interface LoaderProps {
+  themeOverrides: ThemeOverrides
+  message: string
+}
+
+export const Loader = ({ themeOverrides, message }: LoaderProps) => (
+  <ComponentsProvider {...themeOverrides}>
+    <Flex flexDirection="column" justifyContent="center" mt="25%">
+      <FlexItem alignSelf="center">
+        <ProgressCircular size="large" />
+      </FlexItem>
+      <FlexItem mt="large" alignSelf="center">
+        <Heading color="key" as="h2">
+          {message}
+        </Heading>
+      </FlexItem>
+    </Flex>
+  </ComponentsProvider>
+)
