@@ -23,4 +23,6 @@
  SOFTWARE.
 
  */
-export default {}
+import { createStore } from '@looker/redux'
+
+export const store = createStore()

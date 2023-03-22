@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,11 @@
  SOFTWARE.
 
  */
-import type { ReactElement } from 'react'
+import type { FC, ReactElement } from 'react'
 import React from 'react'
 import { useToggle, Accordion2, Divider, Box2 } from '@looker/components'
-import { ArrowRight } from '@styled-icons/material/ArrowRight'
-import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
-
-import { RunItHeading } from '../common'
+import { ArrowRight, ArrowDropDown } from '@styled-icons/material'
+import { ConfigHeading } from '../ConfigHeading'
 
 interface CollapserCardProps {
   id?: string
@@ -42,13 +40,13 @@ interface CollapserCardProps {
 /**
  * Render a collapsable header and children
  */
-export const CollapserCard = ({
+export const CollapserCard: FC<CollapserCardProps> = ({
   id,
   heading,
   children,
   defaultOpen = true,
   divider = true,
-}: CollapserCardProps) => {
+}) => {
   const level = divider ? 'h3' : 'h4'
   const { value, toggle } = useToggle(defaultOpen)
 
@@ -61,7 +59,7 @@ export const CollapserCard = ({
         isOpen={value}
         toggleOpen={toggle}
         indicatorIcons={{ close: <ArrowRight />, open: <ArrowDropDown /> }}
-        label={<RunItHeading as={level}>{heading}</RunItHeading>}
+        label={<ConfigHeading as={level}>{heading}</ConfigHeading>}
       >
         <Box2 pb="xlarge">{children}</Box2>
       </Accordion2>
