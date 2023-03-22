@@ -91,13 +91,45 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	// prepare URL
 	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
 
-	bodyString := serializeBody(body)
+	bodyString := ""
+	contentTypeHeader := ""
+
+	// serialize body to string and determine request's Content-Type header
+	if body != nil {
+		// get the `body`'s type
+		kind := reflect.TypeOf(body).Kind()
+		value := reflect.ValueOf(body)
+
+		// check if it is pointer
+		if kind == reflect.Ptr {
+			// if so find the type it points to
+			kind = reflect.ValueOf(body).Elem().Kind()
+			value = reflect.ValueOf(body).Elem()
+		}
+
+		if kind == reflect.String {
+			contentTypeHeader = "text/plain"
+			bodyString = fmt.Sprintf("%v", value)
+		} else {
+			contentTypeHeader = "application/json"
+			serializedBody, err := json.Marshal(body)
+
+			if err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
+			}
+
+			bodyString = string(serializedBody)
+		}
+	}
 
 	// create new request
 	req, err := http.NewRequest(method, u, bytes.NewBufferString(bodyString))
 	if err != nil {
 		return err
 	}
+
+	// set content-type header
+	req.Header.Add("Content-Type", contentTypeHeader)
 
 	// set query params
 	setQuery(req.URL, reqPars)
@@ -136,38 +168,6 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	}
 
 	return nil
-}
-
-// serializeBody serializes body to a json, if the body is already string, it will just return it unchanged
-func serializeBody(body interface{}) string {
-	ret := ""
-	if body == nil {
-		return ret
-	}
-
-	// get the `body` type
-	kind := reflect.TypeOf(body).Kind()
-	value := reflect.ValueOf(body)
-
-	// check if it is pointer
-	if kind == reflect.Ptr {
-		// if so, use the value kind
-		kind = reflect.ValueOf(body).Elem().Kind()
-		value = reflect.ValueOf(body).Elem()
-	}
-
-	// it is string, return it as it is
-	if kind == reflect.String {
-		return fmt.Sprintf("%v", value)
-	}
-
-	bb, err := json.Marshal(body)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
-	}
-
-	return string(bb)
-
 }
 
 func isStringType(v interface{}) bool {
