@@ -29,11 +29,16 @@ import { all_themes, default_theme } from '@looker/sdk'
 
 export class ThemeService {
   private sdk: IAPIMethods
+  private loadingCount: number = 0
   public defaultTheme?: ITheme
   public themes?: ITheme[]
 
   constructor(sdk: IAPIMethods) {
     this.sdk = sdk
+  }
+
+  get loading() {
+    return this.loadingCount > 0
   }
 
   clear() {
@@ -44,10 +49,13 @@ export class ThemeService {
   async getDefaultTheme(ts?: Date) {
     if (!this.defaultTheme) {
       try {
+        this.loadingCount++
         this.defaultTheme = await this.sdk.ok(default_theme(this.sdk, ts))
       } catch (error: unknown) {
         console.error()
         throw error
+      } finally {
+        this.loadingCount--
       }
     }
     return this.defaultTheme
@@ -56,10 +64,13 @@ export class ThemeService {
   async getAllThemes(fields?: string) {
     if (!this.themes) {
       try {
+        this.loadingCount++
         this.themes = await this.sdk.ok(all_themes(this.sdk, fields))
       } catch (error: unknown) {
         console.error()
         throw error
+      } finally {
+        this.loadingCount--
       }
     }
     return this.themes

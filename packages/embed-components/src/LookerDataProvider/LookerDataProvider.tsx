@@ -56,22 +56,17 @@ export const LookerData =
 export function LookerDataProvider(props: LookerDataProviderProps) {
   const { children, sdk } = props
   const [themeService, setThemeService] = useState<ThemeService | undefined>()
-  const [loading, setLoading] = useState(false)
   const [currentTheme, setCurrentTheme] = useState<ITheme | undefined>()
   const themes = themeService?.themes || []
   const defaultTheme = themeService?.defaultTheme
+  const loading = themeService?.loading || false
 
   useEffect(() => {
     const initialize = async () => {
       if (sdk) {
         const service = new ThemeService(sdk)
-        setLoading(true)
-        try {
-          await service.loadThemeData(undefined, 'name')
-          setCurrentTheme(service.defaultTheme)
-        } finally {
-          setLoading(false)
-        }
+        await service.loadThemeData(undefined, 'name')
+        setCurrentTheme(service.defaultTheme)
         setThemeService(service)
       }
     }
