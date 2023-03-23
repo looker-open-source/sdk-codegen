@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import type { IAPIMethods } from '@looker/sdk-rtl'
 import { ThemeService } from '@looker/embed-services'
