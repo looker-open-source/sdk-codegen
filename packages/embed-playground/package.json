@@ -45,6 +45,7 @@
     "@looker/sdk": "^23.2.0",
     "@looker/sdk-rtl": "^21.6.0",
     "@styled-icons/material": "^10.47.0",
+    "@styled-icons/material-outlined": "^10.28.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-redux": "^8.0.5",

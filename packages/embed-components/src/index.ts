@@ -24,4 +24,7 @@
 
  */
 export * from './Theme'
+export * from './SelectTheme2'
 export * from './QuickEmbed'
+export * from './QuickEmbed2'
+export * from './LookerDataProvider'

@@ -23,6 +23,33 @@
  SOFTWARE.
 
  */
-export * from './Theme'
-export * from './ThemeService'
-export * from './EmbedUtils'
+import React from 'react'
+import { Select } from '@looker/components'
+import type { ITheme } from '@looker/sdk'
+
+export interface SelectTheme2Props {
+  loading: boolean
+  currentTheme?: ITheme
+  themes?: ITheme[]
+  onThemeChange: (selectedThemeName: string) => void
+}
+
+export const SelectTheme2 = ({
+  loading,
+  currentTheme = {},
+  themes = [],
+  onThemeChange,
+}: SelectTheme2Props) => {
+  const options = themes
+    .filter(({ name }) => !!name)
+    .map(({ name }) => ({ value: name || '', label: name || '' }))
+
+  return (
+    <Select
+      isLoading={loading}
+      value={currentTheme.name || ''}
+      options={options}
+      onChange={onThemeChange}
+    />
+  )
+}

@@ -33,8 +33,7 @@ import {
   Heading,
 } from '@looker/components'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import { Themes } from '@looker/embed-services'
-import { QuickEmbed } from '@looker/embed-components'
+import { LookerDataProvider, QuickEmbed2 } from '@looker/embed-components'
 import { FlashOn } from '@styled-icons/material-outlined/FlashOn'
 import { me } from '@looker/sdk'
 
@@ -66,23 +65,25 @@ export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
       loadGoogleFonts={themeOverrides.loadGoogleFonts}
       themeCustomizations={themeOverrides.themeCustomizations}
     >
-      <Flex flexDirection="column" justifyContent="center" mt="30%">
-        <FlexItem alignSelf="center">
-          <Heading as="h2" color="key" pb="large">
-            {greeting}
-          </Heading>
-        </FlexItem>
-        <Dialog content={<QuickEmbed service={new Themes(adaptor.sdk)} />}>
+      <LookerDataProvider sdk={adaptor.sdk}>
+        <Flex flexDirection="column" justifyContent="center" mt="30%">
           <FlexItem alignSelf="center">
-            <IconButton
-              label="Quick Embed"
-              type="button"
-              icon={<FlashOn />}
-              size="large"
-            />
+            <Heading as="h2" color="key" pb="large">
+              {greeting}
+            </Heading>
           </FlexItem>
-        </Dialog>
-      </Flex>
+          <Dialog content={<QuickEmbed2 />}>
+            <FlexItem alignSelf="center">
+              <IconButton
+                label="Quick Embed"
+                type="button"
+                icon={<FlashOn />}
+                size="large"
+              />
+            </FlexItem>
+          </Dialog>
+        </Flex>
+      </LookerDataProvider>
     </ComponentsProvider>
   )
 }
