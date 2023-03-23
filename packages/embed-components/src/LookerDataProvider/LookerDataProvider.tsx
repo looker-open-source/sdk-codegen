@@ -33,7 +33,7 @@ export interface LookerDataContext {
   loading: boolean
   defaultTheme?: ITheme
   currentTheme?: ITheme
-  themes: ITheme[]
+  themes?: ITheme[]
   loadThemeData: () => void
   updateTheme: (seletedThemeName: string) => void
 }
@@ -60,9 +60,7 @@ export const LookerData =
 export function LookerDataProvider({ children, sdk }: LookerDataProviderProps) {
   const [themeService] = useState<ThemeService>(new ThemeService(sdk))
   const [currentTheme, setCurrentTheme] = useState<ITheme | undefined>()
-  const themes = themeService?.themes || []
-  const defaultTheme = themeService?.defaultTheme
-  const loading = themeService?.loading || false
+  const { themes, defaultTheme, loading } = themeService
 
   const loadThemeData = useCallback(async () => {
     if (!currentTheme) {
@@ -73,7 +71,7 @@ export function LookerDataProvider({ children, sdk }: LookerDataProviderProps) {
 
   const updateTheme = useCallback(
     (selectedThemeName: string) => {
-      const selectedTheme = themes.find(
+      const selectedTheme = themes?.find(
         (theme) => theme.name === selectedThemeName
       )
       if (selectedTheme) {
