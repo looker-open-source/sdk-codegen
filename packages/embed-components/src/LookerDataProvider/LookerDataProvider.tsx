@@ -34,6 +34,7 @@ export interface LookerDataContext {
   defaultTheme?: ITheme
   currentTheme?: ITheme
   themes: ITheme[]
+  loadThemeData: () => void
   updateTheme: (seletedThemeName: string) => void
 }
 
@@ -42,19 +43,21 @@ export interface LookerDataProviderProps {
   children?: ReactNode
 }
 
+const noop = () => {
+  // NOOP
+}
+
 const defaultContextData: LookerDataContext = {
   loading: false,
   themes: [],
-  updateTheme: () => {
-    // NOOP
-  },
+  loadThemeData: noop,
+  updateTheme: noop,
 }
 
 export const LookerData =
   React.createContext<LookerDataContext>(defaultContextData)
 
-export function LookerDataProvider(props: LookerDataProviderProps) {
-  const { children, sdk } = props
+export function LookerDataProvider({ children, sdk }: LookerDataProviderProps) {
   const [themeService, setThemeService] = useState<ThemeService | undefined>()
   const [currentTheme, setCurrentTheme] = useState<ITheme | undefined>()
   const themes = themeService?.themes || []
@@ -62,16 +65,15 @@ export function LookerDataProvider(props: LookerDataProviderProps) {
   const loading = themeService?.loading || false
 
   useEffect(() => {
-    const initialize = async () => {
-      if (sdk) {
-        const service = new ThemeService(sdk)
-        await service.loadThemeData(undefined, 'name')
-        setCurrentTheme(service.defaultTheme)
-        setThemeService(service)
-      }
+    setThemeService(new ThemeService(sdk))
+  }, [])
+
+  const loadThemeData = useCallback(async () => {
+    if (themeService && !currentTheme) {
+      await themeService.loadThemeData(undefined, 'name')
+      setCurrentTheme(themeService.defaultTheme)
     }
-    initialize()
-  }, [sdk])
+  }, [themeService, currentTheme])
 
   const updateTheme = useCallback(
     (selectedThemeName: string) => {
@@ -90,6 +92,7 @@ export function LookerDataProvider(props: LookerDataProviderProps) {
     currentTheme,
     themes,
     defaultTheme,
+    loadThemeData,
     updateTheme,
   }
 

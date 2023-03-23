@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
   InputText,
   CopyToClipboard,
@@ -38,9 +38,13 @@ import { embedUrl } from '@looker/embed-services'
 import { LookerData, SelectTheme2 } from '..'
 
 export const QuickEmbed2 = () => {
-  const { loading, themes, currentTheme, updateTheme } = useContext(LookerData)
-
+  const { loading, themes, currentTheme, loadThemeData, updateTheme } =
+    useContext(LookerData)
   const url = embedUrl(currentTheme?.name)
+
+  useEffect(() => {
+    loadThemeData()
+  }, [])
 
   return (
     <Section padding="large">

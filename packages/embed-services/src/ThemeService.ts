@@ -29,7 +29,7 @@ import { all_themes, default_theme } from '@looker/sdk'
 
 export class ThemeService {
   private sdk: IAPIMethods
-  private loadingCount: number = 0
+  private loadingCount = 0
   public defaultTheme?: ITheme
   public themes?: ITheme[]
 
