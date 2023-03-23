@@ -58,22 +58,18 @@ export const LookerData =
   React.createContext<LookerDataContext>(defaultContextData)
 
 export function LookerDataProvider({ children, sdk }: LookerDataProviderProps) {
-  const [themeService, setThemeService] = useState<ThemeService | undefined>()
+  const [themeService] = useState<ThemeService>(new ThemeService(sdk))
   const [currentTheme, setCurrentTheme] = useState<ITheme | undefined>()
   const themes = themeService?.themes || []
   const defaultTheme = themeService?.defaultTheme
   const loading = themeService?.loading || false
 
-  useEffect(() => {
-    setThemeService(new ThemeService(sdk))
-  }, [])
-
   const loadThemeData = useCallback(async () => {
-    if (themeService && !currentTheme) {
+    if (!currentTheme) {
       await themeService.loadThemeData(undefined, 'name')
       setCurrentTheme(themeService.defaultTheme)
     }
-  }, [themeService, currentTheme])
+  }, [currentTheme])
 
   const updateTheme = useCallback(
     (selectedThemeName: string) => {
