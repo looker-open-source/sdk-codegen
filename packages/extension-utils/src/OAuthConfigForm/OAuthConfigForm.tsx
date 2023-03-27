@@ -57,6 +57,7 @@ const POSITIVE: MessageBarIntent = 'positive'
 
 interface IFieldValues {
   baseUrl: string
+  fetchedUrl: string
   webUrl: string
   fetchIntent: MessageBarIntent
   fetchResult: string
@@ -64,6 +65,7 @@ interface IFieldValues {
 
 const defaultFieldValues: IFieldValues = {
   baseUrl: '',
+  fetchedUrl: '',
   webUrl: '',
   fetchResult: '',
   fetchIntent: POSITIVE,
@@ -189,6 +191,9 @@ export const OAuthConfigForm = ({
     updateMessage('inform', '')
     const versionsUrl = `${fields.baseUrl}/versions`
     try {
+      updateFields({
+        fetchedUrl: fields.baseUrl,
+      })
       const { web_server_url: webUrl, api_server_url: baseUrl } =
         (await getVersions(versionsUrl)) as ILookerVersions
       updateMessage(POSITIVE, 'Configuration is valid')
@@ -312,10 +317,10 @@ export const OAuthConfigForm = ({
               />
             </Fieldset>
           </Form>
-          {!!fields.webUrl && (
+          {fields.fetchedUrl && (
             <>
               <Paragraph fontSize="small">
-                On {fields.webUrl}, enable {clientLabel} as a{' '}
+                On {fields.fetchedUrl}, enable {clientLabel} as a{' '}
                 <Link
                   href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
                   target="_blank"
@@ -329,7 +334,7 @@ export const OAuthConfigForm = ({
                 . If API Explorer is also installed, the configuration below can
                 be used to{' '}
                 <Link
-                  href={`${fields.webUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
+                  href={`${fields.fetchedUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
                   target="_blank"
                 >
                   register this API Explorer instance
