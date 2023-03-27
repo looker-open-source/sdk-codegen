@@ -388,6 +388,71 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 	})
 }
 
+func TestAuthSession_Do_Content_Type(t *testing.T) {
+	const path = "/someMethod"
+	const apiVersion = "/4.0"
+
+	t.Run("Do() sets Content-Type header to 'application/json' if body is json", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			contentTypeHeader := r.Header.Get("Content-Type")
+			expectedHeader := "application/json"
+			if contentTypeHeader != expectedHeader {
+				t.Errorf("Content-Type header not correct. got=%v want=%v", contentTypeHeader, expectedHeader)
+			}
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+		})
+
+		var r string
+		body := struct {
+			key    string
+		}{
+			key:    "value",
+		}
+
+		err := s.Do(&r, "GET", apiVersion, path, nil, body, nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+
+	t.Run("Do() sets Content-Type header to 'text/plain' if body is a string", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			contentTypeHeader := r.Header.Get("Content-Type")
+			expectedHeader := "text/plain"
+			if contentTypeHeader != expectedHeader {
+				t.Errorf("Content-Type header not correct. got=%v want=%v", contentTypeHeader, expectedHeader)
+			}
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+		})
+
+		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, "body", nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+}
+
 func TestSetQuery(t *testing.T) {
 	somestring := "somestring"
 	testcases := []struct {
