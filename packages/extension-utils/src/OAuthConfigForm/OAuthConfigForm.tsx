@@ -317,35 +317,33 @@ export const OAuthConfigForm = ({
               />
             </Fieldset>
           </Form>
-          {fields.fetchedUrl &&
-            fields.fetchIntent === CRITICAL &&
-            fields.fetchResult !== '' && (
-              <>
-                <Paragraph fontSize="small">
-                  On {fields.fetchedUrl}, enable {clientLabel} as a{' '}
-                  <Link
-                    href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
-                    target="_blank"
-                  >
-                    Looker OAuth client
-                  </Link>{' '}
-                  by adding "{(window as any).location.origin}" to the{' '}
-                  <Link href={`${fields.webUrl}/admin/embed`} target="_blank">
-                    Embedded Domain Allowlist
-                  </Link>
-                  . If API Explorer is also installed, the configuration below
-                  can be used to{' '}
-                  <Link
-                    href={`${fields.fetchedUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
-                    target="_blank"
-                  >
-                    register this API Explorer instance
-                  </Link>{' '}
-                  as an OAuth client.
-                </Paragraph>
-                <CodeCopy key="appConfig" language="json" code={appConfig} />
-              </>
-            )}
+          {fields.fetchedUrl && (
+            <>
+              <Paragraph fontSize="small">
+                On {fields.fetchedUrl}, enable {clientLabel} as a{' '}
+                <Link
+                  href="https://github.com/looker-open-source/sdk-codegen/blob/main/docs/cors.md#reference-implementation"
+                  target="_blank"
+                >
+                  Looker OAuth client
+                </Link>{' '}
+                by adding "{(window as any).location.origin}" to the{' '}
+                <Link href={`${fields.webUrl}/admin/embed`} target="_blank">
+                  Embedded Domain Allowlist
+                </Link>
+                . If API Explorer is also installed, the configuration below can
+                be used to{' '}
+                <Link
+                  href={`${fields.fetchedUrl}/extensions/marketplace_extension_api_explorer::api-explorer/4.0/methods/Auth/register_oauth_client_app`}
+                  target="_blank"
+                >
+                  register this API Explorer instance
+                </Link>{' '}
+                as an OAuth client.
+              </Paragraph>
+              <CodeCopy key="appConfig" language="json" code={appConfig} />
+            </>
+          )}
           <Space>
             <Tooltip content="Clear the configuration values">
               <ButtonTransparent
