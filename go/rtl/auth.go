@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -122,8 +123,20 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		}
 	}
 
+	// create request context with timeout
+	var timeout int32 = 120 //seconds
+	if s.Config.Timeout != 0 {
+		timeout = s.Config.Timeout
+	}
+	if options != nil && options.Timeout != 0 {
+		timeout = options.Timeout
+	}
+
+	ctx, cncl := context.WithTimeout(context.Background(), time.Second * time.Duration(timeout))
+	defer cncl()
+
 	// create new request
-	req, err := http.NewRequest(method, u, bytes.NewBufferString(bodyString))
+	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))
 	if err != nil {
 		return err
 	}

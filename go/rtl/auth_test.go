@@ -1,7 +1,9 @@
 package rtl
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -514,6 +516,65 @@ func TestAuthSession_Do_Content_Type(t *testing.T) {
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
 		}
+	})
+}
+
+func TestAuthSession_Do_Timeout(t *testing.T) {
+	const path = "/someMethod"
+	const apiVersion = "/4.0"
+
+	t.Run("Do() follows Timeout set in AuthSession config", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Timeout: 1,
+		})
+
+		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+            t.Errorf("Do() call did not error with context.DeadlineExceeded")
+        }
+	})
+
+	t.Run("Do() follows Timeout set in Do()'s options", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+		})
+
+		options := ApiSettings{
+			Timeout: 1,
+		}
+		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+            t.Errorf("Do() call did not error with context.DeadlineExceeded")
+        }
 	})
 }
 
