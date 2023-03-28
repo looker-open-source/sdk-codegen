@@ -130,14 +130,16 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 
 	// set headers
 	req.Header.Add("Content-Type", contentTypeHeader)
-	
+
+	if s.Config.AgentTag != "" {
+		req.Header.Set("User-Agent", s.Config.AgentTag)
+	}
 	if options != nil && options.AgentTag != "" {
 		req.Header.Set("User-Agent", options.AgentTag)
 	}
 
 	// set query params
 	setQuery(req.URL, reqPars)
-
 
 	// do the actual http call
 	res, err := s.Client.Do(req)

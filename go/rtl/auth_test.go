@@ -127,29 +127,58 @@ func TestAuthSession_Do_UserAgent(t *testing.T) {
 	const path = "/someMethod"
 	const apiVersion = "/4.0"
 
-	t.Run("Do() sets User-Agent header with AgentTag option", func(t *testing.T) {
+	t.Run("Do() sets User-Agent header with AuthSession config's AgentTag", func(t *testing.T) {
 		mux := http.NewServeMux()
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
 		server := httptest.NewServer(mux)
 		defer server.Close()
 
-		options := ApiSettings{
-			BaseUrl:    server.URL,
-			ApiVersion: apiVersion,
-			AgentTag:   "some-agent-tag",
-		}
-
 		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
 			userAgentHeader := r.Header.Get("User-Agent")
-			expectedHeader := options.AgentTag
+			expectedHeader := "some-agent-tag"
 			if userAgentHeader != expectedHeader {
 				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
 			}
 		})
 
-		s := NewAuthSession(options)
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			AgentTag:   "some-agent-tag",
+		})
 
 		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+
+	t.Run("Do() sets User-Agent header with Do's option's AgentTag, which will overwrite  AuthSession config", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			userAgentHeader := r.Header.Get("User-Agent")
+			expectedHeader := "new-agent-tag"
+			if userAgentHeader != expectedHeader {
+				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
+			}
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			AgentTag:   "some-agent-tag",
+		})
+
+		var r string
+		options := ApiSettings{
+			AgentTag:   "new-agent-tag",
+		}
 		err := s.Do(&r, "GET", apiVersion, path, nil, nil, &options)
 
 		if err != nil {
