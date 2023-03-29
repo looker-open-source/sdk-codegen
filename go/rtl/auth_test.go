@@ -518,7 +518,7 @@ func TestAuthSession_Do_Headers(t *testing.T) {
 			t.Errorf("Do() call failed: %v", err)
 		}
 	})
-	
+
 	t.Run("Do() sets User-Agent header with AuthSession config's AgentTag", func(t *testing.T) {
 		mux := http.NewServeMux()
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
