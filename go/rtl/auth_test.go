@@ -1,7 +1,9 @@
 package rtl
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -50,13 +52,13 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 			}
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var r string
-		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
@@ -91,13 +93,13 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var r string
-		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("First Do() call failed: %v", err)
@@ -106,7 +108,7 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 		// wait till previous token is definitely expired
 		time.Sleep(2 * time.Second)
 
-		err = s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+		err = session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Second Do() call failed: %v", err)
@@ -141,14 +143,14 @@ func TestAuthSession_Do_UserAgent(t *testing.T) {
 			}
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 			AgentTag:   "some-agent-tag",
 		})
 
 		var r string
-		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
@@ -169,7 +171,7 @@ func TestAuthSession_Do_UserAgent(t *testing.T) {
 			}
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 			AgentTag:   "some-agent-tag",
@@ -179,7 +181,7 @@ func TestAuthSession_Do_UserAgent(t *testing.T) {
 		options := ApiSettings{
 			AgentTag:   "new-agent-tag",
 		}
-		err := s.Do(&r, "GET", apiVersion, path, nil, nil, &options)
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, &options)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
@@ -217,13 +219,13 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var result stringStruct
-		s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if *result.Field != stringField {
 			t.Error("num type field was not unmarshaled correctly into string type field")
@@ -245,13 +247,13 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var result numStruct
-		s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if *result.Field != numField {
 			t.Error("string type field was not unmarshaled correctly into num type field")
@@ -297,7 +299,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
@@ -329,7 +331,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 
 		var result expectedStructType
 
-		s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if !reflect.DeepEqual(result, expectedStruct) {
 			t.Error("fields of mixed types were not unmarshaled correctly into the right types")
@@ -347,14 +349,14 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, "a response")
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var result string
 
-		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Do() failed. error=%v", err)
@@ -382,7 +384,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
@@ -390,7 +392,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 		var result interface{}
 		var expectedField float64 = 10
 
-		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Do() failed. error=%v", err)
@@ -420,7 +422,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 			fmt.Fprint(w, string(s))
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
@@ -440,7 +442,7 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 
 		var result expectedStructType
 
-		err := s.Do(&result, "GET", apiVersion, path, nil, nil, nil)
+		err := session.Do(&result, "GET", apiVersion, path, nil, nil, nil)
 
 		if err != nil {
 			t.Errorf("Do() failed. error=%v", err)
@@ -470,7 +472,7 @@ func TestAuthSession_Do_Content_Type(t *testing.T) {
 			}
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
@@ -482,7 +484,7 @@ func TestAuthSession_Do_Content_Type(t *testing.T) {
 			key:    "value",
 		}
 
-		err := s.Do(&r, "GET", apiVersion, path, nil, body, nil)
+		err := session.Do(&r, "GET", apiVersion, path, nil, body, nil)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
@@ -503,17 +505,75 @@ func TestAuthSession_Do_Content_Type(t *testing.T) {
 			}
 		})
 
-		s := NewAuthSession(ApiSettings{
+		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
 		})
 
 		var r string
-		err := s.Do(&r, "GET", apiVersion, path, nil, "body", nil)
+		err := session.Do(&r, "GET", apiVersion, path, nil, "body", nil)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
 		}
+	})
+}
+
+func TestAuthSession_Do_Timeout(t *testing.T) {
+	const path = "/someMethod"
+	const apiVersion = "/4.0"
+
+	t.Run("Do() follows Timeout set in AuthSession config", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Timeout: 1, // seconds
+		})
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, nil)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+            t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+        }
+	})
+
+	t.Run("Do() follows Timeout set in Do()'s options", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+		})
+
+		options := ApiSettings{
+			Timeout: 1, //seconds
+		}
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+            t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+        }
 	})
 }
 
