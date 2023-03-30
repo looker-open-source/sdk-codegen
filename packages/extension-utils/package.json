@@ -35,7 +35,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@styled-icons/material": "^10.47.0",
     "react": "^16.14.0",
-    "react-redux": "^8.0.5",
+    "react-redux": "^7.2.3",
     "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
