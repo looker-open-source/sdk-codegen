@@ -25,7 +25,7 @@
  */
 import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react'
 import React, { useState, useEffect } from 'react'
-import type { ValidationMessages, MessageBarIntent } from '@looker/components'
+import type { ValidationMessages } from '@looker/components'
 import {
   Button,
   ButtonTransparent,
@@ -44,11 +44,12 @@ import {
 import { CodeCopy } from '@looker/code-editor'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router-dom'
-import { appPath, getEnvAdaptor } from '..'
+import { appPath, getEnvAdaptor } from '../../..'
+import { getVersions, validateUrl } from '../utils'
+import type { ConfigValues } from '../utils'
+import { useOAuthFormActions, useOAuthFormState } from '../state/slice'
+import { CollapserCard } from './CollapserCard'
 import { ConfigHeading } from './ConfigHeading'
-import { CollapserCard } from './Collapser'
-import { getVersions, validateUrl } from './utils'
-import type { ConfigValues } from './utils'
 
 export const readyToLogin =
   'OAuth is configured but your browser session is not authenticated. Click Login.'
@@ -96,20 +97,16 @@ export const OAuthConfigForm = ({
   }
 
   const config = getConfig()
-  const [apiServerUrlValue, setApiServerUrlValue] = useState('')
-  const [fetchedUrl, setFetchedUrl] = useState('')
-  const [webUrlValue, setWebUrlValue] = useState('')
-  const [messageBarIntent, setMessageBarIntent] =
-    useState<MessageBarIntent>('positive')
-  const [messageBarValue, setMessageBarValue] = useState('')
-  const [validationMessages, setValidationMessages] =
-    useState<ValidationMessages>({})
-  const [saved, setSaved] = useState<ConfigValues>(config)
 
-  const updateMessageBar = (intent: MessageBarIntent, message: string) => {
-    setMessageBarIntent(intent)
-    setMessageBarValue(message)
-  }
+  const { clearForm, updateForm, updateMessageBar } = useOAuthFormActions()
+  const {
+    apiServerUrlValue,
+    fetchedUrl,
+    webUrlValue,
+    messageBar,
+    validationMessages,
+  } = useOAuthFormState()
+  const [saved, setSaved] = useState<ConfigValues>(config)
 
   const isConfigured = () => {
     return (
@@ -120,8 +117,10 @@ export const OAuthConfigForm = ({
   }
 
   const fetchError = (message: string) => {
-    setWebUrlValue('')
-    updateMessageBar('critical', message)
+    updateForm({
+      webUrlValue: '',
+    })
+    updateMessageBar({ intent: 'critical', text: message })
   }
 
   const saveConfig = (baseUrl: string, webUrl: string) => {
@@ -135,19 +134,23 @@ export const OAuthConfigForm = ({
     localStorage.setItem(configKey, JSON.stringify(data))
     if (setHasConfig) setHasConfig(true)
     setSaved(data)
-    updateMessageBar('positive', `Saved ${webUrl} as OAuth server`)
+    updateMessageBar({
+      intent: 'positive',
+      text: `Saved ${webUrl} as OAuth server`,
+    })
   }
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
-    updateMessageBar(messageBarIntent, '')
+    updateMessageBar({ intent: messageBar.intent, text: '' })
     const versionsUrl = `${apiServerUrlValue}/versions`
     try {
-      setFetchedUrl(apiServerUrlValue)
+      updateForm({ fetchedUrl: apiServerUrlValue })
+
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
-        updateMessageBar('positive', 'Configuration is valid')
-        setWebUrlValue(versions.web_server_url)
+        updateMessageBar({ intent: 'positive', text: `Configuration is valid` })
+        updateForm({ webUrlValue: versions.web_server_url })
       }
 
       return versions
@@ -171,34 +174,30 @@ export const OAuthConfigForm = ({
   const handleClearClick = async (_e: BaseSyntheticEvent) => {
     // TODO: replace when redux is introduced to run it
     localStorage.removeItem(configKey)
-
-    setApiServerUrlValue('')
-    setFetchedUrl('')
-    setWebUrlValue('')
-    setMessageBarValue('')
-    setMessageBarIntent('critical')
+    clearForm()
     setSaved(EmptyConfig)
 
     if (setHasConfig) setHasConfig(false)
     if (isAuthenticated()) {
-      updateMessageBar('warn', 'Please reload the browser page to log out')
+      updateMessageBar({
+        intent: 'warn',
+        text: `Please reload the browser page to log out`,
+      })
     }
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
     const name = event.currentTarget.name
     const value = event.currentTarget.value
+    let newApiServerUrl = value
 
     const newValidationMessages = { ...validationMessages }
-
-    setApiServerUrlValue(value)
-    setWebUrlValue('')
 
     const url = validateUrl(value)
     if (url) {
       delete newValidationMessages[name]
       // Update URL if it's been cleaned up
-      setApiServerUrlValue(url)
+      newApiServerUrl = url
     } else {
       newValidationMessages[name] = {
         message: `'${value}' is not a valid url`,
@@ -206,7 +205,11 @@ export const OAuthConfigForm = ({
       }
     }
 
-    setValidationMessages(newValidationMessages)
+    updateForm({
+      apiServerUrlValue: newApiServerUrl,
+      webUrlValue: '',
+      validationMessages: newValidationMessages as ValidationMessages,
+    })
   }
 
   const isAuthenticated = () => sdk.authSession.isAuthenticated()
@@ -232,8 +235,10 @@ export const OAuthConfigForm = ({
   useEffect(() => {
     const data = getConfig()
     const { base_url, looker_url } = data
-    setApiServerUrlValue(base_url)
-    setWebUrlValue(looker_url)
+    updateForm({
+      apiServerUrlValue: base_url,
+      webUrlValue: looker_url,
+    })
   }, [])
 
   return (
@@ -244,11 +249,13 @@ export const OAuthConfigForm = ({
         authenticate into your Looker Instance
       </Span>
       <MessageBar
-        intent={messageBarIntent}
-        onPrimaryClick={() => updateMessageBar(messageBarIntent, '')}
-        visible={messageBarValue !== ''}
+        intent={messageBar.intent}
+        onPrimaryClick={() =>
+          updateMessageBar({ intent: messageBar.intent, text: '' })
+        }
+        visible={messageBar.text !== ''}
       >
-        {messageBarValue}
+        {messageBar.text}
       </MessageBar>
       <CollapserCard
         heading="1. Supply API Server URL"

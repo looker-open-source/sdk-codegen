@@ -23,9 +23,28 @@
  SOFTWARE.
 
  */
-import { createStore } from '@looker/redux'
-import { OAuthFormSlice } from '@looker/extension-utils'
+import type { ValidationMessages, MessageBarIntent } from '@looker/components'
+import type { ConfigValues } from './utils'
 
-export const store = createStore()
+export interface OAuthFormState {
+  apiServerUrlValue: string
+  fetchedUrl: string
+  webUrlValue: string
+  messageBar: MessageBarData
+  validationMessages: ValidationMessages
+  savedConfig: ConfigValues
+}
 
-store.addReducer(OAuthFormSlice.name, OAuthFormSlice.reducer)
+export interface UpdateFormPayload {
+  apiServerUrlValue?: string
+  fetchedUrl?: string
+  webUrlValue?: string
+  messageBar?: MessageBarData
+  validationMessages?: ValidationMessages
+  savedConfig?: ConfigValues
+}
+
+export interface MessageBarData {
+  intent: MessageBarIntent
+  text: string
+}

@@ -29,10 +29,13 @@
     "@looker/components": "^4.1.1",
     "@looker/extension-sdk": "^23.2.0",
     "@looker/extension-sdk-react": "^23.2.0",
+    "@looker/redux": "0.0.0",
     "@looker/sdk": "^23.2.0",
     "@looker/sdk-rtl": "^21.6.0",
+    "@reduxjs/toolkit": "^1.9.3",
     "@styled-icons/material": "^10.47.0",
     "react": "^16.14.0",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
