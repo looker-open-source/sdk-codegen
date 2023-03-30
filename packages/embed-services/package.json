@@ -33,9 +33,9 @@
     "npm": ">=5.5.1"
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-services",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
+    "@looker/extension-utils": "^0.1.21",
     "@looker/sdk": "^23.2.0",
     "@looker/sdk-rtl": "^21.6.0"
   },
