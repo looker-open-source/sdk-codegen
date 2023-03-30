@@ -60,8 +60,9 @@ export abstract class ItemList<T extends Record<string, any>>
 
   constructor(
     sdk: IAPIMethods,
-    readonly timeToLive = 900,
-    public keyField: keyof T = 'id'
+    readonly timeToLive: number = 900
+    // I WOULD NOT PASS keyField IN THE CONSTRUCTOR
+    // public keyField: keyof T = 'id'
   ) {
     super(sdk)
   }
@@ -69,7 +70,9 @@ export abstract class ItemList<T extends Record<string, any>>
   /**
    * Creates an indexed collection from the cached items
    */
-  index() {
+  // I WOULD PASS THE keyField IN HERE. If you pass the index in here
+  // you can have multiple indexes.
+  index(index = 'id') {
     this.indexedItems = {}
     this.items.forEach((el) => {
       if (el && el?.[this.keyField]) {
@@ -80,6 +83,7 @@ export abstract class ItemList<T extends Record<string, any>>
   }
 
   /** Computes the expiration time based on timeToLive */
+  // MAKE PROTECTED?
   setExpiration() {
     this.expiresAt = Date.now() * 1000 + this.timeToLive
   }
@@ -94,6 +98,7 @@ export abstract class ItemList<T extends Record<string, any>>
   /**
    * Ejects cache if expired
    */
+  // WHAT CALLS THIS?
   clearIfExpired() {
     if (this.expired()) {
       this.items = []

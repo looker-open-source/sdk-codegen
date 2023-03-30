@@ -35,10 +35,12 @@ import type { IAPIMethods } from '@looker/sdk-rtl'
 import { ItemList } from './ItemList'
 import type { IEntityService, IItemList } from './ItemList'
 import type { ServiceCreatorFunc } from './ServiceFactory'
+import { getFactory } from './ServiceFactory'
+import { createFactory, useEffect } from 'react'
 
 export interface IThemeService
   extends IItemList<ITheme>,
-    IEntityService<ITheme> {
+  IEntityService<ITheme> {
   defaultTheme?: ITheme
   getDefaultTheme(ts?: Date): Promise<ITheme>
 }
@@ -46,6 +48,10 @@ export interface IThemeService
 // todo: check if 'final' is available in this TS version
 class ThemeService extends ItemList<ITheme> implements IThemeService {
   public defaultTheme?: ITheme
+
+  constructor(sdk: IAPIMethods, timeToLive = 900) {
+    super(sdk, timeToLive)
+  }
 
   async get(
     id: string,
@@ -88,7 +94,44 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
 }
 
 export const THEME_SERVICE_NAME = 'ThemeService'
+
 // TODO: make timeToLive changeable via a setter in ItemList
-export const themeServiceCreator: ServiceCreatorFunc = (sdk: IAPIMethods) => {
-  return new ThemeService(sdk)
+export const createThemeService: ServiceCreatorFunc = (sdk: IAPIMethods, timeToLive?: number) => {
+  return new ThemeService(sdk, timeToLive)
 }
+
+export const registerThemeService = () => {
+  getFactory().register(THEME_SERVICE_NAME, createThemeService)
+}
+
+// How a saga would use this
+
+function initSaga() {
+  registerThemeService()
+}
+
+function doSomethingSaga() {
+  const service = getFactory().get(THEME_SERVICE_NAME)
+
+
+}
+
+takeEvery(initialize, initSaga)
+
+// Factory slice
+function initFactorySaga(sdk: IAPIMethods) {
+  createFactory(sdk)
+  put(initialized())
+}
+
+takeEVery(initFactory, initFactorySaga)
+takeEVery(destroyFactory, destroFactorySaga)
+
+
+// Provider
+useEffect(() => {
+  initFactorySaga(sdk)
+  return () => destroyFactory()
+}, [])
+
+

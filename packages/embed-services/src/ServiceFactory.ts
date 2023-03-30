@@ -25,7 +25,9 @@
  */
 import type { IAPIMethods } from '@looker/sdk-rtl'
 
-export interface IService {}
+export interface IService {
+  destroy: () => {}
+}
 
 export type ServiceCreatorFunc = (sdk: IAPIMethods) => IService
 
@@ -36,7 +38,7 @@ export interface IServiceFactory {
 
 class ServiceFactory implements IServiceFactory {
   servicesMap: Record<string, IService> = {}
-  constructor(private sdk: IAPIMethods) {}
+  constructor(private sdk: IAPIMethods) { }
 
   get(serviceName: string) {
     const service = this.servicesMap[serviceName]
