@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
+ * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -4957,7 +4957,6 @@ data class SessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
- * @property sisu
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4972,29 +4971,7 @@ data class Setting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null,
-    var sisu: SisuSetting? = null
-) : Serializable
-
-/**
- * @property can Operations the current user is able to perform on this object (read-only)
- * @property enabled Whether the Sisu integration is enabled
- * @property extension_id The extension ID of the installed Sisu extension
- * @property configured Whether the Looker instance has been configured  with Sisu
- * @property api_key_id The API key ID generated for use with Sisu
- * @property api_user_id The user ID associated with the API key generated for use with Sisu
- * @property installation_id The marketplace installation id of the Sisu extension
- * @property listing_id_override An alternate marketplace listing id to use for the Sisu extension.
- */
-data class SisuSetting (
-    var can: Map<String,Boolean>? = null,
-    var enabled: Boolean? = null,
-    var extension_id: String? = null,
-    var configured: Boolean? = null,
-    var api_key_id: String? = null,
-    var api_user_id: String? = null,
-    var installation_id: String? = null,
-    var listing_id_override: String? = null
+    var email_domain_allowlist: Array<String>? = null
 ) : Serializable
 
 /**
@@ -6991,8 +6968,6 @@ data class WriteSessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
- * @property sisu Dynamic writeable type for SisuSetting removes:
- * can
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -7007,30 +6982,7 @@ data class WriteSetting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null,
-    var sisu: WriteSisuSetting? = null
-) : Serializable
-
-/**
- * Dynamic writeable type for SisuSetting removes:
- * can
- *
- * @property enabled Whether the Sisu integration is enabled
- * @property extension_id The extension ID of the installed Sisu extension
- * @property configured Whether the Looker instance has been configured  with Sisu
- * @property api_key_id The API key ID generated for use with Sisu
- * @property api_user_id The user ID associated with the API key generated for use with Sisu
- * @property installation_id The marketplace installation id of the Sisu extension
- * @property listing_id_override An alternate marketplace listing id to use for the Sisu extension.
- */
-data class WriteSisuSetting (
-    var enabled: Boolean? = null,
-    var extension_id: String? = null,
-    var configured: Boolean? = null,
-    var api_key_id: String? = null,
-    var api_user_id: String? = null,
-    var installation_id: String? = null,
-    var listing_id_override: String? = null
+    var email_domain_allowlist: Array<String>? = null
 ) : Serializable
 
 /**

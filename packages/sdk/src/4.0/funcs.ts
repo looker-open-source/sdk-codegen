@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 460 API methods
+ * 459 API methods
  */
 
 import type {
@@ -1183,16 +1183,20 @@ export const create_embed_url_as_me = async (
  * ### Acquire a cookieless embed session.
  *
  * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
- * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
- * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
- * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+ * to the embed login. This endpoint accepts an embed user definition and creates or updates it. This is
+ * similar behavior to the embed SSO login as they both can create and update embed user data.
  *
  * The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
  * and the credentials match the credentials for the embed session, a new authentication token will be
  * generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
- * the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+ * the session is NOT extended in this scenario. In other words the session_length parameter is ignored.
  *
- * If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+ * **IMPORTANT:** If the `session_reference_token` is provided and the session has NOT expired, the embed user
+ * is NOT updated. This is done for performance reasons and to support the embed SSO usecase where the
+ * first IFRAME created on a page uses a signed url and subsequently created IFRAMEs do not.
+ *
+ * If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
+ * new embed session will be created. Note that the embed user definition will be updated in this scenario.
  *
  * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
  * 404 will be returned.
@@ -3209,29 +3213,6 @@ export const update_cloud_storage_configuration = async (
 }
 
 /**
- * ### Looker Configuration Refresh
- *
- * This is an endpoint for manually calling refresh on Configuration manager.
- *
- * PUT /configuration_force_refresh -> any
- *
- * @param sdk IAPIMethods implementation
- * @param options one-time API call overrides
- *
- */
-export const configuration_force_refresh = async (
-  sdk: IAPIMethods,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<any, IError | IValidationError>> => {
-  return sdk.put<any, IError | IValidationError>(
-    '/configuration_force_refresh',
-    null,
-    null,
-    options
-  )
-}
-
-/**
  * ### Get the current status and content of custom welcome emails
  *
  * GET /custom_welcome_email -> ICustomWelcomeEmail
@@ -3608,7 +3589,6 @@ export const mobile_settings = async (
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
- *  - sisu
  *
  * GET /setting -> ISetting
  *
@@ -3646,7 +3626,6 @@ export const get_setting = async (
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
- *  - sisu
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -5378,7 +5357,7 @@ export const move_dashboard = async (
  * Note that the created dashboard is not linked to any LookML Dashboard,
  * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
  *
- * POST /dashboards/lookml -> IDashboardLookml
+ * POST /dashboards/lookml -> IDashboard
  *
  * @param sdk IAPIMethods implementation
  * @param body Partial<IWriteDashboardLookml>
@@ -5389,8 +5368,8 @@ export const import_dashboard_from_lookml = async (
   sdk: IAPIMethods,
   body: Partial<IWriteDashboardLookml>,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDashboardLookml, IError | IValidationError>> => {
-  return sdk.post<IDashboardLookml, IError | IValidationError>(
+): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
+  return sdk.post<IDashboard, IError | IValidationError>(
     '/dashboards/lookml',
     null,
     body,
@@ -5401,7 +5380,7 @@ export const import_dashboard_from_lookml = async (
 /**
  * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
  *
- * POST /dashboards/from_lookml -> IDashboardLookml
+ * POST /dashboards/from_lookml -> IDashboard
  *
  * @param sdk IAPIMethods implementation
  * @param body Partial<IWriteDashboardLookml>
@@ -5412,8 +5391,8 @@ export const create_dashboard_from_lookml = async (
   sdk: IAPIMethods,
   body: Partial<IWriteDashboardLookml>,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDashboardLookml, IError | IValidationError>> => {
-  return sdk.post<IDashboardLookml, IError | IValidationError>(
+): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
+  return sdk.post<IDashboard, IError | IValidationError>(
     '/dashboards/from_lookml',
     null,
     body,

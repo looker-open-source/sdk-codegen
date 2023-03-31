@@ -1,6 +1,6 @@
 /// MIT License
 ///
-/// Copyright (c) 2021 Looker Data Sciences, Inc.
+/// Copyright (c) 2023 Looker Data Sciences, Inc.
 ///
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
+/// 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -4745,27 +4745,6 @@ public class Setting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  public SisuSetting? sisu { get; set; }
-}
-
-public class SisuSetting : SdkModel
-{
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
-  /// <summary>Whether the Sisu integration is enabled</summary>
-  public bool? enabled { get; set; } = null;
-  /// <summary>The extension ID of the installed Sisu extension</summary>
-  public string? extension_id { get; set; } = null;
-  /// <summary>Whether the Looker instance has been configured  with Sisu</summary>
-  public bool? configured { get; set; } = null;
-  /// <summary>The API key ID generated for use with Sisu</summary>
-  public string? api_key_id { get; set; } = null;
-  /// <summary>The user ID associated with the API key generated for use with Sisu</summary>
-  public string? api_user_id { get; set; } = null;
-  /// <summary>The marketplace installation id of the Sisu extension</summary>
-  public string? installation_id { get; set; } = null;
-  /// <summary>An alternate marketplace listing id to use for the Sisu extension.</summary>
-  public string? listing_id_override { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -6693,31 +6672,6 @@ public class WriteSetting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  /// <summary>
-  /// Dynamic writeable type for SisuSetting removes:
-  /// can
-  /// </summary>
-  public WriteSisuSetting? sisu { get; set; }
-}
-
-/// Dynamic writeable type for SisuSetting removes:
-/// can
-public class WriteSisuSetting : SdkModel
-{
-  /// <summary>Whether the Sisu integration is enabled</summary>
-  public bool? enabled { get; set; } = null;
-  /// <summary>The extension ID of the installed Sisu extension</summary>
-  public string? extension_id { get; set; } = null;
-  /// <summary>Whether the Looker instance has been configured  with Sisu</summary>
-  public bool? configured { get; set; } = null;
-  /// <summary>The API key ID generated for use with Sisu</summary>
-  public string? api_key_id { get; set; } = null;
-  /// <summary>The user ID associated with the API key generated for use with Sisu</summary>
-  public string? api_user_id { get; set; } = null;
-  /// <summary>The marketplace installation id of the Sisu extension</summary>
-  public string? installation_id { get; set; } = null;
-  /// <summary>An alternate marketplace listing id to use for the Sisu extension.</summary>
-  public string? listing_id_override { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:
