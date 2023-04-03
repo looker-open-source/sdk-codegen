@@ -7,6 +7,27 @@
     * @looker/extension-sdk bumped from ^23.0.0 to ^23.2.0
     * @looker/extension-sdk-react bumped from ^23.0.0 to ^23.2.0
 
+## [0.1.22](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.21...extension-utils-v0.1.22) (2023-03-31)
+
+
+### Features
+
+* embed playground ([#1280](https://github.com/looker-open-source/sdk-codegen/issues/1280)) ([28f1218](https://github.com/looker-open-source/sdk-codegen/commit/28f121830f116da59b7f1cd248433c15c98cc56e))
+
+
+### Bug Fixes
+
+* Oauth message on failed verify ([#1282](https://github.com/looker-open-source/sdk-codegen/issues/1282)) ([f3c1b2c](https://github.com/looker-open-source/sdk-codegen/commit/f3c1b2c3ef6e34ab3f984e3e28288a99f14d77b7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.2.0 to ^23.4.0
+    * @looker/extension-sdk-react bumped from ^23.2.0 to ^23.4.0
+    * @looker/sdk bumped from ^23.2.0 to ^23.4.0
+
 ## [0.1.20](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.19...extension-utils-v0.1.20) (2023-02-22)
 
 
