@@ -4,7 +4,7 @@ The Go Looker SDK provides a convenient way to call your Looker instance's [Look
 
 ## Basic Usage
 
-Read through the code snippet below for basic SDK setup and usage. Also `git clone` this sdk-codegen repo and run the [example code](go/example/main.go). 
+Example code snippet below for basic SDK setup and usage. Also `git clone` this sdk-codegen repo and run the [example code](go/example/main.go). 
 
 ```go
 import (
