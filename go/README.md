@@ -1,6 +1,6 @@
 # Go Looker SDK
 
-The Go Looker SDK provides a convenient way to call your Looker instance's [Looker API](https://developers.looker.com/api/overview). The Go Looker SDK supports atleast Go version 1.17.6 and 1.16.13 (subject to change). This SDK is community supported with contributions and discussion from the Looker developer community. We strive for functional parity with our original javascript/typescript SDK. Thanks for using our Go Looker SDK!
+The Go Looker SDK provides a convenient way to call your Looker instance's [Looker API](https://developers.looker.com/api/overview). The Go Looker SDK supports at least Go version 1.17.6 and 1.16.13 (subject to change). This SDK is community supported with contributions and discussion from the Looker developer community. We strive for functional parity with our original javascript/typescript SDK. Thanks for using our Go Looker SDK!
 
 ## Basic Usage
 
