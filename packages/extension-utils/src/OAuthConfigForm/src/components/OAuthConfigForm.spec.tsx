@@ -97,12 +97,6 @@ jest.mock('react-router-dom', () => {
   }
 })
 
-jest.mock('../state', () => ({
-  __esModule: true,
-  ...jest.requireActual('../state'),
-  useStoreState: jest.fn(),
-}))
-
 jest.mock('../utils', () => ({
   __esModule: true,
   ...jest.requireActual('../utils'),
@@ -507,42 +501,6 @@ describe('ConfigForm', () => {
         webUrlValue: 'http://local',
       } as OAuthFormState
       const store = createTestStore(storeState)
-
-      const mockedVersionRes = {
-        looker_release_version: '23.4.30',
-        current_version: {
-          version: '4.0',
-          full_version: '4.0.23.4',
-          status: 'current',
-          swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
-        },
-        supported_versions: [
-          {
-            version: '3.0',
-            full_version: '3.0.0',
-            status: 'legacy',
-            swagger_url:
-              'https://devtools.cloud.looker.com/api/3.0/swagger.json',
-          },
-          {
-            version: '3.1',
-            full_version: '3.1.0',
-            status: 'legacy',
-            swagger_url:
-              'https://devtools.cloud.looker.com/api/3.1/swagger.json',
-          },
-          {
-            version: '4.0',
-            full_version: '4.0.23.4',
-            status: 'current',
-            swagger_url:
-              'https://devtools.cloud.looker.com/api/4.0/swagger.json',
-          },
-        ],
-        api_server_url: 'https://devtools.cloud.looker.com',
-        web_server_url: 'https://devtools.cloud.looker.com',
-      }
-
       getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
 
       const setItem = jest.spyOn(window.localStorage, 'setItem')
