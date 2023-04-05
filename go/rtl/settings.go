@@ -19,6 +19,7 @@ type ApiSettings struct {
 	ClientId     string `ini:"client_id"`
 	ClientSecret string `ini:"client_secret"`
 	ApiVersion   string `ini:"api_version"`
+	Headers      map[string]string
 }
 
 var defaultSettings ApiSettings = ApiSettings{
