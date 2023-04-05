@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 460 API methods
+ * 459 API methods
  */
 
 
@@ -824,16 +824,20 @@ open class LookerSDK: APIMethods {
      * ### Acquire a cookieless embed session.
      *
      * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
-     * to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
-     * otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
-     * attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+     * to the embed login. This endpoint accepts an embed user definition and creates or updates it. This is
+     * similar behavior to the embed SSO login as they both can create and update embed user data.
      *
      * The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
      * and the credentials match the credentials for the embed session, a new authentication token will be
      * generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
-     * the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+     * the session is NOT extended in this scenario. In other words the session_length parameter is ignored.
      *
-     * If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+     * **IMPORTANT:** If the `session_reference_token` is provided and the session has NOT expired, the embed user
+     * is NOT updated. This is done for performance reasons and to support the embed SSO usecase where the
+     * first IFRAME created on a page uses a signed url and subsequently created IFRAMEs do not.
+     *
+     * If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
+     * new embed session will be created. Note that the embed user definition will be updated in this scenario.
      *
      * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
      * 404 will be returned.
@@ -2490,20 +2494,6 @@ open class LookerSDK: APIMethods {
     }
 
     /**
-     * ### Looker Configuration Refresh
-     *
-     * This is an endpoint for manually calling refresh on Configuration manager.
-     *
-     * PUT /configuration_force_refresh -> AnyCodable
-     */
-    public func configuration_force_refresh(
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<AnyCodable, SDKError> {
-        let result: SDKResponse<AnyCodable, SDKError> = self.put("/configuration_force_refresh", nil, nil, options)
-        return result
-    }
-
-    /**
      * ### Get the current status and content of custom welcome emails
      *
      * GET /custom_welcome_email -> CustomWelcomeEmail
@@ -2756,7 +2746,6 @@ open class LookerSDK: APIMethods {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
-     *  - sisu
      *
      * GET /setting -> Setting
      */
@@ -2788,7 +2777,6 @@ open class LookerSDK: APIMethods {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
-     *  - sisu
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -4334,7 +4322,7 @@ open class LookerSDK: APIMethods {
      * Note that the created dashboard is not linked to any LookML Dashboard,
      * i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
      *
-     * POST /dashboards/lookml -> DashboardLookml
+     * POST /dashboards/lookml -> Dashboard
      */
     public func import_dashboard_from_lookml(
         /**
@@ -4342,15 +4330,15 @@ open class LookerSDK: APIMethods {
          */
         _ body: WriteDashboardLookml,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLookml, SDKError> {
-        let result: SDKResponse<DashboardLookml, SDKError> = self.post("/dashboards/lookml", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards/lookml", nil, try! self.encode(body), options)
         return result
     }
 
     /**
      * # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
      *
-     * POST /dashboards/from_lookml -> DashboardLookml
+     * POST /dashboards/from_lookml -> Dashboard
      */
     public func create_dashboard_from_lookml(
         /**
@@ -4358,8 +4346,8 @@ open class LookerSDK: APIMethods {
          */
         _ body: WriteDashboardLookml,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<DashboardLookml, SDKError> {
-        let result: SDKResponse<DashboardLookml, SDKError> = self.post("/dashboards/from_lookml", nil, try! self.encode(body), options)
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards/from_lookml", nil, try! self.encode(body), options)
         return result
     }
 
