@@ -125,70 +125,6 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 	})
 }
 
-func TestAuthSession_Do_UserAgent(t *testing.T) {
-	const path = "/someMethod"
-	const apiVersion = "/4.0"
-
-	t.Run("Do() sets User-Agent header with AuthSession config's AgentTag", func(t *testing.T) {
-		mux := http.NewServeMux()
-		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
-		server := httptest.NewServer(mux)
-		defer server.Close()
-
-		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
-			userAgentHeader := r.Header.Get("User-Agent")
-			expectedHeader := "some-agent-tag"
-			if userAgentHeader != expectedHeader {
-				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
-			}
-		})
-
-		session := NewAuthSession(ApiSettings{
-			BaseUrl:    server.URL,
-			ApiVersion: apiVersion,
-			AgentTag:   "some-agent-tag",
-		})
-
-		var r string
-		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
-
-		if err != nil {
-			t.Errorf("Do() call failed: %v", err)
-		}
-	})
-
-	t.Run("Do() sets User-Agent header with Do's option's AgentTag, which will overwrite  AuthSession config", func(t *testing.T) {
-		mux := http.NewServeMux()
-		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
-		server := httptest.NewServer(mux)
-		defer server.Close()
-
-		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
-			userAgentHeader := r.Header.Get("User-Agent")
-			expectedHeader := "new-agent-tag"
-			if userAgentHeader != expectedHeader {
-				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
-			}
-		})
-
-		session := NewAuthSession(ApiSettings{
-			BaseUrl:    server.URL,
-			ApiVersion: apiVersion,
-			AgentTag:   "some-agent-tag",
-		})
-
-		var r string
-		options := ApiSettings{
-			AgentTag:   "new-agent-tag",
-		}
-		err := session.Do(&r, "GET", apiVersion, path, nil, nil, &options)
-
-		if err != nil {
-			t.Errorf("Do() call failed: %v", err)
-		}
-	})
-}
-
 func TestAuthSession_Do_Parse(t *testing.T) {
 	type stringStruct struct {
 		Field *string `json:"field"`
@@ -454,9 +390,74 @@ func TestAuthSession_Do_Parse(t *testing.T) {
 	})
 }
 
-func TestAuthSession_Do_Content_Type(t *testing.T) {
+func TestAuthSession_Do_Headers(t *testing.T) {
 	const path = "/someMethod"
 	const apiVersion = "/4.0"
+
+	t.Run("Do() sets custom headers if Headers is set in the AuthSession's api settings", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			headerValue1 := r.Header.Get("Key1")
+			headerValue2 := r.Header.Get("Key2")
+
+			expectedHeaderValue1 := "Value1"
+			expectedHeaderValue2 := "Value2"
+			if headerValue1 != expectedHeaderValue1 || headerValue2 != expectedHeaderValue2 {
+				t.Errorf("Custom headers not set correctly. got=%v and %v  want=%v and %v", headerValue1, headerValue2, expectedHeaderValue1, expectedHeaderValue2)
+			}
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Headers: map[string]string{"Key1":"Value1","Key2":"Value2"},
+		})
+
+		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+
+	t.Run("Do()'s options.Headers will overwrite the Headers in the AuthSession's api settings", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			headerValue1 := r.Header.Get("Key1")
+			headerValue2 := r.Header.Get("Key2")
+
+			expectedHeaderValue1 := "Value1"
+			expectedHeaderValue2 := "OverwriteValue2"
+			if headerValue1 != expectedHeaderValue1 || headerValue2 != expectedHeaderValue2 {
+				t.Errorf("Custom headers not set correctly. got=%v and %v  want=%v and %v", headerValue1, headerValue2, expectedHeaderValue1, expectedHeaderValue2)
+			}
+		})
+
+		s := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Headers: map[string]string{"Key1":"Value1","Key2":"Value2"},
+		})
+
+		options := ApiSettings{
+			Headers: map[string]string{"Key1":"Value1","Key2":"OverwriteValue2"},
+		}
+		var r string
+		err := s.Do(&r, "GET", apiVersion, path, nil, nil, &options)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
 
 	t.Run("Do() sets Content-Type header to 'application/json' if body is json", func(t *testing.T) {
 		mux := http.NewServeMux()
@@ -512,6 +513,65 @@ func TestAuthSession_Do_Content_Type(t *testing.T) {
 
 		var r string
 		err := session.Do(&r, "GET", apiVersion, path, nil, "body", nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+
+	t.Run("Do() sets User-Agent header with AuthSession config's AgentTag", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			userAgentHeader := r.Header.Get("User-Agent")
+			expectedHeader := "some-agent-tag"
+			if userAgentHeader != expectedHeader {
+				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
+			}
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			AgentTag:   "some-agent-tag",
+		})
+
+		var r string
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+
+		if err != nil {
+			t.Errorf("Do() call failed: %v", err)
+		}
+	})
+
+	t.Run("Do() sets User-Agent header with Do's option's AgentTag, which will overwrite  AuthSession config", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			userAgentHeader := r.Header.Get("User-Agent")
+			expectedHeader := "new-agent-tag"
+			if userAgentHeader != expectedHeader {
+				t.Errorf("User-Agent header not correct. got=%v want=%v", userAgentHeader, expectedHeader)
+			}
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			AgentTag:   "some-agent-tag",
+		})
+
+		var r string
+		options := ApiSettings{
+			AgentTag:   "new-agent-tag",
+		}
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, &options)
 
 		if err != nil {
 			t.Errorf("Do() call failed: %v", err)
