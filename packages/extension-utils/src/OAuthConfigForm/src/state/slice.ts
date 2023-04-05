@@ -26,11 +26,8 @@
 import { createSliceHooks } from '@looker/redux'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type {
-  MessageBarData,
-  OAuthFormState,
-  UpdateFormPayload,
-} from '../types'
+import type { ValidationMessages } from '@looker/components'
+import type { MessageBarData, OAuthFormState } from '../types'
 
 export const SLICE_NAME = 'OauthConfigForm'
 
@@ -42,8 +39,21 @@ export const defaultOAuthFormState: OAuthFormState = {
     text: '',
     intent: 'positive',
   } as MessageBarData,
-  validationMessages: {},
+  validationMessages: {} as ValidationMessages,
   savedConfig: { base_url: '', looker_url: '' },
+}
+
+interface HandleUrlChangePayload {
+  apiServerUrlValue: string
+  webUrlValue: string
+  validationMessages: ValidationMessages
+}
+
+interface ConfigPayload {
+  base_url: string
+  looker_url: string
+  client_id: string
+  redirect_uri: string
 }
 
 export const OAuthFormSlice = createSlice({
@@ -53,14 +63,36 @@ export const OAuthFormSlice = createSlice({
     clearForm(_state) {
       return { ...defaultOAuthFormState }
     },
+    saveNewConfig(state, action: PayloadAction<ConfigPayload>) {
+      state.savedConfig = {
+        base_url: action.payload.base_url,
+        looker_url: action.payload.looker_url,
+      }
+      state.messageBar = {
+        intent: 'positive',
+        text: `Saved ${action.payload.looker_url} as OAuth server`,
+      }
+    },
+    setApiServerUrl(state, action: PayloadAction<string>) {
+      state.apiServerUrlValue = action.payload
+    },
+    setFetchedUrl(state, action: PayloadAction<string>) {
+      state.fetchedUrl = action.payload
+    },
+    setWebUrlValue(state, action: PayloadAction<string>) {
+      state.webUrlValue = action.payload
+    },
+    updateApiServerUrl(state, action: PayloadAction<HandleUrlChangePayload>) {
+      state.apiServerUrlValue = action.payload.apiServerUrlValue
+      state.webUrlValue = action.payload.webUrlValue
+      state.validationMessages = action.payload.validationMessages
+    },
     updateMessageBar(state, action: PayloadAction<MessageBarData>) {
       state.messageBar = action.payload
     },
-    updateForm(state, action: PayloadAction<UpdateFormPayload>) {
-      state = {
-        ...(state || {}),
-        ...action.payload,
-      }
+    verifyError(state, action: PayloadAction<string>) {
+      state.messageBar = { intent: 'critical', text: action.payload }
+      state.webUrlValue = ''
     },
   },
 })

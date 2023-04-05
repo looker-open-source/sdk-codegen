@@ -85,42 +85,31 @@ export const OAuthConfigForm = ({
 `
   const adaptor = getEnvAdaptor()
   const sdk = adaptor.sdk
-  // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
-  // TODO see about useReducer to clean this up a bit more
 
-  const getConfig = () => {
-    // TODO: This is temporary until config settings are available in redux.
-    // get configuration from storage, or default it
-    const data = localStorage.getItem(configKey)
-    const result = data ? JSON.parse(data) : EmptyConfig
-    return result
-  }
-
-  const config = getConfig()
-
-  const { clearForm, updateForm, updateMessageBar } = useOAuthFormActions()
+  const {
+    setApiServerUrl,
+    updateApiServerUrl,
+    setFetchedUrl,
+    setWebUrlValue,
+    clearForm,
+    updateMessageBar,
+    verifyError,
+    saveNewConfig,
+  } = useOAuthFormActions()
   const {
     apiServerUrlValue,
     fetchedUrl,
     webUrlValue,
     messageBar,
     validationMessages,
+    savedConfig,
   } = useOAuthFormState()
-  const [saved, setSaved] = useState<ConfigValues>(config)
 
   const isConfigured = () => {
     return (
-      saved !== EmptyConfig &&
-      apiServerUrlValue === saved.base_url &&
-      webUrlValue === saved.looker_url
+      apiServerUrlValue === savedConfig.base_url &&
+      webUrlValue === savedConfig.looker_url
     )
-  }
-
-  const fetchError = (message: string) => {
-    updateForm({
-      webUrlValue: '',
-    })
-    updateMessageBar({ intent: 'critical', text: message })
   }
 
   const saveConfig = (baseUrl: string, webUrl: string) => {
@@ -130,32 +119,27 @@ export const OAuthConfigForm = ({
       client_id: clientId,
       redirect_uri,
     }
-    // TODO: replace when redux is introduced
     localStorage.setItem(configKey, JSON.stringify(data))
+    saveNewConfig(data)
     if (setHasConfig) setHasConfig(true)
-    setSaved(data)
-    updateMessageBar({
-      intent: 'positive',
-      text: `Saved ${webUrl} as OAuth server`,
-    })
   }
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
     updateMessageBar({ intent: messageBar.intent, text: '' })
     const versionsUrl = `${apiServerUrlValue}/versions`
     try {
-      updateForm({ fetchedUrl: apiServerUrlValue })
+      setFetchedUrl(apiServerUrlValue)
 
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
         updateMessageBar({ intent: 'positive', text: `Configuration is valid` })
-        updateForm({ webUrlValue: versions.web_server_url })
+        setWebUrlValue(versions.web_server_url)
       }
 
       return versions
     } catch (e: any) {
-      fetchError(e.message)
+      verifyError(e.message)
       return undefined
     }
   }
@@ -172,10 +156,8 @@ export const OAuthConfigForm = ({
   }
 
   const handleClearClick = async (_e: BaseSyntheticEvent) => {
-    // TODO: replace when redux is introduced to run it
     localStorage.removeItem(configKey)
     clearForm()
-    setSaved(EmptyConfig)
 
     if (setHasConfig) setHasConfig(false)
     if (isAuthenticated()) {
@@ -205,7 +187,7 @@ export const OAuthConfigForm = ({
       }
     }
 
-    updateForm({
+    updateApiServerUrl({
       apiServerUrlValue: newApiServerUrl,
       webUrlValue: '',
       validationMessages: newValidationMessages as ValidationMessages,
@@ -233,12 +215,14 @@ export const OAuthConfigForm = ({
   }
 
   useEffect(() => {
-    const data = getConfig()
-    const { base_url, looker_url } = data
-    updateForm({
-      apiServerUrlValue: base_url,
-      webUrlValue: looker_url,
-    })
+    // Get config values from localstorage
+    const data = localStorage.getItem(configKey)
+    const result = data ? JSON.parse(data) : EmptyConfig
+    if (result.base_url && result.looker_url) {
+      const { base_url, looker_url } = result
+      setApiServerUrl(base_url)
+      setWebUrlValue(looker_url)
+    }
   }, [])
 
   return (

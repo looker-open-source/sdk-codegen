@@ -23,7 +23,9 @@
  SOFTWARE.
 
  */
+import type { ReactElement } from 'react'
 import React from 'react'
+import type { Store } from 'redux'
 import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
@@ -36,21 +38,51 @@ import {
 import { functionalSdk40 } from '@looker/sdk'
 import { createStore } from '@looker/redux'
 import { Provider } from 'react-redux'
-import { configureStore, DeepPartial } from '@reduxjs/toolkit'
-import type { UpdateFormPayload } from '../types'
-import { OauthConfigFormState } from '../types'
-import {
-  useOauthConfigFormState,
-  defaultOauthConfigFormState,
-  slice,
-} from '../slice'
-import { renderWithReduxProvider } from '../../../../../api-explorer/src/test-utils'
+import type { ValidationMessages } from '@looker/components'
+import type { ILookerVersions } from '@looker/sdk-codegen'
+import type { OAuthFormState } from '../types'
+import { OAuthFormSlice, defaultOAuthFormState } from '../state/slice'
 import { OAuthConfigForm } from '..'
+import type { ConfigValues } from '../utils'
+import { getVersions } from '../utils'
+
 import {
   BrowserAdaptor,
   registerTestEnvAdaptor,
   OAuthConfigProvider,
 } from '@looker/extension-utils'
+
+const mockedVersionRes = {
+  looker_release_version: '23.4.30',
+  current_version: {
+    version: '4.0',
+    full_version: '4.0.23.4',
+    status: 'current',
+    swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+  },
+  supported_versions: [
+    {
+      version: '3.0',
+      full_version: '3.0.0',
+      status: 'legacy',
+      swagger_url: 'https://devtools.cloud.looker.com/api/3.0/swagger.json',
+    },
+    {
+      version: '3.1',
+      full_version: '3.1.0',
+      status: 'legacy',
+      swagger_url: 'https://devtools.cloud.looker.com/api/3.1/swagger.json',
+    },
+    {
+      version: '4.0',
+      full_version: '4.0.23.4',
+      status: 'current',
+      swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+    },
+  ],
+  api_server_url: 'https://devtools.cloud.looker.com',
+  web_server_url: 'https://devtools.cloud.looker.com',
+}
 
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom')
@@ -64,6 +96,18 @@ jest.mock('react-router-dom', () => {
       .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
   }
 })
+
+jest.mock('../state', () => ({
+  __esModule: true,
+  ...jest.requireActual('../state'),
+  useStoreState: jest.fn(),
+}))
+
+jest.mock('../utils', () => ({
+  __esModule: true,
+  ...jest.requireActual('../utils'),
+  getVersions: jest.fn().mockResolvedValue(),
+}))
 
 const ConfigKey = 'ConfigKey'
 
@@ -85,15 +129,34 @@ const initSdk = () => {
   return sdk
 }
 
-export const createTestStore = (overrides?: UpdateFormPayload) =>
+const renderWithReduxProvider = (
+  consumers: ReactElement<any>,
+  store: Store<{ OauthConfigForm: OAuthFormState }>
+) => renderWithTheme(withReduxProvider(consumers, store))
+
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+const createTestStore = (overrides: DeepPartial<OAuthFormState>) =>
   createStore({
     preloadedState: {
-      oauthForm: { ...defaultOauthConfigFormState, ...overrides },
+      OauthConfigForm: {
+        ...defaultOAuthFormState,
+        ...overrides,
+      } as OAuthFormState,
     },
     reducer: {
-      oauthForm: slice.reducer,
+      OauthConfigForm: OAuthFormSlice.reducer,
     },
   })
+
+const withReduxProvider = (
+  consumers: ReactElement<any>,
+  store: Store<{ OauthConfigForm: OAuthFormState }>
+) => {
+  return <Provider store={store}>{consumers}</Provider>
+}
 
 describe('ConfigForm', () => {
   const adaptor = new BrowserAdaptor(initSdk())
@@ -105,22 +168,17 @@ describe('ConfigForm', () => {
     localStorage.removeItem(ConfigKey)
   })
 
-  test('it creates an empty config form without stored config', async () => {
-    const storeState = {
-      apiServerUrlValue: 'abcd',
-    }
+  test('it renders with default values', async () => {
+    const storeState = {}
+    const store = createTestStore(storeState)
 
-    // ;(useOauthConfigFormState as jest.Mock).mockReturnValue({
-    //   ...defaultOauthConfigFormState,
-    //   ...storeState
-    // })
     renderWithReduxProvider(
       <OAuthConfigForm
         configKey={ConfigKey}
         clientId="looker.cool-client"
         clientLabel="Looker Cool Client"
       />,
-      createTestStore(storeState)
+      store
     )
 
     expect(
@@ -131,7 +189,6 @@ describe('ConfigForm', () => {
       name: apiLabel,
     }) as HTMLInputElement
     expect(apiUrl).toBeInTheDocument()
-    // Todo: this shouldn't be empty according to state
     expect(apiUrl).toHaveValue('')
 
     const authUrl = screen.getByRole('textbox', {
@@ -157,13 +214,57 @@ describe('ConfigForm', () => {
     ).toBeInTheDocument()
   })
 
-  test.skip('it disables and enables verify for bad and good urls', async () => {
-    renderWithTheme(
+  test('it disables verify button if url is not valid', async () => {
+    const storeState = {
+      apiServerUrlValue: 'nonValidUrl',
+      validationMessages: {
+        baseUrl: {
+          type: 'error',
+          message: 'nonValidUrl is not a valid url',
+        },
+      } as ValidationMessages,
+    } as OAuthFormState
+    const store = createTestStore(storeState)
+
+    renderWithReduxProvider(
       <OAuthConfigForm
         configKey={ConfigKey}
         clientId="looker.cool-client"
         clientLabel="Looker Cool Client"
-      />
+      />,
+      store
+    )
+
+    expect(
+      screen.getByRole('heading', { name: 'Looker OAuth Configuration' })
+    ).toBeInTheDocument()
+
+    const apiUrl = screen.getByRole('textbox', {
+      name: apiLabel,
+    }) as HTMLInputElement
+    expect(apiUrl).toBeInTheDocument()
+    expect(apiUrl).toHaveValue(storeState.apiServerUrlValue)
+
+    const verifyBtn = screen.getByRole('button', { name: 'Verify' })
+
+    expect(verifyBtn).toBeInTheDocument()
+    expect(verifyBtn).toBeDisabled()
+    expect(
+      screen.getByText('nonValidUrl is not a valid url')
+    ).toBeInTheDocument()
+  })
+
+  test('it adds validation error on type', async () => {
+    const storeState = {} as OAuthFormState
+    const store = createTestStore(storeState)
+
+    renderWithReduxProvider(
+      <OAuthConfigForm
+        configKey={ConfigKey}
+        clientId="looker.cool-client"
+        clientLabel="Looker Cool Client"
+      />,
+      store
     )
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
@@ -193,21 +294,56 @@ describe('ConfigForm', () => {
     })
   })
 
-  describe('storage', () => {
-    test.skip('it saves and clears storage', async () => {
-      // TODO need to rewrite this test
-      renderWithTheme(
+  test('it calls adaptors login on login click', async () => {
+    adaptor.login = jest.fn()
+
+    const storeState = {
+      apiServerUrlValue: 'https://devtools.cloud.looker.com',
+      webUrlValue: 'https://devtools.cloud.looker.com',
+      savedConfig: {
+        base_url: 'https://devtools.cloud.looker.com',
+        looker_url: 'https://devtools.cloud.looker.com',
+      } as ConfigValues,
+    } as OAuthFormState
+    const store = createTestStore(storeState)
+
+    renderWithReduxProvider(
+      <OAuthConfigForm
+        configKey={ConfigKey}
+        clientId="looker.cool-client"
+        clientLabel="Looker Cool Client"
+      />,
+      store
+    )
+
+    const loginBtn = screen.getByRole('button', {
+      name: 'Login',
+    })
+
+    expect(loginBtn).toBeInTheDocument()
+    expect(loginBtn).toBeEnabled()
+    fireEvent.click(loginBtn)
+
+    await expect(adaptor.login).toHaveBeenCalled()
+  })
+
+  describe('verify function', () => {
+    test('it shows Oauth help message, success banner, and updates web_url on successful verify', async () => {
+      const clientLabel = 'Looker Cool Client'
+      const storeState = {
+        apiServerUrlValue: 'https://devtools.cloud.looker.com',
+      } as OAuthFormState
+      const store = createTestStore(storeState)
+      getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
+
+      renderWithReduxProvider(
         <OAuthConfigForm
           configKey={ConfigKey}
           clientId="looker.cool-client"
-          clientLabel="Looker Cool Client"
-        />
+          clientLabel={clientLabel}
+        />,
+        store
       )
-      const apiUrl = screen.getByRole('textbox', {
-        name: apiLabel,
-      }) as HTMLInputElement
-      expect(apiUrl).toBeInTheDocument()
-      expect(apiUrl).toHaveValue('')
 
       const authUrl = screen.getByRole('textbox', {
         name: authLabel,
@@ -215,57 +351,219 @@ describe('ConfigForm', () => {
       expect(authUrl).toBeInTheDocument()
       expect(authUrl).toHaveValue('')
 
-      const save = screen.getByRole('button', {
-        name: 'Save',
+      const button = screen.getByRole('button', {
+        name: 'Verify',
       }) as HTMLButtonElement
-      expect(save).toBeInTheDocument()
+      expect(button).toBeInTheDocument()
+      expect(button).toBeEnabled()
 
-      const clear = screen.getByRole('button', {
-        name: 'Clear',
-      }) as HTMLButtonElement
-      expect(clear).toBeInTheDocument()
+      fireEvent.click(button)
+      expect(getVersions).toHaveBeenCalledWith(
+        'https://devtools.cloud.looker.com/versions'
+      )
 
       await waitFor(() => {
-        const value = localStorage.getItem(ConfigKey)
-        expect(value).toBeDefined()
-        expect(JSON.parse(value!)).toEqual({
-          base_url: 'https://foo:199',
-          looker_url: 'https://foo:99',
-        })
-      })
-
-      await userEvent.click(clear)
-      await waitFor(() => {
-        const value = localStorage.getItem(ConfigKey)
-        expect(value).toBeEmpty()
+        expect(screen.getByText('Configuration is valid')).toBeInTheDocument()
+        const helpMessage = screen.queryByText((text) =>
+          text.includes(
+            'If API Explorer is also installed, the configuration below can be used to'
+          )
+        )
+        expect(helpMessage).toBeVisible()
+        expect(authUrl).toHaveValue(mockedVersionRes.web_server_url)
       })
     })
 
-    test.skip('it shows login section when configured', async () => {
-      localStorage.setItem(
-        ConfigKey,
-        JSON.stringify({
-          base_url: 'http://locb',
-          looker_url: 'http://local',
-        })
+    test('it shows Oauth help message and error banner on failed verify', async () => {
+      const clientLabel = 'Looker Cool Client'
+      const storeState = {
+        apiServerUrlValue: 'https://devtools.cloud.looker.com',
+      } as OAuthFormState
+      const store = createTestStore(storeState)
+      const mockErrorMessage = 'This is the mock error.'
+
+      getVersions.mockRejectedValueOnce(new Error(mockErrorMessage))
+
+      renderWithReduxProvider(
+        <OAuthConfigForm
+          configKey={ConfigKey}
+          clientId="looker.cool-client"
+          clientLabel={clientLabel}
+        />,
+        store
       )
 
-      renderWithTheme(
+      const authUrl = screen.getByRole('textbox', {
+        name: authLabel,
+      }) as HTMLInputElement
+      expect(authUrl).toBeInTheDocument()
+      expect(authUrl).toHaveValue('')
+
+      const button = screen.getByRole('button', {
+        name: 'Verify',
+      }) as HTMLButtonElement
+      expect(button).toBeInTheDocument()
+      expect(button).toBeEnabled()
+
+      fireEvent.click(button)
+      expect(getVersions).toHaveBeenCalledWith(
+        'https://devtools.cloud.looker.com/versions'
+      )
+
+      await waitFor(() => {
+        expect(screen.getByText(mockErrorMessage)).toBeInTheDocument()
+        const helpMessage = screen.queryByText((text) =>
+          text.includes(
+            'If API Explorer is also installed, the configuration below can be used to'
+          )
+        )
+        expect(helpMessage).toBeVisible()
+      })
+    })
+  })
+
+  describe('storage', () => {
+    test('it renders with a savedConfig in localstorage', async () => {
+      const savedConfig = {
+        base_url: 'http://locb',
+        looker_url: 'http://local',
+      }
+      const storeState = {} as OAuthFormState
+      const store = createTestStore(storeState)
+
+      const getLocalStorageSpy = jest
+        .spyOn(window.localStorage, 'getItem')
+        .mockReturnValue(JSON.stringify(savedConfig))
+
+      renderWithReduxProvider(
         <OAuthConfigForm
           configKey={ConfigKey}
           clientId="looker.cool-client"
           clientLabel="Looker Cool Client"
-        />
+        />,
+        store
       )
-      expect(
-        screen.getByRole('heading', { name: 'Looker OAuth Configuration' })
-      ).toBeInTheDocument()
 
-      expect(
-        screen.getByRole('button', {
-          name: 'Login',
-        })
-      ).toBeInTheDocument()
+      expect(getLocalStorageSpy).toHaveBeenCalledWith(ConfigKey)
+      const apiUrl = screen.getByRole('textbox', {
+        name: apiLabel,
+      }) as HTMLInputElement
+      expect(apiUrl).toBeInTheDocument()
+      expect(apiUrl).toHaveValue(savedConfig.base_url)
+
+      const authUrl = screen.getByRole('textbox', {
+        name: authLabel,
+      }) as HTMLInputElement
+      expect(authUrl).toBeInTheDocument()
+      expect(authUrl).toHaveValue(savedConfig.looker_url)
+    })
+
+    test('it clears storage', async () => {
+      const savedConfig = {
+        base_url: 'http://locb',
+        looker_url: 'http://local',
+      }
+      const storeState = {} as OAuthFormState
+      const store = createTestStore(storeState)
+
+      const getLocalStorageSpy = jest
+        .spyOn(window.localStorage, 'getItem')
+        .mockReturnValue(JSON.stringify(savedConfig))
+      const removeItem = jest.spyOn(window.localStorage, 'removeItem')
+
+      renderWithReduxProvider(
+        <OAuthConfigForm
+          configKey={ConfigKey}
+          clientId="looker.cool-client"
+          clientLabel="Looker Cool Client"
+        />,
+        store
+      )
+
+      const clearBtn = screen.getByRole('button', {
+        name: 'Clear',
+      })
+
+      expect(getLocalStorageSpy).toHaveBeenCalledWith(ConfigKey)
+      const apiUrl = screen.getByRole('textbox', {
+        name: apiLabel,
+      }) as HTMLInputElement
+      expect(apiUrl).toBeInTheDocument()
+      expect(apiUrl).toHaveValue(savedConfig.base_url)
+
+      const authUrl = screen.getByRole('textbox', {
+        name: authLabel,
+      }) as HTMLInputElement
+      expect(authUrl).toBeInTheDocument()
+      expect(authUrl).toHaveValue(savedConfig.looker_url)
+
+      fireEvent.click(clearBtn)
+      expect(removeItem).toHaveBeenCalledWith(ConfigKey)
+    })
+
+    test('it saves storage', async () => {
+      const storeState = {
+        apiServerUrlValue: 'http://locb',
+        webUrlValue: 'http://local',
+      } as OAuthFormState
+      const store = createTestStore(storeState)
+
+      const mockedVersionRes = {
+        looker_release_version: '23.4.30',
+        current_version: {
+          version: '4.0',
+          full_version: '4.0.23.4',
+          status: 'current',
+          swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+        },
+        supported_versions: [
+          {
+            version: '3.0',
+            full_version: '3.0.0',
+            status: 'legacy',
+            swagger_url:
+              'https://devtools.cloud.looker.com/api/3.0/swagger.json',
+          },
+          {
+            version: '3.1',
+            full_version: '3.1.0',
+            status: 'legacy',
+            swagger_url:
+              'https://devtools.cloud.looker.com/api/3.1/swagger.json',
+          },
+          {
+            version: '4.0',
+            full_version: '4.0.23.4',
+            status: 'current',
+            swagger_url:
+              'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+          },
+        ],
+        api_server_url: 'https://devtools.cloud.looker.com',
+        web_server_url: 'https://devtools.cloud.looker.com',
+      }
+
+      getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
+
+      const setItem = jest.spyOn(window.localStorage, 'setItem')
+
+      renderWithReduxProvider(
+        <OAuthConfigForm
+          configKey={ConfigKey}
+          clientId="looker.cool-client"
+          clientLabel="Looker Cool Client"
+        />,
+        store
+      )
+
+      const saveBtn = screen.getByRole('button', {
+        name: 'Save',
+      })
+      fireEvent.click(saveBtn)
+
+      await waitFor(() => {
+        expect(setItem).toHaveBeenCalled()
+      })
     })
   })
 })

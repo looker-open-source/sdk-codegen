@@ -35,15 +35,6 @@ export interface OAuthFormState {
   savedConfig: ConfigValues
 }
 
-export interface UpdateFormPayload {
-  apiServerUrlValue?: string
-  fetchedUrl?: string
-  webUrlValue?: string
-  messageBar?: MessageBarData
-  validationMessages?: ValidationMessages
-  savedConfig?: ConfigValues
-}
-
 export interface MessageBarData {
   intent: MessageBarIntent
   text: string
