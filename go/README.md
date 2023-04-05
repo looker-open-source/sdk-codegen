@@ -9,28 +9,28 @@ Example code snippet below for basic SDK setup and usage. Also `git clone` this 
 ```go
 import (
     "fmt"
-	"github.com/looker-open-source/sdk-codegen/go/rtl"
-	v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
+    "github.com/looker-open-source/sdk-codegen/go/rtl"
+    v4 "github.com/looker-open-source/sdk-codegen/go/sdk/v4"
 )
 
 func main() {
     // Get settings from either looker.ini file OR environment:
-	// looker.ini file
-	cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    // looker.ini file
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
     // environment
     cfg, err := rtl.NewSettingsFromEnv()
 
-	// Create new auth session with sdk settings. 
+    // Create new auth session with sdk settings. 
     // The auth session will fetch/refresh the access 
     // token from your Looker instance's `login` endpoint. 
     session := rtl.NewAuthSession(cfg)
 
     // Create new instance of the Go Looker SDK 
-	sdk := v4.NewLookerSDK(session)
+    sdk := v4.NewLookerSDK(session)
 
     // Call the Looker API e.g. get your user's name
     me, err := sdk.Me("", nil)
-	fmt.Printf("Your name is %s %s\n", *(me.first), *(me.last))
+    fmt.Printf("Your name is %s %s\n", *(me.first), *(me.last))
 }
 ```
 
@@ -46,7 +46,7 @@ Follow the example code snippet below if you want all outgoing requests to have 
 
 ```go
 func main() {
-	cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
 
     // Set the Headers option in the settings/config
     cfg.Headers = map[string]string{
@@ -55,7 +55,7 @@ func main() {
     }
     
     session := rtl.NewAuthSession(cfg)
-	sdk := v4.NewLookerSDK(session)
+    sdk := v4.NewLookerSDK(session)
 }
 ```
 
@@ -65,9 +65,9 @@ Follow the example code snippet below if you want each outgoing request to have 
 
 ```go
 func main() {
-	cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
     session := rtl.NewAuthSession(cfg)
-	sdk := v4.NewLookerSDK(session)
+    sdk := v4.NewLookerSDK(session)
 
     // Set the headers in the options passed into the SDK method
     sdk.Me("", &ApiSettings{Headings: map[string]string{
@@ -104,9 +104,9 @@ Follow the example code snippet below if you want each outgoing request to have 
 import "context"
 
 func main() {
-	cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
     session := rtl.NewAuthSession(cfg)
-	sdk := v4.NewLookerSDK(session)
+    sdk := v4.NewLookerSDK(session)
 
     // Set the timeout in the options passed into the SDK method
     me, err := sdk.Me("", &ApiSettings{Timeout: 60})
