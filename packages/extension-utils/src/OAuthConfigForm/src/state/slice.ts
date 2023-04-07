@@ -32,9 +32,9 @@ import type { MessageBarData, OAuthFormState } from '../types'
 export const SLICE_NAME = 'OauthConfigForm'
 
 export const defaultOAuthFormState: OAuthFormState = {
-  apiServerUrlValue: '',
+  apiServerUrl: '',
   fetchedUrl: '',
-  webUrlValue: '',
+  webUrl: '',
   messageBar: {
     text: '',
     intent: 'positive',
@@ -44,8 +44,8 @@ export const defaultOAuthFormState: OAuthFormState = {
 }
 
 interface HandleUrlChangePayload {
-  apiServerUrlValue: string
-  webUrlValue: string
+  apiServerUrl: string
+  webUrl: string
   validationMessages: ValidationMessages
 }
 
@@ -74,17 +74,17 @@ export const OAuthFormSlice = createSlice({
       }
     },
     setApiServerUrl(state, action: PayloadAction<string>) {
-      state.apiServerUrlValue = action.payload
+      state.apiServerUrl = action.payload
     },
     setFetchedUrl(state, action: PayloadAction<string>) {
       state.fetchedUrl = action.payload
     },
-    setWebUrlValue(state, action: PayloadAction<string>) {
-      state.webUrlValue = action.payload
+    setWebUrl(state, action: PayloadAction<string>) {
+      state.webUrl = action.payload
     },
     updateApiServerUrl(state, action: PayloadAction<HandleUrlChangePayload>) {
-      state.apiServerUrlValue = action.payload.apiServerUrlValue
-      state.webUrlValue = action.payload.webUrlValue
+      state.apiServerUrl = action.payload.apiServerUrl
+      state.webUrl = action.payload.webUrl
       state.validationMessages = action.payload.validationMessages
     },
     updateMessageBar(state, action: PayloadAction<MessageBarData>) {
@@ -92,7 +92,7 @@ export const OAuthFormSlice = createSlice({
     },
     verifyError(state, action: PayloadAction<string>) {
       state.messageBar = { intent: 'critical', text: action.payload }
-      state.webUrlValue = ''
+      state.webUrl = ''
     },
   },
 })

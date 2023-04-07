@@ -27,9 +27,9 @@ import type { ValidationMessages, MessageBarIntent } from '@looker/components'
 import type { ConfigValues } from './utils'
 
 export interface OAuthFormState {
-  apiServerUrlValue: string
+  apiServerUrl: string
   fetchedUrl: string
-  webUrlValue: string
+  webUrl: string
   messageBar: MessageBarData
   validationMessages: ValidationMessages
   savedConfig: ConfigValues

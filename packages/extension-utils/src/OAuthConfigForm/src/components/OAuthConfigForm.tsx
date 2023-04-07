@@ -90,16 +90,16 @@ export const OAuthConfigForm = ({
     setApiServerUrl,
     updateApiServerUrl,
     setFetchedUrl,
-    setWebUrlValue,
+    setWebUrl,
     clearForm,
     updateMessageBar,
     verifyError,
     saveNewConfig,
   } = useOAuthFormActions()
   const {
-    apiServerUrlValue,
+    apiServerUrl,
     fetchedUrl,
-    webUrlValue,
+    webUrl,
     messageBar,
     validationMessages,
     savedConfig,
@@ -107,8 +107,7 @@ export const OAuthConfigForm = ({
 
   const isConfigured = () => {
     return (
-      apiServerUrlValue === savedConfig.base_url &&
-      webUrlValue === savedConfig.looker_url
+      apiServerUrl === savedConfig.base_url && webUrl === savedConfig.looker_url
     )
   }
 
@@ -126,15 +125,15 @@ export const OAuthConfigForm = ({
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
     updateMessageBar({ intent: messageBar.intent, text: '' })
-    const versionsUrl = `${apiServerUrlValue}/versions`
+    const versionsUrl = `${apiServerUrl}/versions`
     try {
-      setFetchedUrl(apiServerUrlValue)
+      setFetchedUrl(apiServerUrl)
 
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
         updateMessageBar({ intent: 'positive', text: `Configuration is valid` })
-        setWebUrlValue(versions.web_server_url)
+        setWebUrl(versions.web_server_url)
       }
 
       return versions
@@ -144,18 +143,18 @@ export const OAuthConfigForm = ({
     }
   }
 
-  const handleSaveClick = async () => {
+  const handleSave = async () => {
     const versions = await verifyUrl()
     if (versions) {
       saveConfig(versions.api_server_url, versions.web_server_url)
     }
   }
 
-  const handleVerifyClick = () => {
+  const handleVerify = () => {
     verifyUrl()
   }
 
-  const handleClearClick = async (_e: BaseSyntheticEvent) => {
+  const handleClear = async (_e: BaseSyntheticEvent) => {
     localStorage.removeItem(configKey)
     clearForm()
 
@@ -188,8 +187,8 @@ export const OAuthConfigForm = ({
     }
 
     updateApiServerUrl({
-      apiServerUrlValue: newApiServerUrl,
-      webUrlValue: '',
+      apiServerUrl: newApiServerUrl,
+      webUrl: '',
       validationMessages: newValidationMessages as ValidationMessages,
     })
   }
@@ -197,18 +196,18 @@ export const OAuthConfigForm = ({
   const isAuthenticated = () => sdk.authSession.isAuthenticated()
 
   const verifyButtonDisabled =
-    apiServerUrlValue.trim().length === 0 ||
+    apiServerUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || webUrlValue.trim().length === 0 || isConfigured()
+    verifyButtonDisabled || webUrl.trim().length === 0 || isConfigured()
 
-  const clearButtonDisabled = apiServerUrlValue.trim().length === 0
+  const clearButtonDisabled = apiServerUrl.trim().length === 0
 
   const loginButtonDisabled =
     verifyButtonDisabled || !isConfigured() || isAuthenticated()
 
-  const handleLoginClick = async (e: BaseSyntheticEvent) => {
+  const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     // This will set storage variables and return to OAuthScene when successful
     await adaptor.login()
@@ -221,7 +220,7 @@ export const OAuthConfigForm = ({
     if (result.base_url && result.looker_url) {
       const { base_url, looker_url } = result
       setApiServerUrl(base_url)
-      setWebUrlValue(looker_url)
+      setWebUrl(looker_url)
     }
   }, [])
 
@@ -255,14 +254,14 @@ export const OAuthConfigForm = ({
                 label="API server URL"
                 placeholder="typically https://myserver.looker.com:19999"
                 name="baseUrl"
-                value={apiServerUrlValue}
+                value={apiServerUrl}
                 onChange={handleUrlChange}
               />
               <FieldText
                 label="OAuth server URL"
                 placeholder="Click 'Verify' to retrieve"
                 name="webUrl"
-                value={webUrlValue}
+                value={webUrl}
                 disabled={true}
               />
             </Fieldset>
@@ -278,7 +277,7 @@ export const OAuthConfigForm = ({
                   Looker OAuth client
                 </Link>{' '}
                 by adding "{(window as any).location.origin}" to the{' '}
-                <Link href={`${webUrlValue}/admin/embed`} target="_blank">
+                <Link href={`${webUrl}/admin/embed`} target="_blank">
                   Embedded Domain Allowlist
                 </Link>
                 . If API Explorer is also installed, the configuration below can
@@ -297,16 +296,16 @@ export const OAuthConfigForm = ({
           <Space>
             <Tooltip content="Clear the configuration values">
               <ButtonTransparent
-                onClick={handleClearClick}
+                onClick={handleClear}
                 disabled={clearButtonDisabled}
               >
                 Clear
               </ButtonTransparent>
             </Tooltip>
-            <Tooltip content={`Verify ${apiServerUrlValue}`}>
+            <Tooltip content={`Verify ${apiServerUrl}`}>
               <ButtonTransparent
                 disabled={verifyButtonDisabled}
-                onClick={handleVerifyClick}
+                onClick={handleVerify}
                 mr="small"
               >
                 Verify
@@ -315,7 +314,7 @@ export const OAuthConfigForm = ({
             <Tooltip content="Save the configuration for this browser">
               <Button
                 disabled={saveButtonDisabled}
-                onClick={handleSaveClick}
+                onClick={handleSave}
                 mr="small"
               >
                 Save
@@ -343,8 +342,8 @@ export const OAuthConfigForm = ({
               You will be able to login after you Verify your API Server URL
             </Span>
           )}
-          <Tooltip content={`Login to ${webUrlValue} using OAuth`}>
-            <Button onClick={handleLoginClick} disabled={loginButtonDisabled}>
+          <Tooltip content={`Login to ${webUrl} using OAuth`}>
+            <Button onClick={handleLogin} disabled={loginButtonDisabled}>
               Login
             </Button>
           </Tooltip>
