@@ -96,31 +96,31 @@ export const OAuthConfigForm = ({
   }
 
   const config = getConfig()
-  const [apiServerUrlValue, setApiServerUrlValue] = useState('')
+  const [apiServerUrl, setApiServerUrl] = useState('')
   const [fetchedUrl, setFetchedUrl] = useState('')
-  const [webUrlValue, setWebUrlValue] = useState('')
+  const [webUrl, setWebUrl] = useState('')
   const [messageBarIntent, setMessageBarIntent] =
     useState<MessageBarIntent>('positive')
-  const [messageBarValue, setMessageBarValue] = useState('')
+  const [messageBarText, setMessageBarText] = useState('')
   const [validationMessages, setValidationMessages] =
     useState<ValidationMessages>({})
   const [saved, setSaved] = useState<ConfigValues>(config)
 
   const updateMessageBar = (intent: MessageBarIntent, message: string) => {
     setMessageBarIntent(intent)
-    setMessageBarValue(message)
+    setMessageBarText(message)
   }
 
   const isConfigured = () => {
     return (
       saved !== EmptyConfig &&
-      apiServerUrlValue === saved.base_url &&
-      webUrlValue === saved.looker_url
+      apiServerUrl === saved.base_url &&
+      webUrl === saved.looker_url
     )
   }
 
   const fetchError = (message: string) => {
-    setWebUrlValue('')
+    setWebUrl('')
     updateMessageBar('critical', message)
   }
 
@@ -140,14 +140,14 @@ export const OAuthConfigForm = ({
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
     updateMessageBar(messageBarIntent, '')
-    const versionsUrl = `${apiServerUrlValue}/versions`
+    const versionsUrl = `${apiServerUrl}/versions`
     try {
-      setFetchedUrl(apiServerUrlValue)
+      setFetchedUrl(apiServerUrl)
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
         updateMessageBar('positive', 'Configuration is valid')
-        setWebUrlValue(versions.web_server_url)
+        setWebUrl(versions.web_server_url)
       }
 
       return versions
@@ -172,10 +172,10 @@ export const OAuthConfigForm = ({
     // TODO: replace when redux is introduced to run it
     localStorage.removeItem(configKey)
 
-    setApiServerUrlValue('')
+    setApiServerUrl('')
     setFetchedUrl('')
-    setWebUrlValue('')
-    setMessageBarValue('')
+    setWebUrl('')
+    setMessageBarText('')
     setMessageBarIntent('critical')
     setSaved(EmptyConfig)
 
@@ -191,14 +191,14 @@ export const OAuthConfigForm = ({
 
     const newValidationMessages = { ...validationMessages }
 
-    setApiServerUrlValue(value)
-    setWebUrlValue('')
+    setApiServerUrl(value)
+    setWebUrl('')
 
     const url = validateUrl(value)
     if (url) {
       delete newValidationMessages[name]
       // Update URL if it's been cleaned up
-      setApiServerUrlValue(url)
+      setApiServerUrl(url)
     } else {
       newValidationMessages[name] = {
         message: `'${value}' is not a valid url`,
@@ -212,13 +212,13 @@ export const OAuthConfigForm = ({
   const isAuthenticated = () => sdk.authSession.isAuthenticated()
 
   const verifyButtonDisabled =
-    apiServerUrlValue.trim().length === 0 ||
+    apiServerUrl.trim().length === 0 ||
     Object.keys(validationMessages).length > 0
 
   const saveButtonDisabled =
-    verifyButtonDisabled || webUrlValue.trim().length === 0 || isConfigured()
+    verifyButtonDisabled || webUrl.trim().length === 0 || isConfigured()
 
-  const clearButtonDisabled = apiServerUrlValue.trim().length === 0
+  const clearButtonDisabled = apiServerUrl.trim().length === 0
 
   const loginButtonDisabled =
     verifyButtonDisabled || !isConfigured() || isAuthenticated()
@@ -232,8 +232,8 @@ export const OAuthConfigForm = ({
   useEffect(() => {
     const data = getConfig()
     const { base_url, looker_url } = data
-    setApiServerUrlValue(base_url)
-    setWebUrlValue(looker_url)
+    setApiServerUrl(base_url)
+    setWebUrl(looker_url)
   }, [])
 
   return (
@@ -246,9 +246,9 @@ export const OAuthConfigForm = ({
       <MessageBar
         intent={messageBarIntent}
         onPrimaryClick={() => updateMessageBar(messageBarIntent, '')}
-        visible={messageBarValue !== ''}
+        visible={messageBarText !== ''}
       >
-        {messageBarValue}
+        {messageBarText}
       </MessageBar>
       <CollapserCard
         heading="1. Supply API Server URL"
@@ -264,14 +264,14 @@ export const OAuthConfigForm = ({
                 label="API server URL"
                 placeholder="typically https://myserver.looker.com:19999"
                 name="baseUrl"
-                value={apiServerUrlValue}
+                value={apiServerUrl}
                 onChange={handleUrlChange}
               />
               <FieldText
                 label="OAuth server URL"
                 placeholder="Click 'Verify' to retrieve"
                 name="webUrl"
-                value={webUrlValue}
+                value={webUrl}
                 disabled={true}
               />
             </Fieldset>
@@ -287,7 +287,7 @@ export const OAuthConfigForm = ({
                   Looker OAuth client
                 </Link>{' '}
                 by adding "{(window as any).location.origin}" to the{' '}
-                <Link href={`${webUrlValue}/admin/embed`} target="_blank">
+                <Link href={`${webUrl}/admin/embed`} target="_blank">
                   Embedded Domain Allowlist
                 </Link>
                 . If API Explorer is also installed, the configuration below can
@@ -312,7 +312,7 @@ export const OAuthConfigForm = ({
                 Clear
               </ButtonTransparent>
             </Tooltip>
-            <Tooltip content={`Verify ${apiServerUrlValue}`}>
+            <Tooltip content={`Verify ${apiServerUrl}`}>
               <ButtonTransparent
                 disabled={verifyButtonDisabled}
                 onClick={handleVerifyClick}
@@ -352,7 +352,7 @@ export const OAuthConfigForm = ({
               You will be able to login after you Verify your API Server URL
             </Span>
           )}
-          <Tooltip content={`Login to ${webUrlValue} using OAuth`}>
+          <Tooltip content={`Login to ${webUrl} using OAuth`}>
             <Button onClick={handleLoginClick} disabled={loginButtonDisabled}>
               Login
             </Button>
