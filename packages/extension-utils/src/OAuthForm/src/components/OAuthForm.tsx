@@ -24,7 +24,7 @@
 
  */
 import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import type { ValidationMessages } from '@looker/components'
 import {
   Button,
@@ -67,7 +67,7 @@ interface ConfigFormProps {
   clientLabel: string
 }
 
-export const OAuthConfigForm = ({
+export const OAuthForm = ({
   setHasConfig,
   clientId,
   clientLabel,
@@ -87,14 +87,14 @@ export const OAuthConfigForm = ({
   const sdk = adaptor.sdk
 
   const {
-    setApiServerUrl,
-    updateApiServerUrl,
-    setFetchedUrl,
-    setWebUrl,
-    clearForm,
-    updateMessageBar,
-    verifyError,
-    saveNewConfig,
+    setApiServerUrlAction,
+    updateApiServerUrlAction,
+    setFetchedUrlAction,
+    setWebUrlAction,
+    clearFormAction,
+    updateMessageBarAction,
+    verifyErrorAction,
+    saveNewConfigAction,
   } = useOAuthFormActions()
   const {
     apiServerUrl,
@@ -119,26 +119,29 @@ export const OAuthConfigForm = ({
       redirect_uri,
     }
     localStorage.setItem(configKey, JSON.stringify(data))
-    saveNewConfig(data)
+    saveNewConfigAction(data)
     if (setHasConfig) setHasConfig(true)
   }
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
-    updateMessageBar({ intent: messageBar.intent, text: '' })
+    updateMessageBarAction({ intent: messageBar.intent, text: '' })
     const versionsUrl = `${apiServerUrl}/versions`
     try {
-      setFetchedUrl(apiServerUrl)
+      setFetchedUrlAction(apiServerUrl)
 
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
-        updateMessageBar({ intent: 'positive', text: `Configuration is valid` })
-        setWebUrl(versions.web_server_url)
+        updateMessageBarAction({
+          intent: 'positive',
+          text: `Configuration is valid`,
+        })
+        setWebUrlAction(versions.web_server_url)
       }
 
       return versions
     } catch (e: any) {
-      verifyError(e.message)
+      verifyErrorAction(e.message)
       return undefined
     }
   }
@@ -156,11 +159,11 @@ export const OAuthConfigForm = ({
 
   const handleClear = async (_e: BaseSyntheticEvent) => {
     localStorage.removeItem(configKey)
-    clearForm()
+    clearFormAction()
 
     if (setHasConfig) setHasConfig(false)
     if (isAuthenticated()) {
-      updateMessageBar({
+      updateMessageBarAction({
         intent: 'warn',
         text: `Please reload the browser page to log out`,
       })
@@ -186,7 +189,7 @@ export const OAuthConfigForm = ({
       }
     }
 
-    updateApiServerUrl({
+    updateApiServerUrlAction({
       apiServerUrl: newApiServerUrl,
       webUrl: '',
       validationMessages: newValidationMessages as ValidationMessages,
@@ -219,8 +222,8 @@ export const OAuthConfigForm = ({
     const result = data ? JSON.parse(data) : EmptyConfig
     if (result.base_url && result.looker_url) {
       const { base_url, looker_url } = result
-      setApiServerUrl(base_url)
-      setWebUrl(looker_url)
+      setApiServerUrlAction(base_url)
+      setWebUrlAction(looker_url)
     }
   }, [])
 
@@ -234,7 +237,7 @@ export const OAuthConfigForm = ({
       <MessageBar
         intent={messageBar.intent}
         onPrimaryClick={() =>
-          updateMessageBar({ intent: messageBar.intent, text: '' })
+          updateMessageBarAction({ intent: messageBar.intent, text: '' })
         }
         visible={messageBar.text !== ''}
       >
