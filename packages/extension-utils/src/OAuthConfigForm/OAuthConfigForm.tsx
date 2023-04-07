@@ -112,11 +112,7 @@ export const OAuthConfigForm = ({
   }
 
   const isConfigured = () => {
-    return (
-      saved !== EmptyConfig &&
-      apiServerUrl === saved.base_url &&
-      webUrl === saved.looker_url
-    )
+    return apiServerUrl === saved.base_url && webUrl === saved.looker_url
   }
 
   const fetchError = (message: string) => {
