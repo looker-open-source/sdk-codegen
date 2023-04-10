@@ -107,7 +107,10 @@ export const OAuthForm = ({
 
   const isConfigured = () => {
     return (
-      apiServerUrl === savedConfig.base_url && webUrl === savedConfig.looker_url
+      apiServerUrl === savedConfig.base_url &&
+      webUrl === savedConfig.looker_url &&
+      apiServerUrl !== '' &&
+      webUrl !== ''
     )
   }
 

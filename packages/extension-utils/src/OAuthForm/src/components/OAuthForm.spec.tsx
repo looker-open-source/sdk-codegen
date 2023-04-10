@@ -58,30 +58,30 @@ const mockedVersionRes = {
     version: '4.0',
     full_version: '4.0.23.4',
     status: 'current',
-    swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+    swagger_url: 'https://validUrl/api/4.0/swagger.json',
   },
   supported_versions: [
     {
       version: '3.0',
       full_version: '3.0.0',
       status: 'legacy',
-      swagger_url: 'https://devtools.cloud.looker.com/api/3.0/swagger.json',
+      swagger_url: 'https://validUrl/api/3.0/swagger.json',
     },
     {
       version: '3.1',
       full_version: '3.1.0',
       status: 'legacy',
-      swagger_url: 'https://devtools.cloud.looker.com/api/3.1/swagger.json',
+      swagger_url: 'https://validUrl/api/3.1/swagger.json',
     },
     {
       version: '4.0',
       full_version: '4.0.23.4',
       status: 'current',
-      swagger_url: 'https://devtools.cloud.looker.com/api/4.0/swagger.json',
+      swagger_url: 'https://validUrl/api/4.0/swagger.json',
     },
   ],
-  api_server_url: 'https://devtools.cloud.looker.com',
-  web_server_url: 'https://devtools.cloud.looker.com',
+  api_server_url: 'https://validUrl',
+  web_server_url: 'https://validUrl',
 }
 
 jest.mock('react-router-dom', () => {
@@ -293,11 +293,11 @@ describe('ConfigForm', () => {
     adaptor.login = jest.fn()
 
     const storeState = {
-      apiServerUrl: 'https://devtools.cloud.looker.com',
-      webUrlValue: 'https://devtools.cloud.looker.com',
+      apiServerUrl: 'https://validUrl',
+      webUrlValue: 'https://validUrl',
       savedConfig: {
-        base_url: 'https://devtools.cloud.looker.com',
-        looker_url: 'https://devtools.cloud.looker.com',
+        base_url: 'https://validUrl',
+        looker_url: 'https://validUrl',
       } as ConfigValues,
     } as OAuthFormState
     const store = createTestStore(storeState)
@@ -326,7 +326,7 @@ describe('ConfigForm', () => {
     test('it shows Oauth help message, success banner, and updates web_url on successful verify', async () => {
       const clientLabel = 'Looker Cool Client'
       const storeState = {
-        apiServerUrl: 'https://devtools.cloud.looker.com',
+        apiServerUrl: 'https://validUrl',
       } as OAuthFormState
       const store = createTestStore(storeState)
       getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
@@ -353,9 +353,7 @@ describe('ConfigForm', () => {
       expect(button).toBeEnabled()
 
       fireEvent.click(button)
-      expect(getVersions).toHaveBeenCalledWith(
-        'https://devtools.cloud.looker.com/versions'
-      )
+      expect(getVersions).toHaveBeenCalledWith('https://validUrl/versions')
 
       await waitFor(() => {
         expect(screen.getByText('Configuration is valid')).toBeInTheDocument()
@@ -372,7 +370,7 @@ describe('ConfigForm', () => {
     test('it shows Oauth help message and error banner on failed verify', async () => {
       const clientLabel = 'Looker Cool Client'
       const storeState = {
-        apiServerUrl: 'https://devtools.cloud.looker.com',
+        apiServerUrl: 'https://validUrl',
       } as OAuthFormState
       const store = createTestStore(storeState)
       const mockErrorMessage = 'This is the mock error.'
@@ -401,9 +399,7 @@ describe('ConfigForm', () => {
       expect(button).toBeEnabled()
 
       fireEvent.click(button)
-      expect(getVersions).toHaveBeenCalledWith(
-        'https://devtools.cloud.looker.com/versions'
-      )
+      expect(getVersions).toHaveBeenCalledWith('https://validUrl/versions')
 
       await waitFor(() => {
         expect(screen.getByText(mockErrorMessage)).toBeInTheDocument()
@@ -420,8 +416,8 @@ describe('ConfigForm', () => {
   describe('storage', () => {
     test('it renders with a savedConfig in localstorage', async () => {
       const savedConfig = {
-        base_url: 'http://locb',
-        looker_url: 'http://local',
+        base_url: 'https://validUrl',
+        looker_url: 'https://validUrl',
       }
       const storeState = {} as OAuthFormState
       const store = createTestStore(storeState)
@@ -455,8 +451,8 @@ describe('ConfigForm', () => {
 
     test('it clears storage', async () => {
       const savedConfig = {
-        base_url: 'http://locb',
-        looker_url: 'http://local',
+        base_url: 'https://validUrl',
+        looker_url: 'https://validUrl',
       }
       const storeState = {} as OAuthFormState
       const store = createTestStore(storeState)
@@ -499,8 +495,8 @@ describe('ConfigForm', () => {
     // saveBtn not enabled
     test.skip('it saves storage', async () => {
       const storeState = {
-        apiServerUrl: 'https://devtools.cloud.looker.com',
-        webUrlValue: 'https://devtools.cloud.looker.com',
+        apiServerUrl: 'https://validUrl',
+        webUrlValue: 'https://validUrl',
       } as OAuthFormState
       const store = createTestStore(storeState)
       getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
