@@ -112,7 +112,12 @@ export const OAuthConfigForm = ({
   }
 
   const isConfigured = () => {
-    return apiServerUrl === saved.base_url && webUrl === saved.looker_url
+    return (
+      apiServerUrl === saved.base_url &&
+      webUrl === saved.looker_url &&
+      apiServerUrl !== '' &&
+      webUrl !== ''
+    )
   }
 
   const fetchError = (message: string) => {
@@ -153,18 +158,18 @@ export const OAuthConfigForm = ({
     }
   }
 
-  const handleSaveClick = async () => {
+  const handleSave = async () => {
     const versions = await verifyUrl()
     if (versions) {
       saveConfig(versions.api_server_url, versions.web_server_url)
     }
   }
 
-  const handleVerifyClick = () => {
+  const handleVerify = () => {
     verifyUrl()
   }
 
-  const handleClearClick = async (_e: BaseSyntheticEvent) => {
+  const handleClear = async (_e: BaseSyntheticEvent) => {
     // TODO: replace when redux is introduced to run it
     localStorage.removeItem(configKey)
 
@@ -219,7 +224,7 @@ export const OAuthConfigForm = ({
   const loginButtonDisabled =
     verifyButtonDisabled || !isConfigured() || isAuthenticated()
 
-  const handleLoginClick = async (e: BaseSyntheticEvent) => {
+  const handleLogin = async (e: BaseSyntheticEvent) => {
     e.preventDefault()
     // This will set storage variables and return to OAuthScene when successful
     await adaptor.login()
@@ -302,7 +307,7 @@ export const OAuthConfigForm = ({
           <Space>
             <Tooltip content="Clear the configuration values">
               <ButtonTransparent
-                onClick={handleClearClick}
+                onClick={handleClear}
                 disabled={clearButtonDisabled}
               >
                 Clear
@@ -311,7 +316,7 @@ export const OAuthConfigForm = ({
             <Tooltip content={`Verify ${apiServerUrl}`}>
               <ButtonTransparent
                 disabled={verifyButtonDisabled}
-                onClick={handleVerifyClick}
+                onClick={handleVerify}
                 mr="small"
               >
                 Verify
@@ -320,7 +325,7 @@ export const OAuthConfigForm = ({
             <Tooltip content="Save the configuration for this browser">
               <Button
                 disabled={saveButtonDisabled}
-                onClick={handleSaveClick}
+                onClick={handleSave}
                 mr="small"
               >
                 Save
@@ -349,7 +354,7 @@ export const OAuthConfigForm = ({
             </Span>
           )}
           <Tooltip content={`Login to ${webUrl} using OAuth`}>
-            <Button onClick={handleLoginClick} disabled={loginButtonDisabled}>
+            <Button onClick={handleLogin} disabled={loginButtonDisabled}>
               Login
             </Button>
           </Tooltip>
