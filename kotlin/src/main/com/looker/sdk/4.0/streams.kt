@@ -290,8 +290,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Present client credentials to obtain an authorization token
      *
      * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
-     * The client credentials required for this login must be obtained by creating an API3 key on a user account
-     * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
+     * The client credentials required for this login must be obtained by creating an API key on a user account
+     * in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
      *
      * The access token returned by `login` must be used in the HTTP Authorization header of subsequent
      * API requests, like this:
@@ -314,10 +314,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Best Practice:
      * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
      *
-     * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+     * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
      *
-     * @param {String} client_id client_id part of API3 Key.
-     * @param {String} client_secret client_secret part of API3 Key.
+     * @param {String} client_id client_id part of API Key.
+     * @param {String} client_secret client_secret part of API Key.
      *
      * POST /login -> ByteArray
      */
@@ -3293,6 +3293,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} type Either dashboard or look
      * @param {String} resource_id ID of the dashboard or look to render
      * @param {String} reload Whether or not to refresh the rendered image with the latest content
+     * @param {String} theme Light or dark background. Default is "light"
      * @param {String} format A value of png produces a thumbnail in PNG format instead of SVG (default)
      * @param {Long} width The width of the image if format is supplied
      * @param {Long} height The height of the image if format is supplied
@@ -3305,6 +3306,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         type: String,
         resource_id: String,
         reload: String? = null,
+        theme: String? = null,
         format: String? = null,
         width: Long? = null,
         height: Long? = null
@@ -3313,6 +3315,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         val path_resource_id = encodeParam(resource_id)
             return this.get<ByteArray>("/content_thumbnail/${path_type}/${path_resource_id}", 
                 mapOf("reload" to reload,
+                     "theme" to theme,
                      "format" to format,
                      "width" to width,
                      "height" to height))
@@ -3491,7 +3494,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Search Dashboards
      *
-     * Returns an **array of dashboard objects** that match the specified search criteria.
+     * Returns an array of **user-defined dashboard** objects that match the specified search criteria.
+     * Note, [search_dashboards()](#!/Dashboard/search_dashboards) does not return LookML dashboard objects.
      *
      * If multiple search params are given and `filter_or` is FALSE or not specified,
      * search params are combined in a logical AND operation.
@@ -9602,10 +9606,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+     * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {String} user_id Id of user
-     * @param {String} credentials_api3_id Id of API 3 Credential
+     * @param {String} credentials_api3_id Id of API Credential
      * @param {String} fields Requested fields.
      *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
@@ -9623,10 +9627,10 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+     * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {String} user_id Id of user
-     * @param {String} credentials_api3_id Id of API 3 Credential
+     * @param {String} credentials_api3_id Id of API Credential
      *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> ByteArray
      */
@@ -9641,7 +9645,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+     * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9659,7 +9663,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
-     * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+     * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -10246,7 +10250,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
      * the same user account will see the same files in the dev workspace. To avoid collisions between
-     * API clients it's best to have each client login with API3 credentials for a different user account.
+     * API clients it's best to have each client login with API credentials for a different user account.
      *
      * Changes made to files in a dev workspace are persistent across API sessions. It's a good
      * idea to commit any changes you've made to the git repository, but not strictly required. Your modified files

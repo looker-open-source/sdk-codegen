@@ -6919,7 +6919,7 @@ public struct DBConnection: SDKModel {
 
     private var _schema: AnyString?
     /**
-     * Scheme name
+     * Schema name
      */
     public var schema: String? {
         get { _schema?.value }
@@ -7338,7 +7338,7 @@ public struct DBConnectionOverride: SDKModel {
 
     private var _schema: AnyString?
     /**
-     * Scheme name
+     * Schema name
      */
     public var schema: String? {
         get { _schema?.value }
@@ -20720,6 +20720,8 @@ public struct ThemeSettings: SDKModel {
         case show_filters_toggle
         case show_dashboard_header
         case center_dashboard_title
+        case _dashboard_title_font_size = "dashboard_title_font_size"
+        case _box_shadow = "box_shadow"
     }
     private var _background_color: AnyString?
     /**
@@ -20777,7 +20779,7 @@ public struct ThemeSettings: SDKModel {
 
     private var _info_button_color: AnyString?
     /**
-     * Info button color
+     * (DEPRECATED) Info button color
      */
     public var info_button_color: String? {
         get { _info_button_color?.value }
@@ -20850,7 +20852,7 @@ public struct ThemeSettings: SDKModel {
 
     private var _warn_button_color: AnyString?
     /**
-     * Warning button color
+     * (DEPRECATED) Warning button color
      */
     public var warn_button_color: String? {
         get { _warn_button_color?.value }
@@ -20901,7 +20903,25 @@ public struct ThemeSettings: SDKModel {
      */
     public var center_dashboard_title: Bool?
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil) {
+    private var _dashboard_title_font_size: AnyString?
+    /**
+     * Dashboard title font size.
+     */
+    public var dashboard_title_font_size: String? {
+        get { _dashboard_title_font_size?.value }
+        set { _dashboard_title_font_size = newValue.map(AnyString.init) }
+    }
+
+    private var _box_shadow: AnyString?
+    /**
+     * Default box shadow.
+     */
+    public var box_shadow: String? {
+        get { _box_shadow?.value }
+        set { _box_shadow = newValue.map(AnyString.init) }
+    }
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -20926,6 +20946,8 @@ public struct ThemeSettings: SDKModel {
         self.show_filters_toggle = show_filters_toggle
         self.show_dashboard_header = show_dashboard_header
         self.center_dashboard_title = center_dashboard_title
+        self._dashboard_title_font_size = dashboard_title_font_size.map(AnyString.init)
+        self._box_shadow = box_shadow.map(AnyString.init)
     }
 
 }
@@ -21124,7 +21146,7 @@ public struct User: SDKModel {
     }
 
     /**
-     * API 3 credentials (read-only)
+     * API credentials (read-only)
      */
     public var credentials_api3: [CredentialsApi3]?
 
@@ -24137,7 +24159,7 @@ public struct WriteDBConnection: SDKModel {
 
     private var _schema: AnyString?
     /**
-     * Scheme name
+     * Schema name
      */
     public var schema: String? {
         get { _schema?.value }
@@ -24450,7 +24472,7 @@ public struct WriteDBConnectionOverride: SDKModel {
 
     private var _schema: AnyString?
     /**
-     * Scheme name
+     * Schema name
      */
     public var schema: String? {
         get { _schema?.value }

@@ -1,5 +1,13 @@
 # Changelog
 
+## [23.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.4.0...sdk-codegen-all-v23.6.0) (2023-04-11)
+
+
+### Features
+
+* Add Go SDK custom header support and README ([#1288](https://github.com/looker-open-source/sdk-codegen/issues/1288)) ([308b419](https://github.com/looker-open-source/sdk-codegen/commit/308b419a67c4806dda4eb3f15064661925314bda))
+* generate SDKs for Looker 23.6 ([#1293](https://github.com/looker-open-source/sdk-codegen/issues/1293)) ([dab9e0a](https://github.com/looker-open-source/sdk-codegen/commit/dab9e0a745ca7c099db13e258a0eea8c6b7b6e24))
+
 ## [23.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.1...sdk-codegen-all-v23.4.0) (2023-03-31)
 
 
