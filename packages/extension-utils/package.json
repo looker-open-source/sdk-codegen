@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-utils",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "Looker Extension Utilities",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -27,9 +27,9 @@
   "dependencies": {
     "@looker/code-editor": "^0.1.28",
     "@looker/components": "^4.1.1",
-    "@looker/extension-sdk": "^23.4.0",
-    "@looker/extension-sdk-react": "^23.4.0",
-    "@looker/sdk": "^23.4.0",
+    "@looker/extension-sdk": "^23.6.0",
+    "@looker/extension-sdk-react": "^23.6.0",
+    "@looker/sdk": "^23.6.0",
     "@looker/sdk-rtl": "^21.6.0",
     "@styled-icons/material": "^10.47.0",
     "react": "^16.14.0",
