@@ -1707,7 +1707,7 @@ data class Datagroup (
  * @property database Database name
  * @property db_timezone Time zone of database
  * @property query_timezone Timezone to use in queries
- * @property schema Scheme name
+ * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
@@ -1815,7 +1815,7 @@ data class DBConnectionBase (
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
  * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
  * @property database Database name
- * @property schema Scheme name
+ * @property schema Schema name
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  */
@@ -5259,7 +5259,7 @@ data class Theme (
  * @property font_color Default font color
  * @property font_family Primary font family
  * @property font_source Source specification for font
- * @property info_button_color Info button color
+ * @property info_button_color (DEPRECATED) Info button color
  * @property primary_button_color Primary button color
  * @property show_filters_bar Toggle to show filters. Defaults to true.
  * @property show_title Toggle to show the title. Defaults to true.
@@ -5268,7 +5268,7 @@ data class Theme (
  * @property text_tile_background_color Background color for text tiles
  * @property tile_text_color Text color for tiles
  * @property title_color Color for titles
- * @property warn_button_color Warning button color
+ * @property warn_button_color (DEPRECATED) Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
  * @property tile_shadow Toggles the tile shadow (not supported)
  * @property show_last_updated_indicator Toggle to show the dashboard last updated indicator. Defaults to true.
@@ -5277,6 +5277,8 @@ data class Theme (
  * @property show_filters_toggle Toggle to show the filters icon/toggle. Defaults to true.
  * @property show_dashboard_header Toggle to show the dashboard header. Defaults to true.
  * @property center_dashboard_title Toggle to center the dashboard title. Defaults to false.
+ * @property dashboard_title_font_size Dashboard title font size.
+ * @property box_shadow Default box shadow.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5302,7 +5304,9 @@ data class ThemeSettings (
     var show_dashboard_menu: Boolean? = null,
     var show_filters_toggle: Boolean? = null,
     var show_dashboard_header: Boolean? = null,
-    var center_dashboard_title: Boolean? = null
+    var center_dashboard_title: Boolean? = null,
+    var dashboard_title_font_size: String? = null,
+    var box_shadow: String? = null
 ) : Serializable
 
 /**
@@ -5342,7 +5346,7 @@ data class UpdateFolder (
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property avatar_url URL for the avatar image (may be generic) (read-only)
  * @property avatar_url_without_sizing URL for the avatar image (may be generic), does not specify size (read-only)
- * @property credentials_api3 API 3 credentials (read-only)
+ * @property credentials_api3 API credentials (read-only)
  * @property credentials_email
  * @property credentials_embed Embed credentials (read-only)
  * @property credentials_google
@@ -6141,7 +6145,7 @@ data class WriteDatagroup (
  * @property database Database name
  * @property db_timezone Time zone of database
  * @property query_timezone Timezone to use in queries
- * @property schema Scheme name
+ * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
@@ -6218,7 +6222,7 @@ data class WriteDBConnection (
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
  * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
  * @property database Database name
- * @property schema Scheme name
+ * @property schema Schema name
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  */

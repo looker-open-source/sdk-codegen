@@ -1626,7 +1626,7 @@ public class DBConnection : SdkModel
   public string? db_timezone { get; set; } = null;
   /// <summary>Timezone to use in queries</summary>
   public string? query_timezone { get; set; } = null;
-  /// <summary>Scheme name</summary>
+  /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
   /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
@@ -1724,7 +1724,7 @@ public class DBConnectionOverride : SdkModel
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// <summary>Scheme name</summary>
+  /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
@@ -5043,7 +5043,7 @@ public class ThemeSettings : SdkModel
   public string? font_family { get; set; } = null;
   /// <summary>Source specification for font</summary>
   public string? font_source { get; set; } = null;
-  /// <summary>Info button color</summary>
+  /// <summary>(DEPRECATED) Info button color</summary>
   public string? info_button_color { get; set; } = null;
   /// <summary>Primary button color</summary>
   public string? primary_button_color { get; set; } = null;
@@ -5061,7 +5061,7 @@ public class ThemeSettings : SdkModel
   public string? tile_text_color { get; set; } = null;
   /// <summary>Color for titles</summary>
   public string? title_color { get; set; } = null;
-  /// <summary>Warning button color</summary>
+  /// <summary>(DEPRECATED) Warning button color</summary>
   public string? warn_button_color { get; set; } = null;
   /// <summary>The text alignment of tile titles (New Dashboards)</summary>
   public string? tile_title_alignment { get; set; } = null;
@@ -5079,6 +5079,10 @@ public class ThemeSettings : SdkModel
   public bool? show_dashboard_header { get; set; } = null;
   /// <summary>Toggle to center the dashboard title. Defaults to false.</summary>
   public bool? center_dashboard_title { get; set; } = null;
+  /// <summary>Dashboard title font size.</summary>
+  public string? dashboard_title_font_size { get; set; } = null;
+  /// <summary>Default box shadow.</summary>
+  public string? box_shadow { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -5119,7 +5123,7 @@ public class User : SdkModel
   public string? avatar_url { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic), does not specify size (read-only)</summary>
   public string? avatar_url_without_sizing { get; set; } = null;
-  /// <summary>API 3 credentials (read-only)</summary>
+  /// <summary>API credentials (read-only)</summary>
   public CredentialsApi3[]? credentials_api3 { get; set; } = null;
   public CredentialsEmail? credentials_email { get; set; }
   /// <summary>Embed credentials (read-only)</summary>
@@ -5892,7 +5896,7 @@ public class WriteDBConnection : SdkModel
   public string? db_timezone { get; set; } = null;
   /// <summary>Timezone to use in queries</summary>
   public string? query_timezone { get; set; } = null;
-  /// <summary>Scheme name</summary>
+  /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
   /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
@@ -5967,7 +5971,7 @@ public class WriteDBConnectionOverride : SdkModel
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
-  /// <summary>Scheme name</summary>
+  /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
