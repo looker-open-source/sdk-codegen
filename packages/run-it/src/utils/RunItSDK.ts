@@ -42,7 +42,11 @@ export const initRunItSdk = () => {
     agentTag: 'RunIt 0.8',
   } as IApiSettings
 
-  const options = new OAuthConfigProvider(settings, RunItConfigKey)
+  const options = new OAuthConfigProvider(
+    settings,
+    'looker.api-explorer',
+    RunItConfigKey
+  )
   const transport = new BrowserTransport(options)
   const session = new BrowserSession(options, transport)
   const sdk = functionalSdk40(session)

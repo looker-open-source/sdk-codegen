@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 328 API models: 245 Spec, 0 Request, 61 Write, 22 Enum
+ * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -19702,7 +19702,6 @@ public struct Setting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
-        case sisu
     }
     /**
      * Toggle extension framework on or off
@@ -19775,9 +19774,7 @@ public struct Setting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public var sisu: SisuSetting?
-
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, sisu: SisuSetting? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19791,92 +19788,6 @@ public struct Setting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
-        self.sisu = sisu
-    }
-
-}
-
-public struct SisuSetting: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case can
-        case enabled
-        case _extension_id = "extension_id"
-        case configured
-        case _api_key_id = "api_key_id"
-        case _api_user_id = "api_user_id"
-        case _installation_id = "installation_id"
-        case _listing_id_override = "listing_id_override"
-    }
-    /**
-     * Operations the current user is able to perform on this object (read-only)
-     */
-    public var can: StringDictionary<Bool>?
-
-    /**
-     * Whether the Sisu integration is enabled
-     */
-    public var enabled: Bool?
-
-    private var _extension_id: AnyString?
-    /**
-     * The extension ID of the installed Sisu extension
-     */
-    public var extension_id: String? {
-        get { _extension_id?.value }
-        set { _extension_id = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Whether the Looker instance has been configured  with Sisu
-     */
-    public var configured: Bool?
-
-    private var _api_key_id: AnyString?
-    /**
-     * The API key ID generated for use with Sisu
-     */
-    public var api_key_id: String? {
-        get { _api_key_id?.value }
-        set { _api_key_id = newValue.map(AnyString.init) }
-    }
-
-    private var _api_user_id: AnyString?
-    /**
-     * The user ID associated with the API key generated for use with Sisu
-     */
-    public var api_user_id: String? {
-        get { _api_user_id?.value }
-        set { _api_user_id = newValue.map(AnyString.init) }
-    }
-
-    private var _installation_id: AnyString?
-    /**
-     * The marketplace installation id of the Sisu extension
-     */
-    public var installation_id: String? {
-        get { _installation_id?.value }
-        set { _installation_id = newValue.map(AnyString.init) }
-    }
-
-    private var _listing_id_override: AnyString?
-    /**
-     * An alternate marketplace listing id to use for the Sisu extension.
-     */
-    public var listing_id_override: String? {
-        get { _listing_id_override?.value }
-        set { _listing_id_override = newValue.map(AnyString.init) }
-    }
-
-    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, extension_id: String? = nil, configured: Bool? = nil, api_key_id: String? = nil, api_user_id: String? = nil, installation_id: String? = nil, listing_id_override: String? = nil) {
-        self.can = can
-        self.enabled = enabled
-        self._extension_id = extension_id.map(AnyString.init)
-        self.configured = configured
-        self._api_key_id = api_key_id.map(AnyString.init)
-        self._api_user_id = api_user_id.map(AnyString.init)
-        self._installation_id = installation_id.map(AnyString.init)
-        self._listing_id_override = listing_id_override.map(AnyString.init)
     }
 
 }
@@ -27201,7 +27112,6 @@ public struct WriteSetting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
-        case sisu
     }
     /**
      * Toggle extension framework on or off
@@ -27278,13 +27188,7 @@ public struct WriteSetting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    /**
-     * Dynamic writeable type for SisuSetting removes:
-     * can
-     */
-    public var sisu: WriteSisuSetting?
-
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, sisu: WriteSisuSetting? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -27298,89 +27202,6 @@ public struct WriteSetting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
-        self.sisu = sisu
-    }
-
-}
-
-/**
- * Dynamic writeable type for SisuSetting removes:
- * can
- */
-public struct WriteSisuSetting: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case enabled
-        case _extension_id = "extension_id"
-        case configured
-        case _api_key_id = "api_key_id"
-        case _api_user_id = "api_user_id"
-        case _installation_id = "installation_id"
-        case _listing_id_override = "listing_id_override"
-    }
-    /**
-     * Whether the Sisu integration is enabled
-     */
-    public var enabled: Bool?
-
-    private var _extension_id: AnyString?
-    /**
-     * The extension ID of the installed Sisu extension
-     */
-    public var extension_id: String? {
-        get { _extension_id?.value }
-        set { _extension_id = newValue.map(AnyString.init) }
-    }
-
-    /**
-     * Whether the Looker instance has been configured  with Sisu
-     */
-    public var configured: Bool?
-
-    private var _api_key_id: AnyString?
-    /**
-     * The API key ID generated for use with Sisu
-     */
-    public var api_key_id: String? {
-        get { _api_key_id?.value }
-        set { _api_key_id = newValue.map(AnyString.init) }
-    }
-
-    private var _api_user_id: AnyString?
-    /**
-     * The user ID associated with the API key generated for use with Sisu
-     */
-    public var api_user_id: String? {
-        get { _api_user_id?.value }
-        set { _api_user_id = newValue.map(AnyString.init) }
-    }
-
-    private var _installation_id: AnyString?
-    /**
-     * The marketplace installation id of the Sisu extension
-     */
-    public var installation_id: String? {
-        get { _installation_id?.value }
-        set { _installation_id = newValue.map(AnyString.init) }
-    }
-
-    private var _listing_id_override: AnyString?
-    /**
-     * An alternate marketplace listing id to use for the Sisu extension.
-     */
-    public var listing_id_override: String? {
-        get { _listing_id_override?.value }
-        set { _listing_id_override = newValue.map(AnyString.init) }
-    }
-
-    public init(enabled: Bool? = nil, extension_id: String? = nil, configured: Bool? = nil, api_key_id: String? = nil, api_user_id: String? = nil, installation_id: String? = nil, listing_id_override: String? = nil) {
-        self.enabled = enabled
-        self._extension_id = extension_id.map(AnyString.init)
-        self.configured = configured
-        self._api_key_id = api_key_id.map(AnyString.init)
-        self._api_user_id = api_user_id.map(AnyString.init)
-        self._installation_id = installation_id.map(AnyString.init)
-        self._listing_id_override = listing_id_override.map(AnyString.init)
     }
 
 }

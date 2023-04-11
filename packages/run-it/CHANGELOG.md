@@ -7,6 +7,21 @@
     * @looker/extension-utils bumped from ^0.1.20 to ^0.1.21
     * @looker/sdk bumped from ^23.0.0 to ^23.2.0
 
+## [0.9.45](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.44...run-it-v0.9.45) (2023-03-31)
+
+
+### Features
+
+* embed playground ([#1280](https://github.com/looker-open-source/sdk-codegen/issues/1280)) ([28f1218](https://github.com/looker-open-source/sdk-codegen/commit/28f121830f116da59b7f1cd248433c15c98cc56e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.21 to ^0.1.22
+    * @looker/sdk bumped from ^23.2.0 to ^23.4.0
+
 ## [0.9.43](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.42...run-it-v0.9.43) (2023-02-22)
 
 

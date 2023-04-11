@@ -1,5 +1,21 @@
 # Changelog
 
+## [23.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.1...sdk-codegen-all-v23.4.0) (2023-03-31)
+
+
+### Features
+
+* embed playground ([#1280](https://github.com/looker-open-source/sdk-codegen/issues/1280)) ([28f1218](https://github.com/looker-open-source/sdk-codegen/commit/28f121830f116da59b7f1cd248433c15c98cc56e))
+* generate SDKs for Looker 23.4 ([#1290](https://github.com/looker-open-source/sdk-codegen/issues/1290)) ([d7cd650](https://github.com/looker-open-source/sdk-codegen/commit/d7cd65054369a5eb93235a2d9b85b0f553bd1306))
+
+
+### Bug Fixes
+
+* Implement Go SDK timeout ([#1287](https://github.com/looker-open-source/sdk-codegen/issues/1287)) ([44974ec](https://github.com/looker-open-source/sdk-codegen/commit/44974eccdc4f1d454906a4236d865de0fdb71320))
+* Make Go SDK set correct content-type header ([#1283](https://github.com/looker-open-source/sdk-codegen/issues/1283)) ([b1f98c6](https://github.com/looker-open-source/sdk-codegen/commit/b1f98c6745b5084b42d6d6a29336e86681b15f83))
+* Oauth message on failed verify ([#1282](https://github.com/looker-open-source/sdk-codegen/issues/1282)) ([f3c1b2c](https://github.com/looker-open-source/sdk-codegen/commit/f3c1b2c3ef6e34ab3f984e3e28288a99f14d77b7))
+* Set Go SDK's User-Agent header ([#1285](https://github.com/looker-open-source/sdk-codegen/issues/1285)) ([68fd4c4](https://github.com/looker-open-source/sdk-codegen/commit/68fd4c4b6081551ba4813547303ecdd19e8e4e04))
+
 ## [23.2.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.0...sdk-codegen-all-v23.2.1) (2023-03-09)
 
 

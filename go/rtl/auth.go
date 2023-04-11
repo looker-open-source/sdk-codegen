@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -91,12 +92,74 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	// prepare URL
 	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
 
-	bodyString := serializeBody(body)
+	bodyString := ""
+	contentTypeHeader := ""
+
+	// serialize body to string and determine request's Content-Type header
+	if body != nil {
+		// get the `body`'s type
+		kind := reflect.TypeOf(body).Kind()
+		value := reflect.ValueOf(body)
+
+		// check if it is pointer
+		if kind == reflect.Ptr {
+			// if so find the type it points to
+			kind = reflect.ValueOf(body).Elem().Kind()
+			value = reflect.ValueOf(body).Elem()
+		}
+
+		if kind == reflect.String {
+			contentTypeHeader = "text/plain"
+			bodyString = fmt.Sprintf("%v", value)
+		} else {
+			contentTypeHeader = "application/json"
+			serializedBody, err := json.Marshal(body)
+
+			if err != nil {
+				_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
+			}
+
+			bodyString = string(serializedBody)
+		}
+	}
+
+	// create request context with timeout
+	var timeoutInSeconds int32 = 120 //seconds
+	if s.Config.Timeout != 0 {
+		timeoutInSeconds = s.Config.Timeout
+	}
+	if options != nil && options.Timeout != 0 {
+		timeoutInSeconds = options.Timeout
+	}
+
+	ctx, cncl := context.WithTimeout(context.Background(), time.Second * time.Duration(timeoutInSeconds))
+	defer cncl()
 
 	// create new request
-	req, err := http.NewRequest(method, u, bytes.NewBufferString(bodyString))
+	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))
 	if err != nil {
 		return err
+	}
+
+	// set headers
+	req.Header.Set("Content-Type", contentTypeHeader)
+
+	if s.Config.AgentTag != "" {
+		req.Header.Set("User-Agent", s.Config.AgentTag)
+	}
+	if options != nil && options.AgentTag != "" {
+		req.Header.Set("User-Agent", options.AgentTag)
+	}
+
+	if s.Config.Headers != nil {
+		for key, value := range s.Config.Headers {
+			req.Header.Set(key, value)
+		}
+	}
+	if options != nil && options.Headers != nil {
+		for key, value := range options.Headers {
+			req.Header.Set(key, value)
+		}
 	}
 
 	// set query params
@@ -136,38 +199,6 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	}
 
 	return nil
-}
-
-// serializeBody serializes body to a json, if the body is already string, it will just return it unchanged
-func serializeBody(body interface{}) string {
-	ret := ""
-	if body == nil {
-		return ret
-	}
-
-	// get the `body` type
-	kind := reflect.TypeOf(body).Kind()
-	value := reflect.ValueOf(body)
-
-	// check if it is pointer
-	if kind == reflect.Ptr {
-		// if so, use the value kind
-		kind = reflect.ValueOf(body).Elem().Kind()
-		value = reflect.ValueOf(body).Elem()
-	}
-
-	// it is string, return it as it is
-	if kind == reflect.String {
-		return fmt.Sprintf("%v", value)
-	}
-
-	bb, err := json.Marshal(body)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
-	}
-
-	return string(bb)
-
 }
 
 func isStringType(v interface{}) bool {

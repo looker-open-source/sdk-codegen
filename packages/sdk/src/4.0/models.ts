@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 394 API models: 245 Spec, 66 Request, 61 Write, 22 Enum
+ * 392 API models: 244 Spec, 66 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -10314,42 +10314,6 @@ export interface ISetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[]
-  sisu?: ISisuSetting
-}
-
-export interface ISisuSetting {
-  /**
-   * Operations the current user is able to perform on this object (read-only)
-   */
-  can?: IDictionary<boolean>
-  /**
-   * Whether the Sisu integration is enabled
-   */
-  enabled?: boolean
-  /**
-   * The extension ID of the installed Sisu extension
-   */
-  extension_id?: string | null
-  /**
-   * Whether the Looker instance has been configured  with Sisu
-   */
-  configured?: boolean
-  /**
-   * The API key ID generated for use with Sisu
-   */
-  api_key_id?: string | null
-  /**
-   * The user ID associated with the API key generated for use with Sisu
-   */
-  api_user_id?: string | null
-  /**
-   * The marketplace installation id of the Sisu extension
-   */
-  installation_id?: string | null
-  /**
-   * An alternate marketplace listing id to use for the Sisu extension.
-   */
-  listing_id_override?: string | null
 }
 
 export interface ISmtpNodeStatus {
@@ -13533,46 +13497,6 @@ export interface IWriteSetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[] | null
-  /**
-   * Dynamic writeable type for SisuSetting removes:
-   * can
-   */
-  sisu?: IWriteSisuSetting | null
-}
-
-/**
- * Dynamic writeable type for SisuSetting removes:
- * can
- */
-export interface IWriteSisuSetting {
-  /**
-   * Whether the Sisu integration is enabled
-   */
-  enabled?: boolean
-  /**
-   * The extension ID of the installed Sisu extension
-   */
-  extension_id?: string | null
-  /**
-   * Whether the Looker instance has been configured  with Sisu
-   */
-  configured?: boolean
-  /**
-   * The API key ID generated for use with Sisu
-   */
-  api_key_id?: string | null
-  /**
-   * The user ID associated with the API key generated for use with Sisu
-   */
-  api_user_id?: string | null
-  /**
-   * The marketplace installation id of the Sisu extension
-   */
-  installation_id?: string | null
-  /**
-   * An alternate marketplace listing id to use for the Sisu extension.
-   */
-  listing_id_override?: string | null
 }
 
 /**

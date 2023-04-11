@@ -40,11 +40,14 @@ export interface IStorageValue {
  * An OAuth Session configuration provider
  */
 export class OAuthConfigProvider extends ApiSettings {
+  oauthClientId: string
   constructor(
     settings: Partial<IApiSettings>,
+    oauthClientId: string,
     private readonly configKey: string
   ) {
     super(settings)
+    this.oauthClientId = oauthClientId
   }
 
   private getStorage(key: string, defaultValue = ''): IStorageValue {
@@ -102,7 +105,7 @@ export class OAuthConfigProvider extends ApiSettings {
       config = {
         base_url: this.base_url,
         looker_url: `${authServer}:9999`,
-        client_id: 'looker.api-explorer',
+        client_id: this.oauthClientId,
         redirect_uri: `${window.location.origin}/oauth`,
       }
     }
