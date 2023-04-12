@@ -36,6 +36,7 @@
   "devDependencies": {
   },
   "dependencies": {
+    "@looker/sdk-rtl": "^21.6.0"
   },
   "keywords": [
     "Looker",
