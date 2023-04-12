@@ -29,6 +29,11 @@ import { EntityService } from './EntityService'
 
 export const DEFAULT_TTL = 900 // 15 minutes
 
+export interface GetOptions {
+  itemCache?: boolean
+  [key: string]: any
+}
+
 export interface IItemList<T> {
   /** Cache time to live in seconds, defaults to 15 minutes */
   readonly timeToLive: number
@@ -42,7 +47,7 @@ export interface IItemList<T> {
 }
 
 export interface IEntityService<T> extends IItemList<T> {
-  get(id: string, cache?: boolean, ...options: any[]): Promise<T>
+  get(id: string, options?: GetOptions): Promise<T>
   set(id: string, item: T): Promise<T>
   getAll(...options: any[]): Promise<IItemList<T>>
   delete(id: string): void
@@ -110,5 +115,14 @@ export abstract class ItemList<T extends Record<string, any>>
     return this.items.find((item) => item[key as string] === value) as
       | T
       | undefined
+  }
+
+  /**
+   * Gets the cache option value if present, otherwise defaults to true
+   * @param options to check
+   */
+  getCacheDefault(options?: GetOptions) {
+    const cache = options && 'itemCache' in options ? options.itemCache : true
+    return cache
   }
 }

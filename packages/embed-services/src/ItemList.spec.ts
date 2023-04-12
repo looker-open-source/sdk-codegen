@@ -123,6 +123,20 @@ describe('ItemList', () => {
     it('returns undefined if item not found', () => {
       const actual = ItemList.find('name', 'bogus')
       expect(actual).toBeUndefined()
+
+      expect(ItemList.find('name', 'barName')).toEqual(items[1])
+    })
+  })
+
+  describe('getCacheDefault', () => {
+    it('gets the default', () => {
+      const actual = ItemList.getCacheDefault()
+      expect(actual).toBe(true)
+    })
+
+    it('gets value from itemCache option when specified', () => {
+      const actual = ItemList.getCacheDefault({ itemCache: false })
+      expect(actual).toBe(false)
     })
   })
 })
