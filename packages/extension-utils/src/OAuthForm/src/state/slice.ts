@@ -26,10 +26,23 @@
 import { createSliceHooks } from '@looker/redux'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { ValidationMessages } from '@looker/components'
-import type { MessageBarData, OAuthFormState } from '../types'
+import type { MessageBarIntent, ValidationMessages } from '@looker/components'
+import type { ConfigValues } from '../utils'
 
 export const SLICE_NAME = 'OAuthForm'
+export interface MessageBarData {
+  intent: MessageBarIntent
+  text: string
+}
+
+export interface OAuthFormState {
+  apiServerUrl: string
+  fetchedUrl: string
+  webUrl: string
+  messageBar: MessageBarData
+  validationMessages: ValidationMessages
+  savedConfig: ConfigValues
+}
 
 export const defaultOAuthFormState: OAuthFormState = {
   apiServerUrl: '',

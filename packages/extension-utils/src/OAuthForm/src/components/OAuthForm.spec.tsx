@@ -288,13 +288,12 @@ describe('ConfigForm', () => {
     })
   })
 
-  // loginBtn not enabled
-  test.skip('it calls adaptors login on login click', async () => {
+  test('it calls adaptors login on login click', async () => {
     adaptor.login = jest.fn()
 
     const storeState = {
       apiServerUrl: 'https://validUrl',
-      webUrlValue: 'https://validUrl',
+      webUrl: 'https://validUrl',
       savedConfig: {
         base_url: 'https://validUrl',
         looker_url: 'https://validUrl',
@@ -492,11 +491,15 @@ describe('ConfigForm', () => {
       expect(removeItem).toHaveBeenCalledWith(ConfigKey)
     })
 
-    // saveBtn not enabled
-    test.skip('it saves storage', async () => {
+    test('it saves storage', async () => {
+      const validUrl = 'https://validUrl'
       const storeState = {
-        apiServerUrl: 'https://validUrl',
-        webUrlValue: 'https://validUrl',
+        apiServerUrl: validUrl,
+        webUrl: validUrl,
+        savedConfig: {
+          base_url: '',
+          looker_url: '',
+        },
       } as OAuthFormState
       const store = createTestStore(storeState)
       getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
