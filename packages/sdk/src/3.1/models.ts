@@ -1948,7 +1948,7 @@ export interface IDBConnection {
    */
   query_timezone?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -2100,7 +2100,7 @@ export interface IDBConnectionOverride {
    */
   database?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -6059,6 +6059,10 @@ export interface IRequestContentThumbnail {
    */
   reload?: string | null
   /**
+   * Light or dark background. Default is "light"
+   */
+  theme?: string | null
+  /**
    * A value of png produces a thumbnail in PNG format instead of SVG (default)
    */
   format?: string | null
@@ -6353,11 +6357,11 @@ export interface IRequestGraphDerivedTablesForView {
  */
 export interface IRequestLogin {
   /**
-   * client_id part of API3 Key.
+   * client_id part of API Key.
    */
   client_id?: string | null
   /**
-   * client_secret part of API3 Key.
+   * client_secret part of API Key.
    */
   client_secret?: string | null
 }
@@ -8745,7 +8749,7 @@ export interface IThemeSettings {
    */
   font_source?: string | null
   /**
-   * Info button color
+   * (DEPRECATED) Info button color
    */
   info_button_color?: string
   /**
@@ -8781,7 +8785,7 @@ export interface IThemeSettings {
    */
   title_color?: string
   /**
-   * Warning button color
+   * (DEPRECATED) Warning button color
    */
   warn_button_color?: string
   /**
@@ -8816,6 +8820,14 @@ export interface IThemeSettings {
    * Toggle to center the dashboard title. Defaults to false.
    */
   center_dashboard_title?: boolean
+  /**
+   * Dashboard title font size.
+   */
+  dashboard_title_font_size?: string
+  /**
+   * Default box shadow.
+   */
+  box_shadow?: string
 }
 
 export interface ITimezone {
@@ -8869,7 +8881,7 @@ export interface IUser {
    */
   avatar_url_without_sizing?: Url | null
   /**
-   * API 3 credentials (read-only)
+   * API credentials (read-only)
    */
   credentials_api3?: ICredentialsApi3[] | null
   credentials_email?: ICredentialsEmail
@@ -9968,7 +9980,7 @@ export interface IWriteDBConnection {
    */
   query_timezone?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -10076,7 +10088,7 @@ export interface IWriteDBConnectionOverride {
    */
   database?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
