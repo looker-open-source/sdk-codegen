@@ -40,7 +40,7 @@ import { createStore } from '@looker/redux'
 import { Provider } from 'react-redux'
 import type { ValidationMessages } from '@looker/components'
 import type { ILookerVersions } from '@looker/sdk-codegen'
-import type { OAuthFormState } from '../types'
+import type { OAuthFormState } from '../state/slice'
 import { OAuthFormSlice, defaultOAuthFormState } from '../state/slice'
 import { OAuthForm } from '..'
 import type { ConfigValues } from '../utils'
@@ -100,7 +100,7 @@ jest.mock('react-router-dom', () => {
 jest.mock('../utils', () => ({
   __esModule: true,
   ...jest.requireActual('../utils'),
-  getVersions: jest.fn().mockResolvedValue(),
+  getVersions: jest.fn(),
 }))
 
 const ConfigKey = 'ConfigKey'
@@ -328,7 +328,7 @@ describe('ConfigForm', () => {
         apiServerUrl: 'https://validUrl',
       } as OAuthFormState
       const store = createTestStore(storeState)
-      getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
+      ;(getVersions as jest.Mock).mockResolvedValueOnce(mockedVersionRes)
 
       renderWithReduxProvider(
         <OAuthForm
@@ -373,8 +373,9 @@ describe('ConfigForm', () => {
       } as OAuthFormState
       const store = createTestStore(storeState)
       const mockErrorMessage = 'This is the mock error.'
-
-      getVersions.mockRejectedValueOnce(new Error(mockErrorMessage))
+      ;(getVersions as jest.Mock).mockRejectedValueOnce(
+        new Error(mockErrorMessage)
+      )
 
       renderWithReduxProvider(
         <OAuthForm
@@ -499,10 +500,10 @@ describe('ConfigForm', () => {
         savedConfig: {
           base_url: '',
           looker_url: '',
-        },
+        } as ConfigValues,
       } as OAuthFormState
       const store = createTestStore(storeState)
-      getVersions.mockResolvedValue(mockedVersionRes as ILookerVersions)
+      ;(getVersions as jest.Mock).mockResolvedValueOnce(mockedVersionRes)
 
       const setItem = jest.spyOn(window.localStorage, 'setItem')
 
