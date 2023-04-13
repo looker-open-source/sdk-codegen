@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
@@ -122,14 +123,44 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		}
 	}
 
+	// create request context with timeout
+	var timeoutInSeconds int32 = 120 //seconds
+	if s.Config.Timeout != 0 {
+		timeoutInSeconds = s.Config.Timeout
+	}
+	if options != nil && options.Timeout != 0 {
+		timeoutInSeconds = options.Timeout
+	}
+
+	ctx, cncl := context.WithTimeout(context.Background(), time.Second * time.Duration(timeoutInSeconds))
+	defer cncl()
+
 	// create new request
-	req, err := http.NewRequest(method, u, bytes.NewBufferString(bodyString))
+	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))
 	if err != nil {
 		return err
 	}
 
-	// set content-type header
-	req.Header.Add("Content-Type", contentTypeHeader)
+	// set headers
+	req.Header.Set("Content-Type", contentTypeHeader)
+
+	if s.Config.AgentTag != "" {
+		req.Header.Set("User-Agent", s.Config.AgentTag)
+	}
+	if options != nil && options.AgentTag != "" {
+		req.Header.Set("User-Agent", options.AgentTag)
+	}
+
+	if s.Config.Headers != nil {
+		for key, value := range s.Config.Headers {
+			req.Header.Set(key, value)
+		}
+	}
+	if options != nil && options.Headers != nil {
+		for key, value := range options.Headers {
+			req.Header.Set(key, value)
+		}
+	}
 
 	// set query params
 	setQuery(req.URL, reqPars)
