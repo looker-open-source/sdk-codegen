@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,32 @@
  SOFTWARE.
 
  */
+import path from 'path'
+import * as fs from 'fs'
+import { environmentPrefix } from '@looker/sdk'
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
 
-export const sdkVersion = '23.6'
-export const environmentPrefix = 'LOOKERSDK'
+const homeToRoost = '../../../../'
+
+export const getRootPath = () => path.join(__dirname, homeToRoost)
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+const localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
+
+const settings = new NodeSettingsIniFile(environmentPrefix, localIni, 'Looker')
+export const session = new NodeSession(settings)
+
+export const timeout = 3600000 // 1 hr
+
+interface ITestConfig {
+  testData: any
+}
+
+export const TestConfig = (): ITestConfig => {
+  const testFile = 'data.yml.json'
+  const testPath = rootFile('test/')
+  const dataFile = `${testPath}${testFile}`
+  const testData = JSON.parse(fs.readFileSync(dataFile, 'utf-8'))
+  return {
+    testData,
+  }
+}

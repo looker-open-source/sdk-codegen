@@ -3316,7 +3316,7 @@ class DBConnection(model.Model):
         database: Database name
         db_timezone: Time zone of database
         query_timezone: Timezone to use in queries
-        schema: Scheme name
+        schema: Schema name
         max_connections: Maximum number of concurrent connection to use
         max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
         ssl: Use SSL/TLS when connecting to server
@@ -3536,7 +3536,7 @@ class DBConnectionOverride(model.Model):
         certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
         file_type: (Write-Only) Certificate keyfile type - .json or .p12
         database: Database name
-        schema: Scheme name
+        schema: Schema name
         jdbc_additional_params: Additional params to add to JDBC connection string
         after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
     """
@@ -10213,7 +10213,7 @@ class ThemeSettings(model.Model):
         font_color: Default font color
         font_family: Primary font family
         font_source: Source specification for font
-        info_button_color: Info button color
+        info_button_color: (DEPRECATED) Info button color
         primary_button_color: Primary button color
         show_filters_bar: Toggle to show filters. Defaults to true.
         show_title: Toggle to show the title. Defaults to true.
@@ -10222,7 +10222,7 @@ class ThemeSettings(model.Model):
         text_tile_background_color: Background color for text tiles
         tile_text_color: Text color for tiles
         title_color: Color for titles
-        warn_button_color: Warning button color
+        warn_button_color: (DEPRECATED) Warning button color
         tile_title_alignment: The text alignment of tile titles (New Dashboards)
         tile_shadow: Toggles the tile shadow (not supported)
         show_last_updated_indicator: Toggle to show the dashboard last updated indicator. Defaults to true.
@@ -10231,6 +10231,8 @@ class ThemeSettings(model.Model):
         show_filters_toggle: Toggle to show the filters icon/toggle. Defaults to true.
         show_dashboard_header: Toggle to show the dashboard header. Defaults to true.
         center_dashboard_title: Toggle to center the dashboard title. Defaults to false.
+        dashboard_title_font_size: Dashboard title font size.
+        box_shadow: Default box shadow.
     """
     background_color: Optional[str] = None
     base_font_size: Optional[str] = None
@@ -10256,6 +10258,8 @@ class ThemeSettings(model.Model):
     show_filters_toggle: Optional[bool] = None
     show_dashboard_header: Optional[bool] = None
     center_dashboard_title: Optional[bool] = None
+    dashboard_title_font_size: Optional[str] = None
+    box_shadow: Optional[str] = None
 
     def __init__(self, *,
             background_color: Optional[str] = None,
@@ -10281,7 +10285,9 @@ class ThemeSettings(model.Model):
             show_dashboard_menu: Optional[bool] = None,
             show_filters_toggle: Optional[bool] = None,
             show_dashboard_header: Optional[bool] = None,
-            center_dashboard_title: Optional[bool] = None):
+            center_dashboard_title: Optional[bool] = None,
+            dashboard_title_font_size: Optional[str] = None,
+            box_shadow: Optional[str] = None):
         self.background_color = background_color
         self.base_font_size = base_font_size
         self.color_collection_id = color_collection_id
@@ -10306,6 +10312,8 @@ class ThemeSettings(model.Model):
         self.show_filters_toggle = show_filters_toggle
         self.show_dashboard_header = show_dashboard_header
         self.center_dashboard_title = center_dashboard_title
+        self.dashboard_title_font_size = dashboard_title_font_size
+        self.box_shadow = box_shadow
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10378,7 +10386,7 @@ class User(model.Model):
         can: Operations the current user is able to perform on this object
         avatar_url: URL for the avatar image (may be generic)
         avatar_url_without_sizing: URL for the avatar image (may be generic), does not specify size
-        credentials_api3: API 3 credentials
+        credentials_api3: API credentials
         credentials_email:
         credentials_embed: Embed credentials
         credentials_google:
@@ -11881,7 +11889,7 @@ can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, cre
         database: Database name
         db_timezone: Time zone of database
         query_timezone: Timezone to use in queries
-        schema: Scheme name
+        schema: Schema name
         max_connections: Maximum number of concurrent connection to use
         max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
         ssl: Use SSL/TLS when connecting to server
@@ -12032,7 +12040,7 @@ has_password
         certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
         file_type: (Write-Only) Certificate keyfile type - .json or .p12
         database: Database name
-        schema: Scheme name
+        schema: Schema name
         jdbc_additional_params: Additional params to add to JDBC connection string
         after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
     """

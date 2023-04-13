@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,5 +24,18 @@
 
  */
 
-export const sdkVersion = '23.6'
-export const environmentPrefix = 'LOOKERSDK'
+import type { IAPIMethods } from '@looker/sdk-rtl'
+
+export interface IEmbedService {
+  /** Instantiated browser sdk */
+  get sdk(): IAPIMethods
+}
+
+export abstract class EntityService implements IEmbedService {
+  /**
+   *
+   * @param sdk
+   * @param timeToLive
+   */
+  constructor(public sdk: IAPIMethods, readonly timeToLive: number) {}
+}

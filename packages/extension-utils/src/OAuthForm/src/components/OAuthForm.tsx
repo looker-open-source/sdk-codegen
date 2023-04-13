@@ -75,13 +75,13 @@ export const OAuthForm = ({
   const location = useLocation()
   const redirect_uri = appPath(location, '/oauth')
   const appConfig = `// client_guid=${clientId}
-{
-  "redirect_uri": "${redirect_uri}",
-  "display_name": "CORS ${clientLabel}",
-  "description": "Looker ${clientLabel} using CORS",
-  "enabled": true
-}
-`
+ {
+   "redirect_uri": "${redirect_uri}",
+   "display_name": "CORS ${clientLabel}",
+   "description": "Looker ${clientLabel} using CORS",
+   "enabled": true
+ }
+ `
   const adaptor = getEnvAdaptor()
   const sdk = adaptor.sdk
 

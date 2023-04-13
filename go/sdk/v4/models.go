@@ -927,7 +927,7 @@ type DBConnection struct {
 	Database                 *string               `json:"database,omitempty"`                     // Database name
 	DbTimezone               *string               `json:"db_timezone,omitempty"`                  // Time zone of database
 	QueryTimezone            *string               `json:"query_timezone,omitempty"`               // Timezone to use in queries
-	Schema                   *string               `json:"schema,omitempty"`                       // Scheme name
+	Schema                   *string               `json:"schema,omitempty"`                       // Schema name
 	MaxConnections           *int64                `json:"max_connections,omitempty"`              // Maximum number of concurrent connection to use
 	MaxBillingGigabytes      *string               `json:"max_billing_gigabytes,omitempty"`        // Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
 	Ssl                      *bool                 `json:"ssl,omitempty"`                          // Use SSL/TLS when connecting to server
@@ -979,7 +979,7 @@ type DBConnectionOverride struct {
 	Certificate            *string `json:"certificate,omitempty"`              // (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
 	FileType               *string `json:"file_type,omitempty"`                // (Write-Only) Certificate keyfile type - .json or .p12
 	Database               *string `json:"database,omitempty"`                 // Database name
-	Schema                 *string `json:"schema,omitempty"`                   // Scheme name
+	Schema                 *string `json:"schema,omitempty"`                   // Schema name
 	JdbcAdditionalParams   *string `json:"jdbc_additional_params,omitempty"`   // Additional params to add to JDBC connection string
 	AfterConnectStatements *string `json:"after_connect_statements,omitempty"` // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
 }
@@ -2493,6 +2493,7 @@ type RequestContentThumbnail struct {
 	Type       string  `json:"type"`             // Either dashboard or look
 	ResourceId string  `json:"resource_id"`      // ID of the dashboard or look to render
 	Reload     *string `json:"reload,omitempty"` // Whether or not to refresh the rendered image with the latest content
+	Theme      *string `json:"theme,omitempty"`  // Light or dark background. Default is "light"
 	Format     *string `json:"format,omitempty"` // A value of png produces a thumbnail in PNG format instead of SVG (default)
 	Width      *int64  `json:"width,omitempty"`  // The width of the image if format is supplied
 	Height     *int64  `json:"height,omitempty"` // The height of the image if format is supplied
@@ -2585,8 +2586,8 @@ type RequestGraphDerivedTablesForView struct {
 
 // Dynamically generated request type for login
 type RequestLogin struct {
-	ClientId     *string `json:"client_id,omitempty"`     // client_id part of API3 Key.
-	ClientSecret *string `json:"client_secret,omitempty"` // client_secret part of API3 Key.
+	ClientId     *string `json:"client_id,omitempty"`     // client_id part of API Key.
+	ClientSecret *string `json:"client_secret,omitempty"` // client_secret part of API Key.
 }
 
 // Dynamically generated request type for model_fieldname_suggestions
@@ -3534,7 +3535,7 @@ type ThemeSettings struct {
 	FontColor                *string `json:"font_color,omitempty"`                  // Default font color
 	FontFamily               *string `json:"font_family,omitempty"`                 // Primary font family
 	FontSource               *string `json:"font_source,omitempty"`                 // Source specification for font
-	InfoButtonColor          *string `json:"info_button_color,omitempty"`           // Info button color
+	InfoButtonColor          *string `json:"info_button_color,omitempty"`           // (DEPRECATED) Info button color
 	PrimaryButtonColor       *string `json:"primary_button_color,omitempty"`        // Primary button color
 	ShowFiltersBar           *bool   `json:"show_filters_bar,omitempty"`            // Toggle to show filters. Defaults to true.
 	ShowTitle                *bool   `json:"show_title,omitempty"`                  // Toggle to show the title. Defaults to true.
@@ -3543,7 +3544,7 @@ type ThemeSettings struct {
 	TextTileBackgroundColor  *string `json:"text_tile_background_color,omitempty"`  // Background color for text tiles
 	TileTextColor            *string `json:"tile_text_color,omitempty"`             // Text color for tiles
 	TitleColor               *string `json:"title_color,omitempty"`                 // Color for titles
-	WarnButtonColor          *string `json:"warn_button_color,omitempty"`           // Warning button color
+	WarnButtonColor          *string `json:"warn_button_color,omitempty"`           // (DEPRECATED) Warning button color
 	TileTitleAlignment       *string `json:"tile_title_alignment,omitempty"`        // The text alignment of tile titles (New Dashboards)
 	TileShadow               *bool   `json:"tile_shadow,omitempty"`                 // Toggles the tile shadow (not supported)
 	ShowLastUpdatedIndicator *bool   `json:"show_last_updated_indicator,omitempty"` // Toggle to show the dashboard last updated indicator. Defaults to true.
@@ -3552,6 +3553,8 @@ type ThemeSettings struct {
 	ShowFiltersToggle        *bool   `json:"show_filters_toggle,omitempty"`         // Toggle to show the filters icon/toggle. Defaults to true.
 	ShowDashboardHeader      *bool   `json:"show_dashboard_header,omitempty"`       // Toggle to show the dashboard header. Defaults to true.
 	CenterDashboardTitle     *bool   `json:"center_dashboard_title,omitempty"`      // Toggle to center the dashboard title. Defaults to false.
+	DashboardTitleFontSize   *string `json:"dashboard_title_font_size,omitempty"`   // Dashboard title font size.
+	BoxShadow                *string `json:"box_shadow,omitempty"`                  // Default box shadow.
 }
 
 type Timezone struct {
@@ -3576,7 +3579,7 @@ type User struct {
 	Can                        *map[string]bool         `json:"can,omitempty"`                       // Operations the current user is able to perform on this object
 	AvatarUrl                  *string                  `json:"avatar_url,omitempty"`                // URL for the avatar image (may be generic)
 	AvatarUrlWithoutSizing     *string                  `json:"avatar_url_without_sizing,omitempty"` // URL for the avatar image (may be generic), does not specify size
-	CredentialsApi3            *[]CredentialsApi3       `json:"credentials_api3,omitempty"`          // API 3 credentials
+	CredentialsApi3            *[]CredentialsApi3       `json:"credentials_api3,omitempty"`          // API credentials
 	CredentialsEmail           *CredentialsEmail        `json:"credentials_email,omitempty"`
 	CredentialsEmbed           *[]CredentialsEmbed      `json:"credentials_embed,omitempty"` // Embed credentials
 	CredentialsGoogle          *CredentialsGoogle       `json:"credentials_google,omitempty"`
@@ -4017,7 +4020,7 @@ type WriteDBConnection struct {
 	Database                 *string                    `json:"database,omitempty"`                     // Database name
 	DbTimezone               *string                    `json:"db_timezone,omitempty"`                  // Time zone of database
 	QueryTimezone            *string                    `json:"query_timezone,omitempty"`               // Timezone to use in queries
-	Schema                   *string                    `json:"schema,omitempty"`                       // Scheme name
+	Schema                   *string                    `json:"schema,omitempty"`                       // Schema name
 	MaxConnections           *int64                     `json:"max_connections,omitempty"`              // Maximum number of concurrent connection to use
 	MaxBillingGigabytes      *string                    `json:"max_billing_gigabytes,omitempty"`        // Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
 	Ssl                      *bool                      `json:"ssl,omitempty"`                          // Use SSL/TLS when connecting to server
@@ -4056,7 +4059,7 @@ type WriteDBConnectionOverride struct {
 	Certificate            *string `json:"certificate,omitempty"`              // (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
 	FileType               *string `json:"file_type,omitempty"`                // (Write-Only) Certificate keyfile type - .json or .p12
 	Database               *string `json:"database,omitempty"`                 // Database name
-	Schema                 *string `json:"schema,omitempty"`                   // Scheme name
+	Schema                 *string `json:"schema,omitempty"`                   // Schema name
 	JdbcAdditionalParams   *string `json:"jdbc_additional_params,omitempty"`   // Additional params to add to JDBC connection string
 	AfterConnectStatements *string `json:"after_connect_statements,omitempty"` // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
 }
