@@ -75,10 +75,10 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
 
   /**
    * Get all themes
-   * @param fields to retrieve
+   * @param options to get
    */
-  async getAll(fields?: string) {
-    this.items = await this.sdk.ok(all_themes(this.sdk, fields))
+  async getAll(options?: GetOptions) {
+    this.items = await this.sdk.ok(all_themes(this.sdk, options?.fields))
     this.index()
     this.setExpiration()
     return this

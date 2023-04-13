@@ -23,8 +23,16 @@
  SOFTWARE.
 
  */
-import { Looker40SDK as LookerSDK, all_themes } from '@looker/sdk'
+import {
+  Looker40SDK as LookerSDK,
+  all_themes,
+  update_theme,
+  create_theme,
+  delete_theme,
+  search_themes,
+} from '@looker/sdk'
 import type { ITheme } from '@looker/sdk'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 
 import { themeServiceCreator } from './ThemeService'
 import type { IThemeService } from './ThemeService'
@@ -34,7 +42,7 @@ const config = TestConfig()
 const themes = config.testData.themes
 
 describe('ThemeService', () => {
-  const sdk = new LookerSDK(session)
+  const sdk: IAPIMethods = new LookerSDK(session)
   let service: IThemeService
   let testThemes: ITheme[]
   const themeCount = themes.length + 1 // includes the Looker theme
@@ -45,22 +53,22 @@ describe('ThemeService', () => {
 
   const createTestThemes = async () => {
     for (const t of themes) {
-      const searched = await sdk.ok(sdk.search_themes({ name: t.name }))
+      const searched = await sdk.ok(search_themes(sdk, { name: t.name }))
       if (searched.length > 0) {
         // update theme with expected values if found
-        await sdk.ok(sdk.update_theme(searched[0].id!, t))
+        await sdk.ok(update_theme(sdk, searched[0].id!, t))
       } else {
         // create theme if not found
-        await sdk.ok(sdk.create_theme(t))
+        await sdk.ok(create_theme(sdk, t))
       }
     }
   }
 
   const removeTestThemes = async () => {
     for (const t of themes) {
-      const searched = await sdk.ok(sdk.search_themes({ id: t.id }))
+      const searched = await sdk.ok(search_themes(sdk, { id: t.id }))
       if (searched.length > 0) {
-        await sdk.ok(sdk.delete_theme(searched[0].id!))
+        await sdk.ok(delete_theme(sdk, searched[0].id!))
       }
     }
   }

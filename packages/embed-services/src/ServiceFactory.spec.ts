@@ -24,12 +24,13 @@
 
  */
 import { Looker40SDK as LookerSDK } from '@looker/sdk'
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { session } from './test-utils'
 import { createFactory, destroyFactory, getFactory } from './ServiceFactory'
 import { getThemeService, registerThemeService } from './ThemeService'
 
 describe('ServiceFactory', () => {
-  const sdk = new LookerSDK(session)
+  const sdk: IAPIMethods = new LookerSDK(session)
 
   afterEach(() => {
     destroyFactory()
