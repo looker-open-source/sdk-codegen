@@ -23,5 +23,4 @@
  SOFTWARE.
 
  */
-export * from './ServiceFactory'
-export * from './ThemeService'
+export * from './utils'
