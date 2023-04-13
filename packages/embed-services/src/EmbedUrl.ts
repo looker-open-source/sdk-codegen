@@ -25,9 +25,10 @@
  */
 
 export enum ContentType {
-  Look = 'LOOK',
-  Explore = 'EXPLORE',
-  Dashboard = 'DASHBOARD',
+  Look = 'look',
+  Explore = 'explore',
+  Dashboard = 'dashboard',
+  Invalid = 'invalid',
 }
 
 const THEMABLE_CONTENT: ContentType[] = [
@@ -100,7 +101,7 @@ export class EmbedUrl implements IEmbedUrl {
     } else if (this.isDashboard) {
       type = ContentType.Dashboard
     } else {
-      throw new Error('Unknown content type')
+      type = ContentType.Invalid
     }
     return type
   }
@@ -111,6 +112,10 @@ export class EmbedUrl implements IEmbedUrl {
    * @param overrides any search key values to include in embed url e.g. 'k1=v1&k2=v2'
    */
   embedUrl(includeSearchParams = false, overrides: Record<string, any> = {}) {
+    if (this.contentType === ContentType.Invalid) {
+      throw new Error('Invalid content type')
+    }
+
     const embedUrlParams = includeSearchParams ? this.searchParams : {}
 
     if (overrides) {

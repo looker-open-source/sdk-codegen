@@ -47,7 +47,7 @@ describe('EmbedUrl', () => {
       expect(targetUrl.path).toBe('/embed/looks/789')
     })
 
-    it('should correctly determine isDashboard, isExplore, and isLook properties', () => {
+    it('should correctly determine isDashboard, isExplore and isLook properties', () => {
       const dashboardTargetUrl = new EmbedUrl(dashboardUrl)
       const exploreTargetUrl = new EmbedUrl(exploreUrl)
       const lookTargetUrl = new EmbedUrl(lookUrl)
@@ -65,10 +65,9 @@ describe('EmbedUrl', () => {
       expect(lookTargetUrl.isLook).toBe(true)
     })
 
-    it('should throw if target url is invalid', () => {
-      expect(() => new EmbedUrl(invalidUrl)).toThrowError(
-        'Unknown content type'
-      )
+    it('should set content type to invalid for invalid urls', () => {
+      const targetUrl = new EmbedUrl(invalidUrl)
+      expect(targetUrl.contentType).toEqual(ContentType.Invalid)
     })
 
     it('should correctly determine contentType property', () => {
@@ -153,6 +152,11 @@ describe('EmbedUrl', () => {
       expect(targetUrl.embedUrl(true, overrides)).toEqual(
         `${dashboardEmbedUrl}?theme=overrideTheme`
       )
+    })
+
+    it('should throw for invalid urls', () => {
+      const targetUrl = new EmbedUrl(invalidUrl)
+      expect(() => targetUrl.embedUrl()).toThrow('Invalid content type')
     })
   })
 })
