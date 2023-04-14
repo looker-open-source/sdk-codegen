@@ -23,5 +23,27 @@
  SOFTWARE.
 
  */
-export * from './Theme'
-export * from './GlobalStore'
+import { createStore } from '@looker/redux'
+import { factorySlice, defaultFactoryState } from '../GlobalStore'
+import type { RootState, FactoryState } from '../GlobalStore'
+import { themesSlice, defaultThemesState } from '../Theme'
+import type { ThemesState } from '../Theme'
+
+type DeepPartial<T> = {
+  [P in keyof T]?: DeepPartial<T[P]>
+}
+
+export const createTestStore = (overrides?: DeepPartial<RootState>) =>
+  createStore({
+    preloadedState: {
+      factory: {
+        ...defaultFactoryState,
+        ...overrides?.factory,
+      } as FactoryState,
+      themes: { ...defaultThemesState, ...overrides?.themes } as ThemesState,
+    },
+    reducer: {
+      factory: factorySlice.reducer,
+      themes: themesSlice.reducer,
+    },
+  })

@@ -23,5 +23,24 @@
  SOFTWARE.
 
  */
-export * from './Theme'
-export * from './GlobalStore'
+import { createStore } from '@looker/redux'
+import { defaultThemesState, themesSlice } from '../Theme'
+import type { ThemesState } from '../Theme'
+import { defaultFactoryState, factorySlice } from './slice'
+import type { FactoryState } from './slice'
+
+export const store = createStore({
+  preloadedState: {
+    factory: defaultFactoryState,
+    themes: defaultThemesState,
+  },
+  reducer: {
+    factory: factorySlice.reducer,
+    themes: themesSlice.reducer,
+  },
+})
+
+export interface RootState {
+  factory: FactoryState
+  themes?: ThemesState
+}

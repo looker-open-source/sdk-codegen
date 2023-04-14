@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export * from './Theme'
-export * from './GlobalStore'
+export * from './utils'
+export * from './store'
