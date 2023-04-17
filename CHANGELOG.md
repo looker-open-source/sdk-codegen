@@ -1,5 +1,14 @@
 # Changelog
 
+## [23.7.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.6.0...sdk-codegen-all-v23.7.0) (2023-04-13)
+
+
+### Features
+
+* base class for all services ([#1295](https://github.com/looker-open-source/sdk-codegen/issues/1295)) ([b51f782](https://github.com/looker-open-source/sdk-codegen/commit/b51f782b4da04581e6ef262d26453430916580a8))
+* embed url service ([#1297](https://github.com/looker-open-source/sdk-codegen/issues/1297)) ([0f71acf](https://github.com/looker-open-source/sdk-codegen/commit/0f71acf083043e7056f65b34acd56a617438e4be))
+* singleton factory and theme service ([#1298](https://github.com/looker-open-source/sdk-codegen/issues/1298)) ([18af00b](https://github.com/looker-open-source/sdk-codegen/commit/18af00b9894b9c19597c3e868161e04b387df20b))
+
 ## [23.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.4.0...sdk-codegen-all-v23.6.0) (2023-04-11)
 
 
