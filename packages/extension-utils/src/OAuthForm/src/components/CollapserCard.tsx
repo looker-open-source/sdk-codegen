@@ -27,7 +27,7 @@ import type { FC, ReactElement } from 'react'
 import React from 'react'
 import { useToggle, Accordion2, Divider, Box2 } from '@looker/components'
 import { ArrowRight, ArrowDropDown } from '@styled-icons/material'
-import { ConfigHeading } from '../ConfigHeading'
+import { ConfigHeading } from './ConfigHeading'
 
 interface CollapserCardProps {
   id?: string
