@@ -24,8 +24,8 @@
 
  */
 import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react'
-import React, { useState, useEffect } from 'react'
-import type { ValidationMessages, MessageBarIntent } from '@looker/components'
+import React, { useEffect } from 'react'
+import type { ValidationMessages } from '@looker/components'
 import {
   Button,
   ButtonTransparent,
@@ -44,11 +44,11 @@ import {
 import { CodeCopy } from '@looker/code-editor'
 import type { ILookerVersions } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router-dom'
-import { appPath, getEnvAdaptor } from '..'
+import { appPath, getEnvAdaptor } from '../../..'
+import { getVersions, validateUrl } from '../utils'
+import { useOAuthFormActions, useOAuthFormState } from '../state/slice'
+import { CollapserCard } from './CollapserCard'
 import { ConfigHeading } from './ConfigHeading'
-import { CollapserCard } from './Collapser'
-import { getVersions, validateUrl } from './utils'
-import type { ConfigValues } from './utils'
 
 export const readyToLogin =
   'OAuth is configured but your browser session is not authenticated. Click Login.'
@@ -66,7 +66,7 @@ interface ConfigFormProps {
   clientLabel: string
 }
 
-export const OAuthConfigForm = ({
+export const OAuthForm = ({
   setHasConfig,
   clientId,
   clientLabel,
@@ -75,54 +75,42 @@ export const OAuthConfigForm = ({
   const location = useLocation()
   const redirect_uri = appPath(location, '/oauth')
   const appConfig = `// client_guid=${clientId}
-{
-  "redirect_uri": "${redirect_uri}",
-  "display_name": "CORS ${clientLabel}",
-  "description": "Looker ${clientLabel} using CORS",
-  "enabled": true
-}
-`
+ {
+   "redirect_uri": "${redirect_uri}",
+   "display_name": "CORS ${clientLabel}",
+   "description": "Looker ${clientLabel} using CORS",
+   "enabled": true
+ }
+ `
   const adaptor = getEnvAdaptor()
   const sdk = adaptor.sdk
-  // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
-  // TODO see about useReducer to clean this up a bit more
 
-  const getConfig = () => {
-    // TODO: This is temporary until config settings are available in redux.
-    // get configuration from storage, or default it
-    const data = localStorage.getItem(configKey)
-    const result = data ? JSON.parse(data) : EmptyConfig
-    return result
-  }
-
-  const config = getConfig()
-  const [apiServerUrl, setApiServerUrl] = useState('')
-  const [fetchedUrl, setFetchedUrl] = useState('')
-  const [webUrl, setWebUrl] = useState('')
-  const [messageBarIntent, setMessageBarIntent] =
-    useState<MessageBarIntent>('positive')
-  const [messageBarText, setMessageBarText] = useState('')
-  const [validationMessages, setValidationMessages] =
-    useState<ValidationMessages>({})
-  const [saved, setSaved] = useState<ConfigValues>(config)
-
-  const updateMessageBar = (intent: MessageBarIntent, message: string) => {
-    setMessageBarIntent(intent)
-    setMessageBarText(message)
-  }
+  const {
+    setApiServerUrlAction,
+    updateApiServerUrlAction,
+    setFetchedUrlAction,
+    setWebUrlAction,
+    clearFormAction,
+    updateMessageBarAction,
+    verifyErrorAction,
+    saveNewConfigAction,
+  } = useOAuthFormActions()
+  const {
+    apiServerUrl,
+    fetchedUrl,
+    webUrl,
+    messageBar,
+    validationMessages,
+    savedConfig,
+  } = useOAuthFormState()
 
   const isConfigured = () => {
     return (
-      apiServerUrl === saved.base_url &&
-      webUrl === saved.looker_url &&
+      apiServerUrl === savedConfig.base_url &&
+      webUrl === savedConfig.looker_url &&
       apiServerUrl !== '' &&
       webUrl !== ''
     )
-  }
-
-  const fetchError = (message: string) => {
-    setWebUrl('')
-    updateMessageBar('critical', message)
   }
 
   const saveConfig = (baseUrl: string, webUrl: string) => {
@@ -132,28 +120,30 @@ export const OAuthConfigForm = ({
       client_id: clientId,
       redirect_uri,
     }
-    // TODO: replace when redux is introduced
     localStorage.setItem(configKey, JSON.stringify(data))
+    saveNewConfigAction(data)
     if (setHasConfig) setHasConfig(true)
-    setSaved(data)
-    updateMessageBar('positive', `Saved ${webUrl} as OAuth server`)
   }
 
   const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
-    updateMessageBar(messageBarIntent, '')
+    updateMessageBarAction({ intent: messageBar.intent, text: '' })
     const versionsUrl = `${apiServerUrl}/versions`
     try {
-      setFetchedUrl(apiServerUrl)
+      setFetchedUrlAction(apiServerUrl)
+
       const versions = await getVersions(versionsUrl)
 
       if (versions) {
-        updateMessageBar('positive', 'Configuration is valid')
-        setWebUrl(versions.web_server_url)
+        updateMessageBarAction({
+          intent: 'positive',
+          text: `Configuration is valid`,
+        })
+        setWebUrlAction(versions.web_server_url)
       }
 
       return versions
     } catch (e: any) {
-      fetchError(e.message)
+      verifyErrorAction(e.message)
       return undefined
     }
   }
@@ -170,36 +160,30 @@ export const OAuthConfigForm = ({
   }
 
   const handleClear = async (_e: BaseSyntheticEvent) => {
-    // TODO: replace when redux is introduced to run it
     localStorage.removeItem(configKey)
-
-    setApiServerUrl('')
-    setFetchedUrl('')
-    setWebUrl('')
-    setMessageBarText('')
-    setMessageBarIntent('critical')
-    setSaved(EmptyConfig)
+    clearFormAction()
 
     if (setHasConfig) setHasConfig(false)
     if (isAuthenticated()) {
-      updateMessageBar('warn', 'Please reload the browser page to log out')
+      updateMessageBarAction({
+        intent: 'warn',
+        text: `Please reload the browser page to log out`,
+      })
     }
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
     const name = event.currentTarget.name
     const value = event.currentTarget.value
+    let newApiServerUrl = value
 
     const newValidationMessages = { ...validationMessages }
-
-    setApiServerUrl(value)
-    setWebUrl('')
 
     const url = validateUrl(value)
     if (url) {
       delete newValidationMessages[name]
       // Update URL if it's been cleaned up
-      setApiServerUrl(url)
+      newApiServerUrl = url
     } else {
       newValidationMessages[name] = {
         message: `'${value}' is not a valid url`,
@@ -207,7 +191,11 @@ export const OAuthConfigForm = ({
       }
     }
 
-    setValidationMessages(newValidationMessages)
+    updateApiServerUrlAction({
+      apiServerUrl: newApiServerUrl,
+      webUrl: '',
+      validationMessages: newValidationMessages as ValidationMessages,
+    })
   }
 
   const isAuthenticated = () => sdk.authSession.isAuthenticated()
@@ -231,10 +219,14 @@ export const OAuthConfigForm = ({
   }
 
   useEffect(() => {
-    const data = getConfig()
-    const { base_url, looker_url } = data
-    setApiServerUrl(base_url)
-    setWebUrl(looker_url)
+    // Get config values from localstorage
+    const data = localStorage.getItem(configKey)
+    const result = data ? JSON.parse(data) : EmptyConfig
+    if (result.base_url && result.looker_url) {
+      const { base_url, looker_url } = result
+      setApiServerUrlAction(base_url)
+      setWebUrlAction(looker_url)
+    }
   }, [])
 
   return (
@@ -245,11 +237,13 @@ export const OAuthConfigForm = ({
         authenticate into your Looker Instance
       </Span>
       <MessageBar
-        intent={messageBarIntent}
-        onPrimaryClick={() => updateMessageBar(messageBarIntent, '')}
-        visible={messageBarText !== ''}
+        intent={messageBar.intent}
+        onPrimaryClick={() =>
+          updateMessageBarAction({ intent: messageBar.intent, text: '' })
+        }
+        visible={messageBar.text !== ''}
       >
-        {messageBarText}
+        {messageBar.text}
       </MessageBar>
       <CollapserCard
         heading="1. Supply API Server URL"

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { OAuthConfigForm } from './OAuthConfigForm'
+export { OAuthFormSlice } from './slice'
