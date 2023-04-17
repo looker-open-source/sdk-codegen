@@ -41,8 +41,8 @@ export interface IThemeService
   extends IItemList<ITheme>,
     IEntityService<ITheme> {
   defaultTheme?: ITheme
-  getDefaultTheme(ts?: Date): Promise<ITheme>
-  load(): Promise<IThemeService>
+  getDefaultTheme(ts?: Date, options?: GetOptions): Promise<ITheme>
+  load(options?: GetOptions): Promise<IThemeService>
 }
 
 class ThemeService extends ItemList<ITheme> implements IThemeService {
@@ -74,13 +74,14 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
   }
 
   /**
-   * Get all themes
+   * Get all themes, including the default theme
    * @param options to get
    */
   async getAll(options?: GetOptions) {
-    this.items = await this.sdk.ok(all_themes(this.sdk, options?.fields))
-    this.index()
-    this.setExpiration()
+    if (this.getCacheDefault(options) && !this.expired()) {
+      return this
+    }
+    await this.load(options)
     return this
   }
 
@@ -105,8 +106,10 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
    * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
    */
   async getDefaultTheme(ts?: Date) {
-    this.defaultTheme = await this.sdk.ok(default_theme(this.sdk, ts))
-    return this.defaultTheme
+    if (this.expired()) {
+      this.defaultTheme = await this.sdk.ok(default_theme(this.sdk, ts))
+    }
+    return this.defaultTheme as ITheme
   }
 
   /**
@@ -123,9 +126,11 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
   /**
    * Retrieves all themes and the default theme
    */
-  async load() {
-    await this.getAll()
+  async load(options?: GetOptions) {
     await this.getDefaultTheme()
+    this.items = await this.sdk.ok(all_themes(this.sdk, options?.fields))
+    this.index()
+    this.setExpiration()
     return this
   }
 }

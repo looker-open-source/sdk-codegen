@@ -47,11 +47,7 @@ export const defaultThemesState: ThemesState = {
   working: false,
 }
 
-type GetThemesSuccessAction = Pick<ThemesState, 'themes'>
-
-type GetDefaultThemeSuccessAction = Pick<ThemesState, 'defaultTheme'>
-
-export type SelectThemeAction = Record<'id', string>
+export type SelectThemeAction = Record<'key', string>
 
 type SelectThemeSuccessAction = Pick<ThemesState, 'selectedTheme'>
 
@@ -61,8 +57,6 @@ type LoadThemeDataSuccessAction = Pick<
   ThemesState,
   'defaultTheme' | 'themes' | 'selectedTheme'
 >
-
-type RefreshSuccessAction = Pick<ThemesState, 'defaultTheme' | 'themes'>
 
 export const THEMES_SLICE_NAME = 'themes'
 
@@ -83,31 +77,10 @@ export const themesSlice = createSlice({
       state,
       action: PayloadAction<LoadThemeDataSuccessAction>
     ) {
-      state = { ...state, ...action.payload, working: false }
-    },
-    getThemesAction(state) {
-      state.working = true
-    },
-    getThemesSuccessAction(
-      state,
-      action: PayloadAction<GetThemesSuccessAction>
-    ) {
-      state = { ...state, ...action.payload, working: false }
-    },
-    getDefaultThemeAction(state) {
-      state.working = true
-    },
-    getDefaultThemeSuccessAction(
-      state,
-      action: PayloadAction<GetDefaultThemeSuccessAction>
-    ) {
-      state = { ...state, ...action.payload, working: false }
-    },
-    refreshAction(state) {
-      state.working = true
-    },
-    refreshSuccessAction(state, action: PayloadAction<RefreshSuccessAction>) {
-      state = { ...state, ...action.payload, working: false }
+      state.themes = action.payload.themes
+      state.defaultTheme = action.payload.defaultTheme
+      state.selectedTheme = action.payload.selectedTheme
+      state.working = false
     },
     selectThemeAction(state, _action: PayloadAction<SelectThemeAction>) {
       state.working = true
@@ -116,10 +89,12 @@ export const themesSlice = createSlice({
       state,
       action: PayloadAction<SelectThemeSuccessAction>
     ) {
-      state = { ...state, ...action.payload, working: false }
+      state.selectedTheme = action.payload.selectedTheme
+      state.working = false
     },
     setFailureAction(state, action: PayloadAction<SetFailureAction>) {
-      state = { ...state, ...action.payload, working: false }
+      state.error = action.payload.error
+      state.working = false
     },
   },
 })

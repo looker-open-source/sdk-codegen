@@ -26,11 +26,7 @@
 import { takeEvery, put, call } from 'typed-redux-saga'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ITheme } from '@looker/sdk'
-import {
-  registerThemeService,
-  getThemeService,
-  EmbedUrl,
-} from '@looker/embed-services'
+import { registerThemeService, getThemeService } from '@looker/embed-services'
 import { themeActions } from './slice'
 import type { SelectThemeAction } from './slice'
 
@@ -40,7 +36,7 @@ import type { SelectThemeAction } from './slice'
 function* initSaga() {
   const { initSuccessAction, setFailureAction } = themeActions
   try {
-    registerThemeService(10)
+    registerThemeService()
     yield* put(initSuccessAction())
   } catch (error: any) {
     yield* put(setFailureAction({ error: error.message }))
@@ -55,17 +51,11 @@ function* loadThemeDataSaga() {
   try {
     const service = getThemeService()
     yield* call([service, 'load'])
-    const searchParams = new EmbedUrl().searchParams
-    const urlThemeName = searchParams.theme
-    let urlTheme: ITheme | undefined
-    if (urlThemeName) {
-      urlTheme = service.find('name', urlThemeName)
-    }
     yield* put(
       loadThemeDataSuccessAction({
         themes: service.items,
         defaultTheme: service.defaultTheme!,
-        selectedTheme: (urlTheme ?? service.defaultTheme)!,
+        selectedTheme: service.defaultTheme!,
       })
     )
   } catch (error: any) {
@@ -74,85 +64,34 @@ function* loadThemeDataSaga() {
 }
 
 /**
- * Gets all available themes
- */
-function* getThemesSaga() {
-  const { getThemesSuccessAction, setFailureAction } = themeActions
-  try {
-    const service = getThemeService()
-    yield* call([service, 'getAll'])
-    yield* put(getThemesSuccessAction({ themes: service.items }))
-  } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
-  }
-}
-
-/**
- * Gets default theme
- */
-function* getDefaultThemeSaga() {
-  const { getDefaultThemeSuccessAction, setFailureAction } = themeActions
-  try {
-    const service = getThemeService()
-    const defaultTheme = yield* call([service, 'getDefaultTheme'])
-    yield* put(getDefaultThemeSuccessAction({ defaultTheme }))
-  } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
-  }
-}
-
-/**
- * Fetches the latest themes and defaultTheme
- */
-function* refreshSaga() {
-  const { refreshSuccessAction, setFailureAction } = themeActions
-  try {
-    const service = getThemeService()
-    yield* call([service, 'getDefaultTheme'])
-    yield* call([service, 'getAll'])
-    yield* put(
-      refreshSuccessAction({
-        themes: service.items,
-        defaultTheme: service.defaultTheme!,
-      })
-    )
-  } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
-  }
-}
-
-/**
- * Sets the selected theme by id
- * @param action containing id of theme to select
+ * Sets the selected theme by id or name
+ * @param action containing id or name of theme to select
  */
 function* selectThemeSaga(action: PayloadAction<SelectThemeAction>) {
-  const { refreshAction, selectThemeSuccessAction, setFailureAction } =
-    themeActions
+  const { selectThemeSuccessAction, setFailureAction } = themeActions
   try {
     const service = getThemeService()
-    if (service.expired()) {
-      yield* put(refreshAction())
+    yield* call([service, 'getAll'])
+    const key = action.payload.key
+    let item: ITheme | undefined = service.indexedItems[key]
+    if (!item) {
+      item = service.find(['id', 'name'], `^${key}$`)
     }
-    const selectedTheme = yield* call([service, 'get'], action.payload.id)
-    yield* put(selectThemeSuccessAction({ selectedTheme }))
+    yield* put(
+      selectThemeSuccessAction({ selectedTheme: item ?? service.defaultTheme! })
+    )
   } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
+    yield* put(
+      setFailureAction({
+        error: error.message,
+      })
+    )
   }
 }
 
 export function* saga() {
-  const {
-    initAction,
-    loadThemeDataAction,
-    getThemesAction,
-    getDefaultThemeAction,
-    refreshAction,
-    selectThemeAction,
-  } = themeActions
+  const { initAction, loadThemeDataAction, selectThemeAction } = themeActions
   yield* takeEvery(initAction, initSaga)
   yield* takeEvery(loadThemeDataAction, loadThemeDataSaga)
-  yield* takeEvery(getThemesAction, getThemesSaga)
-  yield* takeEvery(getDefaultThemeAction, getDefaultThemeSaga)
   yield* takeEvery(selectThemeAction, selectThemeSaga)
-  yield* takeEvery(refreshAction, refreshSaga)
 }
