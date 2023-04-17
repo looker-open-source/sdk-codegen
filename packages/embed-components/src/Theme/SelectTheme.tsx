@@ -24,12 +24,12 @@
 
  */
 import React, { useState, useEffect } from 'react'
-import { Select } from '@looker/components'
+import { Select, SpaceVertical, ValidationMessage } from '@looker/components'
 import type { SelectOptionObject } from '@looker/components'
 import { useThemeActions, useThemesStoreState } from './state'
 
 export const SelectTheme = () => {
-  const { initialized, themes, selectedTheme } = useThemesStoreState()
+  const { initialized, themes, selectedTheme, error } = useThemesStoreState()
   const { initAction, loadThemeDataAction, selectThemeAction } =
     useThemeActions()
   const [options, setOptions] = useState<SelectOptionObject[]>()
@@ -63,12 +63,16 @@ export const SelectTheme = () => {
   }
 
   return (
-    <Select
-      disabled={themes.length === 1}
-      isLoading={!initialized}
-      value={selectedTheme.name}
-      options={options}
-      onChange={handleChange}
-    />
+    <SpaceVertical gap="xxxsmall">
+      <Select
+        disabled={themes.length === 1}
+        isLoading={!initialized || (themes.length === 0 && !error)}
+        validationType={error ? 'error' : undefined}
+        value={selectedTheme.name}
+        options={options}
+        onChange={handleChange}
+      />
+      {error && <ValidationMessage type="error" message={error} />}
+    </SpaceVertical>
   )
 }

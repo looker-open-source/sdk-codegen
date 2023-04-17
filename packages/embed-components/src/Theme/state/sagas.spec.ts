@@ -95,9 +95,9 @@ describe('SelectTheme sagas', () => {
       loadThemeDataSuccessAction,
       setFailureAction,
     } = themeActions
-    const lookerTheme = { id: 1, name: 'Looker' } as unknown as ITheme
-    const defaultTheme = { id: 2, name: 'custom_theme' } as unknown as ITheme
-    const anotherTheme = { id: 3, name: 'custom_theme_1' } as unknown as ITheme
+    const lookerTheme = { id: '1', name: 'Looker' } as ITheme
+    const defaultTheme = { id: '2', name: 'custom_theme' } as ITheme
+    const anotherTheme = { id: '3', name: 'custom_theme_1' } as ITheme
     let loadSpy: jest.SpyInstance
 
     const { location } = window

@@ -150,4 +150,23 @@ describe('SelectTheme', () => {
     expect(selector).toHaveValue(lookerTheme.name)
     expect(selector).toBeDisabled()
   })
+
+  it('renders an error if present', () => {
+    const mockStore = createTestStore(
+      getMockStoreState({
+        selectedTheme: {},
+        themes: [],
+        defaultTheme: {},
+        error: 'Failed to fetch themes',
+      })
+    )
+
+    renderWithTheme(
+      <Provider store={mockStore}>
+        <SelectTheme />
+      </Provider>
+    )
+
+    expect(screen.getByText('Failed to fetch themes')).toBeInTheDocument()
+  })
 })
