@@ -26,15 +26,14 @@
 import React from 'react'
 import { screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Provider } from 'react-redux'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { createTestStore } from '../test-utils'
 import { SelectTheme } from './SelectTheme'
-import { useThemeActions } from './state'
+import { useThemeActions, useThemesStoreState } from './state'
 
 jest.mock('./state', () => ({
   ...jest.requireActual('./state'),
   useThemeActions: jest.fn(),
+  useThemesStoreState: jest.fn(),
 }))
 
 describe('SelectTheme', () => {
@@ -45,13 +44,11 @@ describe('SelectTheme', () => {
   const themes = [lookerTheme, customTheme1, customTheme2]
 
   const getMockStoreState = (overrides: Record<string, any> = {}) => ({
-    themes: {
-      initialized: true,
-      selectedTheme,
-      themes,
-      defaultTheme: lookerTheme,
-      ...overrides,
-    },
+    initialized: true,
+    selectedTheme,
+    themes,
+    defaultTheme: lookerTheme,
+    ...overrides,
   })
 
   const initActionSpy = jest.fn()
@@ -64,6 +61,7 @@ describe('SelectTheme', () => {
       loadThemeDataAction: loadThemeDataActionSpy,
       selectThemeAction: selectThemeActionSpy,
     })
+    ;(useThemesStoreState as jest.Mock).mockReturnValue(getMockStoreState())
   })
 
   afterEach(() => {
@@ -71,12 +69,7 @@ describe('SelectTheme', () => {
   })
 
   it('renders with the default theme selected', async () => {
-    const mockStore = createTestStore(getMockStoreState())
-    renderWithTheme(
-      <Provider store={mockStore}>
-        <SelectTheme />
-      </Provider>
-    )
+    renderWithTheme(<SelectTheme />)
 
     expect(initActionSpy).toHaveBeenCalled()
     expect(loadThemeDataActionSpy).toHaveBeenCalled()
@@ -99,12 +92,7 @@ describe('SelectTheme', () => {
   })
 
   it('selects on select', async () => {
-    const mockStore = createTestStore(getMockStoreState())
-    renderWithTheme(
-      <Provider store={mockStore}>
-        <SelectTheme />
-      </Provider>
-    )
+    renderWithTheme(<SelectTheme />)
 
     const selector = screen.getByRole('textbox')
     expect(selector).toHaveValue(lookerTheme.name)
@@ -132,7 +120,7 @@ describe('SelectTheme', () => {
   })
 
   it('is disabled when only one theme is available', () => {
-    const mockStore = createTestStore(
+    ;(useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({
         selectedTheme: lookerTheme,
         themes: [lookerTheme],
@@ -140,11 +128,7 @@ describe('SelectTheme', () => {
       })
     )
 
-    renderWithTheme(
-      <Provider store={mockStore}>
-        <SelectTheme />
-      </Provider>
-    )
+    renderWithTheme(<SelectTheme />)
 
     const selector = screen.getByRole('textbox')
     expect(selector).toHaveValue(lookerTheme.name)
@@ -152,7 +136,7 @@ describe('SelectTheme', () => {
   })
 
   it('renders an error if present', () => {
-    const mockStore = createTestStore(
+    ;(useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({
         selectedTheme: {},
         themes: [],
@@ -161,11 +145,7 @@ describe('SelectTheme', () => {
       })
     )
 
-    renderWithTheme(
-      <Provider store={mockStore}>
-        <SelectTheme />
-      </Provider>
-    )
+    renderWithTheme(<SelectTheme />)
 
     expect(screen.getByText('Failed to fetch themes')).toBeInTheDocument()
   })

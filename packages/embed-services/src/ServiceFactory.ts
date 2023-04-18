@@ -29,7 +29,11 @@ export type ServiceCreatorFunc<T> = (sdk: IAPIMethods, timeToLive?: number) => T
 
 export interface IServiceFactory {
   get<T>(serviceName: string): T
-  register<T>(serviceName: string, serviceCreator: ServiceCreatorFunc<T>): void
+  register<T>(
+    serviceName: string,
+    serviceCreator: ServiceCreatorFunc<T>,
+    timeToLive?: number
+  ): void
 }
 
 /**

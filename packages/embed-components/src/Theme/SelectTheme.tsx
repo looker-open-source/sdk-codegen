@@ -29,10 +29,11 @@ import type { SelectOptionObject } from '@looker/components'
 import { useThemeActions, useThemesStoreState } from './state'
 
 export const SelectTheme = () => {
-  const { initialized, themes, selectedTheme, error } = useThemesStoreState()
+  const { initialized, themes, selectedTheme, error, working } =
+    useThemesStoreState()
   const { initAction, loadThemeDataAction, selectThemeAction } =
     useThemeActions()
-  const [options, setOptions] = useState<SelectOptionObject[]>()
+  const [options, setOptions] = useState<SelectOptionObject[]>([])
 
   useEffect(() => {
     /** initialize theme service */
@@ -47,14 +48,12 @@ export const SelectTheme = () => {
   }, [initialized])
 
   useEffect(() => {
-    const themeOptions: SelectOptionObject[] = []
-    themes.forEach((theme) => {
-      themeOptions.push({
+    const themeOptions: SelectOptionObject[] = themes
+      .map((theme) => ({
         value: theme.id!,
         label: theme.name,
-      })
-    })
-    themeOptions.sort((x, y) => x.label!.localeCompare(y.label!))
+      }))
+      .sort((x, y) => x.label!.localeCompare(y.label!))
     setOptions(themeOptions)
   }, [themes])
 
@@ -66,7 +65,7 @@ export const SelectTheme = () => {
     <SpaceVertical gap="xxxsmall">
       <Select
         disabled={themes.length === 1}
-        isLoading={!initialized || (themes.length === 0 && !error)}
+        isLoading={!initialized || working}
         validationType={error ? 'error' : undefined}
         value={selectedTheme.name}
         options={options}

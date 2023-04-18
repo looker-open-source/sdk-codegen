@@ -132,6 +132,11 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
 
 export const THEME_SERVICE_NAME = 'ThemeService'
 
+/**
+ * A theme service creator helper function
+ * @param sdk
+ * @param timeToLive  in seconds for the cache
+ */
 export const themeServiceCreator: ServiceCreatorFunc<IThemeService> = (
   sdk: IAPIMethods,
   timeToLive?: number
@@ -139,9 +144,16 @@ export const themeServiceCreator: ServiceCreatorFunc<IThemeService> = (
   return new ThemeService(sdk, timeToLive)
 }
 
-export const registerThemeService = () => {
-  getFactory().register(THEME_SERVICE_NAME, themeServiceCreator)
+/**
+ * Creates and registers the theme service with the service factory
+ * @param timeToLive  in seconds for the cache
+ */
+export const registerThemeService = (timeToLive?: number) => {
+  getFactory().register(THEME_SERVICE_NAME, themeServiceCreator, timeToLive)
 }
 
+/**
+ * Gets the theme service registered with the service factory
+ */
 export const getThemeService = () =>
   getFactory().get<IThemeService>(THEME_SERVICE_NAME)

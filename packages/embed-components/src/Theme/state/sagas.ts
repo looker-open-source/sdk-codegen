@@ -40,7 +40,7 @@ import type { SelectThemeAction } from './slice'
 function* initSaga() {
   const { initSuccessAction, setFailureAction } = themeActions
   try {
-    registerThemeService()
+    registerThemeService(10)
     yield* put(initSuccessAction())
   } catch (error: any) {
     yield* put(setFailureAction({ error: error.message }))
@@ -109,6 +109,10 @@ function* selectThemeSaga(action: PayloadAction<SelectThemeAction>) {
   const { selectThemeSuccessAction, setFailureAction } = themeActions
   try {
     const service = getThemeService()
+    if (service.expired()) {
+      yield* call(getThemesSaga)
+      yield* call(getDefaultThemeSaga)
+    }
     const selectedTheme = yield* call([service, 'get'], action.payload.id)
     yield* put(selectThemeSuccessAction({ selectedTheme }))
   } catch (error: any) {

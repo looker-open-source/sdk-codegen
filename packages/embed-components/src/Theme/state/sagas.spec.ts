@@ -239,8 +239,13 @@ describe('SelectTheme sagas', () => {
   })
 
   describe('selectThemeSaga', () => {
-    const { selectThemeAction, selectThemeSuccessAction, setFailureAction } =
-      themeActions
+    const {
+      selectThemeAction,
+      getThemesSuccessAction,
+      getDefaultThemeSuccessAction,
+      selectThemeSuccessAction,
+      setFailureAction,
+    } = themeActions
 
     it('sends selectThemeSuccessAction on success', async () => {
       registerThemeService()
@@ -249,17 +254,27 @@ describe('SelectTheme sagas', () => {
       const getSpy = jest
         .spyOn(service, 'get')
         .mockResolvedValueOnce(selectedTheme)
+      jest.spyOn(service, 'getAll').mockResolvedValueOnce(service)
+      jest
+        .spyOn(service, 'getDefaultTheme')
+        .mockResolvedValueOnce(selectedTheme)
 
       sagaTester.dispatch(selectThemeAction({ id: selectedTheme.id! }))
 
       await sagaTester.waitFor('themes/selectThemeSuccessAction')
       const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
+      expect(calledActions).toHaveLength(4)
       expect(calledActions[0]).toEqual(
         selectThemeAction({ id: selectedTheme.id! })
       )
-      expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
       expect(calledActions[1]).toEqual(
+        getThemesSuccessAction({ themes: service.items })
+      )
+      expect(calledActions[2]).toEqual(
+        getDefaultThemeSuccessAction({ defaultTheme: selectedTheme })
+      )
+      expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
+      expect(calledActions[3]).toEqual(
         selectThemeSuccessAction({ selectedTheme })
       )
     })

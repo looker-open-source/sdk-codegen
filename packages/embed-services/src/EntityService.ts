@@ -37,5 +37,5 @@ export abstract class EntityService implements IEmbedService {
    * @param sdk
    * @param timeToLive
    */
-  constructor(public sdk: IAPIMethods, readonly timeToLive: number) {}
+  constructor(public sdk: IAPIMethods, readonly timeToLive = 900) {}
 }
