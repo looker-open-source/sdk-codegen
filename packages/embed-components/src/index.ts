@@ -24,5 +24,4 @@
 
  */
 export * from './GlobalStore'
-export * from './QuickEmbed'
 export * from './Theme'

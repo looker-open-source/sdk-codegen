@@ -64,7 +64,7 @@ export const SelectTheme = () => {
   return (
     <SpaceVertical gap="xxxsmall">
       <Select
-        disabled={themes.length === 1}
+        disabled={themes.length <= 1}
         isLoading={!initialized || working}
         validationType={error ? 'error' : undefined}
         value={selectedTheme.name}

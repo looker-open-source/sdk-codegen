@@ -101,18 +101,36 @@ function* getDefaultThemeSaga() {
   }
 }
 
+function* refreshSaga() {
+  const { refreshSuccessAction, setFailureAction } = themeActions
+  try {
+    const service = getThemeService()
+    yield* call([service, 'getDefaultTheme'])
+    yield* call([service, 'getAll'])
+    yield* put(
+      refreshSuccessAction({
+        themes: service.items,
+        defaultTheme: service.defaultTheme!,
+      })
+    )
+  } catch (error: any) {
+    yield* put(setFailureAction({ error: error.message }))
+  }
+}
+
 /**
  * Sets the selected theme by id
  * @param action containing id of theme to select
  */
 function* selectThemeSaga(action: PayloadAction<SelectThemeAction>) {
-  const { selectThemeSuccessAction, setFailureAction } = themeActions
+  const { refreshAction, selectThemeSuccessAction, setFailureAction } =
+    themeActions
   try {
     const service = getThemeService()
     if (service.expired()) {
-      yield* call(getThemesSaga)
-      yield* call(getDefaultThemeSaga)
+      yield* put(refreshAction())
     }
+    // put the result of the calls
     const selectedTheme = yield* call([service, 'get'], action.payload.id)
     yield* put(selectThemeSuccessAction({ selectedTheme }))
   } catch (error: any) {
@@ -126,6 +144,7 @@ export function* saga() {
     loadThemeDataAction,
     getThemesAction,
     getDefaultThemeAction,
+    refreshAction,
     selectThemeAction,
   } = themeActions
   yield* takeEvery(initAction, initSaga)
@@ -133,4 +152,5 @@ export function* saga() {
   yield* takeEvery(getThemesAction, getThemesSaga)
   yield* takeEvery(getDefaultThemeAction, getDefaultThemeSaga)
   yield* takeEvery(selectThemeAction, selectThemeSaga)
+  yield* takeEvery(refreshAction, refreshSaga)
 }

@@ -240,9 +240,9 @@ describe('SelectTheme sagas', () => {
 
   describe('selectThemeSaga', () => {
     const {
+      refreshAction,
+      refreshSuccessAction,
       selectThemeAction,
-      getThemesSuccessAction,
-      getDefaultThemeSuccessAction,
       selectThemeSuccessAction,
       setFailureAction,
     } = themeActions
@@ -251,6 +251,36 @@ describe('SelectTheme sagas', () => {
       registerThemeService()
       const service = getThemeService()
       const selectedTheme = { name: 'Looker', id: '1' } as ITheme
+
+      jest.spyOn(service, 'expired').mockReturnValue(false)
+      const getSpy = jest
+        .spyOn(service, 'get')
+        .mockResolvedValueOnce(selectedTheme)
+      jest.spyOn(service, 'getAll').mockResolvedValueOnce(service)
+      jest
+        .spyOn(service, 'getDefaultTheme')
+        .mockResolvedValueOnce(selectedTheme)
+
+      sagaTester.dispatch(selectThemeAction({ id: selectedTheme.id! }))
+
+      await sagaTester.waitFor('themes/selectThemeSuccessAction')
+      const calledActions = sagaTester.getCalledActions()
+      expect(calledActions).toHaveLength(2)
+      expect(calledActions[0]).toEqual(
+        selectThemeAction({ id: selectedTheme.id! })
+      )
+      expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
+      expect(calledActions[1]).toEqual(
+        selectThemeSuccessAction({ selectedTheme })
+      )
+    })
+
+    it('refreshes the store if cache has expired', async () => {
+      registerThemeService()
+      const service = getThemeService()
+      const selectedTheme = { name: 'Looker', id: '1' } as ITheme
+
+      jest.spyOn(service, 'expired').mockReturnValue(true)
       const getSpy = jest
         .spyOn(service, 'get')
         .mockResolvedValueOnce(selectedTheme)
@@ -267,15 +297,16 @@ describe('SelectTheme sagas', () => {
       expect(calledActions[0]).toEqual(
         selectThemeAction({ id: selectedTheme.id! })
       )
-      expect(calledActions[1]).toEqual(
-        getThemesSuccessAction({ themes: service.items })
-      )
-      expect(calledActions[2]).toEqual(
-        getDefaultThemeSuccessAction({ defaultTheme: selectedTheme })
-      )
+      expect(calledActions[1]).toEqual(refreshAction())
       expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
-      expect(calledActions[3]).toEqual(
+      expect(calledActions[2]).toEqual(
         selectThemeSuccessAction({ selectedTheme })
+      )
+      expect(calledActions[3]).toEqual(
+        refreshSuccessAction({
+          themes: service.items,
+          defaultTheme: service.defaultTheme!,
+        })
       )
     })
 

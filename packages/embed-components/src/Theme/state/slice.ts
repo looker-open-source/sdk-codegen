@@ -62,6 +62,8 @@ type LoadThemeDataSuccessAction = Pick<
   'defaultTheme' | 'themes' | 'selectedTheme'
 >
 
+type RefreshSuccessAction = Pick<ThemesState, 'defaultTheme' | 'themes'>
+
 export const THEMES_SLICE_NAME = 'themes'
 
 export const themesSlice = createSlice({
@@ -101,6 +103,12 @@ export const themesSlice = createSlice({
     ) {
       state = { ...state, ...action.payload, working: false }
     },
+    refreshAction(state) {
+      state.working = true
+    },
+    refreshSuccessAction(state, action: PayloadAction<RefreshSuccessAction>) {
+      state = { ...state, ...action.payload, working: false }
+    },
     selectThemeAction(state, _action: PayloadAction<SelectThemeAction>) {
       state.working = true
     },
@@ -115,6 +123,7 @@ export const themesSlice = createSlice({
     },
   },
 })
+
 export const themeActions = themesSlice.actions
 export const {
   useActions: useThemeActions,
