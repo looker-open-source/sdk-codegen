@@ -23,19 +23,24 @@
  SOFTWARE.
 
  */
+import { takeEvery, put } from 'typed-redux-saga'
+import { createFactory } from '@looker/embed-services'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import { factoryActions } from './slice'
+import type { InitFactoryAction } from './slice'
 
-export interface IEmbedService {
-  /** Instantiated browser sdk */
-  get sdk(): IAPIMethods
+function* initSaga(action: PayloadAction<InitFactoryAction>) {
+  const { initFactorySuccessAction, setFailureAction } = factoryActions
+  try {
+    createFactory(action.payload.sdk)
+    yield* put(initFactorySuccessAction())
+  } catch (error: any) {
+    yield* put(setFailureAction({ error: error.message }))
+  }
 }
 
-export abstract class EntityService implements IEmbedService {
-  /**
-   *
-   * @param sdk
-   * @param timeToLive
-   */
-  constructor(public sdk: IAPIMethods, readonly timeToLive = 900) {}
+export function* saga() {
+  const { initFactoryAction } = factoryActions
+  yield* takeEvery(initFactoryAction, initSaga)
 }

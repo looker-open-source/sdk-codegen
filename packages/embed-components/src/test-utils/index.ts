@@ -23,19 +23,5 @@
  SOFTWARE.
 
  */
-
-import type { IAPIMethods } from '@looker/sdk-rtl'
-
-export interface IEmbedService {
-  /** Instantiated browser sdk */
-  get sdk(): IAPIMethods
-}
-
-export abstract class EntityService implements IEmbedService {
-  /**
-   *
-   * @param sdk
-   * @param timeToLive
-   */
-  constructor(public sdk: IAPIMethods, readonly timeToLive = 900) {}
-}
+export * from './utils'
+export * from './store'

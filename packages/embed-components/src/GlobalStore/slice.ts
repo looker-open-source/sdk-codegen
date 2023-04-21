@@ -23,19 +23,50 @@
  SOFTWARE.
 
  */
-
+import { createSlice } from '@reduxjs/toolkit'
+import { createSliceHooks } from '@looker/redux'
 import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { saga } from './sagas'
 
-export interface IEmbedService {
-  /** Instantiated browser sdk */
-  get sdk(): IAPIMethods
+export interface FactoryState {
+  initialized: boolean
+  error?: string
 }
 
-export abstract class EntityService implements IEmbedService {
-  /**
-   *
-   * @param sdk
-   * @param timeToLive
-   */
-  constructor(public sdk: IAPIMethods, readonly timeToLive = 900) {}
+export const defaultFactoryState: FactoryState = {
+  initialized: false,
 }
+
+export interface InitFactoryAction {
+  sdk: IAPIMethods
+}
+
+type SetFailureAction = Record<'error', string>
+
+export const FACTORY_SLICE_NAME = 'factory'
+
+export const factorySlice = createSlice({
+  name: FACTORY_SLICE_NAME,
+  initialState: defaultFactoryState,
+  reducers: {
+    initFactoryAction(_state, _action: PayloadAction<InitFactoryAction>) {
+      // noop
+    },
+    initFactorySuccessAction(state) {
+      state.initialized = true
+    },
+    destroyFactoryAction() {
+      // noop
+    },
+    setFailureAction(state, action: PayloadAction<SetFailureAction>) {
+      state.error = action.payload.error
+    },
+  },
+})
+
+export const factoryActions = factorySlice.actions
+export const {
+  useActions: useFactoryActions,
+  useStoreState: useFactoryStoreState,
+} = createSliceHooks(factorySlice, saga)

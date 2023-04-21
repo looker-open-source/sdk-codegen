@@ -41,6 +41,7 @@ export interface IItemList<T> {
   readonly expiresAt: number
   index(key?: keyof T): ItemList<T>
   indexedItems: Record<string, T>
+  expired(): boolean
   setExpiration(): void
   clearIfExpired(): void
   find(key: keyof T, value: any): T | undefined
@@ -92,7 +93,7 @@ export abstract class ItemList<T extends Record<string, any>>
   /**
    * Determines if the cache has expired
    */
-  protected expired() {
+  expired() {
     return this.expiresAt <= Date.now()
   }
 

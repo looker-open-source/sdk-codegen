@@ -23,19 +23,24 @@
  SOFTWARE.
 
  */
+import { createStore } from '@looker/redux'
+import { defaultThemesState, themesSlice } from '../Theme'
+import type { ThemesState } from '../Theme'
+import { defaultFactoryState, factorySlice } from './slice'
+import type { FactoryState } from './slice'
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
+export const store = createStore({
+  preloadedState: {
+    factory: defaultFactoryState,
+    themes: defaultThemesState,
+  },
+  reducer: {
+    factory: factorySlice.reducer,
+    themes: themesSlice.reducer,
+  },
+})
 
-export interface IEmbedService {
-  /** Instantiated browser sdk */
-  get sdk(): IAPIMethods
-}
-
-export abstract class EntityService implements IEmbedService {
-  /**
-   *
-   * @param sdk
-   * @param timeToLive
-   */
-  constructor(public sdk: IAPIMethods, readonly timeToLive = 900) {}
+export interface RootState {
+  factory: FactoryState
+  themes?: ThemesState
 }
