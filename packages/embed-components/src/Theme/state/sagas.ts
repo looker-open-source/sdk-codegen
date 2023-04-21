@@ -101,6 +101,9 @@ function* getDefaultThemeSaga() {
   }
 }
 
+/**
+ * Fetches the latest themes and defaultTheme
+ */
 function* refreshSaga() {
   const { refreshSuccessAction, setFailureAction } = themeActions
   try {
@@ -130,7 +133,6 @@ function* selectThemeSaga(action: PayloadAction<SelectThemeAction>) {
     if (service.expired()) {
       yield* put(refreshAction())
     }
-    // put the result of the calls
     const selectedTheme = yield* call([service, 'get'], action.payload.id)
     yield* put(selectThemeSuccessAction({ selectedTheme }))
   } catch (error: any) {
