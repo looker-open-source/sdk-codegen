@@ -48,8 +48,8 @@ import {
 
 The following create methods are also available
 
-- `LookerExtensionSDK.createClient(extensionSDK)` creates a Looker31SDK instance.
-- `LookerExtensionSDK.create31Client(extensionSDK)` creates a Looker31SDK instance.
+- `LookerExtensionSDK.createClient(extensionSDK)` creates a Looker40SDK instance.
+- `LookerExtensionSDK.create31Client(extensionSDK)` creates a Looker31SDK instance, which is deprecated.
 
 #### Connection configuration
 

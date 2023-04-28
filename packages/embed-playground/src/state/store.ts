@@ -24,5 +24,8 @@
 
  */
 import { createStore } from '@looker/redux'
+import { OAuthFormSlice } from '@looker/extension-utils'
 
 export const store = createStore()
+
+store.addReducer(OAuthFormSlice.name, OAuthFormSlice.reducer)

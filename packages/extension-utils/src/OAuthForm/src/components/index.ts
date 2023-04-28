@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { CollapserCard } from './CollapserCard'
+export { OAuthForm } from './OAuthForm'

@@ -257,8 +257,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * ### Present client credentials to obtain an authorization token
    *
    * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
-   * The client credentials required for this login must be obtained by creating an API3 key on a user account
-   * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
+   * The client credentials required for this login must be obtained by creating an API key on a user account
+   * in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
    *
    * The access token returned by `login` must be used in the HTTP Authorization header of subsequent
    * API requests, like this:
@@ -281,7 +281,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * ### Best Practice:
    * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
    *
-   * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+   * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
    *
    * POST /login -> IAccessToken
    *
@@ -1724,7 +1724,7 @@ export interface ILooker31SDK extends IAPIMethods {
   content_thumbnail(
     request: IRequestContentThumbnail,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>
+  ): Promise<SDKResponse<string, IError | IValidationError>>
 
   /**
    * ### Validate All Content
@@ -1857,7 +1857,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Search Dashboards
    *
-   * Returns an **array of dashboard objects** that match the specified search criteria.
+   * Returns an array of **user-defined dashboard** objects that match the specified search criteria.
+   * Note, [search_dashboards()](#!/Dashboard/search_dashboards) does not return LookML dashboard objects.
    *
    * If multiple search params are given and `filter_or` is FALSE or not specified,
    * search params are combined in a logical AND operation.
@@ -6822,12 +6823,12 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
    * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
    *
    * @param user_id Id of user
-   * @param credentials_api3_id Id of API 3 Credential
+   * @param credentials_api3_id Id of API Credential
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6840,12 +6841,12 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsApi3, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param user_id Id of user
-   * @param credentials_api3_id Id of API 3 Credential
+   * @param credentials_api3_id Id of API Credential
    * @param options one-time API call overrides
    *
    */
@@ -6856,7 +6857,7 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
@@ -6872,7 +6873,7 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsApi3[], IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
@@ -7333,7 +7334,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
    * the same user account will see the same files in the dev workspace. To avoid collisions between
-   * API clients it's best to have each client login with API3 credentials for a different user account.
+   * API clients it's best to have each client login with API credentials for a different user account.
    *
    * Changes made to files in a dev workspace are persistent across API sessions. It's a good
    * idea to commit any changes you've made to the git repository, but not strictly required. Your modified files

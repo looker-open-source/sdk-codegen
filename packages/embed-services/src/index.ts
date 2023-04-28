@@ -23,3 +23,6 @@
  SOFTWARE.
 
  */
+export * from './EmbedUrl'
+export * from './ServiceFactory'
+export * from './ThemeService'

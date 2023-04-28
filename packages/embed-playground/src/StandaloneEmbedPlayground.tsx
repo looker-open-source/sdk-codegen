@@ -26,11 +26,11 @@
 import React, { useState, useEffect } from 'react'
 import { ComponentsProvider } from '@looker/components'
 import {
-  OAuthConfigForm,
   BrowserAdaptor,
   registerEnvAdaptor,
   OAuthScene,
   OAuthConfigProvider,
+  OAuthForm,
 } from '@looker/extension-utils'
 import { Provider } from 'react-redux'
 import { useLocation } from 'react-router'
@@ -95,7 +95,7 @@ export const StandaloneEmbedPlayground = () => {
           loadGoogleFonts={themeOverrides.loadGoogleFonts}
           themeCustomizations={themeOverrides.themeCustomizations}
         >
-          <OAuthConfigForm
+          <OAuthForm
             configKey="EPConfig"
             clientId={OAuthClientId}
             clientLabel="Embed Playground"
