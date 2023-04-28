@@ -1,0 +1,5 @@
+# Function dependencies, for example:
+# package>=version
+looker_sdk
+google-cloud-storage==2.7.0
+google-api-core==2.11.0
