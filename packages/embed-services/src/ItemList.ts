@@ -30,7 +30,7 @@ import { EntityService } from './EntityService'
 export const DEFAULT_TTL = 900 // 15 minutes
 
 export interface GetOptions {
-  itemCache?: boolean
+  useCache?: boolean
   [key: string]: any
 }
 
@@ -44,7 +44,7 @@ export interface IItemList<T> {
   expired(): boolean
   setExpiration(): void
   clearIfExpired(): void
-  find(key: keyof T, value: any): T | undefined
+  find(key: keyof T | Array<keyof T>, value: any): T | undefined
 }
 
 export interface IEntityService<T> extends IItemList<T> {
@@ -109,13 +109,36 @@ export abstract class ItemList<T extends Record<string, any>>
 
   /**
    * Searches the collection for an item with the specified key/value pair
-   * @param key to search
-   * @param value to match
+   * @param key or keys to search
+   * @param expression to match
    */
-  find<T>(key: keyof T, value: any): T | undefined {
-    return this.items.find((item) => item[key as string] === value) as
-      | T
-      | undefined
+  find(key: keyof T | Array<keyof T>, expression: string): T | undefined {
+    let result: T | undefined
+    let keys: Array<keyof T>
+
+    if (typeof key === 'string') {
+      keys = [key]
+    } else {
+      keys = key as Array<keyof T>
+    }
+
+    let rx: RegExp
+    try {
+      rx = new RegExp(expression, 'i')
+
+      for (const item of this.items) {
+        for (const k of keys) {
+          const match = item[k]?.toString().match(rx)
+          if (match) {
+            result = item as T
+            return result
+          }
+        }
+      }
+      return result
+    } catch (e: any) {
+      throw new Error(e)
+    }
   }
 
   /**
@@ -123,7 +146,7 @@ export abstract class ItemList<T extends Record<string, any>>
    * @param options to check
    */
   getCacheDefault(options?: GetOptions) {
-    const cache = options && 'itemCache' in options ? options.itemCache : true
+    const cache = options && 'useCache' in options ? options.useCache : true
     return cache
   }
 }

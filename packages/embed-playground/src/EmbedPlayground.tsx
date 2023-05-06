@@ -24,9 +24,23 @@
 
  */
 import React, { useState, useEffect } from 'react'
-import { ComponentsProvider } from '@looker/components'
+import {
+  ComponentsProvider,
+  Dialog,
+  IconButton,
+  Flex,
+  FlexItem,
+  Heading,
+} from '@looker/components'
 import type { IEnvironmentAdaptor } from '@looker/extension-utils'
 import { me } from '@looker/sdk'
+import {
+  useFactoryActions,
+  useFactoryStoreState,
+  useThemesStoreState,
+  QuickEmbed,
+} from '@looker/embed-components'
+import { FlashOn } from '@styled-icons/material'
 
 interface EmbedPlaygroundProps {
   adaptor: IEnvironmentAdaptor
@@ -34,20 +48,68 @@ interface EmbedPlaygroundProps {
 }
 
 export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
-  const [greeting, setGreeting] = useState('Hello World!')
+  const { initFactoryAction } = useFactoryActions()
+  const { initialized } = useFactoryStoreState()
+  useThemesStoreState()
+  const [greeting, setGreeting] = useState('')
+  const [isOpen, setIsOpen] = useState(false)
   const sdk = adaptor.sdk
+
   useEffect(() => {
     const getCurrentUser = async () => {
       const currentUser = await sdk.ok(me(sdk))
       if (currentUser) {
-        const { first_name, last_name } = currentUser
+        const { first_name } = currentUser
 
-        setGreeting(`Hello ${first_name} ${last_name}!`)
+        setGreeting(`Hi ${first_name}, are you ready to embed?`)
       }
       return currentUser
     }
     getCurrentUser()
-  })
+  }, [initialized])
 
-  return <ComponentsProvider>{greeting}</ComponentsProvider>
+  useEffect(() => {
+    initFactoryAction({ sdk })
+  }, [])
+
+  const themeOverrides = adaptor.themeOverrides()
+
+  const handleClose = () => {
+    setIsOpen(false)
+  }
+
+  const handleOpen = () => {
+    setIsOpen(true)
+  }
+
+  return (
+    <ComponentsProvider
+      loadGoogleFonts={themeOverrides.loadGoogleFonts}
+      themeCustomizations={themeOverrides.themeCustomizations}
+    >
+      {initialized && greeting && (
+        <Flex flexDirection="column" justifyContent="center" mt="30%">
+          <FlexItem alignSelf="center">
+            <Heading as="h2" color="key" pb="large">
+              {greeting}
+            </Heading>
+          </FlexItem>
+          <Dialog
+            isOpen={isOpen}
+            content={<QuickEmbed onClose={handleClose} />}
+          >
+            <FlexItem alignSelf="center">
+              <IconButton
+                label="Quick Embed"
+                type="button"
+                icon={<FlashOn />}
+                size="large"
+                onClick={handleOpen}
+              />
+            </FlexItem>
+          </Dialog>
+        </Flex>
+      )}
+    </ComponentsProvider>
+  )
 }

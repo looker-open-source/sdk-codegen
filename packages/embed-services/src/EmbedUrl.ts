@@ -124,7 +124,11 @@ export class EmbedUrl implements IEmbedUrl {
         if (typeof value === 'object') {
           overrideValue = JSON.stringify(value)
         }
-        embedUrlParams[key] = overrideValue
+        if (key === 'theme' && overrideValue === 'Looker') {
+          delete embedUrlParams.theme
+        } else {
+          embedUrlParams[key] = overrideValue
+        }
       })
     }
 

@@ -128,7 +128,7 @@ describe('ThemeService', () => {
       const cachedTheme = themes[0]
       const expectedName = cachedTheme.name
       cachedTheme.name += 'cached'
-      const actual = await service.get(cachedTheme.id!, { itemCache: false })
+      const actual = await service.get(cachedTheme.id!, { useCache: false })
       expect(actual.name).toEqual(expectedName)
     })
   })
@@ -169,6 +169,15 @@ describe('ThemeService', () => {
       expect(service.defaultTheme).toBeUndefined()
       await service.getDefaultTheme()
       expect(service.defaultTheme).toBeDefined()
+    })
+
+    it('gets from cache if valid', async () => {
+      expect(service.defaultTheme).toBeUndefined()
+      const cachedTheme = await service.getDefaultTheme()
+      const expectedName = cachedTheme.name
+      cachedTheme.name += 'cached'
+      const actual = await service.getDefaultTheme()
+      expect(actual.name).toEqual(expectedName)
     })
   })
 

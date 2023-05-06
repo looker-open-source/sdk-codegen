@@ -23,6 +23,8 @@
  SOFTWARE.
 
  */
-export * from './GlobalStore'
-export * from './Theme'
-export * from './QuickEmbed'
+import React from 'react'
+import { render } from 'react-dom'
+import { StandaloneEmbedPlayground } from './StandaloneEmbedPlayground'
+
+render(<StandaloneEmbedPlayground />, document.getElementById('container'))
