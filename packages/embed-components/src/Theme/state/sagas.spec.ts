@@ -93,7 +93,12 @@ describe('SelectTheme sagas', () => {
   })
 
   describe('loadThemeDataSaga', () => {
-    const { loadThemeDataAction, setFailureAction } = themeActions
+    const {
+      loadThemeDataAction,
+      loadThemeDataSuccessAction,
+      setFailureAction,
+    } = themeActions
+    let loadSpy: jest.SpyInstance
 
     const { location } = window
 
@@ -104,6 +109,40 @@ describe('SelectTheme sagas', () => {
     afterEach(() => {
       window.location = location
     })
+
+    test.each`
+      scenario                                 | href                                                        | selectedTheme
+      ${`no theme override param is present`}  | ${`https://example.com/dashboards/42`}                      | ${defaultTheme}
+      ${`theme override param is present`}     | ${`https://example.com/dashboards/42?theme=custom_theme_1`} | ${anotherTheme}
+      ${`theme override param value is bogus`} | ${`https://example.com/dashboards/42?theme=bogus`}          | ${defaultTheme}
+    `(
+      'sends a loadThemeDataSuccessAction on success with correct selectedTheme when $scenario',
+      async ({ href, selectedTheme }) => {
+        registerThemeService()
+        const service = getThemeService()
+        service.items = [lookerTheme, defaultTheme, anotherTheme]
+        service.defaultTheme = defaultTheme
+        loadSpy = jest.spyOn(service, 'load').mockResolvedValueOnce(service)
+        window.location = {
+          href: href,
+        } as Location
+
+        sagaTester.dispatch(loadThemeDataAction())
+
+        await sagaTester.waitFor('themes/loadThemeDataSuccessAction')
+        const calledActions = sagaTester.getCalledActions()
+        expect(calledActions).toHaveLength(2)
+        expect(calledActions[0]).toEqual(loadThemeDataAction())
+        expect(loadSpy).toHaveBeenCalledTimes(1)
+        expect(calledActions[1]).toEqual(
+          loadThemeDataSuccessAction({
+            themes: service.items,
+            defaultTheme: service.defaultTheme!,
+            selectedTheme,
+          })
+        )
+      }
+    )
 
     it('sends setFailureAction on error', async () => {
       destroyFactory()

@@ -26,7 +26,11 @@
 import { takeEvery, put, call } from 'typed-redux-saga'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { ITheme } from '@looker/sdk'
-import { registerThemeService, getThemeService } from '@looker/embed-services'
+import {
+  registerThemeService,
+  getThemeService,
+  EmbedUrl,
+} from '@looker/embed-services'
 import { themeActions } from './slice'
 import type { SelectThemeAction } from './slice'
 
@@ -51,11 +55,17 @@ function* loadThemeDataSaga() {
   try {
     const service = getThemeService()
     yield* call([service, 'load'])
+    const searchParams = new EmbedUrl().searchParams
+    const urlThemeName = searchParams.theme
+    let urlTheme: ITheme | undefined
+    if (urlThemeName) {
+      urlTheme = service.find('name', urlThemeName)
+    }
     yield* put(
       loadThemeDataSuccessAction({
         themes: service.items,
         defaultTheme: service.defaultTheme!,
-        selectedTheme: service.defaultTheme!,
+        selectedTheme: (urlTheme ?? service.defaultTheme!)!,
       })
     )
   } catch (error: any) {
