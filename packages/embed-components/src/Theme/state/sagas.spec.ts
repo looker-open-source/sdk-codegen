@@ -43,6 +43,9 @@ import {
 import * as sagas from './sagas'
 
 describe('SelectTheme sagas', () => {
+  const lookerTheme = { id: '1', name: 'Looker' } as ITheme
+  const defaultTheme = { id: '2', name: 'custom_theme' } as ITheme
+  const anotherTheme = { id: '3', name: 'custom_theme_1' } as ITheme
   let sagaTester: ReduxSagaTester<any>
   const sdk: IAPIMethods = new LookerSDK(session)
 
@@ -95,9 +98,6 @@ describe('SelectTheme sagas', () => {
       loadThemeDataSuccessAction,
       setFailureAction,
     } = themeActions
-    const lookerTheme = { id: '1', name: 'Looker' } as ITheme
-    const defaultTheme = { id: '2', name: 'custom_theme' } as ITheme
-    const anotherTheme = { id: '3', name: 'custom_theme_1' } as ITheme
     let loadSpy: jest.SpyInstance
 
     const { location } = window
@@ -159,165 +159,63 @@ describe('SelectTheme sagas', () => {
     })
   })
 
-  describe('getThemesSaga', () => {
-    const { getThemesAction, getThemesSuccessAction, setFailureAction } =
-      themeActions
-
-    it('sends getThemesSuccessAction on success', async () => {
-      registerThemeService()
-      const service = getThemeService()
-      const getAllSpy = jest
-        .spyOn(service, 'getAll')
-        .mockResolvedValueOnce(service)
-
-      sagaTester.dispatch(getThemesAction())
-
-      await sagaTester.waitFor('themes/getThemesSuccessAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(getThemesAction())
-      expect(getAllSpy).toHaveBeenCalledTimes(1)
-      expect(calledActions[1]).toEqual(
-        getThemesSuccessAction({ themes: service.items })
-      )
-    })
-
-    it('sends setFailureAction on error', async () => {
-      destroyFactory()
-
-      sagaTester.dispatch(getThemesAction())
-
-      await sagaTester.waitFor('themes/setFailureAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(getThemesAction())
-      expect(calledActions[1]).toEqual(
-        setFailureAction({ error: 'Factory must be created with an SDK.' })
-      )
-    })
-  })
-
-  describe('getDefaultThemeSaga', () => {
-    const {
-      getDefaultThemeAction,
-      getDefaultThemeSuccessAction,
-      setFailureAction,
-    } = themeActions
-
-    it('sends getDefaultThemeSuccessAction on success', async () => {
-      registerThemeService()
-      const service = getThemeService()
-      const defaultTheme = { name: 'Looker', id: '1' } as ITheme
-      const getDefaultThemeSpy = jest
-        .spyOn(service, 'getDefaultTheme')
-        .mockResolvedValueOnce(defaultTheme)
-
-      sagaTester.dispatch(getDefaultThemeAction())
-
-      await sagaTester.waitFor('themes/getDefaultThemeSuccessAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(getDefaultThemeAction())
-      expect(getDefaultThemeSpy).toHaveBeenCalledTimes(1)
-      expect(calledActions[1]).toEqual(
-        getDefaultThemeSuccessAction({ defaultTheme })
-      )
-    })
-
-    it('sends setFailureAction on error', async () => {
-      destroyFactory()
-
-      sagaTester.dispatch(getDefaultThemeAction())
-      await sagaTester.waitFor('themes/setFailureAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(getDefaultThemeAction())
-      expect(calledActions[1]).toEqual(
-        setFailureAction({ error: 'Factory must be created with an SDK.' })
-      )
-    })
-  })
-
   describe('selectThemeSaga', () => {
-    const {
-      refreshAction,
-      refreshSuccessAction,
-      selectThemeAction,
-      selectThemeSuccessAction,
-      setFailureAction,
-    } = themeActions
+    const { selectThemeAction, selectThemeSuccessAction, setFailureAction } =
+      themeActions
 
     it('sends selectThemeSuccessAction on success', async () => {
       registerThemeService()
       const service = getThemeService()
+      service.items = [lookerTheme, defaultTheme, anotherTheme]
+      service.index()
       const selectedTheme = { name: 'Looker', id: '1' } as ITheme
 
       jest.spyOn(service, 'expired').mockReturnValue(false)
-      const getSpy = jest
-        .spyOn(service, 'get')
-        .mockResolvedValueOnce(selectedTheme)
-      jest.spyOn(service, 'getAll').mockResolvedValueOnce(service)
-      jest
-        .spyOn(service, 'getDefaultTheme')
-        .mockResolvedValueOnce(selectedTheme)
 
-      sagaTester.dispatch(selectThemeAction({ id: selectedTheme.id! }))
+      sagaTester.dispatch(selectThemeAction({ key: selectedTheme.id! }))
 
       await sagaTester.waitFor('themes/selectThemeSuccessAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(2)
       expect(calledActions[0]).toEqual(
-        selectThemeAction({ id: selectedTheme.id! })
+        selectThemeAction({ key: selectedTheme.id! })
       )
-      expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
       expect(calledActions[1]).toEqual(
         selectThemeSuccessAction({ selectedTheme })
       )
     })
 
-    it('refreshes the store if cache has expired', async () => {
+    it('can select a theme by name', async () => {
       registerThemeService()
       const service = getThemeService()
+      service.items = [lookerTheme, defaultTheme, anotherTheme]
+      service.index()
       const selectedTheme = { name: 'Looker', id: '1' } as ITheme
 
-      jest.spyOn(service, 'expired').mockReturnValue(true)
-      const getSpy = jest
-        .spyOn(service, 'get')
-        .mockResolvedValueOnce(selectedTheme)
-      jest.spyOn(service, 'getAll').mockResolvedValueOnce(service)
-      jest
-        .spyOn(service, 'getDefaultTheme')
-        .mockResolvedValueOnce(selectedTheme)
+      jest.spyOn(service, 'expired').mockReturnValue(false)
 
-      sagaTester.dispatch(selectThemeAction({ id: selectedTheme.id! }))
+      sagaTester.dispatch(selectThemeAction({ key: selectedTheme.name! }))
 
       await sagaTester.waitFor('themes/selectThemeSuccessAction')
       const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(4)
+      expect(calledActions).toHaveLength(2)
       expect(calledActions[0]).toEqual(
-        selectThemeAction({ id: selectedTheme.id! })
+        selectThemeAction({ key: selectedTheme.name! })
       )
-      expect(calledActions[1]).toEqual(refreshAction())
-      expect(getSpy).toHaveBeenCalledWith(selectedTheme.id)
-      expect(calledActions[2]).toEqual(
+      expect(calledActions[1]).toEqual(
         selectThemeSuccessAction({ selectedTheme })
-      )
-      expect(calledActions[3]).toEqual(
-        refreshSuccessAction({
-          themes: service.items,
-          defaultTheme: service.defaultTheme!,
-        })
       )
     })
 
     it('sends setFailureAction on error', async () => {
       destroyFactory()
 
-      sagaTester.dispatch(selectThemeAction({ id: 'foo' }))
+      sagaTester.dispatch(selectThemeAction({ key: 'foo' }))
+
       await sagaTester.waitFor('themes/setFailureAction')
       const calledActions = sagaTester.getCalledActions()
       expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(selectThemeAction({ id: 'foo' }))
+      expect(calledActions[0]).toEqual(selectThemeAction({ key: 'foo' }))
       expect(calledActions[1]).toEqual(
         setFailureAction({ error: 'Factory must be created with an SDK.' })
       )

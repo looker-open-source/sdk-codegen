@@ -126,6 +126,16 @@ describe('ItemList', () => {
 
       expect(ItemList.find('name', 'barName')).toEqual(items[1])
     })
+
+    it('can search for a value in multiple keys', () => {
+      const actual = ItemList.find(['id', 'name'], 'fooName')
+      expect(actual).toBe(items[0])
+    })
+
+    it('correctly parses an expression', () => {
+      const actual = ItemList.find('id', 'foo|qux')
+      expect(actual).toBe(items[0])
+    })
   })
 
   describe('getCacheDefault', () => {
@@ -135,7 +145,7 @@ describe('ItemList', () => {
     })
 
     it('gets value from itemCache option when specified', () => {
-      const actual = ItemList.getCacheDefault({ itemCache: false })
+      const actual = ItemList.getCacheDefault({ useCache: false })
       expect(actual).toBe(false)
     })
   })

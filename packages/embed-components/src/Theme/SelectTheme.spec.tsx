@@ -114,7 +114,7 @@ describe('SelectTheme', () => {
 
     await waitFor(() => {
       expect(selectThemeActionSpy).toHaveBeenCalledWith({
-        id: customTheme1.id,
+        key: customTheme1.id,
       })
     })
   })

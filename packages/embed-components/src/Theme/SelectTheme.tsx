@@ -57,8 +57,8 @@ export const SelectTheme = () => {
     setOptions(themeOptions)
   }, [themes])
 
-  const handleChange = (id: string) => {
-    selectThemeAction({ id })
+  const handleChange = (key: string) => {
+    selectThemeAction({ key })
   }
 
   return (
