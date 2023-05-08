@@ -3970,6 +3970,7 @@ class EmbedCookielessSessionAcquire(model.Model):
         external_group_id: A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
         user_attributes: A dictionary of name-value pairs associating a Looker user attribute name with a value.
         session_reference_token: Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+        embed_domain: The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
     """
     session_length: Optional[int] = None
     force_logout_login: Optional[bool] = None
@@ -3983,6 +3984,7 @@ class EmbedCookielessSessionAcquire(model.Model):
     external_group_id: Optional[str] = None
     user_attributes: Optional[MutableMapping[str, Any]] = None
     session_reference_token: Optional[str] = None
+    embed_domain: Optional[str] = None
 
     def __init__(self, *,
             session_length: Optional[int] = None,
@@ -3996,7 +3998,8 @@ class EmbedCookielessSessionAcquire(model.Model):
             group_ids: Optional[Sequence[str]] = None,
             external_group_id: Optional[str] = None,
             user_attributes: Optional[MutableMapping[str, Any]] = None,
-            session_reference_token: Optional[str] = None):
+            session_reference_token: Optional[str] = None,
+            embed_domain: Optional[str] = None):
         self.session_length = session_length
         self.force_logout_login = force_logout_login
         self.external_user_id = external_user_id
@@ -4009,6 +4012,7 @@ class EmbedCookielessSessionAcquire(model.Model):
         self.external_group_id = external_group_id
         self.user_attributes = user_attributes
         self.session_reference_token = session_reference_token
+        self.embed_domain = embed_domain
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9643,6 +9647,7 @@ class Setting(model.Model):
         host_url: Change the base portion of your Looker instance URL setting
         override_warnings: (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
         email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
+        embed_cookieless_v2: Toggle cookieless embed setting
     """
     extension_framework_enabled: Optional[bool] = None
     extension_load_url_enabled: Optional[bool] = None
@@ -9657,6 +9662,7 @@ class Setting(model.Model):
     host_url: Optional[str] = None
     override_warnings: Optional[bool] = None
     email_domain_allowlist: Optional[Sequence[str]] = None
+    embed_cookieless_v2: Optional[bool] = None
 
     def __init__(self, *,
             extension_framework_enabled: Optional[bool] = None,
@@ -9671,7 +9677,8 @@ class Setting(model.Model):
             data_connector_default_enabled: Optional[bool] = None,
             host_url: Optional[str] = None,
             override_warnings: Optional[bool] = None,
-            email_domain_allowlist: Optional[Sequence[str]] = None):
+            email_domain_allowlist: Optional[Sequence[str]] = None,
+            embed_cookieless_v2: Optional[bool] = None):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -9685,6 +9692,7 @@ class Setting(model.Model):
         self.host_url = host_url
         self.override_warnings = override_warnings
         self.email_domain_allowlist = email_domain_allowlist
+        self.embed_cookieless_v2 = embed_cookieless_v2
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10418,6 +10426,7 @@ class User(model.Model):
         allow_normal_group_membership: User can be a direct member of a normal Looker group.
         allow_roles_from_normal_groups: User can inherit roles from a normal Looker group.
         embed_group_folder_id: (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login
+        is_iam_admin: User is an IAM Admin - only available in Looker (Google Cloud core)
         url: Link to get this item
     """
     can: Optional[MutableMapping[str, bool]] = None
@@ -10455,6 +10464,7 @@ class User(model.Model):
     allow_normal_group_membership: Optional[bool] = None
     allow_roles_from_normal_groups: Optional[bool] = None
     embed_group_folder_id: Optional[str] = None
+    is_iam_admin: Optional[bool] = None
     url: Optional[str] = None
 
     def __init__(self, *,
@@ -10493,6 +10503,7 @@ class User(model.Model):
             allow_normal_group_membership: Optional[bool] = None,
             allow_roles_from_normal_groups: Optional[bool] = None,
             embed_group_folder_id: Optional[str] = None,
+            is_iam_admin: Optional[bool] = None,
             url: Optional[str] = None):
         self.can = can
         self.avatar_url = avatar_url
@@ -10529,6 +10540,7 @@ class User(model.Model):
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self.embed_group_folder_id = embed_group_folder_id
+        self.is_iam_admin = is_iam_admin
         self.url = url
 
 
@@ -13410,6 +13422,7 @@ logo_url, favicon_url
         host_url: Change the base portion of your Looker instance URL setting
         override_warnings: (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
         email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
+        embed_cookieless_v2: Toggle cookieless embed setting
     """
     extension_framework_enabled: Optional[bool] = None
     extension_load_url_enabled: Optional[bool] = None
@@ -13424,6 +13437,7 @@ logo_url, favicon_url
     host_url: Optional[str] = None
     override_warnings: Optional[bool] = None
     email_domain_allowlist: Optional[Sequence[str]] = None
+    embed_cookieless_v2: Optional[bool] = None
 
     def __init__(self, *,
             extension_framework_enabled: Optional[bool] = None,
@@ -13438,7 +13452,8 @@ logo_url, favicon_url
             data_connector_default_enabled: Optional[bool] = None,
             host_url: Optional[str] = None,
             override_warnings: Optional[bool] = None,
-            email_domain_allowlist: Optional[Sequence[str]] = None):
+            email_domain_allowlist: Optional[Sequence[str]] = None,
+            embed_cookieless_v2: Optional[bool] = None):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -13452,6 +13467,7 @@ logo_url, favicon_url
         self.host_url = host_url
         self.override_warnings = override_warnings
         self.email_domain_allowlist = email_domain_allowlist
+        self.embed_cookieless_v2 = embed_cookieless_v2
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -13542,7 +13558,7 @@ can, id
 class WriteUser(model.Model):
     """
     Dynamic writeable type for User removes:
-can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
 
     Attributes:
         credentials_email: Dynamic writeable type for CredentialsEmail removes:

@@ -349,6 +349,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * See 'login' for more detail on the access token and how to use it.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user.
      * @param {Boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      *
@@ -829,6 +831,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /ldap_config -> ByteArray
      */
     fun ldap_config(
@@ -850,6 +854,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
      *
      * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {WriteLDAPConfig} body
      *
@@ -881,6 +887,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * No authentication to the LDAP server is attempted.
      *
      * The active LDAP settings are not modified.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {WriteLDAPConfig} body
      *
@@ -915,6 +923,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The active LDAP settings are not modified.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteLDAPConfig} body
      *
      * PUT /ldap_config/test_auth -> ByteArray
@@ -937,6 +947,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The active LDAP settings are not modified.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteLDAPConfig} body
      *
      * PUT /ldap_config/test_user_info -> ByteArray
@@ -958,6 +970,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * **test_ldap_user** and **test_ldap_password** are required.
      *
      * The active LDAP settings are not modified.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {WriteLDAPConfig} body
      *
@@ -1215,6 +1229,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /oidc_config -> ByteArray
      */
     fun oidc_config(
@@ -1235,6 +1251,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteOIDCConfig} body
      *
      * PATCH /oidc_config -> ByteArray
@@ -1248,6 +1266,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Get a OIDC test configuration by test_slug.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} test_slug Slug of test config
      *
@@ -1264,6 +1284,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a OIDC test configuration.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} test_slug Slug of test config
      *
      * DELETE /oidc_test_configs/{test_slug} -> ByteArray
@@ -1279,6 +1301,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Create a OIDC test configuration.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteOIDCConfig} body
      *
      * POST /oidc_test_configs -> ByteArray
@@ -1293,6 +1317,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get password config.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /password_config -> ByteArray
      */
     fun password_config(
@@ -1304,6 +1330,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Update password config.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {WritePasswordConfig} body
      *
@@ -1318,6 +1346,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Force all credentials_email users to reset their login passwords upon their next login.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> ByteArray
      */
@@ -1342,6 +1372,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /saml_config -> ByteArray
      */
     fun saml_config(
@@ -1362,6 +1394,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteSamlConfig} body
      *
      * PATCH /saml_config -> ByteArray
@@ -1375,6 +1409,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Get a SAML test configuration by test_slug.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} test_slug Slug of test config
      *
@@ -1391,6 +1427,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Delete a SAML test configuration.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} test_slug Slug of test config
      *
      * DELETE /saml_test_configs/{test_slug} -> ByteArray
@@ -1406,6 +1444,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Create a SAML test configuration.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {WriteSamlConfig} body
      *
      * POST /saml_test_configs -> ByteArray
@@ -1419,6 +1459,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Parse the given xml as a SAML IdP metadata document and return the result.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} body
      *
@@ -1435,6 +1477,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
      * Note that this requires that the url be public or at least at a location where the Looker instance
      * can fetch it without requiring any special authentication.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} body
      *
@@ -1478,6 +1522,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns the users that have been added to the Support Access Allowlist
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} fields Requested fields.
      *
      * GET /support_access/allowlist -> ByteArray
@@ -1495,6 +1541,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Adds a list of emails to the Allowlist, using the provided reason
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {SupportAccessAddEntries} body
      *
      * POST /support_access/allowlist -> ByteArray
@@ -1510,6 +1558,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Delete Support Access Allowlist User
      *
      * Deletes the specified Allowlist Entry Id
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} entry_id Id of Allowlist Entry
      *
@@ -1528,6 +1578,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Enables Support Access for the provided duration
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {SupportAccessEnable} body
      *
      * PUT /support_access/enable -> ByteArray
@@ -1544,6 +1596,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Disables Support Access immediately
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * PUT /support_access/disable -> ByteArray
      */
     fun disable_support_access(
@@ -1557,6 +1611,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * ### Support Access Status
      *
      * Returns the current Support Access Status
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /support_access/status -> ByteArray
      */
@@ -2294,6 +2350,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns the list of public egress IP Addresses for a hosted customer's instance
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /public_egress_ip_addresses -> ByteArray
      */
     fun public_egress_ip_addresses(
@@ -2358,6 +2416,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get all legacy features.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * GET /legacy_features -> ByteArray
      */
     fun all_legacy_features(
@@ -2369,6 +2429,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Get information about the legacy feature with a specific id.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} legacy_feature_id id of legacy feature
      *
@@ -2384,6 +2446,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Update information about the legacy feature with a specific id.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} legacy_feature_id id of legacy feature
      * @param {WriteLegacyFeature} body
@@ -2439,6 +2503,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - embed_cookieless_v2
      *
      * @param {String} fields Requested fields
      *
@@ -2468,6 +2533,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
+     *  - embed_cookieless_v2
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -2488,7 +2554,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Configure SMTP Settings
      *   This API allows users to configure the SMTP settings on the Looker instance.
-     *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+     *   Only admin users are authorised to call this API.
      *
      * @param {SmtpSettings} body
      *
@@ -8115,6 +8181,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Set all groups for a role, removing all existing group associations from that role.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} role_id id of role
      * @param {Array<String>} body
      *
@@ -8997,6 +9065,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Boolean search params accept only "true" and "false" as values.
      *
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} fields Requested fields.
      * @param {Long} limit Number of results to return (used with `offset`).
      * @param {Long} offset Number of results to skip before returning any (used with `limit`).
@@ -9329,6 +9400,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} credential_type Type name of credential
      * @param {String} credential_id Id of credential
      * @param {String} fields Requested fields.
@@ -9350,6 +9423,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
@@ -9367,6 +9442,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Email/password login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {WriteCredentialsEmail} body
@@ -9388,6 +9465,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {WriteCredentialsEmail} body
      * @param {String} fields Requested fields.
@@ -9408,6 +9487,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Email/password login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_email -> ByteArray
@@ -9422,6 +9503,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Two-factor login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9440,6 +9523,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Two-factor login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {CredentialsTotp} body WARNING: no writeable properties found for POST, PUT, or PATCH
@@ -9461,6 +9546,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Two-factor login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_totp -> ByteArray
@@ -9475,6 +9562,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### LDAP login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9494,6 +9583,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### LDAP login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_ldap -> ByteArray
@@ -9508,6 +9599,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Google authentication login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9527,6 +9620,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Google authentication login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_google -> ByteArray
@@ -9541,6 +9636,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Saml authentication login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9560,6 +9657,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Saml authentication login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_saml -> ByteArray
@@ -9574,6 +9673,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9593,6 +9694,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_oidc -> ByteArray
@@ -9607,6 +9710,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} credentials_api3_id Id of API Credential
@@ -9629,6 +9734,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} credentials_api3_id Id of API Credential
      *
@@ -9646,6 +9753,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9665,6 +9774,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
@@ -9682,6 +9793,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Embed login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} credentials_embed_id Id of Embedding Credential
@@ -9704,6 +9817,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} credentials_embed_id Id of Embedding Credential
      *
@@ -9721,6 +9836,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Embed login information for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9740,6 +9857,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
@@ -9758,6 +9877,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      *
      * DELETE /users/{user_id}/credentials_looker_openid -> ByteArray
@@ -9772,6 +9893,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Web login session for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} session_id Id of Web Login Session
@@ -9794,6 +9917,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Web login session for the specified user.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} session_id Id of Web Login Session
      *
@@ -9811,6 +9936,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Web login session for the specified user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -9837,6 +9964,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Invitation emails for new users typically are not set to expire.
      * The expire period is always 60 minutes when expires is enabled.
      * This method can be called with an empty body.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {Boolean} expires Expiring token.
@@ -9993,6 +10122,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Password reset URLs will expire in 60 minutes.
      * This method can be called with an empty body.
      *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
      *
@@ -10015,6 +10146,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * associated credentials.  Will overwrite all associated email addresses with
      * the value supplied in the 'email' body param.
      * The user's 'is_disabled' status must be true.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * @param {String} user_id Id of user
      * @param {UserEmailOnly} body
