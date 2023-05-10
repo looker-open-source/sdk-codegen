@@ -41,7 +41,7 @@
     "@looker/embed-services": "*",
     "@looker/embed-components": "*",
     "@looker/extension-utils": "^0.1.21",
-    "@looker/redux": "0.0.0",
+    "@looker/redux": "^0.0.1",
     "@looker/sdk": "^23.2.0",
     "@looker/sdk-rtl": "^21.6.0",
     "@styled-icons/material": "^10.47.0",

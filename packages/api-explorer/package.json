@@ -75,7 +75,7 @@
     "@looker/design-tokens": "^3.1.0",
     "@looker/extension-utils": "^0.1.23",
     "@looker/icons": "^1.5.21",
-    "@looker/redux": "0.0.0",
+    "@looker/redux": "^0.0.1",
     "@looker/run-it": "^0.9.46",
     "@looker/sdk": "^23.6.0",
     "@looker/sdk-codegen": "^21.8.0",

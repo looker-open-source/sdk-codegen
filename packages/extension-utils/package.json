@@ -27,7 +27,7 @@
   "dependencies": {
     "@looker/code-editor": "^0.1.28",
     "@looker/components": "^4.1.1",
-    "@looker/redux": "0.0.0",
+    "@looker/redux": "^0.0.1",
     "@looker/extension-sdk": "^23.6.0",
     "@looker/extension-sdk-react": "^23.6.0",
     "@looker/sdk": "^23.6.0",
