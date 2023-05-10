@@ -38,8 +38,8 @@
   },
   "dependencies": {
     "@looker/components": "^4.1.1",
-    "@looker/embed-services": "0.0.1-alpha",
-    "@looker/embed-components": "0.0.1-alpha",
+    "@looker/embed-services": "*",
+    "@looker/embed-components": "*",
     "@looker/extension-utils": "^0.1.21",
     "@looker/redux": "0.0.0",
     "@looker/sdk": "^23.2.0",
