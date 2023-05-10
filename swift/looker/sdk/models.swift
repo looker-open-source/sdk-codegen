@@ -7996,6 +7996,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         case _external_group_id = "external_group_id"
         case user_attributes
         case _session_reference_token = "session_reference_token"
+        case _embed_domain = "embed_domain"
     }
     private var _session_length: AnyInt?
     /**
@@ -8097,7 +8098,16 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         set { _session_reference_token = newValue.map(AnyString.init) }
     }
 
-    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil) {
+    private var _embed_domain: AnyString?
+    /**
+     * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
+     */
+    public var embed_domain: String? {
+        get { _embed_domain?.value }
+        set { _embed_domain = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil, embed_domain: String? = nil) {
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
         self._external_user_id = external_user_id.map(AnyString.init)
@@ -8110,6 +8120,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._session_reference_token = session_reference_token.map(AnyString.init)
+        self._embed_domain = embed_domain.map(AnyString.init)
     }
 
 }
@@ -19702,6 +19713,7 @@ public struct Setting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case embed_cookieless_v2
     }
     /**
      * Toggle extension framework on or off
@@ -19774,7 +19786,12 @@ public struct Setting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    /**
+     * Toggle cookieless embed setting
+     */
+    public var embed_cookieless_v2: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19788,6 +19805,7 @@ public struct Setting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.embed_cookieless_v2 = embed_cookieless_v2
     }
 
 }
@@ -21120,6 +21138,7 @@ public struct User: SDKModel {
         case allow_normal_group_membership
         case allow_roles_from_normal_groups
         case _embed_group_folder_id = "embed_group_folder_id"
+        case is_iam_admin
         case _url = "url"
     }
     /**
@@ -21336,6 +21355,11 @@ public struct User: SDKModel {
         set { _embed_group_folder_id = newValue.map(AnyString.init) }
     }
 
+    /**
+     * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+     */
+    public var is_iam_admin: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -21345,7 +21369,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -21381,6 +21405,7 @@ public struct User: SDKModel {
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
+        self.is_iam_admin = is_iam_admin
         self._url = url.map(AnyString.init)
     }
 
@@ -27134,6 +27159,7 @@ public struct WriteSetting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case embed_cookieless_v2
     }
     /**
      * Toggle extension framework on or off
@@ -27210,7 +27236,12 @@ public struct WriteSetting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    /**
+     * Toggle cookieless embed setting
+     */
+    public var embed_cookieless_v2: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -27224,6 +27255,7 @@ public struct WriteSetting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.embed_cookieless_v2 = embed_cookieless_v2
     }
 
 }
@@ -27386,7 +27418,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 public struct WriteUser: SDKModel {
 

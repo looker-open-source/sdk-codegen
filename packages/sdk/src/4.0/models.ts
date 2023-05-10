@@ -25,7 +25,7 @@
  */
 
 /**
- * 392 API models: 244 Spec, 66 Request, 60 Write, 22 Enum
+ * 386 API models: 244 Spec, 60 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -3260,6 +3260,10 @@ export interface IEmbedCookielessSessionAcquire {
    * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
    */
   session_reference_token?: string | null
+  /**
+   * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
+   */
+  embed_domain?: string | null
 }
 
 export interface IEmbedCookielessSessionAcquireResponse {
@@ -7299,24 +7303,6 @@ export interface IRequestAllIntegrations {
 }
 
 /**
- * Dynamically generated request type for all_lookml_models
- */
-export interface IRequestAllLookmlModels {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return. (can be used with offset)
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
-   */
-  offset?: number | null
-}
-
-/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -7346,20 +7332,6 @@ export interface IRequestAllScheduledPlans {
    * Return scheduled plans belonging to all users (caller needs see_schedules permission)
    */
   all_users?: boolean | null
-}
-
-/**
- * Dynamically generated request type for all_user_attributes
- */
-export interface IRequestAllUserAttributes {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Fields to order the results by. Sortable fields include: name, label
-   */
-  sorts?: string | null
 }
 
 /**
@@ -8733,98 +8705,6 @@ export interface IRequestSearchGroups {
 }
 
 /**
- * Dynamically generated request type for search_groups_with_hierarchy
- */
-export interface IRequestSearchGroupsWithHierarchy {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null
-  /**
-   * Match group id.
-   */
-  id?: string | null
-  /**
-   * Match group name.
-   */
-  name?: string | null
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null
-}
-
-/**
- * Dynamically generated request type for search_groups_with_roles
- */
-export interface IRequestSearchGroupsWithRoles {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null
-  /**
-   * Match group id.
-   */
-  id?: string | null
-  /**
-   * Match group name.
-   */
-  name?: string | null
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null
-}
-
-/**
  * Dynamically generated request type for search_looks
  */
 export interface IRequestSearchLooks {
@@ -8945,89 +8825,9 @@ export interface IRequestSearchModelSets {
 }
 
 /**
- * Dynamically generated request type for search_permission_sets
- */
-export interface IRequestSearchPermissionSets {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match permission set id.
-   */
-  id?: string | null
-  /**
-   * Match permission set name.
-   */
-  name?: string | null
-  /**
-   * Match permission sets by all_access status.
-   */
-  all_access?: boolean | null
-  /**
-   * Match permission sets by built_in status.
-   */
-  built_in?: boolean | null
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null
-}
-
-/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match role id.
-   */
-  id?: string | null
-  /**
-   * Match role name.
-   */
-  name?: string | null
-  /**
-   * Match roles by built_in status.
-   */
-  built_in?: boolean | null
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null
-}
-
-/**
- * Dynamically generated request type for search_roles_with_user_count
- */
-export interface IRequestSearchRolesWithUserCount {
   /**
    * Requested fields.
    */
@@ -10318,6 +10118,10 @@ export interface ISetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[]
+  /**
+   * Toggle cookieless embed setting
+   */
+  embed_cookieless_v2?: boolean
 }
 
 export interface ISmtpNodeStatus {
@@ -10979,6 +10783,10 @@ export interface IUser {
    * (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
    */
   embed_group_folder_id?: string | null
+  /**
+   * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+   */
+  is_iam_admin?: boolean
   /**
    * Link to get this item (read-only)
    */
@@ -13509,6 +13317,10 @@ export interface IWriteSetting {
    * An array of Email Domain Allowlist of type string for Scheduled Content
    */
   email_domain_allowlist?: string[] | null
+  /**
+   * Toggle cookieless embed setting
+   */
+  embed_cookieless_v2?: boolean
 }
 
 /**
@@ -13579,7 +13391,7 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 export interface IWriteUser {
   /**
