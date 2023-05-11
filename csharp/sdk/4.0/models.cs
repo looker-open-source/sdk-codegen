@@ -1948,6 +1948,8 @@ public class EmbedCookielessSessionAcquire : SdkModel
   public StringDictionary<object>? user_attributes { get; set; } = null;
   /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
   public string? session_reference_token { get; set; } = null;
+  /// <summary>The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.</summary>
+  public string? embed_domain { get; set; } = null;
 }
 
 public class EmbedCookielessSessionAcquireResponse : SdkModel
@@ -4745,6 +4747,8 @@ public class Setting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
+  /// <summary>Toggle cookieless embed setting</summary>
+  public bool? embed_cookieless_v2 { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5180,6 +5184,8 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
+  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)</summary>
+  public bool? is_iam_admin { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -6676,6 +6682,8 @@ public class WriteSetting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
+  /// <summary>Toggle cookieless embed setting</summary>
+  public bool? embed_cookieless_v2 { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:
@@ -6720,7 +6728,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
 public class WriteUser : SdkModel
 {
   /// <summary>

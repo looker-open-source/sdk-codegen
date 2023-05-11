@@ -2043,6 +2043,7 @@ data class EgressIpAddresses (
  * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
  * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
  * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property embed_domain The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
  */
 data class EmbedCookielessSessionAcquire (
     var session_length: Long? = null,
@@ -2056,7 +2057,8 @@ data class EmbedCookielessSessionAcquire (
     var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var session_reference_token: String? = null
+    var session_reference_token: String? = null,
+    var embed_domain: String? = null
 ) : Serializable
 
 /**
@@ -4957,6 +4959,7 @@ data class SessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4971,7 +4974,8 @@ data class Setting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null
 ) : Serializable
 
 /**
@@ -5378,6 +5382,7 @@ data class UpdateFolder (
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
  * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
+ * @property is_iam_admin User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
  * @property url Link to get this item (read-only)
  */
 data class User (
@@ -5416,6 +5421,7 @@ data class User (
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var embed_group_folder_id: String? = null,
+    var is_iam_admin: Boolean? = null,
     var url: String? = null
 ) : Serializable
 
@@ -6972,6 +6978,7 @@ data class WriteSessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6986,7 +6993,8 @@ data class WriteSetting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null
 ) : Serializable
 
 /**
@@ -7039,7 +7047,7 @@ data class WriteTheme (
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
