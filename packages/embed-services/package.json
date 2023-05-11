@@ -1,6 +1,6 @@
 {
   "name": "@looker/embed-services",
-  "version": "23.6.0",
+  "version": "23.8.0",
   "description": "Looker Embed Services",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -34,11 +34,11 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-services",
   "devDependencies": {
-    "@looker/sdk-node": "^23.4.0"
+    "@looker/sdk-node": "^23.8.0"
   },
   "dependencies": {
     "@looker/sdk-rtl": "^21.6.0",
-    "@looker/sdk": "^23.6.0"
+    "@looker/sdk": "^23.8.0"
   },
   "keywords": [
     "Looker",

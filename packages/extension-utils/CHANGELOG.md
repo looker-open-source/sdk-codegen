@@ -15,6 +15,22 @@
     * @looker/extension-sdk-react bumped from ^23.4.0 to ^23.6.0
     * @looker/sdk bumped from ^23.4.0 to ^23.6.0
 
+## [0.1.24](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.23...extension-utils-v0.1.24) (2023-05-11)
+
+
+### Features
+
+* replace @looker/redux for with npm dependency ([#1307](https://github.com/looker-open-source/sdk-codegen/issues/1307)) ([baa58db](https://github.com/looker-open-source/sdk-codegen/commit/baa58db1bce9d974384c63a0e11301f38774a7b2))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.6.0 to ^23.8.0
+    * @looker/extension-sdk-react bumped from ^23.6.0 to ^23.8.0
+    * @looker/sdk bumped from ^23.6.0 to ^23.8.0
+
 ## [0.1.22](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.21...extension-utils-v0.1.22) (2023-03-31)
 
 
