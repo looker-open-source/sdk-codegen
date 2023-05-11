@@ -1,5 +1,16 @@
 # Changelog
 
+## [23.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.7.0...sdk-codegen-all-v23.8.0) (2023-05-11)
+
+
+### Features
+
+* Add Looker content cleanup automation example ([#1279](https://github.com/looker-open-source/sdk-codegen/issues/1279)) ([f2644fc](https://github.com/looker-open-source/sdk-codegen/commit/f2644fc209045fd9be18a721d0746d5027d59ad8))
+* generate SDKs for Looker 23.8 ([#1311](https://github.com/looker-open-source/sdk-codegen/issues/1311)) ([e0b6597](https://github.com/looker-open-source/sdk-codegen/commit/e0b65973c3827b1c701fe8941d0f010ad7603354))
+* QuickEmbed component ([#1306](https://github.com/looker-open-source/sdk-codegen/issues/1306)) ([4c78712](https://github.com/looker-open-source/sdk-codegen/commit/4c78712d44fb32dbdc0690a6121bc35086dec44a))
+* replace @looker/redux for with npm dependency ([#1307](https://github.com/looker-open-source/sdk-codegen/issues/1307)) ([baa58db](https://github.com/looker-open-source/sdk-codegen/commit/baa58db1bce9d974384c63a0e11301f38774a7b2))
+* SelectTheme component ([#1300](https://github.com/looker-open-source/sdk-codegen/issues/1300)) ([95c0da6](https://github.com/looker-open-source/sdk-codegen/commit/95c0da628d1d22fae2c6968f988047bfacc5fd01))
+
 ## [23.7.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.6.0...sdk-codegen-all-v23.7.0) (2023-04-13)
 
 
