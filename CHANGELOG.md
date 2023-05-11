@@ -1,5 +1,12 @@
 # Changelog
 
+## [23.8.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.0...sdk-codegen-all-v23.8.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* release config for embed-components ([#1312](https://github.com/looker-open-source/sdk-codegen/issues/1312)) ([b450071](https://github.com/looker-open-source/sdk-codegen/commit/b45007116a340a9e5b026303b5919a85ee33d1ba))
+
 ## [23.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.7.0...sdk-codegen-all-v23.8.0) (2023-05-11)
 
 
