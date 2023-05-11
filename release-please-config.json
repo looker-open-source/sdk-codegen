@@ -27,12 +27,12 @@
       "component": "extension-sdk",
       "versioning": "always-bump-patch"
     },
-    "packages/embed-services": {
-      "component": "embed-services",
+    "packages/embed-components": {
+      "component": "embed-components",
       "versioning": "always-bump-patch"
     },
     "packages/embed-services": {
-      "component": "embed-components",
+      "component": "embed-services",
       "versioning": "always-bump-patch"
     },
     "packages/extension-sdk-react": {
