@@ -140,7 +140,10 @@ describe('ItemList', () => {
 
   describe('getCacheDefault', () => {
     it('gets the default', () => {
-      const actual = ItemList.getCacheDefault()
+      let actual = ItemList.getCacheDefault()
+      expect(actual).toBe(true)
+
+      actual = ItemList.getCacheDefault({ useCache: undefined })
       expect(actual).toBe(true)
     })
 

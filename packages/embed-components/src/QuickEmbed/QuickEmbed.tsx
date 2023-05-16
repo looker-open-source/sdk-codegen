@@ -77,7 +77,7 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
   return (
     <Section padding="large">
       <Heading as="h3" fontWeight="medium">
-        Get embed url
+        Get embed URL
       </Heading>
 
       <SpaceVertical pt="medium" pb="medium" gap="xsmall">

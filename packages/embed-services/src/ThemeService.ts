@@ -41,7 +41,14 @@ export interface IThemeService
   extends IItemList<ITheme>,
     IEntityService<ITheme> {
   defaultTheme?: ITheme
+  /**
+   * Gets the default theme
+   * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+   */
   getDefaultTheme(ts?: Date, options?: GetOptions): Promise<ITheme>
+  /**
+   * Retrieves all themes and the default theme
+   */
   load(options?: GetOptions): Promise<IThemeService>
 }
 
@@ -101,10 +108,6 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
     return theme
   }
 
-  /**
-   * Gets the default theme
-   * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
-   */
   async getDefaultTheme(ts?: Date) {
     if (this.expired()) {
       this.defaultTheme = await this.sdk.ok(default_theme(this.sdk, ts))
@@ -123,9 +126,6 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
     this.index()
   }
 
-  /**
-   * Retrieves all themes and the default theme
-   */
   async load(options?: GetOptions) {
     await this.getDefaultTheme()
     this.items = await this.sdk.ok(all_themes(this.sdk, options?.fields))

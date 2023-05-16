@@ -37,23 +37,8 @@ const THEMABLE_CONTENT: ContentType[] = [
 ]
 
 export interface IEmbedUrl {
-  readonly url: string
-  readonly path: string
-  readonly searchParams: Record<string, string>
-  readonly isDashboard: boolean
-  readonly isExplore: boolean
-  readonly isLook: boolean
-  readonly contentType: ContentType
-  readonly isThemable: boolean
-  embedUrl(includeSearchParams: boolean, overrides: Record<string, any>): string
-}
-
-/**
- * A class for use when implementer requires components to be context aware
- */
-export class EmbedUrl implements IEmbedUrl {
   /** Current url */
-  private _url: URL
+  readonly url: string
   /** Path of the current page */
   readonly path: string
   /** Search string of the current url */
@@ -64,9 +49,29 @@ export class EmbedUrl implements IEmbedUrl {
   readonly isExplore: boolean
   /** Determines whether the current URl is for a Look */
   readonly isLook: boolean
+  /** Type of content the URL represents */
+  readonly contentType: ContentType
   /** Determines if current URL represents themable content */
   readonly isThemable: boolean
-  /** Type of content the URL represents */
+  /**
+   * Builds the embed target url
+   * @param includeSearchParams switch determining whether to include search params from target url
+   * @param overrides any search key values to include in embed url e.g. 'k1=v1&k2=v2'
+   */
+  embedUrl(includeSearchParams: boolean, overrides: Record<string, any>): string
+}
+
+/**
+ * A class for use when implementer requires components to be context aware
+ */
+export class EmbedUrl implements IEmbedUrl {
+  private _url: URL
+  readonly path: string
+  readonly searchParams: Record<string, string>
+  readonly isDashboard: boolean
+  readonly isExplore: boolean
+  readonly isLook: boolean
+  readonly isThemable: boolean
   readonly contentType: ContentType
   private readonly _embedUrl: string
 
@@ -106,11 +111,6 @@ export class EmbedUrl implements IEmbedUrl {
     return type
   }
 
-  /**
-   * Builds the embed target url
-   * @param includeSearchParams switch determining whether to include search params from target url
-   * @param overrides any search key values to include in embed url e.g. 'k1=v1&k2=v2'
-   */
   embedUrl(includeSearchParams = false, overrides: Record<string, any> = {}) {
     if (this.contentType === ContentType.Invalid) {
       throw new Error('Invalid content type')
