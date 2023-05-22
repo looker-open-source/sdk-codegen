@@ -72,7 +72,7 @@ describe('QuickEmbed', () => {
     renderWithTheme(<QuickEmbed onClose={onClose} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
     const textboxes = screen.getAllByRole('textbox')
 
@@ -106,7 +106,7 @@ describe('QuickEmbed', () => {
     renderWithTheme(<QuickEmbed onClose={onClose} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
 
     expect(screen.queryByText(/Apply theme to/)).not.toBeInTheDocument()
@@ -127,7 +127,7 @@ describe('QuickEmbed', () => {
     renderWithTheme(<QuickEmbed onClose={onClose} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
 
     expect(screen.getByText('Apply theme to dashboard URL')).toBeInTheDocument()

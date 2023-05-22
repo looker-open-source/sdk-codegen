@@ -37,14 +37,31 @@ export interface GetOptions {
 export interface IItemList<T> {
   /** Cache time to live in seconds, defaults to 15 minutes */
   readonly timeToLive: number
+  /** Cached items */
   items: T[]
+  /** Expiration time */
   readonly expiresAt: number
+  /** Creates an indexed collection from the cached items */
   index(key?: keyof T): ItemList<T>
+  /** An indexed collection of items */
   indexedItems: Record<string, T>
+  /** Determines if the cache has expired */
   expired(): boolean
+  /** Computes the expiration time based on timeToLive */
   setExpiration(): void
+  /** Ejects cache if expired */
   clearIfExpired(): void
+  /**
+   * Searches the collection for an item with the specified key/value pair
+   * @param key or keys to search
+   * @param expression to match
+   */
   find(key: keyof T | Array<keyof T>, value: any): T | undefined
+  /**
+   * Gets the cache option value if present, otherwise defaults to true
+   * @param options to check
+   */
+  getCacheDefault(options?: GetOptions): boolean
 }
 
 export interface IEntityService<T> extends IItemList<T> {
@@ -58,11 +75,8 @@ export abstract class ItemList<T extends Record<string, any>>
   extends EntityService
   implements IItemList<T>
 {
-  /** Cached items */
   items: T[] = []
-  /** An indexed collection of items */
   indexedItems: Record<string, T> = {}
-  /** Time when cache expires */
   expiresAt = 0
   /** Key to index by */
   private keyField = 'id'
@@ -71,9 +85,6 @@ export abstract class ItemList<T extends Record<string, any>>
     super(sdk, timeToLive)
   }
 
-  /**
-   * Creates an indexed collection from the cached items
-   */
   index(key: keyof T = this.keyField) {
     this.keyField = key as string
     this.indexedItems = {}
@@ -85,21 +96,14 @@ export abstract class ItemList<T extends Record<string, any>>
     return this
   }
 
-  /** Computes the expiration time based on timeToLive */
   setExpiration() {
     this.expiresAt = Date.now() + this.timeToLive * 1000
   }
 
-  /**
-   * Determines if the cache has expired
-   */
   expired() {
     return this.expiresAt <= Date.now()
   }
 
-  /**
-   * Ejects cache if expired
-   */
   clearIfExpired() {
     if (this.expired()) {
       this.items = []
@@ -107,11 +111,6 @@ export abstract class ItemList<T extends Record<string, any>>
     }
   }
 
-  /**
-   * Searches the collection for an item with the specified key/value pair
-   * @param key or keys to search
-   * @param expression to match
-   */
   find(key: keyof T | Array<keyof T>, expression: string): T | undefined {
     let result: T | undefined
     let keys: Array<keyof T>
@@ -122,9 +121,8 @@ export abstract class ItemList<T extends Record<string, any>>
       keys = key as Array<keyof T>
     }
 
-    let rx: RegExp
     try {
-      rx = new RegExp(expression, 'i')
+      const rx = new RegExp(expression, 'i')
 
       for (const item of this.items) {
         for (const k of keys) {
@@ -141,12 +139,11 @@ export abstract class ItemList<T extends Record<string, any>>
     }
   }
 
-  /**
-   * Gets the cache option value if present, otherwise defaults to true
-   * @param options to check
-   */
   getCacheDefault(options?: GetOptions) {
-    const cache = options && 'useCache' in options ? options.useCache : true
+    const cache =
+      options && 'useCache' in options && options.useCache !== undefined
+        ? options.useCache
+        : true
     return cache
   }
 }

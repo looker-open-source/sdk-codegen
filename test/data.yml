@@ -85,6 +85,37 @@ dashboards:
         body_text: "Data Body"
         # this is a test data convention to reference the query by some identifying tag
         query_id: "#user_query"
+themes:
+    - name: "First_SDK_Theme"
+      settings:
+         background_color: "#b83232"
+         base_font_size: "12px"
+         font_color: "rgb(62, 63, 64)"
+         font_family: "Gotham"
+         font_source: ""
+         info_button_color: "#0087e1"
+         primary_button_color: "#e32645"
+         text_tile_text_color: ""
+         tile_background_color: "white"
+         text_tile_background_color: ""
+         tile_text_color: "#20272D"
+         title_color: "#e0060b"
+         warn_button_color: "#f2ad43"
+    - name: "Second_SDK_Theme"
+      settings:
+         background_color: "#f6f8fa"
+         base_font_size: "12px"
+         font_color: "#3e3f40"
+         font_family: "\"Comic Sans MS\""
+         font_source: ""
+         info_button_color: "#0087e1"
+         primary_button_color: "#64518a"
+         tile_background_color: "#ffffff"
+         text_tile_background_color: ""
+         tile_text_color: "#3a4245"
+         title_color: "#3a4245"
+         warn_button_color: "#980c11"
+         tile_title_alignment: "center"
 looks:
   - title: An SDK Look
     description: An SDK test look about system activity

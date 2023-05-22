@@ -28,7 +28,17 @@ import type { IAPIMethods } from '@looker/sdk-rtl'
 export type ServiceCreatorFunc<T> = (sdk: IAPIMethods, timeToLive?: number) => T
 
 export interface IServiceFactory {
+  /**
+   * Retrieves a service
+   * @param serviceName to retrieve
+   */
   get<T>(serviceName: string): T
+  /**
+   * Registers or creates a service
+   * @param serviceName name of service.
+   * @param serviceCreator function that creates the service.
+   * @param timeToLive in seconds, for the service cache. Defaults to 15 minutes.
+   */
   register<T>(
     serviceName: string,
     serviceCreator: ServiceCreatorFunc<T>,
@@ -51,12 +61,6 @@ class ServiceFactory implements IServiceFactory {
     return service
   }
 
-  /**
-   * Registers or creates a service
-   * @param serviceName name of service.
-   * @param serviceCreator function that creates the service.
-   * @param timeToLive in seconds, for the service cache. Defaults to 15 minutes.
-   */
   register<T>(
     serviceName: string,
     serviceCreator: ServiceCreatorFunc<T>,
