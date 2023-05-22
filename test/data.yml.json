@@ -124,27 +124,6 @@
       ]
     }
   ],
-  "looks": [
-    {
-      "title": "An SDK Look",
-      "description": "An SDK test look about system activity",
-      "deleted": false,
-      "is_run_on_load": true,
-      "public": true,
-      "query": [
-        {
-          "id": "#dashboard_query_system_activity",
-          "model": "system__activity",
-          "view": "dashboard",
-          "fields": [
-            "dashboard.count",
-            "dashboard.id"
-          ],
-          "limit": 100
-        }
-      ]
-    }
-  ],
   "themes": [
     {
       "name": "First_SDK_Theme",
@@ -180,7 +159,29 @@
         "title_color": "#3a4245",
         "warn_button_color": "#980c11",
         "tile_title_alignment": "center"
-      }}
+      }
+    }
+  ],
+  "looks": [
+    {
+      "title": "An SDK Look",
+      "description": "An SDK test look about system activity",
+      "deleted": false,
+      "is_run_on_load": true,
+      "public": true,
+      "query": [
+        {
+          "id": "#dashboard_query_system_activity",
+          "model": "system__activity",
+          "view": "dashboard",
+          "fields": [
+            "dashboard.count",
+            "dashboard.id"
+          ],
+          "limit": 100
+        }
+      ]
+    }
   ],
   "content_types": {
     "string": [
