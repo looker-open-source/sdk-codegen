@@ -95,7 +95,7 @@ describe('QuickEmbed', () => {
     expect(
       screen.getByRole('button', { name: 'Copy Link' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument()
   })
 
   it('does not render theme selector for non-themable content', () => {
