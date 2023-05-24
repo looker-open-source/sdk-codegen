@@ -111,7 +111,7 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
         <CopyToClipboard content={embedUrl}>
           <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
         </CopyToClipboard>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>Close</Button>
       </Space>
     </Section>
   )
