@@ -28,9 +28,9 @@ import { itIT as componentsLocale } from '@looker/components'
 
 const resources = {
   QuickEmbed: {
-    'Get embed URL': 'Ottieni embed URL',
+    'Get embed URL': "Ottieni l'embed URL",
     'Apply theme to contentType URL': 'Applica il tema a {{contentType}} URL',
-    'Include current params in URL': "Includi i parametri correntin nell'URL",
+    'Include current params in URL': "Includi i parametri correnti nell'URL",
     'Copy Link': 'Copia Link',
     Close: 'Chiudi',
   },
