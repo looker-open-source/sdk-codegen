@@ -23,7 +23,13 @@
  SOFTWARE.
 
  */
-export * from './GlobalStore'
-export * from './Theme'
-export * from './QuickEmbed'
-export * from './locales'
+import type { Namespace, UseTranslationOptions } from 'react-i18next'
+import { useTranslationBase } from '@looker/i18n'
+import { en } from '../locales'
+
+export const useTranslation = (
+  ns?: Namespace,
+  options?: UseTranslationOptions
+) => {
+  return useTranslationBase(en, ns, options)
+}

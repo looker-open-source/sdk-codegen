@@ -34,17 +34,18 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-components",
   "devDependencies": {
-    "redux-saga-tester": "^1.0.874",
+    "@looker/components-test-utils": "^1.5.27",
     "@looker/sdk-node": "*",
     "@testing-library/react": "^11.2.7",
-    "@looker/components-test-utils": "^1.5.27",
-    "react-redux": "^7.2.9",
+    "@testing-library/user-event": "^14.4.3",
     "@types/react-redux": "^7.1.25",
-    "@testing-library/user-event": "^14.4.3"
+    "react-redux": "^7.2.9",
+    "redux-saga-tester": "^1.0.874"
   },
   "dependencies": {
     "@looker/components": "^4.1.3",
     "@looker/embed-services": "*",
+    "@looker/i18n": "^1.0.0",
     "@looker/redux": "^0.0.1",
     "@looker/sdk": "*",
     "@looker/sdk-rtl": "*",
@@ -52,6 +53,7 @@
     "@styled-icons/material-outlined": "^10.47.0",
     "react": "16.14.0",
     "react-dom": "16.14.0",
+    "react-i18next": "11.8.15",
     "styled-components": "^5.3.1",
     "typed-redux-saga": "^1.5.0"
   },

@@ -40,6 +40,7 @@ import {
 } from '@looker/components'
 import { Link } from '@styled-icons/material-outlined'
 import { EmbedUrl } from '@looker/embed-services'
+import { useTranslation } from '../utils'
 import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme'
 
 interface QuickEmbedProps {
@@ -47,6 +48,7 @@ interface QuickEmbedProps {
 }
 
 export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
+  const { t } = useTranslation('QuickEmbed')
   const service = new EmbedUrl()
   const [toggleValue, setToggle] = useState(false)
   const [embedUrl, setEmbedUrl] = useState<string>(service.embedUrl(false))
@@ -77,14 +79,16 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
   return (
     <Section padding="large">
       <Heading as="h3" fontWeight="medium">
-        Get embed URL
+        {t('Get embed URL')}
       </Heading>
 
       <SpaceVertical pt="medium" pb="medium" gap="xsmall">
         {service.isThemable && (
           <>
             <Span fontWeight="normal" fontSize="xsmall">
-              Apply theme to {service.contentType.toLocaleLowerCase()} URL
+              {t(`Apply theme to contentType URL`, {
+                contentType: service.contentType.toLocaleLowerCase(),
+              })}
             </Span>
             <SelectTheme />
           </>
@@ -104,14 +108,14 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
 
       <Space gap="xxsmall" fontWeight="normal" fontSize="small">
         <ToggleSwitch onChange={handleToggle} on={toggleValue} />
-        Include current params in URL
+        {t('Include current params in URL')}
       </Space>
 
       <Space mt="large" between>
         <CopyToClipboard content={embedUrl}>
-          <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
+          <ButtonOutline iconBefore={<Link />}>{t('Copy Link')}</ButtonOutline>
         </CopyToClipboard>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t('Close')}</Button>
       </Space>
     </Section>
   )
