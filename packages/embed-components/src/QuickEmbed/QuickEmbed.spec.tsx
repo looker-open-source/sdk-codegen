@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { useThemeActions, useThemesStoreState } from '../Theme/state'
@@ -50,6 +50,8 @@ describe('QuickEmbed', () => {
     ...overrides,
   })
   const onClose = jest.fn()
+  const onCopy = jest.fn()
+  document.execCommand = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(window, 'location', 'get').mockReturnValue({
@@ -69,7 +71,7 @@ describe('QuickEmbed', () => {
   })
 
   it('renders', () => {
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
       screen.getByRole('heading', { name: 'Get embed URL' })
@@ -103,7 +105,7 @@ describe('QuickEmbed', () => {
       href: 'https://example.com/looks/42',
       pathname: '/looks/42',
     } as Location)
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
       screen.getByRole('heading', { name: 'Get embed URL' })
@@ -124,7 +126,7 @@ describe('QuickEmbed', () => {
     ;(useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({ selectedTheme: customTheme1 })
     )
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
       screen.getByRole('heading', { name: 'Get embed URL' })
@@ -152,5 +154,25 @@ describe('QuickEmbed', () => {
         'https://example.com/embed/dashboards/42?foo=bar&theme=custom_theme_1'
       )
     })
+  })
+
+  it('close button function triggers on click', () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
+    const closeBtn = screen.getByRole('button', { name: 'Close' })
+
+    expect(closeBtn).toBeInTheDocument()
+    fireEvent.click(closeBtn)
+
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('copy button function triggers on click', () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
+    const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
+
+    expect(copyBtn).toBeInTheDocument()
+    fireEvent.click(copyBtn)
+
+    expect(onCopy).toHaveBeenCalled()
   })
 })

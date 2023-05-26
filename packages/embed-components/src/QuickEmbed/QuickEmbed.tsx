@@ -44,9 +44,10 @@ import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme'
 
 interface QuickEmbedProps {
   onClose: () => void
+  onCopy: () => void
 }
 
-export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
+export const QuickEmbed = ({ onClose, onCopy }: QuickEmbedProps) => {
   const service = new EmbedUrl()
   const [toggleValue, setToggle] = useState(false)
   const [embedUrl, setEmbedUrl] = useState<string>(service.embedUrl(false))
@@ -108,9 +109,11 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
       </Space>
 
       <Space mt="large" between>
-        <CopyToClipboard content={embedUrl}>
-          <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
-        </CopyToClipboard>
+        <Space onClick={onCopy} width="fit-content">
+          <CopyToClipboard content={embedUrl}>
+            <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
+          </CopyToClipboard>
+        </Space>
         <Button onClick={onClose}>Close</Button>
       </Space>
     </Section>
