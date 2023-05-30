@@ -166,6 +166,16 @@ describe('QuickEmbed', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
+  it('onCopy not called when not passed in', () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
+
+    expect(copyBtn).toBeInTheDocument()
+    fireEvent.click(copyBtn)
+
+    expect(onCopy).not.toHaveBeenCalled()
+  })
+
   it('copy button function triggers on click', () => {
     renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
     const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
