@@ -23,7 +23,5 @@
  SOFTWARE.
 
  */
-export * from './GlobalStore'
-export * from './Theme'
-export * from './QuickEmbed'
-export * from './locales'
+export * from './resources/en'
+export * from './resources/it-IT'

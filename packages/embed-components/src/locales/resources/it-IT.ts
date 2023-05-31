@@ -23,7 +23,17 @@
  SOFTWARE.
 
  */
-export * from './GlobalStore'
-export * from './Theme'
-export * from './QuickEmbed'
-export * from './locales'
+import { mergeLocaleObjects } from '@looker/i18n'
+import { itIT as componentsLocale } from '@looker/components'
+
+const resources = {
+  QuickEmbed: {
+    'Get embed URL': "Ottieni l'embed URL",
+    'Apply theme to contentType URL': 'Applica il tema a {{contentType}} URL',
+    'Include current params in URL': "Includi i parametri correnti nell'URL",
+    'Copy Link': 'Copia Link',
+    Close: 'Chiudi',
+  },
+}
+
+export const itIT = mergeLocaleObjects([componentsLocale], 'it-IT', resources)
