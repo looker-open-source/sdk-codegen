@@ -33,7 +33,7 @@ export interface IErrorDocItem {
 }
 
 /** Location of the public CDN for Looker API Error codes */
-export const ErrorCodesUrl = 'https://marketplace-api.looker.com/errorcodes/'
+export const ErrorCodesUrl = 'https://static-a.cdn.looker.app/errorcodes/'
 
 /** Structure of the error code document index */
 export type ErrorCodeIndex = Record<string, IErrorDocItem>
