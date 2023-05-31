@@ -43,10 +43,12 @@ import { EmbedUrl } from '@looker/embed-services'
 import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme'
 
 interface QuickEmbedProps {
-  // A function triggered when close button is clicked.
+  /** A function triggered when close button is clicked. */
   onClose: () => void
-  /** An optional callback triggered when the copy button is clicked.
-   * The copy to clipboard action is already handled */
+  /**
+   * An optional callback triggered when the copy button is clicked.
+   * The copy to clipboard action is already handled
+   */
   onCopy?: () => void
 }
 
