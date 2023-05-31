@@ -43,15 +43,27 @@ import { EmbedUrl } from '@looker/embed-services'
 import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme'
 
 interface QuickEmbedProps {
+  /** A function triggered when close button is clicked. */
   onClose: () => void
+  /**
+   * An optional callback triggered when the copy button is clicked.
+   * The copy to clipboard action is already handled
+   */
+  onCopy?: () => void
 }
 
-export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
+export const QuickEmbed = ({ onClose, onCopy }: QuickEmbedProps) => {
   const service = new EmbedUrl()
   const [toggleValue, setToggle] = useState(false)
   const [embedUrl, setEmbedUrl] = useState<string>(service.embedUrl(false))
   const { selectedTheme } = useThemesStoreState()
   const { selectThemeAction } = useThemeActions()
+
+  const handleCopy = () => {
+    if (onCopy) {
+      onCopy()
+    }
+  }
 
   const handleToggle = () => {
     const newToggleValue = !toggleValue
@@ -108,9 +120,11 @@ export const QuickEmbed = ({ onClose }: QuickEmbedProps) => {
       </Space>
 
       <Space mt="large" between>
-        <CopyToClipboard content={embedUrl}>
-          <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
-        </CopyToClipboard>
+        <Space onClick={handleCopy} width="fit-content">
+          <CopyToClipboard content={embedUrl}>
+            <ButtonOutline iconBefore={<Link />}>Copy Link</ButtonOutline>
+          </CopyToClipboard>
+        </Space>
         <Button onClick={onClose}>Close</Button>
       </Space>
     </Section>
