@@ -222,10 +222,7 @@ describe('ErrorDoc', () => {
       ['login_2_404.md', 'login_2'],
       ['and_another_404.md', 'and_another'],
       ['errorcodes/live/login_404.md', 'login'],
-      [
-        'https://marketplace-api.looker.com/errorcodes/live/login_404.md',
-        'login',
-      ],
+      ['https://static-a.cdn.looker.app/errorcodes/live/login_404.md', 'login'],
     ])('url:"%s" should be "%s"', (url, expected) => {
       expect(errDoc.methodName(url)).toEqual(expected)
     })
