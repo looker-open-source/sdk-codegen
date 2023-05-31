@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderWithTheme } from '@looker/components-test-utils'
 import { useThemeActions, useThemesStoreState } from '../Theme/state'
@@ -156,32 +156,32 @@ describe('QuickEmbed', () => {
     })
   })
 
-  it('close button function triggers on click', () => {
+  it('close button function triggers on click', async () => {
     renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
     const closeBtn = screen.getByRole('button', { name: 'Close' })
 
     expect(closeBtn).toBeInTheDocument()
-    fireEvent.click(closeBtn)
+    await userEvent.click(closeBtn)
 
     expect(onClose).toHaveBeenCalled()
   })
 
-  it('onCopy not called when not passed in', () => {
+  it('onCopy not called when not passed in', async () => {
     renderWithTheme(<QuickEmbed onClose={onClose} />)
     const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
 
     expect(copyBtn).toBeInTheDocument()
-    fireEvent.click(copyBtn)
+    await userEvent.click(copyBtn)
 
     expect(onCopy).not.toHaveBeenCalled()
   })
 
-  it('copy button function triggers on click', () => {
+  it('copy button function triggers on click', async () => {
     renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
     const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
 
     expect(copyBtn).toBeInTheDocument()
-    fireEvent.click(copyBtn)
+    await userEvent.click(copyBtn)
 
     expect(onCopy).toHaveBeenCalled()
   })
