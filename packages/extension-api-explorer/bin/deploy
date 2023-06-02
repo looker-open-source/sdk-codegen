@@ -28,6 +28,7 @@ rm -rf dist/
 echo "Creating extension-api-explorer production bundle"
 yarn bundle
 BUNDLE=$(pwd)"/dist/bundle.js"
+MANIFEST=$(pwd)"/manifest.lkml"
 
 cd "${ROOT}"/..
 if [ -d "extension-api-explorer" ]
@@ -42,7 +43,8 @@ fi
 echo "Copying extension bundle into repo"
 git checkout main || { echo "Error checking out branch"; exit 1; }
 cp "${BUNDLE}" .
+cp "${MANIFEST}" .
 echo "Pushing changes to remote"
-git add bundle.js && git commit -m "${commit_msg}" && git push || { exit 1; }
+git add bundle.js manifest.lkml && git commit -m "${commit_msg}" && git push || { exit 1; }
 echo "The extension's bundle commit hash is:"
 git rev-parse HEAD
