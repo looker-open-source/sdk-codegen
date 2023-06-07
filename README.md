@@ -6,6 +6,10 @@ While Looker has developed and tested this code internally, we cannot guarantee 
 
 **Important** - If you are using the Looker TypeScript SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
 
+### Support
+The TypeScript and Python SDKs are officially supported by Looker/Google. Issues can be logged here in the GitHub Issues page, but can also be logged with Looker Support. The other language SDKs are community supported. Issues for these should be logged only in the GitHub Issues page. Details of Looker API and SDK support can be found at [https://cloud.google.com/looker/docs/api-sdk-support-policy](https://cloud.google.com/looker/docs/api-sdk-support-policy).
+
+
 ## Overview
 
 This repository contains:
