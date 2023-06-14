@@ -615,6 +615,8 @@ namespace Looker.SDK.API40
   ///
   /// The value of the `secret` field will be set by Looker and returned.
   ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed_config/secrets -> EmbedSecret
   ///
   /// <returns><c>EmbedSecret</c> embed secret (application/json)</returns>
@@ -627,6 +629,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Delete an embed secret.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /embed_config/secrets/{embed_secret_id} -> string
   ///
@@ -676,6 +680,9 @@ namespace Looker.SDK.API40
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
   ///
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
   /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
@@ -709,9 +716,12 @@ namespace Looker.SDK.API40
   /// copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
   ///
   /// #### Security Note
-  /// Protect this embed URL as you would an access token or password credentials - do not write
+  /// Protect this signed URL as you would an access token or password credentials - do not write
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
+  ///
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// POST /embed/token_url/me -> EmbedUrlResponse
   ///
@@ -755,6 +765,8 @@ namespace Looker.SDK.API40
   /// - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
   ///   the iframe.
   ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
   ///
   /// <returns><c>EmbedCookielessSessionAcquireResponse</c> Embed cookieless acquire session response (application/json)</returns>
@@ -771,6 +783,8 @@ namespace Looker.SDK.API40
   /// This will delete the session associated with the given session reference token. Calling this endpoint will result
   /// in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
   /// user out of the Looker instance.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /embed/cookieless_session/{session_reference_token} -> string
   ///
@@ -792,6 +806,8 @@ namespace Looker.SDK.API40
   /// - Navigation token.
   /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
   /// first time when the tokens returned by the acquire_session endpoint should be used).
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
   ///
@@ -2464,6 +2480,7 @@ namespace Looker.SDK.API40
   ///  - host_url
   ///  - email_domain_allowlist
   ///  - embed_cookieless_v2
+  ///  - embed_enabled
   ///
   /// GET /setting -> Setting
   ///
@@ -2494,8 +2511,11 @@ namespace Looker.SDK.API40
   ///  - host_url
   ///  - email_domain_allowlist
   ///  - embed_cookieless_v2
+  ///  - embed_enabled
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
+  ///
+  /// If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
   ///
   /// PATCH /setting -> Setting
   ///
@@ -3558,6 +3578,7 @@ namespace Looker.SDK.API40
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="not_owned_by">Filter out the dashboards owned by the user passed at the :user_id params</param>
   public async Task<SdkResponse<Dashboard[], Exception>> search_dashboards(
     string? id = null,
     string? slug = null,
@@ -3578,6 +3599,7 @@ namespace Looker.SDK.API40
     long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
+    bool? not_owned_by = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, "/dashboards/search", new Values {
@@ -3599,7 +3621,8 @@ namespace Looker.SDK.API40
       { "limit", limit },
       { "offset", offset },
       { "sorts", sorts },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "not_owned_by", not_owned_by }},null,options);
   }
 
   /// ### Import a LookML dashboard to a space as a UDD
@@ -7416,7 +7439,7 @@ namespace Looker.SDK.API40
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
@@ -9734,7 +9757,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
   ///
@@ -9757,7 +9780,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
   ///
@@ -9777,7 +9800,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
   ///
@@ -10105,6 +10128,8 @@ namespace Looker.SDK.API40
   }
 
   /// Create an embed user from an external user ID
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// POST /users/embed_user -> UserPublic
   ///
