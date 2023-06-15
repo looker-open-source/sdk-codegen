@@ -794,6 +794,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * The value of the `secret` field will be set by Looker and returned.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed_config/secrets -> IEmbedSecret
    *
    * @param body Partial<IWriteEmbedSecret>
@@ -807,6 +809,8 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### Delete an embed secret.
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * DELETE /embed_config/secrets/{embed_secret_id} -> string
    *
@@ -855,6 +859,9 @@ export interface ILooker40SDK extends IAPIMethods {
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
    *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/sso_url -> IEmbedUrlResponse
    *
    * @param body Partial<IEmbedSsoParams>
@@ -889,9 +896,12 @@ export interface ILooker40SDK extends IAPIMethods {
    * copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
    *
    * #### Security Note
-   * Protect this embed URL as you would an access token or password credentials - do not write
+   * Protect this signed URL as you would an access token or password credentials - do not write
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
+   *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * POST /embed/token_url/me -> IEmbedUrlResponse
    *
@@ -936,6 +946,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
    *   the iframe.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
    *
    * @param body Partial<IEmbedCookielessSessionAcquire>
@@ -959,6 +971,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
    * user out of the Looker instance.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * DELETE /embed/cookieless_session/{session_reference_token} -> string
    *
    * @param session_reference_token Embed session reference token
@@ -978,6 +992,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * - Navigation token.
    * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
    * first time when the tokens returned by the acquire_session endpoint should be used).
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
    *
@@ -2555,6 +2571,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
+   *  - embed_enabled
    *
    * GET /setting -> ISetting
    *
@@ -2584,8 +2601,11 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
+   *  - embed_enabled
    *
    * See the `Setting` type for more information on the specific values that can be configured.
+   *
+   * If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
    *
    * PATCH /setting -> ISetting
    *
@@ -6559,7 +6579,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * **NOTE**: Binary content may be returned by this function.
    *
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *
@@ -8476,7 +8496,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
    *
@@ -8496,7 +8516,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
@@ -8514,7 +8534,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
@@ -8796,6 +8816,8 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * Create an embed user from an external user ID
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * POST /users/embed_user -> IUserPublic
    *

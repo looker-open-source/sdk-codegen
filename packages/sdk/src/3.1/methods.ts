@@ -405,6 +405,9 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
    *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/sso_url -> IEmbedUrlResponse
    *
    * @param body Partial<IEmbedSsoParams>
@@ -6844,7 +6847,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
    * **NOTE**: Binary content may be returned by this function.
    *
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *
@@ -9686,7 +9689,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
    *
@@ -9713,7 +9716,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
@@ -9738,7 +9741,7 @@ export class Looker31SDK extends APIMethods implements ILooker31SDK {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *

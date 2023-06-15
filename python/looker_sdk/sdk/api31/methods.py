@@ -185,6 +185,9 @@ class Looker31SDK(api_methods.APIMethods):
     # it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
     # encrypted transport.
     #
+    #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    #
     # POST /embed/sso_url -> mdls.EmbedUrlResponse
     def create_sso_embed_url(
         self,
@@ -6696,7 +6699,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # slug of query
         slug: str,
-        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
         result_format: str,
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,
@@ -9610,7 +9613,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> mdls.CredentialsEmbed
     def user_credentials_embed(
@@ -9637,7 +9640,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> str
     def delete_user_credentials_embed(
@@ -9661,7 +9664,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(

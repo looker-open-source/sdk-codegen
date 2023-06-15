@@ -3846,7 +3846,7 @@ public struct CreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
      */
     public var result_format: ResultFormat
 
@@ -17515,7 +17515,7 @@ public struct RepositoryCredential: SDKModel {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 public enum ResultFormat: String, Codable {
     case inline_json = "inline_json"
@@ -17528,6 +17528,7 @@ public enum ResultFormat: String, Codable {
     case txt = "txt"
     case xlsx = "xlsx"
     case gsxml = "gsxml"
+    case sql = "sql"
 }
 
 public struct ResultMakerFilterables: SDKModel {
@@ -19714,6 +19715,7 @@ public struct Setting: SDKModel {
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
+        case embed_enabled
     }
     /**
      * Toggle extension framework on or off
@@ -19791,7 +19793,12 @@ public struct Setting: SDKModel {
      */
     public var embed_cookieless_v2: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
+    /**
+     * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+     */
+    public var embed_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19806,6 +19813,7 @@ public struct Setting: SDKModel {
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_enabled = embed_enabled
     }
 
 }
@@ -20740,6 +20748,24 @@ public struct ThemeSettings: SDKModel {
         case center_dashboard_title
         case _dashboard_title_font_size = "dashboard_title_font_size"
         case _box_shadow = "box_shadow"
+        case _page_margin_top = "page_margin_top"
+        case _page_margin_bottom = "page_margin_bottom"
+        case _page_margin_sides = "page_margin_sides"
+        case show_explore_header
+        case show_explore_title
+        case show_explore_last_run
+        case show_explore_timezone
+        case show_explore_run_stop_button
+        case show_explore_actions_button
+        case show_look_header
+        case show_look_title
+        case show_look_last_run
+        case show_look_timezone
+        case show_look_run_stop_button
+        case show_look_actions_button
+        case _tile_title_font_size = "tile_title_font_size"
+        case _column_gap_size = "column_gap_size"
+        case _row_gap_size = "row_gap_size"
     }
     private var _background_color: AnyString?
     /**
@@ -20939,7 +20965,121 @@ public struct ThemeSettings: SDKModel {
         set { _box_shadow = newValue.map(AnyString.init) }
     }
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil) {
+    private var _page_margin_top: AnyString?
+    /**
+     * Dashboard page margin top.
+     */
+    public var page_margin_top: String? {
+        get { _page_margin_top?.value }
+        set { _page_margin_top = newValue.map(AnyString.init) }
+    }
+
+    private var _page_margin_bottom: AnyString?
+    /**
+     * Dashboard page margin bottom.
+     */
+    public var page_margin_bottom: String? {
+        get { _page_margin_bottom?.value }
+        set { _page_margin_bottom = newValue.map(AnyString.init) }
+    }
+
+    private var _page_margin_sides: AnyString?
+    /**
+     * Dashboard page margin left and right.
+     */
+    public var page_margin_sides: String? {
+        get { _page_margin_sides?.value }
+        set { _page_margin_sides = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle to show the explore page header. Defaults to true.
+     */
+    public var show_explore_header: Bool?
+
+    /**
+     * Toggle to show the explore page title. Defaults to true.
+     */
+    public var show_explore_title: Bool?
+
+    /**
+     * Toggle to show the explore page last run. Defaults to true.
+     */
+    public var show_explore_last_run: Bool?
+
+    /**
+     * Toggle to show the explore page timezone. Defaults to true.
+     */
+    public var show_explore_timezone: Bool?
+
+    /**
+     * Toggle to show the explore page run button. Defaults to true.
+     */
+    public var show_explore_run_stop_button: Bool?
+
+    /**
+     * Toggle to show the explore page actions button. Defaults to true.
+     */
+    public var show_explore_actions_button: Bool?
+
+    /**
+     * Toggle to show the look page header. Defaults to true.
+     */
+    public var show_look_header: Bool?
+
+    /**
+     * Toggle to show the look page title. Defaults to true.
+     */
+    public var show_look_title: Bool?
+
+    /**
+     * Toggle to show the look page last run. Defaults to true.
+     */
+    public var show_look_last_run: Bool?
+
+    /**
+     * Toggle to show the look page timezone Defaults to true.
+     */
+    public var show_look_timezone: Bool?
+
+    /**
+     * Toggle to show the look page run button. Defaults to true.
+     */
+    public var show_look_run_stop_button: Bool?
+
+    /**
+     * Toggle to show the look page actions button. Defaults to true.
+     */
+    public var show_look_actions_button: Bool?
+
+    private var _tile_title_font_size: AnyString?
+    /**
+     * Font size for tiles.
+     */
+    public var tile_title_font_size: String? {
+        get { _tile_title_font_size?.value }
+        set { _tile_title_font_size = newValue.map(AnyString.init) }
+    }
+
+    private var _column_gap_size: AnyString?
+    /**
+     * The vertical gap/gutter size between tiles.
+     */
+    public var column_gap_size: String? {
+        get { _column_gap_size?.value }
+        set { _column_gap_size = newValue.map(AnyString.init) }
+    }
+
+    private var _row_gap_size: AnyString?
+    /**
+     * The horizontal gap/gutter size between tiles.
+     */
+    public var row_gap_size: String? {
+        get { _row_gap_size?.value }
+        set { _row_gap_size = newValue.map(AnyString.init) }
+    }
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil, page_margin_top: String? = nil, page_margin_bottom: String? = nil, page_margin_sides: String? = nil, show_explore_header: Bool? = nil, show_explore_title: Bool? = nil, show_explore_last_run: Bool? = nil, show_explore_timezone: Bool? = nil, show_explore_run_stop_button: Bool? = nil, show_explore_actions_button: Bool? = nil, show_look_header: Bool? = nil, show_look_title: Bool? = nil, show_look_last_run: Bool? = nil, show_look_timezone: Bool? = nil, show_look_run_stop_button: Bool? = nil, show_look_actions_button: Bool? = nil, tile_title_font_size: String? = nil, column_gap_size: String? = nil, row_gap_size: String? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -20966,6 +21106,24 @@ public struct ThemeSettings: SDKModel {
         self.center_dashboard_title = center_dashboard_title
         self._dashboard_title_font_size = dashboard_title_font_size.map(AnyString.init)
         self._box_shadow = box_shadow.map(AnyString.init)
+        self._page_margin_top = page_margin_top.map(AnyString.init)
+        self._page_margin_bottom = page_margin_bottom.map(AnyString.init)
+        self._page_margin_sides = page_margin_sides.map(AnyString.init)
+        self.show_explore_header = show_explore_header
+        self.show_explore_title = show_explore_title
+        self.show_explore_last_run = show_explore_last_run
+        self.show_explore_timezone = show_explore_timezone
+        self.show_explore_run_stop_button = show_explore_run_stop_button
+        self.show_explore_actions_button = show_explore_actions_button
+        self.show_look_header = show_look_header
+        self.show_look_title = show_look_title
+        self.show_look_last_run = show_look_last_run
+        self.show_look_timezone = show_look_timezone
+        self.show_look_run_stop_button = show_look_run_stop_button
+        self.show_look_actions_button = show_look_actions_button
+        self._tile_title_font_size = tile_title_font_size.map(AnyString.init)
+        self._column_gap_size = column_gap_size.map(AnyString.init)
+        self._row_gap_size = row_gap_size.map(AnyString.init)
     }
 
 }
@@ -23142,7 +23300,7 @@ public struct WriteCreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
      */
     public var result_format: ResultFormat
 
@@ -27141,7 +27299,8 @@ public struct WriteSessionConfig: SDKModel {
 }
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  */
 public struct WriteSetting: SDKModel {
 

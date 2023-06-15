@@ -620,6 +620,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The value of the `secret` field will be set by Looker and returned.
      *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * @param {WriteEmbedSecret} body
      *
      * POST /embed_config/secrets -> ByteArray
@@ -633,6 +635,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * ### Delete an embed secret.
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {String} embed_secret_id Id of Embed Secret
      *
@@ -682,6 +686,9 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
      *
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * @param {EmbedSsoParams} body
      *
      * POST /embed/sso_url -> ByteArray
@@ -716,9 +723,12 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
      *
      * #### Security Note
-     * Protect this embed URL as you would an access token or password credentials - do not write
+     * Protect this signed URL as you would an access token or password credentials - do not write
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
+     *
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {EmbedParams} body
      *
@@ -763,6 +773,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
      *   the iframe.
      *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * @param {EmbedCookielessSessionAcquire} body
      *
      * POST /embed/cookieless_session/acquire -> ByteArray
@@ -780,6 +792,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * This will delete the session associated with the given session reference token. Calling this endpoint will result
      * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
      * user out of the Looker instance.
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {String} session_reference_token Embed session reference token
      *
@@ -801,6 +815,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * - Navigation token.
      * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
      * first time when the tokens returned by the acquire_session endpoint should be used).
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {EmbedCookielessSessionGenerateTokens} body
      *
@@ -2504,6 +2520,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
+     *  - embed_enabled
      *
      * @param {String} fields Requested fields
      *
@@ -2534,8 +2551,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
+     *  - embed_enabled
      *
      * See the `Setting` type for more information on the specific values that can be configured.
+     *
+     * If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
      *
      * @param {WriteSetting} body
      * @param {String} fields Requested fields
@@ -3608,6 +3628,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Long} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
      * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
+     * @param {Boolean} not_owned_by Filter out the dashboards owned by the user passed at the :user_id params
      *
      * GET /dashboards/search -> ByteArray
      */
@@ -3630,7 +3651,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         limit: Long? = null,
         offset: Long? = null,
         sorts: String? = null,
-        filter_or: Boolean? = null
+        filter_or: Boolean? = null,
+        not_owned_by: Boolean? = null
     ) : SDKResponse {
             return this.get<ByteArray>("/dashboards/search", 
                 mapOf("id" to id,
@@ -3651,7 +3673,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                      "limit" to limit,
                      "offset" to offset,
                      "sorts" to sorts,
-                     "filter_or" to filter_or))
+                     "filter_or" to filter_or,
+                     "not_owned_by" to not_owned_by))
     }
 
 
@@ -7455,7 +7478,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Execute a SQL Runner query in a given result_format.
      *
      * @param {String} slug slug of query
-     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> ByteArray
@@ -9794,7 +9817,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {String} user_id Id of user
      * @param {String} credentials_embed_id Id of Embedding Credential
@@ -9817,7 +9840,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {String} user_id Id of user
      * @param {String} credentials_embed_id Id of Embedding Credential
@@ -9837,7 +9860,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {String} user_id Id of user
      * @param {String} fields Requested fields.
@@ -10168,6 +10191,8 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     /**
      * Create an embed user from an external user ID
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {CreateEmbedUserRequest} body
      *
