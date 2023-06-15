@@ -23,11 +23,18 @@
  SOFTWARE.
 
  */
+import type { Dispatch } from 'react'
 import { createSliceHooks } from '@looker/redux'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { MessageBarIntent, ValidationMessages } from '@looker/components'
+import type {
+  MessageBarIntent,
+  ValidationMessageProps,
+  ValidationMessages,
+} from '@looker/components'
+import omit from 'lodash/omit'
 import type { ConfigValues } from '../utils'
+import { saga } from './sagas'
 
 export const SLICE_NAME = 'OAuthForm'
 export interface MessageBarData {
@@ -56,59 +63,117 @@ export const defaultOAuthFormState: OAuthFormState = {
   savedConfig: { base_url: '', looker_url: '' },
 }
 
-interface HandleUrlChangePayload {
-  apiServerUrl: string
-  webUrl: string
-  validationMessages: ValidationMessages
+export interface ClearFormActionPayload {
+  configKey: string
+  setHasConfig?: Dispatch<boolean>
+  isAuthenticated: boolean
 }
 
-interface ConfigPayload {
-  base_url: string
-  looker_url: string
+export interface HandleUrlChangePayload {
+  name: string
+  value: string
+}
+
+interface UpdateValidationMessagesPayload {
+  elementName: string
+  newMessage: ValidationMessageProps | null
+}
+
+export interface SaveConfigPayload {
+  configKey: string
+  setHasConfig?: Dispatch<boolean>
   client_id: string
   redirect_uri: string
+}
+
+export interface SaveConfigSuccessPaylaod {
+  base_url: string
+  looker_url: string
 }
 
 export const OAuthFormSlice = createSlice({
   name: SLICE_NAME,
   initialState: defaultOAuthFormState,
   reducers: {
-    clearFormAction(_state) {
+    initAction(_state, _action: PayloadAction<string>) {
+      // noop
+    },
+    initFormSuccessAction(state, action: PayloadAction<ConfigValues>) {
+      state.apiServerUrl = action.payload.base_url
+      state.webUrl = action.payload.looker_url
+    },
+    handleUrlChangeAction(
+      _state,
+      _action: PayloadAction<HandleUrlChangePayload>
+    ) {
+      // noop
+    },
+    hanldeUrlChangeSuccess(state, action) {
+      state.apiServerUrl = action.payload
+      state.webUrl = ''
+    },
+    updateValidationMessagesAction(
+      state,
+      action: PayloadAction<UpdateValidationMessagesPayload>
+    ) {
+      let newValidationMessages = state.validationMessages
+
+      if (action.payload.newMessage !== null) {
+        newValidationMessages[action.payload.elementName] =
+          action.payload.newMessage
+      } else {
+        newValidationMessages = omit(
+          newValidationMessages,
+          action.payload.elementName
+        )
+      }
+      state.validationMessages = newValidationMessages
+    },
+    clearFormAction(_state, _action: PayloadAction<ClearFormActionPayload>) {
+      // noop
+    },
+    clearFormActionSuccess() {
       return { ...defaultOAuthFormState }
     },
-    saveNewConfigAction(state, action: PayloadAction<ConfigPayload>) {
+    handleVerifyAction(state) {
+      state.fetchedUrl = `${state.apiServerUrl}/versions`
+    },
+    handleVerifyActionSuccess(state, action: PayloadAction<string>) {
+      state.messageBar = {
+        intent: 'positive',
+        text: `Configuration is valid`,
+      }
+      state.webUrl = action.payload
+    },
+    handleVerifyActionFailure(state, action: PayloadAction<string>) {
+      state.messageBar = { intent: 'critical', text: action.payload }
+      state.webUrl = ''
+    },
+    handleSaveConfigAction(_state, _action: PayloadAction<SaveConfigPayload>) {
+      // noop
+    },
+    handleSaveConfigSuccess(
+      state,
+      action: PayloadAction<SaveConfigSuccessPaylaod>
+    ) {
+      const { base_url, looker_url } = action.payload
       state.savedConfig = {
-        base_url: action.payload.base_url,
-        looker_url: action.payload.looker_url,
+        base_url,
+        looker_url,
       }
       state.messageBar = {
         intent: 'positive',
-        text: `Saved ${action.payload.looker_url} as OAuth server`,
+        text: `Saved ${looker_url} as OAuth server`,
       }
     },
-    setApiServerUrlAction(state, action: PayloadAction<string>) {
-      state.apiServerUrl = action.payload
-    },
-    setFetchedUrlAction(state, action: PayloadAction<string>) {
-      state.fetchedUrl = action.payload
-    },
-    setWebUrlAction(state, action: PayloadAction<string>) {
-      state.webUrl = action.payload
-    },
-    updateApiServerUrlAction(
-      state,
-      action: PayloadAction<HandleUrlChangePayload>
-    ) {
-      state.apiServerUrl = action.payload.apiServerUrl
-      state.webUrl = action.payload.webUrl
-      state.validationMessages = action.payload.validationMessages
+    clearMessageBarAction(state) {
+      state.messageBar.text = ''
     },
     updateMessageBarAction(state, action: PayloadAction<MessageBarData>) {
       state.messageBar = action.payload
     },
-    verifyErrorAction(state, action: PayloadAction<string>) {
+    setFailureAction(state, action: PayloadAction<string>) {
       state.messageBar = { intent: 'critical', text: action.payload }
-      state.webUrl = ''
     },
   },
 })
@@ -117,4 +182,4 @@ export const oAuthFormActions = OAuthFormSlice.actions
 export const {
   useActions: useOAuthFormActions,
   useStoreState: useOAuthFormState,
-} = createSliceHooks(OAuthFormSlice)
+} = createSliceHooks(OAuthFormSlice, saga)
