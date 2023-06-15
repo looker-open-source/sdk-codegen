@@ -178,7 +178,7 @@ export const OAuthFormSlice = createSlice({
   },
 })
 
-export const oAuthFormActions = OAuthFormSlice.actions
+export const OAuthFormActions = OAuthFormSlice.actions
 export const {
   useActions: useOAuthFormActions,
   useStoreState: useOAuthFormState,

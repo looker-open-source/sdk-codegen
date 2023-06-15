@@ -33,7 +33,7 @@ import type {
   OAuthFormState,
   SaveConfigPayload,
 } from './slice'
-import { oAuthFormActions } from './slice'
+import { OAuthFormActions } from './slice'
 
 /**
  * get saved configData from localStorage key
@@ -53,7 +53,7 @@ const getLocalStorageConfig = (configKey: string) => {
  * checks for saved configData in localStorage
  */
 function* initSaga(action: PayloadAction<string>) {
-  const { initFormSuccessAction, setFailureAction } = oAuthFormActions
+  const { initFormSuccessAction, setFailureAction } = OAuthFormActions
   try {
     const result = yield* call(getLocalStorageConfig, action.payload)
     yield* put(initFormSuccessAction(result))
@@ -67,7 +67,7 @@ function* initSaga(action: PayloadAction<string>) {
  */
 function* handleUrlChangeSaga(action: PayloadAction<HandleUrlChangePayload>) {
   const { updateValidationMessagesAction, hanldeUrlChangeSuccess } =
-    oAuthFormActions
+    OAuthFormActions
   try {
     const url = validateUrl(action.payload.value)
     if (!url) throw new Error(`${action.payload.value} is not a valid url`)
@@ -98,7 +98,7 @@ function* handleUrlChangeSaga(action: PayloadAction<HandleUrlChangePayload>) {
  */
 function* clearFormSaga(action: PayloadAction<ClearFormActionPayload>) {
   const { clearFormActionSuccess, setFailureAction, updateMessageBarAction } =
-    oAuthFormActions
+    OAuthFormActions
   try {
     const { configKey, setHasConfig, isAuthenticated } = action.payload
     localStorage.removeItem(configKey)
@@ -128,7 +128,7 @@ function* handleVerifySaga() {
     handleVerifyActionFailure,
     handleVerifyActionSuccess,
     clearMessageBarAction,
-  } = oAuthFormActions
+  } = OAuthFormActions
 
   try {
     yield* put(clearMessageBarAction())
@@ -154,7 +154,7 @@ function* handleSaveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
     handleVerifyActionFailure,
     clearMessageBarAction,
     handleSaveConfigSuccess,
-  } = oAuthFormActions
+  } = OAuthFormActions
   const { configKey, setHasConfig, client_id, redirect_uri } = action.payload
 
   try {
@@ -192,7 +192,7 @@ export function* saga() {
     clearFormAction,
     handleVerifyAction,
     handleSaveConfigAction,
-  } = oAuthFormActions
+  } = OAuthFormActions
   yield* takeEvery(initAction, initSaga)
   yield* takeEvery(handleUrlChangeAction, handleUrlChangeSaga)
   yield* takeEvery(clearFormAction, clearFormSaga)
