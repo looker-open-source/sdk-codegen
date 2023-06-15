@@ -27,16 +27,18 @@
   "dependencies": {
     "@looker/code-editor": "^0.1.28",
     "@looker/components": "^4.1.1",
-    "@looker/redux": "^0.0.1",
     "@looker/extension-sdk": "^23.8.1",
     "@looker/extension-sdk-react": "^23.8.1",
+    "@looker/redux": "^0.0.1",
     "@looker/sdk": "^23.8.1",
     "@looker/sdk-rtl": "^21.6.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@styled-icons/material": "^10.47.0",
+    "@types/lodash": "^4.14.195",
     "react": "^16.14.0",
     "react-redux": "^7.2.3",
-    "react-router-dom": "^5.3.4"
+    "react-router-dom": "^5.3.4",
+    "typed-redux-saga": "^1.5.0"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.26",
