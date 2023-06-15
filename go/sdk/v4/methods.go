@@ -491,6 +491,8 @@ func (l *LookerSDK) UpdateArtifacts(
 //
 // The value of the `secret` field will be set by Looker and returned.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // POST /embed_config/secrets -> EmbedSecret
 func (l *LookerSDK) CreateEmbedSecret(
 	body WriteEmbedSecret,
@@ -502,6 +504,8 @@ func (l *LookerSDK) CreateEmbedSecret(
 }
 
 // ### Delete an embed secret.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // DELETE /embed_config/secrets/{embed_secret_id} -> string
 func (l *LookerSDK) DeleteEmbedSecret(
@@ -549,6 +553,8 @@ func (l *LookerSDK) DeleteEmbedSecret(
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // POST /embed/sso_url -> EmbedUrlResponse
 func (l *LookerSDK) CreateSsoEmbedUrl(
 	body EmbedSsoParams,
@@ -581,9 +587,11 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 // copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
 //
 // #### Security Note
-// Protect this embed URL as you would an access token or password credentials - do not write
+// Protect this signed URL as you would an access token or password credentials - do not write
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // POST /embed/token_url/me -> EmbedUrlResponse
 func (l *LookerSDK) CreateEmbedUrlAsMe(
@@ -626,6 +634,8 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 //   - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
 //     the iframe.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
 func (l *LookerSDK) AcquireEmbedCookielessSession(
 	body EmbedCookielessSessionAcquire,
@@ -641,6 +651,8 @@ func (l *LookerSDK) AcquireEmbedCookielessSession(
 // This will delete the session associated with the given session reference token. Calling this endpoint will result
 // in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
 // user out of the Looker instance.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // DELETE /embed/cookieless_session/{session_reference_token} -> string
 func (l *LookerSDK) DeleteEmbedCookielessSession(
@@ -660,6 +672,8 @@ func (l *LookerSDK) DeleteEmbedCookielessSession(
 // - Navigation token.
 // The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
 // first time when the tokens returned by the acquire_session endpoint should be used).
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
 func (l *LookerSDK) GenerateTokensForCookielessSession(
@@ -2078,6 +2092,7 @@ func (l *LookerSDK) MobileSettings(
 //   - host_url
 //   - email_domain_allowlist
 //   - embed_cookieless_v2
+//   - embed_enabled
 //
 // GET /setting -> Setting
 func (l *LookerSDK) GetSetting(
@@ -2105,8 +2120,11 @@ func (l *LookerSDK) GetSetting(
 //   - host_url
 //   - email_domain_allowlist
 //   - embed_cookieless_v2
+//   - embed_enabled
 //
 // See the `Setting` type for more information on the specific values that can be configured.
+//
+// If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
 //
 // PATCH /setting -> Setting
 func (l *LookerSDK) SetSetting(
@@ -2915,7 +2933,7 @@ func (l *LookerSDK) CreateDashboard(
 func (l *LookerSDK) SearchDashboards(request RequestSearchDashboards,
 	options *rtl.ApiSettings) ([]Dashboard, error) {
 	var result []Dashboard
-	err := l.session.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "not_owned_by": request.NotOwnedBy}, nil, options)
 	return result, err
 
 }
@@ -7410,7 +7428,7 @@ func (l *LookerSDK) CreateUserCredentialsApi3(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
 func (l *LookerSDK) UserCredentialsEmbed(
@@ -7428,7 +7446,7 @@ func (l *LookerSDK) UserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsEmbed(
@@ -7445,7 +7463,7 @@ func (l *LookerSDK) DeleteUserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // GET /users/{user_id}/credentials_embed -> []CredentialsEmbed
 func (l *LookerSDK) AllUserCredentialsEmbeds(
@@ -7699,6 +7717,8 @@ func (l *LookerSDK) WipeoutUserEmails(
 }
 
 // Create an embed user from an external user ID
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // POST /users/embed_user -> UserPublic
 func (l *LookerSDK) CreateEmbedUser(

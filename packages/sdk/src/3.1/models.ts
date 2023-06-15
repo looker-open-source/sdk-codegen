@@ -769,7 +769,7 @@ export interface ICreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -7527,7 +7527,7 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -7540,6 +7540,7 @@ export enum ResultFormat {
   txt = 'txt',
   xlsx = 'xlsx',
   gsxml = 'gsxml',
+  sql = 'sql',
 }
 
 export interface IResultMakerFilterables {
@@ -8718,6 +8719,78 @@ export interface IThemeSettings {
    * Default box shadow.
    */
   box_shadow?: string
+  /**
+   * Dashboard page margin top.
+   */
+  page_margin_top?: string
+  /**
+   * Dashboard page margin bottom.
+   */
+  page_margin_bottom?: string
+  /**
+   * Dashboard page margin left and right.
+   */
+  page_margin_sides?: string
+  /**
+   * Toggle to show the explore page header. Defaults to true.
+   */
+  show_explore_header?: boolean
+  /**
+   * Toggle to show the explore page title. Defaults to true.
+   */
+  show_explore_title?: boolean
+  /**
+   * Toggle to show the explore page last run. Defaults to true.
+   */
+  show_explore_last_run?: boolean
+  /**
+   * Toggle to show the explore page timezone. Defaults to true.
+   */
+  show_explore_timezone?: boolean
+  /**
+   * Toggle to show the explore page run button. Defaults to true.
+   */
+  show_explore_run_stop_button?: boolean
+  /**
+   * Toggle to show the explore page actions button. Defaults to true.
+   */
+  show_explore_actions_button?: boolean
+  /**
+   * Toggle to show the look page header. Defaults to true.
+   */
+  show_look_header?: boolean
+  /**
+   * Toggle to show the look page title. Defaults to true.
+   */
+  show_look_title?: boolean
+  /**
+   * Toggle to show the look page last run. Defaults to true.
+   */
+  show_look_last_run?: boolean
+  /**
+   * Toggle to show the look page timezone Defaults to true.
+   */
+  show_look_timezone?: boolean
+  /**
+   * Toggle to show the look page run button. Defaults to true.
+   */
+  show_look_run_stop_button?: boolean
+  /**
+   * Toggle to show the look page actions button. Defaults to true.
+   */
+  show_look_actions_button?: boolean
+  /**
+   * Font size for tiles.
+   */
+  tile_title_font_size?: string
+  /**
+   * The vertical gap/gutter size between tiles.
+   */
+  column_gap_size?: string
+  /**
+   * The horizontal gap/gutter size between tiles.
+   */
+  row_gap_size?: string
 }
 
 export interface ITimezone {
@@ -9420,7 +9493,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
