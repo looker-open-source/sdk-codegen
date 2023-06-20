@@ -86,7 +86,7 @@ export interface SaveConfigPayload {
   redirect_uri: string
 }
 
-export interface SaveConfigSuccessPaylaod {
+export interface SaveConfigSuccessPayload {
   base_url: string
   looker_url: string
 }
@@ -135,17 +135,17 @@ export const OAuthFormSlice = createSlice({
     clearConfigActionSuccess() {
       return { ...defaultOAuthFormState }
     },
-    verifyAction(state) {
+    verifyConfigAction(state) {
       state.fetchedUrl = `${state.apiServerUrl}/versions`
     },
-    verifyActionSuccess(state, action: PayloadAction<string>) {
+    verifyConfigActionSuccess(state, action: PayloadAction<string>) {
       state.messageBar = {
         intent: 'positive',
         text: `Configuration is valid`,
       }
       state.webUrl = action.payload
     },
-    verifyActionFailure(state, action: PayloadAction<string>) {
+    verifyConfigActionFailure(state, action: PayloadAction<string>) {
       state.messageBar = { intent: 'critical', text: action.payload }
       state.webUrl = ''
     },
@@ -154,7 +154,7 @@ export const OAuthFormSlice = createSlice({
     },
     saveConfigActionSuccess(
       state,
-      action: PayloadAction<SaveConfigSuccessPaylaod>
+      action: PayloadAction<SaveConfigSuccessPayload>
     ) {
       const { base_url, looker_url } = action.payload
       state.savedConfig = {

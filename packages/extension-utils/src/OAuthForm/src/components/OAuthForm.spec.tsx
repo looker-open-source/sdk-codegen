@@ -114,7 +114,7 @@ jest.mock('../state/slice', () => ({
     initAction: jest.fn(),
     setUrlAction: jest.fn(),
     clearConfigAction: jest.fn(),
-    verifyAction: jest.fn(),
+    verifyConfigAction: jest.fn(),
     clearMessageBarAction: jest.fn(),
     saveConfigAction: jest.fn(),
   }),
@@ -182,7 +182,7 @@ describe('ConfigForm', () => {
       initAction: jest.fn(),
       setUrlAction: jest.fn(),
       clearConfigAction: jest.fn(),
-      verifyAction: jest.fn(),
+      verifyConfigAction: jest.fn(),
       clearMessageBarAction: jest.fn(),
       saveConfigAction: jest.fn(),
     })
@@ -315,7 +315,7 @@ describe('ConfigForm', () => {
     ;(useOAuthFormState as jest.Mock).mockReturnValue(
       store.getState().OAuthForm
     )
-    const { verifyAction } = useOAuthFormActions()
+    const { verifyConfigAction } = useOAuthFormActions()
 
     renderWithReduxProvider(
       <OAuthForm
@@ -332,7 +332,7 @@ describe('ConfigForm', () => {
     expect(button).toBeInTheDocument()
     expect(button).toBeEnabled()
     fireEvent.click(button)
-    expect(verifyAction).toHaveBeenCalled()
+    expect(verifyConfigAction).toHaveBeenCalled()
   })
 
   test('it shows Oauth help message after verify and enabled save button', async () => {

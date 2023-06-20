@@ -37,6 +37,8 @@ import { OAuthFormSlice, OAuthFormActions } from './slice'
 
 /**
  * get saved configData from localStorage key
+ * @param configKey key that config will be saved under in local storage
+ * @returns
  */
 const getLocalStorageConfig = (configKey: string): ConfigValues => {
   const EmptyConfig = {
@@ -64,6 +66,7 @@ function* initSaga(action: PayloadAction<string>) {
 
 /**
  * updates the new url and adds or removes form validation message
+ * @param action containing name and value of form element changed
  */
 function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
   const { updateValidationMessages, setUrlActionSuccess } = OAuthFormActions
@@ -97,6 +100,7 @@ function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
 
 /**
  * clears form, removes local storage config key and triggers callback function
+ * @param action containing the localstorage key to clear, a callback function, and if the user is already authenticated
  */
 function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
   const { clearConfigActionSuccess, setFailureAction, updateMessageBarAction } =
@@ -120,15 +124,18 @@ function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
 }
 
 /**
- * verify button clicked, verifys apiServerUrl and populates OAuth server URL if valid
+ * verify button clicked, verifies apiServerUrl and populates OAuth server URL if valid
  */
-function* verifySaga() {
+function* verifyConfigSaga() {
   const apiServerUrl = yield* select((storeState) => {
     const formState: OAuthFormState = storeState[OAuthFormSlice.name]
     return formState.apiServerUrl
   })
-  const { verifyActionFailure, verifyActionSuccess, clearMessageBarAction } =
-    OAuthFormActions
+  const {
+    verifyConfigActionFailure,
+    verifyConfigActionSuccess,
+    clearMessageBarAction,
+  } = OAuthFormActions
 
   try {
     yield* put(clearMessageBarAction())
@@ -137,14 +144,15 @@ function* verifySaga() {
     const versions = yield* call(getVersions, versionsUrl)
     if (!versions) throw new Error()
 
-    yield* put(verifyActionSuccess(versions.web_server_url))
+    yield* put(verifyConfigActionSuccess(versions.web_server_url))
   } catch (error: any) {
-    yield* put(verifyActionFailure(error.message))
+    yield* put(verifyConfigActionFailure(error.message))
   }
 }
 
 /**
  * save button clicked, verify api server url and if valid save config data to localstorage
+ * @param action containing configKey, callback function, client_id and redirect_uri
  */
 function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
   const apiServerUrl = yield* select((storeState) => {
@@ -152,7 +160,7 @@ function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
     return formState.apiServerUrl
   })
   const {
-    verifyActionFailure,
+    verifyConfigActionFailure,
     clearMessageBarAction,
     saveConfigActionSuccess,
   } = OAuthFormActions
@@ -181,7 +189,7 @@ function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
       })
     )
   } catch (error: any) {
-    yield* put(verifyActionFailure(error.message))
+    yield* put(verifyConfigActionFailure(error.message))
   }
 }
 
@@ -190,12 +198,12 @@ export function* saga() {
     initAction,
     setUrlAction,
     clearConfigAction,
-    verifyAction,
+    verifyConfigAction,
     saveConfigAction,
   } = OAuthFormActions
   yield* takeEvery(initAction, initSaga)
   yield* takeEvery(setUrlAction, setUrlSaga)
   yield* takeEvery(clearConfigAction, clearConfigSaga)
-  yield* takeEvery(verifyAction, verifySaga)
+  yield* takeEvery(verifyConfigAction, verifyConfigSaga)
   yield* takeEvery(saveConfigAction, saveConfigSaga)
 }

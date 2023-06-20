@@ -83,7 +83,7 @@ export const OAuthForm = ({
     initAction,
     setUrlAction,
     clearConfigAction,
-    verifyAction,
+    verifyConfigAction,
     clearMessageBarAction,
     saveConfigAction,
   } = useOAuthFormActions()
@@ -115,7 +115,7 @@ export const OAuthForm = ({
   }
 
   const handleVerify = () => {
-    verifyAction()
+    verifyConfigAction()
   }
 
   const handleClear = async () => {

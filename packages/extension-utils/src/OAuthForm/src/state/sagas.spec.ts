@@ -94,7 +94,10 @@ describe('OAuth Form Sagas', () => {
   registerTestEnvAdaptor()
   const configKey = 'configKey'
 
-  beforeEach(() => {
+  sagaTester = getReduxSagaTester()
+  sagaTester.start(sagas.saga)
+
+  afterEach(() => {
     jest.resetAllMocks()
     sagaTester = getReduxSagaTester()
     localStorage.clear()
@@ -273,10 +276,10 @@ describe('OAuth Form Sagas', () => {
 
   describe('verify Saga', () => {
     const {
-      verifyAction,
+      verifyConfigAction,
       clearMessageBarAction,
-      verifyActionFailure,
-      verifyActionSuccess,
+      verifyConfigActionFailure,
+      verifyConfigActionSuccess,
     } = OAuthFormActions
 
     test('returns success with valid url', async () => {
@@ -287,15 +290,15 @@ describe('OAuth Form Sagas', () => {
       })
       sagaTester.start(sagas.saga)
 
-      sagaTester.dispatch(verifyAction())
-      await sagaTester.waitFor(`${OAuthFormSlice.name}/verifyAction`)
+      sagaTester.dispatch(verifyConfigAction())
+      await sagaTester.waitFor(`${OAuthFormSlice.name}/verifyConfigAction`)
       const calledActions = sagaTester.getCalledActions()
 
       expect(calledActions).toHaveLength(3)
-      expect(calledActions[0]).toEqual(verifyAction())
+      expect(calledActions[0]).toEqual(verifyConfigAction())
       expect(calledActions[1]).toEqual(clearMessageBarAction())
       expect(calledActions[2]).toEqual(
-        verifyActionSuccess(mockedVersionRes.web_server_url)
+        verifyConfigActionSuccess(mockedVersionRes.web_server_url)
       )
     })
 
@@ -307,14 +310,14 @@ describe('OAuth Form Sagas', () => {
       })
       sagaTester.start(sagas.saga)
 
-      sagaTester.dispatch(verifyAction())
-      await sagaTester.waitFor(`${OAuthFormSlice.name}/verifyAction`)
+      sagaTester.dispatch(verifyConfigAction())
+      await sagaTester.waitFor(`${OAuthFormSlice.name}/verifyConfigAction`)
       const calledActions = sagaTester.getCalledActions()
 
       expect(calledActions).toHaveLength(3)
-      expect(calledActions[0]).toEqual(verifyAction())
+      expect(calledActions[0]).toEqual(verifyConfigAction())
       expect(calledActions[1]).toEqual(clearMessageBarAction())
-      expect(calledActions[2]).toEqual(verifyActionFailure('Boom'))
+      expect(calledActions[2]).toEqual(verifyConfigActionFailure('Boom'))
     })
   })
 
@@ -323,7 +326,7 @@ describe('OAuth Form Sagas', () => {
       saveConfigAction,
       saveConfigActionSuccess,
       clearMessageBarAction,
-      verifyActionFailure,
+      verifyConfigActionFailure,
     } = OAuthFormActions
     const saveConfigPayload: SaveConfigPayload = {
       configKey,
@@ -375,7 +378,7 @@ describe('OAuth Form Sagas', () => {
       expect(calledActions).toHaveLength(3)
       expect(calledActions[0]).toEqual(saveConfigAction(saveConfigPayload))
       expect(calledActions[1]).toEqual(clearMessageBarAction())
-      expect(calledActions[2]).toEqual(verifyActionFailure('Boom'))
+      expect(calledActions[2]).toEqual(verifyConfigActionFailure('Boom'))
     })
   })
 })
