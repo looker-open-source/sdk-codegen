@@ -25,7 +25,6 @@
  */
 import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react'
 import React, { useEffect } from 'react'
-import type { ValidationMessages } from '@looker/components'
 import {
   Button,
   ButtonTransparent,
@@ -42,18 +41,13 @@ import {
   Tooltip,
 } from '@looker/components'
 import { CodeCopy } from '@looker/code-editor'
-import type { ILookerVersions } from '@looker/sdk-codegen'
 import { useLocation } from 'react-router-dom'
 import { appPath, getEnvAdaptor } from '../../..'
-import { getVersions, validateUrl } from '../utils'
 import { useOAuthFormActions, useOAuthFormState } from '../state/slice'
 import { CollapserCard } from './CollapserCard'
 import { ConfigHeading } from './ConfigHeading'
-
 export const readyToLogin =
   'OAuth is configured but your browser session is not authenticated. Click Login.'
-
-const EmptyConfig = { base_url: '', looker_url: '' }
 
 interface ConfigFormProps {
   /** A set state callback which allows for editing, setting or clearing OAuth configuration parameters if present */
@@ -86,14 +80,12 @@ export const OAuthForm = ({
   const sdk = adaptor.sdk
 
   const {
-    setApiServerUrlAction,
-    updateApiServerUrlAction,
-    setFetchedUrlAction,
-    setWebUrlAction,
-    clearFormAction,
-    updateMessageBarAction,
-    verifyErrorAction,
-    saveNewConfigAction,
+    initAction,
+    setUrlAction,
+    clearConfigAction,
+    verifyAction,
+    clearMessageBarAction,
+    saveConfigAction,
   } = useOAuthFormActions()
   const {
     apiServerUrl,
@@ -113,88 +105,31 @@ export const OAuthForm = ({
     )
   }
 
-  const saveConfig = (baseUrl: string, webUrl: string) => {
-    const data = {
-      base_url: baseUrl,
-      looker_url: webUrl,
+  const handleSave = () => {
+    saveConfigAction({
+      configKey,
+      setHasConfig,
       client_id: clientId,
       redirect_uri,
-    }
-    localStorage.setItem(configKey, JSON.stringify(data))
-    saveNewConfigAction(data)
-    if (setHasConfig) setHasConfig(true)
-  }
-
-  const verifyUrl = async (): Promise<ILookerVersions | undefined> => {
-    updateMessageBarAction({ intent: messageBar.intent, text: '' })
-    const versionsUrl = `${apiServerUrl}/versions`
-    try {
-      setFetchedUrlAction(apiServerUrl)
-
-      const versions = await getVersions(versionsUrl)
-
-      if (versions) {
-        updateMessageBarAction({
-          intent: 'positive',
-          text: `Configuration is valid`,
-        })
-        setWebUrlAction(versions.web_server_url)
-      }
-
-      return versions
-    } catch (e: any) {
-      verifyErrorAction(e.message)
-      return undefined
-    }
-  }
-
-  const handleSave = async () => {
-    const versions = await verifyUrl()
-    if (versions) {
-      saveConfig(versions.api_server_url, versions.web_server_url)
-    }
+    })
   }
 
   const handleVerify = () => {
-    verifyUrl()
+    verifyAction()
   }
 
-  const handleClear = async (_e: BaseSyntheticEvent) => {
-    localStorage.removeItem(configKey)
-    clearFormAction()
-
-    if (setHasConfig) setHasConfig(false)
-    if (isAuthenticated()) {
-      updateMessageBarAction({
-        intent: 'warn',
-        text: `Please reload the browser page to log out`,
-      })
-    }
+  const handleClear = async () => {
+    clearConfigAction({
+      configKey,
+      setHasConfig: setHasConfig,
+      isAuthenticated: isAuthenticated(),
+    })
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
-    const name = event.currentTarget.name
-    const value = event.currentTarget.value
-    let newApiServerUrl = value
-
-    const newValidationMessages = { ...validationMessages }
-
-    const url = validateUrl(value)
-    if (url) {
-      delete newValidationMessages[name]
-      // Update URL if it's been cleaned up
-      newApiServerUrl = url
-    } else {
-      newValidationMessages[name] = {
-        message: `'${value}' is not a valid url`,
-        type: 'error',
-      }
-    }
-
-    updateApiServerUrlAction({
-      apiServerUrl: newApiServerUrl,
-      webUrl: '',
-      validationMessages: newValidationMessages as ValidationMessages,
+    setUrlAction({
+      name: event.currentTarget.name,
+      value: event.currentTarget.value,
     })
   }
 
@@ -219,15 +154,8 @@ export const OAuthForm = ({
   }
 
   useEffect(() => {
-    // Get config values from localstorage
-    const data = localStorage.getItem(configKey)
-    const result = data ? JSON.parse(data) : EmptyConfig
-    if (result.base_url && result.looker_url) {
-      const { base_url, looker_url } = result
-      setApiServerUrlAction(base_url)
-      setWebUrlAction(looker_url)
-    }
-  }, [])
+    initAction(configKey)
+  }, [configKey, initAction])
 
   return (
     <SpaceVertical gap="u2">
@@ -238,9 +166,7 @@ export const OAuthForm = ({
       </Span>
       <MessageBar
         intent={messageBar.intent}
-        onPrimaryClick={() =>
-          updateMessageBarAction({ intent: messageBar.intent, text: '' })
-        }
+        onPrimaryClick={clearMessageBarAction}
         visible={messageBar.text !== ''}
       >
         {messageBar.text}
@@ -267,7 +193,7 @@ export const OAuthForm = ({
                 placeholder="Click 'Verify' to retrieve"
                 name="webUrl"
                 value={webUrl}
-                disabled={true}
+                disabled
               />
             </Fieldset>
           </Form>
