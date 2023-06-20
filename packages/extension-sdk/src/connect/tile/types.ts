@@ -25,6 +25,7 @@
  */
 
 import type { MouseEvent } from 'react'
+import type { IQuery } from '@looker/sdk'
 
 /**
  * Callback that is invoked when a change in the host happens
@@ -69,7 +70,7 @@ export interface TileHostData {
    * cross filtering applied to the dashboard. Filters and cross filters
    * will need to be applied and a new query generated in order to reflect
    * the data shown in the QueryResponse. As such the queryId may not be
-   * that useful.
+   * that useful. See filteredQuery for query object with filters applied.
    */
   queryId?: string
   /**
@@ -82,7 +83,7 @@ export interface TileHostData {
    * cross filtering applied to the dashboard. Filters and cross filters
    * will need to be applied and a new query generated in order to reflect
    * the data shown in the QueryResponse. As such the queryId may not be
-   * that useful.
+   * that useful. See filteredQuery for query object with filters applied.
    */
   querySlug?: string
   /**
@@ -112,6 +113,12 @@ export interface TileHostData {
    * is being configured as an explore this will not be populated.
    */
   isDashboardCrossFilteringEnabled?: boolean
+  /**
+   * A query object that matches the query ID associated with the
+   * underlying dashboard element with any dashboard filters and
+   * timezone changes made at the dashboard level applied.
+   */
+  filteredQuery?: IQuery
   /**
    * The id of the tile extension element that triggered the last
    * dashboard run. The id will be undefined if the dashboard run
