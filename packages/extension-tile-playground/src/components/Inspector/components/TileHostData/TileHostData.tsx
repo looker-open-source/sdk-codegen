@@ -50,6 +50,7 @@ export const TileHostData: React.FC = () => {
     lastRunEndTime,
     lastRunSuccess,
     lastRunSourceElementId,
+    filteredQuery,
   } = tileHostData
 
   const dashboardIdMessage = `Dashboard id is "${
@@ -101,6 +102,10 @@ export const TileHostData: React.FC = () => {
     .map(([key, value]) => `${key}=${value}`)
     .join(', ')
 
+  const filteredQueryMessage = filteredQuery
+    ? `Filtered query: ${JSON.stringify(filteredQuery, null, 1)}`
+    : 'No filtered query available.'
+
   return (
     <Card>
       <CardContent>
@@ -121,6 +126,7 @@ export const TileHostData: React.FC = () => {
                     ? `Dashboard filters are ${filtersArray}`
                     : 'Dashboard has no filters'}
                 </Paragraph>
+                <Paragraph>{filteredQueryMessage}</Paragraph>
               </>
             )}
           </SpaceVertical>
