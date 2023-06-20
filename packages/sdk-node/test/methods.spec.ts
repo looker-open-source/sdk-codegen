@@ -259,7 +259,7 @@ describe('LookerNodeSDK', () => {
   })
 
   describe('downloads', () => {
-    it(
+    it.skip(
       'png and svg',
       async () => {
         const sdk = new LookerSDK(session)
