@@ -43,8 +43,9 @@ const tabnames = ['general', 'config', 'addusers']
 
 export const AdminScene: FC = () => {
   const history = useHistory()
-  const match =
-    useRouteMatch<{ func: string; tabname: string }>('/:func/:tabname')
+  const match = useRouteMatch<{ func: string; tabname: string }>(
+    '/:func/:tabname'
+  )
 
   useEffect(() => {
     const currentTabname = match?.params?.tabname

@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 325 API models: 243 Spec, 0 Request, 60 Write, 22 Enum
+ * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -52,8 +52,12 @@ data class AccessToken (
 
 /**
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
- * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
  * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+ * @property custom_url_params Parameters and path for the custom url defined by the alert creator
+ * @property custom_url_label Label for the custom url defined by the alert creator
+ * @property show_custom_url Boolean to determine if the custom url should be used
  * @property custom_title An optional, user-defined title for the alert
  * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
  * @property description An optional description for the alert. This supplements the title
@@ -79,6 +83,10 @@ data class Alert (
     var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
     var comparison_type: ComparisonType,
     var cron: String,
+    var custom_url_base: String? = null,
+    var custom_url_params: String? = null,
+    var custom_url_label: String? = null,
+    var show_custom_url: Boolean? = null,
     var custom_title: String? = null,
     var dashboard_element_id: String? = null,
     var description: String? = null,
@@ -104,7 +112,7 @@ data class Alert (
 /**
  * @property filter_title Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
  * @property field_name Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
- * @property filter_value Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+ * @property filter_value Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
  * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
  */
 data class AlertAppliedDashboardFilter (
@@ -138,7 +146,7 @@ data class AlertDestination (
 
 /**
  * @property title Field's title. Usually auto-generated to reflect field name and its filters
- * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+ * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
  * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
  */
 data class AlertField (
@@ -149,8 +157,8 @@ data class AlertField (
 
 /**
  * @property field_name Field Name. Has format `<view>.<field>`
- * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
- * @property filter_value Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+ * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+ * @property filter_value Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
  */
 data class AlertFieldFilter (
     var field_name: String,
@@ -466,7 +474,7 @@ data class ColumnSearch (
 ) : Serializable
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 enum class ComparisonType : Serializable {
     EQUAL_TO,
@@ -584,6 +592,29 @@ data class ContentMetaGroupUser (
 ) : Serializable
 
 /**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property content_id Primary id associated with the content (read-only)
+ * @property type Type of content (read-only)
+ * @property title Content title (read-only)
+ * @property description Content description (read-only)
+ * @property folder_id Id of the folder where the content is saved (read-only)
+ * @property folder_name Name of the folder where the content is saved (read-only)
+ * @property view_count Number of times the content has been viewed (read-only)
+ * @property preferred_viewer Preferred way of viewing the content (only applies to dashboards) (read-only)
+ */
+data class ContentSearch (
+    var can: Map<String,Boolean>? = null,
+    var content_id: String? = null,
+    var type: String? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var folder_id: String? = null,
+    var folder_name: String? = null,
+    var view_count: Long? = null,
+    var preferred_viewer: String? = null
+) : Serializable
+
+/**
  * @property content_with_errors A list of content errors (read-only)
  * @property computation_time Duration of content validation in seconds (read-only)
  * @property total_looks_validated The number of looks validated (read-only)
@@ -608,12 +639,20 @@ data class ContentValidation (
  * @property id ID of the alert
  * @property lookml_dashboard_id ID of the LookML dashboard associated with the alert
  * @property lookml_link_id ID of the LookML dashboard element associated with the alert
+ * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+ * @property custom_url_params Parameters and path for the custom url defined by the alert creator
+ * @property custom_url_label Label for the custom url defined by the alert creator
+ * @property show_custom_url Boolean to determine if the custom url should be used
  * @property custom_title An optional, user-defined title for the alert
  */
 data class ContentValidationAlert (
     var id: String? = null,
     var lookml_dashboard_id: String? = null,
     var lookml_link_id: String? = null,
+    var custom_url_base: String? = null,
+    var custom_url_params: String? = null,
+    var custom_url_label: String? = null,
+    var show_custom_url: Boolean? = null,
     var custom_title: String? = null
 ) : Serializable
 
@@ -648,6 +687,7 @@ data class ContentValidationDashboard (
  * @property title_text Text tile title
  * @property type Type
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
+ * @property extension_id Extension ID
  */
 data class ContentValidationDashboardElement (
     var body_text: String? = null,
@@ -664,7 +704,8 @@ data class ContentValidationDashboardElement (
     var title_hidden: Boolean? = null,
     var title_text: String? = null,
     var type: String? = null,
-    var rich_content_json: String? = null
+    var rich_content_json: String? = null,
+    var extension_id: String? = null
 ) : Serializable
 
 /**
@@ -957,7 +998,7 @@ data class CreateOAuthApplicationUserStateResponse (
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -997,9 +1038,11 @@ data class CredentialsApi3 (
  * @property created_at Timestamp for the creation of this credential (read-only)
  * @property email EMail address used for user login
  * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property user_id Unique Id of the user (read-only)
  * @property is_disabled Has this credential been disabled? (read-only)
  * @property logged_in_at Timestamp for most recent login using credential (read-only)
  * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property account_setup_url Url with one-time use secret token that the user can use to setup account (read-only)
  * @property type Short name for the type of this kind of credential (read-only)
  * @property url Link to get this item (read-only)
  * @property user_url Link to get this user (read-only)
@@ -1009,9 +1052,11 @@ data class CredentialsEmail (
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
+    var user_id: String? = null,
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
+    var account_setup_url: String? = null,
     var type: String? = null,
     var url: String? = null,
     var user_url: String? = null
@@ -1022,9 +1067,11 @@ data class CredentialsEmail (
  * @property created_at Timestamp for the creation of this credential (read-only)
  * @property email EMail address used for user login
  * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
+ * @property user_id Unique Id of the user (read-only)
  * @property is_disabled Has this credential been disabled? (read-only)
  * @property logged_in_at Timestamp for most recent login using credential (read-only)
  * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
+ * @property account_setup_url Url with one-time use secret token that the user can use to setup account (read-only)
  * @property type Short name for the type of this kind of credential (read-only)
  * @property url Link to get this item (read-only)
  * @property user_url Link to get this user (read-only)
@@ -1034,9 +1081,11 @@ data class CredentialsEmailSearch (
     var created_at: String? = null,
     var email: String? = null,
     var forced_password_reset_at_next_login: Boolean? = null,
+    var user_id: String? = null,
     var is_disabled: Boolean? = null,
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
+    var account_setup_url: String? = null,
     var type: String? = null,
     var url: String? = null,
     var user_url: String? = null
@@ -1248,7 +1297,7 @@ data class CustomWelcomeEmail (
  * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -1406,7 +1455,7 @@ data class DashboardBase (
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  * @property title_text_as_html Text tile title text as Html (read-only)
  * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
- * @property extension_id Extension ID (read-only)
+ * @property extension_id Extension ID
  */
 data class DashboardElement (
     var can: Map<String,Boolean>? = null,
@@ -1648,8 +1697,8 @@ data class Datagroup (
  * @property dialect
  * @property snippets SQL Runner snippets for this connection (read-only)
  * @property pdts_enabled True if PDTs are enabled on this connection (read-only)
- * @property host Host name/address of server
- * @property port Port number on server
+ * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+ * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
  * @property password (Write-Only) Password for server authentication
  * @property uses_oauth Whether the connection uses OAuth for authentication. (read-only)
@@ -1658,7 +1707,7 @@ data class Datagroup (
  * @property database Database name
  * @property db_timezone Time zone of database
  * @property query_timezone Timezone to use in queries
- * @property schema Scheme name
+ * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
@@ -1681,7 +1730,9 @@ data class Datagroup (
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  * @property pdt_context_override
  * @property managed Is this connection created and managed by Looker (read-only)
+ * @property custom_local_port This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
  * @property tunnel_id The Id of the ssh tunnel this connection uses
+ * @property uses_tns Enable Transparent Network Substrate (TNS) connections
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
@@ -1728,7 +1779,9 @@ data class DBConnection (
     var after_connect_statements: String? = null,
     var pdt_context_override: DBConnectionOverride? = null,
     var managed: Boolean? = null,
+    var custom_local_port: Long? = null,
     var tunnel_id: String? = null,
+    var uses_tns: Boolean? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
@@ -1762,7 +1815,7 @@ data class DBConnectionBase (
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
  * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
  * @property database Database name
- * @property schema Scheme name
+ * @property schema Schema name
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  */
@@ -1898,26 +1951,48 @@ data class DialectInfo (
 
 /**
  * @property additional_params Has additional params support (read-only)
+ * @property after_connect_statements Has support for issuing statements after connecting to the database (read-only)
+ * @property analytical_view_dataset Has analytical view support (read-only)
  * @property auth Has auth support (read-only)
- * @property host Has host support (read-only)
+ * @property cost_estimate Has configurable cost estimation (read-only)
+ * @property disable_context_comment Can disable query context comments (read-only)
+ * @property host Host is required (read-only)
+ * @property instance_name Instance name is required (read-only)
+ * @property max_billing_gigabytes Has max billing gigabytes support (read-only)
  * @property oauth_credentials Has support for a service account (read-only)
+ * @property pdts_for_oauth Has OAuth for PDT support (read-only)
+ * @property port Port can be specified (read-only)
  * @property project_name Has project name support (read-only)
- * @property schema Has schema support (read-only)
- * @property ssl Has SSL support (read-only)
+ * @property schema Schema can be specified (read-only)
+ * @property service_account_credentials Has support for a service account (read-only)
+ * @property ssl Has TLS/SSL support (read-only)
  * @property timezone Has timezone support (read-only)
  * @property tmp_table Has tmp table support (read-only)
+ * @property tns Has Oracle TNS support (read-only)
+ * @property username Username can be specified (read-only)
  * @property username_required Username is required (read-only)
  */
 data class DialectInfoOptions (
     var additional_params: Boolean? = null,
+    var after_connect_statements: Boolean? = null,
+    var analytical_view_dataset: Boolean? = null,
     var auth: Boolean? = null,
+    var cost_estimate: Boolean? = null,
+    var disable_context_comment: Boolean? = null,
     var host: Boolean? = null,
+    var instance_name: Boolean? = null,
+    var max_billing_gigabytes: Boolean? = null,
     var oauth_credentials: Boolean? = null,
+    var pdts_for_oauth: Boolean? = null,
+    var port: Boolean? = null,
     var project_name: Boolean? = null,
     var schema: Boolean? = null,
+    var service_account_credentials: Boolean? = null,
     var ssl: Boolean? = null,
     var timezone: Boolean? = null,
     var tmp_table: Boolean? = null,
+    var tns: Boolean? = null,
+    var username: Boolean? = null,
     var username_required: Boolean? = null
 ) : Serializable
 
@@ -1968,6 +2043,7 @@ data class EgressIpAddresses (
  * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
  * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
  * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property embed_domain The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
  */
 data class EmbedCookielessSessionAcquire (
     var session_length: Long? = null,
@@ -1981,7 +2057,8 @@ data class EmbedCookielessSessionAcquire (
     var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var session_reference_token: String? = null
+    var session_reference_token: String? = null,
+    var embed_domain: String? = null
 ) : Serializable
 
 /**
@@ -4324,7 +4401,7 @@ data class RepositoryCredential (
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
@@ -4336,7 +4413,8 @@ enum class ResultFormat : Serializable {
     md,
     txt,
     xlsx,
-    gsxml
+    gsxml,
+    sql
 }
 
 /**
@@ -4646,6 +4724,10 @@ data class SamlUserAttributeWrite (
  * @property scheduled_plan_destination Scheduled plan destinations
  * @property run_once Whether the plan in question should only be run once (usually for testing)
  * @property include_links Whether links back to Looker should be included in this ScheduledPlan
+ * @property custom_url_base Custom url domain for the scheduled entity
+ * @property custom_url_params Custom url path and parameters for the scheduled entity
+ * @property custom_url_label Custom url label for the scheduled entity
+ * @property show_custom_url Whether to show custom link back instead of standard looker link
  * @property pdf_paper_size The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
  * @property pdf_landscape Whether the PDF should be formatted for landscape orientation
  * @property embed Whether this schedule is in an embed context or not
@@ -4682,6 +4764,10 @@ data class ScheduledPlan (
     var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
     var run_once: Boolean? = null,
     var include_links: Boolean? = null,
+    var custom_url_base: String? = null,
+    var custom_url_params: String? = null,
+    var custom_url_label: String? = null,
+    var show_custom_url: Boolean? = null,
     var pdf_paper_size: String? = null,
     var pdf_landscape: Boolean? = null,
     var embed: Boolean? = null,
@@ -4871,6 +4957,11 @@ data class SessionConfig (
  * @property timezone Change instance-wide default timezone
  * @property allow_user_timezones Toggle user-specific timezones on or off
  * @property data_connector_default_enabled Toggle default future connectors on or off
+ * @property host_url Change the base portion of your Looker instance URL setting
+ * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+ * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
+ * @property embed_enabled True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
@@ -4882,7 +4973,12 @@ data class Setting (
     var onboarding_enabled: Boolean? = null,
     var timezone: String? = null,
     var allow_user_timezones: Boolean? = null,
-    var data_connector_default_enabled: Boolean? = null
+    var data_connector_default_enabled: Boolean? = null,
+    var host_url: String? = null,
+    var override_warnings: Boolean? = null,
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null,
+    var embed_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -4904,6 +5000,7 @@ data class SmtpNodeStatus (
  * @property port SMTP Server's port
  * @property enable_starttls_auto Is TLS encryption enabled?
  * @property ssl_version TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+ * @property default_smtp Whether to enable built-in Looker SMTP
  */
 data class SmtpSettings (
     var address: String? = null,
@@ -4912,7 +5009,8 @@ data class SmtpSettings (
     var password: String? = null,
     var port: Long? = null,
     var enable_starttls_auto: Boolean? = null,
-    var ssl_version: SslVersion? = null
+    var ssl_version: SslVersion? = null,
+    var default_smtp: Boolean? = null
 ) : Serializable
 
 /**
@@ -5023,7 +5121,7 @@ data class SshServer (
  * @property ssh_server_port SSH Server port (read-only)
  * @property ssh_server_user Username used to connect to the SSH Server (read-only)
  * @property last_attempt Time of last connect attempt (read-only)
- * @property local_host_port Localhost Port used by the Looker instance to connect to the remote DB (read-only)
+ * @property local_host_port Localhost Port used by the Looker instance to connect to the remote DB
  * @property database_host Hostname or IP Address of the Database Server
  * @property database_port Port that the Database Server is listening on
  * @property status Current connection status for this Tunnel (read-only)
@@ -5168,19 +5266,44 @@ data class Theme (
  * @property font_color Default font color
  * @property font_family Primary font family
  * @property font_source Source specification for font
- * @property info_button_color Info button color
+ * @property info_button_color (DEPRECATED) Info button color
  * @property primary_button_color Primary button color
  * @property show_filters_bar Toggle to show filters. Defaults to true.
  * @property show_title Toggle to show the title. Defaults to true.
  * @property text_tile_text_color Text color for text tiles
  * @property tile_background_color Background color for tiles
+ * @property text_tile_background_color Background color for text tiles
  * @property tile_text_color Text color for tiles
  * @property title_color Color for titles
- * @property warn_button_color Warning button color
+ * @property warn_button_color (DEPRECATED) Warning button color
  * @property tile_title_alignment The text alignment of tile titles (New Dashboards)
  * @property tile_shadow Toggles the tile shadow (not supported)
  * @property show_last_updated_indicator Toggle to show the dashboard last updated indicator. Defaults to true.
  * @property show_reload_data_icon Toggle to show reload data icon/button. Defaults to true.
+ * @property show_dashboard_menu Toggle to show the dashboard actions menu. Defaults to true.
+ * @property show_filters_toggle Toggle to show the filters icon/toggle. Defaults to true.
+ * @property show_dashboard_header Toggle to show the dashboard header. Defaults to true.
+ * @property center_dashboard_title Toggle to center the dashboard title. Defaults to false.
+ * @property dashboard_title_font_size Dashboard title font size.
+ * @property box_shadow Default box shadow.
+ * @property page_margin_top Dashboard page margin top.
+ * @property page_margin_bottom Dashboard page margin bottom.
+ * @property page_margin_sides Dashboard page margin left and right.
+ * @property show_explore_header Toggle to show the explore page header. Defaults to true.
+ * @property show_explore_title Toggle to show the explore page title. Defaults to true.
+ * @property show_explore_last_run Toggle to show the explore page last run. Defaults to true.
+ * @property show_explore_timezone Toggle to show the explore page timezone. Defaults to true.
+ * @property show_explore_run_stop_button Toggle to show the explore page run button. Defaults to true.
+ * @property show_explore_actions_button Toggle to show the explore page actions button. Defaults to true.
+ * @property show_look_header Toggle to show the look page header. Defaults to true.
+ * @property show_look_title Toggle to show the look page title. Defaults to true.
+ * @property show_look_last_run Toggle to show the look page last run. Defaults to true.
+ * @property show_look_timezone Toggle to show the look page timezone Defaults to true.
+ * @property show_look_run_stop_button Toggle to show the look page run button. Defaults to true.
+ * @property show_look_actions_button Toggle to show the look page actions button. Defaults to true.
+ * @property tile_title_font_size Font size for tiles.
+ * @property column_gap_size The vertical gap/gutter size between tiles.
+ * @property row_gap_size The horizontal gap/gutter size between tiles.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5195,13 +5318,38 @@ data class ThemeSettings (
     var show_title: Boolean? = null,
     var text_tile_text_color: String? = null,
     var tile_background_color: String? = null,
+    var text_tile_background_color: String? = null,
     var tile_text_color: String? = null,
     var title_color: String? = null,
     var warn_button_color: String? = null,
     var tile_title_alignment: String? = null,
     var tile_shadow: Boolean? = null,
     var show_last_updated_indicator: Boolean? = null,
-    var show_reload_data_icon: Boolean? = null
+    var show_reload_data_icon: Boolean? = null,
+    var show_dashboard_menu: Boolean? = null,
+    var show_filters_toggle: Boolean? = null,
+    var show_dashboard_header: Boolean? = null,
+    var center_dashboard_title: Boolean? = null,
+    var dashboard_title_font_size: String? = null,
+    var box_shadow: String? = null,
+    var page_margin_top: String? = null,
+    var page_margin_bottom: String? = null,
+    var page_margin_sides: String? = null,
+    var show_explore_header: Boolean? = null,
+    var show_explore_title: Boolean? = null,
+    var show_explore_last_run: Boolean? = null,
+    var show_explore_timezone: Boolean? = null,
+    var show_explore_run_stop_button: Boolean? = null,
+    var show_explore_actions_button: Boolean? = null,
+    var show_look_header: Boolean? = null,
+    var show_look_title: Boolean? = null,
+    var show_look_last_run: Boolean? = null,
+    var show_look_timezone: Boolean? = null,
+    var show_look_run_stop_button: Boolean? = null,
+    var show_look_actions_button: Boolean? = null,
+    var tile_title_font_size: String? = null,
+    var column_gap_size: String? = null,
+    var row_gap_size: String? = null
 ) : Serializable
 
 /**
@@ -5241,7 +5389,7 @@ data class UpdateFolder (
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property avatar_url URL for the avatar image (may be generic) (read-only)
  * @property avatar_url_without_sizing URL for the avatar image (may be generic), does not specify size (read-only)
- * @property credentials_api3 API 3 credentials (read-only)
+ * @property credentials_api3 API credentials (read-only)
  * @property credentials_email
  * @property credentials_embed Embed credentials (read-only)
  * @property credentials_google
@@ -5273,6 +5421,7 @@ data class UpdateFolder (
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
  * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
+ * @property is_iam_admin User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
  * @property url Link to get this item (read-only)
  */
 data class User (
@@ -5311,6 +5460,7 @@ data class User (
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var embed_group_folder_id: String? = null,
+    var is_iam_admin: Boolean? = null,
     var url: String? = null
 ) : Serializable
 
@@ -5390,7 +5540,7 @@ data class UserAttributeGroupValue (
  * @property value_is_hidden If true, the "value" field will be null, because the attribute settings block access to this value (read-only)
  * @property user_attribute_id Id of User Attribute (read-only)
  * @property source How user got this value for this attribute (read-only)
- * @property hidden_value_domain_whitelist If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+ * @property hidden_value_domain_whitelist If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
  */
 data class UserAttributeWithValue (
     var can: Map<String,Boolean>? = null,
@@ -5558,8 +5708,12 @@ data class Workspace (
  * followed, followable, id, investigative_content_title, owner_display_name
  *
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
- * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
  * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+ * @property custom_url_params Parameters and path for the custom url defined by the alert creator
+ * @property custom_url_label Label for the custom url defined by the alert creator
+ * @property show_custom_url Boolean to determine if the custom url should be used
  * @property custom_title An optional, user-defined title for the alert
  * @property dashboard_element_id ID of the dashboard element associated with the alert. Refer to [dashboard_element()](#!/Dashboard/DashboardElement)
  * @property description An optional description for the alert. This supplements the title
@@ -5580,6 +5734,10 @@ data class WriteAlert (
     var applied_dashboard_filters: Array<AlertAppliedDashboardFilter>? = null,
     var comparison_type: ComparisonType,
     var cron: String,
+    var custom_url_base: String? = null,
+    var custom_url_params: String? = null,
+    var custom_url_label: String? = null,
+    var show_custom_url: Boolean? = null,
     var custom_title: String? = null,
     var dashboard_element_id: String? = null,
     var description: String? = null,
@@ -5776,7 +5934,7 @@ data class WriteCreateDashboardFilter (
  * can
  *
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -5793,7 +5951,7 @@ data class WriteCreateQueryTask (
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
  *
  * @property email EMail address used for user login
  * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
@@ -5825,7 +5983,7 @@ data class WriteCredentialsEmail (
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -5875,7 +6033,7 @@ data class WriteDashboardBase (
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  *
  * @property body_text Text tile body text
  * @property dashboard_id Id of Dashboard
@@ -5899,6 +6057,7 @@ data class WriteDashboardBase (
  * @property title_text Text tile title
  * @property type Type
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
+ * @property extension_id Extension ID
  */
 data class WriteDashboardElement (
     var body_text: String? = null,
@@ -5919,7 +6078,8 @@ data class WriteDashboardElement (
     var title_hidden: Boolean? = null,
     var title_text: String? = null,
     var type: String? = null,
-    var rich_content_json: String? = null
+    var rich_content_json: String? = null,
+    var extension_id: String? = null
 ) : Serializable
 
 /**
@@ -6021,8 +6181,8 @@ data class WriteDatagroup (
  * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
  *
  * @property name Name of the connection. Also used as the unique identifier
- * @property host Host name/address of server
- * @property port Port number on server
+ * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+ * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
  * @property password (Write-Only) Password for server authentication
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
@@ -6030,7 +6190,7 @@ data class WriteDatagroup (
  * @property database Database name
  * @property db_timezone Time zone of database
  * @property query_timezone Timezone to use in queries
- * @property schema Scheme name
+ * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
@@ -6047,7 +6207,9 @@ data class WriteDatagroup (
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  * @property pdt_context_override Dynamic writeable type for DBConnectionOverride removes:
  * has_password
+ * @property custom_local_port This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
  * @property tunnel_id The Id of the ssh tunnel this connection uses
+ * @property uses_tns Enable Transparent Network Substrate (TNS) connections
  * @property pdt_concurrency Maximum number of threads to use to build PDTs in parallel
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
@@ -6082,7 +6244,9 @@ data class WriteDBConnection (
     var sql_writing_with_info_schema: Boolean? = null,
     var after_connect_statements: String? = null,
     var pdt_context_override: WriteDBConnectionOverride? = null,
+    var custom_local_port: Long? = null,
     var tunnel_id: String? = null,
+    var uses_tns: Boolean? = null,
     var pdt_concurrency: Long? = null,
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
@@ -6103,7 +6267,7 @@ data class WriteDBConnection (
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
  * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
  * @property database Database name
- * @property schema Scheme name
+ * @property schema Schema name
  * @property jdbc_additional_params Additional params to add to JDBC connection string
  * @property after_connect_statements SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
  */
@@ -6774,6 +6938,10 @@ data class WriteSamlConfig (
  * @property scheduled_plan_destination Scheduled plan destinations
  * @property run_once Whether the plan in question should only be run once (usually for testing)
  * @property include_links Whether links back to Looker should be included in this ScheduledPlan
+ * @property custom_url_base Custom url domain for the scheduled entity
+ * @property custom_url_params Custom url path and parameters for the scheduled entity
+ * @property custom_url_label Custom url label for the scheduled entity
+ * @property show_custom_url Whether to show custom link back instead of standard looker link
  * @property pdf_paper_size The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
  * @property pdf_landscape Whether the PDF should be formatted for landscape orientation
  * @property embed Whether this schedule is in an embed context or not
@@ -6802,6 +6970,10 @@ data class WriteScheduledPlan (
     var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
     var run_once: Boolean? = null,
     var include_links: Boolean? = null,
+    var custom_url_base: String? = null,
+    var custom_url_params: String? = null,
+    var custom_url_label: String? = null,
+    var show_custom_url: Boolean? = null,
     var pdf_paper_size: String? = null,
     var pdf_landscape: Boolean? = null,
     var embed: Boolean? = null,
@@ -6829,7 +7001,8 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  *
  * @property extension_framework_enabled Toggle extension framework on or off
  * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
@@ -6842,6 +7015,10 @@ data class WriteSessionConfig (
  * @property timezone Change instance-wide default timezone
  * @property allow_user_timezones Toggle user-specific timezones on or off
  * @property data_connector_default_enabled Toggle default future connectors on or off
+ * @property host_url Change the base portion of your Looker instance URL setting
+ * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+ * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
@@ -6853,7 +7030,11 @@ data class WriteSetting (
     var onboarding_enabled: Boolean? = null,
     var timezone: String? = null,
     var allow_user_timezones: Boolean? = null,
-    var data_connector_default_enabled: Boolean? = null
+    var data_connector_default_enabled: Boolean? = null,
+    var host_url: String? = null,
+    var override_warnings: Boolean? = null,
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null
 ) : Serializable
 
 /**
@@ -6874,14 +7055,16 @@ data class WriteSshServer (
 
 /**
  * Dynamic writeable type for SshTunnel removes:
- * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
+ * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, status
  *
  * @property ssh_server_id SSH Server ID
+ * @property local_host_port Localhost Port used by the Looker instance to connect to the remote DB
  * @property database_host Hostname or IP Address of the Database Server
  * @property database_port Port that the Database Server is listening on
  */
 data class WriteSshTunnel (
     var ssh_server_id: String? = null,
+    var local_host_port: Long? = null,
     var database_host: String? = null,
     var database_port: Long? = null
 ) : Serializable
@@ -6904,10 +7087,10 @@ data class WriteTheme (
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
  * @property first_name First name
  * @property home_folder_id ID string for user's home folder
  * @property is_disabled Account has been disabled

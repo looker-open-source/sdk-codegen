@@ -24,7 +24,7 @@
 
  */
 
-import type { FC, ReactElement } from 'react'
+import type { ReactElement } from 'react'
 import React, { useEffect, useState } from 'react'
 import {
   DataTable,
@@ -46,7 +46,7 @@ interface DataGridProps {
   pageSize?: number
 }
 
-export const DataGrid: FC<DataGridProps> = ({ data, raw, pageSize = 15 }) => {
+export const DataGrid = ({ data, raw, pageSize = 15 }: DataGridProps) => {
   const tabs = useTabs()
   const headers = gridHeaders(data)
   const [page, setPage] = useState(1)

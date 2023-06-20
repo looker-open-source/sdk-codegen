@@ -67,9 +67,11 @@ export interface IVersionInfo {
 /**
  * Removes all empty input values
  * @param inputs current inputs
+ * @param keepBody true to send body as is. false trims body values (default)
+ * @param depth recursion depth
  * @returns inputs with all "empty" values removed so the key no longer exists
  */
-export const trimInputs = (inputs: any, depth = 0): any => {
+export const trimInputs = (inputs: any, keepBody = false, depth = 0): any => {
   function isEmpty(value: any, depth: number): boolean {
     if (Array.isArray(value)) return value.length === 0
     if (value === undefined) return true
@@ -90,18 +92,22 @@ export const trimInputs = (inputs: any, depth = 0): any => {
   if (Array.isArray(inputs)) {
     result = []
     Object.values(inputs).forEach((v: any) =>
-      result.push(trimInputs(v, depth + 1))
+      result.push(trimInputs(v, keepBody, depth + 1))
     )
   } else if (inputs instanceof Object) {
-    result = {}
-    Object.entries(inputs).forEach(([key, value]) => {
-      const trimmed = trimInputs(value, depth + 1)
-      if (!isEmpty(trimmed, depth + 1)) {
-        result[key] = trimmed
-      }
-    })
+    if (keepBody && depth > 0) {
+      result = inputs
+    } else {
+      result = {}
+      Object.entries(inputs).forEach(([key, value]) => {
+        const trimmed = trimInputs(value, keepBody, depth + 1)
+        if (!isEmpty(trimmed, depth + 1)) {
+          result[key] = trimmed
+        }
+      })
+    }
   } else {
-    // Scalar value
+    // Scalar or preserved "body" value
     result = inputs
   }
   return result
@@ -936,7 +942,8 @@ export abstract class CodeGen implements ICodeGen {
         args.push(this.assignType(this.indentStr, requestType, inputs))
         hasComplexArg = true
       } else {
-        method.allParams.forEach((p) => {
+        const params = method.allParams
+        params.forEach((p) => {
           const v = this.argValue(this.indentStr, p, inputs)
           if (v !== '') {
             const arg = this.useNamedArguments ? `${p.name}=${v}` : v
@@ -970,20 +977,24 @@ export abstract class CodeGen implements ICodeGen {
     const args: string[] = []
     // child properties are indented one level
     const bump = this.bumper(indent)
-    Object.values(type.properties).forEach((p) => {
+    const props = Object.values(type.properties)
+    props.forEach((p) => {
       const v = this.argValue(bump, p, inputs)
       if (v) args.push(this.argSet(p.name, this.argSetSep, v))
     })
-    // Nothing to assign?
-    if (args.length === 0) return ''
-    // Otherwise, indent and join arguments
+
     const open = this.useModelClassForTypes
       ? `${mt.name}${this.typeOpen}`
       : this.typeOpen
     const nl = `,\n${bump}`
+    let joined = `\n${bump}${args.join(nl)}\n${indent}`
+    if (joined.trim().length === 0) {
+      // trim the structure new lines if there are no arguments
+      joined = ''
+    }
     // need a bump after `open` to account for the first argument
     // not getting the proper bump from args.join()
-    return `${open}\n${bump}${args.join(nl)}\n${indent}${this.typeClose}`
+    return `${open}${joined}${this.typeClose}`
   }
 
   /**

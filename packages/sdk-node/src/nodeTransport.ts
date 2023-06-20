@@ -68,6 +68,7 @@ const asString = (value: any): string => {
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
+    // TODO update this to Node 18
     return nodeCrypto.randomBytes(byteCount).toString('hex')
   }
 

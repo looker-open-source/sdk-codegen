@@ -24,8 +24,9 @@
 
  */
 
+import type { IAPIMethods } from '@looker/sdk-rtl'
 import { LookerSDKError } from '@looker/sdk-rtl'
-import type { IArtifact, ILooker40SDK, IUpdateArtifact } from '@looker/sdk'
+import type { IArtifact, IUpdateArtifact } from '@looker/sdk'
 import {
   artifact,
   delete_artifact,
@@ -101,8 +102,8 @@ export class TypedRows<T> {
 }
 
 export interface IWhollyArtifact<T extends IRowModel, P> {
-  /** Initialized REST-based GSheets SDK */
-  sdk: ILooker40SDK
+  /** Any initialized Looker TypeScript SDK  */
+  sdk: IAPIMethods
 
   /** Namespace of this collection. Retrieved from IRowModel descendant */
   namespace: string
@@ -316,7 +317,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   tableName = ''
 
   constructor(
-    public readonly sdk: ILooker40SDK,
+    public readonly sdk: IAPIMethods,
     public readonly table: ITabTable,
     public readonly keyColumn: string = '_id' // TODO change to `key`
   ) {
@@ -429,7 +430,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     switch (model.$action) {
       case RowAction.Delete: {
         await this.sdk.ok(
-          this.sdk.delete_artifact(this.namespace, model[this.keyColumn])
+          delete_artifact(this.sdk, this.namespace, model[this.keyColumn])
         )
         return model
       }

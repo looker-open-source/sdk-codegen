@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-sdk",
-  "version": "22.20.1",
+  "version": "23.10.0",
   "description": "Looker Extension SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -40,8 +40,8 @@
   },
   "dependencies": {
     "@looker/chatty": "2.3.9",
-    "@looker/sdk": "^22.20.1",
-    "@looker/sdk-rtl": "^21.5.0",
+    "@looker/sdk": "^23.10.0",
+    "@looker/sdk-rtl": "^21.6.1",
     "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",

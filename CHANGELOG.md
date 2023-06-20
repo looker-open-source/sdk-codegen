@@ -1,5 +1,99 @@
 # Changelog
 
+## [23.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.1...sdk-codegen-all-v23.10.0) (2023-06-15)
+
+
+### Features
+
+* change "Cancel" to "Close" in QuickEmbed component ([#1317](https://github.com/looker-open-source/sdk-codegen/issues/1317)) ([6eedf6f](https://github.com/looker-open-source/sdk-codegen/commit/6eedf6ffaf0e3487152bc283d925c86058cd9f59))
+* generate SDKs for Looker 23.10 ([#1326](https://github.com/looker-open-source/sdk-codegen/issues/1326)) ([121b90e](https://github.com/looker-open-source/sdk-codegen/commit/121b90e9258a49de51e2332f6f2b639b96956c36))
+* minor tweaks to embed-components and embed-services ([#1315](https://github.com/looker-open-source/sdk-codegen/issues/1315)) ([f3c5fc4](https://github.com/looker-open-source/sdk-codegen/commit/f3c5fc44a6161c0aab519527a4feb68e1f826bce))
+
+
+### Bug Fixes
+
+* use new CDN for errorcodes repository ([#1320](https://github.com/looker-open-source/sdk-codegen/issues/1320)) ([df40441](https://github.com/looker-open-source/sdk-codegen/commit/df40441cb1f187df5469f834486f8ff4de82c266))
+
+## [23.8.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.0...sdk-codegen-all-v23.8.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* release config for embed-components ([#1312](https://github.com/looker-open-source/sdk-codegen/issues/1312)) ([b450071](https://github.com/looker-open-source/sdk-codegen/commit/b45007116a340a9e5b026303b5919a85ee33d1ba))
+
+## [23.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.7.0...sdk-codegen-all-v23.8.0) (2023-05-11)
+
+
+### Features
+
+* Add Looker content cleanup automation example ([#1279](https://github.com/looker-open-source/sdk-codegen/issues/1279)) ([f2644fc](https://github.com/looker-open-source/sdk-codegen/commit/f2644fc209045fd9be18a721d0746d5027d59ad8))
+* generate SDKs for Looker 23.8 ([#1311](https://github.com/looker-open-source/sdk-codegen/issues/1311)) ([e0b6597](https://github.com/looker-open-source/sdk-codegen/commit/e0b65973c3827b1c701fe8941d0f010ad7603354))
+* QuickEmbed component ([#1306](https://github.com/looker-open-source/sdk-codegen/issues/1306)) ([4c78712](https://github.com/looker-open-source/sdk-codegen/commit/4c78712d44fb32dbdc0690a6121bc35086dec44a))
+* replace @looker/redux for with npm dependency ([#1307](https://github.com/looker-open-source/sdk-codegen/issues/1307)) ([baa58db](https://github.com/looker-open-source/sdk-codegen/commit/baa58db1bce9d974384c63a0e11301f38774a7b2))
+* SelectTheme component ([#1300](https://github.com/looker-open-source/sdk-codegen/issues/1300)) ([95c0da6](https://github.com/looker-open-source/sdk-codegen/commit/95c0da628d1d22fae2c6968f988047bfacc5fd01))
+
+## [23.7.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.6.0...sdk-codegen-all-v23.7.0) (2023-04-13)
+
+
+### Features
+
+* base class for all services ([#1295](https://github.com/looker-open-source/sdk-codegen/issues/1295)) ([b51f782](https://github.com/looker-open-source/sdk-codegen/commit/b51f782b4da04581e6ef262d26453430916580a8))
+* embed url service ([#1297](https://github.com/looker-open-source/sdk-codegen/issues/1297)) ([0f71acf](https://github.com/looker-open-source/sdk-codegen/commit/0f71acf083043e7056f65b34acd56a617438e4be))
+* singleton factory and theme service ([#1298](https://github.com/looker-open-source/sdk-codegen/issues/1298)) ([18af00b](https://github.com/looker-open-source/sdk-codegen/commit/18af00b9894b9c19597c3e868161e04b387df20b))
+
+## [23.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.4.0...sdk-codegen-all-v23.6.0) (2023-04-11)
+
+
+### Features
+
+* Add Go SDK custom header support and README ([#1288](https://github.com/looker-open-source/sdk-codegen/issues/1288)) ([308b419](https://github.com/looker-open-source/sdk-codegen/commit/308b419a67c4806dda4eb3f15064661925314bda))
+* generate SDKs for Looker 23.6 ([#1293](https://github.com/looker-open-source/sdk-codegen/issues/1293)) ([dab9e0a](https://github.com/looker-open-source/sdk-codegen/commit/dab9e0a745ca7c099db13e258a0eea8c6b7b6e24))
+
+## [23.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.1...sdk-codegen-all-v23.4.0) (2023-03-31)
+
+
+### Features
+
+* embed playground ([#1280](https://github.com/looker-open-source/sdk-codegen/issues/1280)) ([28f1218](https://github.com/looker-open-source/sdk-codegen/commit/28f121830f116da59b7f1cd248433c15c98cc56e))
+* generate SDKs for Looker 23.4 ([#1290](https://github.com/looker-open-source/sdk-codegen/issues/1290)) ([d7cd650](https://github.com/looker-open-source/sdk-codegen/commit/d7cd65054369a5eb93235a2d9b85b0f553bd1306))
+
+
+### Bug Fixes
+
+* Implement Go SDK timeout ([#1287](https://github.com/looker-open-source/sdk-codegen/issues/1287)) ([44974ec](https://github.com/looker-open-source/sdk-codegen/commit/44974eccdc4f1d454906a4236d865de0fdb71320))
+* Make Go SDK set correct content-type header ([#1283](https://github.com/looker-open-source/sdk-codegen/issues/1283)) ([b1f98c6](https://github.com/looker-open-source/sdk-codegen/commit/b1f98c6745b5084b42d6d6a29336e86681b15f83))
+* Oauth message on failed verify ([#1282](https://github.com/looker-open-source/sdk-codegen/issues/1282)) ([f3c1b2c](https://github.com/looker-open-source/sdk-codegen/commit/f3c1b2c3ef6e34ab3f984e3e28288a99f14d77b7))
+* Set Go SDK's User-Agent header ([#1285](https://github.com/looker-open-source/sdk-codegen/issues/1285)) ([68fd4c4](https://github.com/looker-open-source/sdk-codegen/commit/68fd4c4b6081551ba4813547303ecdd19e8e4e04))
+
+## [23.2.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.2.0...sdk-codegen-all-v23.2.1) (2023-03-09)
+
+
+### Bug Fixes
+
+* correct documentation on WhollyArtifact construction ([#1269](https://github.com/looker-open-source/sdk-codegen/issues/1269)) ([bec902c](https://github.com/looker-open-source/sdk-codegen/commit/bec902c511c77e02d49239e94f68fd91d2c38106))
+
+## [23.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.0.0...sdk-codegen-all-v23.2.0) (2023-03-01)
+
+
+### Features
+
+* generate SDKs for Looker 23.2 ([#1257](https://github.com/looker-open-source/sdk-codegen/issues/1257)) ([75346bc](https://github.com/looker-open-source/sdk-codegen/commit/75346bc0cc03224661a2986a44f5d670f872def4))
+
+## [23.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.13.0...sdk-codegen-all-v23.0.0) (2023-02-22)
+
+
+### Features
+
+* generate SDKs for Looker 23.0 ([#1237](https://github.com/looker-open-source/sdk-codegen/issues/1237)) ([2ade858](https://github.com/looker-open-source/sdk-codegen/commit/2ade85815c43383169263659f5dddd783c062c09))
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+* show Looker release version providing API specification ([#1233](https://github.com/looker-open-source/sdk-codegen/issues/1233)) ([a2be9ee](https://github.com/looker-open-source/sdk-codegen/commit/a2be9ee4736ce88336a27b78989763ecb2c57e00))
+* track request time if the transport doesn't ([#1231](https://github.com/looker-open-source/sdk-codegen/issues/1231)) ([a0e31a4](https://github.com/looker-open-source/sdk-codegen/commit/a0e31a41c1075b653fc8a2bf44b297ff98b41c72))
+
+
+### Miscellaneous Chores
+
+* Update sdk Readme and kickoff Release 23.0.0 ([#1247](https://github.com/looker-open-source/sdk-codegen/issues/1247)) ([4a8ef9d](https://github.com/looker-open-source/sdk-codegen/commit/4a8ef9dad45de28d222b35229fadd985aec06bfc))
+
 ## [2.13.0](https://www.github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v2.12.0...sdk-codegen-all-v2.13.0) (2022-12-09)
 
 

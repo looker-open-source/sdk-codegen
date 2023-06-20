@@ -42,6 +42,8 @@ import { CodeEditor } from '@looker/code-editor'
 import type { RunItInput, RunItValues } from '../../RunIt'
 import { FormItem } from './FormItem'
 
+export const BODY_HINT =
+  'By default, empty values are automatically removed from the request inputs, except for properties with `false` boolean values, which must be completely removed from the JSON body if they should not be passed.'
 /**
  * Creates a datetime form item
  * @param name Form item's name
@@ -240,7 +242,7 @@ export const createComplexItem = (
       label={
         <Space>
           {input.name}
-          <Tooltip content="Empty values are automatically removed from the request.">
+          <Tooltip content={BODY_HINT}>
             <Icon
               data-testid="body-param-tooltip"
               icon={<Info />}

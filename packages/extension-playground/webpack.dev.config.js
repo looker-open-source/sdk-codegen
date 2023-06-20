@@ -31,10 +31,10 @@ const browser = require('../../webpack.browser.config')()
 module.exports = merge(base, browser, {
   mode: 'development',
   devServer: {
-    historyApiFallback: {
-      disableDotRule: true,
+    historyApiFallback: true,
+    devMiddleware: {
+      publicPath: '/dist/',
     },
-    publicPath: '/dist/',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',

@@ -16,7 +16,6 @@ const utf8 = { encoding: 'utf-8' }
 
 const root = path.join(__dirname, '/../')
 let sdk = looker.LookerNodeSDK.init40()
-const releaseConfig = path.join(root, 'release-please-config.json')
 
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -68,31 +67,6 @@ const run = (command) => {
   catch (error) {
     result = error
   }
-  return result
-}
-
-/**
- * Updates release-please-config.json to stamp the correct CalVer for the SDKs
- *
- * if `release-as` is already set, CalVer patch will be bumped if the current
- * version is the same as the requested release version. Otherwise, it will be
- * set to CalVer.0
- *
- * @param release Looker version
- * @returns string describing CalVer action
- */
-const releasePlease = (release) => {
-  const config = JSON.parse(fs.readFileSync(releaseConfig, utf8))
-  let newVer = `${release}.0`
-  const calVer = config[`release-as`]
-  if (calVer === newVer) {
-    const patch = parseInt(calVer.split('.')[2]) + 1
-    newVer = `${release}.${patch}`
-  }
-  config['release-as'] = newVer
-  fs.writeFileSync(releaseConfig, JSON.stringify(config, null, 2), utf8)
-  const result = `set release please calVer to ${newVer}`
-  console.info(result)
   return result
 }
 
@@ -214,11 +188,10 @@ const regen = async (release) => {
     const branch = branchActive()
     if (await pullci(release)) {
       return batch([
-        (release) => releasePlease(release),
         'yarn gen',
         'bin/smoke typescript python kotlin',
-        'git add -A',
-        `git commit -m "feat: generate SDKs for Looker ${release}"`,
+        'git add -u',
+        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
         `git push origin ${branch}`,
         /* create PR
          */

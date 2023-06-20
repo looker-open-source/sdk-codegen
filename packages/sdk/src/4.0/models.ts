@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
  */
 
 /**
- * 390 API models: 243 Spec, 65 Request, 60 Write, 22 Enum
+ * 386 API models: 244 Spec, 60 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -59,13 +59,29 @@ export interface IAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
   cron: string
+  /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
   /**
    * An optional, user-defined title for the alert
    */
@@ -152,7 +168,7 @@ export interface IAlertAppliedDashboardFilter {
    */
   field_name: string
   /**
-   * Field Value. [Filter Expressions](https://docs.looker.com/reference/filter-expressions). Example `Los Angeles CA`
+   * Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
    */
   filter_value: string
   /**
@@ -197,7 +213,7 @@ export interface IAlertField {
    */
   title: string
   /**
-   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.looker.com/sharing-and-publishing/creating-alerts) for more details
+   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
    */
   name: string
   /**
@@ -212,11 +228,11 @@ export interface IAlertFieldFilter {
    */
   field_name: string
   /**
-   * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+   * Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
    */
   field_value: any
   /**
-   * Filter Value. Usually null except for [location](https://docs.looker.com/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+   * Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string | null
 }
@@ -707,7 +723,7 @@ export interface IColumnSearch {
 }
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 export enum ComparisonType {
   EQUAL_TO = 'EQUAL_TO',
@@ -893,6 +909,45 @@ export interface IContentMetaGroupUser {
   user_id?: string | null
 }
 
+export interface IContentSearch {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Primary id associated with the content (read-only)
+   */
+  content_id?: string | null
+  /**
+   * Type of content (read-only)
+   */
+  type?: string | null
+  /**
+   * Content title (read-only)
+   */
+  title?: string | null
+  /**
+   * Content description (read-only)
+   */
+  description?: string | null
+  /**
+   * Id of the folder where the content is saved (read-only)
+   */
+  folder_id?: string | null
+  /**
+   * Name of the folder where the content is saved (read-only)
+   */
+  folder_name?: string | null
+  /**
+   * Number of times the content has been viewed (read-only)
+   */
+  view_count?: number | null
+  /**
+   * Preferred way of viewing the content (only applies to dashboards) (read-only)
+   */
+  preferred_viewer?: string | null
+}
+
 export interface IContentValidation {
   /**
    * A list of content errors (read-only)
@@ -941,6 +996,22 @@ export interface IContentValidationAlert {
    * ID of the LookML dashboard element associated with the alert
    */
   lookml_link_id?: string | null
+  /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
   /**
    * An optional, user-defined title for the alert
    */
@@ -1028,6 +1099,10 @@ export interface IContentValidationDashboardElement {
    * JSON with all the properties required for rich editor and buttons elements
    */
   rich_content_json?: string | null
+  /**
+   * Extension ID
+   */
+  extension_id?: string | null
 }
 
 export interface IContentValidationDashboardFilter {
@@ -1432,7 +1507,7 @@ export interface ICreateQueryTask {
    */
   query_id: string | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -1502,6 +1577,10 @@ export interface ICredentialsEmail {
    */
   forced_password_reset_at_next_login?: boolean
   /**
+   * Unique Id of the user (read-only)
+   */
+  user_id?: string | null
+  /**
    * Has this credential been disabled? (read-only)
    */
   is_disabled?: boolean
@@ -1513,6 +1592,10 @@ export interface ICredentialsEmail {
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
   password_reset_url?: string | null
+  /**
+   * Url with one-time use secret token that the user can use to setup account (read-only)
+   */
+  account_setup_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -1545,6 +1628,10 @@ export interface ICredentialsEmailSearch {
    */
   forced_password_reset_at_next_login?: boolean
   /**
+   * Unique Id of the user (read-only)
+   */
+  user_id?: string | null
+  /**
    * Has this credential been disabled? (read-only)
    */
   is_disabled?: boolean
@@ -1556,6 +1643,10 @@ export interface ICredentialsEmailSearch {
    * Url with one-time use secret token that the user can use to reset password (read-only)
    */
   password_reset_url?: string | null
+  /**
+   * Url with one-time use secret token that the user can use to setup account (read-only)
+   */
+  account_setup_url?: string | null
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -1997,7 +2088,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -2247,7 +2338,7 @@ export interface IDashboardElement {
    */
   subtitle_text_as_html?: string | null
   /**
-   * Extension ID (read-only)
+   * Extension ID
    */
   extension_id?: string | null
 }
@@ -2590,11 +2681,11 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -2630,7 +2721,7 @@ export interface IDBConnection {
    */
   query_timezone?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -2719,9 +2810,17 @@ export interface IDBConnection {
    */
   managed?: boolean
   /**
+   * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+   */
+  custom_local_port?: number | null
+  /**
    * The Id of the ssh tunnel this connection uses
    */
   tunnel_id?: string | null
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
@@ -2806,7 +2905,7 @@ export interface IDBConnectionOverride {
    */
   database?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -2991,27 +3090,63 @@ export interface IDialectInfoOptions {
    */
   additional_params?: boolean
   /**
+   * Has support for issuing statements after connecting to the database (read-only)
+   */
+  after_connect_statements?: boolean
+  /**
+   * Has analytical view support (read-only)
+   */
+  analytical_view_dataset?: boolean
+  /**
    * Has auth support (read-only)
    */
   auth?: boolean
   /**
-   * Has host support (read-only)
+   * Has configurable cost estimation (read-only)
+   */
+  cost_estimate?: boolean
+  /**
+   * Can disable query context comments (read-only)
+   */
+  disable_context_comment?: boolean
+  /**
+   * Host is required (read-only)
    */
   host?: boolean
+  /**
+   * Instance name is required (read-only)
+   */
+  instance_name?: boolean
+  /**
+   * Has max billing gigabytes support (read-only)
+   */
+  max_billing_gigabytes?: boolean
   /**
    * Has support for a service account (read-only)
    */
   oauth_credentials?: boolean
   /**
+   * Has OAuth for PDT support (read-only)
+   */
+  pdts_for_oauth?: boolean
+  /**
+   * Port can be specified (read-only)
+   */
+  port?: boolean
+  /**
    * Has project name support (read-only)
    */
   project_name?: boolean
   /**
-   * Has schema support (read-only)
+   * Schema can be specified (read-only)
    */
   schema?: boolean
   /**
-   * Has SSL support (read-only)
+   * Has support for a service account (read-only)
+   */
+  service_account_credentials?: boolean
+  /**
+   * Has TLS/SSL support (read-only)
    */
   ssl?: boolean
   /**
@@ -3022,6 +3157,14 @@ export interface IDialectInfoOptions {
    * Has tmp table support (read-only)
    */
   tmp_table?: boolean
+  /**
+   * Has Oracle TNS support (read-only)
+   */
+  tns?: boolean
+  /**
+   * Username can be specified (read-only)
+   */
+  username?: boolean
   /**
    * Username is required (read-only)
    */
@@ -3117,6 +3260,10 @@ export interface IEmbedCookielessSessionAcquire {
    * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
    */
   session_reference_token?: string | null
+  /**
+   * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
+   */
+  embed_domain?: string | null
 }
 
 export interface IEmbedCookielessSessionAcquireResponse {
@@ -7156,24 +7303,6 @@ export interface IRequestAllIntegrations {
 }
 
 /**
- * Dynamically generated request type for all_lookml_models
- */
-export interface IRequestAllLookmlModels {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return. (can be used with offset)
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
-   */
-  offset?: number | null
-}
-
-/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -7203,20 +7332,6 @@ export interface IRequestAllScheduledPlans {
    * Return scheduled plans belonging to all users (caller needs see_schedules permission)
    */
   all_users?: boolean | null
-}
-
-/**
- * Dynamically generated request type for all_user_attributes
- */
-export interface IRequestAllUserAttributes {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Fields to order the results by. Sortable fields include: name, label
-   */
-  sorts?: string | null
 }
 
 /**
@@ -7421,6 +7536,10 @@ export interface IRequestContentThumbnail {
    * Whether or not to refresh the rendered image with the latest content
    */
   reload?: string | null
+  /**
+   * Light or dark background. Default is "light"
+   */
+  theme?: string | null
   /**
    * A value of png produces a thumbnail in PNG format instead of SVG (default)
    */
@@ -7690,11 +7809,11 @@ export interface IRequestGraphDerivedTablesForView {
  */
 export interface IRequestLogin {
   /**
-   * client_id part of API3 Key.
+   * client_id part of API Key.
    */
   client_id?: string | null
   /**
-   * client_secret part of API3 Key.
+   * client_secret part of API Key.
    */
   client_secret?: string | null
 }
@@ -8190,6 +8309,40 @@ export interface IRequestSearchBoards {
 }
 
 /**
+ * Dynamically generated request type for search_content
+ */
+export interface IRequestSearchContent {
+  /**
+   * Search terms
+   */
+  terms: string
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Content types requested (dashboard, look, lookml_dashboard).
+   */
+  types?: string | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
+  /**
+   * Requested page.
+   */
+  page?: number | null
+  /**
+   * Results per page.
+   */
+  per_page?: number | null
+}
+
+/**
  * Dynamically generated request type for search_content_favorites
  */
 export interface IRequestSearchContentFavorites {
@@ -8449,6 +8602,10 @@ export interface IRequestSearchDashboards {
    * Combine given search criteria in a boolean OR expression
    */
   filter_or?: boolean | null
+  /**
+   * Filter out the dashboards owned by the user passed at the :user_id params
+   */
+  not_owned_by?: boolean | null
 }
 
 /**
@@ -8509,98 +8666,6 @@ export interface IRequestSearchFolders {
  * Dynamically generated request type for search_groups
  */
 export interface IRequestSearchGroups {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null
-  /**
-   * Match group id.
-   */
-  id?: string | null
-  /**
-   * Match group name.
-   */
-  name?: string | null
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null
-}
-
-/**
- * Dynamically generated request type for search_groups_with_hierarchy
- */
-export interface IRequestSearchGroupsWithHierarchy {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null
-  /**
-   * Match group id.
-   */
-  id?: string | null
-  /**
-   * Match group name.
-   */
-  name?: string | null
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null
-}
-
-/**
- * Dynamically generated request type for search_groups_with_roles
- */
-export interface IRequestSearchGroupsWithRoles {
   /**
    * Requested fields.
    */
@@ -8764,89 +8829,9 @@ export interface IRequestSearchModelSets {
 }
 
 /**
- * Dynamically generated request type for search_permission_sets
- */
-export interface IRequestSearchPermissionSets {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match permission set id.
-   */
-  id?: string | null
-  /**
-   * Match permission set name.
-   */
-  name?: string | null
-  /**
-   * Match permission sets by all_access status.
-   */
-  all_access?: boolean | null
-  /**
-   * Match permission sets by built_in status.
-   */
-  built_in?: boolean | null
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null
-}
-
-/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match role id.
-   */
-  id?: string | null
-  /**
-   * Match role name.
-   */
-  name?: string | null
-  /**
-   * Match roles by built_in status.
-   */
-  built_in?: boolean | null
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null
-}
-
-/**
- * Dynamically generated request type for search_roles_with_user_count
- */
-export interface IRequestSearchRolesWithUserCount {
   /**
    * Requested fields.
    */
@@ -9202,7 +9187,7 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -9215,6 +9200,7 @@ export enum ResultFormat {
   txt = 'txt',
   xlsx = 'xlsx',
   gsxml = 'gsxml',
+  sql = 'sql',
 }
 
 export interface IResultMakerFilterables {
@@ -9760,6 +9746,22 @@ export interface IScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -10109,6 +10111,26 @@ export interface ISetting {
    * Toggle default future connectors on or off
    */
   data_connector_default_enabled?: boolean
+  /**
+   * Change the base portion of your Looker instance URL setting
+   */
+  host_url?: string
+  /**
+   * (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+   */
+  override_warnings?: boolean
+  /**
+   * An array of Email Domain Allowlist of type string for Scheduled Content
+   */
+  email_domain_allowlist?: string[]
+  /**
+   * Toggle cookieless embed setting
+   */
+  embed_cookieless_v2?: boolean
+  /**
+   * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+   */
+  embed_enabled?: boolean
 }
 
 export interface ISmtpNodeStatus {
@@ -10155,6 +10177,10 @@ export interface ISmtpSettings {
    * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
    */
   ssl_version?: SslVersion | null
+  /**
+   * Whether to enable built-in Looker SMTP
+   */
+  default_smtp?: boolean | null
 }
 
 export interface ISmtpStatus {
@@ -10339,7 +10365,7 @@ export interface ISshTunnel {
    */
   last_attempt?: string
   /**
-   * Localhost Port used by the Looker instance to connect to the remote DB (read-only)
+   * Localhost Port used by the Looker instance to connect to the remote DB
    */
   local_host_port?: number
   /**
@@ -10520,7 +10546,7 @@ export interface IThemeSettings {
    */
   font_source?: string | null
   /**
-   * Info button color
+   * (DEPRECATED) Info button color
    */
   info_button_color?: string
   /**
@@ -10544,6 +10570,10 @@ export interface IThemeSettings {
    */
   tile_background_color?: string
   /**
+   * Background color for text tiles
+   */
+  text_tile_background_color?: string
+  /**
    * Text color for tiles
    */
   tile_text_color?: string
@@ -10552,7 +10582,7 @@ export interface IThemeSettings {
    */
   title_color?: string
   /**
-   * Warning button color
+   * (DEPRECATED) Warning button color
    */
   warn_button_color?: string
   /**
@@ -10571,6 +10601,102 @@ export interface IThemeSettings {
    * Toggle to show reload data icon/button. Defaults to true.
    */
   show_reload_data_icon?: boolean
+  /**
+   * Toggle to show the dashboard actions menu. Defaults to true.
+   */
+  show_dashboard_menu?: boolean
+  /**
+   * Toggle to show the filters icon/toggle. Defaults to true.
+   */
+  show_filters_toggle?: boolean
+  /**
+   * Toggle to show the dashboard header. Defaults to true.
+   */
+  show_dashboard_header?: boolean
+  /**
+   * Toggle to center the dashboard title. Defaults to false.
+   */
+  center_dashboard_title?: boolean
+  /**
+   * Dashboard title font size.
+   */
+  dashboard_title_font_size?: string
+  /**
+   * Default box shadow.
+   */
+  box_shadow?: string
+  /**
+   * Dashboard page margin top.
+   */
+  page_margin_top?: string
+  /**
+   * Dashboard page margin bottom.
+   */
+  page_margin_bottom?: string
+  /**
+   * Dashboard page margin left and right.
+   */
+  page_margin_sides?: string
+  /**
+   * Toggle to show the explore page header. Defaults to true.
+   */
+  show_explore_header?: boolean
+  /**
+   * Toggle to show the explore page title. Defaults to true.
+   */
+  show_explore_title?: boolean
+  /**
+   * Toggle to show the explore page last run. Defaults to true.
+   */
+  show_explore_last_run?: boolean
+  /**
+   * Toggle to show the explore page timezone. Defaults to true.
+   */
+  show_explore_timezone?: boolean
+  /**
+   * Toggle to show the explore page run button. Defaults to true.
+   */
+  show_explore_run_stop_button?: boolean
+  /**
+   * Toggle to show the explore page actions button. Defaults to true.
+   */
+  show_explore_actions_button?: boolean
+  /**
+   * Toggle to show the look page header. Defaults to true.
+   */
+  show_look_header?: boolean
+  /**
+   * Toggle to show the look page title. Defaults to true.
+   */
+  show_look_title?: boolean
+  /**
+   * Toggle to show the look page last run. Defaults to true.
+   */
+  show_look_last_run?: boolean
+  /**
+   * Toggle to show the look page timezone Defaults to true.
+   */
+  show_look_timezone?: boolean
+  /**
+   * Toggle to show the look page run button. Defaults to true.
+   */
+  show_look_run_stop_button?: boolean
+  /**
+   * Toggle to show the look page actions button. Defaults to true.
+   */
+  show_look_actions_button?: boolean
+  /**
+   * Font size for tiles.
+   */
+  tile_title_font_size?: string
+  /**
+   * The vertical gap/gutter size between tiles.
+   */
+  column_gap_size?: string
+  /**
+   * The horizontal gap/gutter size between tiles.
+   */
+  row_gap_size?: string
 }
 
 export interface ITimezone {
@@ -10632,7 +10758,7 @@ export interface IUser {
    */
   avatar_url_without_sizing?: string | null
   /**
-   * API 3 credentials (read-only)
+   * API credentials (read-only)
    */
   credentials_api3?: ICredentialsApi3[] | null
   credentials_email?: ICredentialsEmail
@@ -10738,6 +10864,10 @@ export interface IUser {
    * (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
    */
   embed_group_folder_id?: string | null
+  /**
+   * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+   */
+  is_iam_admin?: boolean
   /**
    * Link to get this item (read-only)
    */
@@ -10886,7 +11016,7 @@ export interface IUserAttributeWithValue {
    */
   source?: string | null
   /**
-   * If this user attribute is hidden, whitelist of destinations to which it may be sent. (read-only)
+   * If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)
    */
   hidden_value_domain_whitelist?: string | null
 }
@@ -11126,13 +11256,29 @@ export interface IWriteAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.looker.com/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType | null
   /**
    * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
    */
   cron: string
+  /**
+   * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+   */
+  custom_url_base?: string | null
+  /**
+   * Parameters and path for the custom url defined by the alert creator
+   */
+  custom_url_params?: string | null
+  /**
+   * Label for the custom url defined by the alert creator
+   */
+  custom_url_label?: string | null
+  /**
+   * Boolean to determine if the custom url should be used
+   */
+  show_custom_url?: boolean
   /**
    * An optional, user-defined title for the alert
    */
@@ -11464,7 +11610,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: string | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -11487,7 +11633,7 @@ export interface IWriteCreateQueryTask {
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
   /**
@@ -11575,7 +11721,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null
   /**
@@ -11619,7 +11765,7 @@ export interface IWriteDashboardBase {
 
 /**
  * Dynamic writeable type for DashboardElement removes:
- * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, extension_id
+ * can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
  */
 export interface IWriteDashboardElement {
   /**
@@ -11701,6 +11847,10 @@ export interface IWriteDashboardElement {
    * JSON with all the properties required for rich editor and buttons elements
    */
   rich_content_json?: string | null
+  /**
+   * Extension ID
+   */
+  extension_id?: string | null
 }
 
 /**
@@ -11856,11 +12006,11 @@ export interface IWriteDBConnection {
    */
   name?: string
   /**
-   * Host name/address of server
+   * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null
   /**
-   * Port number on server
+   * Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
    */
   port?: string | null
   /**
@@ -11892,7 +12042,7 @@ export interface IWriteDBConnection {
    */
   query_timezone?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -11957,9 +12107,17 @@ export interface IWriteDBConnection {
    */
   pdt_context_override?: IWriteDBConnectionOverride | null
   /**
+   * This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+   */
+  custom_local_port?: number | null
+  /**
    * The Id of the ssh tunnel this connection uses
    */
   tunnel_id?: string | null
+  /**
+   * Enable Transparent Network Substrate (TNS) connections
+   */
+  uses_tns?: boolean | null
   /**
    * Maximum number of threads to use to build PDTs in parallel
    */
@@ -12024,7 +12182,7 @@ export interface IWriteDBConnectionOverride {
    */
   database?: string | null
   /**
-   * Scheme name
+   * Schema name
    */
   schema?: string | null
   /**
@@ -13118,6 +13276,22 @@ export interface IWriteScheduledPlan {
    */
   include_links?: boolean
   /**
+   * Custom url domain for the scheduled entity
+   */
+  custom_url_base?: string | null
+  /**
+   * Custom url path and parameters for the scheduled entity
+   */
+  custom_url_params?: string | null
+  /**
+   * Custom url label for the scheduled entity
+   */
+  custom_url_label?: string | null
+  /**
+   * Whether to show custom link back instead of standard looker link
+   */
+  show_custom_url?: boolean
+  /**
    * The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
    */
   pdf_paper_size?: string | null
@@ -13171,7 +13345,8 @@ export interface IWriteSessionConfig {
 }
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  */
 export interface IWriteSetting {
   /**
@@ -13212,6 +13387,22 @@ export interface IWriteSetting {
    * Toggle default future connectors on or off
    */
   data_connector_default_enabled?: boolean
+  /**
+   * Change the base portion of your Looker instance URL setting
+   */
+  host_url?: string
+  /**
+   * (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+   */
+  override_warnings?: boolean
+  /**
+   * An array of Email Domain Allowlist of type string for Scheduled Content
+   */
+  email_domain_allowlist?: string[] | null
+  /**
+   * Toggle cookieless embed setting
+   */
+  embed_cookieless_v2?: boolean
 }
 
 /**
@@ -13239,13 +13430,17 @@ export interface IWriteSshServer {
 
 /**
  * Dynamic writeable type for SshTunnel removes:
- * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, local_host_port, status
+ * tunnel_id, ssh_server_name, ssh_server_host, ssh_server_port, ssh_server_user, last_attempt, status
  */
 export interface IWriteSshTunnel {
   /**
    * SSH Server ID
    */
   ssh_server_id?: string
+  /**
+   * Localhost Port used by the Looker instance to connect to the remote DB
+   */
+  local_host_port?: number
   /**
    * Hostname or IP Address of the Database Server
    */
@@ -13278,12 +13473,12 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 export interface IWriteUser {
   /**
    * Dynamic writeable type for CredentialsEmail removes:
-   * can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+   * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
    */
   credentials_email?: IWriteCredentialsEmail | null
   /**

@@ -27,6 +27,7 @@ import type { ApiModel } from '@looker/sdk-codegen'
 import type { FC } from 'react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { Space, Span, Tooltip } from '@looker/components'
 import { ApixSection, DocMarkdown, DocTitle } from '../../components'
 
 interface DocHomeProps {
@@ -39,10 +40,18 @@ interface DocHomeParams {
 
 export const HomeScene: FC<DocHomeProps> = ({ api }) => {
   const { specKey } = useParams<DocHomeParams>()
+  const lookerVersion = 'x-looker-release-version'
 
   return (
     <ApixSection>
-      <DocTitle>{api.spec.info.title}</DocTitle>
+      <Space>
+        <DocTitle>{api.spec.info.title}</DocTitle>
+        {api.spec.info[lookerVersion] && (
+          <Tooltip content="Looker version providing this specification">
+            <Span fontSize="small">{api.spec.info[lookerVersion]}</Span>
+          </Tooltip>
+        )}
+      </Space>
       {api.spec.info.description && (
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />
       )}

@@ -1,5 +1,77 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.20 to ^0.1.21
+    * @looker/sdk bumped from ^23.0.0 to ^23.2.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.22 to ^0.1.23
+    * @looker/sdk bumped from ^23.4.0 to ^23.6.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.23 to ^0.1.24
+    * @looker/sdk bumped from ^23.6.0 to ^23.8.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.24 to ^0.1.25
+    * @looker/sdk bumped from ^23.8.0 to ^23.8.1
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.28 to ^0.1.29
+    * @looker/extension-utils bumped from ^0.1.25 to ^0.1.26
+    * @looker/sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk-codegen bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
+
+## [0.9.45](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.44...run-it-v0.9.45) (2023-03-31)
+
+
+### Features
+
+* embed playground ([#1280](https://github.com/looker-open-source/sdk-codegen/issues/1280)) ([28f1218](https://github.com/looker-open-source/sdk-codegen/commit/28f121830f116da59b7f1cd248433c15c98cc56e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.21 to ^0.1.22
+    * @looker/sdk bumped from ^23.2.0 to ^23.4.0
+
+## [0.9.43](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.42...run-it-v0.9.43) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+* track request time if the transport doesn't ([#1231](https://github.com/looker-open-source/sdk-codegen/issues/1231)) ([a0e31a4](https://github.com/looker-open-source/sdk-codegen/commit/a0e31a41c1075b653fc8a2bf44b297ff98b41c72))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.27 to ^0.1.28
+    * @looker/extension-utils bumped from ^0.1.19 to ^0.1.20
+    * @looker/sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-codegen bumped from ^21.7.4 to ^21.8.0
+    * @looker/sdk-rtl bumped from ^21.5.0 to ^21.6.0
+
 ### [0.9.42](https://www.github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.41...run-it-v0.9.42) (2022-12-09)
 
 

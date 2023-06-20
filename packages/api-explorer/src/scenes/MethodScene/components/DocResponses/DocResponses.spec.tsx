@@ -117,11 +117,11 @@ See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes
         json: function (): Promise<any> {
           throw new Error('Function not implemented.')
         },
-      }
+      } as unknown as Response
       return Promise.resolve(resp)
     }
     const fetcher = global.fetch
-    global.fetch = jest.fn((input: RequestInfo, _init?: RequestInit) => {
+    global.fetch = jest.fn((input: RequestInfo | URL, _init?: RequestInit) => {
       const url = input.toString()
       let result = 'I dunno'
       if (url.endsWith('index.json')) {

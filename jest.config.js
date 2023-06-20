@@ -36,22 +36,30 @@ module.exports = {
     '@looker/api-explorer/src/utils':
       '<rootDir>/packages/api-explorer/src/utils',
     '@looker/sdk-codegen-utils/src': '<rootDir>/packages/sdk-codegen-utils/src',
-    '@looker/((?!components-test-utils|components|design|icons|chatty|i18n)(.+))$':
+    '@looker/((?!components-test-utils|components|design|icons|chatty|i18n|redux)(.+))$':
       '<rootDir>/packages/$1/src',
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/config/jest/fileMock.js',
   },
   restoreMocks: true,
-  // eslint-disable-next-line node/no-path-concat
-  setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
+  setupFilesAfterEnv: [
+    // eslint-disable-next-line node/no-path-concat
+    `${__dirname}/jest.setup.js`,
+    '@testing-library/jest-dom/extend-expect',
+    'regenerator-runtime/runtime',
+  ],
   setupFiles: ['jest-localstorage-mock'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],
+  testEnvironment: require.resolve('jest-environment-jsdom'),
+  testEnvironmentOptions: {
+    url: 'http://localhost/',
+  },
   globals: {
     'ts-jest': {
       isolatedModules: true,

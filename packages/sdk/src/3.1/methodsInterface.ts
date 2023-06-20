@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,6 @@ import type {
   IRequestAllIntegrations,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
@@ -160,12 +159,10 @@ import type {
   IRequestSearchContentViews,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
-  IRequestSearchFolders,
   IRequestSearchGroups,
   IRequestSearchHomepages,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchSpaces,
   IRequestSearchThemes,
@@ -256,9 +253,9 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Present client credentials to obtain an authorization token
    *
-   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
-   * The client credentials required for this login must be obtained by creating an API3 key on a user account
-   * in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
+   * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
+   * The client credentials required for this login must be obtained by creating an API key on a user account
+   * in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
    *
    * The access token returned by `login` must be used in the HTTP Authorization header of subsequent
    * API requests, like this:
@@ -281,7 +278,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * ### Best Practice:
    * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
    *
-   * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+   * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
    *
    * POST /login -> IAccessToken
    *
@@ -311,6 +308,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * each of those API calls.
    *
    * See 'login' for more detail on the access token and how to use it.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /login/{user_id} -> IAccessToken
    *
@@ -377,6 +376,9 @@ export interface ILooker31SDK extends IAPIMethods {
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
    *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/sso_url -> IEmbedUrlResponse
    *
    * @param body Partial<IEmbedSsoParams>
@@ -404,7 +406,9 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
    *
-   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /ldap_config -> ILDAPConfig
    *
@@ -426,7 +430,9 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
    *
-   * See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+   * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /ldap_config -> ILDAPConfig
    *
@@ -458,6 +464,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * No authentication to the LDAP server is attempted.
    *
    * The active LDAP settings are not modified.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /ldap_config/test_connection -> ILDAPConfigTestResult
    *
@@ -492,6 +500,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * The active LDAP settings are not modified.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /ldap_config/test_auth -> ILDAPConfigTestResult
    *
    * @param body Partial<IWriteLDAPConfig>
@@ -514,6 +524,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * The active LDAP settings are not modified.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /ldap_config/test_user_info -> ILDAPConfigTestResult
    *
    * @param body Partial<IWriteLDAPConfig>
@@ -535,6 +547,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * **test_ldap_user** and **test_ldap_password** are required.
    *
    * The active LDAP settings are not modified.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /ldap_config/test_user_auth -> ILDAPConfigTestResult
    *
@@ -561,6 +575,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * OIDC is enabled or disabled for Looker using the **enabled** field.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /oidc_config -> IOIDCConfig
    *
    * @param options one-time API call overrides
@@ -581,6 +597,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /oidc_config -> IOIDCConfig
    *
    * @param body Partial<IWriteOIDCConfig>
@@ -594,6 +612,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Get a OIDC test configuration by test_slug.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /oidc_test_configs/{test_slug} -> IOIDCConfig
    *
@@ -609,6 +629,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Delete a OIDC test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /oidc_test_configs/{test_slug} -> string
    *
    * @param test_slug Slug of test config
@@ -622,6 +644,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Create a OIDC test configuration.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /oidc_test_configs -> IOIDCConfig
    *
@@ -637,6 +661,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Get password config.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /password_config -> IPasswordConfig
    *
    * @param options one-time API call overrides
@@ -648,6 +674,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Update password config.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /password_config -> IPasswordConfig
    *
@@ -662,6 +690,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Force all credentials_email users to reset their login passwords upon their next login.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
    *
@@ -686,6 +716,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * SAML is enabled or disabled for Looker using the **enabled** field.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /saml_config -> ISamlConfig
    *
    * @param options one-time API call overrides
@@ -706,6 +738,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /saml_config -> ISamlConfig
    *
    * @param body Partial<IWriteSamlConfig>
@@ -719,6 +753,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Get a SAML test configuration by test_slug.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /saml_test_configs/{test_slug} -> ISamlConfig
    *
@@ -734,6 +770,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Delete a SAML test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /saml_test_configs/{test_slug} -> string
    *
    * @param test_slug Slug of test config
@@ -748,6 +786,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Create a SAML test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /saml_test_configs -> ISamlConfig
    *
    * @param body Partial<IWriteSamlConfig>
@@ -761,6 +801,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Parse the given xml as a SAML IdP metadata document and return the result.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
@@ -777,6 +819,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
    * Note that this requires that the url be public or at least at a location where the Looker instance
    * can fetch it without requiring any special authentication.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
@@ -1237,6 +1281,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Get all legacy features.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /legacy_features -> ILegacyFeature[]
    *
    * @param options one-time API call overrides
@@ -1248,6 +1294,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Get information about the legacy feature with a specific id.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /legacy_features/{legacy_feature_id} -> ILegacyFeature
    *
@@ -1262,6 +1310,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Update information about the legacy feature with a specific id.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /legacy_features/{legacy_feature_id} -> ILegacyFeature
    *
@@ -1291,7 +1341,7 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Configure SMTP Settings
    *   This API allows users to configure the SMTP settings on the Looker instance.
-   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *   Only admin users are authorised to call this API.
    *
    * POST /smtp_settings -> void
    *
@@ -1724,7 +1774,7 @@ export interface ILooker31SDK extends IAPIMethods {
   content_thumbnail(
     request: IRequestContentThumbnail,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>
+  ): Promise<SDKResponse<string, IError | IValidationError>>
 
   /**
    * ### Validate All Content
@@ -1857,7 +1907,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Search Dashboards
    *
-   * Returns an **array of dashboard objects** that match the specified search criteria.
+   * Returns an array of **user-defined dashboard** objects that match the specified search criteria.
+   * Note, [search_dashboards()](#!/Dashboard/search_dashboards) does not return LookML dashboard objects.
    *
    * If multiple search params are given and `filter_or` is FALSE or not specified,
    * search params are combined in a logical AND operation.
@@ -2540,12 +2591,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /folders/search -> IFolder[]
    *
-   * @param request composed interface "IRequestSearchFolders" for complex method parameters
+   * @param request composed interface "IRequestSearchSpaces" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_folders(
-    request: IRequestSearchFolders,
+    request: IRequestSearchSpaces,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IFolder[], IError>>
 
@@ -4850,7 +4901,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * **NOTE**: Binary content may be returned by this function.
    *
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *
@@ -5162,12 +5213,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /permission_sets/search -> IPermissionSet[]
    *
-   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_permission_sets(
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>>
 
@@ -5373,6 +5424,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Set all groups for a role, removing all existing group associations from that role.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
    * @param role_id id of role
@@ -5475,7 +5528,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -5582,7 +5635,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
    * queries are run in the context of each recipient, so different recipients may see different
-   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
+   * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://cloud.google.com/looker/docs/r/admin/run-as-recipient).
    *
    * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
    * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -5590,7 +5643,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -5640,7 +5693,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -5768,7 +5821,7 @@ export interface ILooker31SDK extends IAPIMethods {
    * #### Email Permissions:
    *
    * For details about permissions required to schedule delivery to email and the safeguards
-   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+   * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
    *
    *
    * #### Scheduled Plan Destination Formats
@@ -6145,7 +6198,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
    *
-   * For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
+   * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
    *
    * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
@@ -6572,6 +6625,8 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/credential/{credential_type}/{credential_id} -> IUser
    *
    * @param credential_type Type name of credential
@@ -6590,6 +6645,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param user_id Id of user
@@ -6605,6 +6662,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
@@ -6624,6 +6683,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param user_id Id of user
@@ -6642,6 +6703,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_email -> string
    *
    * @param user_id Id of user
@@ -6655,6 +6718,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
@@ -6671,6 +6736,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
@@ -6690,6 +6757,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Two-factor login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_totp -> string
    *
    * @param user_id Id of user
@@ -6703,6 +6772,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### LDAP login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
@@ -6720,6 +6791,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### LDAP login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
    * @param user_id Id of user
@@ -6733,6 +6806,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Google authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
@@ -6750,6 +6825,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Google authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_google -> string
    *
    * @param user_id Id of user
@@ -6763,6 +6840,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Saml authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
@@ -6780,6 +6859,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Saml authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
    * @param user_id Id of user
@@ -6793,6 +6874,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
@@ -6810,6 +6893,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
    * @param user_id Id of user
@@ -6822,12 +6907,14 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
    *
    * @param user_id Id of user
-   * @param credentials_api3_id Id of API 3 Credential
+   * @param credentials_api3_id Id of API Credential
    * @param fields Requested fields.
    * @param options one-time API call overrides
    *
@@ -6840,12 +6927,14 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsApi3, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param user_id Id of user
-   * @param credentials_api3_id Id of API 3 Credential
+   * @param credentials_api3_id Id of API Credential
    * @param options one-time API call overrides
    *
    */
@@ -6856,7 +6945,9 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
@@ -6872,7 +6963,9 @@ export interface ILooker31SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsApi3[], IError>>
 
   /**
-   * ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_api3 -> ICredentialsApi3
    *
@@ -6892,6 +6985,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Embed login information for the specified user.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
    *
    * @param user_id Id of user
@@ -6910,6 +7005,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Embed login information for the specified user.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
    * @param user_id Id of user
@@ -6925,6 +7022,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Embed login information for the specified user.
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
@@ -6942,6 +7041,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
    * @param user_id Id of user
@@ -6958,6 +7059,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
    * @param user_id Id of user
@@ -6971,6 +7074,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Web login session for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/sessions/{session_id} -> ISession
    *
@@ -6990,6 +7095,8 @@ export interface ILooker31SDK extends IAPIMethods {
   /**
    * ### Web login session for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
    * @param user_id Id of user
@@ -7005,6 +7112,8 @@ export interface ILooker31SDK extends IAPIMethods {
 
   /**
    * ### Web login session for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
@@ -7029,6 +7138,8 @@ export interface ILooker31SDK extends IAPIMethods {
    * Invitation emails for new users typically are not set to expire.
    * The expire period is always 60 minutes when expires is enabled.
    * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
    *
@@ -7152,12 +7263,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /user_attributes -> IUserAttribute[]
    *
-   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+   * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   all_user_attributes(
-    request: IRequestAllUserAttributes,
+    request: IRequestAllHomepageSections,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>>
 
@@ -7333,7 +7444,7 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
    * the same user account will see the same files in the dev workspace. To avoid collisions between
-   * API clients it's best to have each client login with API3 credentials for a different user account.
+   * API clients it's best to have each client login with API credentials for a different user account.
    *
    * Changes made to files in a dev workspace are persistent across API sessions. It's a good
    * idea to commit any changes you've made to the git repository, but not strictly required. Your modified files

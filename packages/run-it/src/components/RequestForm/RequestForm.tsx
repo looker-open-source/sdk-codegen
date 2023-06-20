@@ -24,7 +24,7 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, Dispatch } from 'react'
+import type { BaseSyntheticEvent, FC, Dispatch, FormEventHandler } from 'react'
 import React from 'react'
 import {
   Button,
@@ -33,6 +33,8 @@ import {
   Tooltip,
   Fieldset,
   MessageBar,
+  ToggleSwitch,
+  Label,
 } from '@looker/components'
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt'
 import { LoginForm } from '../LoginForm'
@@ -41,8 +43,10 @@ import {
   createComplexItem,
   showDataChangeWarning,
   updateNullableProp,
+  BODY_HINT,
 } from './formUtils'
 import { FormItem } from './FormItem'
+import { DarkSpan } from './../common'
 
 /** Properties required by RequestForm */
 interface RequestFormProps {
@@ -62,12 +66,16 @@ interface RequestFormProps {
   hasConfig: boolean
   /** Handle config button click */
   handleConfig: (e: BaseSyntheticEvent) => void
-  /** A set state callback which if present allows for editing, setting or clearing OAuth configuration parameters */
+  /** A set state callback which, if present, allows for editing, setting or clearing OAuth configuration parameters */
   setHasConfig?: Dispatch<boolean>
   /** Validation message to display */
   validationMessage?: string
   /** Validation message setter */
   setValidationMessage?: Dispatch<string>
+  /** Toggle for processing body inputs */
+  keepBody?: boolean
+  /** Toggle to keep all body inputs */
+  toggleKeepBody?: (_event: FormEventHandler<HTMLInputElement>) => void
   /** Is RunIt being used in a Looker extension? */
   isExtension?: boolean
 }
@@ -88,8 +96,12 @@ export const RequestForm: FC<RequestFormProps> = ({
   setHasConfig,
   validationMessage,
   setValidationMessage,
+  keepBody,
+  toggleKeepBody,
   isExtension = false,
 }) => {
+  const hasBody = inputs.some((i) => i.location === 'body')
+
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked })
   }
@@ -152,6 +164,25 @@ export const RequestForm: FC<RequestFormProps> = ({
             : createComplexItem(input, handleComplexChange, requestContent)
         )}
         {httpMethod !== 'GET' && showDataChangeWarning()}
+        {hasBody && !!toggleKeepBody && (
+          <>
+            <FormItem key="keepbody_fib" id="keepBody" label="Send body as-is">
+              <>
+                <ToggleSwitch
+                  key="keepBody"
+                  id="keepBody"
+                  name="keepBody"
+                  onChange={toggleKeepBody as unknown as FormEventHandler}
+                  on={keepBody}
+                />
+                <Label>Send the body parameter as entered</Label>
+              </>
+            </FormItem>
+            <FormItem key="body_hint" id="bodyHint">
+              <DarkSpan fontSize="small">{BODY_HINT}</DarkSpan>
+            </FormItem>
+          </>
+        )}
         <FormItem id="buttonbar">
           <>
             {hasConfig ? (

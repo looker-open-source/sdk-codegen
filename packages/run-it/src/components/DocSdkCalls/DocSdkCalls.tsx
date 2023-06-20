@@ -45,6 +45,8 @@ export interface DocSdkCallsProps {
   inputs: RunItValues
   /** Language to generate Sdk calls in*/
   sdkLanguage: string
+  /** true to not trim the body params */
+  keepBody?: boolean
 }
 
 /**
@@ -55,9 +57,10 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   method,
   inputs,
   sdkLanguage = 'All',
+  keepBody = false,
 }) => {
-  const trimmedInputs = trimInputs(inputs)
   const [heading, setHeading] = useState('')
+  const trimmed = trimInputs(inputs, keepBody)
 
   useEffect(() => {
     const text =
@@ -72,11 +75,11 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
     if (sdkLanguage === 'All') {
       const generators = getGenerators(api)
       Object.entries(generators).forEach(([language, gen]) => {
-        calls[language] = gen.makeTheCall(method, trimmedInputs)
+        calls[language] = gen.makeTheCall(method, trimmed)
       })
     } else {
       const gen = getCodeGenerator(sdkLanguage, api)
-      calls[sdkLanguage] = gen!.makeTheCall(method, trimmedInputs)
+      calls[sdkLanguage] = gen!.makeTheCall(method, trimmed)
     }
   } catch {
     return (

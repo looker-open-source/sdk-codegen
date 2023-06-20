@@ -1,5 +1,104 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-sdk-react bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-utils bumped from ^0.1.20 to ^0.1.21
+    * @looker/sdk bumped from ^23.0.0 to ^23.2.0
+    * @looker/wholly-sheet bumped from ^0.5.39 to ^0.5.40
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/wholly-artifact bumped from ^0.1.0 to ^0.1.1
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/wholly-artifact bumped from ^0.1.1 to ^0.1.2
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.2.0 to ^23.4.0
+    * @looker/extension-sdk-react bumped from ^23.2.0 to ^23.4.0
+    * @looker/extension-utils bumped from ^0.1.21 to ^0.1.22
+    * @looker/sdk bumped from ^23.2.0 to ^23.4.0
+    * @looker/wholly-artifact bumped from ^0.1.2 to ^0.1.3
+    * @looker/wholly-sheet bumped from ^0.5.40 to ^0.5.41
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.4.0 to ^23.6.0
+    * @looker/extension-sdk-react bumped from ^23.4.0 to ^23.6.0
+    * @looker/extension-utils bumped from ^0.1.22 to ^0.1.23
+    * @looker/sdk bumped from ^23.4.0 to ^23.6.0
+    * @looker/wholly-artifact bumped from ^0.1.3 to ^0.1.4
+    * @looker/wholly-sheet bumped from ^0.5.41 to ^0.5.42
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.6.0 to ^23.8.0
+    * @looker/extension-sdk-react bumped from ^23.6.0 to ^23.8.0
+    * @looker/extension-utils bumped from ^0.1.23 to ^0.1.24
+    * @looker/sdk bumped from ^23.6.0 to ^23.8.0
+    * @looker/wholly-artifact bumped from ^0.1.4 to ^0.1.5
+    * @looker/wholly-sheet bumped from ^0.5.42 to ^0.5.43
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.8.0 to ^23.8.1
+    * @looker/extension-sdk-react bumped from ^23.8.0 to ^23.8.1
+    * @looker/extension-utils bumped from ^0.1.24 to ^0.1.25
+    * @looker/sdk bumped from ^23.8.0 to ^23.8.1
+    * @looker/wholly-artifact bumped from ^0.1.5 to ^0.1.6
+    * @looker/wholly-sheet bumped from ^0.5.43 to ^0.5.44
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.28 to ^0.1.29
+    * @looker/extension-sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/extension-sdk-react bumped from ^23.8.1 to ^23.10.0
+    * @looker/extension-utils bumped from ^0.1.25 to ^0.1.26
+    * @looker/sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
+    * @looker/wholly-artifact bumped from ^0.1.6 to ^0.1.7
+    * @looker/wholly-sheet bumped from ^0.5.44 to ^0.5.45
+
+## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.20.1...hackathon-v22.21.0) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.27 to ^0.1.28
+    * @looker/extension-sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/extension-sdk-react bumped from ^22.20.1 to ^23.0.0
+    * @looker/extension-utils bumped from ^0.1.19 to ^0.1.20
+    * @looker/sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-rtl bumped from ^21.5.0 to ^21.6.0
+    * @looker/wholly-sheet bumped from ^0.5.38 to ^0.5.39
+
 ### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.20.0...hackathon-v22.20.1) (2022-12-09)
 
 

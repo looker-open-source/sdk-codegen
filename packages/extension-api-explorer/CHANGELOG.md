@@ -1,5 +1,100 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.43 to ^0.9.44
+    * @looker/extension-sdk bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-sdk-react bumped from ^23.0.0 to ^23.2.0
+    * @looker/extension-utils bumped from ^0.1.20 to ^0.1.21
+    * @looker/run-it bumped from ^0.9.43 to ^0.9.44
+    * @looker/sdk bumped from ^23.0.0 to ^23.2.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.44 to ^0.9.45
+    * @looker/extension-sdk bumped from ^23.2.0 to ^23.4.0
+    * @looker/extension-sdk-react bumped from ^23.2.0 to ^23.4.0
+    * @looker/extension-utils bumped from ^0.1.21 to ^0.1.22
+    * @looker/run-it bumped from ^0.9.44 to ^0.9.45
+    * @looker/sdk bumped from ^23.2.0 to ^23.4.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.45 to ^0.9.46
+    * @looker/extension-sdk bumped from ^23.4.0 to ^23.6.0
+    * @looker/extension-sdk-react bumped from ^23.4.0 to ^23.6.0
+    * @looker/extension-utils bumped from ^0.1.22 to ^0.1.23
+    * @looker/run-it bumped from ^0.9.45 to ^0.9.46
+    * @looker/sdk bumped from ^23.4.0 to ^23.6.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.46 to ^0.9.47
+    * @looker/extension-sdk bumped from ^23.6.0 to ^23.8.0
+    * @looker/extension-sdk-react bumped from ^23.6.0 to ^23.8.0
+    * @looker/extension-utils bumped from ^0.1.23 to ^0.1.24
+    * @looker/run-it bumped from ^0.9.46 to ^0.9.47
+    * @looker/sdk bumped from ^23.6.0 to ^23.8.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.47 to ^0.9.48
+    * @looker/extension-sdk bumped from ^23.8.0 to ^23.8.1
+    * @looker/extension-sdk-react bumped from ^23.8.0 to ^23.8.1
+    * @looker/extension-utils bumped from ^0.1.24 to ^0.1.25
+    * @looker/run-it bumped from ^0.9.47 to ^0.9.48
+    * @looker/sdk bumped from ^23.8.0 to ^23.8.1
+
+## [22.21.6](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.5...extension-api-explorer-v22.21.6) (2023-06-15)
+
+
+### Bug Fixes
+
+* use new CDN for errorcodes repository ([#1320](https://github.com/looker-open-source/sdk-codegen/issues/1320)) ([df40441](https://github.com/looker-open-source/sdk-codegen/commit/df40441cb1f187df5469f834486f8ff4de82c266))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.48 to ^0.9.49
+    * @looker/extension-sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/extension-sdk-react bumped from ^23.8.1 to ^23.10.0
+    * @looker/extension-utils bumped from ^0.1.25 to ^0.1.26
+    * @looker/run-it bumped from ^0.9.48 to ^0.9.49
+    * @looker/sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk-codegen bumped from ^21.8.0 to ^21.8.1
+
+## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.20.1...extension-api-explorer-v22.21.0) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from ^0.9.42 to ^0.9.43
+    * @looker/extension-sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/extension-sdk-react bumped from ^22.20.1 to ^23.0.0
+    * @looker/extension-utils bumped from ^0.1.19 to ^0.1.20
+    * @looker/run-it bumped from ^0.9.42 to ^0.9.43
+    * @looker/sdk bumped from ^22.20.1 to ^23.0.0
+    * @looker/sdk-codegen bumped from ^21.7.4 to ^21.8.0
+
 ### [22.20.1](https://www.github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.20.0...extension-api-explorer-v22.20.1) (2022-12-09)
 
 

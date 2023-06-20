@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2021 Looker Data Sciences, Inc.
+Copyright (c) 2023 Looker Data Sciences, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -239,9 +239,9 @@ func (l *LookerSDK) ReadAlertNotification(
 
 // ### Present client credentials to obtain an authorization token
 //
-// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.looker.com/r/api/outh2_resource_owner_pc) pattern.
-// The client credentials required for this login must be obtained by creating an API3 key on a user account
-// in the Looker Admin console. The API3 key consists of a public `client_id` and a private `client_secret`.
+// Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
+// The client credentials required for this login must be obtained by creating an API key on a user account
+// in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
 //
 // The access token returned by `login` must be used in the HTTP Authorization header of subsequent
 // API requests, like this:
@@ -264,7 +264,7 @@ func (l *LookerSDK) ReadAlertNotification(
 // ### Best Practice:
 // Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
 //
-// For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API3](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+// For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
 //
 // POST /login -> AccessToken
 func (l *LookerSDK) Login(request RequestLogin,
@@ -291,6 +291,8 @@ func (l *LookerSDK) Login(request RequestLogin,
 // each of those API calls.
 //
 // See 'login' for more detail on the access token and how to use it.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /login/{user_id} -> AccessToken
 func (l *LookerSDK) LoginUser(
@@ -489,6 +491,8 @@ func (l *LookerSDK) UpdateArtifacts(
 //
 // The value of the `secret` field will be set by Looker and returned.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // POST /embed_config/secrets -> EmbedSecret
 func (l *LookerSDK) CreateEmbedSecret(
 	body WriteEmbedSecret,
@@ -500,6 +504,8 @@ func (l *LookerSDK) CreateEmbedSecret(
 }
 
 // ### Delete an embed secret.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // DELETE /embed_config/secrets/{embed_secret_id} -> string
 func (l *LookerSDK) DeleteEmbedSecret(
@@ -547,6 +553,8 @@ func (l *LookerSDK) DeleteEmbedSecret(
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // POST /embed/sso_url -> EmbedUrlResponse
 func (l *LookerSDK) CreateSsoEmbedUrl(
 	body EmbedSsoParams,
@@ -563,7 +571,7 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 // This embed URL can then be used to instantiate a Looker embed session in a
 // "Powered by Looker" (PBL) web application.
 //
-// This is similar to Private Embedding (https://docs.looker.com/r/admin/embed/private-embed). Instead of
+// This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
 // of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
 // make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
 // the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
@@ -579,9 +587,11 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 // copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
 //
 // #### Security Note
-// Protect this embed URL as you would an access token or password credentials - do not write
+// Protect this signed URL as you would an access token or password credentials - do not write
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // POST /embed/token_url/me -> EmbedUrlResponse
 func (l *LookerSDK) CreateEmbedUrlAsMe(
@@ -596,16 +606,20 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 // ### Acquire a cookieless embed session.
 //
 // The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
-// to the embed login. This endpoint accepts an embed user definition and creates it if it does not exist,
-// otherwise it reuses it. Note that this endpoint will not update the user, user attributes or group
-// attributes if the embed user already exists. This is the same behavior as the embed SSO login.
+// to the embed login. This endpoint accepts an embed user definition and creates or updates it. This is
+// similar behavior to the embed SSO login as they both can create and update embed user data.
 //
 // The endpoint also accepts an optional `session_reference_token`. If present and the session has not expired
 // and the credentials match the credentials for the embed session, a new authentication token will be
 // generated. This allows the embed session to attach a new embedded IFRAME to the embed session. Note that
-// the session will NOT be extended in this scenario, in other words the session_length parameter is ignored.
+// the session is NOT extended in this scenario. In other words the session_length parameter is ignored.
 //
-// If the session_reference_token has expired, it will be ignored and a new embed session will be created.
+// **IMPORTANT:** If the `session_reference_token` is provided and the session has NOT expired, the embed user
+// is NOT updated. This is done for performance reasons and to support the embed SSO usecase where the
+// first IFRAME created on a page uses a signed url and subsequently created IFRAMEs do not.
+//
+// If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
+// new embed session will be created. Note that the embed user definition will be updated in this scenario.
 //
 // If the credentials do not match the credentials associated with an exisiting session_reference_token, a
 // 404 will be returned.
@@ -619,6 +633,8 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 //     iframe.
 //   - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
 //     the iframe.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
 func (l *LookerSDK) AcquireEmbedCookielessSession(
@@ -635,6 +651,8 @@ func (l *LookerSDK) AcquireEmbedCookielessSession(
 // This will delete the session associated with the given session reference token. Calling this endpoint will result
 // in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
 // user out of the Looker instance.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // DELETE /embed/cookieless_session/{session_reference_token} -> string
 func (l *LookerSDK) DeleteEmbedCookielessSession(
@@ -654,6 +672,8 @@ func (l *LookerSDK) DeleteEmbedCookielessSession(
 // - Navigation token.
 // The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
 // first time when the tokens returned by the acquire_session endpoint should be used).
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
 func (l *LookerSDK) GenerateTokensForCookielessSession(
@@ -680,7 +700,9 @@ func (l *LookerSDK) GenerateTokensForCookielessSession(
 //
 // Looker will never return an **auth_password** field. That value can be set, but never retrieved.
 //
-// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+// See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /ldap_config -> LDAPConfig
 func (l *LookerSDK) LdapConfig(
@@ -701,7 +723,9 @@ func (l *LookerSDK) LdapConfig(
 //
 // It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
 //
-// See the [Looker LDAP docs](https://docs.looker.com/r/api/ldap_setup) for additional information.
+// See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PATCH /ldap_config -> LDAPConfig
 func (l *LookerSDK) UpdateLdapConfig(
@@ -733,6 +757,8 @@ func (l *LookerSDK) UpdateLdapConfig(
 // No authentication to the LDAP server is attempted.
 //
 // The active LDAP settings are not modified.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PUT /ldap_config/test_connection -> LDAPConfigTestResult
 func (l *LookerSDK) TestLdapConfigConnection(
@@ -767,6 +793,8 @@ func (l *LookerSDK) TestLdapConfigConnection(
 //
 // The active LDAP settings are not modified.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PUT /ldap_config/test_auth -> LDAPConfigTestResult
 func (l *LookerSDK) TestLdapConfigAuth(
 	body WriteLDAPConfig,
@@ -787,6 +815,8 @@ func (l *LookerSDK) TestLdapConfigAuth(
 //
 // The active LDAP settings are not modified.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PUT /ldap_config/test_user_info -> LDAPConfigTestResult
 func (l *LookerSDK) TestLdapConfigUserInfo(
 	body WriteLDAPConfig,
@@ -806,6 +836,8 @@ func (l *LookerSDK) TestLdapConfigUserInfo(
 // **test_ldap_user** and **test_ldap_password** are required.
 //
 // The active LDAP settings are not modified.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
 func (l *LookerSDK) TestLdapConfigUserAuth(
@@ -1023,6 +1055,8 @@ func (l *LookerSDK) DeactivateAppUser(
 //
 // OIDC is enabled or disabled for Looker using the **enabled** field.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /oidc_config -> OIDCConfig
 func (l *LookerSDK) OidcConfig(
 	options *rtl.ApiSettings) (OIDCConfig, error) {
@@ -1042,6 +1076,8 @@ func (l *LookerSDK) OidcConfig(
 //
 // It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PATCH /oidc_config -> OIDCConfig
 func (l *LookerSDK) UpdateOidcConfig(
 	body WriteOIDCConfig,
@@ -1053,6 +1089,8 @@ func (l *LookerSDK) UpdateOidcConfig(
 }
 
 // ### Get a OIDC test configuration by test_slug.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /oidc_test_configs/{test_slug} -> OIDCConfig
 func (l *LookerSDK) OidcTestConfig(
@@ -1067,6 +1105,8 @@ func (l *LookerSDK) OidcTestConfig(
 
 // ### Delete a OIDC test configuration.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /oidc_test_configs/{test_slug} -> string
 func (l *LookerSDK) DeleteOidcTestConfig(
 	testSlug string,
@@ -1080,6 +1120,8 @@ func (l *LookerSDK) DeleteOidcTestConfig(
 
 // ### Create a OIDC test configuration.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // POST /oidc_test_configs -> OIDCConfig
 func (l *LookerSDK) CreateOidcTestConfig(
 	body WriteOIDCConfig,
@@ -1092,6 +1134,8 @@ func (l *LookerSDK) CreateOidcTestConfig(
 
 // ### Get password config.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /password_config -> PasswordConfig
 func (l *LookerSDK) PasswordConfig(
 	options *rtl.ApiSettings) (PasswordConfig, error) {
@@ -1102,6 +1146,8 @@ func (l *LookerSDK) PasswordConfig(
 }
 
 // ### Update password config.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PATCH /password_config -> PasswordConfig
 func (l *LookerSDK) UpdatePasswordConfig(
@@ -1114,6 +1160,8 @@ func (l *LookerSDK) UpdatePasswordConfig(
 }
 
 // ### Force all credentials_email users to reset their login passwords upon their next login.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
 func (l *LookerSDK) ForcePasswordResetAtNextLoginForAllUsers(
@@ -1137,6 +1185,8 @@ func (l *LookerSDK) ForcePasswordResetAtNextLoginForAllUsers(
 //
 // SAML is enabled or disabled for Looker using the **enabled** field.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /saml_config -> SamlConfig
 func (l *LookerSDK) SamlConfig(
 	options *rtl.ApiSettings) (SamlConfig, error) {
@@ -1156,6 +1206,8 @@ func (l *LookerSDK) SamlConfig(
 //
 // It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PATCH /saml_config -> SamlConfig
 func (l *LookerSDK) UpdateSamlConfig(
 	body WriteSamlConfig,
@@ -1167,6 +1219,8 @@ func (l *LookerSDK) UpdateSamlConfig(
 }
 
 // ### Get a SAML test configuration by test_slug.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /saml_test_configs/{test_slug} -> SamlConfig
 func (l *LookerSDK) SamlTestConfig(
@@ -1181,6 +1235,8 @@ func (l *LookerSDK) SamlTestConfig(
 
 // ### Delete a SAML test configuration.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /saml_test_configs/{test_slug} -> string
 func (l *LookerSDK) DeleteSamlTestConfig(
 	testSlug string,
@@ -1194,6 +1250,8 @@ func (l *LookerSDK) DeleteSamlTestConfig(
 
 // ### Create a SAML test configuration.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // POST /saml_test_configs -> SamlConfig
 func (l *LookerSDK) CreateSamlTestConfig(
 	body WriteSamlConfig,
@@ -1205,6 +1263,8 @@ func (l *LookerSDK) CreateSamlTestConfig(
 }
 
 // ### Parse the given xml as a SAML IdP metadata document and return the result.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /parse_saml_idp_metadata -> SamlMetadataParseResult
 func (l *LookerSDK) ParseSamlIdpMetadata(
@@ -1219,6 +1279,8 @@ func (l *LookerSDK) ParseSamlIdpMetadata(
 // ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
 // Note that this requires that the url be public or at least at a location where the Looker instance
 // can fetch it without requiring any special authentication.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
 func (l *LookerSDK) FetchAndParseSamlIdpMetadata(
@@ -1257,6 +1319,8 @@ func (l *LookerSDK) UpdateSessionConfig(
 //
 // # Returns the users that have been added to the Support Access Allowlist
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /support_access/allowlist -> []SupportAccessAllowlistEntry
 func (l *LookerSDK) GetSupportAccessAllowlistEntries(
 	fields string,
@@ -1271,6 +1335,8 @@ func (l *LookerSDK) GetSupportAccessAllowlistEntries(
 //
 // # Adds a list of emails to the Allowlist, using the provided reason
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // POST /support_access/allowlist -> []SupportAccessAllowlistEntry
 func (l *LookerSDK) AddSupportAccessAllowlistEntries(
 	body SupportAccessAddEntries,
@@ -1284,6 +1350,8 @@ func (l *LookerSDK) AddSupportAccessAllowlistEntries(
 // ### Delete Support Access Allowlist User
 //
 // # Deletes the specified Allowlist Entry Id
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // DELETE /support_access/allowlist/{entry_id} -> string
 func (l *LookerSDK) DeleteSupportAccessAllowlistEntry(
@@ -1300,6 +1368,8 @@ func (l *LookerSDK) DeleteSupportAccessAllowlistEntry(
 //
 // # Enables Support Access for the provided duration
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PUT /support_access/enable -> SupportAccessStatus
 func (l *LookerSDK) EnableSupportAccess(
 	body SupportAccessEnable,
@@ -1314,6 +1384,8 @@ func (l *LookerSDK) EnableSupportAccess(
 //
 // # Disables Support Access immediately
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PUT /support_access/disable -> SupportAccessStatus
 func (l *LookerSDK) DisableSupportAccess(
 	options *rtl.ApiSettings) (SupportAccessStatus, error) {
@@ -1326,6 +1398,8 @@ func (l *LookerSDK) DisableSupportAccess(
 // ### Support Access Status
 //
 // # Returns the current Support Access Status
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /support_access/status -> SupportAccessStatus
 func (l *LookerSDK) SupportAccessStatus(
@@ -1799,19 +1873,6 @@ func (l *LookerSDK) UpdateCloudStorageConfiguration(
 
 }
 
-// ### Looker Configuration Refresh
-//
-// This is an endpoint for manually calling refresh on Configuration manager.
-//
-// PUT /configuration_force_refresh -> interface{}
-func (l *LookerSDK) ConfigurationForceRefresh(
-	options *rtl.ApiSettings) (interface{}, error) {
-	var result interface{}
-	err := l.session.Do(&result, "PUT", "/4.0", "/configuration_force_refresh", nil, nil, options)
-	return result, err
-
-}
-
 // ### Get the current status and content of custom welcome emails
 //
 // GET /custom_welcome_email -> CustomWelcomeEmail
@@ -1892,6 +1953,8 @@ func (l *LookerSDK) CreateDigestEmailSend(
 //
 // # Returns the list of public egress IP Addresses for a hosted customer's instance
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /public_egress_ip_addresses -> EgressIpAddresses
 func (l *LookerSDK) PublicEgressIpAddresses(
 	options *rtl.ApiSettings) (EgressIpAddresses, error) {
@@ -1949,6 +2012,8 @@ func (l *LookerSDK) UpdateInternalHelpResources(
 
 // ### Get all legacy features.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /legacy_features -> []LegacyFeature
 func (l *LookerSDK) AllLegacyFeatures(
 	options *rtl.ApiSettings) ([]LegacyFeature, error) {
@@ -1959,6 +2024,8 @@ func (l *LookerSDK) AllLegacyFeatures(
 }
 
 // ### Get information about the legacy feature with a specific id.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /legacy_features/{legacy_feature_id} -> LegacyFeature
 func (l *LookerSDK) LegacyFeature(
@@ -1972,6 +2039,8 @@ func (l *LookerSDK) LegacyFeature(
 }
 
 // ### Update information about the legacy feature with a specific id.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
 func (l *LookerSDK) UpdateLegacyFeature(
@@ -2020,6 +2089,10 @@ func (l *LookerSDK) MobileSettings(
 //   - onboarding_enabled
 //   - privatelabel_configuration
 //   - timezone
+//   - host_url
+//   - email_domain_allowlist
+//   - embed_cookieless_v2
+//   - embed_enabled
 //
 // GET /setting -> Setting
 func (l *LookerSDK) GetSetting(
@@ -2044,8 +2117,14 @@ func (l *LookerSDK) GetSetting(
 //   - onboarding_enabled
 //   - privatelabel_configuration
 //   - timezone
+//   - host_url
+//   - email_domain_allowlist
+//   - embed_cookieless_v2
+//   - embed_enabled
 //
 // See the `Setting` type for more information on the specific values that can be configured.
+//
+// If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
 //
 // PATCH /setting -> Setting
 func (l *LookerSDK) SetSetting(
@@ -2061,7 +2140,7 @@ func (l *LookerSDK) SetSetting(
 // ### Configure SMTP Settings
 //
 //	This API allows users to configure the SMTP settings on the Looker instance.
-//	This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+//	Only admin users are authorised to call this API.
 //
 // POST /smtp_settings -> Void
 func (l *LookerSDK) SetSmtpSettings(
@@ -2665,6 +2744,26 @@ func (l *LookerSDK) DeleteContentMetadataAccess(
 
 }
 
+// ### Search across looks, dashboards, and lookml dashboards. The terms field will be matched against the
+// title and description of the content and the closest results are returned. Content that has been frequently
+// viewed and those pieces of content stored in public folders will be ranked more highly in the results.
+//
+// This endpoint does not return a full description of these content types. For more specific information
+// about each type please refer to the individual content specific API endpoints.
+//
+// Get the **full details** of a specific dashboard (or lookml dashboard) by id with [dashboard()](#!/Dashboard/dashboard)
+// Get the **full details** of a specific look by id with [look()](#!/Look/look)
+//
+// GET /content/{terms} -> []ContentSearch
+func (l *LookerSDK) SearchContent(request RequestSearchContent,
+	options *rtl.ApiSettings) ([]ContentSearch, error) {
+	request.Terms = url.PathEscape(request.Terms)
+	var result []ContentSearch
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content/%v", request.Terms), map[string]interface{}{"fields": request.Fields, "types": request.Types, "limit": request.Limit, "offset": request.Offset, "page": request.Page, "per_page": request.PerPage}, nil, options)
+	return result, err
+
+}
+
 // ### Get an image representing the contents of a dashboard or look.
 //
 // The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
@@ -2678,7 +2777,7 @@ func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
 	request.Type = url.PathEscape(request.Type)
 	request.ResourceId = url.PathEscape(request.ResourceId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_thumbnail/%v/%v", request.Type, request.ResourceId), map[string]interface{}{"reload": request.Reload, "format": request.Format, "width": request.Width, "height": request.Height}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_thumbnail/%v/%v", request.Type, request.ResourceId), map[string]interface{}{"reload": request.Reload, "theme": request.Theme, "format": request.Format, "width": request.Width, "height": request.Height}, nil, options)
 	return result, err
 
 }
@@ -2802,7 +2901,8 @@ func (l *LookerSDK) CreateDashboard(
 
 // ### Search Dashboards
 //
-// Returns an **array of dashboard objects** that match the specified search criteria.
+// Returns an array of **user-defined dashboard** objects that match the specified search criteria.
+// Note, [search_dashboards()](#!/Dashboard/search_dashboards) does not return LookML dashboard objects.
 //
 // If multiple search params are given and `filter_or` is FALSE or not specified,
 // search params are combined in a logical AND operation.
@@ -2833,7 +2933,7 @@ func (l *LookerSDK) CreateDashboard(
 func (l *LookerSDK) SearchDashboards(request RequestSearchDashboards,
 	options *rtl.ApiSettings) ([]Dashboard, error) {
 	var result []Dashboard
-	err := l.session.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "not_owned_by": request.NotOwnedBy}, nil, options)
 	return result, err
 
 }
@@ -3016,11 +3116,11 @@ func (l *LookerSDK) MoveDashboard(
 // Note that the created dashboard is not linked to any LookML Dashboard,
 // i.e. [sync_lookml_dashboard()](#!/Dashboard/sync_lookml_dashboard) will not update dashboards created by this method.
 //
-// POST /dashboards/lookml -> DashboardLookml
+// POST /dashboards/lookml -> Dashboard
 func (l *LookerSDK) ImportDashboardFromLookml(
 	body WriteDashboardLookml,
-	options *rtl.ApiSettings) (DashboardLookml, error) {
-	var result DashboardLookml
+	options *rtl.ApiSettings) (Dashboard, error) {
+	var result Dashboard
 	err := l.session.Do(&result, "POST", "/4.0", "/dashboards/lookml", nil, body, options)
 	return result, err
 
@@ -3028,11 +3128,11 @@ func (l *LookerSDK) ImportDashboardFromLookml(
 
 // # DEPRECATED:  Use [import_dashboard_from_lookml()](#!/Dashboard/import_dashboard_from_lookml)
 //
-// POST /dashboards/from_lookml -> DashboardLookml
+// POST /dashboards/from_lookml -> Dashboard
 func (l *LookerSDK) CreateDashboardFromLookml(
 	body WriteDashboardLookml,
-	options *rtl.ApiSettings) (DashboardLookml, error) {
-	var result DashboardLookml
+	options *rtl.ApiSettings) (Dashboard, error) {
+	var result Dashboard
 	err := l.session.Do(&result, "POST", "/4.0", "/dashboards/from_lookml", nil, body, options)
 	return result, err
 
@@ -3740,7 +3840,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_roles -> []GroupSearch
-func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
+func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -3775,7 +3875,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_hierarchy -> []GroupHierarchy
-func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
+func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -4334,7 +4434,7 @@ func (l *LookerSDK) MoveLook(
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
+func (l *LookerSDK) AllLookmlModels(request RequestArtifactNamespaces,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
 	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
@@ -5885,7 +5985,7 @@ func (l *LookerSDK) AllPermissions(
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /permission_sets/search -> []PermissionSet
-func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
+func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
 	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6042,7 +6142,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /roles/search/with_user_count -> []RoleSearch
-func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6105,6 +6205,8 @@ func (l *LookerSDK) RoleGroups(
 }
 
 // ### Set all groups for a role, removing all existing group associations from that role.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // PUT /roles/{role_id}/groups -> []Group
 func (l *LookerSDK) SetRoleGroups(
@@ -6198,7 +6300,7 @@ func (l *LookerSDK) ScheduledPlan(
 // #### Email Permissions:
 //
 // For details about permissions required to schedule delivery to email and the safeguards
-// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
 //
 // #### Scheduled Plan Destination Formats
 //
@@ -6296,7 +6398,7 @@ func (l *LookerSDK) AllScheduledPlans(request RequestAllScheduledPlans,
 //
 // When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
 // queries are run in the context of each recipient, so different recipients may see different
-// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.looker.com/r/admin/run-as-recipient).
+// data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://cloud.google.com/looker/docs/r/admin/run-as-recipient).
 //
 // Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
 // Non-admin users may not create or modify scheduled plans by or for other users.
@@ -6304,7 +6406,7 @@ func (l *LookerSDK) AllScheduledPlans(request RequestAllScheduledPlans,
 // #### Email Permissions:
 //
 // For details about permissions required to schedule delivery to email and the safeguards
-// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
 //
 // #### Scheduled Plan Destination Formats
 //
@@ -6351,7 +6453,7 @@ func (l *LookerSDK) CreateScheduledPlan(
 // #### Email Permissions:
 //
 // For details about permissions required to schedule delivery to email and the safeguards
-// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
 //
 // #### Scheduled Plan Destination Formats
 //
@@ -6464,7 +6566,7 @@ func (l *LookerSDK) ScheduledPlansForLookmlDashboard(request RequestScheduledPla
 // #### Email Permissions:
 //
 // For details about permissions required to schedule delivery to email and the safeguards
-// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Whitelist for Scheduled Looks](https://docs.looker.com/r/api/embed-permissions).
+// Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
 //
 // #### Scheduled Plan Destination Formats
 //
@@ -6584,7 +6686,7 @@ func (l *LookerSDK) AllThemes(
 //
 // **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
 //
-// For more information, see [Creating and Applying Themes](https://docs.looker.com/r/admin/themes).
+// For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
 //
 // **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
 //
@@ -6824,6 +6926,8 @@ func (l *LookerSDK) DeleteTheme(
 //
 // Boolean search params accept only "true" and "false" as values.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /credentials_email/search -> []CredentialsEmailSearch
 func (l *LookerSDK) SearchCredentialsEmail(request RequestSearchCredentialsEmail,
 	options *rtl.ApiSettings) ([]CredentialsEmailSearch, error) {
@@ -7002,6 +7106,8 @@ func (l *LookerSDK) DeleteUser(
 //
 // **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /users/credential/{credential_type}/{credential_id} -> User
 func (l *LookerSDK) UserForCredential(
 	credentialType string,
@@ -7018,6 +7124,8 @@ func (l *LookerSDK) UserForCredential(
 
 // ### Email/password login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // GET /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) UserCredentialsEmail(
 	userId string,
@@ -7031,6 +7139,8 @@ func (l *LookerSDK) UserCredentialsEmail(
 }
 
 // ### Email/password login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) CreateUserCredentialsEmail(
@@ -7047,6 +7157,8 @@ func (l *LookerSDK) CreateUserCredentialsEmail(
 
 // ### Email/password login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // PATCH /users/{user_id}/credentials_email -> CredentialsEmail
 func (l *LookerSDK) UpdateUserCredentialsEmail(
 	userId string,
@@ -7062,6 +7174,8 @@ func (l *LookerSDK) UpdateUserCredentialsEmail(
 
 // ### Email/password login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_email -> string
 func (l *LookerSDK) DeleteUserCredentialsEmail(
 	userId string,
@@ -7074,6 +7188,8 @@ func (l *LookerSDK) DeleteUserCredentialsEmail(
 }
 
 // ### Two-factor login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_totp -> CredentialsTotp
 func (l *LookerSDK) UserCredentialsTotp(
@@ -7088,6 +7204,8 @@ func (l *LookerSDK) UserCredentialsTotp(
 }
 
 // ### Two-factor login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /users/{user_id}/credentials_totp -> CredentialsTotp
 func (l *LookerSDK) CreateUserCredentialsTotp(
@@ -7104,6 +7222,8 @@ func (l *LookerSDK) CreateUserCredentialsTotp(
 
 // ### Two-factor login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_totp -> string
 func (l *LookerSDK) DeleteUserCredentialsTotp(
 	userId string,
@@ -7116,6 +7236,8 @@ func (l *LookerSDK) DeleteUserCredentialsTotp(
 }
 
 // ### LDAP login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
 func (l *LookerSDK) UserCredentialsLdap(
@@ -7131,6 +7253,8 @@ func (l *LookerSDK) UserCredentialsLdap(
 
 // ### LDAP login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_ldap -> string
 func (l *LookerSDK) DeleteUserCredentialsLdap(
 	userId string,
@@ -7143,6 +7267,8 @@ func (l *LookerSDK) DeleteUserCredentialsLdap(
 }
 
 // ### Google authentication login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_google -> CredentialsGoogle
 func (l *LookerSDK) UserCredentialsGoogle(
@@ -7158,6 +7284,8 @@ func (l *LookerSDK) UserCredentialsGoogle(
 
 // ### Google authentication login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_google -> string
 func (l *LookerSDK) DeleteUserCredentialsGoogle(
 	userId string,
@@ -7170,6 +7298,8 @@ func (l *LookerSDK) DeleteUserCredentialsGoogle(
 }
 
 // ### Saml authentication login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_saml -> CredentialsSaml
 func (l *LookerSDK) UserCredentialsSaml(
@@ -7185,6 +7315,8 @@ func (l *LookerSDK) UserCredentialsSaml(
 
 // ### Saml authentication login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_saml -> string
 func (l *LookerSDK) DeleteUserCredentialsSaml(
 	userId string,
@@ -7197,6 +7329,8 @@ func (l *LookerSDK) DeleteUserCredentialsSaml(
 }
 
 // ### OpenID Connect (OIDC) authentication login information for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
 func (l *LookerSDK) UserCredentialsOidc(
@@ -7212,6 +7346,8 @@ func (l *LookerSDK) UserCredentialsOidc(
 
 // ### OpenID Connect (OIDC) authentication login information for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_oidc -> string
 func (l *LookerSDK) DeleteUserCredentialsOidc(
 	userId string,
@@ -7223,7 +7359,9 @@ func (l *LookerSDK) DeleteUserCredentialsOidc(
 
 }
 
-// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
 func (l *LookerSDK) UserCredentialsApi3(
@@ -7239,7 +7377,9 @@ func (l *LookerSDK) UserCredentialsApi3(
 
 }
 
-// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsApi3(
@@ -7254,7 +7394,9 @@ func (l *LookerSDK) DeleteUserCredentialsApi3(
 
 }
 
-// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_api3 -> []CredentialsApi3
 func (l *LookerSDK) AllUserCredentialsApi3s(
@@ -7268,7 +7410,9 @@ func (l *LookerSDK) AllUserCredentialsApi3s(
 
 }
 
-// ### API 3 login information for the specified user. This is for the newer API keys that can be added for any user.
+// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
 func (l *LookerSDK) CreateUserCredentialsApi3(
@@ -7283,6 +7427,8 @@ func (l *LookerSDK) CreateUserCredentialsApi3(
 }
 
 // ### Embed login information for the specified user.
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
 func (l *LookerSDK) UserCredentialsEmbed(
@@ -7300,6 +7446,8 @@ func (l *LookerSDK) UserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsEmbed(
 	userId string,
@@ -7315,6 +7463,8 @@ func (l *LookerSDK) DeleteUserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+//
 // GET /users/{user_id}/credentials_embed -> []CredentialsEmbed
 func (l *LookerSDK) AllUserCredentialsEmbeds(
 	userId string,
@@ -7328,6 +7478,8 @@ func (l *LookerSDK) AllUserCredentialsEmbeds(
 }
 
 // ### Looker Openid login information for the specified user. Used by Looker Analysts.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
 func (l *LookerSDK) UserCredentialsLookerOpenid(
@@ -7343,6 +7495,8 @@ func (l *LookerSDK) UserCredentialsLookerOpenid(
 
 // ### Looker Openid login information for the specified user. Used by Looker Analysts.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/credentials_looker_openid -> string
 func (l *LookerSDK) DeleteUserCredentialsLookerOpenid(
 	userId string,
@@ -7355,6 +7509,8 @@ func (l *LookerSDK) DeleteUserCredentialsLookerOpenid(
 }
 
 // ### Web login session for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/sessions/{session_id} -> Session
 func (l *LookerSDK) UserSession(
@@ -7372,6 +7528,8 @@ func (l *LookerSDK) UserSession(
 
 // ### Web login session for the specified user.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // DELETE /users/{user_id}/sessions/{session_id} -> string
 func (l *LookerSDK) DeleteUserSession(
 	userId string,
@@ -7386,6 +7544,8 @@ func (l *LookerSDK) DeleteUserSession(
 }
 
 // ### Web login session for the specified user.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // GET /users/{user_id}/sessions -> []Session
 func (l *LookerSDK) AllUserSessions(
@@ -7408,6 +7568,8 @@ func (l *LookerSDK) AllUserSessions(
 // Invitation emails for new users typically are not set to expire.
 // The expire period is always 60 minutes when expires is enabled.
 // This method can be called with an empty body.
+//
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
 //
 // POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
 func (l *LookerSDK) CreateUserCredentialsEmailPasswordReset(request RequestCreateUserCredentialsEmailPasswordReset,
@@ -7518,6 +7680,8 @@ func (l *LookerSDK) DeleteUserAttributeUserValue(
 // Password reset URLs will expire in 60 minutes.
 // This method can be called with an empty body.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
 func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
 	userId string,
@@ -7537,6 +7701,8 @@ func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
 // the value supplied in the 'email' body param.
 // The user's 'is_disabled' status must be true.
 //
+// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+//
 // POST /users/{user_id}/update_emails -> User
 func (l *LookerSDK) WipeoutUserEmails(
 	userId string,
@@ -7551,6 +7717,8 @@ func (l *LookerSDK) WipeoutUserEmails(
 }
 
 // Create an embed user from an external user ID
+//
+// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // POST /users/embed_user -> UserPublic
 func (l *LookerSDK) CreateEmbedUser(
@@ -7569,7 +7737,7 @@ func (l *LookerSDK) CreateEmbedUser(
 // ### Get information about all user attributes.
 //
 // GET /user_attributes -> []UserAttribute
-func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
+func (l *LookerSDK) AllUserAttributes(request RequestAllBoardSections,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
 	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)
@@ -7735,7 +7903,7 @@ func (l *LookerSDK) AllWorkspaces(
 //
 // The dev workspace is NOT unique to an API session. Two applications accessing the Looker API using
 // the same user account will see the same files in the dev workspace. To avoid collisions between
-// API clients it's best to have each client login with API3 credentials for a different user account.
+// API clients it's best to have each client login with API credentials for a different user account.
 //
 // Changes made to files in a dev workspace are persistent across API sessions. It's a good
 // idea to commit any changes you've made to the git repository, but not strictly required. Your modified files

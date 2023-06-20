@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-utils",
-  "version": "0.1.19",
+  "version": "0.1.26",
   "description": "Looker Extension Utilities",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -25,22 +25,29 @@
     "watch": "yarn lerna exec --scope @looker/extension-utils --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/components": "^3.0.8",
-    "@looker/extension-sdk": "^22.20.1",
-    "@looker/extension-sdk-react": "^22.20.1",
-    "@looker/sdk-rtl": "^21.5.0",
-    "@looker/code-editor": "^0.1.27",
-    "react": "^16.13.1"
+    "@looker/code-editor": "^0.1.29",
+    "@looker/components": "^4.1.1",
+    "@looker/redux": "^0.0.1",
+    "@looker/extension-sdk": "^23.10.0",
+    "@looker/extension-sdk-react": "^23.10.0",
+    "@looker/sdk": "^23.10.0",
+    "@looker/sdk-rtl": "^21.6.1",
+    "@reduxjs/toolkit": "^1.9.3",
+    "@styled-icons/material": "^10.47.0",
+    "react": "^16.14.0",
+    "react-redux": "^7.2.3",
+    "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.26",
     "@testing-library/react": "^12.1.5",
-    "@types/react-router": "^5.1.18",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
     "@types/redux": "^3.6.0",
+    "@types/styled-components": "^5.1.26",
     "webpack-bundle-analyzer": "^4.2.0",
     "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3"
   }
 }

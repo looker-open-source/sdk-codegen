@@ -1,5 +1,25 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.8.0 to ^21.8.1
+
+## [0.1.28](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.27...code-editor-v0.1.28) (2023-02-22)
+
+
+### Features
+
+* keep all body parameters toggle in API Explorer requests ([#1245](https://github.com/looker-open-source/sdk-codegen/issues/1245)) ([043ed3f](https://github.com/looker-open-source/sdk-codegen/commit/043ed3ff12cba4f821604b5b668d7301ed4aa6d1))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from ^21.7.4 to ^21.8.0
+
 ### [0.1.27](https://www.github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.26...code-editor-v0.1.27) (2022-12-09)
 
 

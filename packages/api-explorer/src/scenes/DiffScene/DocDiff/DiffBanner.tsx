@@ -35,7 +35,7 @@ interface DiffBannerProps {
 }
 
 export const DiffBanner: FC<DiffBannerProps> = ({ item, method }) => (
-  <Grid justifyContent="space-between" columns={4}>
+  <Grid justifyItems="space-between" columns={4}>
     <FlexItem>
       <Code>{item.name}</Code>
     </FlexItem>

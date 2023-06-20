@@ -5,6 +5,7 @@ on:
       - packages/sdk-codegen/**
       - packages/sdk-codegen-utils/**
       - packages/sdk-codegen-scripts/**
+      - .github/workflows/codegen-ci.yml
 
   push:
     branches:
@@ -13,6 +14,7 @@ on:
       - packages/sdk-codegen/**
       - packages/sdk-codegen-utils/**
       - packages/sdk-codegen-scripts/**
+      - .github/workflows/codegen-ci.yml
 
   workflow_dispatch:
 
@@ -37,19 +39,23 @@ jobs:
 
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.2.0
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1.0.0
         with:
+          credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_AR_READER_SA_KEY }}
-          export_default_credentials: true
+          create_credentials_file: true
+          export_environment_variables: true
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1.1.0
 
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
@@ -63,7 +69,7 @@ jobs:
           docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(needs.setup.outputs.matrix_json)[0] }}
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
@@ -105,6 +111,7 @@ jobs:
         if: failure()
 
       - name: Run unit tests
+        # TODO can we use yarn test:gen with the reporters option added to it here?
         run: yarn jest "packages/sdk-codegen(|-utils|-scripts)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
@@ -112,7 +119,7 @@ jobs:
 
       - name: Upload ts unit test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: sdk-codegen-test-results
           path: results/sdk-codegen
@@ -124,7 +131,7 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: artifacts
 

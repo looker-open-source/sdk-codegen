@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2021 Looker Data Sciences, Inc.
+# Copyright (c) 2023 Looker Data Sciences, Inc.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -51,18 +51,14 @@ class AccessToken(model.Model):
         token_type: Type of Token
         expires_in: Number of seconds before the token expires
     """
-
     access_token: Optional[str] = None
     token_type: Optional[str] = None
     expires_in: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        access_token: Optional[str] = None,
-        token_type: Optional[str] = None,
-        expires_in: Optional[int] = None
-    ):
+    def __init__(self, *,
+            access_token: Optional[str] = None,
+            token_type: Optional[str] = None,
+            expires_in: Optional[int] = None):
         self.access_token = access_token
         self.token_type = token_type
         self.expires_in = expires_in
@@ -73,7 +69,6 @@ class Align(enum.Enum):
     The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
 
     """
-
     left = "left"
     right = "right"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -91,18 +86,14 @@ class ApiSession(model.Model):
         workspace_id: The id of active workspace for this session
         sudo_user_id: The id of the actual user in the case when this session represents one user sudo'ing as another
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     workspace_id: Optional[str] = None
     sudo_user_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        workspace_id: Optional[str] = None,
-        sudo_user_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            workspace_id: Optional[str] = None,
+            sudo_user_id: Optional[int] = None):
         self.can = can
         self.workspace_id = workspace_id
         self.sudo_user_id = sudo_user_id
@@ -118,22 +109,18 @@ class ApiVersion(model.Model):
         api_server_url: API server base url
         web_server_url: Web server base url
     """
-
     looker_release_version: Optional[str] = None
     current_version: Optional["ApiVersionElement"] = None
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None
     api_server_url: Optional[str] = None
     web_server_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        looker_release_version: Optional[str] = None,
-        current_version: Optional["ApiVersionElement"] = None,
-        supported_versions: Optional[Sequence["ApiVersionElement"]] = None,
-        api_server_url: Optional[str] = None,
-        web_server_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            looker_release_version: Optional[str] = None,
+            current_version: Optional["ApiVersionElement"] = None,
+            supported_versions: Optional[Sequence["ApiVersionElement"]] = None,
+            api_server_url: Optional[str] = None,
+            web_server_url: Optional[str] = None):
         self.looker_release_version = looker_release_version
         self.current_version = current_version
         self.supported_versions = supported_versions
@@ -150,20 +137,16 @@ class ApiVersionElement(model.Model):
         status: Status of this version
         swagger_url: Url for swagger.json for this version
     """
-
     version: Optional[str] = None
     full_version: Optional[str] = None
     status: Optional[str] = None
     swagger_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        version: Optional[str] = None,
-        full_version: Optional[str] = None,
-        status: Optional[str] = None,
-        swagger_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            version: Optional[str] = None,
+            full_version: Optional[str] = None,
+            status: Optional[str] = None,
+            swagger_url: Optional[str] = None):
         self.version = version
         self.full_version = full_version
         self.status = status
@@ -182,7 +165,6 @@ class BackupConfiguration(model.Model):
         custom_s3_secret: (Write-Only) AWS S3 secret used for custom-s3 backups
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     type: Optional[str] = None
     custom_s3_bucket: Optional[str] = None
@@ -191,17 +173,14 @@ class BackupConfiguration(model.Model):
     custom_s3_secret: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        type: Optional[str] = None,
-        custom_s3_bucket: Optional[str] = None,
-        custom_s3_bucket_region: Optional[str] = None,
-        custom_s3_key: Optional[str] = None,
-        custom_s3_secret: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            type: Optional[str] = None,
+            custom_s3_bucket: Optional[str] = None,
+            custom_s3_bucket_region: Optional[str] = None,
+            custom_s3_key: Optional[str] = None,
+            custom_s3_secret: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.type = type
         self.custom_s3_bucket = custom_s3_bucket
@@ -216,7 +195,6 @@ class Category(enum.Enum):
     Field category Valid values are: "parameter", "filter", "measure", "dimension". (Enum defined in LookmlModelExploreField)
 
     """
-
     parameter = "parameter"
     filter = "filter"
     measure = "measure"
@@ -238,22 +216,18 @@ class ColorCollection(model.Model):
         sequentialPalettes: Array of discrete palette definitions
         divergingPalettes: Array of diverging palette definitions
     """
-
     id: Optional[str] = None
     label: Optional[str] = None
     categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None
     sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None
     divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        label: Optional[str] = None,
-        categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None,
-        sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None,
-        divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            label: Optional[str] = None,
+            categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None,
+            sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None,
+            divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None):
         self.id = id
         self.label = label
         self.categoricalPalettes = categoricalPalettes
@@ -268,11 +242,12 @@ class ColorStop(model.Model):
         color: CSS color string
         offset: Offset in continuous palette (0 to 100)
     """
-
     color: Optional[str] = None
     offset: Optional[int] = None
 
-    def __init__(self, *, color: Optional[str] = None, offset: Optional[int] = None):
+    def __init__(self, *,
+            color: Optional[str] = None,
+            offset: Optional[int] = None):
         self.color = color
         self.offset = offset
 
@@ -289,7 +264,6 @@ class ContentFavorite(model.Model):
         look:
         dashboard:
     """
-
     id: Optional[int] = None
     user_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
@@ -298,17 +272,14 @@ class ContentFavorite(model.Model):
     look: Optional["LookBasic"] = None
     dashboard: Optional["DashboardBase"] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        user_id: Optional[int] = None,
-        content_metadata_id: Optional[int] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[int] = None,
-        look: Optional["LookBasic"] = None,
-        dashboard: Optional["DashboardBase"] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            user_id: Optional[int] = None,
+            content_metadata_id: Optional[int] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[int] = None,
+            look: Optional["LookBasic"] = None,
+            dashboard: Optional["DashboardBase"] = None):
         self.id = id
         self.user_id = user_id
         self.content_metadata_id = content_metadata_id
@@ -335,7 +306,6 @@ class ContentMeta(model.Model):
         slug: Content Slug
         space_id: Id of associated space when content_type is "space"
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     name: Optional[str] = None
@@ -349,22 +319,19 @@ class ContentMeta(model.Model):
     slug: Optional[str] = None
     space_id: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        parent_id: Optional[int] = None,
-        dashboard_id: Optional[str] = None,
-        look_id: Optional[int] = None,
-        folder_id: Optional[str] = None,
-        content_type: Optional[str] = None,
-        inherits: Optional[bool] = None,
-        inheriting_id: Optional[int] = None,
-        slug: Optional[str] = None,
-        space_id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            name: Optional[str] = None,
+            parent_id: Optional[int] = None,
+            dashboard_id: Optional[str] = None,
+            look_id: Optional[int] = None,
+            folder_id: Optional[str] = None,
+            content_type: Optional[str] = None,
+            inherits: Optional[bool] = None,
+            inheriting_id: Optional[int] = None,
+            slug: Optional[str] = None,
+            space_id: Optional[str] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -392,7 +359,6 @@ class ContentMetaGroupUser(model.Model):
         group_id: ID of associated group
         user_id: ID of associated user
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     content_metadata_id: Optional[str] = None
@@ -400,16 +366,13 @@ class ContentMetaGroupUser(model.Model):
     group_id: Optional[int] = None
     user_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        content_metadata_id: Optional[str] = None,
-        permission_type: Optional["PermissionType"] = None,
-        group_id: Optional[int] = None,
-        user_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            content_metadata_id: Optional[str] = None,
+            permission_type: Optional["PermissionType"] = None,
+            group_id: Optional[int] = None,
+            user_id: Optional[int] = None):
         self.can = can
         self.id = id
         self.content_metadata_id = content_metadata_id
@@ -431,7 +394,6 @@ class ContentValidation(model.Model):
         total_alerts_validated: The number of alerts validated
         total_explores_validated: The number of explores used across all content validated
     """
-
     content_with_errors: Optional[Sequence["ContentValidatorError"]] = None
     computation_time: Optional[float] = None
     total_looks_validated: Optional[int] = None
@@ -441,18 +403,15 @@ class ContentValidation(model.Model):
     total_alerts_validated: Optional[int] = None
     total_explores_validated: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        content_with_errors: Optional[Sequence["ContentValidatorError"]] = None,
-        computation_time: Optional[float] = None,
-        total_looks_validated: Optional[int] = None,
-        total_dashboard_elements_validated: Optional[int] = None,
-        total_dashboard_filters_validated: Optional[int] = None,
-        total_scheduled_plans_validated: Optional[int] = None,
-        total_alerts_validated: Optional[int] = None,
-        total_explores_validated: Optional[int] = None
-    ):
+    def __init__(self, *,
+            content_with_errors: Optional[Sequence["ContentValidatorError"]] = None,
+            computation_time: Optional[float] = None,
+            total_looks_validated: Optional[int] = None,
+            total_dashboard_elements_validated: Optional[int] = None,
+            total_dashboard_filters_validated: Optional[int] = None,
+            total_scheduled_plans_validated: Optional[int] = None,
+            total_alerts_validated: Optional[int] = None,
+            total_explores_validated: Optional[int] = None):
         self.content_with_errors = content_with_errors
         self.computation_time = computation_time
         self.total_looks_validated = total_looks_validated
@@ -470,25 +429,37 @@ class ContentValidationAlert(model.Model):
         id: ID of the alert
         lookml_dashboard_id: ID of the LookML dashboard associated with the alert
         lookml_link_id: ID of the LookML dashboard element associated with the alert
+        custom_url_base: Domain for the custom url selected by the alert creator from the admin defined domain allowlist
+        custom_url_params: Parameters and path for the custom url defined by the alert creator
+        custom_url_label: Label for the custom url defined by the alert creator
+        show_custom_url: Boolean to determine if the custom url should be used
         custom_title: An optional, user-defined title for the alert
     """
-
     id: Optional[int] = None
     lookml_dashboard_id: Optional[str] = None
     lookml_link_id: Optional[str] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     custom_title: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        lookml_link_id: Optional[str] = None,
-        custom_title: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            lookml_link_id: Optional[str] = None,
+            custom_url_base: Optional[str] = None,
+            custom_url_params: Optional[str] = None,
+            custom_url_label: Optional[str] = None,
+            show_custom_url: Optional[bool] = None,
+            custom_title: Optional[str] = None):
         self.id = id
         self.lookml_dashboard_id = lookml_dashboard_id
         self.lookml_link_id = lookml_link_id
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.custom_title = custom_title
 
 
@@ -502,22 +473,18 @@ class ContentValidationDashboard(model.Model):
         title: Dashboard Title
         space:
     """
-
     description: Optional[str] = None
     id: Optional[str] = None
     folder: Optional["ContentValidationFolder"] = None
     title: Optional[str] = None
     space: Optional["ContentValidationSpace"] = None
 
-    def __init__(
-        self,
-        *,
-        description: Optional[str] = None,
-        id: Optional[str] = None,
-        folder: Optional["ContentValidationFolder"] = None,
-        title: Optional[str] = None,
-        space: Optional["ContentValidationSpace"] = None
-    ):
+    def __init__(self, *,
+            description: Optional[str] = None,
+            id: Optional[str] = None,
+            folder: Optional["ContentValidationFolder"] = None,
+            title: Optional[str] = None,
+            space: Optional["ContentValidationSpace"] = None):
         self.description = description
         self.id = id
         self.folder = folder
@@ -545,7 +512,6 @@ class ContentValidationDashboardElement(model.Model):
         type: Type
         rich_content_json: JSON with all the properties required for rich editor and buttons elements
     """
-
     body_text: Optional[str] = None
     dashboard_id: Optional[str] = None
     id: Optional[str] = None
@@ -562,25 +528,22 @@ class ContentValidationDashboardElement(model.Model):
     type: Optional[str] = None
     rich_content_json: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        body_text: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        id: Optional[str] = None,
-        look_id: Optional[str] = None,
-        note_display: Optional[str] = None,
-        note_state: Optional[str] = None,
-        note_text: Optional[str] = None,
-        note_text_as_html: Optional[str] = None,
-        query_id: Optional[int] = None,
-        subtitle_text: Optional[str] = None,
-        title: Optional[str] = None,
-        title_hidden: Optional[bool] = None,
-        title_text: Optional[str] = None,
-        type: Optional[str] = None,
-        rich_content_json: Optional[str] = None
-    ):
+    def __init__(self, *,
+            body_text: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            id: Optional[str] = None,
+            look_id: Optional[str] = None,
+            note_display: Optional[str] = None,
+            note_state: Optional[str] = None,
+            note_text: Optional[str] = None,
+            note_text_as_html: Optional[str] = None,
+            query_id: Optional[int] = None,
+            subtitle_text: Optional[str] = None,
+            title: Optional[str] = None,
+            title_hidden: Optional[bool] = None,
+            title_text: Optional[str] = None,
+            type: Optional[str] = None,
+            rich_content_json: Optional[str] = None):
         self.body_text = body_text
         self.dashboard_id = dashboard_id
         self.id = id
@@ -612,7 +575,6 @@ class ContentValidationDashboardFilter(model.Model):
         explore: Explore of filter (required if type = field)
         dimension: Dimension of filter (required if type = field)
     """
-
     id: Optional[str] = None
     dashboard_id: Optional[str] = None
     name: Optional[str] = None
@@ -623,19 +585,16 @@ class ContentValidationDashboardFilter(model.Model):
     explore: Optional[str] = None
     dimension: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        name: Optional[str] = None,
-        title: Optional[str] = None,
-        type: Optional[str] = None,
-        default_value: Optional[str] = None,
-        model: Optional[str] = None,
-        explore: Optional[str] = None,
-        dimension: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            name: Optional[str] = None,
+            title: Optional[str] = None,
+            type: Optional[str] = None,
+            default_value: Optional[str] = None,
+            model: Optional[str] = None,
+            explore: Optional[str] = None,
+            dimension: Optional[str] = None):
         self.id = id
         self.dashboard_id = dashboard_id
         self.name = name
@@ -657,22 +616,18 @@ class ContentValidationError(model.Model):
         explore_name: Name of the explore involved in the error
         removable: Whether this validation error is removable
     """
-
     message: Optional[str] = None
     field_name: Optional[str] = None
     model_name: Optional[str] = None
     explore_name: Optional[str] = None
     removable: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        message: Optional[str] = None,
-        field_name: Optional[str] = None,
-        model_name: Optional[str] = None,
-        explore_name: Optional[str] = None,
-        removable: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            message: Optional[str] = None,
+            field_name: Optional[str] = None,
+            model_name: Optional[str] = None,
+            explore_name: Optional[str] = None,
+            removable: Optional[bool] = None):
         self.message = message
         self.field_name = field_name
         self.model_name = model_name
@@ -687,11 +642,12 @@ class ContentValidationFolder(model.Model):
         name: Unique Name
         id: Unique Id
     """
-
     name: str
     id: Optional[str] = None
 
-    def __init__(self, *, name: str, id: Optional[str] = None):
+    def __init__(self, *,
+            name: str,
+            id: Optional[str] = None):
         self.name = name
         self.id = id
 
@@ -706,22 +662,18 @@ class ContentValidationLook(model.Model):
         folder:
         space:
     """
-
     id: Optional[int] = None
     title: Optional[str] = None
     short_url: Optional[str] = None
     folder: Optional["ContentValidationFolder"] = None
     space: Optional["ContentValidationSpace"] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        title: Optional[str] = None,
-        short_url: Optional[str] = None,
-        folder: Optional["ContentValidationFolder"] = None,
-        space: Optional["ContentValidationSpace"] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            title: Optional[str] = None,
+            short_url: Optional[str] = None,
+            folder: Optional["ContentValidationFolder"] = None,
+            space: Optional["ContentValidationSpace"] = None):
         self.id = id
         self.title = title
         self.short_url = short_url
@@ -738,20 +690,16 @@ class ContentValidationLookMLDashboard(model.Model):
         space_id: ID of Space
         space:
     """
-
     id: Optional[str] = None
     title: Optional[str] = None
     space_id: Optional[str] = None
     space: Optional["SpaceBase"] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        title: Optional[str] = None,
-        space_id: Optional[str] = None,
-        space: Optional["SpaceBase"] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            title: Optional[str] = None,
+            space_id: Optional[str] = None,
+            space: Optional["SpaceBase"] = None):
         self.id = id
         self.title = title
         self.space_id = space_id
@@ -765,13 +713,12 @@ class ContentValidationLookMLDashboardElement(model.Model):
         lookml_link_id: Link ID of the LookML Dashboard Element
         title: Title of the LookML Dashboard Element
     """
-
     lookml_link_id: Optional[str] = None
     title: Optional[str] = None
 
-    def __init__(
-        self, *, lookml_link_id: Optional[str] = None, title: Optional[str] = None
-    ):
+    def __init__(self, *,
+            lookml_link_id: Optional[str] = None,
+            title: Optional[str] = None):
         self.lookml_link_id = lookml_link_id
         self.title = title
 
@@ -784,18 +731,14 @@ class ContentValidationScheduledPlan(model.Model):
         look_id: Id of a look
         id: Unique Id
     """
-
     name: Optional[str] = None
     look_id: Optional[int] = None
     id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        look_id: Optional[int] = None,
-        id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            look_id: Optional[int] = None,
+            id: Optional[int] = None):
         self.name = name
         self.look_id = look_id
         self.id = id
@@ -808,11 +751,12 @@ class ContentValidationSpace(model.Model):
         name: Unique Name
         id: Unique Id
     """
-
     name: str
     id: Optional[str] = None
 
-    def __init__(self, *, name: str, id: Optional[str] = None):
+    def __init__(self, *,
+            name: str,
+            id: Optional[str] = None):
         self.name = name
         self.id = id
 
@@ -832,7 +776,6 @@ class ContentValidatorError(model.Model):
         errors: A list of errors found for this piece of content
         id: An id unique to this piece of content for this validation run
     """
-
     look: Optional["ContentValidationLook"] = None
     dashboard: Optional["ContentValidationDashboard"] = None
     dashboard_element: Optional["ContentValidationDashboardElement"] = None
@@ -844,22 +787,17 @@ class ContentValidatorError(model.Model):
     errors: Optional[Sequence["ContentValidationError"]] = None
     id: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        look: Optional["ContentValidationLook"] = None,
-        dashboard: Optional["ContentValidationDashboard"] = None,
-        dashboard_element: Optional["ContentValidationDashboardElement"] = None,
-        dashboard_filter: Optional["ContentValidationDashboardFilter"] = None,
-        scheduled_plan: Optional["ContentValidationScheduledPlan"] = None,
-        alert: Optional["ContentValidationAlert"] = None,
-        lookml_dashboard: Optional["ContentValidationLookMLDashboard"] = None,
-        lookml_dashboard_element: Optional[
-            "ContentValidationLookMLDashboardElement"
-        ] = None,
-        errors: Optional[Sequence["ContentValidationError"]] = None,
-        id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            look: Optional["ContentValidationLook"] = None,
+            dashboard: Optional["ContentValidationDashboard"] = None,
+            dashboard_element: Optional["ContentValidationDashboardElement"] = None,
+            dashboard_filter: Optional["ContentValidationDashboardFilter"] = None,
+            scheduled_plan: Optional["ContentValidationScheduledPlan"] = None,
+            alert: Optional["ContentValidationAlert"] = None,
+            lookml_dashboard: Optional["ContentValidationLookMLDashboard"] = None,
+            lookml_dashboard_element: Optional["ContentValidationLookMLDashboardElement"] = None,
+            errors: Optional[Sequence["ContentValidationError"]] = None,
+            id: Optional[str] = None):
         self.look = look
         self.dashboard = dashboard
         self.dashboard_element = dashboard_element
@@ -889,7 +827,6 @@ class ContentView(model.Model):
         last_viewed_at: Date the piece of content was last viewed
         start_of_week_date: Week start date for the view and favorite count during that given week
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     look_id: Optional[int] = None
@@ -903,22 +840,19 @@ class ContentView(model.Model):
     last_viewed_at: Optional[str] = None
     start_of_week_date: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[int] = None,
-        title: Optional[str] = None,
-        content_metadata_id: Optional[int] = None,
-        user_id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        view_count: Optional[int] = None,
-        favorite_count: Optional[int] = None,
-        last_viewed_at: Optional[str] = None,
-        start_of_week_date: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[int] = None,
+            title: Optional[str] = None,
+            content_metadata_id: Optional[int] = None,
+            user_id: Optional[int] = None,
+            group_id: Optional[int] = None,
+            view_count: Optional[int] = None,
+            favorite_count: Optional[int] = None,
+            last_viewed_at: Optional[str] = None,
+            start_of_week_date: Optional[str] = None):
         self.can = can
         self.id = id
         self.look_id = look_id
@@ -942,20 +876,16 @@ class ContinuousPalette(model.Model):
         type: Type of palette
         stops: Array of ColorStops in the palette
     """
-
     id: Optional[str] = None
     label: Optional[str] = None
     type: Optional[str] = None
     stops: Optional[Sequence["ColorStop"]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        label: Optional[str] = None,
-        type: Optional[str] = None,
-        stops: Optional[Sequence["ColorStop"]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            label: Optional[str] = None,
+            type: Optional[str] = None,
+            stops: Optional[Sequence["ColorStop"]] = None):
         self.id = id
         self.label = label
         self.type = type
@@ -982,7 +912,6 @@ class CreateDashboardFilter(model.Model):
         required: Whether the filter requires a value to run the dashboard
         ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
-
     dashboard_id: str
     name: str
     title: str
@@ -999,25 +928,22 @@ class CreateDashboardFilter(model.Model):
     required: Optional[bool] = None
     ui_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_id: str,
-        name: str,
-        title: str,
-        type: str,
-        id: Optional[str] = None,
-        default_value: Optional[str] = None,
-        model: Optional[str] = None,
-        explore: Optional[str] = None,
-        dimension: Optional[str] = None,
-        field: Optional[MutableMapping[str, Any]] = None,
-        row: Optional[int] = None,
-        listens_to_filters: Optional[Sequence[str]] = None,
-        allow_multiple_values: Optional[bool] = None,
-        required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            dashboard_id: str,
+            name: str,
+            title: str,
+            type: str,
+            id: Optional[str] = None,
+            default_value: Optional[str] = None,
+            model: Optional[str] = None,
+            explore: Optional[str] = None,
+            dimension: Optional[str] = None,
+            field: Optional[MutableMapping[str, Any]] = None,
+            row: Optional[int] = None,
+            listens_to_filters: Optional[Sequence[str]] = None,
+            allow_multiple_values: Optional[bool] = None,
+            required: Optional[bool] = None,
+            ui_config: Optional[MutableMapping[str, Any]] = None):
         self.dashboard_id = dashboard_id
         self.name = name
         self.title = title
@@ -1042,16 +968,12 @@ class CreateDashboardRenderTask(model.Model):
         dashboard_filters: Filter values to apply to the dashboard queries, in URL query format
         dashboard_style: Dashboard layout style: single_column or tiled
     """
-
     dashboard_filters: Optional[str] = None
     dashboard_style: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_filters: Optional[str] = None,
-        dashboard_style: Optional[str] = None
-    ):
+    def __init__(self, *,
+            dashboard_filters: Optional[str] = None,
+            dashboard_style: Optional[str] = None):
         self.dashboard_filters = dashboard_filters
         self.dashboard_style = dashboard_style
 
@@ -1063,11 +985,12 @@ class CreateFolder(model.Model):
         name: Unique Name
         parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: str
     parent_id: str
 
-    def __init__(self, *, name: str, parent_id: str):
+    def __init__(self, *,
+            name: str,
+            parent_id: str):
         self.name = name
         self.parent_id = parent_id
 
@@ -1077,14 +1000,13 @@ class CreateQueryTask(model.Model):
     """
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
         can: Operations the current user is able to perform on this object
         source: Source of query task
         deferred: Create the task but defer execution
         look_id: Id of look associated with query.
         dashboard_id: Id of dashboard associated with query.
     """
-
     query_id: int
     result_format: "ResultFormat"
     can: Optional[MutableMapping[str, bool]] = None
@@ -1099,20 +1021,17 @@ class CreateQueryTask(model.Model):
         "source": Optional[str],
         "deferred": Optional[bool],
         "look_id": Optional[int],
-        "dashboard_id": Optional[str],
+        "dashboard_id": Optional[str]
     }
 
-    def __init__(
-        self,
-        *,
-        query_id: int,
-        result_format: "ResultFormat",
-        can: Optional[MutableMapping[str, bool]] = None,
-        source: Optional[str] = None,
-        deferred: Optional[bool] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            query_id: int,
+            result_format: "ResultFormat",
+            can: Optional[MutableMapping[str, bool]] = None,
+            source: Optional[str] = None,
+            deferred: Optional[bool] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[str] = None):
         self.query_id = query_id
         self.result_format = result_format
         self.can = can
@@ -1129,11 +1048,12 @@ class CreateSpace(model.Model):
         name: Unique Name
         parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: str
     parent_id: str
 
-    def __init__(self, *, name: str, parent_id: str):
+    def __init__(self, *,
+            name: str,
+            parent_id: str):
         self.name = name
         self.parent_id = parent_id
 
@@ -1152,7 +1072,6 @@ class CredentialsApi3(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     client_id: Optional[str] = None
@@ -1161,17 +1080,14 @@ class CredentialsApi3(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        client_id: Optional[str] = None,
-        created_at: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            client_id: Optional[str] = None,
+            created_at: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.id = id
         self.client_id = client_id
@@ -1189,46 +1105,50 @@ class CredentialsEmail(model.Model):
         created_at: Timestamp for the creation of this credential
         email: EMail address used for user login
         forced_password_reset_at_next_login: Force the user to change their password upon their next login
+        user_id: Unique Id of the user
         is_disabled: Has this credential been disabled?
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
+        account_setup_url: Url with one-time use secret token that the user can use to setup account
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
+    user_id: Optional[str] = None
     is_disabled: Optional[bool] = None
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
+    account_setup_url: Optional[str] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        email: Optional[str] = None,
-        forced_password_reset_at_next_login: Optional[bool] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        password_reset_url: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None,
-        user_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            email: Optional[str] = None,
+            forced_password_reset_at_next_login: Optional[bool] = None,
+            user_id: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            password_reset_url: Optional[str] = None,
+            account_setup_url: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None,
+            user_url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.email = email
         self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
+        self.user_id = user_id
         self.is_disabled = is_disabled
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
+        self.account_setup_url = account_setup_url
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -1248,7 +1168,6 @@ class CredentialsEmbed(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     external_group_id: Optional[str] = None
@@ -1259,19 +1178,16 @@ class CredentialsEmbed(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        external_group_id: Optional[str] = None,
-        external_user_id: Optional[str] = None,
-        id: Optional[int] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            external_group_id: Optional[str] = None,
+            external_user_id: Optional[str] = None,
+            id: Optional[int] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.external_group_id = external_group_id
@@ -1297,7 +1213,6 @@ class CredentialsGoogle(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     domain: Optional[str] = None
@@ -1308,19 +1223,16 @@ class CredentialsGoogle(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        domain: Optional[str] = None,
-        email: Optional[str] = None,
-        google_user_id: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            domain: Optional[str] = None,
+            email: Optional[str] = None,
+            google_user_id: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.domain = domain
@@ -1346,7 +1258,6 @@ class CredentialsLDAP(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
@@ -1357,19 +1268,16 @@ class CredentialsLDAP(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        email: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        ldap_dn: Optional[str] = None,
-        ldap_id: Optional[str] = None,
-        logged_in_at: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            email: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            ldap_dn: Optional[str] = None,
+            ldap_id: Optional[str] = None,
+            logged_in_at: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1395,7 +1303,6 @@ class CredentialsLookerOpenid(model.Model):
         url: Link to get this item
         user_url: Link to get this user
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
@@ -1406,19 +1313,16 @@ class CredentialsLookerOpenid(model.Model):
     url: Optional[str] = None
     user_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        email: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        logged_in_ip: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None,
-        user_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            email: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            logged_in_ip: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None,
+            user_url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1443,7 +1347,6 @@ class CredentialsOIDC(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
@@ -1453,18 +1356,15 @@ class CredentialsOIDC(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        email: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        oidc_user_id: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            email: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            oidc_user_id: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1488,7 +1388,6 @@ class CredentialsSaml(model.Model):
         type: Short name for the type of this kind of credential
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     email: Optional[str] = None
@@ -1498,18 +1397,15 @@ class CredentialsSaml(model.Model):
     type: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        email: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        logged_in_at: Optional[str] = None,
-        saml_user_id: Optional[str] = None,
-        type: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            email: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            logged_in_at: Optional[str] = None,
+            saml_user_id: Optional[str] = None,
+            type: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.email = email
@@ -1533,7 +1429,6 @@ class CredentialsTotp(model.Model):
         verified: User has verified
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     is_disabled: Optional[bool] = None
@@ -1541,16 +1436,13 @@ class CredentialsTotp(model.Model):
     verified: Optional[bool] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        type: Optional[str] = None,
-        verified: Optional[bool] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            type: Optional[str] = None,
+            verified: Optional[bool] = None,
+            url: Optional[str] = None):
         self.can = can
         self.created_at = created_at
         self.is_disabled = is_disabled
@@ -1569,22 +1461,18 @@ class CustomWelcomeEmail(model.Model):
         subject: The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
         header: The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     enabled: Optional[bool] = None
     content: Optional[str] = None
     subject: Optional[str] = None
     header: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        enabled: Optional[bool] = None,
-        content: Optional[str] = None,
-        subject: Optional[str] = None,
-        header: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            enabled: Optional[bool] = None,
+            content: Optional[str] = None,
+            subject: Optional[str] = None,
+            header: Optional[str] = None):
         self.can = can
         self.enabled = enabled
         self.content = content
@@ -1636,7 +1524,7 @@ class Dashboard(model.Model):
         user_name: Name of User that created the dashboard.
         load_configuration: configuration option that governs how dashboard loading will happen.
         lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
+        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
         show_title: Show title
         space_id: Id of Space
         folder_id: Id of folder
@@ -1647,7 +1535,6 @@ class Dashboard(model.Model):
         view_count: Number of times viewed in the Looker web UI
         appearance:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_favorite_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
@@ -1699,60 +1586,57 @@ class Dashboard(model.Model):
     view_count: Optional[int] = None
     appearance: Optional["DashboardAppearance"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_favorite_id: Optional[int] = None,
-        content_metadata_id: Optional[int] = None,
-        description: Optional[str] = None,
-        hidden: Optional[bool] = None,
-        id: Optional[str] = None,
-        model: Optional["LookModel"] = None,
-        query_timezone: Optional[str] = None,
-        readonly: Optional[bool] = None,
-        refresh_interval: Optional[str] = None,
-        refresh_interval_to_i: Optional[int] = None,
-        folder: Optional["FolderBase"] = None,
-        title: Optional[str] = None,
-        user_id: Optional[int] = None,
-        slug: Optional[str] = None,
-        preferred_viewer: Optional[str] = None,
-        space: Optional["SpaceBase"] = None,
-        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
-        background_color: Optional[str] = None,
-        created_at: Optional[datetime.datetime] = None,
-        crossfilter_enabled: Optional[bool] = None,
-        dashboard_elements: Optional[Sequence["DashboardElement"]] = None,
-        dashboard_filters: Optional[Sequence["DashboardFilter"]] = None,
-        dashboard_layouts: Optional[Sequence["DashboardLayout"]] = None,
-        deleted: Optional[bool] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        deleter_id: Optional[int] = None,
-        edit_uri: Optional[str] = None,
-        enable_viz_full_screen: Optional[bool] = None,
-        favorite_count: Optional[int] = None,
-        filters_bar_collapsed: Optional[bool] = None,
-        filters_location_top: Optional[bool] = None,
-        last_accessed_at: Optional[datetime.datetime] = None,
-        last_viewed_at: Optional[datetime.datetime] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        last_updater_id: Optional[int] = None,
-        last_updater_name: Optional[str] = None,
-        user_name: Optional[str] = None,
-        load_configuration: Optional[str] = None,
-        lookml_link_id: Optional[str] = None,
-        show_filters_bar: Optional[bool] = None,
-        show_title: Optional[bool] = None,
-        space_id: Optional[str] = None,
-        folder_id: Optional[str] = None,
-        text_tile_text_color: Optional[str] = None,
-        tile_background_color: Optional[str] = None,
-        tile_text_color: Optional[str] = None,
-        title_color: Optional[str] = None,
-        view_count: Optional[int] = None,
-        appearance: Optional["DashboardAppearance"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_favorite_id: Optional[int] = None,
+            content_metadata_id: Optional[int] = None,
+            description: Optional[str] = None,
+            hidden: Optional[bool] = None,
+            id: Optional[str] = None,
+            model: Optional["LookModel"] = None,
+            query_timezone: Optional[str] = None,
+            readonly: Optional[bool] = None,
+            refresh_interval: Optional[str] = None,
+            refresh_interval_to_i: Optional[int] = None,
+            folder: Optional["FolderBase"] = None,
+            title: Optional[str] = None,
+            user_id: Optional[int] = None,
+            slug: Optional[str] = None,
+            preferred_viewer: Optional[str] = None,
+            space: Optional["SpaceBase"] = None,
+            alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
+            background_color: Optional[str] = None,
+            created_at: Optional[datetime.datetime] = None,
+            crossfilter_enabled: Optional[bool] = None,
+            dashboard_elements: Optional[Sequence["DashboardElement"]] = None,
+            dashboard_filters: Optional[Sequence["DashboardFilter"]] = None,
+            dashboard_layouts: Optional[Sequence["DashboardLayout"]] = None,
+            deleted: Optional[bool] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            deleter_id: Optional[int] = None,
+            edit_uri: Optional[str] = None,
+            enable_viz_full_screen: Optional[bool] = None,
+            favorite_count: Optional[int] = None,
+            filters_bar_collapsed: Optional[bool] = None,
+            filters_location_top: Optional[bool] = None,
+            last_accessed_at: Optional[datetime.datetime] = None,
+            last_viewed_at: Optional[datetime.datetime] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            last_updater_id: Optional[int] = None,
+            last_updater_name: Optional[str] = None,
+            user_name: Optional[str] = None,
+            load_configuration: Optional[str] = None,
+            lookml_link_id: Optional[str] = None,
+            show_filters_bar: Optional[bool] = None,
+            show_title: Optional[bool] = None,
+            space_id: Optional[str] = None,
+            folder_id: Optional[str] = None,
+            text_tile_text_color: Optional[str] = None,
+            tile_background_color: Optional[str] = None,
+            tile_text_color: Optional[str] = None,
+            title_color: Optional[str] = None,
+            view_count: Optional[int] = None,
+            appearance: Optional["DashboardAppearance"] = None):
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -1770,9 +1654,7 @@ class Dashboard(model.Model):
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
-        self.alert_sync_with_dashboard_filter_enabled = (
-            alert_sync_with_dashboard_filter_enabled
-        )
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -1814,16 +1696,12 @@ class DashboardAggregateTableLookml(model.Model):
         dashboard_id: Dashboard Id
         aggregate_table_lookml: Aggregate Table LookML
     """
-
     dashboard_id: Optional[str] = None
     aggregate_table_lookml: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_id: Optional[str] = None,
-        aggregate_table_lookml: Optional[str] = None
-    ):
+    def __init__(self, *,
+            dashboard_id: Optional[str] = None,
+            aggregate_table_lookml: Optional[str] = None):
         self.dashboard_id = dashboard_id
         self.aggregate_table_lookml = aggregate_table_lookml
 
@@ -1840,7 +1718,6 @@ class DashboardAppearance(model.Model):
         tile_shadow: Tile shadow on/off
         key_color: Key color
     """
-
     page_side_margins: Optional[int] = None
     page_background_color: Optional[str] = None
     tile_title_alignment: Optional[str] = None
@@ -1849,17 +1726,14 @@ class DashboardAppearance(model.Model):
     tile_shadow: Optional[bool] = None
     key_color: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        page_side_margins: Optional[int] = None,
-        page_background_color: Optional[str] = None,
-        tile_title_alignment: Optional[str] = None,
-        tile_space_between: Optional[int] = None,
-        tile_background_color: Optional[str] = None,
-        tile_shadow: Optional[bool] = None,
-        key_color: Optional[str] = None
-    ):
+    def __init__(self, *,
+            page_side_margins: Optional[int] = None,
+            page_background_color: Optional[str] = None,
+            tile_title_alignment: Optional[str] = None,
+            tile_space_between: Optional[int] = None,
+            tile_background_color: Optional[str] = None,
+            tile_shadow: Optional[bool] = None,
+            key_color: Optional[str] = None):
         self.page_side_margins = page_side_margins
         self.page_background_color = page_background_color
         self.tile_title_alignment = tile_title_alignment
@@ -1891,7 +1765,6 @@ class DashboardBase(model.Model):
         preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
         space:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_favorite_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
@@ -1910,27 +1783,24 @@ class DashboardBase(model.Model):
     preferred_viewer: Optional[str] = None
     space: Optional["SpaceBase"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_favorite_id: Optional[int] = None,
-        content_metadata_id: Optional[int] = None,
-        description: Optional[str] = None,
-        hidden: Optional[bool] = None,
-        id: Optional[str] = None,
-        model: Optional["LookModel"] = None,
-        query_timezone: Optional[str] = None,
-        readonly: Optional[bool] = None,
-        refresh_interval: Optional[str] = None,
-        refresh_interval_to_i: Optional[int] = None,
-        folder: Optional["FolderBase"] = None,
-        title: Optional[str] = None,
-        user_id: Optional[int] = None,
-        slug: Optional[str] = None,
-        preferred_viewer: Optional[str] = None,
-        space: Optional["SpaceBase"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_favorite_id: Optional[int] = None,
+            content_metadata_id: Optional[int] = None,
+            description: Optional[str] = None,
+            hidden: Optional[bool] = None,
+            id: Optional[str] = None,
+            model: Optional["LookModel"] = None,
+            query_timezone: Optional[str] = None,
+            readonly: Optional[bool] = None,
+            refresh_interval: Optional[str] = None,
+            refresh_interval_to_i: Optional[int] = None,
+            folder: Optional["FolderBase"] = None,
+            title: Optional[str] = None,
+            user_id: Optional[int] = None,
+            slug: Optional[str] = None,
+            preferred_viewer: Optional[str] = None,
+            space: Optional["SpaceBase"] = None):
         self.can = can
         self.content_favorite_id = content_favorite_id
         self.content_metadata_id = content_metadata_id
@@ -1984,7 +1854,6 @@ class DashboardElement(model.Model):
         title_text_as_html: Text tile title text as Html
         subtitle_text_as_html: Text tile subtitle text as Html
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     body_text: Optional[str] = None
     body_text_as_html: Optional[str] = None
@@ -2015,39 +1884,36 @@ class DashboardElement(model.Model):
     title_text_as_html: Optional[str] = None
     subtitle_text_as_html: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        body_text: Optional[str] = None,
-        body_text_as_html: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        edit_uri: Optional[str] = None,
-        id: Optional[str] = None,
-        look: Optional["LookWithQuery"] = None,
-        look_id: Optional[str] = None,
-        lookml_link_id: Optional[str] = None,
-        merge_result_id: Optional[str] = None,
-        note_display: Optional[str] = None,
-        note_state: Optional[str] = None,
-        note_text: Optional[str] = None,
-        note_text_as_html: Optional[str] = None,
-        query: Optional["Query"] = None,
-        query_id: Optional[int] = None,
-        refresh_interval: Optional[str] = None,
-        refresh_interval_to_i: Optional[int] = None,
-        result_maker: Optional["ResultMakerWithIdVisConfigAndDynamicFields"] = None,
-        result_maker_id: Optional[int] = None,
-        subtitle_text: Optional[str] = None,
-        title: Optional[str] = None,
-        title_hidden: Optional[bool] = None,
-        title_text: Optional[str] = None,
-        type: Optional[str] = None,
-        alert_count: Optional[int] = None,
-        rich_content_json: Optional[str] = None,
-        title_text_as_html: Optional[str] = None,
-        subtitle_text_as_html: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            body_text: Optional[str] = None,
+            body_text_as_html: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            edit_uri: Optional[str] = None,
+            id: Optional[str] = None,
+            look: Optional["LookWithQuery"] = None,
+            look_id: Optional[str] = None,
+            lookml_link_id: Optional[str] = None,
+            merge_result_id: Optional[str] = None,
+            note_display: Optional[str] = None,
+            note_state: Optional[str] = None,
+            note_text: Optional[str] = None,
+            note_text_as_html: Optional[str] = None,
+            query: Optional["Query"] = None,
+            query_id: Optional[int] = None,
+            refresh_interval: Optional[str] = None,
+            refresh_interval_to_i: Optional[int] = None,
+            result_maker: Optional["ResultMakerWithIdVisConfigAndDynamicFields"] = None,
+            result_maker_id: Optional[int] = None,
+            subtitle_text: Optional[str] = None,
+            title: Optional[str] = None,
+            title_hidden: Optional[bool] = None,
+            title_text: Optional[str] = None,
+            type: Optional[str] = None,
+            alert_count: Optional[int] = None,
+            rich_content_json: Optional[str] = None,
+            title_text_as_html: Optional[str] = None,
+            subtitle_text_as_html: Optional[str] = None):
         self.can = can
         self.body_text = body_text
         self.body_text_as_html = body_text_as_html
@@ -2100,7 +1966,6 @@ class DashboardFilter(model.Model):
         required: Whether the filter requires a value to run the dashboard
         ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     dashboard_id: Optional[str] = None
@@ -2118,26 +1983,23 @@ class DashboardFilter(model.Model):
     required: Optional[bool] = None
     ui_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        name: Optional[str] = None,
-        title: Optional[str] = None,
-        type: Optional[str] = None,
-        default_value: Optional[str] = None,
-        model: Optional[str] = None,
-        explore: Optional[str] = None,
-        dimension: Optional[str] = None,
-        field: Optional[MutableMapping[str, Any]] = None,
-        row: Optional[int] = None,
-        listens_to_filters: Optional[Sequence[str]] = None,
-        allow_multiple_values: Optional[bool] = None,
-        required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            name: Optional[str] = None,
+            title: Optional[str] = None,
+            type: Optional[str] = None,
+            default_value: Optional[str] = None,
+            model: Optional[str] = None,
+            explore: Optional[str] = None,
+            dimension: Optional[str] = None,
+            field: Optional[MutableMapping[str, Any]] = None,
+            row: Optional[int] = None,
+            listens_to_filters: Optional[Sequence[str]] = None,
+            allow_multiple_values: Optional[bool] = None,
+            required: Optional[bool] = None,
+            ui_config: Optional[MutableMapping[str, Any]] = None):
         self.can = can
         self.id = id
         self.dashboard_id = dashboard_id
@@ -2171,7 +2033,6 @@ class DashboardLayout(model.Model):
         dashboard_title: Title extracted from the dashboard this layout represents.
         dashboard_layout_components: Components
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     dashboard_id: Optional[str] = None
@@ -2183,22 +2044,17 @@ class DashboardLayout(model.Model):
     dashboard_title: Optional[str] = None
     dashboard_layout_components: Optional[Sequence["DashboardLayoutComponent"]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        type: Optional[str] = None,
-        active: Optional[bool] = None,
-        column_width: Optional[int] = None,
-        width: Optional[int] = None,
-        deleted: Optional[bool] = None,
-        dashboard_title: Optional[str] = None,
-        dashboard_layout_components: Optional[
-            Sequence["DashboardLayoutComponent"]
-        ] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            type: Optional[str] = None,
+            active: Optional[bool] = None,
+            column_width: Optional[int] = None,
+            width: Optional[int] = None,
+            deleted: Optional[bool] = None,
+            dashboard_title: Optional[str] = None,
+            dashboard_layout_components: Optional[Sequence["DashboardLayoutComponent"]] = None):
         self.can = can
         self.id = id
         self.dashboard_id = dashboard_id
@@ -2228,7 +2084,6 @@ class DashboardLayoutComponent(model.Model):
         element_title_hidden: Whether or not the dashboard element title is displayed.
         vis_type: Visualization type, extracted from a query's vis_config
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     dashboard_layout_id: Optional[str] = None
@@ -2242,22 +2097,19 @@ class DashboardLayoutComponent(model.Model):
     element_title_hidden: Optional[bool] = None
     vis_type: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        dashboard_layout_id: Optional[str] = None,
-        dashboard_element_id: Optional[str] = None,
-        row: Optional[int] = None,
-        column: Optional[int] = None,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-        deleted: Optional[bool] = None,
-        element_title: Optional[str] = None,
-        element_title_hidden: Optional[bool] = None,
-        vis_type: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            dashboard_layout_id: Optional[str] = None,
+            dashboard_element_id: Optional[str] = None,
+            row: Optional[int] = None,
+            column: Optional[int] = None,
+            width: Optional[int] = None,
+            height: Optional[int] = None,
+            deleted: Optional[bool] = None,
+            element_title: Optional[str] = None,
+            element_title_hidden: Optional[bool] = None,
+            vis_type: Optional[str] = None):
         self.can = can
         self.id = id
         self.dashboard_layout_id = dashboard_layout_id
@@ -2280,18 +2132,14 @@ class DashboardLookml(model.Model):
         folder_id: (Write-Only) Id of the folder
         lookml: lookml of UDD
     """
-
     dashboard_id: Optional[str] = None
     folder_id: Optional[str] = None
     lookml: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_id: Optional[str] = None,
-        folder_id: Optional[str] = None,
-        lookml: Optional[str] = None
-    ):
+    def __init__(self, *,
+            dashboard_id: Optional[str] = None,
+            folder_id: Optional[str] = None,
+            lookml: Optional[str] = None):
         self.dashboard_id = dashboard_id
         self.folder_id = folder_id
         self.lookml = lookml
@@ -2304,16 +2152,12 @@ class DataActionForm(model.Model):
         state:
         fields: Array of form fields.
     """
-
     state: Optional["DataActionUserState"] = None
     fields: Optional[Sequence["DataActionFormField"]] = None
 
-    def __init__(
-        self,
-        *,
-        state: Optional["DataActionUserState"] = None,
-        fields: Optional[Sequence["DataActionFormField"]] = None
-    ):
+    def __init__(self, *,
+            state: Optional["DataActionUserState"] = None,
+            fields: Optional[Sequence["DataActionFormField"]] = None):
         self.state = state
         self.fields = fields
 
@@ -2332,7 +2176,6 @@ class DataActionFormField(model.Model):
         required: Whether or not the field is required. This is a user-interface hint. A user interface displaying this form should not submit it without a value for this field. The action server must also perform this validation.
         options: If the form type is 'select', a list of options to be selected from.
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
     description: Optional[str] = None
@@ -2343,19 +2186,16 @@ class DataActionFormField(model.Model):
     required: Optional[bool] = None
     options: Optional[Sequence["DataActionFormSelectOption"]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        description: Optional[str] = None,
-        type: Optional[str] = None,
-        default: Optional[str] = None,
-        oauth_url: Optional[str] = None,
-        interactive: Optional[bool] = None,
-        required: Optional[bool] = None,
-        options: Optional[Sequence["DataActionFormSelectOption"]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            description: Optional[str] = None,
+            type: Optional[str] = None,
+            default: Optional[str] = None,
+            oauth_url: Optional[str] = None,
+            interactive: Optional[bool] = None,
+            required: Optional[bool] = None,
+            options: Optional[Sequence["DataActionFormSelectOption"]] = None):
         self.name = name
         self.label = label
         self.description = description
@@ -2374,11 +2214,12 @@ class DataActionFormSelectOption(model.Model):
         name: Name
         label: Human-readable label
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, label: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None):
         self.name = name
         self.label = label
 
@@ -2390,16 +2231,12 @@ class DataActionRequest(model.Model):
         action: The JSON describing the data action. This JSON should be considered opaque and should be passed through unmodified from the query result it came from.
         form_values: User input for any form values the data action might use.
     """
-
     action: Optional[MutableMapping[str, Any]] = None
     form_values: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        action: Optional[MutableMapping[str, Any]] = None,
-        form_values: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            action: Optional[MutableMapping[str, Any]] = None,
+            form_values: Optional[MutableMapping[str, Any]] = None):
         self.action = action
         self.form_values = form_values
 
@@ -2414,22 +2251,18 @@ class DataActionResponse(model.Model):
         validation_errors:
         message: Optional message returned by the data action server describing the state of the action that took place. This can be used to implement custom failure messages. If a failure is related to a particular form field, the server should send back a validation error instead. The Looker web UI does not currently display any message if the action indicates 'success', but may do so in the future.
     """
-
     webhook_id: Optional[str] = None
     success: Optional[bool] = None
     refresh_query: Optional[bool] = None
     validation_errors: Optional["ValidationError"] = None
     message: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        webhook_id: Optional[str] = None,
-        success: Optional[bool] = None,
-        refresh_query: Optional[bool] = None,
-        validation_errors: Optional["ValidationError"] = None,
-        message: Optional[str] = None
-    ):
+    def __init__(self, *,
+            webhook_id: Optional[str] = None,
+            success: Optional[bool] = None,
+            refresh_query: Optional[bool] = None,
+            validation_errors: Optional["ValidationError"] = None,
+            message: Optional[str] = None):
         self.webhook_id = webhook_id
         self.success = success
         self.refresh_query = refresh_query
@@ -2444,13 +2277,12 @@ class DataActionUserState(model.Model):
         data: User state data
         refresh_time: Time in seconds until the state needs to be refreshed
     """
-
     data: Optional[str] = None
     refresh_time: Optional[int] = None
 
-    def __init__(
-        self, *, data: Optional[str] = None, refresh_time: Optional[int] = None
-    ):
+    def __init__(self, *,
+            data: Optional[str] = None,
+            refresh_time: Optional[int] = None):
         self.data = data
         self.refresh_time = refresh_time
 
@@ -2470,7 +2302,6 @@ class Datagroup(model.Model):
         trigger_value: The value of the trigger when last checked.
         triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[int] = None
     id: Optional[int] = None
@@ -2482,20 +2313,17 @@ class Datagroup(model.Model):
     trigger_value: Optional[str] = None
     triggered_at: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[int] = None,
-        id: Optional[int] = None,
-        model_name: Optional[str] = None,
-        name: Optional[str] = None,
-        stale_before: Optional[int] = None,
-        trigger_check_at: Optional[int] = None,
-        trigger_error: Optional[str] = None,
-        trigger_value: Optional[str] = None,
-        triggered_at: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[int] = None,
+            id: Optional[int] = None,
+            model_name: Optional[str] = None,
+            name: Optional[str] = None,
+            stale_before: Optional[int] = None,
+            trigger_check_at: Optional[int] = None,
+            trigger_error: Optional[str] = None,
+            trigger_value: Optional[str] = None,
+            triggered_at: Optional[int] = None):
         self.can = can
         self.created_at = created_at
         self.id = id
@@ -2517,8 +2345,8 @@ class DBConnection(model.Model):
         dialect:
         snippets: SQL Runner snippets for this connection
         pdts_enabled: True if PDTs are enabled on this connection
-        host: Host name/address of server
-        port: Port number on server
+        host: Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+        port: Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
         username: Username for server authentication
         password: (Write-Only) Password for server authentication
         uses_oauth: Whether the connection uses OAuth for authentication.
@@ -2527,7 +2355,7 @@ class DBConnection(model.Model):
         database: Database name
         db_timezone: Time zone of database
         query_timezone: Timezone to use in queries
-        schema: Scheme name
+        schema: Schema name
         max_connections: Maximum number of concurrent connection to use
         max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
         ssl: Use SSL/TLS when connecting to server
@@ -2550,8 +2378,8 @@ class DBConnection(model.Model):
         after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
         pdt_context_override:
         managed: Is this connection created and managed by Looker
+        uses_tns: Enable Transparent Network Substrate (TNS) connections
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     name: Optional[str] = None
     dialect: Optional["Dialect"] = None
@@ -2590,49 +2418,48 @@ class DBConnection(model.Model):
     after_connect_statements: Optional[str] = None
     pdt_context_override: Optional["DBConnectionOverride"] = None
     managed: Optional[bool] = None
+    uses_tns: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        name: Optional[str] = None,
-        dialect: Optional["Dialect"] = None,
-        snippets: Optional[Sequence["Snippet"]] = None,
-        pdts_enabled: Optional[bool] = None,
-        host: Optional[str] = None,
-        port: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        uses_oauth: Optional[bool] = None,
-        certificate: Optional[str] = None,
-        file_type: Optional[str] = None,
-        database: Optional[str] = None,
-        db_timezone: Optional[str] = None,
-        query_timezone: Optional[str] = None,
-        schema: Optional[str] = None,
-        max_connections: Optional[int] = None,
-        max_billing_gigabytes: Optional[str] = None,
-        ssl: Optional[bool] = None,
-        verify_ssl: Optional[bool] = None,
-        tmp_db_name: Optional[str] = None,
-        jdbc_additional_params: Optional[str] = None,
-        pool_timeout: Optional[int] = None,
-        dialect_name: Optional[str] = None,
-        supports_data_studio_link: Optional[bool] = None,
-        created_at: Optional[str] = None,
-        user_id: Optional[str] = None,
-        example: Optional[bool] = None,
-        user_db_credentials: Optional[bool] = None,
-        user_attribute_fields: Optional[Sequence[str]] = None,
-        maintenance_cron: Optional[str] = None,
-        last_regen_at: Optional[str] = None,
-        last_reap_at: Optional[str] = None,
-        sql_runner_precache_tables: Optional[bool] = None,
-        sql_writing_with_info_schema: Optional[bool] = None,
-        after_connect_statements: Optional[str] = None,
-        pdt_context_override: Optional["DBConnectionOverride"] = None,
-        managed: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            name: Optional[str] = None,
+            dialect: Optional["Dialect"] = None,
+            snippets: Optional[Sequence["Snippet"]] = None,
+            pdts_enabled: Optional[bool] = None,
+            host: Optional[str] = None,
+            port: Optional[str] = None,
+            username: Optional[str] = None,
+            password: Optional[str] = None,
+            uses_oauth: Optional[bool] = None,
+            certificate: Optional[str] = None,
+            file_type: Optional[str] = None,
+            database: Optional[str] = None,
+            db_timezone: Optional[str] = None,
+            query_timezone: Optional[str] = None,
+            schema: Optional[str] = None,
+            max_connections: Optional[int] = None,
+            max_billing_gigabytes: Optional[str] = None,
+            ssl: Optional[bool] = None,
+            verify_ssl: Optional[bool] = None,
+            tmp_db_name: Optional[str] = None,
+            jdbc_additional_params: Optional[str] = None,
+            pool_timeout: Optional[int] = None,
+            dialect_name: Optional[str] = None,
+            supports_data_studio_link: Optional[bool] = None,
+            created_at: Optional[str] = None,
+            user_id: Optional[str] = None,
+            example: Optional[bool] = None,
+            user_db_credentials: Optional[bool] = None,
+            user_attribute_fields: Optional[Sequence[str]] = None,
+            maintenance_cron: Optional[str] = None,
+            last_regen_at: Optional[str] = None,
+            last_reap_at: Optional[str] = None,
+            sql_runner_precache_tables: Optional[bool] = None,
+            sql_writing_with_info_schema: Optional[bool] = None,
+            after_connect_statements: Optional[str] = None,
+            pdt_context_override: Optional["DBConnectionOverride"] = None,
+            managed: Optional[bool] = None,
+            uses_tns: Optional[bool] = None):
         self.can = can
         self.name = name
         self.dialect = dialect
@@ -2671,6 +2498,7 @@ class DBConnection(model.Model):
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
         self.managed = managed
+        self.uses_tns = uses_tns
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -2683,22 +2511,18 @@ class DBConnectionBase(model.Model):
         snippets: SQL Runner snippets for this connection
         pdts_enabled: True if PDTs are enabled on this connection
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     name: Optional[str] = None
     dialect: Optional["Dialect"] = None
     snippets: Optional[Sequence["Snippet"]] = None
     pdts_enabled: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        name: Optional[str] = None,
-        dialect: Optional["Dialect"] = None,
-        snippets: Optional[Sequence["Snippet"]] = None,
-        pdts_enabled: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            name: Optional[str] = None,
+            dialect: Optional["Dialect"] = None,
+            snippets: Optional[Sequence["Snippet"]] = None,
+            pdts_enabled: Optional[bool] = None):
         self.can = can
         self.name = name
         self.dialect = dialect
@@ -2719,11 +2543,10 @@ class DBConnectionOverride(model.Model):
         certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
         file_type: (Write-Only) Certificate keyfile type - .json or .p12
         database: Database name
-        schema: Scheme name
+        schema: Schema name
         jdbc_additional_params: Additional params to add to JDBC connection string
         after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
     """
-
     context: Optional[str] = None
     host: Optional[str] = None
     port: Optional[str] = None
@@ -2737,22 +2560,19 @@ class DBConnectionOverride(model.Model):
     jdbc_additional_params: Optional[str] = None
     after_connect_statements: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        context: Optional[str] = None,
-        host: Optional[str] = None,
-        port: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        has_password: Optional[bool] = None,
-        certificate: Optional[str] = None,
-        file_type: Optional[str] = None,
-        database: Optional[str] = None,
-        schema: Optional[str] = None,
-        jdbc_additional_params: Optional[str] = None,
-        after_connect_statements: Optional[str] = None
-    ):
+    def __init__(self, *,
+            context: Optional[str] = None,
+            host: Optional[str] = None,
+            port: Optional[str] = None,
+            username: Optional[str] = None,
+            password: Optional[str] = None,
+            has_password: Optional[bool] = None,
+            certificate: Optional[str] = None,
+            file_type: Optional[str] = None,
+            database: Optional[str] = None,
+            schema: Optional[str] = None,
+            jdbc_additional_params: Optional[str] = None,
+            after_connect_statements: Optional[str] = None):
         self.context = context
         self.host = host
         self.port = port
@@ -2777,22 +2597,18 @@ class DBConnectionTestResult(model.Model):
         name: Name of test
         status: Result code of test
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     connection_string: Optional[str] = None
     message: Optional[str] = None
     name: Optional[str] = None
     status: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        connection_string: Optional[str] = None,
-        message: Optional[str] = None,
-        name: Optional[str] = None,
-        status: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            connection_string: Optional[str] = None,
+            message: Optional[str] = None,
+            name: Optional[str] = None,
+            status: Optional[str] = None):
         self.can = can
         self.connection_string = connection_string
         self.message = message
@@ -2809,20 +2625,16 @@ class DelegateOauthTest(model.Model):
         installation_id: Installation ID
         success: Whether or not the test was successful
     """
-
     name: Optional[str] = None
     installation_target_id: Optional[str] = None
     installation_id: Optional[int] = None
     success: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        installation_target_id: Optional[str] = None,
-        installation_id: Optional[int] = None,
-        success: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            installation_target_id: Optional[str] = None,
+            installation_id: Optional[int] = None,
+            success: Optional[bool] = None):
         self.name = name
         self.installation_target_id = installation_target_id
         self.installation_id = installation_id
@@ -2835,10 +2647,10 @@ class DependencyGraph(model.Model):
     Attributes:
         graph_text: The graph structure in the dot language that can be rendered into an image.
     """
-
     graph_text: Optional[str] = None
 
-    def __init__(self, *, graph_text: Optional[str] = None):
+    def __init__(self, *,
+            graph_text: Optional[str] = None):
         self.graph_text = graph_text
 
 
@@ -2847,7 +2659,6 @@ class DependencyStatus(enum.Enum):
     Status of the dependencies in your project. Valid values are: "lock_optional", "lock_required", "lock_error", "install_none". (Enum defined in ProjectWorkspace)
 
     """
-
     lock_optional = "lock_optional"
     lock_required = "lock_required"
     lock_error = "lock_error"
@@ -2878,7 +2689,6 @@ class Dialect(model.Model):
         supports_persistent_derived_tables: Whether the dialect supports allowing Looker to build persistent derived tables
         has_ssl_support: Does the database have client SSL support settable through the JDBC string explicitly?
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
     supports_cost_estimate: Optional[bool] = None
@@ -2894,24 +2704,21 @@ class Dialect(model.Model):
     supports_persistent_derived_tables: Optional[bool] = None
     has_ssl_support: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        supports_cost_estimate: Optional[bool] = None,
-        cost_estimate_style: Optional[str] = None,
-        persistent_table_indexes: Optional[str] = None,
-        persistent_table_sortkeys: Optional[str] = None,
-        persistent_table_distkey: Optional[str] = None,
-        supports_streaming: Optional[bool] = None,
-        automatically_run_sql_runner_snippets: Optional[bool] = None,
-        connection_tests: Optional[Sequence[str]] = None,
-        supports_inducer: Optional[bool] = None,
-        supports_multiple_databases: Optional[bool] = None,
-        supports_persistent_derived_tables: Optional[bool] = None,
-        has_ssl_support: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            supports_cost_estimate: Optional[bool] = None,
+            cost_estimate_style: Optional[str] = None,
+            persistent_table_indexes: Optional[str] = None,
+            persistent_table_sortkeys: Optional[str] = None,
+            persistent_table_distkey: Optional[str] = None,
+            supports_streaming: Optional[bool] = None,
+            automatically_run_sql_runner_snippets: Optional[bool] = None,
+            connection_tests: Optional[Sequence[str]] = None,
+            supports_inducer: Optional[bool] = None,
+            supports_multiple_databases: Optional[bool] = None,
+            supports_persistent_derived_tables: Optional[bool] = None,
+            has_ssl_support: Optional[bool] = None):
         self.name = name
         self.label = label
         self.supports_cost_estimate = supports_cost_estimate
@@ -2920,9 +2727,7 @@ class Dialect(model.Model):
         self.persistent_table_sortkeys = persistent_table_sortkeys
         self.persistent_table_distkey = persistent_table_distkey
         self.supports_streaming = supports_streaming
-        self.automatically_run_sql_runner_snippets = (
-            automatically_run_sql_runner_snippets
-        )
+        self.automatically_run_sql_runner_snippets = automatically_run_sql_runner_snippets
         self.connection_tests = connection_tests
         self.supports_inducer = supports_inducer
         self.supports_multiple_databases = supports_multiple_databases
@@ -2943,7 +2748,6 @@ class DialectInfo(model.Model):
         name: The name of the dialect
         supported_options:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     default_max_connections: Optional[str] = None
     default_port: Optional[str] = None
@@ -2953,18 +2757,15 @@ class DialectInfo(model.Model):
     name: Optional[str] = None
     supported_options: Optional["DialectInfoOptions"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        default_max_connections: Optional[str] = None,
-        default_port: Optional[str] = None,
-        installed: Optional[bool] = None,
-        label: Optional[str] = None,
-        label_for_database_equivalent: Optional[str] = None,
-        name: Optional[str] = None,
-        supported_options: Optional["DialectInfoOptions"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            default_max_connections: Optional[str] = None,
+            default_port: Optional[str] = None,
+            installed: Optional[bool] = None,
+            label: Optional[str] = None,
+            label_for_database_equivalent: Optional[str] = None,
+            name: Optional[str] = None,
+            supported_options: Optional["DialectInfoOptions"] = None):
         self.can = can
         self.default_max_connections = default_max_connections
         self.default_port = default_port
@@ -2980,54 +2781,94 @@ class DialectInfoOptions(model.Model):
     """
     Attributes:
         additional_params: Has additional params support
+        after_connect_statements: Has support for issuing statements after connecting to the database
+        analytical_view_dataset: Has analytical view support
         auth: Has auth support
-        host: Has host support
+        cost_estimate: Has configurable cost estimation
+        disable_context_comment: Can disable query context comments
+        host: Host is required
+        instance_name: Instance name is required
+        max_billing_gigabytes: Has max billing gigabytes support
         oauth_credentials: Has support for a service account
+        pdts_for_oauth: Has OAuth for PDT support
+        port: Port can be specified
         project_name: Has project name support
-        schema: Has schema support
-        ssl: Has SSL support
+        schema: Schema can be specified
+        service_account_credentials: Has support for a service account
+        ssl: Has TLS/SSL support
         timezone: Has timezone support
         tmp_table: Has tmp table support
+        tns: Has Oracle TNS support
+        username: Username can be specified
         username_required: Username is required
         can: Operations the current user is able to perform on this object
     """
-
     additional_params: Optional[bool] = None
+    after_connect_statements: Optional[bool] = None
+    analytical_view_dataset: Optional[bool] = None
     auth: Optional[bool] = None
+    cost_estimate: Optional[bool] = None
+    disable_context_comment: Optional[bool] = None
     host: Optional[bool] = None
+    instance_name: Optional[bool] = None
+    max_billing_gigabytes: Optional[bool] = None
     oauth_credentials: Optional[bool] = None
+    pdts_for_oauth: Optional[bool] = None
+    port: Optional[bool] = None
     project_name: Optional[bool] = None
     schema: Optional[bool] = None
+    service_account_credentials: Optional[bool] = None
     ssl: Optional[bool] = None
     timezone: Optional[bool] = None
     tmp_table: Optional[bool] = None
+    tns: Optional[bool] = None
+    username: Optional[bool] = None
     username_required: Optional[bool] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        additional_params: Optional[bool] = None,
-        auth: Optional[bool] = None,
-        host: Optional[bool] = None,
-        oauth_credentials: Optional[bool] = None,
-        project_name: Optional[bool] = None,
-        schema: Optional[bool] = None,
-        ssl: Optional[bool] = None,
-        timezone: Optional[bool] = None,
-        tmp_table: Optional[bool] = None,
-        username_required: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            additional_params: Optional[bool] = None,
+            after_connect_statements: Optional[bool] = None,
+            analytical_view_dataset: Optional[bool] = None,
+            auth: Optional[bool] = None,
+            cost_estimate: Optional[bool] = None,
+            disable_context_comment: Optional[bool] = None,
+            host: Optional[bool] = None,
+            instance_name: Optional[bool] = None,
+            max_billing_gigabytes: Optional[bool] = None,
+            oauth_credentials: Optional[bool] = None,
+            pdts_for_oauth: Optional[bool] = None,
+            port: Optional[bool] = None,
+            project_name: Optional[bool] = None,
+            schema: Optional[bool] = None,
+            service_account_credentials: Optional[bool] = None,
+            ssl: Optional[bool] = None,
+            timezone: Optional[bool] = None,
+            tmp_table: Optional[bool] = None,
+            tns: Optional[bool] = None,
+            username: Optional[bool] = None,
+            username_required: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.additional_params = additional_params
+        self.after_connect_statements = after_connect_statements
+        self.analytical_view_dataset = analytical_view_dataset
         self.auth = auth
+        self.cost_estimate = cost_estimate
+        self.disable_context_comment = disable_context_comment
         self.host = host
+        self.instance_name = instance_name
+        self.max_billing_gigabytes = max_billing_gigabytes
         self.oauth_credentials = oauth_credentials
+        self.pdts_for_oauth = pdts_for_oauth
+        self.port = port
         self.project_name = project_name
         self.schema = schema
+        self.service_account_credentials = service_account_credentials
         self.ssl = ssl
         self.timezone = timezone
         self.tmp_table = tmp_table
+        self.tns = tns
+        self.username = username
         self.username_required = username_required
         self.can = can
 
@@ -3038,10 +2879,10 @@ class DigestEmails(model.Model):
     Attributes:
         is_enabled: Whether or not digest emails are enabled
     """
-
     is_enabled: Optional[bool] = None
 
-    def __init__(self, *, is_enabled: Optional[bool] = None):
+    def __init__(self, *,
+            is_enabled: Optional[bool] = None):
         self.is_enabled = is_enabled
 
 
@@ -3051,10 +2892,10 @@ class DigestEmailSend(model.Model):
     Attributes:
         configuration_delivered: True if content was successfully generated and delivered
     """
-
     configuration_delivered: Optional[bool] = None
 
-    def __init__(self, *, configuration_delivered: Optional[bool] = None):
+    def __init__(self, *,
+            configuration_delivered: Optional[bool] = None):
         self.configuration_delivered = configuration_delivered
 
 
@@ -3067,20 +2908,16 @@ class DiscretePalette(model.Model):
         type: Type of palette
         colors: Array of colors in the palette
     """
-
     id: Optional[str] = None
     label: Optional[str] = None
     type: Optional[str] = None
     colors: Optional[Sequence[str]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        label: Optional[str] = None,
-        type: Optional[str] = None,
-        colors: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            label: Optional[str] = None,
+            type: Optional[str] = None,
+            colors: Optional[Sequence[str]] = None):
         self.id = id
         self.label = label
         self.type = type
@@ -3105,7 +2942,6 @@ class EmbedSsoParams(model.Model):
         user_attributes: A dictionary of name-value pairs associating a Looker user attribute name with a value.
         secret_id: Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
     """
-
     target_url: str
     session_length: Optional[int] = None
     force_logout_login: Optional[bool] = None
@@ -3120,23 +2956,20 @@ class EmbedSsoParams(model.Model):
     user_attributes: Optional[MutableMapping[str, Any]] = None
     secret_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        target_url: str,
-        session_length: Optional[int] = None,
-        force_logout_login: Optional[bool] = None,
-        external_user_id: Optional[str] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-        user_timezone: Optional[str] = None,
-        permissions: Optional[Sequence[str]] = None,
-        models: Optional[Sequence[str]] = None,
-        group_ids: Optional[Sequence[int]] = None,
-        external_group_id: Optional[str] = None,
-        user_attributes: Optional[MutableMapping[str, Any]] = None,
-        secret_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            target_url: str,
+            session_length: Optional[int] = None,
+            force_logout_login: Optional[bool] = None,
+            external_user_id: Optional[str] = None,
+            first_name: Optional[str] = None,
+            last_name: Optional[str] = None,
+            user_timezone: Optional[str] = None,
+            permissions: Optional[Sequence[str]] = None,
+            models: Optional[Sequence[str]] = None,
+            group_ids: Optional[Sequence[int]] = None,
+            external_group_id: Optional[str] = None,
+            user_attributes: Optional[MutableMapping[str, Any]] = None,
+            secret_id: Optional[int] = None):
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
@@ -3158,10 +2991,10 @@ class EmbedUrlResponse(model.Model):
     Attributes:
         url: The embed URL. Any modification to this string will make the URL unusable.
     """
-
     url: Optional[str] = None
 
-    def __init__(self, *, url: Optional[str] = None):
+    def __init__(self, *,
+            url: Optional[str] = None):
         self.url = url
 
 
@@ -3172,11 +3005,12 @@ class Error(model.Model):
         message: Error details
         documentation_url: Documentation link
     """
-
     message: str
     documentation_url: str
 
-    def __init__(self, *, message: str, documentation_url: str):
+    def __init__(self, *,
+            message: str,
+            documentation_url: str):
         self.message = message
         self.documentation_url = documentation_url
 
@@ -3186,7 +3020,6 @@ class FillStyle(enum.Enum):
     The style of dimension fill that is possible for this field. Null if no dimension fill is possible. Valid values are: "enumeration", "range". (Enum defined in LookmlModelExploreField)
 
     """
-
     enumeration = "enumeration"
     range = "range"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -3219,7 +3052,6 @@ class Folder(model.Model):
         dashboards: Dashboards
         looks: Looks
     """
-
     name: str
     parent_id: Optional[str] = None
     id: Optional[str] = None
@@ -3239,28 +3071,25 @@ class Folder(model.Model):
     dashboards: Optional[Sequence["DashboardBase"]] = None
     looks: Optional[Sequence["LookWithDashboards"]] = None
 
-    def __init__(
-        self,
-        *,
-        name: str,
-        parent_id: Optional[str] = None,
-        id: Optional[str] = None,
-        content_metadata_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        creator_id: Optional[int] = None,
-        child_count: Optional[int] = None,
-        external_id: Optional[str] = None,
-        is_embed: Optional[bool] = None,
-        is_embed_shared_root: Optional[bool] = None,
-        is_embed_users_root: Optional[bool] = None,
-        is_personal: Optional[bool] = None,
-        is_personal_descendant: Optional[bool] = None,
-        is_shared_root: Optional[bool] = None,
-        is_users_root: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None,
-        dashboards: Optional[Sequence["DashboardBase"]] = None,
-        looks: Optional[Sequence["LookWithDashboards"]] = None
-    ):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None,
+            id: Optional[str] = None,
+            content_metadata_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            creator_id: Optional[int] = None,
+            child_count: Optional[int] = None,
+            external_id: Optional[str] = None,
+            is_embed: Optional[bool] = None,
+            is_embed_shared_root: Optional[bool] = None,
+            is_embed_users_root: Optional[bool] = None,
+            is_personal: Optional[bool] = None,
+            is_personal_descendant: Optional[bool] = None,
+            is_shared_root: Optional[bool] = None,
+            is_users_root: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None,
+            dashboards: Optional[Sequence["DashboardBase"]] = None,
+            looks: Optional[Sequence["LookWithDashboards"]] = None):
         self.name = name
         self.parent_id = parent_id
         self.id = id
@@ -3302,7 +3131,6 @@ class FolderBase(model.Model):
         is_users_root: Folder is the root user folder
         can: Operations the current user is able to perform on this object
     """
-
     name: str
     parent_id: Optional[str] = None
     id: Optional[str] = None
@@ -3320,26 +3148,23 @@ class FolderBase(model.Model):
     is_users_root: Optional[bool] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: str,
-        parent_id: Optional[str] = None,
-        id: Optional[str] = None,
-        content_metadata_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        creator_id: Optional[int] = None,
-        child_count: Optional[int] = None,
-        external_id: Optional[str] = None,
-        is_embed: Optional[bool] = None,
-        is_embed_shared_root: Optional[bool] = None,
-        is_embed_users_root: Optional[bool] = None,
-        is_personal: Optional[bool] = None,
-        is_personal_descendant: Optional[bool] = None,
-        is_shared_root: Optional[bool] = None,
-        is_users_root: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None,
+            id: Optional[str] = None,
+            content_metadata_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            creator_id: Optional[int] = None,
+            child_count: Optional[int] = None,
+            external_id: Optional[str] = None,
+            is_embed: Optional[bool] = None,
+            is_embed_shared_root: Optional[bool] = None,
+            is_embed_users_root: Optional[bool] = None,
+            is_personal: Optional[bool] = None,
+            is_personal_descendant: Optional[bool] = None,
+            is_shared_root: Optional[bool] = None,
+            is_users_root: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.parent_id = parent_id
         self.id = id
@@ -3363,7 +3188,6 @@ class Format(enum.Enum):
     Specifies the data format of the region information. Valid values are: "topojson", "vector_tile_region". (Enum defined in LookmlModelExploreFieldMapLayer)
 
     """
-
     topojson = "topojson"
     vector_tile_region = "vector_tile_region"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -3395,7 +3219,6 @@ class GitBranch(model.Model):
         ref: The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
         remote_ref: The resolved ref of this branch remote.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     name: Optional[str] = None
     remote: Optional[str] = None
@@ -3414,27 +3237,24 @@ class GitBranch(model.Model):
     ref: Optional[str] = None
     remote_ref: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        name: Optional[str] = None,
-        remote: Optional[str] = None,
-        remote_name: Optional[str] = None,
-        error: Optional[str] = None,
-        message: Optional[str] = None,
-        owner_name: Optional[str] = None,
-        readonly: Optional[bool] = None,
-        personal: Optional[bool] = None,
-        is_local: Optional[bool] = None,
-        is_remote: Optional[bool] = None,
-        is_production: Optional[bool] = None,
-        ahead_count: Optional[int] = None,
-        behind_count: Optional[int] = None,
-        commit_at: Optional[int] = None,
-        ref: Optional[str] = None,
-        remote_ref: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            name: Optional[str] = None,
+            remote: Optional[str] = None,
+            remote_name: Optional[str] = None,
+            error: Optional[str] = None,
+            message: Optional[str] = None,
+            owner_name: Optional[str] = None,
+            readonly: Optional[bool] = None,
+            personal: Optional[bool] = None,
+            is_local: Optional[bool] = None,
+            is_remote: Optional[bool] = None,
+            is_production: Optional[bool] = None,
+            ahead_count: Optional[int] = None,
+            behind_count: Optional[int] = None,
+            commit_at: Optional[int] = None,
+            ref: Optional[str] = None,
+            remote_ref: Optional[str] = None):
         self.can = can
         self.name = name
         self.remote = remote
@@ -3462,18 +3282,14 @@ class GitConnectionTest(model.Model):
         description: Human readable string describing the test
         id: A short string, uniquely naming this test
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     description: Optional[str] = None
     id: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        description: Optional[str] = None,
-        id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            description: Optional[str] = None,
+            id: Optional[str] = None):
         self.can = can
         self.description = description
         self.id = id
@@ -3488,20 +3304,16 @@ class GitConnectionTestResult(model.Model):
         message: Additional data from the test
         status: Either 'pass' or 'fail'
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     message: Optional[str] = None
     status: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        message: Optional[str] = None,
-        status: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            message: Optional[str] = None,
+            status: Optional[str] = None):
         self.can = can
         self.id = id
         self.message = message
@@ -3518,22 +3330,18 @@ class GitStatus(model.Model):
         text: Git description of the action
         can: Operations the current user is able to perform on this object
     """
-
     action: Optional[str] = None
     conflict: Optional[bool] = None
     revertable: Optional[bool] = None
     text: Optional[str] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        action: Optional[str] = None,
-        conflict: Optional[bool] = None,
-        revertable: Optional[bool] = None,
-        text: Optional[str] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            action: Optional[str] = None,
+            conflict: Optional[bool] = None,
+            revertable: Optional[bool] = None,
+            text: Optional[str] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.action = action
         self.conflict = conflict
         self.revertable = revertable
@@ -3555,7 +3363,6 @@ class Group(model.Model):
         name: Name of group
         user_count: Number of users included in this group
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     can_add_to_content_metadata: Optional[bool] = None
     contains_current_user: Optional[bool] = None
@@ -3566,19 +3373,16 @@ class Group(model.Model):
     name: Optional[str] = None
     user_count: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        can_add_to_content_metadata: Optional[bool] = None,
-        contains_current_user: Optional[bool] = None,
-        external_group_id: Optional[str] = None,
-        externally_managed: Optional[bool] = None,
-        id: Optional[int] = None,
-        include_by_default: Optional[bool] = None,
-        name: Optional[str] = None,
-        user_count: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            can_add_to_content_metadata: Optional[bool] = None,
+            contains_current_user: Optional[bool] = None,
+            external_group_id: Optional[str] = None,
+            externally_managed: Optional[bool] = None,
+            id: Optional[int] = None,
+            include_by_default: Optional[bool] = None,
+            name: Optional[str] = None,
+            user_count: Optional[int] = None):
         self.can = can
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.contains_current_user = contains_current_user
@@ -3598,10 +3402,10 @@ class GroupIdForGroupInclusion(model.Model):
     Attributes:
         group_id: Id of group
     """
-
     group_id: Optional[int] = None
 
-    def __init__(self, *, group_id: Optional[int] = None):
+    def __init__(self, *,
+            group_id: Optional[int] = None):
         self.group_id = group_id
 
 
@@ -3613,10 +3417,10 @@ class GroupIdForGroupUserInclusion(model.Model):
     Attributes:
         user_id: Id of user
     """
-
     user_id: Optional[int] = None
 
-    def __init__(self, *, user_id: Optional[int] = None):
+    def __init__(self, *,
+            user_id: Optional[int] = None):
         self.user_id = user_id
 
 
@@ -3637,7 +3441,6 @@ class Homepage(model.Model):
         user_id: User id of homepage creator
         primary_homepage: Whether the homepage is the primary homepage or not
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_metadata_id: Optional[int] = None
     created_at: Optional[datetime.datetime] = None
@@ -3651,22 +3454,19 @@ class Homepage(model.Model):
     user_id: Optional[int] = None
     primary_homepage: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_metadata_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        description: Optional[str] = None,
-        homepage_sections: Optional[Sequence["HomepageSection"]] = None,
-        id: Optional[int] = None,
-        section_order: Optional[Sequence[int]] = None,
-        title: Optional[str] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        user_id: Optional[int] = None,
-        primary_homepage: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_metadata_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            description: Optional[str] = None,
+            homepage_sections: Optional[Sequence["HomepageSection"]] = None,
+            id: Optional[int] = None,
+            section_order: Optional[Sequence[int]] = None,
+            title: Optional[str] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            user_id: Optional[int] = None,
+            primary_homepage: Optional[bool] = None):
         self.can = can
         self.content_metadata_id = content_metadata_id
         self.created_at = created_at
@@ -3714,7 +3514,6 @@ class HomepageItem(model.Model):
         use_custom_url: Whether the custom url should be used instead of the content url, if the item is associated with content
         view_count: Number of times content has been viewed, if present
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_created_by: Optional[str] = None
     content_favorite_id: Optional[int] = None
@@ -3744,38 +3543,35 @@ class HomepageItem(model.Model):
     use_custom_url: Optional[bool] = None
     view_count: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_created_by: Optional[str] = None,
-        content_favorite_id: Optional[int] = None,
-        content_metadata_id: Optional[int] = None,
-        content_updated_at: Optional[str] = None,
-        custom_description: Optional[str] = None,
-        custom_image_data_base64: Optional[str] = None,
-        custom_image_url: Optional[str] = None,
-        custom_title: Optional[str] = None,
-        custom_url: Optional[str] = None,
-        dashboard_id: Optional[int] = None,
-        description: Optional[str] = None,
-        favorite_count: Optional[int] = None,
-        homepage_section_id: Optional[int] = None,
-        id: Optional[int] = None,
-        image_url: Optional[str] = None,
-        location: Optional[str] = None,
-        look_id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        order: Optional[int] = None,
-        section_fetch_time: Optional[float] = None,
-        title: Optional[str] = None,
-        url: Optional[str] = None,
-        use_custom_description: Optional[bool] = None,
-        use_custom_image: Optional[bool] = None,
-        use_custom_title: Optional[bool] = None,
-        use_custom_url: Optional[bool] = None,
-        view_count: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_created_by: Optional[str] = None,
+            content_favorite_id: Optional[int] = None,
+            content_metadata_id: Optional[int] = None,
+            content_updated_at: Optional[str] = None,
+            custom_description: Optional[str] = None,
+            custom_image_data_base64: Optional[str] = None,
+            custom_image_url: Optional[str] = None,
+            custom_title: Optional[str] = None,
+            custom_url: Optional[str] = None,
+            dashboard_id: Optional[int] = None,
+            description: Optional[str] = None,
+            favorite_count: Optional[int] = None,
+            homepage_section_id: Optional[int] = None,
+            id: Optional[int] = None,
+            image_url: Optional[str] = None,
+            location: Optional[str] = None,
+            look_id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            order: Optional[int] = None,
+            section_fetch_time: Optional[float] = None,
+            title: Optional[str] = None,
+            url: Optional[str] = None,
+            use_custom_description: Optional[bool] = None,
+            use_custom_image: Optional[bool] = None,
+            use_custom_title: Optional[bool] = None,
+            use_custom_url: Optional[bool] = None,
+            view_count: Optional[int] = None):
         self.can = can
         self.content_created_by = content_created_by
         self.content_favorite_id = content_favorite_id
@@ -3824,7 +3620,6 @@ class HomepageSection(model.Model):
         description: Description of the content found in this section.
         visible_item_order: ids of the homepage items the user can see in the order they should be displayed
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[datetime.datetime] = None
     deleted_at: Optional[datetime.datetime] = None
@@ -3839,23 +3634,20 @@ class HomepageSection(model.Model):
     description: Optional[str] = None
     visible_item_order: Optional[Sequence[str]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[datetime.datetime] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        detail_url: Optional[str] = None,
-        homepage_id: Optional[int] = None,
-        homepage_items: Optional[Sequence["HomepageItem"]] = None,
-        id: Optional[int] = None,
-        is_header: Optional[bool] = None,
-        item_order: Optional[Sequence[int]] = None,
-        title: Optional[str] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        description: Optional[str] = None,
-        visible_item_order: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[datetime.datetime] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            detail_url: Optional[str] = None,
+            homepage_id: Optional[int] = None,
+            homepage_items: Optional[Sequence["HomepageItem"]] = None,
+            id: Optional[int] = None,
+            is_header: Optional[bool] = None,
+            item_order: Optional[Sequence[int]] = None,
+            title: Optional[str] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            description: Optional[str] = None,
+            visible_item_order: Optional[Sequence[str]] = None):
         self.can = can
         self.created_at = created_at
         self.deleted_at = deleted_at
@@ -3881,22 +3673,18 @@ class ImportedProject(model.Model):
         is_remote: Flag signifying if a dependency is remote or local
         can: Operations the current user is able to perform on this object
     """
-
     name: Optional[str] = None
     url: Optional[str] = None
     ref: Optional[str] = None
     is_remote: Optional[bool] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        url: Optional[str] = None,
-        ref: Optional[str] = None,
-        is_remote: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            url: Optional[str] = None,
+            ref: Optional[str] = None,
+            is_remote: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.url = url
         self.ref = ref
@@ -3927,7 +3715,6 @@ class Integration(model.Model):
         delegate_oauth: Whether the integration uses delegate oauth, which allows federation between an integration installation scope specific entity (like org, group, and team, etc.) and Looker.
         installed_delegate_oauth_targets: Whether the integration is available to users.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     integration_hub_id: Optional[int] = None
@@ -3938,9 +3725,7 @@ class Integration(model.Model):
     supported_formats: Optional[Sequence["SupportedFormats"]] = None
     supported_action_types: Optional[Sequence["SupportedActionTypes"]] = None
     supported_formattings: Optional[Sequence["SupportedFormattings"]] = None
-    supported_visualization_formattings: Optional[
-        Sequence["SupportedVisualizationFormattings"]
-    ] = None
+    supported_visualization_formattings: Optional[Sequence["SupportedVisualizationFormattings"]] = None
     supported_download_settings: Optional[Sequence["SupportedDownloadSettings"]] = None
     icon_url: Optional[str] = None
     uses_oauth: Optional[bool] = None
@@ -3949,32 +3734,25 @@ class Integration(model.Model):
     delegate_oauth: Optional[bool] = None
     installed_delegate_oauth_targets: Optional[Sequence[int]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        integration_hub_id: Optional[int] = None,
-        label: Optional[str] = None,
-        description: Optional[str] = None,
-        enabled: Optional[bool] = None,
-        params: Optional[Sequence["IntegrationParam"]] = None,
-        supported_formats: Optional[Sequence["SupportedFormats"]] = None,
-        supported_action_types: Optional[Sequence["SupportedActionTypes"]] = None,
-        supported_formattings: Optional[Sequence["SupportedFormattings"]] = None,
-        supported_visualization_formattings: Optional[
-            Sequence["SupportedVisualizationFormattings"]
-        ] = None,
-        supported_download_settings: Optional[
-            Sequence["SupportedDownloadSettings"]
-        ] = None,
-        icon_url: Optional[str] = None,
-        uses_oauth: Optional[bool] = None,
-        required_fields: Optional[Sequence["IntegrationRequiredField"]] = None,
-        privacy_link: Optional[str] = None,
-        delegate_oauth: Optional[bool] = None,
-        installed_delegate_oauth_targets: Optional[Sequence[int]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            integration_hub_id: Optional[int] = None,
+            label: Optional[str] = None,
+            description: Optional[str] = None,
+            enabled: Optional[bool] = None,
+            params: Optional[Sequence["IntegrationParam"]] = None,
+            supported_formats: Optional[Sequence["SupportedFormats"]] = None,
+            supported_action_types: Optional[Sequence["SupportedActionTypes"]] = None,
+            supported_formattings: Optional[Sequence["SupportedFormattings"]] = None,
+            supported_visualization_formattings: Optional[Sequence["SupportedVisualizationFormattings"]] = None,
+            supported_download_settings: Optional[Sequence["SupportedDownloadSettings"]] = None,
+            icon_url: Optional[str] = None,
+            uses_oauth: Optional[bool] = None,
+            required_fields: Optional[Sequence["IntegrationRequiredField"]] = None,
+            privacy_link: Optional[str] = None,
+            delegate_oauth: Optional[bool] = None,
+            installed_delegate_oauth_targets: Optional[Sequence[int]] = None):
         self.can = can
         self.id = id
         self.integration_hub_id = integration_hub_id
@@ -4011,7 +3789,6 @@ class IntegrationHub(model.Model):
         legal_agreement_required: Whether the legal terms for the integration hub are required before use.
         legal_agreement_text: The legal agreement text for this integration hub.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     url: Optional[str] = None
@@ -4024,21 +3801,18 @@ class IntegrationHub(model.Model):
     legal_agreement_required: Optional[bool] = None
     legal_agreement_text: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        url: Optional[str] = None,
-        label: Optional[str] = None,
-        official: Optional[bool] = None,
-        fetch_error_message: Optional[str] = None,
-        authorization_token: Optional[str] = None,
-        has_authorization_token: Optional[bool] = None,
-        legal_agreement_signed: Optional[bool] = None,
-        legal_agreement_required: Optional[bool] = None,
-        legal_agreement_text: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            url: Optional[str] = None,
+            label: Optional[str] = None,
+            official: Optional[bool] = None,
+            fetch_error_message: Optional[str] = None,
+            authorization_token: Optional[str] = None,
+            has_authorization_token: Optional[bool] = None,
+            legal_agreement_signed: Optional[bool] = None,
+            legal_agreement_required: Optional[bool] = None,
+            legal_agreement_text: Optional[str] = None):
         self.can = can
         self.id = id
         self.url = url
@@ -4067,7 +3841,6 @@ class IntegrationParam(model.Model):
         per_user: When true, this parameter must be assigned to a user attribute in the admin panel (instead of a constant value), and that value may be updated by the user as part of the integration flow.
         delegate_oauth_url: When present, the param represents the oauth url the user will be taken to.
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
     description: Optional[str] = None
@@ -4079,20 +3852,17 @@ class IntegrationParam(model.Model):
     per_user: Optional[bool] = None
     delegate_oauth_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        description: Optional[str] = None,
-        required: Optional[bool] = None,
-        has_value: Optional[bool] = None,
-        value: Optional[str] = None,
-        user_attribute_name: Optional[str] = None,
-        sensitive: Optional[bool] = None,
-        per_user: Optional[bool] = None,
-        delegate_oauth_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            description: Optional[str] = None,
+            required: Optional[bool] = None,
+            has_value: Optional[bool] = None,
+            value: Optional[str] = None,
+            user_attribute_name: Optional[str] = None,
+            sensitive: Optional[bool] = None,
+            per_user: Optional[bool] = None,
+            delegate_oauth_url: Optional[str] = None):
         self.name = name
         self.label = label
         self.description = description
@@ -4113,18 +3883,14 @@ class IntegrationRequiredField(model.Model):
         any_tag: If present, supercedes 'tag' and matches a field that has any of the provided tags.
         all_tags: If present, supercedes 'tag' and matches a field that has all of the provided tags.
     """
-
     tag: Optional[str] = None
     any_tag: Optional[Sequence[str]] = None
     all_tags: Optional[Sequence[str]] = None
 
-    def __init__(
-        self,
-        *,
-        tag: Optional[str] = None,
-        any_tag: Optional[Sequence[str]] = None,
-        all_tags: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            tag: Optional[str] = None,
+            any_tag: Optional[Sequence[str]] = None,
+            all_tags: Optional[Sequence[str]] = None):
         self.tag = tag
         self.any_tag = any_tag
         self.all_tags = all_tags
@@ -4138,18 +3904,14 @@ class IntegrationTestResult(model.Model):
         message: A message representing the results of the test.
         delegate_oauth_result: An array of connection test result for delegate oauth actions.
     """
-
     success: Optional[bool] = None
     message: Optional[str] = None
     delegate_oauth_result: Optional[Sequence["DelegateOauthTest"]] = None
 
-    def __init__(
-        self,
-        *,
-        success: Optional[bool] = None,
-        message: Optional[str] = None,
-        delegate_oauth_result: Optional[Sequence["DelegateOauthTest"]] = None
-    ):
+    def __init__(self, *,
+            success: Optional[bool] = None,
+            message: Optional[str] = None,
+            delegate_oauth_result: Optional[Sequence["DelegateOauthTest"]] = None):
         self.success = success
         self.message = message
         self.delegate_oauth_result = delegate_oauth_result
@@ -4162,16 +3924,12 @@ class InternalHelpResources(model.Model):
         can: Operations the current user is able to perform on this object
         enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     enabled: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        enabled: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            enabled: Optional[bool] = None):
         self.can = can
         self.enabled = enabled
 
@@ -4184,18 +3942,14 @@ class InternalHelpResourcesContent(model.Model):
         organization_name: Text to display in the help menu item which will display the internal help resources
         markdown_content: Content to be displayed in the internal help resources page/modal
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     organization_name: Optional[str] = None
     markdown_content: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        organization_name: Optional[str] = None,
-        markdown_content: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            organization_name: Optional[str] = None,
+            markdown_content: Optional[str] = None):
         self.can = can
         self.organization_name = organization_name
         self.markdown_content = markdown_content
@@ -4249,7 +4003,6 @@ class LDAPConfig(model.Model):
         allow_direct_roles: Allows roles to be directly assigned to LDAP auth'd users.
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     alternate_email_login_allowed: Optional[bool] = None
     auth_password: Optional[str] = None
@@ -4294,53 +4047,50 @@ class LDAPConfig(model.Model):
     allow_direct_roles: Optional[bool] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        alternate_email_login_allowed: Optional[bool] = None,
-        auth_password: Optional[str] = None,
-        auth_requires_role: Optional[bool] = None,
-        auth_username: Optional[str] = None,
-        connection_host: Optional[str] = None,
-        connection_port: Optional[str] = None,
-        connection_tls: Optional[bool] = None,
-        connection_tls_no_verify: Optional[bool] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        default_new_user_groups: Optional[Sequence["Group"]] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        default_new_user_roles: Optional[Sequence["Role"]] = None,
-        enabled: Optional[bool] = None,
-        force_no_page: Optional[bool] = None,
-        groups: Optional[Sequence["LDAPGroupRead"]] = None,
-        groups_base_dn: Optional[str] = None,
-        groups_finder_type: Optional[str] = None,
-        groups_member_attribute: Optional[str] = None,
-        groups_objectclasses: Optional[str] = None,
-        groups_user_attribute: Optional[str] = None,
-        groups_with_role_ids: Optional[Sequence["LDAPGroupWrite"]] = None,
-        has_auth_password: Optional[bool] = None,
-        merge_new_users_by_email: Optional[bool] = None,
-        modified_at: Optional[str] = None,
-        modified_by: Optional[str] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        test_ldap_password: Optional[str] = None,
-        test_ldap_user: Optional[str] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        user_attribute_map_ldap_id: Optional[str] = None,
-        user_attributes: Optional[Sequence["LDAPUserAttributeRead"]] = None,
-        user_attributes_with_ids: Optional[Sequence["LDAPUserAttributeWrite"]] = None,
-        user_bind_base_dn: Optional[str] = None,
-        user_custom_filter: Optional[str] = None,
-        user_id_attribute_names: Optional[str] = None,
-        user_objectclass: Optional[str] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            alternate_email_login_allowed: Optional[bool] = None,
+            auth_password: Optional[str] = None,
+            auth_requires_role: Optional[bool] = None,
+            auth_username: Optional[str] = None,
+            connection_host: Optional[str] = None,
+            connection_port: Optional[str] = None,
+            connection_tls: Optional[bool] = None,
+            connection_tls_no_verify: Optional[bool] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            default_new_user_groups: Optional[Sequence["Group"]] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            default_new_user_roles: Optional[Sequence["Role"]] = None,
+            enabled: Optional[bool] = None,
+            force_no_page: Optional[bool] = None,
+            groups: Optional[Sequence["LDAPGroupRead"]] = None,
+            groups_base_dn: Optional[str] = None,
+            groups_finder_type: Optional[str] = None,
+            groups_member_attribute: Optional[str] = None,
+            groups_objectclasses: Optional[str] = None,
+            groups_user_attribute: Optional[str] = None,
+            groups_with_role_ids: Optional[Sequence["LDAPGroupWrite"]] = None,
+            has_auth_password: Optional[bool] = None,
+            merge_new_users_by_email: Optional[bool] = None,
+            modified_at: Optional[str] = None,
+            modified_by: Optional[str] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            test_ldap_password: Optional[str] = None,
+            test_ldap_user: Optional[str] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            user_attribute_map_ldap_id: Optional[str] = None,
+            user_attributes: Optional[Sequence["LDAPUserAttributeRead"]] = None,
+            user_attributes_with_ids: Optional[Sequence["LDAPUserAttributeWrite"]] = None,
+            user_bind_base_dn: Optional[str] = None,
+            user_custom_filter: Optional[str] = None,
+            user_id_attribute_names: Optional[str] = None,
+            user_objectclass: Optional[str] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None,
+            url: Optional[str] = None):
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.auth_password = auth_password
@@ -4394,18 +4144,14 @@ class LDAPConfigTestIssue(model.Model):
         message: Message describing the issue
         can: Operations the current user is able to perform on this object
     """
-
     severity: Optional[str] = None
     message: Optional[str] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        severity: Optional[str] = None,
-        message: Optional[str] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            severity: Optional[str] = None,
+            message: Optional[str] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.severity = severity
         self.message = message
         self.can = can
@@ -4423,7 +4169,6 @@ class LDAPConfigTestResult(model.Model):
         user:
         url: Link to ldap config
     """
-
     details: Optional[str] = None
     issues: Optional[Sequence["LDAPConfigTestIssue"]] = None
     message: Optional[str] = None
@@ -4432,17 +4177,14 @@ class LDAPConfigTestResult(model.Model):
     user: Optional["LDAPUser"] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        details: Optional[str] = None,
-        issues: Optional[Sequence["LDAPConfigTestIssue"]] = None,
-        message: Optional[str] = None,
-        status: Optional[str] = None,
-        trace: Optional[str] = None,
-        user: Optional["LDAPUser"] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            details: Optional[str] = None,
+            issues: Optional[Sequence["LDAPConfigTestIssue"]] = None,
+            message: Optional[str] = None,
+            status: Optional[str] = None,
+            trace: Optional[str] = None,
+            user: Optional["LDAPUser"] = None,
+            url: Optional[str] = None):
         self.details = details
         self.issues = issues
         self.message = message
@@ -4463,7 +4205,6 @@ class LDAPGroupRead(model.Model):
         roles: Looker Roles
         url: Link to ldap config
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
@@ -4471,16 +4212,13 @@ class LDAPGroupRead(model.Model):
     roles: Optional[Sequence["Role"]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        roles: Optional[Sequence["Role"]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            roles: Optional[Sequence["Role"]] = None,
+            url: Optional[str] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -4500,7 +4238,6 @@ class LDAPGroupWrite(model.Model):
         role_ids: Looker Role Ids
         url: Link to ldap config
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
@@ -4508,16 +4245,13 @@ class LDAPGroupWrite(model.Model):
     role_ids: Optional[Sequence[int]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        role_ids: Optional[Sequence[int]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            role_ids: Optional[Sequence[int]] = None,
+            url: Optional[str] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -4542,7 +4276,6 @@ class LDAPUser(model.Model):
         can: Operations the current user is able to perform on this object
         url: Link to ldap config
     """
-
     all_emails: Optional[Sequence[str]] = None
     attributes: Optional[MutableMapping[str, Any]] = None
     email: Optional[str] = None
@@ -4555,21 +4288,18 @@ class LDAPUser(model.Model):
     can: Optional[MutableMapping[str, bool]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        all_emails: Optional[Sequence[str]] = None,
-        attributes: Optional[MutableMapping[str, Any]] = None,
-        email: Optional[str] = None,
-        first_name: Optional[str] = None,
-        groups: Optional[Sequence[str]] = None,
-        last_name: Optional[str] = None,
-        ldap_dn: Optional[str] = None,
-        ldap_id: Optional[str] = None,
-        roles: Optional[Sequence[str]] = None,
-        can: Optional[MutableMapping[str, bool]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            all_emails: Optional[Sequence[str]] = None,
+            attributes: Optional[MutableMapping[str, Any]] = None,
+            email: Optional[str] = None,
+            first_name: Optional[str] = None,
+            groups: Optional[Sequence[str]] = None,
+            last_name: Optional[str] = None,
+            ldap_dn: Optional[str] = None,
+            ldap_id: Optional[str] = None,
+            roles: Optional[Sequence[str]] = None,
+            can: Optional[MutableMapping[str, bool]] = None,
+            url: Optional[str] = None):
         self.all_emails = all_emails
         self.attributes = attributes
         self.email = email
@@ -4592,20 +4322,16 @@ class LDAPUserAttributeRead(model.Model):
         user_attributes: Looker User Attributes
         url: Link to ldap config
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attributes: Optional[Sequence["UserAttribute"]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attributes: Optional[Sequence["UserAttribute"]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attributes: Optional[Sequence["UserAttribute"]] = None,
+            url: Optional[str] = None):
         self.name = name
         self.required = required
         self.user_attributes = user_attributes
@@ -4621,20 +4347,16 @@ class LDAPUserAttributeWrite(model.Model):
         user_attribute_ids: Looker User Attribute Ids
         url: Link to ldap config
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attribute_ids: Optional[Sequence[int]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attribute_ids: Optional[Sequence[int]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attribute_ids: Optional[Sequence[int]] = None,
+            url: Optional[str] = None):
         self.name = name
         self.required = required
         self.user_attribute_ids = user_attribute_ids
@@ -4659,7 +4381,6 @@ class LegacyFeature(model.Model):
         approximate_end_of_life_date: Approximate date that this feature will be removed.
         has_disabled_on_upgrade: Whether this legacy feature may have been automatically disabled when upgrading to the current version.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     name: Optional[str] = None
@@ -4674,23 +4395,20 @@ class LegacyFeature(model.Model):
     approximate_end_of_life_date: Optional[datetime.datetime] = None
     has_disabled_on_upgrade: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        enabled_locally: Optional[bool] = None,
-        enabled: Optional[bool] = None,
-        disallowed_as_of_version: Optional[str] = None,
-        disable_on_upgrade_to_version: Optional[str] = None,
-        end_of_life_version: Optional[str] = None,
-        documentation_url: Optional[str] = None,
-        approximate_disable_date: Optional[datetime.datetime] = None,
-        approximate_end_of_life_date: Optional[datetime.datetime] = None,
-        has_disabled_on_upgrade: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            description: Optional[str] = None,
+            enabled_locally: Optional[bool] = None,
+            enabled: Optional[bool] = None,
+            disallowed_as_of_version: Optional[str] = None,
+            disable_on_upgrade_to_version: Optional[str] = None,
+            end_of_life_version: Optional[str] = None,
+            documentation_url: Optional[str] = None,
+            approximate_disable_date: Optional[datetime.datetime] = None,
+            approximate_end_of_life_date: Optional[datetime.datetime] = None,
+            has_disabled_on_upgrade: Optional[bool] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -4714,18 +4432,14 @@ class Locale(model.Model):
         native_name: Name of Locale in its own language
         english_name: Name of Locale in English
     """
-
     code: Optional[str] = None
     native_name: Optional[str] = None
     english_name: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        code: Optional[str] = None,
-        native_name: Optional[str] = None,
-        english_name: Optional[str] = None
-    ):
+    def __init__(self, *,
+            code: Optional[str] = None,
+            native_name: Optional[str] = None,
+            english_name: Optional[str] = None):
         self.code = code
         self.native_name = native_name
         self.english_name = english_name
@@ -4739,18 +4453,14 @@ class LocalizationSettings(model.Model):
         localization_level: Localization level - strict or permissive
         can: Operations the current user is able to perform on this object
     """
-
     default_locale: Optional[str] = None
     localization_level: Optional[str] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        default_locale: Optional[str] = None,
-        localization_level: Optional[str] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            default_locale: Optional[str] = None,
+            localization_level: Optional[str] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.default_locale = default_locale
         self.localization_level = localization_level
         self.can = can
@@ -4794,7 +4504,6 @@ class Look(model.Model):
         space_id: Space Id
         space:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
@@ -4829,43 +4538,40 @@ class Look(model.Model):
     space_id: Optional[str] = None
     space: Optional["SpaceBase"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_metadata_id: Optional[int] = None,
-        id: Optional[int] = None,
-        title: Optional[str] = None,
-        content_favorite_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        deleted: Optional[bool] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        deleter_id: Optional[int] = None,
-        description: Optional[str] = None,
-        embed_url: Optional[str] = None,
-        excel_file_url: Optional[str] = None,
-        favorite_count: Optional[int] = None,
-        google_spreadsheet_formula: Optional[str] = None,
-        image_embed_url: Optional[str] = None,
-        is_run_on_load: Optional[bool] = None,
-        last_accessed_at: Optional[datetime.datetime] = None,
-        last_updater_id: Optional[int] = None,
-        last_viewed_at: Optional[datetime.datetime] = None,
-        model: Optional["LookModel"] = None,
-        public: Optional[bool] = None,
-        public_slug: Optional[str] = None,
-        public_url: Optional[str] = None,
-        query_id: Optional[int] = None,
-        short_url: Optional[str] = None,
-        folder: Optional["FolderBase"] = None,
-        folder_id: Optional[str] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        user_id: Optional[int] = None,
-        view_count: Optional[int] = None,
-        user: Optional["UserIdOnly"] = None,
-        space_id: Optional[str] = None,
-        space: Optional["SpaceBase"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_metadata_id: Optional[int] = None,
+            id: Optional[int] = None,
+            title: Optional[str] = None,
+            content_favorite_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            deleted: Optional[bool] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            deleter_id: Optional[int] = None,
+            description: Optional[str] = None,
+            embed_url: Optional[str] = None,
+            excel_file_url: Optional[str] = None,
+            favorite_count: Optional[int] = None,
+            google_spreadsheet_formula: Optional[str] = None,
+            image_embed_url: Optional[str] = None,
+            is_run_on_load: Optional[bool] = None,
+            last_accessed_at: Optional[datetime.datetime] = None,
+            last_updater_id: Optional[int] = None,
+            last_viewed_at: Optional[datetime.datetime] = None,
+            model: Optional["LookModel"] = None,
+            public: Optional[bool] = None,
+            public_slug: Optional[str] = None,
+            public_url: Optional[str] = None,
+            query_id: Optional[int] = None,
+            short_url: Optional[str] = None,
+            folder: Optional["FolderBase"] = None,
+            folder_id: Optional[str] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            user_id: Optional[int] = None,
+            view_count: Optional[int] = None,
+            user: Optional["UserIdOnly"] = None,
+            space_id: Optional[str] = None,
+            space: Optional["SpaceBase"] = None):
         self.can = can
         self.content_metadata_id = content_metadata_id
         self.id = id
@@ -4910,20 +4616,16 @@ class LookBasic(model.Model):
         id: Unique Id
         title: Look Title
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
     title: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_metadata_id: Optional[int] = None,
-        id: Optional[int] = None,
-        title: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_metadata_id: Optional[int] = None,
+            id: Optional[int] = None,
+            title: Optional[str] = None):
         self.can = can
         self.content_metadata_id = content_metadata_id
         self.id = id
@@ -4943,7 +4645,6 @@ class LookmlModel(model.Model):
         project_name: Name of project containing the model
         unlimited_db_connections: Is this model allowed to use all current and future connections
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     allowed_db_connection_names: Optional[Sequence[str]] = None
     explores: Optional[Sequence["LookmlModelNavExplore"]] = None
@@ -4953,18 +4654,15 @@ class LookmlModel(model.Model):
     project_name: Optional[str] = None
     unlimited_db_connections: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        allowed_db_connection_names: Optional[Sequence[str]] = None,
-        explores: Optional[Sequence["LookmlModelNavExplore"]] = None,
-        has_content: Optional[bool] = None,
-        label: Optional[str] = None,
-        name: Optional[str] = None,
-        project_name: Optional[str] = None,
-        unlimited_db_connections: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            allowed_db_connection_names: Optional[Sequence[str]] = None,
+            explores: Optional[Sequence["LookmlModelNavExplore"]] = None,
+            has_content: Optional[bool] = None,
+            label: Optional[str] = None,
+            name: Optional[str] = None,
+            project_name: Optional[str] = None,
+            unlimited_db_connections: Optional[bool] = None):
         self.can = can
         self.allowed_db_connection_names = allowed_db_connection_names
         self.explores = explores
@@ -5014,7 +4712,6 @@ class LookmlModelExplore(model.Model):
         group_label: Label used to group explores in the navigation menus
         supported_measure_types: An array of items describing which custom measure types are supported for creating a custom measure 'based_on' each possible dimension type.
     """
-
     id: Optional[str] = None
     name: Optional[str] = None
     description: Optional[str] = None
@@ -5040,9 +4737,7 @@ class LookmlModelExplore(model.Model):
     access_filters: Optional[Sequence["LookmlModelExploreAccessFilter"]] = None
     aliases: Optional[Sequence["LookmlModelExploreAlias"]] = None
     always_filter: Optional[Sequence["LookmlModelExploreAlwaysFilter"]] = None
-    conditionally_filter: Optional[
-        Sequence["LookmlModelExploreConditionallyFilter"]
-    ] = None
+    conditionally_filter: Optional[Sequence["LookmlModelExploreConditionallyFilter"]] = None
     index_fields: Optional[Sequence[str]] = None
     sets: Optional[Sequence["LookmlModelExploreSet"]] = None
     tags: Optional[Sequence[str]] = None
@@ -5050,52 +4745,43 @@ class LookmlModelExplore(model.Model):
     fields: Optional["LookmlModelExploreFieldset"] = None
     joins: Optional[Sequence["LookmlModelExploreJoins"]] = None
     group_label: Optional[str] = None
-    supported_measure_types: Optional[
-        Sequence["LookmlModelExploreSupportedMeasureType"]
-    ] = None
+    supported_measure_types: Optional[Sequence["LookmlModelExploreSupportedMeasureType"]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        label: Optional[str] = None,
-        scopes: Optional[Sequence[str]] = None,
-        can_total: Optional[bool] = None,
-        can_save: Optional[bool] = None,
-        can_explain: Optional[bool] = None,
-        can_pivot_in_db: Optional[bool] = None,
-        can_subtotal: Optional[bool] = None,
-        has_timezone_support: Optional[bool] = None,
-        supports_cost_estimate: Optional[bool] = None,
-        connection_name: Optional[str] = None,
-        null_sort_treatment: Optional[str] = None,
-        files: Optional[Sequence[str]] = None,
-        source_file: Optional[str] = None,
-        project_name: Optional[str] = None,
-        model_name: Optional[str] = None,
-        view_name: Optional[str] = None,
-        hidden: Optional[bool] = None,
-        sql_table_name: Optional[str] = None,
-        access_filter_fields: Optional[Sequence[str]] = None,
-        access_filters: Optional[Sequence["LookmlModelExploreAccessFilter"]] = None,
-        aliases: Optional[Sequence["LookmlModelExploreAlias"]] = None,
-        always_filter: Optional[Sequence["LookmlModelExploreAlwaysFilter"]] = None,
-        conditionally_filter: Optional[
-            Sequence["LookmlModelExploreConditionallyFilter"]
-        ] = None,
-        index_fields: Optional[Sequence[str]] = None,
-        sets: Optional[Sequence["LookmlModelExploreSet"]] = None,
-        tags: Optional[Sequence[str]] = None,
-        errors: Optional[Sequence["LookmlModelExploreError"]] = None,
-        fields: Optional["LookmlModelExploreFieldset"] = None,
-        joins: Optional[Sequence["LookmlModelExploreJoins"]] = None,
-        group_label: Optional[str] = None,
-        supported_measure_types: Optional[
-            Sequence["LookmlModelExploreSupportedMeasureType"]
-        ] = None
-    ):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            description: Optional[str] = None,
+            label: Optional[str] = None,
+            scopes: Optional[Sequence[str]] = None,
+            can_total: Optional[bool] = None,
+            can_save: Optional[bool] = None,
+            can_explain: Optional[bool] = None,
+            can_pivot_in_db: Optional[bool] = None,
+            can_subtotal: Optional[bool] = None,
+            has_timezone_support: Optional[bool] = None,
+            supports_cost_estimate: Optional[bool] = None,
+            connection_name: Optional[str] = None,
+            null_sort_treatment: Optional[str] = None,
+            files: Optional[Sequence[str]] = None,
+            source_file: Optional[str] = None,
+            project_name: Optional[str] = None,
+            model_name: Optional[str] = None,
+            view_name: Optional[str] = None,
+            hidden: Optional[bool] = None,
+            sql_table_name: Optional[str] = None,
+            access_filter_fields: Optional[Sequence[str]] = None,
+            access_filters: Optional[Sequence["LookmlModelExploreAccessFilter"]] = None,
+            aliases: Optional[Sequence["LookmlModelExploreAlias"]] = None,
+            always_filter: Optional[Sequence["LookmlModelExploreAlwaysFilter"]] = None,
+            conditionally_filter: Optional[Sequence["LookmlModelExploreConditionallyFilter"]] = None,
+            index_fields: Optional[Sequence[str]] = None,
+            sets: Optional[Sequence["LookmlModelExploreSet"]] = None,
+            tags: Optional[Sequence[str]] = None,
+            errors: Optional[Sequence["LookmlModelExploreError"]] = None,
+            fields: Optional["LookmlModelExploreFieldset"] = None,
+            joins: Optional[Sequence["LookmlModelExploreJoins"]] = None,
+            group_label: Optional[str] = None,
+            supported_measure_types: Optional[Sequence["LookmlModelExploreSupportedMeasureType"]] = None):
         self.id = id
         self.name = name
         self.description = description
@@ -5139,13 +4825,12 @@ class LookmlModelExploreAccessFilter(model.Model):
         field: Field to be filtered
         user_attribute: User attribute name
     """
-
     field: Optional[str] = None
     user_attribute: Optional[str] = None
 
-    def __init__(
-        self, *, field: Optional[str] = None, user_attribute: Optional[str] = None
-    ):
+    def __init__(self, *,
+            field: Optional[str] = None,
+            user_attribute: Optional[str] = None):
         self.field = field
         self.user_attribute = user_attribute
 
@@ -5157,11 +4842,12 @@ class LookmlModelExploreAlias(model.Model):
         name: Name
         value: Value
     """
-
     name: Optional[str] = None
     value: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, value: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            value: Optional[str] = None):
         self.name = name
         self.value = value
 
@@ -5173,11 +4859,12 @@ class LookmlModelExploreAlwaysFilter(model.Model):
         name: Name
         value: Value
     """
-
     name: Optional[str] = None
     value: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, value: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            value: Optional[str] = None):
         self.name = name
         self.value = value
 
@@ -5189,11 +4876,12 @@ class LookmlModelExploreConditionallyFilter(model.Model):
         name: Name
         value: Value
     """
-
     name: Optional[str] = None
     value: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, value: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            value: Optional[str] = None):
         self.name = name
         self.value = value
 
@@ -5207,20 +4895,16 @@ class LookmlModelExploreError(model.Model):
         error_pos: Error source location
         field_error: Is this a field error
     """
-
     message: Optional[str] = None
     details: Optional[Any] = None
     error_pos: Optional[str] = None
     field_error: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        message: Optional[str] = None,
-        details: Optional[Any] = None,
-        error_pos: Optional[str] = None,
-        field_error: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            message: Optional[str] = None,
+            details: Optional[Any] = None,
+            error_pos: Optional[str] = None,
+            field_error: Optional[bool] = None):
         self.message = message
         self.details = details
         self.error_pos = error_pos
@@ -5284,7 +4968,6 @@ class LookmlModelExploreField(model.Model):
         dynamic: Whether this field was specified in "dynamic_fields" and is not part of the model.
         week_start_day: The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday".
     """
-
     align: Optional["Align"] = None
     can_filter: Optional[bool] = None
     category: Optional["Category"] = None
@@ -5338,64 +5021,59 @@ class LookmlModelExploreField(model.Model):
     dynamic: Optional[bool] = None
     week_start_day: Optional["WeekStartDay"] = None
 
-    def __init__(
-        self,
-        *,
-        align: Optional["Align"] = None,
-        can_filter: Optional[bool] = None,
-        category: Optional["Category"] = None,
-        default_filter_value: Optional[str] = None,
-        description: Optional[str] = None,
-        dimension_group: Optional[str] = None,
-        enumerations: Optional[Sequence["LookmlModelExploreFieldEnumeration"]] = None,
-        error: Optional[str] = None,
-        field_group_label: Optional[str] = None,
-        field_group_variant: Optional[str] = None,
-        fill_style: Optional["FillStyle"] = None,
-        fiscal_month_offset: Optional[int] = None,
-        has_allowed_values: Optional[bool] = None,
-        hidden: Optional[bool] = None,
-        is_filter: Optional[bool] = None,
-        is_fiscal: Optional[bool] = None,
-        is_numeric: Optional[bool] = None,
-        is_timeframe: Optional[bool] = None,
-        can_time_filter: Optional[bool] = None,
-        time_interval: Optional["LookmlModelExploreFieldTimeInterval"] = None,
-        label: Optional[str] = None,
-        label_from_parameter: Optional[str] = None,
-        label_short: Optional[str] = None,
-        lookml_link: Optional[str] = None,
-        map_layer: Optional["LookmlModelExploreFieldMapLayer"] = None,
-        measure: Optional[bool] = None,
-        name: Optional[str] = None,
-        strict_value_format: Optional[bool] = None,
-        parameter: Optional[bool] = None,
-        permanent: Optional[bool] = None,
-        primary_key: Optional[bool] = None,
-        project_name: Optional[str] = None,
-        requires_refresh_on_sort: Optional[bool] = None,
-        scope: Optional[str] = None,
-        sortable: Optional[bool] = None,
-        source_file: Optional[str] = None,
-        source_file_path: Optional[str] = None,
-        sql: Optional[str] = None,
-        sql_case: Optional[Sequence["LookmlModelExploreFieldSqlCase"]] = None,
-        filters: Optional[Sequence["LookmlModelExploreFieldMeasureFilters"]] = None,
-        suggest_dimension: Optional[str] = None,
-        suggest_explore: Optional[str] = None,
-        suggestable: Optional[bool] = None,
-        suggestions: Optional[Sequence[str]] = None,
-        tags: Optional[Sequence[str]] = None,
-        type: Optional[str] = None,
-        user_attribute_filter_types: Optional[
-            Sequence["UserAttributeFilterTypes"]
-        ] = None,
-        value_format: Optional[str] = None,
-        view: Optional[str] = None,
-        view_label: Optional[str] = None,
-        dynamic: Optional[bool] = None,
-        week_start_day: Optional["WeekStartDay"] = None
-    ):
+    def __init__(self, *,
+            align: Optional["Align"] = None,
+            can_filter: Optional[bool] = None,
+            category: Optional["Category"] = None,
+            default_filter_value: Optional[str] = None,
+            description: Optional[str] = None,
+            dimension_group: Optional[str] = None,
+            enumerations: Optional[Sequence["LookmlModelExploreFieldEnumeration"]] = None,
+            error: Optional[str] = None,
+            field_group_label: Optional[str] = None,
+            field_group_variant: Optional[str] = None,
+            fill_style: Optional["FillStyle"] = None,
+            fiscal_month_offset: Optional[int] = None,
+            has_allowed_values: Optional[bool] = None,
+            hidden: Optional[bool] = None,
+            is_filter: Optional[bool] = None,
+            is_fiscal: Optional[bool] = None,
+            is_numeric: Optional[bool] = None,
+            is_timeframe: Optional[bool] = None,
+            can_time_filter: Optional[bool] = None,
+            time_interval: Optional["LookmlModelExploreFieldTimeInterval"] = None,
+            label: Optional[str] = None,
+            label_from_parameter: Optional[str] = None,
+            label_short: Optional[str] = None,
+            lookml_link: Optional[str] = None,
+            map_layer: Optional["LookmlModelExploreFieldMapLayer"] = None,
+            measure: Optional[bool] = None,
+            name: Optional[str] = None,
+            strict_value_format: Optional[bool] = None,
+            parameter: Optional[bool] = None,
+            permanent: Optional[bool] = None,
+            primary_key: Optional[bool] = None,
+            project_name: Optional[str] = None,
+            requires_refresh_on_sort: Optional[bool] = None,
+            scope: Optional[str] = None,
+            sortable: Optional[bool] = None,
+            source_file: Optional[str] = None,
+            source_file_path: Optional[str] = None,
+            sql: Optional[str] = None,
+            sql_case: Optional[Sequence["LookmlModelExploreFieldSqlCase"]] = None,
+            filters: Optional[Sequence["LookmlModelExploreFieldMeasureFilters"]] = None,
+            suggest_dimension: Optional[str] = None,
+            suggest_explore: Optional[str] = None,
+            suggestable: Optional[bool] = None,
+            suggestions: Optional[Sequence[str]] = None,
+            tags: Optional[Sequence[str]] = None,
+            type: Optional[str] = None,
+            user_attribute_filter_types: Optional[Sequence["UserAttributeFilterTypes"]] = None,
+            value_format: Optional[str] = None,
+            view: Optional[str] = None,
+            view_label: Optional[str] = None,
+            dynamic: Optional[bool] = None,
+            week_start_day: Optional["WeekStartDay"] = None):
         self.align = align
         self.can_filter = can_filter
         self.category = category
@@ -5457,11 +5135,12 @@ class LookmlModelExploreFieldEnumeration(model.Model):
         label: Label
         value: Value
     """
-
     label: Optional[str] = None
     value: Optional[Any] = None
 
-    def __init__(self, *, label: Optional[str] = None, value: Optional[Any] = None):
+    def __init__(self, *,
+            label: Optional[str] = None,
+            value: Optional[Any] = None):
         self.label = label
         self.value = value
 
@@ -5481,7 +5160,6 @@ class LookmlModelExploreFieldMapLayer(model.Model):
         max_zoom_level: The minimum zoom level that the map layer may be displayed at, for visualizations that support zooming.
         min_zoom_level: The maximum zoom level that the map layer may be displayed at, for visualizations that support zooming.
     """
-
     url: Optional[str] = None
     name: Optional[str] = None
     feature_key: Optional[str] = None
@@ -5493,20 +5171,17 @@ class LookmlModelExploreFieldMapLayer(model.Model):
     max_zoom_level: Optional[int] = None
     min_zoom_level: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        url: Optional[str] = None,
-        name: Optional[str] = None,
-        feature_key: Optional[str] = None,
-        property_key: Optional[str] = None,
-        property_label_key: Optional[str] = None,
-        projection: Optional[str] = None,
-        format: Optional["Format"] = None,
-        extents_json_url: Optional[str] = None,
-        max_zoom_level: Optional[int] = None,
-        min_zoom_level: Optional[int] = None
-    ):
+    def __init__(self, *,
+            url: Optional[str] = None,
+            name: Optional[str] = None,
+            feature_key: Optional[str] = None,
+            property_key: Optional[str] = None,
+            property_label_key: Optional[str] = None,
+            projection: Optional[str] = None,
+            format: Optional["Format"] = None,
+            extents_json_url: Optional[str] = None,
+            max_zoom_level: Optional[int] = None,
+            min_zoom_level: Optional[int] = None):
         self.url = url
         self.name = name
         self.feature_key = feature_key
@@ -5526,11 +5201,12 @@ class LookmlModelExploreFieldMeasureFilters(model.Model):
         field: Filter field name
         condition: Filter condition value
     """
-
     field: Optional[str] = None
     condition: Optional[str] = None
 
-    def __init__(self, *, field: Optional[str] = None, condition: Optional[str] = None):
+    def __init__(self, *,
+            field: Optional[str] = None,
+            condition: Optional[str] = None):
         self.field = field
         self.condition = condition
 
@@ -5544,20 +5220,16 @@ class LookmlModelExploreFieldset(model.Model):
         filters: Array of filters
         parameters: Array of parameters
     """
-
     dimensions: Optional[Sequence["LookmlModelExploreField"]] = None
     measures: Optional[Sequence["LookmlModelExploreField"]] = None
     filters: Optional[Sequence["LookmlModelExploreField"]] = None
     parameters: Optional[Sequence["LookmlModelExploreField"]] = None
 
-    def __init__(
-        self,
-        *,
-        dimensions: Optional[Sequence["LookmlModelExploreField"]] = None,
-        measures: Optional[Sequence["LookmlModelExploreField"]] = None,
-        filters: Optional[Sequence["LookmlModelExploreField"]] = None,
-        parameters: Optional[Sequence["LookmlModelExploreField"]] = None
-    ):
+    def __init__(self, *,
+            dimensions: Optional[Sequence["LookmlModelExploreField"]] = None,
+            measures: Optional[Sequence["LookmlModelExploreField"]] = None,
+            filters: Optional[Sequence["LookmlModelExploreField"]] = None,
+            parameters: Optional[Sequence["LookmlModelExploreField"]] = None):
         self.dimensions = dimensions
         self.measures = measures
         self.filters = filters
@@ -5571,11 +5243,12 @@ class LookmlModelExploreFieldSqlCase(model.Model):
         value: SQL Case label value
         condition: SQL Case condition expression
     """
-
     value: Optional[str] = None
     condition: Optional[str] = None
 
-    def __init__(self, *, value: Optional[str] = None, condition: Optional[str] = None):
+    def __init__(self, *,
+            value: Optional[str] = None,
+            condition: Optional[str] = None):
         self.value = value
         self.condition = condition
 
@@ -5587,11 +5260,12 @@ class LookmlModelExploreFieldTimeInterval(model.Model):
         name: The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year".
         count: The number of intervals this field represents a grouping of.
     """
-
     name: Optional["Name"] = None
     count: Optional[int] = None
 
-    def __init__(self, *, name: Optional["Name"] = None, count: Optional[int] = None):
+    def __init__(self, *,
+            name: Optional["Name"] = None,
+            count: Optional[int] = None):
         self.name = name
         self.count = count
 
@@ -5614,7 +5288,6 @@ class LookmlModelExploreJoins(model.Model):
         type: The join type: left_outer, full_outer, inner, or cross
         view_label: Label to display in UI selectors
     """
-
     name: Optional[str] = None
     dependent_fields: Optional[Sequence[str]] = None
     fields: Optional[Sequence[str]] = None
@@ -5629,23 +5302,20 @@ class LookmlModelExploreJoins(model.Model):
     type: Optional[str] = None
     view_label: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        dependent_fields: Optional[Sequence[str]] = None,
-        fields: Optional[Sequence[str]] = None,
-        foreign_key: Optional[str] = None,
-        from_: Optional[str] = None,
-        outer_only: Optional[bool] = None,
-        relationship: Optional[str] = None,
-        required_joins: Optional[Sequence[str]] = None,
-        sql_foreign_key: Optional[str] = None,
-        sql_on: Optional[str] = None,
-        sql_table_name: Optional[str] = None,
-        type: Optional[str] = None,
-        view_label: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            dependent_fields: Optional[Sequence[str]] = None,
+            fields: Optional[Sequence[str]] = None,
+            foreign_key: Optional[str] = None,
+            from_: Optional[str] = None,
+            outer_only: Optional[bool] = None,
+            relationship: Optional[str] = None,
+            required_joins: Optional[Sequence[str]] = None,
+            sql_foreign_key: Optional[str] = None,
+            sql_on: Optional[str] = None,
+            sql_table_name: Optional[str] = None,
+            type: Optional[str] = None,
+            view_label: Optional[str] = None):
         self.name = name
         self.dependent_fields = dependent_fields
         self.fields = fields
@@ -5668,13 +5338,12 @@ class LookmlModelExploreSet(model.Model):
         name: Name
         value: Value set
     """
-
     name: Optional[str] = None
     value: Optional[Sequence[str]] = None
 
-    def __init__(
-        self, *, name: Optional[str] = None, value: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            value: Optional[Sequence[str]] = None):
         self.name = name
         self.value = value
 
@@ -5686,16 +5355,12 @@ class LookmlModelExploreSupportedMeasureType(model.Model):
         dimension_type:
         measure_types:
     """
-
     dimension_type: Optional[str] = None
     measure_types: Optional[Sequence[str]] = None
 
-    def __init__(
-        self,
-        *,
-        dimension_type: Optional[str] = None,
-        measure_types: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            dimension_type: Optional[str] = None,
+            measure_types: Optional[Sequence[str]] = None):
         self.dimension_type = dimension_type
         self.measure_types = measure_types
 
@@ -5711,7 +5376,6 @@ class LookmlModelNavExplore(model.Model):
         group_label: Label used to group explores in the navigation menus
         can: Operations the current user is able to perform on this object
     """
-
     name: Optional[str] = None
     description: Optional[str] = None
     label: Optional[str] = None
@@ -5719,16 +5383,13 @@ class LookmlModelNavExplore(model.Model):
     group_label: Optional[str] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        description: Optional[str] = None,
-        label: Optional[str] = None,
-        hidden: Optional[bool] = None,
-        group_label: Optional[str] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            description: Optional[str] = None,
+            label: Optional[str] = None,
+            hidden: Optional[bool] = None,
+            group_label: Optional[str] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.description = description
         self.label = label
@@ -5749,7 +5410,6 @@ class LookmlTest(model.Model):
         file: Name of the LookML file containing this test.
         line: Line number of this test in LookML.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     model_name: Optional[str] = None
     name: Optional[str] = None
@@ -5758,17 +5418,14 @@ class LookmlTest(model.Model):
     file: Optional[str] = None
     line: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        model_name: Optional[str] = None,
-        name: Optional[str] = None,
-        explore_name: Optional[str] = None,
-        query_url_params: Optional[str] = None,
-        file: Optional[str] = None,
-        line: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            model_name: Optional[str] = None,
+            name: Optional[str] = None,
+            explore_name: Optional[str] = None,
+            query_url_params: Optional[str] = None,
+            file: Optional[str] = None,
+            line: Optional[int] = None):
         self.can = can
         self.model_name = model_name
         self.name = name
@@ -5791,7 +5448,6 @@ class LookmlTestResult(model.Model):
         warnings: A list of any warnings encountered by the test.
         success: True if this test passsed without errors.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     model_name: Optional[str] = None
     test_name: Optional[str] = None
@@ -5801,18 +5457,15 @@ class LookmlTestResult(model.Model):
     warnings: Optional[Sequence["ProjectError"]] = None
     success: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        model_name: Optional[str] = None,
-        test_name: Optional[str] = None,
-        assertions_count: Optional[int] = None,
-        assertions_failed: Optional[int] = None,
-        errors: Optional[Sequence["ProjectError"]] = None,
-        warnings: Optional[Sequence["ProjectError"]] = None,
-        success: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            model_name: Optional[str] = None,
+            test_name: Optional[str] = None,
+            assertions_count: Optional[int] = None,
+            assertions_failed: Optional[int] = None,
+            errors: Optional[Sequence["ProjectError"]] = None,
+            warnings: Optional[Sequence["ProjectError"]] = None,
+            success: Optional[bool] = None):
         self.can = can
         self.model_name = model_name
         self.test_name = test_name
@@ -5830,11 +5483,12 @@ class LookModel(model.Model):
         id: Model Id
         label: Model Label
     """
-
     id: Optional[str] = None
     label: Optional[str] = None
 
-    def __init__(self, *, id: Optional[str] = None, label: Optional[str] = None):
+    def __init__(self, *,
+            id: Optional[str] = None,
+            label: Optional[str] = None):
         self.id = id
         self.label = label
 
@@ -5878,7 +5532,6 @@ class LookWithDashboards(model.Model):
         space:
         dashboards: Dashboards
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
@@ -5914,44 +5567,41 @@ class LookWithDashboards(model.Model):
     space: Optional["SpaceBase"] = None
     dashboards: Optional[Sequence["DashboardBase"]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_metadata_id: Optional[int] = None,
-        id: Optional[int] = None,
-        title: Optional[str] = None,
-        content_favorite_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        deleted: Optional[bool] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        deleter_id: Optional[int] = None,
-        description: Optional[str] = None,
-        embed_url: Optional[str] = None,
-        excel_file_url: Optional[str] = None,
-        favorite_count: Optional[int] = None,
-        google_spreadsheet_formula: Optional[str] = None,
-        image_embed_url: Optional[str] = None,
-        is_run_on_load: Optional[bool] = None,
-        last_accessed_at: Optional[datetime.datetime] = None,
-        last_updater_id: Optional[int] = None,
-        last_viewed_at: Optional[datetime.datetime] = None,
-        model: Optional["LookModel"] = None,
-        public: Optional[bool] = None,
-        public_slug: Optional[str] = None,
-        public_url: Optional[str] = None,
-        query_id: Optional[int] = None,
-        short_url: Optional[str] = None,
-        folder: Optional["FolderBase"] = None,
-        folder_id: Optional[str] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        user_id: Optional[int] = None,
-        view_count: Optional[int] = None,
-        user: Optional["UserIdOnly"] = None,
-        space_id: Optional[str] = None,
-        space: Optional["SpaceBase"] = None,
-        dashboards: Optional[Sequence["DashboardBase"]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_metadata_id: Optional[int] = None,
+            id: Optional[int] = None,
+            title: Optional[str] = None,
+            content_favorite_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            deleted: Optional[bool] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            deleter_id: Optional[int] = None,
+            description: Optional[str] = None,
+            embed_url: Optional[str] = None,
+            excel_file_url: Optional[str] = None,
+            favorite_count: Optional[int] = None,
+            google_spreadsheet_formula: Optional[str] = None,
+            image_embed_url: Optional[str] = None,
+            is_run_on_load: Optional[bool] = None,
+            last_accessed_at: Optional[datetime.datetime] = None,
+            last_updater_id: Optional[int] = None,
+            last_viewed_at: Optional[datetime.datetime] = None,
+            model: Optional["LookModel"] = None,
+            public: Optional[bool] = None,
+            public_slug: Optional[str] = None,
+            public_url: Optional[str] = None,
+            query_id: Optional[int] = None,
+            short_url: Optional[str] = None,
+            folder: Optional["FolderBase"] = None,
+            folder_id: Optional[str] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            user_id: Optional[int] = None,
+            view_count: Optional[int] = None,
+            user: Optional["UserIdOnly"] = None,
+            space_id: Optional[str] = None,
+            space: Optional["SpaceBase"] = None,
+            dashboards: Optional[Sequence["DashboardBase"]] = None):
         self.can = can
         self.content_metadata_id = content_metadata_id
         self.id = id
@@ -6028,7 +5678,6 @@ class LookWithQuery(model.Model):
         query:
         url: Url
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     content_metadata_id: Optional[int] = None
     id: Optional[int] = None
@@ -6065,45 +5714,42 @@ class LookWithQuery(model.Model):
     query: Optional["Query"] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        content_metadata_id: Optional[int] = None,
-        id: Optional[int] = None,
-        title: Optional[str] = None,
-        content_favorite_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        deleted: Optional[bool] = None,
-        deleted_at: Optional[datetime.datetime] = None,
-        deleter_id: Optional[int] = None,
-        description: Optional[str] = None,
-        embed_url: Optional[str] = None,
-        excel_file_url: Optional[str] = None,
-        favorite_count: Optional[int] = None,
-        google_spreadsheet_formula: Optional[str] = None,
-        image_embed_url: Optional[str] = None,
-        is_run_on_load: Optional[bool] = None,
-        last_accessed_at: Optional[datetime.datetime] = None,
-        last_updater_id: Optional[int] = None,
-        last_viewed_at: Optional[datetime.datetime] = None,
-        model: Optional["LookModel"] = None,
-        public: Optional[bool] = None,
-        public_slug: Optional[str] = None,
-        public_url: Optional[str] = None,
-        query_id: Optional[int] = None,
-        short_url: Optional[str] = None,
-        folder: Optional["FolderBase"] = None,
-        folder_id: Optional[str] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        user_id: Optional[int] = None,
-        view_count: Optional[int] = None,
-        user: Optional["UserIdOnly"] = None,
-        space_id: Optional[str] = None,
-        space: Optional["SpaceBase"] = None,
-        query: Optional["Query"] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            content_metadata_id: Optional[int] = None,
+            id: Optional[int] = None,
+            title: Optional[str] = None,
+            content_favorite_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            deleted: Optional[bool] = None,
+            deleted_at: Optional[datetime.datetime] = None,
+            deleter_id: Optional[int] = None,
+            description: Optional[str] = None,
+            embed_url: Optional[str] = None,
+            excel_file_url: Optional[str] = None,
+            favorite_count: Optional[int] = None,
+            google_spreadsheet_formula: Optional[str] = None,
+            image_embed_url: Optional[str] = None,
+            is_run_on_load: Optional[bool] = None,
+            last_accessed_at: Optional[datetime.datetime] = None,
+            last_updater_id: Optional[int] = None,
+            last_viewed_at: Optional[datetime.datetime] = None,
+            model: Optional["LookModel"] = None,
+            public: Optional[bool] = None,
+            public_slug: Optional[str] = None,
+            public_url: Optional[str] = None,
+            query_id: Optional[int] = None,
+            short_url: Optional[str] = None,
+            folder: Optional["FolderBase"] = None,
+            folder_id: Optional[str] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            user_id: Optional[int] = None,
+            view_count: Optional[int] = None,
+            user: Optional["UserIdOnly"] = None,
+            space_id: Optional[str] = None,
+            space: Optional["SpaceBase"] = None,
+            query: Optional["Query"] = None,
+            url: Optional[str] = None):
         self.can = can
         self.content_metadata_id = content_metadata_id
         self.id = id
@@ -6150,20 +5796,16 @@ class Manifest(model.Model):
         imports: Imports for a project
         localization_settings:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     name: Optional[str] = None
     imports: Optional[Sequence["ImportedProject"]] = None
     localization_settings: Optional["LocalizationSettings"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        name: Optional[str] = None,
-        imports: Optional[Sequence["ImportedProject"]] = None,
-        localization_settings: Optional["LocalizationSettings"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            name: Optional[str] = None,
+            imports: Optional[Sequence["ImportedProject"]] = None,
+            localization_settings: Optional["LocalizationSettings"] = None):
         self.can = can
         self.name = name
         self.imports = imports
@@ -6177,16 +5819,12 @@ class MaterializePDT(model.Model):
         materialization_id: The ID of the enqueued materialization task
         resp_text: Detailed response in text format
     """
-
     materialization_id: Optional[str] = None
     resp_text: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        materialization_id: Optional[str] = None,
-        resp_text: Optional[str] = None
-    ):
+    def __init__(self, *,
+            materialization_id: Optional[str] = None,
+            resp_text: Optional[str] = None):
         self.materialization_id = materialization_id
         self.resp_text = resp_text
 
@@ -6198,16 +5836,12 @@ class MergeFields(model.Model):
         field_name: Field name to map onto in the merged results
         source_field_name: Field name from the source query
     """
-
     field_name: Optional[str] = None
     source_field_name: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        field_name: Optional[str] = None,
-        source_field_name: Optional[str] = None
-    ):
+    def __init__(self, *,
+            field_name: Optional[str] = None,
+            source_field_name: Optional[str] = None):
         self.field_name = field_name
         self.source_field_name = source_field_name
 
@@ -6227,7 +5861,6 @@ class MergeQuery(model.Model):
         total: Total
         vis_config: Visualization Config
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     column_limit: Optional[str] = None
     dynamic_fields: Optional[str] = None
@@ -6239,20 +5872,17 @@ class MergeQuery(model.Model):
     total: Optional[bool] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        column_limit: Optional[str] = None,
-        dynamic_fields: Optional[str] = None,
-        id: Optional[str] = None,
-        pivots: Optional[Sequence[str]] = None,
-        result_maker_id: Optional[int] = None,
-        sorts: Optional[Sequence[str]] = None,
-        source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
-        total: Optional[bool] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            column_limit: Optional[str] = None,
+            dynamic_fields: Optional[str] = None,
+            id: Optional[str] = None,
+            pivots: Optional[Sequence[str]] = None,
+            result_maker_id: Optional[int] = None,
+            sorts: Optional[Sequence[str]] = None,
+            source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
+            total: Optional[bool] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None):
         self.can = can
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
@@ -6273,18 +5903,14 @@ class MergeQuerySourceQuery(model.Model):
         name: Display name
         query_id: Id of the query to merge
     """
-
     merge_fields: Optional[Sequence["MergeFields"]] = None
     name: Optional[str] = None
     query_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        merge_fields: Optional[Sequence["MergeFields"]] = None,
-        name: Optional[str] = None,
-        query_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            merge_fields: Optional[Sequence["MergeFields"]] = None,
+            name: Optional[str] = None,
+            query_id: Optional[int] = None):
         self.merge_fields = merge_fields
         self.name = name
         self.query_id = query_id
@@ -6302,7 +5928,6 @@ class ModelSet(model.Model):
         name: Name of ModelSet
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     all_access: Optional[bool] = None
     built_in: Optional[bool] = None
@@ -6311,17 +5936,14 @@ class ModelSet(model.Model):
     name: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        all_access: Optional[bool] = None,
-        built_in: Optional[bool] = None,
-        id: Optional[int] = None,
-        models: Optional[Sequence[str]] = None,
-        name: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            all_access: Optional[bool] = None,
+            built_in: Optional[bool] = None,
+            id: Optional[int] = None,
+            models: Optional[Sequence[str]] = None,
+            name: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
@@ -6338,13 +5960,12 @@ class ModelsNotValidated(model.Model):
         name: Model name
         project_file_id: Project file
     """
-
     name: Optional[str] = None
     project_file_id: Optional[str] = None
 
-    def __init__(
-        self, *, name: Optional[str] = None, project_file_id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            project_file_id: Optional[str] = None):
         self.name = name
         self.project_file_id = project_file_id
 
@@ -6354,7 +5975,6 @@ class Name(enum.Enum):
     The type of time interval this field represents a grouping of. Valid values are: "day", "hour", "minute", "second", "millisecond", "microsecond", "week", "month", "quarter", "year". (Enum defined in LookmlModelExploreFieldTimeInterval)
 
     """
-
     day = "day"
     hour = "hour"
     minute = "minute"
@@ -6410,7 +6030,6 @@ class OIDCConfig(model.Model):
         allow_direct_roles: Allows roles to be directly assigned to OIDC auth'd users.
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     alternate_email_login_allowed: Optional[bool] = None
     audience: Optional[str] = None
@@ -6445,43 +6064,40 @@ class OIDCConfig(model.Model):
     allow_direct_roles: Optional[bool] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        alternate_email_login_allowed: Optional[bool] = None,
-        audience: Optional[str] = None,
-        auth_requires_role: Optional[bool] = None,
-        authorization_endpoint: Optional[str] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        default_new_user_groups: Optional[Sequence["Group"]] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        default_new_user_roles: Optional[Sequence["Role"]] = None,
-        enabled: Optional[bool] = None,
-        groups: Optional[Sequence["OIDCGroupRead"]] = None,
-        groups_attribute: Optional[str] = None,
-        groups_with_role_ids: Optional[Sequence["OIDCGroupWrite"]] = None,
-        identifier: Optional[str] = None,
-        issuer: Optional[str] = None,
-        modified_at: Optional[datetime.datetime] = None,
-        modified_by: Optional[int] = None,
-        new_user_migration_types: Optional[str] = None,
-        scopes: Optional[Sequence[str]] = None,
-        secret: Optional[str] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        test_slug: Optional[str] = None,
-        token_endpoint: Optional[str] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        user_attributes: Optional[Sequence["OIDCUserAttributeRead"]] = None,
-        user_attributes_with_ids: Optional[Sequence["OIDCUserAttributeWrite"]] = None,
-        userinfo_endpoint: Optional[str] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            alternate_email_login_allowed: Optional[bool] = None,
+            audience: Optional[str] = None,
+            auth_requires_role: Optional[bool] = None,
+            authorization_endpoint: Optional[str] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            default_new_user_groups: Optional[Sequence["Group"]] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            default_new_user_roles: Optional[Sequence["Role"]] = None,
+            enabled: Optional[bool] = None,
+            groups: Optional[Sequence["OIDCGroupRead"]] = None,
+            groups_attribute: Optional[str] = None,
+            groups_with_role_ids: Optional[Sequence["OIDCGroupWrite"]] = None,
+            identifier: Optional[str] = None,
+            issuer: Optional[str] = None,
+            modified_at: Optional[datetime.datetime] = None,
+            modified_by: Optional[int] = None,
+            new_user_migration_types: Optional[str] = None,
+            scopes: Optional[Sequence[str]] = None,
+            secret: Optional[str] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            test_slug: Optional[str] = None,
+            token_endpoint: Optional[str] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            user_attributes: Optional[Sequence["OIDCUserAttributeRead"]] = None,
+            user_attributes_with_ids: Optional[Sequence["OIDCUserAttributeWrite"]] = None,
+            userinfo_endpoint: Optional[str] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None,
+            url: Optional[str] = None):
         self.can = can
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.audience = audience
@@ -6527,22 +6143,18 @@ class OIDCGroupRead(model.Model):
         name: Name of group in OIDC
         roles: Looker Roles
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
     name: Optional[str] = None
     roles: Optional[Sequence["Role"]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        roles: Optional[Sequence["Role"]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            roles: Optional[Sequence["Role"]] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -6561,7 +6173,6 @@ class OIDCGroupWrite(model.Model):
         role_ids: Looker Role Ids
         can: Operations the current user is able to perform on this object
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
@@ -6569,16 +6180,13 @@ class OIDCGroupWrite(model.Model):
     role_ids: Optional[Sequence[int]] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        role_ids: Optional[Sequence[int]] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            role_ids: Optional[Sequence[int]] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -6595,18 +6203,14 @@ class OIDCUserAttributeRead(model.Model):
         required: Required to be in OIDC assertion for login to be allowed to succeed
         user_attributes: Looker User Attributes
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attributes: Optional[Sequence["UserAttribute"]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attributes: Optional[Sequence["UserAttribute"]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attributes: Optional[Sequence["UserAttribute"]] = None):
         self.name = name
         self.required = required
         self.user_attributes = user_attributes
@@ -6621,20 +6225,16 @@ class OIDCUserAttributeWrite(model.Model):
         user_attribute_ids: Looker User Attribute Ids
         can: Operations the current user is able to perform on this object
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attribute_ids: Optional[Sequence[int]] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attribute_ids: Optional[Sequence[int]] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attribute_ids: Optional[Sequence[int]] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.required = required
         self.user_attribute_ids = user_attribute_ids
@@ -6651,22 +6251,18 @@ class PasswordConfig(model.Model):
         require_upperlower: Require at least one uppercase and one lowercase letter
         require_special: Require at least one special character
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     min_length: Optional[int] = None
     require_numeric: Optional[bool] = None
     require_upperlower: Optional[bool] = None
     require_special: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        min_length: Optional[int] = None,
-        require_numeric: Optional[bool] = None,
-        require_upperlower: Optional[bool] = None,
-        require_special: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            min_length: Optional[int] = None,
+            require_numeric: Optional[bool] = None,
+            require_upperlower: Optional[bool] = None,
+            require_special: Optional[bool] = None):
         self.can = can
         self.min_length = min_length
         self.require_numeric = require_numeric
@@ -6683,20 +6279,16 @@ class Permission(model.Model):
         parent: Dependency parent symbol
         description: Description
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     permission: Optional[str] = None
     parent: Optional[str] = None
     description: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        permission: Optional[str] = None,
-        parent: Optional[str] = None,
-        description: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            permission: Optional[str] = None,
+            parent: Optional[str] = None,
+            description: Optional[str] = None):
         self.can = can
         self.permission = permission
         self.parent = parent
@@ -6715,7 +6307,6 @@ class PermissionSet(model.Model):
         permissions:
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     all_access: Optional[bool] = None
     built_in: Optional[bool] = None
@@ -6724,17 +6315,14 @@ class PermissionSet(model.Model):
     permissions: Optional[Sequence[str]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        all_access: Optional[bool] = None,
-        built_in: Optional[bool] = None,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        permissions: Optional[Sequence[str]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            all_access: Optional[bool] = None,
+            built_in: Optional[bool] = None,
+            id: Optional[int] = None,
+            name: Optional[str] = None,
+            permissions: Optional[Sequence[str]] = None,
+            url: Optional[str] = None):
         self.can = can
         self.all_access = all_access
         self.built_in = built_in
@@ -6749,7 +6337,6 @@ class PermissionType(enum.Enum):
     Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
 
     """
-
     view = "view"
     edit = "edit"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -6785,7 +6372,6 @@ class Project(model.Model):
         allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
         is_example: If true the project is an example project and cannot be modified
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     name: Optional[str] = None
@@ -6808,31 +6394,28 @@ class Project(model.Model):
     allow_warnings: Optional[bool] = None
     is_example: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        name: Optional[str] = None,
-        uses_git: Optional[bool] = None,
-        git_remote_url: Optional[str] = None,
-        git_username: Optional[str] = None,
-        git_password: Optional[str] = None,
-        git_production_branch_name: Optional[str] = None,
-        use_git_cookie_auth: Optional[bool] = None,
-        git_username_user_attribute: Optional[str] = None,
-        git_password_user_attribute: Optional[str] = None,
-        git_service_name: Optional[str] = None,
-        git_application_server_http_port: Optional[int] = None,
-        git_application_server_http_scheme: Optional[str] = None,
-        deploy_secret: Optional[str] = None,
-        unset_deploy_secret: Optional[bool] = None,
-        pull_request_mode: Optional["PullRequestMode"] = None,
-        validation_required: Optional[bool] = None,
-        git_release_mgmt_enabled: Optional[bool] = None,
-        allow_warnings: Optional[bool] = None,
-        is_example: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            name: Optional[str] = None,
+            uses_git: Optional[bool] = None,
+            git_remote_url: Optional[str] = None,
+            git_username: Optional[str] = None,
+            git_password: Optional[str] = None,
+            git_production_branch_name: Optional[str] = None,
+            use_git_cookie_auth: Optional[bool] = None,
+            git_username_user_attribute: Optional[str] = None,
+            git_password_user_attribute: Optional[str] = None,
+            git_service_name: Optional[str] = None,
+            git_application_server_http_port: Optional[int] = None,
+            git_application_server_http_scheme: Optional[str] = None,
+            deploy_secret: Optional[str] = None,
+            unset_deploy_secret: Optional[bool] = None,
+            pull_request_mode: Optional["PullRequestMode"] = None,
+            validation_required: Optional[bool] = None,
+            git_release_mgmt_enabled: Optional[bool] = None,
+            allow_warnings: Optional[bool] = None,
+            is_example: Optional[bool] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -6873,7 +6456,6 @@ class ProjectError(model.Model):
         params: Error parameters
         sanitized_message: A version of the error message that does not contain potentially sensitive information. Suitable for situations in which messages are stored or sent to consumers outside of Looker, such as external logs. Sanitized messages will display "(?)" where sensitive information would appear in the corresponding non-sanitized message
     """
-
     code: Optional[str] = None
     severity: Optional[str] = None
     kind: Optional[str] = None
@@ -6887,22 +6469,19 @@ class ProjectError(model.Model):
     params: Optional[MutableMapping[str, Any]] = None
     sanitized_message: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        code: Optional[str] = None,
-        severity: Optional[str] = None,
-        kind: Optional[str] = None,
-        message: Optional[str] = None,
-        field_name: Optional[str] = None,
-        file_path: Optional[str] = None,
-        line_number: Optional[int] = None,
-        model_id: Optional[str] = None,
-        explore: Optional[str] = None,
-        help_url: Optional[str] = None,
-        params: Optional[MutableMapping[str, Any]] = None,
-        sanitized_message: Optional[str] = None
-    ):
+    def __init__(self, *,
+            code: Optional[str] = None,
+            severity: Optional[str] = None,
+            kind: Optional[str] = None,
+            message: Optional[str] = None,
+            field_name: Optional[str] = None,
+            file_path: Optional[str] = None,
+            line_number: Optional[int] = None,
+            model_id: Optional[str] = None,
+            explore: Optional[str] = None,
+            help_url: Optional[str] = None,
+            params: Optional[MutableMapping[str, Any]] = None,
+            sanitized_message: Optional[str] = None):
         self.code = code
         self.severity = severity
         self.kind = kind
@@ -6931,7 +6510,6 @@ class ProjectFile(model.Model):
         editable: State of editability for the file.
         git_status:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     path: Optional[str] = None
@@ -6942,19 +6520,16 @@ class ProjectFile(model.Model):
     editable: Optional[bool] = None
     git_status: Optional["GitStatus"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        path: Optional[str] = None,
-        title: Optional[str] = None,
-        type: Optional[str] = None,
-        extension: Optional[str] = None,
-        mime_type: Optional[str] = None,
-        editable: Optional[bool] = None,
-        git_status: Optional["GitStatus"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            path: Optional[str] = None,
+            title: Optional[str] = None,
+            type: Optional[str] = None,
+            extension: Optional[str] = None,
+            mime_type: Optional[str] = None,
+            editable: Optional[bool] = None,
+            git_status: Optional["GitStatus"] = None):
         self.can = can
         self.id = id
         self.path = path
@@ -6975,20 +6550,16 @@ class ProjectValidation(model.Model):
         models_not_validated: A list of models which were not fully validated
         computation_time: Duration of project validation in seconds
     """
-
     errors: Optional[Sequence["ProjectError"]] = None
     project_digest: Optional[str] = None
     models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None
     computation_time: Optional[float] = None
 
-    def __init__(
-        self,
-        *,
-        errors: Optional[Sequence["ProjectError"]] = None,
-        project_digest: Optional[str] = None,
-        models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None,
-        computation_time: Optional[float] = None
-    ):
+    def __init__(self, *,
+            errors: Optional[Sequence["ProjectError"]] = None,
+            project_digest: Optional[str] = None,
+            models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None,
+            computation_time: Optional[float] = None):
         self.errors = errors
         self.project_digest = project_digest
         self.models_not_validated = models_not_validated
@@ -7005,22 +6576,18 @@ class ProjectValidationCache(model.Model):
         computation_time: Duration of project validation in seconds
         stale: If true, the cached project validation results are no longer accurate because the project has changed since the cached results were calculated
     """
-
     errors: Optional[Sequence["ProjectError"]] = None
     project_digest: Optional[str] = None
     models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None
     computation_time: Optional[float] = None
     stale: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        errors: Optional[Sequence["ProjectError"]] = None,
-        project_digest: Optional[str] = None,
-        models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None,
-        computation_time: Optional[float] = None,
-        stale: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            errors: Optional[Sequence["ProjectError"]] = None,
+            project_digest: Optional[str] = None,
+            models_not_validated: Optional[Sequence["ModelsNotValidated"]] = None,
+            computation_time: Optional[float] = None,
+            stale: Optional[bool] = None):
         self.errors = errors
         self.project_digest = project_digest
         self.models_not_validated = models_not_validated
@@ -7041,7 +6608,6 @@ class ProjectWorkspace(model.Model):
         git_branch:
         lookml_type: The lookml syntax used by all files in this project
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     project_id: Optional[str] = None
     workspace_id: Optional[str] = None
@@ -7051,18 +6617,15 @@ class ProjectWorkspace(model.Model):
     git_branch: Optional["GitBranch"] = None
     lookml_type: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        project_id: Optional[str] = None,
-        workspace_id: Optional[str] = None,
-        git_status: Optional[str] = None,
-        git_head: Optional[str] = None,
-        dependency_status: Optional["DependencyStatus"] = None,
-        git_branch: Optional["GitBranch"] = None,
-        lookml_type: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            project_id: Optional[str] = None,
+            workspace_id: Optional[str] = None,
+            git_status: Optional[str] = None,
+            git_head: Optional[str] = None,
+            dependency_status: Optional["DependencyStatus"] = None,
+            git_branch: Optional["GitBranch"] = None,
+            lookml_type: Optional[str] = None):
         self.can = can
         self.project_id = project_id
         self.workspace_id = workspace_id
@@ -7078,7 +6641,6 @@ class PullRequestMode(enum.Enum):
     The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required". (Enum defined in Project)
 
     """
-
     off = "off"
     links = "links"
     recommended = "recommended"
@@ -7122,7 +6684,6 @@ class Query(model.Model):
         has_table_calculations: Has Table Calculations
         runtime: (DEPRECATED) Runtime (Deprecated)
     """
-
     model: str
     view: str
     can: Optional[MutableMapping[str, bool]] = None
@@ -7151,37 +6712,34 @@ class Query(model.Model):
     has_table_calculations: Optional[bool] = None
     runtime: Optional[float] = None
 
-    def __init__(
-        self,
-        *,
-        model: str,
-        view: str,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        fields: Optional[Sequence[str]] = None,
-        pivots: Optional[Sequence[str]] = None,
-        fill_fields: Optional[Sequence[str]] = None,
-        filters: Optional[MutableMapping[str, Any]] = None,
-        filter_expression: Optional[str] = None,
-        sorts: Optional[Sequence[str]] = None,
-        limit: Optional[str] = None,
-        column_limit: Optional[str] = None,
-        total: Optional[bool] = None,
-        row_total: Optional[str] = None,
-        subtotals: Optional[Sequence[str]] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None,
-        filter_config: Optional[MutableMapping[str, Any]] = None,
-        visible_ui_sections: Optional[str] = None,
-        slug: Optional[str] = None,
-        dynamic_fields: Optional[str] = None,
-        client_id: Optional[str] = None,
-        share_url: Optional[str] = None,
-        expanded_share_url: Optional[str] = None,
-        url: Optional[str] = None,
-        query_timezone: Optional[str] = None,
-        has_table_calculations: Optional[bool] = None,
-        runtime: Optional[float] = None
-    ):
+    def __init__(self, *,
+            model: str,
+            view: str,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            fields: Optional[Sequence[str]] = None,
+            pivots: Optional[Sequence[str]] = None,
+            fill_fields: Optional[Sequence[str]] = None,
+            filters: Optional[MutableMapping[str, Any]] = None,
+            filter_expression: Optional[str] = None,
+            sorts: Optional[Sequence[str]] = None,
+            limit: Optional[str] = None,
+            column_limit: Optional[str] = None,
+            total: Optional[bool] = None,
+            row_total: Optional[str] = None,
+            subtotals: Optional[Sequence[str]] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None,
+            filter_config: Optional[MutableMapping[str, Any]] = None,
+            visible_ui_sections: Optional[str] = None,
+            slug: Optional[str] = None,
+            dynamic_fields: Optional[str] = None,
+            client_id: Optional[str] = None,
+            share_url: Optional[str] = None,
+            expanded_share_url: Optional[str] = None,
+            url: Optional[str] = None,
+            query_timezone: Optional[str] = None,
+            has_table_calculations: Optional[bool] = None,
+            runtime: Optional[float] = None):
         self.model = model
         self.view = view
         self.can = can
@@ -7235,7 +6793,6 @@ class QueryTask(model.Model):
         dashboard_id: Id of dashboard associated with query.
         result_format: The data format of the query results.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     query_id: Optional[int] = None
@@ -7256,29 +6813,26 @@ class QueryTask(model.Model):
     dashboard_id: Optional[str] = None
     result_format: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        query_id: Optional[int] = None,
-        query: Optional["Query"] = None,
-        generate_links: Optional[bool] = None,
-        force_production: Optional[bool] = None,
-        path_prefix: Optional[str] = None,
-        cache: Optional[bool] = None,
-        server_table_calcs: Optional[bool] = None,
-        cache_only: Optional[bool] = None,
-        cache_key: Optional[str] = None,
-        status: Optional[str] = None,
-        source: Optional[str] = None,
-        runtime: Optional[float] = None,
-        rebuild_pdts: Optional[bool] = None,
-        result_source: Optional[str] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[str] = None,
-        result_format: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            query_id: Optional[int] = None,
+            query: Optional["Query"] = None,
+            generate_links: Optional[bool] = None,
+            force_production: Optional[bool] = None,
+            path_prefix: Optional[str] = None,
+            cache: Optional[bool] = None,
+            server_table_calcs: Optional[bool] = None,
+            cache_only: Optional[bool] = None,
+            cache_key: Optional[str] = None,
+            status: Optional[str] = None,
+            source: Optional[str] = None,
+            runtime: Optional[float] = None,
+            rebuild_pdts: Optional[bool] = None,
+            result_source: Optional[str] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[str] = None,
+            result_format: Optional[str] = None):
         self.can = can
         self.id = id
         self.query_id = query_id
@@ -7325,7 +6879,6 @@ class RenderTask(model.Model):
         user_id: The user account permissions in which the render task will execute
         width: Output width in pixels
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     created_at: Optional[str] = None
     dashboard_filters: Optional[str] = None
@@ -7347,30 +6900,27 @@ class RenderTask(model.Model):
     user_id: Optional[int] = None
     width: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        created_at: Optional[str] = None,
-        dashboard_filters: Optional[str] = None,
-        dashboard_id: Optional[int] = None,
-        dashboard_style: Optional[str] = None,
-        finalized_at: Optional[str] = None,
-        height: Optional[int] = None,
-        id: Optional[str] = None,
-        look_id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        query_id: Optional[int] = None,
-        dashboard_element_id: Optional[str] = None,
-        query_runtime: Optional[float] = None,
-        render_runtime: Optional[float] = None,
-        result_format: Optional[str] = None,
-        runtime: Optional[float] = None,
-        status: Optional[str] = None,
-        status_detail: Optional[str] = None,
-        user_id: Optional[int] = None,
-        width: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            created_at: Optional[str] = None,
+            dashboard_filters: Optional[str] = None,
+            dashboard_id: Optional[int] = None,
+            dashboard_style: Optional[str] = None,
+            finalized_at: Optional[str] = None,
+            height: Optional[int] = None,
+            id: Optional[str] = None,
+            look_id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            query_id: Optional[int] = None,
+            dashboard_element_id: Optional[str] = None,
+            query_runtime: Optional[float] = None,
+            render_runtime: Optional[float] = None,
+            result_format: Optional[str] = None,
+            runtime: Optional[float] = None,
+            status: Optional[str] = None,
+            status_detail: Optional[str] = None,
+            user_id: Optional[int] = None,
+            width: Optional[int] = None):
         self.can = can
         self.created_at = created_at
         self.dashboard_filters = dashboard_filters
@@ -7406,7 +6956,6 @@ class RepositoryCredential(model.Model):
         ssh_public_key: Public deploy key for SSH authentication.
         is_configured: Whether the credentials have been configured for the Git Repository.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     root_project_id: Optional[str] = None
@@ -7416,18 +6965,15 @@ class RepositoryCredential(model.Model):
     ssh_public_key: Optional[str] = None
     is_configured: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        root_project_id: Optional[str] = None,
-        remote_url: Optional[str] = None,
-        git_username: Optional[str] = None,
-        git_password: Optional[str] = None,
-        ssh_public_key: Optional[str] = None,
-        is_configured: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            root_project_id: Optional[str] = None,
+            remote_url: Optional[str] = None,
+            git_username: Optional[str] = None,
+            git_password: Optional[str] = None,
+            ssh_public_key: Optional[str] = None,
+            is_configured: Optional[bool] = None):
         self.can = can
         self.id = id
         self.root_project_id = root_project_id
@@ -7440,10 +6986,9 @@ class RepositoryCredential(model.Model):
 
 class ResultFormat(enum.Enum):
     """
-    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 
     """
-
     inline_json = "inline_json"
     json = "json"
     json_detail = "json_detail"
@@ -7454,6 +6999,7 @@ class ResultFormat(enum.Enum):
     txt = "txt"
     xlsx = "xlsx"
     gsxml = "gsxml"
+    sql = "sql"
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
@@ -7470,20 +7016,16 @@ class ResultMakerFilterables(model.Model):
         name: The name of the filterable thing (Query or Merged Results).
         listen: array of dashboard_filter_name: and field: objects.
     """
-
     model: Optional[str] = None
     view: Optional[str] = None
     name: Optional[str] = None
     listen: Optional[Sequence["ResultMakerFilterablesListen"]] = None
 
-    def __init__(
-        self,
-        *,
-        model: Optional[str] = None,
-        view: Optional[str] = None,
-        name: Optional[str] = None,
-        listen: Optional[Sequence["ResultMakerFilterablesListen"]] = None
-    ):
+    def __init__(self, *,
+            model: Optional[str] = None,
+            view: Optional[str] = None,
+            name: Optional[str] = None,
+            listen: Optional[Sequence["ResultMakerFilterablesListen"]] = None):
         self.model = model
         self.view = view
         self.name = name
@@ -7497,16 +7039,12 @@ class ResultMakerFilterablesListen(model.Model):
         dashboard_filter_name: The name of a dashboard filter to listen to.
         field: The name of the field in the filterable to filter with the value of the dashboard filter.
     """
-
     dashboard_filter_name: Optional[str] = None
     field: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_filter_name: Optional[str] = None,
-        field: Optional[str] = None
-    ):
+    def __init__(self, *,
+            dashboard_filter_name: Optional[str] = None,
+            field: Optional[str] = None):
         self.dashboard_filter_name = dashboard_filter_name
         self.field = field
 
@@ -7526,7 +7064,6 @@ class ResultMakerWithIdVisConfigAndDynamicFields(model.Model):
         query:
         vis_config: Vis config of the constituent Query, or Merge Query.
     """
-
     id: Optional[int] = None
     dynamic_fields: Optional[str] = None
     filterables: Optional[Sequence["ResultMakerFilterables"]] = None
@@ -7538,20 +7075,17 @@ class ResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     query: Optional["Query"] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        dynamic_fields: Optional[str] = None,
-        filterables: Optional[Sequence["ResultMakerFilterables"]] = None,
-        sorts: Optional[Sequence[str]] = None,
-        merge_result_id: Optional[str] = None,
-        total: Optional[bool] = None,
-        query_id: Optional[int] = None,
-        sql_query_id: Optional[str] = None,
-        query: Optional["Query"] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            dynamic_fields: Optional[str] = None,
+            filterables: Optional[Sequence["ResultMakerFilterables"]] = None,
+            sorts: Optional[Sequence[str]] = None,
+            merge_result_id: Optional[str] = None,
+            total: Optional[bool] = None,
+            query_id: Optional[int] = None,
+            sql_query_id: Optional[str] = None,
+            query: Optional["Query"] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None):
         self.id = id
         self.dynamic_fields = dynamic_fields
         self.filterables = filterables
@@ -7578,7 +7112,6 @@ class Role(model.Model):
         url: Link to get this item
         users_url: Link to get list of users with this role
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     name: Optional[str] = None
@@ -7589,19 +7122,16 @@ class Role(model.Model):
     url: Optional[str] = None
     users_url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        permission_set: Optional["PermissionSet"] = None,
-        permission_set_id: Optional[int] = None,
-        model_set: Optional["ModelSet"] = None,
-        model_set_id: Optional[int] = None,
-        url: Optional[str] = None,
-        users_url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            name: Optional[str] = None,
+            permission_set: Optional["PermissionSet"] = None,
+            permission_set_id: Optional[int] = None,
+            model_set: Optional["ModelSet"] = None,
+            model_set_id: Optional[int] = None,
+            url: Optional[str] = None,
+            users_url: Optional[str] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -7639,7 +7169,6 @@ class RunningQueries(model.Model):
         runtime: Number of seconds elapsed running the Query
         sql: SQL text of the query as run
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     user: Optional["UserPublic"] = None
@@ -7662,31 +7191,28 @@ class RunningQueries(model.Model):
     runtime: Optional[float] = None
     sql: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        user: Optional["UserPublic"] = None,
-        query: Optional["Query"] = None,
-        sql_query: Optional["SqlQuery"] = None,
-        look: Optional["LookBasic"] = None,
-        created_at: Optional[str] = None,
-        completed_at: Optional[str] = None,
-        query_id: Optional[str] = None,
-        source: Optional[str] = None,
-        node_id: Optional[str] = None,
-        slug: Optional[str] = None,
-        query_task_id: Optional[str] = None,
-        cache_key: Optional[str] = None,
-        connection_name: Optional[str] = None,
-        dialect: Optional[str] = None,
-        connection_id: Optional[str] = None,
-        message: Optional[str] = None,
-        status: Optional[str] = None,
-        runtime: Optional[float] = None,
-        sql: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            user: Optional["UserPublic"] = None,
+            query: Optional["Query"] = None,
+            sql_query: Optional["SqlQuery"] = None,
+            look: Optional["LookBasic"] = None,
+            created_at: Optional[str] = None,
+            completed_at: Optional[str] = None,
+            query_id: Optional[str] = None,
+            source: Optional[str] = None,
+            node_id: Optional[str] = None,
+            slug: Optional[str] = None,
+            query_task_id: Optional[str] = None,
+            cache_key: Optional[str] = None,
+            connection_name: Optional[str] = None,
+            dialect: Optional[str] = None,
+            connection_id: Optional[str] = None,
+            message: Optional[str] = None,
+            status: Optional[str] = None,
+            runtime: Optional[float] = None,
+            sql: Optional[str] = None):
         self.can = can
         self.id = id
         self.user = user
@@ -7748,7 +7274,6 @@ class SamlConfig(model.Model):
         allow_direct_roles: Allows roles to be directly assigned to SAML auth'd users.
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     enabled: Optional[bool] = None
     idp_cert: Optional[str] = None
@@ -7783,43 +7308,40 @@ class SamlConfig(model.Model):
     allow_direct_roles: Optional[bool] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        enabled: Optional[bool] = None,
-        idp_cert: Optional[str] = None,
-        idp_url: Optional[str] = None,
-        idp_issuer: Optional[str] = None,
-        idp_audience: Optional[str] = None,
-        allowed_clock_drift: Optional[int] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        new_user_migration_types: Optional[str] = None,
-        alternate_email_login_allowed: Optional[bool] = None,
-        test_slug: Optional[str] = None,
-        modified_at: Optional[str] = None,
-        modified_by: Optional[str] = None,
-        default_new_user_roles: Optional[Sequence["Role"]] = None,
-        default_new_user_groups: Optional[Sequence["Group"]] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        groups_attribute: Optional[str] = None,
-        groups: Optional[Sequence["SamlGroupRead"]] = None,
-        groups_with_role_ids: Optional[Sequence["SamlGroupWrite"]] = None,
-        auth_requires_role: Optional[bool] = None,
-        user_attributes: Optional[Sequence["SamlUserAttributeRead"]] = None,
-        user_attributes_with_ids: Optional[Sequence["SamlUserAttributeWrite"]] = None,
-        groups_finder_type: Optional[str] = None,
-        groups_member_value: Optional[str] = None,
-        bypass_login_page: Optional[bool] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            enabled: Optional[bool] = None,
+            idp_cert: Optional[str] = None,
+            idp_url: Optional[str] = None,
+            idp_issuer: Optional[str] = None,
+            idp_audience: Optional[str] = None,
+            allowed_clock_drift: Optional[int] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            new_user_migration_types: Optional[str] = None,
+            alternate_email_login_allowed: Optional[bool] = None,
+            test_slug: Optional[str] = None,
+            modified_at: Optional[str] = None,
+            modified_by: Optional[str] = None,
+            default_new_user_roles: Optional[Sequence["Role"]] = None,
+            default_new_user_groups: Optional[Sequence["Group"]] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            groups_attribute: Optional[str] = None,
+            groups: Optional[Sequence["SamlGroupRead"]] = None,
+            groups_with_role_ids: Optional[Sequence["SamlGroupWrite"]] = None,
+            auth_requires_role: Optional[bool] = None,
+            user_attributes: Optional[Sequence["SamlUserAttributeRead"]] = None,
+            user_attributes_with_ids: Optional[Sequence["SamlUserAttributeWrite"]] = None,
+            groups_finder_type: Optional[str] = None,
+            groups_member_value: Optional[str] = None,
+            bypass_login_page: Optional[bool] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None,
+            url: Optional[str] = None):
         self.can = can
         self.enabled = enabled
         self.idp_cert = idp_cert
@@ -7866,7 +7388,6 @@ class SamlGroupRead(model.Model):
         roles: Looker Roles
         url: Link to saml config
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
@@ -7874,16 +7395,13 @@ class SamlGroupRead(model.Model):
     roles: Optional[Sequence["Role"]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        roles: Optional[Sequence["Role"]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            roles: Optional[Sequence["Role"]] = None,
+            url: Optional[str] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -7903,7 +7421,6 @@ class SamlGroupWrite(model.Model):
         role_ids: Looker Role Ids
         url: Link to saml config
     """
-
     id: Optional[int] = None
     looker_group_id: Optional[int] = None
     looker_group_name: Optional[str] = None
@@ -7911,16 +7428,13 @@ class SamlGroupWrite(model.Model):
     role_ids: Optional[Sequence[int]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        looker_group_id: Optional[int] = None,
-        looker_group_name: Optional[str] = None,
-        name: Optional[str] = None,
-        role_ids: Optional[Sequence[int]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            looker_group_id: Optional[int] = None,
+            looker_group_name: Optional[str] = None,
+            name: Optional[str] = None,
+            role_ids: Optional[Sequence[int]] = None,
+            url: Optional[str] = None):
         self.id = id
         self.looker_group_id = looker_group_id
         self.looker_group_name = looker_group_name
@@ -7938,20 +7452,16 @@ class SamlMetadataParseResult(model.Model):
         idp_url: Identify Provider Url
         idp_cert: Identify Provider Certificate
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     idp_issuer: Optional[str] = None
     idp_url: Optional[str] = None
     idp_cert: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        idp_issuer: Optional[str] = None,
-        idp_url: Optional[str] = None,
-        idp_cert: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            idp_issuer: Optional[str] = None,
+            idp_url: Optional[str] = None,
+            idp_cert: Optional[str] = None):
         self.can = can
         self.idp_issuer = idp_issuer
         self.idp_url = idp_url
@@ -7967,20 +7477,16 @@ class SamlUserAttributeRead(model.Model):
         user_attributes: Looker User Attributes
         url: Link to saml config
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attributes: Optional[Sequence["UserAttribute"]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attributes: Optional[Sequence["UserAttribute"]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attributes: Optional[Sequence["UserAttribute"]] = None,
+            url: Optional[str] = None):
         self.name = name
         self.required = required
         self.user_attributes = user_attributes
@@ -7996,20 +7502,16 @@ class SamlUserAttributeWrite(model.Model):
         user_attribute_ids: Looker User Attribute Ids
         url: Link to saml config
     """
-
     name: Optional[str] = None
     required: Optional[bool] = None
     user_attribute_ids: Optional[Sequence[int]] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        required: Optional[bool] = None,
-        user_attribute_ids: Optional[Sequence[int]] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            required: Optional[bool] = None,
+            user_attribute_ids: Optional[Sequence[int]] = None,
+            url: Optional[str] = None):
         self.name = name
         self.required = required
         self.user_attribute_ids = user_attribute_ids
@@ -8040,6 +7542,10 @@ class ScheduledPlan(model.Model):
         scheduled_plan_destination: Scheduled plan destinations
         run_once: Whether the plan in question should only be run once (usually for testing)
         include_links: Whether links back to Looker should be included in this ScheduledPlan
+        custom_url_base: Custom url domain for the scheduled entity
+        custom_url_params: Custom url path and parameters for the scheduled entity
+        custom_url_label: Custom url label for the scheduled entity
+        show_custom_url: Whether to show custom link back instead of standard looker link
         pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
         pdf_landscape: Whether the PDF should be formatted for landscape orientation
         embed: Whether this schedule is in an embed context or not
@@ -8055,7 +7561,6 @@ class ScheduledPlan(model.Model):
         last_run_at: When the ScheduledPlan was last run
         can: Operations the current user is able to perform on this object
     """
-
     name: Optional[str] = None
     user_id: Optional[int] = None
     run_as_recipient: Optional[bool] = None
@@ -8076,6 +7581,10 @@ class ScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -8091,46 +7600,45 @@ class ScheduledPlan(model.Model):
     last_run_at: Optional[datetime.datetime] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        user_id: Optional[int] = None,
-        run_as_recipient: Optional[bool] = None,
-        enabled: Optional[bool] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        filters_string: Optional[str] = None,
-        dashboard_filters: Optional[str] = None,
-        require_results: Optional[bool] = None,
-        require_no_results: Optional[bool] = None,
-        require_change: Optional[bool] = None,
-        send_all_results: Optional[bool] = None,
-        crontab: Optional[str] = None,
-        datagroup: Optional[str] = None,
-        timezone: Optional[str] = None,
-        query_id: Optional[str] = None,
-        scheduled_plan_destination: Optional[
-            Sequence["ScheduledPlanDestination"]
-        ] = None,
-        run_once: Optional[bool] = None,
-        include_links: Optional[bool] = None,
-        pdf_paper_size: Optional[str] = None,
-        pdf_landscape: Optional[bool] = None,
-        embed: Optional[bool] = None,
-        color_theme: Optional[str] = None,
-        long_tables: Optional[bool] = None,
-        inline_table_width: Optional[int] = None,
-        id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        updated_at: Optional[datetime.datetime] = None,
-        title: Optional[str] = None,
-        user: Optional["UserPublic"] = None,
-        next_run_at: Optional[datetime.datetime] = None,
-        last_run_at: Optional[datetime.datetime] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            user_id: Optional[int] = None,
+            run_as_recipient: Optional[bool] = None,
+            enabled: Optional[bool] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            filters_string: Optional[str] = None,
+            dashboard_filters: Optional[str] = None,
+            require_results: Optional[bool] = None,
+            require_no_results: Optional[bool] = None,
+            require_change: Optional[bool] = None,
+            send_all_results: Optional[bool] = None,
+            crontab: Optional[str] = None,
+            datagroup: Optional[str] = None,
+            timezone: Optional[str] = None,
+            query_id: Optional[str] = None,
+            scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None,
+            run_once: Optional[bool] = None,
+            include_links: Optional[bool] = None,
+            custom_url_base: Optional[str] = None,
+            custom_url_params: Optional[str] = None,
+            custom_url_label: Optional[str] = None,
+            show_custom_url: Optional[bool] = None,
+            pdf_paper_size: Optional[str] = None,
+            pdf_landscape: Optional[bool] = None,
+            embed: Optional[bool] = None,
+            color_theme: Optional[str] = None,
+            long_tables: Optional[bool] = None,
+            inline_table_width: Optional[int] = None,
+            id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            updated_at: Optional[datetime.datetime] = None,
+            title: Optional[str] = None,
+            user: Optional["UserPublic"] = None,
+            next_run_at: Optional[datetime.datetime] = None,
+            last_run_at: Optional[datetime.datetime] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.user_id = user_id
         self.run_as_recipient = run_as_recipient
@@ -8151,6 +7659,10 @@ class ScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -8176,14 +7688,13 @@ class ScheduledPlanDestination(model.Model):
         format: The data format to send to the given destination. Supported formats vary by destination, but include: "txt", "csv", "inline_json", "json", "json_detail", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png"
         apply_formatting: Are values formatted? (containing currency symbols, digit separators, etc.
         apply_vis: Whether visualization options are applied to the results.
-        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'.
+        address: Address for recipient. For email e.g. 'user@example.com'. For webhooks e.g. 'https://domain/path'. For Amazon S3 e.g. 's3://bucket-name/path/'. For SFTP e.g. 'sftp://host-name/path/'. 
         looker_recipient: Whether the recipient is a Looker user on the current instance (only applicable for email recipients)
         type: Type of the address ('email', 'webhook', 's3', or 'sftp')
         parameters: JSON object containing parameters for external scheduling. For Amazon S3, this requires keys and values for access_key_id and region. For SFTP, this requires a key and value for username.
         secret_parameters: (Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.
         message: Optional message to be included in scheduled emails
     """
-
     id: Optional[int] = None
     scheduled_plan_id: Optional[int] = None
     format: Optional[str] = None
@@ -8196,21 +7707,18 @@ class ScheduledPlanDestination(model.Model):
     secret_parameters: Optional[str] = None
     message: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        scheduled_plan_id: Optional[int] = None,
-        format: Optional[str] = None,
-        apply_formatting: Optional[bool] = None,
-        apply_vis: Optional[bool] = None,
-        address: Optional[str] = None,
-        looker_recipient: Optional[bool] = None,
-        type: Optional[str] = None,
-        parameters: Optional[str] = None,
-        secret_parameters: Optional[str] = None,
-        message: Optional[str] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            scheduled_plan_id: Optional[int] = None,
+            format: Optional[str] = None,
+            apply_formatting: Optional[bool] = None,
+            apply_vis: Optional[bool] = None,
+            address: Optional[str] = None,
+            looker_recipient: Optional[bool] = None,
+            type: Optional[str] = None,
+            parameters: Optional[str] = None,
+            secret_parameters: Optional[str] = None,
+            message: Optional[str] = None):
         self.id = id
         self.scheduled_plan_id = scheduled_plan_id
         self.format = format
@@ -8244,7 +7752,6 @@ class Session(model.Model):
         expires_at: Time when this session will expire
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     ip_address: Optional[str] = None
@@ -8261,25 +7768,22 @@ class Session(model.Model):
     expires_at: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        ip_address: Optional[str] = None,
-        browser: Optional[str] = None,
-        operating_system: Optional[str] = None,
-        city: Optional[str] = None,
-        state: Optional[str] = None,
-        country: Optional[str] = None,
-        credentials_type: Optional[str] = None,
-        extended_at: Optional[str] = None,
-        extended_count: Optional[int] = None,
-        sudo_user_id: Optional[int] = None,
-        created_at: Optional[str] = None,
-        expires_at: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            ip_address: Optional[str] = None,
+            browser: Optional[str] = None,
+            operating_system: Optional[str] = None,
+            city: Optional[str] = None,
+            state: Optional[str] = None,
+            country: Optional[str] = None,
+            credentials_type: Optional[str] = None,
+            extended_at: Optional[str] = None,
+            extended_count: Optional[int] = None,
+            sudo_user_id: Optional[int] = None,
+            created_at: Optional[str] = None,
+            expires_at: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.id = id
         self.ip_address = ip_address
@@ -8308,7 +7812,6 @@ class SessionConfig(model.Model):
         use_inactivity_based_logout: Enforce session logout for sessions that are inactive for 15 minutes.
         track_session_location: Track location of session when user logs in.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     allow_persistent_sessions: Optional[bool] = None
     session_minutes: Optional[int] = None
@@ -8316,16 +7819,13 @@ class SessionConfig(model.Model):
     use_inactivity_based_logout: Optional[bool] = None
     track_session_location: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        allow_persistent_sessions: Optional[bool] = None,
-        session_minutes: Optional[int] = None,
-        unlimited_sessions_per_user: Optional[bool] = None,
-        use_inactivity_based_logout: Optional[bool] = None,
-        track_session_location: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            allow_persistent_sessions: Optional[bool] = None,
+            session_minutes: Optional[int] = None,
+            unlimited_sessions_per_user: Optional[bool] = None,
+            use_inactivity_based_logout: Optional[bool] = None,
+            track_session_location: Optional[bool] = None):
         self.can = can
         self.allow_persistent_sessions = allow_persistent_sessions
         self.session_minutes = session_minutes
@@ -8345,8 +7845,8 @@ class SmtpSettings(model.Model):
         port: SMTP Server's port
         enable_starttls_auto: Is TLS encryption enabled?
         ssl_version: TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
+        default_smtp: Whether to enable built-in Looker SMTP
     """
-
     address: Optional[str] = None
     from_: Optional[str] = None
     user_name: Optional[str] = None
@@ -8354,18 +7854,17 @@ class SmtpSettings(model.Model):
     port: Optional[int] = None
     enable_starttls_auto: Optional[bool] = None
     ssl_version: Optional["SslVersion"] = None
+    default_smtp: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        address: Optional[str] = None,
-        from_: Optional[str] = None,
-        user_name: Optional[str] = None,
-        password: Optional[str] = None,
-        port: Optional[int] = None,
-        enable_starttls_auto: Optional[bool] = None,
-        ssl_version: Optional["SslVersion"] = None
-    ):
+    def __init__(self, *,
+            address: Optional[str] = None,
+            from_: Optional[str] = None,
+            user_name: Optional[str] = None,
+            password: Optional[str] = None,
+            port: Optional[int] = None,
+            enable_starttls_auto: Optional[bool] = None,
+            ssl_version: Optional["SslVersion"] = None,
+            default_smtp: Optional[bool] = None):
         self.address = address
         self.from_ = from_
         self.user_name = user_name
@@ -8373,6 +7872,7 @@ class SmtpSettings(model.Model):
         self.port = port
         self.enable_starttls_auto = enable_starttls_auto
         self.ssl_version = ssl_version
+        self.default_smtp = default_smtp
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8384,20 +7884,16 @@ class Snippet(model.Model):
         sql: SQL text of the snippet
         can: Operations the current user is able to perform on this object
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
     sql: Optional[str] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        sql: Optional[str] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            sql: Optional[str] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.label = label
         self.sql = sql
@@ -8427,7 +7923,6 @@ class Space(model.Model):
         dashboards: Dashboards
         looks: Looks
     """
-
     name: str
     parent_id: Optional[str] = None
     id: Optional[str] = None
@@ -8447,28 +7942,25 @@ class Space(model.Model):
     dashboards: Optional[Sequence["DashboardBase"]] = None
     looks: Optional[Sequence["LookWithDashboards"]] = None
 
-    def __init__(
-        self,
-        *,
-        name: str,
-        parent_id: Optional[str] = None,
-        id: Optional[str] = None,
-        content_metadata_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        creator_id: Optional[int] = None,
-        child_count: Optional[int] = None,
-        external_id: Optional[str] = None,
-        is_embed: Optional[bool] = None,
-        is_embed_shared_root: Optional[bool] = None,
-        is_embed_users_root: Optional[bool] = None,
-        is_personal: Optional[bool] = None,
-        is_personal_descendant: Optional[bool] = None,
-        is_shared_root: Optional[bool] = None,
-        is_users_root: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None,
-        dashboards: Optional[Sequence["DashboardBase"]] = None,
-        looks: Optional[Sequence["LookWithDashboards"]] = None
-    ):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None,
+            id: Optional[str] = None,
+            content_metadata_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            creator_id: Optional[int] = None,
+            child_count: Optional[int] = None,
+            external_id: Optional[str] = None,
+            is_embed: Optional[bool] = None,
+            is_embed_shared_root: Optional[bool] = None,
+            is_embed_users_root: Optional[bool] = None,
+            is_personal: Optional[bool] = None,
+            is_personal_descendant: Optional[bool] = None,
+            is_shared_root: Optional[bool] = None,
+            is_users_root: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None,
+            dashboards: Optional[Sequence["DashboardBase"]] = None,
+            looks: Optional[Sequence["LookWithDashboards"]] = None):
         self.name = name
         self.parent_id = parent_id
         self.id = id
@@ -8510,7 +8002,6 @@ class SpaceBase(model.Model):
         is_users_root: Space is the root user space
         can: Operations the current user is able to perform on this object
     """
-
     name: str
     parent_id: Optional[str] = None
     id: Optional[str] = None
@@ -8528,26 +8019,23 @@ class SpaceBase(model.Model):
     is_users_root: Optional[bool] = None
     can: Optional[MutableMapping[str, bool]] = None
 
-    def __init__(
-        self,
-        *,
-        name: str,
-        parent_id: Optional[str] = None,
-        id: Optional[str] = None,
-        content_metadata_id: Optional[int] = None,
-        created_at: Optional[datetime.datetime] = None,
-        creator_id: Optional[int] = None,
-        child_count: Optional[int] = None,
-        external_id: Optional[str] = None,
-        is_embed: Optional[bool] = None,
-        is_embed_shared_root: Optional[bool] = None,
-        is_embed_users_root: Optional[bool] = None,
-        is_personal: Optional[bool] = None,
-        is_personal_descendant: Optional[bool] = None,
-        is_shared_root: Optional[bool] = None,
-        is_users_root: Optional[bool] = None,
-        can: Optional[MutableMapping[str, bool]] = None
-    ):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None,
+            id: Optional[str] = None,
+            content_metadata_id: Optional[int] = None,
+            created_at: Optional[datetime.datetime] = None,
+            creator_id: Optional[int] = None,
+            child_count: Optional[int] = None,
+            external_id: Optional[str] = None,
+            is_embed: Optional[bool] = None,
+            is_embed_shared_root: Optional[bool] = None,
+            is_embed_users_root: Optional[bool] = None,
+            is_personal: Optional[bool] = None,
+            is_personal_descendant: Optional[bool] = None,
+            is_shared_root: Optional[bool] = None,
+            is_users_root: Optional[bool] = None,
+            can: Optional[MutableMapping[str, bool]] = None):
         self.name = name
         self.parent_id = parent_id
         self.id = id
@@ -8585,7 +8073,6 @@ class SqlQuery(model.Model):
         vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
         result_maker_id: ID of the ResultMakerLookup entry.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     slug: Optional[str] = None
     last_runtime: Optional[float] = None
@@ -8601,24 +8088,21 @@ class SqlQuery(model.Model):
     vis_config: Optional[MutableMapping[str, Any]] = None
     result_maker_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        slug: Optional[str] = None,
-        last_runtime: Optional[float] = None,
-        run_count: Optional[int] = None,
-        browser_limit: Optional[int] = None,
-        sql: Optional[str] = None,
-        last_run_at: Optional[str] = None,
-        connection: Optional["DBConnectionBase"] = None,
-        model_name: Optional[str] = None,
-        creator: Optional["UserPublic"] = None,
-        explore_url: Optional[str] = None,
-        plaintext: Optional[bool] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None,
-        result_maker_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            slug: Optional[str] = None,
+            last_runtime: Optional[float] = None,
+            run_count: Optional[int] = None,
+            browser_limit: Optional[int] = None,
+            sql: Optional[str] = None,
+            last_run_at: Optional[str] = None,
+            connection: Optional["DBConnectionBase"] = None,
+            model_name: Optional[str] = None,
+            creator: Optional["UserPublic"] = None,
+            explore_url: Optional[str] = None,
+            plaintext: Optional[bool] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None,
+            result_maker_id: Optional[int] = None):
         self.can = can
         self.slug = slug
         self.last_runtime = last_runtime
@@ -8645,22 +8129,18 @@ class SqlQueryCreate(model.Model):
         sql: SQL query
         vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
     """
-
     connection_name: Optional[str] = None
     connection_id: Optional[str] = None
     model_name: Optional[str] = None
     sql: Optional[str] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        connection_name: Optional[str] = None,
-        connection_id: Optional[str] = None,
-        model_name: Optional[str] = None,
-        sql: Optional[str] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            connection_name: Optional[str] = None,
+            connection_id: Optional[str] = None,
+            model_name: Optional[str] = None,
+            sql: Optional[str] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None):
         self.connection_name = connection_name
         self.connection_id = connection_id
         self.model_name = model_name
@@ -8673,7 +8153,6 @@ class SslVersion(enum.Enum):
     TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2". (Enum defined in SmtpSettings)
 
     """
-
     TLSv1_1 = "TLSv1_1"
     SSLv23 = "SSLv23"
     TLSv1_2 = "TLSv1_2"
@@ -8689,7 +8168,6 @@ class SupportedActionTypes(enum.Enum):
     A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (Enum defined in Integration)
 
     """
-
     cell = "cell"
     query = "query"
     dashboard = "dashboard"
@@ -8706,7 +8184,6 @@ class SupportedDownloadSettings(enum.Enum):
     A list of all the download mechanisms the integration supports. The order of values is not significant: Looker will select the most appropriate supported download mechanism for a given query. The integration must ensure it can handle any of the mechanisms it claims to support. If unspecified, this defaults to all download setting values. Valid values are: "push", "url". (Enum defined in Integration)
 
     """
-
     push = "push"
     url = "url"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -8721,7 +8198,6 @@ class SupportedFormats(enum.Enum):
     A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 
     """
-
     txt = "txt"
     csv = "csv"
     inline_json = "inline_json"
@@ -8747,7 +8223,6 @@ class SupportedFormattings(enum.Enum):
     A list of formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "formatted", "unformatted". (Enum defined in Integration)
 
     """
-
     formatted = "formatted"
     unformatted = "unformatted"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -8762,7 +8237,6 @@ class SupportedVisualizationFormattings(enum.Enum):
     A list of visualization formatting options the integration supports. If unspecified, defaults to all formats. Valid values are: "apply", "noapply". (Enum defined in Integration)
 
     """
-
     apply = "apply"
     noapply = "noapply"
     invalid_api_enum_value = "invalid_api_enum_value"
@@ -8783,7 +8257,6 @@ class Theme(model.Model):
         name: Name of theme. Can only be alphanumeric and underscores.
         settings:
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     begin_at: Optional[datetime.datetime] = None
     end_at: Optional[datetime.datetime] = None
@@ -8791,16 +8264,13 @@ class Theme(model.Model):
     name: Optional[str] = None
     settings: Optional["ThemeSettings"] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        begin_at: Optional[datetime.datetime] = None,
-        end_at: Optional[datetime.datetime] = None,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        settings: Optional["ThemeSettings"] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            begin_at: Optional[datetime.datetime] = None,
+            end_at: Optional[datetime.datetime] = None,
+            id: Optional[int] = None,
+            name: Optional[str] = None,
+            settings: Optional["ThemeSettings"] = None):
         self.can = can
         self.begin_at = begin_at
         self.end_at = end_at
@@ -8819,21 +8289,45 @@ class ThemeSettings(model.Model):
         font_color: Default font color
         font_family: Primary font family
         font_source: Source specification for font
-        info_button_color: Info button color
+        info_button_color: (DEPRECATED) Info button color
         primary_button_color: Primary button color
         show_filters_bar: Toggle to show filters. Defaults to true.
         show_title: Toggle to show the title. Defaults to true.
         text_tile_text_color: Text color for text tiles
         tile_background_color: Background color for tiles
+        text_tile_background_color: Background color for text tiles
         tile_text_color: Text color for tiles
         title_color: Color for titles
-        warn_button_color: Warning button color
+        warn_button_color: (DEPRECATED) Warning button color
         tile_title_alignment: The text alignment of tile titles (New Dashboards)
         tile_shadow: Toggles the tile shadow (not supported)
         show_last_updated_indicator: Toggle to show the dashboard last updated indicator. Defaults to true.
         show_reload_data_icon: Toggle to show reload data icon/button. Defaults to true.
+        show_dashboard_menu: Toggle to show the dashboard actions menu. Defaults to true.
+        show_filters_toggle: Toggle to show the filters icon/toggle. Defaults to true.
+        show_dashboard_header: Toggle to show the dashboard header. Defaults to true.
+        center_dashboard_title: Toggle to center the dashboard title. Defaults to false.
+        dashboard_title_font_size: Dashboard title font size.
+        box_shadow: Default box shadow.
+        page_margin_top: Dashboard page margin top.
+        page_margin_bottom: Dashboard page margin bottom.
+        page_margin_sides: Dashboard page margin left and right.
+        show_explore_header: Toggle to show the explore page header. Defaults to true.
+        show_explore_title: Toggle to show the explore page title. Defaults to true.
+        show_explore_last_run: Toggle to show the explore page last run. Defaults to true.
+        show_explore_timezone: Toggle to show the explore page timezone. Defaults to true.
+        show_explore_run_stop_button: Toggle to show the explore page run button. Defaults to true.
+        show_explore_actions_button: Toggle to show the explore page actions button. Defaults to true.
+        show_look_header: Toggle to show the look page header. Defaults to true.
+        show_look_title: Toggle to show the look page title. Defaults to true.
+        show_look_last_run: Toggle to show the look page last run. Defaults to true.
+        show_look_timezone: Toggle to show the look page timezone Defaults to true.
+        show_look_run_stop_button: Toggle to show the look page run button. Defaults to true.
+        show_look_actions_button: Toggle to show the look page actions button. Defaults to true.
+        tile_title_font_size: Font size for tiles.
+        column_gap_size: The vertical gap/gutter size between tiles.
+        row_gap_size: The horizontal gap/gutter size between tiles.
     """
-
     background_color: Optional[str] = None
     base_font_size: Optional[str] = None
     color_collection_id: Optional[str] = None
@@ -8846,6 +8340,7 @@ class ThemeSettings(model.Model):
     show_title: Optional[bool] = None
     text_tile_text_color: Optional[str] = None
     tile_background_color: Optional[str] = None
+    text_tile_background_color: Optional[str] = None
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
     warn_button_color: Optional[str] = None
@@ -8853,30 +8348,76 @@ class ThemeSettings(model.Model):
     tile_shadow: Optional[bool] = None
     show_last_updated_indicator: Optional[bool] = None
     show_reload_data_icon: Optional[bool] = None
+    show_dashboard_menu: Optional[bool] = None
+    show_filters_toggle: Optional[bool] = None
+    show_dashboard_header: Optional[bool] = None
+    center_dashboard_title: Optional[bool] = None
+    dashboard_title_font_size: Optional[str] = None
+    box_shadow: Optional[str] = None
+    page_margin_top: Optional[str] = None
+    page_margin_bottom: Optional[str] = None
+    page_margin_sides: Optional[str] = None
+    show_explore_header: Optional[bool] = None
+    show_explore_title: Optional[bool] = None
+    show_explore_last_run: Optional[bool] = None
+    show_explore_timezone: Optional[bool] = None
+    show_explore_run_stop_button: Optional[bool] = None
+    show_explore_actions_button: Optional[bool] = None
+    show_look_header: Optional[bool] = None
+    show_look_title: Optional[bool] = None
+    show_look_last_run: Optional[bool] = None
+    show_look_timezone: Optional[bool] = None
+    show_look_run_stop_button: Optional[bool] = None
+    show_look_actions_button: Optional[bool] = None
+    tile_title_font_size: Optional[str] = None
+    column_gap_size: Optional[str] = None
+    row_gap_size: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        background_color: Optional[str] = None,
-        base_font_size: Optional[str] = None,
-        color_collection_id: Optional[str] = None,
-        font_color: Optional[str] = None,
-        font_family: Optional[str] = None,
-        font_source: Optional[str] = None,
-        info_button_color: Optional[str] = None,
-        primary_button_color: Optional[str] = None,
-        show_filters_bar: Optional[bool] = None,
-        show_title: Optional[bool] = None,
-        text_tile_text_color: Optional[str] = None,
-        tile_background_color: Optional[str] = None,
-        tile_text_color: Optional[str] = None,
-        title_color: Optional[str] = None,
-        warn_button_color: Optional[str] = None,
-        tile_title_alignment: Optional[str] = None,
-        tile_shadow: Optional[bool] = None,
-        show_last_updated_indicator: Optional[bool] = None,
-        show_reload_data_icon: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            background_color: Optional[str] = None,
+            base_font_size: Optional[str] = None,
+            color_collection_id: Optional[str] = None,
+            font_color: Optional[str] = None,
+            font_family: Optional[str] = None,
+            font_source: Optional[str] = None,
+            info_button_color: Optional[str] = None,
+            primary_button_color: Optional[str] = None,
+            show_filters_bar: Optional[bool] = None,
+            show_title: Optional[bool] = None,
+            text_tile_text_color: Optional[str] = None,
+            tile_background_color: Optional[str] = None,
+            text_tile_background_color: Optional[str] = None,
+            tile_text_color: Optional[str] = None,
+            title_color: Optional[str] = None,
+            warn_button_color: Optional[str] = None,
+            tile_title_alignment: Optional[str] = None,
+            tile_shadow: Optional[bool] = None,
+            show_last_updated_indicator: Optional[bool] = None,
+            show_reload_data_icon: Optional[bool] = None,
+            show_dashboard_menu: Optional[bool] = None,
+            show_filters_toggle: Optional[bool] = None,
+            show_dashboard_header: Optional[bool] = None,
+            center_dashboard_title: Optional[bool] = None,
+            dashboard_title_font_size: Optional[str] = None,
+            box_shadow: Optional[str] = None,
+            page_margin_top: Optional[str] = None,
+            page_margin_bottom: Optional[str] = None,
+            page_margin_sides: Optional[str] = None,
+            show_explore_header: Optional[bool] = None,
+            show_explore_title: Optional[bool] = None,
+            show_explore_last_run: Optional[bool] = None,
+            show_explore_timezone: Optional[bool] = None,
+            show_explore_run_stop_button: Optional[bool] = None,
+            show_explore_actions_button: Optional[bool] = None,
+            show_look_header: Optional[bool] = None,
+            show_look_title: Optional[bool] = None,
+            show_look_last_run: Optional[bool] = None,
+            show_look_timezone: Optional[bool] = None,
+            show_look_run_stop_button: Optional[bool] = None,
+            show_look_actions_button: Optional[bool] = None,
+            tile_title_font_size: Optional[str] = None,
+            column_gap_size: Optional[str] = None,
+            row_gap_size: Optional[str] = None):
         self.background_color = background_color
         self.base_font_size = base_font_size
         self.color_collection_id = color_collection_id
@@ -8889,6 +8430,7 @@ class ThemeSettings(model.Model):
         self.show_title = show_title
         self.text_tile_text_color = text_tile_text_color
         self.tile_background_color = tile_background_color
+        self.text_tile_background_color = text_tile_background_color
         self.tile_text_color = tile_text_color
         self.title_color = title_color
         self.warn_button_color = warn_button_color
@@ -8896,6 +8438,30 @@ class ThemeSettings(model.Model):
         self.tile_shadow = tile_shadow
         self.show_last_updated_indicator = show_last_updated_indicator
         self.show_reload_data_icon = show_reload_data_icon
+        self.show_dashboard_menu = show_dashboard_menu
+        self.show_filters_toggle = show_filters_toggle
+        self.show_dashboard_header = show_dashboard_header
+        self.center_dashboard_title = center_dashboard_title
+        self.dashboard_title_font_size = dashboard_title_font_size
+        self.box_shadow = box_shadow
+        self.page_margin_top = page_margin_top
+        self.page_margin_bottom = page_margin_bottom
+        self.page_margin_sides = page_margin_sides
+        self.show_explore_header = show_explore_header
+        self.show_explore_title = show_explore_title
+        self.show_explore_last_run = show_explore_last_run
+        self.show_explore_timezone = show_explore_timezone
+        self.show_explore_run_stop_button = show_explore_run_stop_button
+        self.show_explore_actions_button = show_explore_actions_button
+        self.show_look_header = show_look_header
+        self.show_look_title = show_look_title
+        self.show_look_last_run = show_look_last_run
+        self.show_look_timezone = show_look_timezone
+        self.show_look_run_stop_button = show_look_run_stop_button
+        self.show_look_actions_button = show_look_actions_button
+        self.tile_title_font_size = tile_title_font_size
+        self.column_gap_size = column_gap_size
+        self.row_gap_size = row_gap_size
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8906,18 +8472,14 @@ class Timezone(model.Model):
         label: Description of timezone
         group: Timezone group (e.g Common, Other, etc.)
     """
-
     value: Optional[str] = None
     label: Optional[str] = None
     group: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        value: Optional[str] = None,
-        label: Optional[str] = None,
-        group: Optional[str] = None
-    ):
+    def __init__(self, *,
+            value: Optional[str] = None,
+            label: Optional[str] = None,
+            group: Optional[str] = None):
         self.value = value
         self.label = label
         self.group = group
@@ -8930,11 +8492,12 @@ class UpdateFolder(model.Model):
         name: Unique Name
         parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: Optional[str] = None
     parent_id: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, parent_id: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            parent_id: Optional[str] = None):
         self.name = name
         self.parent_id = parent_id
 
@@ -8946,11 +8509,12 @@ class UpdateSpace(model.Model):
         name: Unique Name
         parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: Optional[str] = None
     parent_id: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, parent_id: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            parent_id: Optional[str] = None):
         self.name = name
         self.parent_id = parent_id
 
@@ -8962,7 +8526,7 @@ class User(model.Model):
         can: Operations the current user is able to perform on this object
         avatar_url: URL for the avatar image (may be generic)
         avatar_url_without_sizing: URL for the avatar image (may be generic), does not specify size
-        credentials_api3: API 3 credentials
+        credentials_api3: API credentials
         credentials_email:
         credentials_embed: Embed credentials
         credentials_google:
@@ -8997,7 +8561,6 @@ class User(model.Model):
         allow_roles_from_normal_groups: User can inherit roles from a normal Looker group.
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     avatar_url: Optional[str] = None
     avatar_url_without_sizing: Optional[str] = None
@@ -9036,47 +8599,44 @@ class User(model.Model):
     allow_roles_from_normal_groups: Optional[bool] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        avatar_url: Optional[str] = None,
-        avatar_url_without_sizing: Optional[str] = None,
-        credentials_api3: Optional[Sequence["CredentialsApi3"]] = None,
-        credentials_email: Optional["CredentialsEmail"] = None,
-        credentials_embed: Optional[Sequence["CredentialsEmbed"]] = None,
-        credentials_google: Optional["CredentialsGoogle"] = None,
-        credentials_ldap: Optional["CredentialsLDAP"] = None,
-        credentials_looker_openid: Optional["CredentialsLookerOpenid"] = None,
-        credentials_oidc: Optional["CredentialsOIDC"] = None,
-        credentials_saml: Optional["CredentialsSaml"] = None,
-        credentials_totp: Optional["CredentialsTotp"] = None,
-        display_name: Optional[str] = None,
-        email: Optional[str] = None,
-        embed_group_space_id: Optional[int] = None,
-        first_name: Optional[str] = None,
-        group_ids: Optional[Sequence[int]] = None,
-        home_space_id: Optional[str] = None,
-        home_folder_id: Optional[str] = None,
-        id: Optional[int] = None,
-        is_disabled: Optional[bool] = None,
-        last_name: Optional[str] = None,
-        locale: Optional[str] = None,
-        looker_versions: Optional[Sequence[str]] = None,
-        models_dir_validated: Optional[bool] = None,
-        personal_space_id: Optional[int] = None,
-        personal_folder_id: Optional[int] = None,
-        presumed_looker_employee: Optional[bool] = None,
-        role_ids: Optional[Sequence[int]] = None,
-        sessions: Optional[Sequence["Session"]] = None,
-        ui_state: Optional[MutableMapping[str, Any]] = None,
-        verified_looker_employee: Optional[bool] = None,
-        roles_externally_managed: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            avatar_url: Optional[str] = None,
+            avatar_url_without_sizing: Optional[str] = None,
+            credentials_api3: Optional[Sequence["CredentialsApi3"]] = None,
+            credentials_email: Optional["CredentialsEmail"] = None,
+            credentials_embed: Optional[Sequence["CredentialsEmbed"]] = None,
+            credentials_google: Optional["CredentialsGoogle"] = None,
+            credentials_ldap: Optional["CredentialsLDAP"] = None,
+            credentials_looker_openid: Optional["CredentialsLookerOpenid"] = None,
+            credentials_oidc: Optional["CredentialsOIDC"] = None,
+            credentials_saml: Optional["CredentialsSaml"] = None,
+            credentials_totp: Optional["CredentialsTotp"] = None,
+            display_name: Optional[str] = None,
+            email: Optional[str] = None,
+            embed_group_space_id: Optional[int] = None,
+            first_name: Optional[str] = None,
+            group_ids: Optional[Sequence[int]] = None,
+            home_space_id: Optional[str] = None,
+            home_folder_id: Optional[str] = None,
+            id: Optional[int] = None,
+            is_disabled: Optional[bool] = None,
+            last_name: Optional[str] = None,
+            locale: Optional[str] = None,
+            looker_versions: Optional[Sequence[str]] = None,
+            models_dir_validated: Optional[bool] = None,
+            personal_space_id: Optional[int] = None,
+            personal_folder_id: Optional[int] = None,
+            presumed_looker_employee: Optional[bool] = None,
+            role_ids: Optional[Sequence[int]] = None,
+            sessions: Optional[Sequence["Session"]] = None,
+            ui_state: Optional[MutableMapping[str, Any]] = None,
+            verified_looker_employee: Optional[bool] = None,
+            roles_externally_managed: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            url: Optional[str] = None):
         self.can = can
         self.avatar_url = avatar_url
         self.avatar_url_without_sizing = avatar_url_without_sizing
@@ -9133,7 +8693,6 @@ class UserAttribute(model.Model):
         user_can_edit: Users can change the value of this attribute for themselves
         hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     name: Optional[str] = None
@@ -9147,22 +8706,19 @@ class UserAttribute(model.Model):
     user_can_edit: Optional[bool] = None
     hidden_value_domain_whitelist: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        type: Optional[str] = None,
-        default_value: Optional[str] = None,
-        is_system: Optional[bool] = None,
-        is_permanent: Optional[bool] = None,
-        value_is_hidden: Optional[bool] = None,
-        user_can_view: Optional[bool] = None,
-        user_can_edit: Optional[bool] = None,
-        hidden_value_domain_whitelist: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            type: Optional[str] = None,
+            default_value: Optional[str] = None,
+            is_system: Optional[bool] = None,
+            is_permanent: Optional[bool] = None,
+            value_is_hidden: Optional[bool] = None,
+            user_can_view: Optional[bool] = None,
+            user_can_edit: Optional[bool] = None,
+            hidden_value_domain_whitelist: Optional[str] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -9182,7 +8738,6 @@ class UserAttributeFilterTypes(enum.Enum):
     An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
 
     """
-
     advanced_filter_string = "advanced_filter_string"
     advanced_filter_number = "advanced_filter_number"
     advanced_filter_datetime = "advanced_filter_datetime"
@@ -9213,7 +8768,6 @@ class UserAttributeGroupValue(model.Model):
         rank: Precedence for resolving value for user
         value: Value of user attribute for group
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     group_id: Optional[int] = None
@@ -9222,17 +8776,14 @@ class UserAttributeGroupValue(model.Model):
     rank: Optional[int] = None
     value: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        group_id: Optional[int] = None,
-        user_attribute_id: Optional[int] = None,
-        value_is_hidden: Optional[bool] = None,
-        rank: Optional[int] = None,
-        value: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            group_id: Optional[int] = None,
+            user_attribute_id: Optional[int] = None,
+            value_is_hidden: Optional[bool] = None,
+            rank: Optional[int] = None,
+            value: Optional[str] = None):
         self.can = can
         self.id = id
         self.group_id = group_id
@@ -9256,9 +8807,8 @@ class UserAttributeWithValue(model.Model):
         value_is_hidden: If true, the "value" field will be null, because the attribute settings block access to this value
         user_attribute_id: Id of User Attribute
         source: How user got this value for this attribute
-        hidden_value_domain_whitelist: If this user attribute is hidden, whitelist of destinations to which it may be sent.
+        hidden_value_domain_whitelist: If this user attribute is hidden, allowed list of destinations to which it may be sent.
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     name: Optional[str] = None
     label: Optional[str] = None
@@ -9271,21 +8821,18 @@ class UserAttributeWithValue(model.Model):
     source: Optional[str] = None
     hidden_value_domain_whitelist: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        rank: Optional[int] = None,
-        value: Optional[str] = None,
-        user_id: Optional[int] = None,
-        user_can_edit: Optional[bool] = None,
-        value_is_hidden: Optional[bool] = None,
-        user_attribute_id: Optional[int] = None,
-        source: Optional[str] = None,
-        hidden_value_domain_whitelist: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            rank: Optional[int] = None,
+            value: Optional[str] = None,
+            user_id: Optional[int] = None,
+            user_can_edit: Optional[bool] = None,
+            value_is_hidden: Optional[bool] = None,
+            user_attribute_id: Optional[int] = None,
+            source: Optional[str] = None,
+            hidden_value_domain_whitelist: Optional[str] = None):
         self.can = can
         self.name = name
         self.label = label
@@ -9305,10 +8852,10 @@ class UserIdOnly(model.Model):
     Attributes:
         id: Unique Id
     """
-
     id: Optional[int] = None
 
-    def __init__(self, *, id: Optional[int] = None):
+    def __init__(self, *,
+            id: Optional[int] = None):
         self.id = id
 
 
@@ -9327,7 +8874,6 @@ class UserLoginLockout(model.Model):
         fail_count: Number of failures that triggered the lockout
         lockout_at: Time when lockout was triggered
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     key: Optional[str] = None
     auth_type: Optional[str] = None
@@ -9339,20 +8885,17 @@ class UserLoginLockout(model.Model):
     fail_count: Optional[int] = None
     lockout_at: Optional[datetime.datetime] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        key: Optional[str] = None,
-        auth_type: Optional[str] = None,
-        ip: Optional[str] = None,
-        user_id: Optional[int] = None,
-        remote_id: Optional[str] = None,
-        full_name: Optional[str] = None,
-        email: Optional[str] = None,
-        fail_count: Optional[int] = None,
-        lockout_at: Optional[datetime.datetime] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            key: Optional[str] = None,
+            auth_type: Optional[str] = None,
+            ip: Optional[str] = None,
+            user_id: Optional[int] = None,
+            remote_id: Optional[str] = None,
+            full_name: Optional[str] = None,
+            email: Optional[str] = None,
+            fail_count: Optional[int] = None,
+            lockout_at: Optional[datetime.datetime] = None):
         self.can = can
         self.key = key
         self.auth_type = auth_type
@@ -9377,7 +8920,6 @@ class UserPublic(model.Model):
         avatar_url: URL for the avatar image (may be generic)
         url: Link to get this item
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[int] = None
     first_name: Optional[str] = None
@@ -9386,17 +8928,14 @@ class UserPublic(model.Model):
     avatar_url: Optional[str] = None
     url: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[int] = None,
-        first_name: Optional[str] = None,
-        last_name: Optional[str] = None,
-        display_name: Optional[str] = None,
-        avatar_url: Optional[str] = None,
-        url: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[int] = None,
+            first_name: Optional[str] = None,
+            last_name: Optional[str] = None,
+            display_name: Optional[str] = None,
+            avatar_url: Optional[str] = None,
+            url: Optional[str] = None):
         self.can = can
         self.id = id
         self.first_name = first_name
@@ -9414,18 +8953,14 @@ class ValidationError(model.Model):
         documentation_url: Documentation link
         errors: Error detail array
     """
-
     message: str
     documentation_url: str
     errors: Optional[Sequence["ValidationErrorDetail"]] = None
 
-    def __init__(
-        self,
-        *,
-        message: str,
-        documentation_url: str,
-        errors: Optional[Sequence["ValidationErrorDetail"]] = None
-    ):
+    def __init__(self, *,
+            message: str,
+            documentation_url: str,
+            errors: Optional[Sequence["ValidationErrorDetail"]] = None):
         self.message = message
         self.documentation_url = documentation_url
         self.errors = errors
@@ -9440,20 +8975,16 @@ class ValidationErrorDetail(model.Model):
         code: Error code
         message: Error info message
     """
-
     documentation_url: str
     field: Optional[str] = None
     code: Optional[str] = None
     message: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        documentation_url: str,
-        field: Optional[str] = None,
-        code: Optional[str] = None,
-        message: Optional[str] = None
-    ):
+    def __init__(self, *,
+            documentation_url: str,
+            field: Optional[str] = None,
+            code: Optional[str] = None,
+            message: Optional[str] = None):
         self.documentation_url = documentation_url
         self.field = field
         self.code = code
@@ -9465,7 +8996,6 @@ class WeekStartDay(enum.Enum):
     The name of the starting day of the week. Valid values are: "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday". (Enum defined in LookmlModelExploreField)
 
     """
-
     monday = "monday"
     tuesday = "tuesday"
     wednesday = "wednesday"
@@ -9488,18 +9018,14 @@ class WelcomeEmailTest(model.Model):
         subject: The subject that would be sent for the custom welcome email
         header: The header that would be sent in the body of a custom welcome email
     """
-
     content: Optional[str] = None
     subject: Optional[str] = None
     header: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        content: Optional[str] = None,
-        subject: Optional[str] = None,
-        header: Optional[str] = None
-    ):
+    def __init__(self, *,
+            content: Optional[str] = None,
+            subject: Optional[str] = None,
+            header: Optional[str] = None):
         self.content = content
         self.subject = subject
         self.header = header
@@ -9526,7 +9052,6 @@ class WhitelabelConfiguration(model.Model):
         alerts_links: Remove Looker links from Alerts
         folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
     """
-
     id: Optional[int] = None
     logo_file: Optional[str] = None
     logo_url: Optional[str] = None
@@ -9544,26 +9069,23 @@ class WhitelabelConfiguration(model.Model):
     alerts_links: Optional[bool] = None
     folders_mentions: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        id: Optional[int] = None,
-        logo_file: Optional[str] = None,
-        logo_url: Optional[str] = None,
-        favicon_file: Optional[str] = None,
-        favicon_url: Optional[str] = None,
-        default_title: Optional[str] = None,
-        show_help_menu: Optional[bool] = None,
-        show_docs: Optional[bool] = None,
-        show_email_sub_options: Optional[bool] = None,
-        allow_looker_mentions: Optional[bool] = None,
-        allow_looker_links: Optional[bool] = None,
-        custom_welcome_email_advanced: Optional[bool] = None,
-        setup_mentions: Optional[bool] = None,
-        alerts_logo: Optional[bool] = None,
-        alerts_links: Optional[bool] = None,
-        folders_mentions: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            id: Optional[int] = None,
+            logo_file: Optional[str] = None,
+            logo_url: Optional[str] = None,
+            favicon_file: Optional[str] = None,
+            favicon_url: Optional[str] = None,
+            default_title: Optional[str] = None,
+            show_help_menu: Optional[bool] = None,
+            show_docs: Optional[bool] = None,
+            show_email_sub_options: Optional[bool] = None,
+            allow_looker_mentions: Optional[bool] = None,
+            allow_looker_links: Optional[bool] = None,
+            custom_welcome_email_advanced: Optional[bool] = None,
+            setup_mentions: Optional[bool] = None,
+            alerts_logo: Optional[bool] = None,
+            alerts_links: Optional[bool] = None,
+            folders_mentions: Optional[bool] = None):
         self.id = id
         self.logo_file = logo_file
         self.logo_url = logo_url
@@ -9590,18 +9112,14 @@ class Workspace(model.Model):
         id: The unique id of this user workspace. Predefined workspace ids include "production" and "dev"
         projects: The local state of each project in the workspace
     """
-
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
     projects: Optional[Sequence["Project"]] = None
 
-    def __init__(
-        self,
-        *,
-        can: Optional[MutableMapping[str, bool]] = None,
-        id: Optional[str] = None,
-        projects: Optional[Sequence["Project"]] = None
-    ):
+    def __init__(self, *,
+            can: Optional[MutableMapping[str, bool]] = None,
+            id: Optional[str] = None,
+            projects: Optional[Sequence["Project"]] = None):
         self.can = can
         self.id = id
         self.projects = projects
@@ -9610,48 +9128,44 @@ class Workspace(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteApiSession(model.Model):
     """
-        Dynamic writeable type for ApiSession removes:
-    can, sudo_user_id
+    Dynamic writeable type for ApiSession removes:
+can, sudo_user_id
 
-        Attributes:
-            workspace_id: The id of active workspace for this session
+    Attributes:
+        workspace_id: The id of active workspace for this session
     """
-
     workspace_id: Optional[str] = None
 
-    def __init__(self, *, workspace_id: Optional[str] = None):
+    def __init__(self, *,
+            workspace_id: Optional[str] = None):
         self.workspace_id = workspace_id
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteBackupConfiguration(model.Model):
     """
-        Dynamic writeable type for BackupConfiguration removes:
-    can, url
+    Dynamic writeable type for BackupConfiguration removes:
+can, url
 
-        Attributes:
-            type: Type of backup: looker-s3 or custom-s3
-            custom_s3_bucket: Name of bucket for custom-s3 backups
-            custom_s3_bucket_region: Name of region where the bucket is located
-            custom_s3_key: (Write-Only) AWS S3 key used for custom-s3 backups
-            custom_s3_secret: (Write-Only) AWS S3 secret used for custom-s3 backups
+    Attributes:
+        type: Type of backup: looker-s3 or custom-s3
+        custom_s3_bucket: Name of bucket for custom-s3 backups
+        custom_s3_bucket_region: Name of region where the bucket is located
+        custom_s3_key: (Write-Only) AWS S3 key used for custom-s3 backups
+        custom_s3_secret: (Write-Only) AWS S3 secret used for custom-s3 backups
     """
-
     type: Optional[str] = None
     custom_s3_bucket: Optional[str] = None
     custom_s3_bucket_region: Optional[str] = None
     custom_s3_key: Optional[str] = None
     custom_s3_secret: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        type: Optional[str] = None,
-        custom_s3_bucket: Optional[str] = None,
-        custom_s3_bucket_region: Optional[str] = None,
-        custom_s3_key: Optional[str] = None,
-        custom_s3_secret: Optional[str] = None
-    ):
+    def __init__(self, *,
+            type: Optional[str] = None,
+            custom_s3_bucket: Optional[str] = None,
+            custom_s3_bucket_region: Optional[str] = None,
+            custom_s3_key: Optional[str] = None,
+            custom_s3_secret: Optional[str] = None):
         self.type = type
         self.custom_s3_bucket = custom_s3_bucket
         self.custom_s3_bucket_region = custom_s3_bucket_region
@@ -9662,29 +9176,25 @@ class WriteBackupConfiguration(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteColorCollection(model.Model):
     """
-        Dynamic writeable type for ColorCollection removes:
-    id
+    Dynamic writeable type for ColorCollection removes:
+id
 
-        Attributes:
-            label: Label of color collection
-            categoricalPalettes: Array of categorical palette definitions
-            sequentialPalettes: Array of discrete palette definitions
-            divergingPalettes: Array of diverging palette definitions
+    Attributes:
+        label: Label of color collection
+        categoricalPalettes: Array of categorical palette definitions
+        sequentialPalettes: Array of discrete palette definitions
+        divergingPalettes: Array of diverging palette definitions
     """
-
     label: Optional[str] = None
     categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None
     sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None
     divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None
 
-    def __init__(
-        self,
-        *,
-        label: Optional[str] = None,
-        categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None,
-        sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None,
-        divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None
-    ):
+    def __init__(self, *,
+            label: Optional[str] = None,
+            categoricalPalettes: Optional[Sequence["DiscretePalette"]] = None,
+            sequentialPalettes: Optional[Sequence["ContinuousPalette"]] = None,
+            divergingPalettes: Optional[Sequence["ContinuousPalette"]] = None):
         self.label = label
         self.categoricalPalettes = categoricalPalettes
         self.sequentialPalettes = sequentialPalettes
@@ -9694,27 +9204,23 @@ class WriteColorCollection(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteContentFavorite(model.Model):
     """
-        Dynamic writeable type for ContentFavorite removes:
-    id, look_id, dashboard_id, look
+    Dynamic writeable type for ContentFavorite removes:
+id, look_id, dashboard_id, look
 
-        Attributes:
-            user_id: User Id which owns this ContentFavorite
-            content_metadata_id: Content Metadata Id associated with this ContentFavorite
-            dashboard: Dynamic writeable type for DashboardBase removes:
-    can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+    Attributes:
+        user_id: User Id which owns this ContentFavorite
+        content_metadata_id: Content Metadata Id associated with this ContentFavorite
+        dashboard: Dynamic writeable type for DashboardBase removes:
+can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
     """
-
     user_id: Optional[int] = None
     content_metadata_id: Optional[int] = None
     dashboard: Optional["WriteDashboardBase"] = None
 
-    def __init__(
-        self,
-        *,
-        user_id: Optional[int] = None,
-        content_metadata_id: Optional[int] = None,
-        dashboard: Optional["WriteDashboardBase"] = None
-    ):
+    def __init__(self, *,
+            user_id: Optional[int] = None,
+            content_metadata_id: Optional[int] = None,
+            dashboard: Optional["WriteDashboardBase"] = None):
         self.user_id = user_id
         self.content_metadata_id = content_metadata_id
         self.dashboard = dashboard
@@ -9723,41 +9229,40 @@ class WriteContentFavorite(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteContentMeta(model.Model):
     """
-        Dynamic writeable type for ContentMeta removes:
-    can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
+    Dynamic writeable type for ContentMeta removes:
+can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug, space_id
 
-        Attributes:
-            inherits: Whether content inherits its access levels from parent
+    Attributes:
+        inherits: Whether content inherits its access levels from parent
     """
-
     inherits: Optional[bool] = None
 
-    def __init__(self, *, inherits: Optional[bool] = None):
+    def __init__(self, *,
+            inherits: Optional[bool] = None):
         self.inherits = inherits
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateDashboardFilter(model.Model):
     """
-        Dynamic writeable type for CreateDashboardFilter removes:
-    id, field
+    Dynamic writeable type for CreateDashboardFilter removes:
+id, field
 
-        Attributes:
-            dashboard_id: Id of Dashboard
-            name: Name of filter
-            title: Title of filter
-            type: Type of filter: one of date, number, string, or field
-            default_value: Default value of filter
-            model: Model of filter (required if type = field)
-            explore: Explore of filter (required if type = field)
-            dimension: Dimension of filter (required if type = field)
-            row: Display order of this filter relative to other filters
-            listens_to_filters: Array of listeners for faceted filters
-            allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-            required: Whether the filter requires a value to run the dashboard
-            ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+    Attributes:
+        dashboard_id: Id of Dashboard
+        name: Name of filter
+        title: Title of filter
+        type: Type of filter: one of date, number, string, or field
+        default_value: Default value of filter
+        model: Model of filter (required if type = field)
+        explore: Explore of filter (required if type = field)
+        dimension: Dimension of filter (required if type = field)
+        row: Display order of this filter relative to other filters
+        listens_to_filters: Array of listeners for faceted filters
+        allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+        required: Whether the filter requires a value to run the dashboard
+        ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
-
     dashboard_id: str
     name: str
     title: str
@@ -9772,23 +9277,20 @@ class WriteCreateDashboardFilter(model.Model):
     required: Optional[bool] = None
     ui_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_id: str,
-        name: str,
-        title: str,
-        type: str,
-        default_value: Optional[str] = None,
-        model: Optional[str] = None,
-        explore: Optional[str] = None,
-        dimension: Optional[str] = None,
-        row: Optional[int] = None,
-        listens_to_filters: Optional[Sequence[str]] = None,
-        allow_multiple_values: Optional[bool] = None,
-        required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            dashboard_id: str,
+            name: str,
+            title: str,
+            type: str,
+            default_value: Optional[str] = None,
+            model: Optional[str] = None,
+            explore: Optional[str] = None,
+            dimension: Optional[str] = None,
+            row: Optional[int] = None,
+            listens_to_filters: Optional[Sequence[str]] = None,
+            allow_multiple_values: Optional[bool] = None,
+            required: Optional[bool] = None,
+            ui_config: Optional[MutableMapping[str, Any]] = None):
         self.dashboard_id = dashboard_id
         self.name = name
         self.title = title
@@ -9807,18 +9309,17 @@ class WriteCreateDashboardFilter(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteCreateQueryTask(model.Model):
     """
-        Dynamic writeable type for CreateQueryTask removes:
-    can
+    Dynamic writeable type for CreateQueryTask removes:
+can
 
-        Attributes:
-            query_id: Id of query to run
-            result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
-            source: Source of query task
-            deferred: Create the task but defer execution
-            look_id: Id of look associated with query.
-            dashboard_id: Id of dashboard associated with query.
+    Attributes:
+        query_id: Id of query to run
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+        source: Source of query task
+        deferred: Create the task but defer execution
+        look_id: Id of look associated with query.
+        dashboard_id: Id of dashboard associated with query.
     """
-
     query_id: int
     result_format: "ResultFormat"
     source: Optional[str] = None
@@ -9831,19 +9332,16 @@ class WriteCreateQueryTask(model.Model):
         "source": Optional[str],
         "deferred": Optional[bool],
         "look_id": Optional[int],
-        "dashboard_id": Optional[str],
+        "dashboard_id": Optional[str]
     }
 
-    def __init__(
-        self,
-        *,
-        query_id: int,
-        result_format: "ResultFormat",
-        source: Optional[str] = None,
-        deferred: Optional[bool] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[str] = None
-    ):
+    def __init__(self, *,
+            query_id: int,
+            result_format: "ResultFormat",
+            source: Optional[str] = None,
+            deferred: Optional[bool] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[str] = None):
         self.query_id = query_id
         self.result_format = result_format
         self.source = source
@@ -9855,23 +9353,19 @@ class WriteCreateQueryTask(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteCredentialsEmail(model.Model):
     """
-        Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
+    Dynamic writeable type for CredentialsEmail removes:
+can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
 
-        Attributes:
-            email: EMail address used for user login
-            forced_password_reset_at_next_login: Force the user to change their password upon their next login
+    Attributes:
+        email: EMail address used for user login
+        forced_password_reset_at_next_login: Force the user to change their password upon their next login
     """
-
     email: Optional[str] = None
     forced_password_reset_at_next_login: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        email: Optional[str] = None,
-        forced_password_reset_at_next_login: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            email: Optional[str] = None,
+            forced_password_reset_at_next_login: Optional[bool] = None):
         self.email = email
         self.forced_password_reset_at_next_login = forced_password_reset_at_next_login
 
@@ -9879,29 +9373,25 @@ class WriteCredentialsEmail(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteCustomWelcomeEmail(model.Model):
     """
-        Dynamic writeable type for CustomWelcomeEmail removes:
-    can
+    Dynamic writeable type for CustomWelcomeEmail removes:
+can
 
-        Attributes:
-            enabled: If true, custom email content will replace the default body of welcome emails
-            content: The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
-            subject: The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
-            header: The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+    Attributes:
+        enabled: If true, custom email content will replace the default body of welcome emails
+        content: The HTML to use as custom content for welcome emails. Script elements and other potentially dangerous markup will be removed.
+        subject: The text to appear in the email subject line. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
+        header: The text to appear in the header line of the email body. Only available with a whitelabel license and whitelabel_configuration.advanced_custom_welcome_email enabled.
     """
-
     enabled: Optional[bool] = None
     content: Optional[str] = None
     subject: Optional[str] = None
     header: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        enabled: Optional[bool] = None,
-        content: Optional[str] = None,
-        subject: Optional[str] = None,
-        header: Optional[str] = None
-    ):
+    def __init__(self, *,
+            enabled: Optional[bool] = None,
+            content: Optional[str] = None,
+            subject: Optional[str] = None,
+            header: Optional[str] = None):
         self.enabled = enabled
         self.content = content
         self.subject = subject
@@ -9911,41 +9401,40 @@ class WriteCustomWelcomeEmail(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboard(model.Model):
     """
-        Dynamic writeable type for Dashboard removes:
-    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
+    Dynamic writeable type for Dashboard removes:
+can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count
 
-        Attributes:
-            description: Description
-            hidden: Is Hidden
-            query_timezone: Timezone in which the Dashboard will run by default.
-            refresh_interval: Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
-            folder: Dynamic writeable type for FolderBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            title: Dashboard Title
-            slug: Content Metadata Slug
-            preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
-            space: Dynamic writeable type for SpaceBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes
-            background_color: Background color
-            crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
-            deleted: Whether or not a dashboard is 'soft' deleted.
-            enable_viz_full_screen: Allow visualizations to be viewed in full screen mode
-            filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
-            filters_location_top: Sets the default state of the filters location to top(true) or right(false)
-            load_configuration: configuration option that governs how dashboard loading will happen.
-            lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.looker.com/r/api/control-access)
-            show_title: Show title
-            space_id: Id of Space
-            folder_id: Id of folder
-            text_tile_text_color: Color of text on text tiles
-            tile_background_color: Tile background color
-            tile_text_color: Tile text color
-            title_color: Title color
-            appearance:
+    Attributes:
+        description: Description
+        hidden: Is Hidden
+        query_timezone: Timezone in which the Dashboard will run by default.
+        refresh_interval: Refresh Interval, as a time duration phrase like "2 hours 30 minutes". A number with no time units will be interpreted as whole seconds.
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        title: Dashboard Title
+        slug: Content Metadata Slug
+        preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes
+        background_color: Background color
+        crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
+        deleted: Whether or not a dashboard is 'soft' deleted.
+        enable_viz_full_screen: Allow visualizations to be viewed in full screen mode
+        filters_bar_collapsed: Sets the default state of the filters bar to collapsed or open
+        filters_location_top: Sets the default state of the filters location to top(true) or right(false)
+        load_configuration: configuration option that governs how dashboard loading will happen.
+        lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
+        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+        show_title: Show title
+        space_id: Id of Space
+        folder_id: Id of folder
+        text_tile_text_color: Color of text on text tiles
+        tile_background_color: Tile background color
+        tile_text_color: Tile text color
+        title_color: Title color
+        appearance:
     """
-
     description: Optional[str] = None
     hidden: Optional[bool] = None
     query_timezone: Optional[str] = None
@@ -9974,37 +9463,34 @@ class WriteDashboard(model.Model):
     title_color: Optional[str] = None
     appearance: Optional["DashboardAppearance"] = None
 
-    def __init__(
-        self,
-        *,
-        description: Optional[str] = None,
-        hidden: Optional[bool] = None,
-        query_timezone: Optional[str] = None,
-        refresh_interval: Optional[str] = None,
-        folder: Optional["WriteFolderBase"] = None,
-        title: Optional[str] = None,
-        slug: Optional[str] = None,
-        preferred_viewer: Optional[str] = None,
-        space: Optional["WriteSpaceBase"] = None,
-        alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
-        background_color: Optional[str] = None,
-        crossfilter_enabled: Optional[bool] = None,
-        deleted: Optional[bool] = None,
-        enable_viz_full_screen: Optional[bool] = None,
-        filters_bar_collapsed: Optional[bool] = None,
-        filters_location_top: Optional[bool] = None,
-        load_configuration: Optional[str] = None,
-        lookml_link_id: Optional[str] = None,
-        show_filters_bar: Optional[bool] = None,
-        show_title: Optional[bool] = None,
-        space_id: Optional[str] = None,
-        folder_id: Optional[str] = None,
-        text_tile_text_color: Optional[str] = None,
-        tile_background_color: Optional[str] = None,
-        tile_text_color: Optional[str] = None,
-        title_color: Optional[str] = None,
-        appearance: Optional["DashboardAppearance"] = None
-    ):
+    def __init__(self, *,
+            description: Optional[str] = None,
+            hidden: Optional[bool] = None,
+            query_timezone: Optional[str] = None,
+            refresh_interval: Optional[str] = None,
+            folder: Optional["WriteFolderBase"] = None,
+            title: Optional[str] = None,
+            slug: Optional[str] = None,
+            preferred_viewer: Optional[str] = None,
+            space: Optional["WriteSpaceBase"] = None,
+            alert_sync_with_dashboard_filter_enabled: Optional[bool] = None,
+            background_color: Optional[str] = None,
+            crossfilter_enabled: Optional[bool] = None,
+            deleted: Optional[bool] = None,
+            enable_viz_full_screen: Optional[bool] = None,
+            filters_bar_collapsed: Optional[bool] = None,
+            filters_location_top: Optional[bool] = None,
+            load_configuration: Optional[str] = None,
+            lookml_link_id: Optional[str] = None,
+            show_filters_bar: Optional[bool] = None,
+            show_title: Optional[bool] = None,
+            space_id: Optional[str] = None,
+            folder_id: Optional[str] = None,
+            text_tile_text_color: Optional[str] = None,
+            tile_background_color: Optional[str] = None,
+            tile_text_color: Optional[str] = None,
+            title_color: Optional[str] = None,
+            appearance: Optional["DashboardAppearance"] = None):
         self.description = description
         self.hidden = hidden
         self.query_timezone = query_timezone
@@ -10014,9 +9500,7 @@ class WriteDashboard(model.Model):
         self.slug = slug
         self.preferred_viewer = preferred_viewer
         self.space = space
-        self.alert_sync_with_dashboard_filter_enabled = (
-            alert_sync_with_dashboard_filter_enabled
-        )
+        self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
         self.background_color = background_color
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
@@ -10039,25 +9523,21 @@ class WriteDashboard(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardBase(model.Model):
     """
-        Dynamic writeable type for DashboardBase removes:
-    can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+    Dynamic writeable type for DashboardBase removes:
+can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 
-        Attributes:
-            folder: Dynamic writeable type for FolderBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            space: Dynamic writeable type for SpaceBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+    Attributes:
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
     """
-
     folder: Optional["WriteFolderBase"] = None
     space: Optional["WriteSpaceBase"] = None
 
-    def __init__(
-        self,
-        *,
-        folder: Optional["WriteFolderBase"] = None,
-        space: Optional["WriteSpaceBase"] = None
-    ):
+    def __init__(self, *,
+            folder: Optional["WriteFolderBase"] = None,
+            space: Optional["WriteSpaceBase"] = None):
         self.folder = folder
         self.space = space
 
@@ -10065,34 +9545,33 @@ class WriteDashboardBase(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardElement(model.Model):
     """
-        Dynamic writeable type for DashboardElement removes:
-    can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+    Dynamic writeable type for DashboardElement removes:
+can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
 
-        Attributes:
-            body_text: Text tile body text
-            dashboard_id: Id of Dashboard
-            look: Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
-            look_id: Id Of Look
-            merge_result_id: ID of merge result
-            note_display: Note Display
-            note_state: Note State
-            note_text: Note Text
-            query: Dynamic writeable type for Query removes:
-    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
-            query_id: Id Of Query
-            refresh_interval: Refresh Interval
-            result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
-            result_maker_id: ID of the ResultMakerLookup entry.
-            subtitle_text: Text tile subtitle text
-            title: Title of dashboard element
-            title_hidden: Whether title is hidden
-            title_text: Text tile title
-            type: Type
-            rich_content_json: JSON with all the properties required for rich editor and buttons elements
+    Attributes:
+        body_text: Text tile body text
+        dashboard_id: Id of Dashboard
+        look: Dynamic writeable type for LookWithQuery removes:
+can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+        look_id: Id Of Look
+        merge_result_id: ID of merge result
+        note_display: Note Display
+        note_state: Note State
+        note_text: Note Text
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+        query_id: Id Of Query
+        refresh_interval: Refresh Interval
+        result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+        result_maker_id: ID of the ResultMakerLookup entry.
+        subtitle_text: Text tile subtitle text
+        title: Title of dashboard element
+        title_hidden: Whether title is hidden
+        title_text: Text tile title
+        type: Type
+        rich_content_json: JSON with all the properties required for rich editor and buttons elements
     """
-
     body_text: Optional[str] = None
     dashboard_id: Optional[str] = None
     look: Optional["WriteLookWithQuery"] = None
@@ -10113,31 +9592,26 @@ class WriteDashboardElement(model.Model):
     type: Optional[str] = None
     rich_content_json: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        body_text: Optional[str] = None,
-        dashboard_id: Optional[str] = None,
-        look: Optional["WriteLookWithQuery"] = None,
-        look_id: Optional[str] = None,
-        merge_result_id: Optional[str] = None,
-        note_display: Optional[str] = None,
-        note_state: Optional[str] = None,
-        note_text: Optional[str] = None,
-        query: Optional["WriteQuery"] = None,
-        query_id: Optional[int] = None,
-        refresh_interval: Optional[str] = None,
-        result_maker: Optional[
-            "WriteResultMakerWithIdVisConfigAndDynamicFields"
-        ] = None,
-        result_maker_id: Optional[int] = None,
-        subtitle_text: Optional[str] = None,
-        title: Optional[str] = None,
-        title_hidden: Optional[bool] = None,
-        title_text: Optional[str] = None,
-        type: Optional[str] = None,
-        rich_content_json: Optional[str] = None
-    ):
+    def __init__(self, *,
+            body_text: Optional[str] = None,
+            dashboard_id: Optional[str] = None,
+            look: Optional["WriteLookWithQuery"] = None,
+            look_id: Optional[str] = None,
+            merge_result_id: Optional[str] = None,
+            note_display: Optional[str] = None,
+            note_state: Optional[str] = None,
+            note_text: Optional[str] = None,
+            query: Optional["WriteQuery"] = None,
+            query_id: Optional[int] = None,
+            refresh_interval: Optional[str] = None,
+            result_maker: Optional["WriteResultMakerWithIdVisConfigAndDynamicFields"] = None,
+            result_maker_id: Optional[int] = None,
+            subtitle_text: Optional[str] = None,
+            title: Optional[str] = None,
+            title_hidden: Optional[bool] = None,
+            title_text: Optional[str] = None,
+            type: Optional[str] = None,
+            rich_content_json: Optional[str] = None):
         self.body_text = body_text
         self.dashboard_id = dashboard_id
         self.look = look
@@ -10162,24 +9636,23 @@ class WriteDashboardElement(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardFilter(model.Model):
     """
-        Dynamic writeable type for DashboardFilter removes:
-    can, id, dashboard_id, field
+    Dynamic writeable type for DashboardFilter removes:
+can, id, dashboard_id, field
 
-        Attributes:
-            name: Name of filter
-            title: Title of filter
-            type: Type of filter: one of date, number, string, or field
-            default_value: Default value of filter
-            model: Model of filter (required if type = field)
-            explore: Explore of filter (required if type = field)
-            dimension: Dimension of filter (required if type = field)
-            row: Display order of this filter relative to other filters
-            listens_to_filters: Array of listeners for faceted filters
-            allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
-            required: Whether the filter requires a value to run the dashboard
-            ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
+    Attributes:
+        name: Name of filter
+        title: Title of filter
+        type: Type of filter: one of date, number, string, or field
+        default_value: Default value of filter
+        model: Model of filter (required if type = field)
+        explore: Explore of filter (required if type = field)
+        dimension: Dimension of filter (required if type = field)
+        row: Display order of this filter relative to other filters
+        listens_to_filters: Array of listeners for faceted filters
+        allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
+        required: Whether the filter requires a value to run the dashboard
+        ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
-
     name: Optional[str] = None
     title: Optional[str] = None
     type: Optional[str] = None
@@ -10193,22 +9666,19 @@ class WriteDashboardFilter(model.Model):
     required: Optional[bool] = None
     ui_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        title: Optional[str] = None,
-        type: Optional[str] = None,
-        default_value: Optional[str] = None,
-        model: Optional[str] = None,
-        explore: Optional[str] = None,
-        dimension: Optional[str] = None,
-        row: Optional[int] = None,
-        listens_to_filters: Optional[Sequence[str]] = None,
-        allow_multiple_values: Optional[bool] = None,
-        required: Optional[bool] = None,
-        ui_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            title: Optional[str] = None,
+            type: Optional[str] = None,
+            default_value: Optional[str] = None,
+            model: Optional[str] = None,
+            explore: Optional[str] = None,
+            dimension: Optional[str] = None,
+            row: Optional[int] = None,
+            listens_to_filters: Optional[Sequence[str]] = None,
+            allow_multiple_values: Optional[bool] = None,
+            required: Optional[bool] = None,
+            ui_config: Optional[MutableMapping[str, Any]] = None):
         self.name = name
         self.title = title
         self.type = type
@@ -10226,32 +9696,28 @@ class WriteDashboardFilter(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayout(model.Model):
     """
-        Dynamic writeable type for DashboardLayout removes:
-    can, id, deleted, dashboard_title, dashboard_layout_components
+    Dynamic writeable type for DashboardLayout removes:
+can, id, deleted, dashboard_title, dashboard_layout_components
 
-        Attributes:
-            dashboard_id: Id of Dashboard
-            type: Type
-            active: Is Active
-            column_width: Column Width
-            width: Width
+    Attributes:
+        dashboard_id: Id of Dashboard
+        type: Type
+        active: Is Active
+        column_width: Column Width
+        width: Width
     """
-
     dashboard_id: Optional[str] = None
     type: Optional[str] = None
     active: Optional[bool] = None
     column_width: Optional[int] = None
     width: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_id: Optional[str] = None,
-        type: Optional[str] = None,
-        active: Optional[bool] = None,
-        column_width: Optional[int] = None,
-        width: Optional[int] = None
-    ):
+    def __init__(self, *,
+            dashboard_id: Optional[str] = None,
+            type: Optional[str] = None,
+            active: Optional[bool] = None,
+            column_width: Optional[int] = None,
+            width: Optional[int] = None):
         self.dashboard_id = dashboard_id
         self.type = type
         self.active = active
@@ -10262,18 +9728,17 @@ class WriteDashboardLayout(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDashboardLayoutComponent(model.Model):
     """
-        Dynamic writeable type for DashboardLayoutComponent removes:
-    can, id, deleted, element_title, element_title_hidden, vis_type
+    Dynamic writeable type for DashboardLayoutComponent removes:
+can, id, deleted, element_title, element_title_hidden, vis_type
 
-        Attributes:
-            dashboard_layout_id: Id of Dashboard Layout
-            dashboard_element_id: Id Of Dashboard Element
-            row: Row
-            column: Column
-            width: Width
-            height: Height
+    Attributes:
+        dashboard_layout_id: Id of Dashboard Layout
+        dashboard_element_id: Id Of Dashboard Element
+        row: Row
+        column: Column
+        width: Width
+        height: Height
     """
-
     dashboard_layout_id: Optional[str] = None
     dashboard_element_id: Optional[str] = None
     row: Optional[int] = None
@@ -10281,16 +9746,13 @@ class WriteDashboardLayoutComponent(model.Model):
     width: Optional[int] = None
     height: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        dashboard_layout_id: Optional[str] = None,
-        dashboard_element_id: Optional[str] = None,
-        row: Optional[int] = None,
-        column: Optional[int] = None,
-        width: Optional[int] = None,
-        height: Optional[int] = None
-    ):
+    def __init__(self, *,
+            dashboard_layout_id: Optional[str] = None,
+            dashboard_element_id: Optional[str] = None,
+            row: Optional[int] = None,
+            column: Optional[int] = None,
+            width: Optional[int] = None,
+            height: Optional[int] = None):
         self.dashboard_layout_id = dashboard_layout_id
         self.dashboard_element_id = dashboard_element_id
         self.row = row
@@ -10302,20 +9764,19 @@ class WriteDashboardLayoutComponent(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDatagroup(model.Model):
     """
-        Dynamic writeable type for Datagroup removes:
-    can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
+    Dynamic writeable type for Datagroup removes:
+can, created_at, id, model_name, name, trigger_check_at, trigger_error, trigger_value
 
-        Attributes:
-            stale_before: UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
-            triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
+    Attributes:
+        stale_before: UNIX timestamp before which cache entries are considered stale. Cannot be in the future.
+        triggered_at: UNIX timestamp at which this entry became triggered. Cannot be in the future.
     """
-
     stale_before: Optional[int] = None
     triggered_at: Optional[int] = None
 
-    def __init__(
-        self, *, stale_before: Optional[int] = None, triggered_at: Optional[int] = None
-    ):
+    def __init__(self, *,
+            stale_before: Optional[int] = None,
+            triggered_at: Optional[int] = None):
         self.stale_before = stale_before
         self.triggered_at = triggered_at
 
@@ -10323,39 +9784,39 @@ class WriteDatagroup(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnection(model.Model):
     """
-        Dynamic writeable type for DBConnection removes:
-    can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+    Dynamic writeable type for DBConnection removes:
+can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
 
-        Attributes:
-            name: Name of the connection. Also used as the unique identifier
-            host: Host name/address of server
-            port: Port number on server
-            username: Username for server authentication
-            password: (Write-Only) Password for server authentication
-            certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-            file_type: (Write-Only) Certificate keyfile type - .json or .p12
-            database: Database name
-            db_timezone: Time zone of database
-            query_timezone: Timezone to use in queries
-            schema: Scheme name
-            max_connections: Maximum number of concurrent connection to use
-            max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
-            ssl: Use SSL/TLS when connecting to server
-            verify_ssl: Verify the SSL
-            tmp_db_name: Name of temporary database (if used)
-            jdbc_additional_params: Additional params to add to JDBC connection string
-            pool_timeout: Connection Pool Timeout, in seconds
-            dialect_name: (Read/Write) SQL Dialect name
-            user_db_credentials: (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
-            user_attribute_fields: Fields whose values map to user attribute names
-            maintenance_cron: Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
-            sql_runner_precache_tables: Precache tables in the SQL Runner
-            sql_writing_with_info_schema: Fetch Information Schema For SQL Writing
-            after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-            pdt_context_override: Dynamic writeable type for DBConnectionOverride removes:
-    has_password
+    Attributes:
+        name: Name of the connection. Also used as the unique identifier
+        host: Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+        port: Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
+        username: Username for server authentication
+        password: (Write-Only) Password for server authentication
+        certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+        file_type: (Write-Only) Certificate keyfile type - .json or .p12
+        database: Database name
+        db_timezone: Time zone of database
+        query_timezone: Timezone to use in queries
+        schema: Schema name
+        max_connections: Maximum number of concurrent connection to use
+        max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+        ssl: Use SSL/TLS when connecting to server
+        verify_ssl: Verify the SSL
+        tmp_db_name: Name of temporary database (if used)
+        jdbc_additional_params: Additional params to add to JDBC connection string
+        pool_timeout: Connection Pool Timeout, in seconds
+        dialect_name: (Read/Write) SQL Dialect name
+        user_db_credentials: (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+        user_attribute_fields: Fields whose values map to user attribute names
+        maintenance_cron: Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+        sql_runner_precache_tables: Precache tables in the SQL Runner
+        sql_writing_with_info_schema: Fetch Information Schema For SQL Writing
+        after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+        pdt_context_override: Dynamic writeable type for DBConnectionOverride removes:
+has_password
+        uses_tns: Enable Transparent Network Substrate (TNS) connections
     """
-
     name: Optional[str] = None
     host: Optional[str] = None
     port: Optional[str] = None
@@ -10382,37 +9843,36 @@ class WriteDBConnection(model.Model):
     sql_writing_with_info_schema: Optional[bool] = None
     after_connect_statements: Optional[str] = None
     pdt_context_override: Optional["WriteDBConnectionOverride"] = None
+    uses_tns: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        host: Optional[str] = None,
-        port: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        certificate: Optional[str] = None,
-        file_type: Optional[str] = None,
-        database: Optional[str] = None,
-        db_timezone: Optional[str] = None,
-        query_timezone: Optional[str] = None,
-        schema: Optional[str] = None,
-        max_connections: Optional[int] = None,
-        max_billing_gigabytes: Optional[str] = None,
-        ssl: Optional[bool] = None,
-        verify_ssl: Optional[bool] = None,
-        tmp_db_name: Optional[str] = None,
-        jdbc_additional_params: Optional[str] = None,
-        pool_timeout: Optional[int] = None,
-        dialect_name: Optional[str] = None,
-        user_db_credentials: Optional[bool] = None,
-        user_attribute_fields: Optional[Sequence[str]] = None,
-        maintenance_cron: Optional[str] = None,
-        sql_runner_precache_tables: Optional[bool] = None,
-        sql_writing_with_info_schema: Optional[bool] = None,
-        after_connect_statements: Optional[str] = None,
-        pdt_context_override: Optional["WriteDBConnectionOverride"] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            host: Optional[str] = None,
+            port: Optional[str] = None,
+            username: Optional[str] = None,
+            password: Optional[str] = None,
+            certificate: Optional[str] = None,
+            file_type: Optional[str] = None,
+            database: Optional[str] = None,
+            db_timezone: Optional[str] = None,
+            query_timezone: Optional[str] = None,
+            schema: Optional[str] = None,
+            max_connections: Optional[int] = None,
+            max_billing_gigabytes: Optional[str] = None,
+            ssl: Optional[bool] = None,
+            verify_ssl: Optional[bool] = None,
+            tmp_db_name: Optional[str] = None,
+            jdbc_additional_params: Optional[str] = None,
+            pool_timeout: Optional[int] = None,
+            dialect_name: Optional[str] = None,
+            user_db_credentials: Optional[bool] = None,
+            user_attribute_fields: Optional[Sequence[str]] = None,
+            maintenance_cron: Optional[str] = None,
+            sql_runner_precache_tables: Optional[bool] = None,
+            sql_writing_with_info_schema: Optional[bool] = None,
+            after_connect_statements: Optional[str] = None,
+            pdt_context_override: Optional["WriteDBConnectionOverride"] = None,
+            uses_tns: Optional[bool] = None):
         self.name = name
         self.host = host
         self.port = port
@@ -10439,28 +9899,28 @@ class WriteDBConnection(model.Model):
         self.sql_writing_with_info_schema = sql_writing_with_info_schema
         self.after_connect_statements = after_connect_statements
         self.pdt_context_override = pdt_context_override
+        self.uses_tns = uses_tns
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteDBConnectionOverride(model.Model):
     """
-        Dynamic writeable type for DBConnectionOverride removes:
-    has_password
+    Dynamic writeable type for DBConnectionOverride removes:
+has_password
 
-        Attributes:
-            context: Context in which to override (`pdt` is the only allowed value)
-            host: Host name/address of server
-            port: Port number on server
-            username: Username for server authentication
-            password: (Write-Only) Password for server authentication
-            certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-            file_type: (Write-Only) Certificate keyfile type - .json or .p12
-            database: Database name
-            schema: Scheme name
-            jdbc_additional_params: Additional params to add to JDBC connection string
-            after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+    Attributes:
+        context: Context in which to override (`pdt` is the only allowed value)
+        host: Host name/address of server
+        port: Port number on server
+        username: Username for server authentication
+        password: (Write-Only) Password for server authentication
+        certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+        file_type: (Write-Only) Certificate keyfile type - .json or .p12
+        database: Database name
+        schema: Schema name
+        jdbc_additional_params: Additional params to add to JDBC connection string
+        after_connect_statements: SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
     """
-
     context: Optional[str] = None
     host: Optional[str] = None
     port: Optional[str] = None
@@ -10473,21 +9933,18 @@ class WriteDBConnectionOverride(model.Model):
     jdbc_additional_params: Optional[str] = None
     after_connect_statements: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        context: Optional[str] = None,
-        host: Optional[str] = None,
-        port: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        certificate: Optional[str] = None,
-        file_type: Optional[str] = None,
-        database: Optional[str] = None,
-        schema: Optional[str] = None,
-        jdbc_additional_params: Optional[str] = None,
-        after_connect_statements: Optional[str] = None
-    ):
+    def __init__(self, *,
+            context: Optional[str] = None,
+            host: Optional[str] = None,
+            port: Optional[str] = None,
+            username: Optional[str] = None,
+            password: Optional[str] = None,
+            certificate: Optional[str] = None,
+            file_type: Optional[str] = None,
+            database: Optional[str] = None,
+            schema: Optional[str] = None,
+            jdbc_additional_params: Optional[str] = None,
+            after_connect_statements: Optional[str] = None):
         self.context = context
         self.host = host
         self.port = port
@@ -10504,18 +9961,19 @@ class WriteDBConnectionOverride(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteFolderBase(model.Model):
     """
-        Dynamic writeable type for FolderBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+    Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
-        Attributes:
-            name: Unique Name
-            parent_id: Id of Parent. If the parent id is null, this is a root-level entry
+    Attributes:
+        name: Unique Name
+        parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: str
     parent_id: Optional[str] = None
 
-    def __init__(self, *, name: str, parent_id: Optional[str] = None):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None):
         self.name = name
         self.parent_id = parent_id
 
@@ -10523,18 +9981,19 @@ class WriteFolderBase(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteGitBranch(model.Model):
     """
-        Dynamic writeable type for GitBranch removes:
-    can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
+    Dynamic writeable type for GitBranch removes:
+can, remote, remote_name, error, message, owner_name, readonly, personal, is_local, is_remote, is_production, ahead_count, behind_count, commit_at, remote_ref
 
-        Attributes:
-            name: The short name on the local. Updating `name` results in `git checkout <new_name>`
-            ref: The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
+    Attributes:
+        name: The short name on the local. Updating `name` results in `git checkout <new_name>`
+        ref: The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
     """
-
     name: Optional[str] = None
     ref: Optional[str] = None
 
-    def __init__(self, *, name: Optional[str] = None, ref: Optional[str] = None):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            ref: Optional[str] = None):
         self.name = name
         self.ref = ref
 
@@ -10542,23 +10001,19 @@ class WriteGitBranch(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteGroup(model.Model):
     """
-        Dynamic writeable type for Group removes:
-    can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
+    Dynamic writeable type for Group removes:
+can, contains_current_user, external_group_id, externally_managed, id, include_by_default, user_count
 
-        Attributes:
-            can_add_to_content_metadata: Group can be used in content access controls
-            name: Name of group
+    Attributes:
+        can_add_to_content_metadata: Group can be used in content access controls
+        name: Name of group
     """
-
     can_add_to_content_metadata: Optional[bool] = None
     name: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        can_add_to_content_metadata: Optional[bool] = None,
-        name: Optional[str] = None
-    ):
+    def __init__(self, *,
+            can_add_to_content_metadata: Optional[bool] = None,
+            name: Optional[str] = None):
         self.can_add_to_content_metadata = can_add_to_content_metadata
         self.name = name
 
@@ -10566,29 +10021,25 @@ class WriteGroup(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepage(model.Model):
     """
-        Dynamic writeable type for Homepage removes:
-    can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
+    Dynamic writeable type for Homepage removes:
+can, content_metadata_id, created_at, homepage_sections, id, updated_at, user_id, primary_homepage
 
-        Attributes:
-            deleted_at: Date of homepage deletion
-            description: Description of the homepage
-            section_order: ids of the homepage sections in the order they should be displayed
-            title: Title of the homepage
+    Attributes:
+        deleted_at: Date of homepage deletion
+        description: Description of the homepage
+        section_order: ids of the homepage sections in the order they should be displayed
+        title: Title of the homepage
     """
-
     deleted_at: Optional[datetime.datetime] = None
     description: Optional[str] = None
     section_order: Optional[Sequence[int]] = None
     title: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        deleted_at: Optional[datetime.datetime] = None,
-        description: Optional[str] = None,
-        section_order: Optional[Sequence[int]] = None,
-        title: Optional[str] = None
-    ):
+    def __init__(self, *,
+            deleted_at: Optional[datetime.datetime] = None,
+            description: Optional[str] = None,
+            section_order: Optional[Sequence[int]] = None,
+            title: Optional[str] = None):
         self.deleted_at = deleted_at
         self.description = description
         self.section_order = section_order
@@ -10598,25 +10049,24 @@ class WriteHomepage(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageItem(model.Model):
     """
-        Dynamic writeable type for HomepageItem removes:
-    can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
+    Dynamic writeable type for HomepageItem removes:
+can, content_created_by, content_favorite_id, content_metadata_id, content_updated_at, custom_image_url, description, favorite_count, id, image_url, location, section_fetch_time, title, url, view_count
 
-        Attributes:
-            custom_description: Custom description entered by the user, if present
-            custom_image_data_base64: (Write-Only) base64 encoded image data
-            custom_title: Custom title entered by the user, if present
-            custom_url: Custom url entered by the user, if present
-            dashboard_id: Dashboard to base this item on
-            homepage_section_id: Associated Homepage Section
-            look_id: Look to base this item on
-            lookml_dashboard_id: LookML Dashboard to base this item on
-            order: An arbitrary integer representing the sort order within the section
-            use_custom_description: Whether the custom description should be used instead of the content description, if the item is associated with content
-            use_custom_image: Whether the custom image should be used instead of the content image, if the item is associated with content
-            use_custom_title: Whether the custom title should be used instead of the content title, if the item is associated with content
-            use_custom_url: Whether the custom url should be used instead of the content url, if the item is associated with content
+    Attributes:
+        custom_description: Custom description entered by the user, if present
+        custom_image_data_base64: (Write-Only) base64 encoded image data
+        custom_title: Custom title entered by the user, if present
+        custom_url: Custom url entered by the user, if present
+        dashboard_id: Dashboard to base this item on
+        homepage_section_id: Associated Homepage Section
+        look_id: Look to base this item on
+        lookml_dashboard_id: LookML Dashboard to base this item on
+        order: An arbitrary integer representing the sort order within the section
+        use_custom_description: Whether the custom description should be used instead of the content description, if the item is associated with content
+        use_custom_image: Whether the custom image should be used instead of the content image, if the item is associated with content
+        use_custom_title: Whether the custom title should be used instead of the content title, if the item is associated with content
+        use_custom_url: Whether the custom url should be used instead of the content url, if the item is associated with content
     """
-
     custom_description: Optional[str] = None
     custom_image_data_base64: Optional[str] = None
     custom_title: Optional[str] = None
@@ -10631,23 +10081,20 @@ class WriteHomepageItem(model.Model):
     use_custom_title: Optional[bool] = None
     use_custom_url: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        custom_description: Optional[str] = None,
-        custom_image_data_base64: Optional[str] = None,
-        custom_title: Optional[str] = None,
-        custom_url: Optional[str] = None,
-        dashboard_id: Optional[int] = None,
-        homepage_section_id: Optional[int] = None,
-        look_id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        order: Optional[int] = None,
-        use_custom_description: Optional[bool] = None,
-        use_custom_image: Optional[bool] = None,
-        use_custom_title: Optional[bool] = None,
-        use_custom_url: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            custom_description: Optional[str] = None,
+            custom_image_data_base64: Optional[str] = None,
+            custom_title: Optional[str] = None,
+            custom_url: Optional[str] = None,
+            dashboard_id: Optional[int] = None,
+            homepage_section_id: Optional[int] = None,
+            look_id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            order: Optional[int] = None,
+            use_custom_description: Optional[bool] = None,
+            use_custom_image: Optional[bool] = None,
+            use_custom_title: Optional[bool] = None,
+            use_custom_url: Optional[bool] = None):
         self.custom_description = custom_description
         self.custom_image_data_base64 = custom_image_data_base64
         self.custom_title = custom_title
@@ -10666,32 +10113,28 @@ class WriteHomepageItem(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteHomepageSection(model.Model):
     """
-        Dynamic writeable type for HomepageSection removes:
-    can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
+    Dynamic writeable type for HomepageSection removes:
+can, created_at, detail_url, homepage_items, id, is_header, updated_at, visible_item_order
 
-        Attributes:
-            deleted_at: Time at which this section was deleted.
-            homepage_id: Id reference to parent homepage
-            item_order: ids of the homepage items in the order they should be displayed
-            title: Name of row
-            description: Description of the content found in this section.
+    Attributes:
+        deleted_at: Time at which this section was deleted.
+        homepage_id: Id reference to parent homepage
+        item_order: ids of the homepage items in the order they should be displayed
+        title: Name of row
+        description: Description of the content found in this section.
     """
-
     deleted_at: Optional[datetime.datetime] = None
     homepage_id: Optional[int] = None
     item_order: Optional[Sequence[int]] = None
     title: Optional[str] = None
     description: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        deleted_at: Optional[datetime.datetime] = None,
-        homepage_id: Optional[int] = None,
-        item_order: Optional[Sequence[int]] = None,
-        title: Optional[str] = None,
-        description: Optional[str] = None
-    ):
+    def __init__(self, *,
+            deleted_at: Optional[datetime.datetime] = None,
+            homepage_id: Optional[int] = None,
+            item_order: Optional[Sequence[int]] = None,
+            title: Optional[str] = None,
+            description: Optional[str] = None):
         self.deleted_at = deleted_at
         self.homepage_id = homepage_id
         self.item_order = item_order
@@ -10702,26 +10145,22 @@ class WriteHomepageSection(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegration(model.Model):
     """
-        Dynamic writeable type for Integration removes:
-    can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
+    Dynamic writeable type for Integration removes:
+can, id, integration_hub_id, label, description, supported_formats, supported_action_types, supported_formattings, supported_visualization_formattings, supported_download_settings, icon_url, uses_oauth, required_fields, privacy_link, delegate_oauth
 
-        Attributes:
-            enabled: Whether the integration is available to users.
-            params: Array of params for the integration.
-            installed_delegate_oauth_targets: Whether the integration is available to users.
+    Attributes:
+        enabled: Whether the integration is available to users.
+        params: Array of params for the integration.
+        installed_delegate_oauth_targets: Whether the integration is available to users.
     """
-
     enabled: Optional[bool] = None
     params: Optional[Sequence["IntegrationParam"]] = None
     installed_delegate_oauth_targets: Optional[Sequence[int]] = None
 
-    def __init__(
-        self,
-        *,
-        enabled: Optional[bool] = None,
-        params: Optional[Sequence["IntegrationParam"]] = None,
-        installed_delegate_oauth_targets: Optional[Sequence[int]] = None
-    ):
+    def __init__(self, *,
+            enabled: Optional[bool] = None,
+            params: Optional[Sequence["IntegrationParam"]] = None,
+            installed_delegate_oauth_targets: Optional[Sequence[int]] = None):
         self.enabled = enabled
         self.params = params
         self.installed_delegate_oauth_targets = installed_delegate_oauth_targets
@@ -10730,20 +10169,19 @@ class WriteIntegration(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteIntegrationHub(model.Model):
     """
-        Dynamic writeable type for IntegrationHub removes:
-    can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
+    Dynamic writeable type for IntegrationHub removes:
+can, id, label, official, fetch_error_message, has_authorization_token, legal_agreement_signed, legal_agreement_required, legal_agreement_text
 
-        Attributes:
-            url: URL of the hub.
-            authorization_token: (Write-Only) An authorization key that will be sent to the integration hub on every request.
+    Attributes:
+        url: URL of the hub.
+        authorization_token: (Write-Only) An authorization key that will be sent to the integration hub on every request.
     """
-
     url: Optional[str] = None
     authorization_token: Optional[str] = None
 
-    def __init__(
-        self, *, url: Optional[str] = None, authorization_token: Optional[str] = None
-    ):
+    def __init__(self, *,
+            url: Optional[str] = None,
+            authorization_token: Optional[str] = None):
         self.url = url
         self.authorization_token = authorization_token
 
@@ -10751,39 +10189,35 @@ class WriteIntegrationHub(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResources(model.Model):
     """
-        Dynamic writeable type for InternalHelpResources removes:
-    can
+    Dynamic writeable type for InternalHelpResources removes:
+can
 
-        Attributes:
-            enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
+    Attributes:
+        enabled: If true and internal help resources content is not blank then the link for internal help resources will be shown in the help menu and the content displayed within Looker
     """
-
     enabled: Optional[bool] = None
 
-    def __init__(self, *, enabled: Optional[bool] = None):
+    def __init__(self, *,
+            enabled: Optional[bool] = None):
         self.enabled = enabled
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteInternalHelpResourcesContent(model.Model):
     """
-        Dynamic writeable type for InternalHelpResourcesContent removes:
-    can
+    Dynamic writeable type for InternalHelpResourcesContent removes:
+can
 
-        Attributes:
-            organization_name: Text to display in the help menu item which will display the internal help resources
-            markdown_content: Content to be displayed in the internal help resources page/modal
+    Attributes:
+        organization_name: Text to display in the help menu item which will display the internal help resources
+        markdown_content: Content to be displayed in the internal help resources page/modal
     """
-
     organization_name: Optional[str] = None
     markdown_content: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        organization_name: Optional[str] = None,
-        markdown_content: Optional[str] = None
-    ):
+    def __init__(self, *,
+            organization_name: Optional[str] = None,
+            markdown_content: Optional[str] = None):
         self.organization_name = organization_name
         self.markdown_content = markdown_content
 
@@ -10791,46 +10225,45 @@ class WriteInternalHelpResourcesContent(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteLDAPConfig(model.Model):
     """
-        Dynamic writeable type for LDAPConfig removes:
-    can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
+    Dynamic writeable type for LDAPConfig removes:
+can, default_new_user_groups, default_new_user_roles, groups, has_auth_password, modified_at, modified_by, user_attributes, url
 
-        Attributes:
-            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-            auth_password: (Write-Only)  Password for the LDAP account used to access the LDAP server
-            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
-            auth_username: Distinguished name of LDAP account used to access the LDAP server
-            connection_host: LDAP server hostname
-            connection_port: LDAP host port
-            connection_tls: Use Transport Layer Security
-            connection_tls_no_verify: Do not verify peer when using TLS
-            default_new_user_group_ids: (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
-            default_new_user_role_ids: (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
-            enabled: Enable/Disable LDAP authentication for the server
-            force_no_page: Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
-            groups_base_dn: Base dn for finding groups in LDAP searches
-            groups_finder_type: Identifier for a strategy for how Looker will search for groups in the LDAP server
-            groups_member_attribute: LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
-            groups_objectclasses: Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
-            groups_user_attribute: LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
-            groups_with_role_ids: (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
-            merge_new_users_by_email: Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
-            set_roles_from_groups: Set user roles in Looker based on groups from LDAP
-            test_ldap_password: (Write-Only)  Test LDAP user password. For ldap tests only.
-            test_ldap_user: (Write-Only)  Test LDAP user login id. For ldap tests only.
-            user_attribute_map_email: Name of user record attributes used to indicate email address field
-            user_attribute_map_first_name: Name of user record attributes used to indicate first name
-            user_attribute_map_last_name: Name of user record attributes used to indicate last name
-            user_attribute_map_ldap_id: Name of user record attributes used to indicate unique record id
-            user_attributes_with_ids: (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
-            user_bind_base_dn: Distinguished name of LDAP node used as the base for user searches
-            user_custom_filter: (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
-            user_id_attribute_names: Name(s) of user record attributes used for matching user login id (comma separated list)
-            user_objectclass: (Optional) Name of user record objectclass used for finding user during login id
-            allow_normal_group_membership: Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-            allow_roles_from_normal_groups: LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
-            allow_direct_roles: Allows roles to be directly assigned to LDAP auth'd users.
+    Attributes:
+        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+        auth_password: (Write-Only)  Password for the LDAP account used to access the LDAP server
+        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in LDAP if set to true
+        auth_username: Distinguished name of LDAP account used to access the LDAP server
+        connection_host: LDAP server hostname
+        connection_port: LDAP host port
+        connection_tls: Use Transport Layer Security
+        connection_tls_no_verify: Do not verify peer when using TLS
+        default_new_user_group_ids: (Write-Only)  Array of ids of groups that will be applied to new users the first time they login via LDAP
+        default_new_user_role_ids: (Write-Only)  Array of ids of roles that will be applied to new users the first time they login via LDAP
+        enabled: Enable/Disable LDAP authentication for the server
+        force_no_page: Don't attempt to do LDAP search result paging (RFC 2696) even if the LDAP server claims to support it.
+        groups_base_dn: Base dn for finding groups in LDAP searches
+        groups_finder_type: Identifier for a strategy for how Looker will search for groups in the LDAP server
+        groups_member_attribute: LDAP Group attribute that signifies the members of the groups. Most commonly 'member'
+        groups_objectclasses: Optional comma-separated list of supported LDAP objectclass for groups when doing groups searches
+        groups_user_attribute: LDAP Group attribute that signifies the user in a group. Most commonly 'dn'
+        groups_with_role_ids: (Read/Write) Array of mappings between LDAP Groups and arrays of Looker Role ids
+        merge_new_users_by_email: Merge first-time ldap login to existing user account by email addresses. When a user logs in for the first time via ldap this option will connect this user into their existing account by finding the account with a matching email address. Otherwise a new user account will be created for the user.
+        set_roles_from_groups: Set user roles in Looker based on groups from LDAP
+        test_ldap_password: (Write-Only)  Test LDAP user password. For ldap tests only.
+        test_ldap_user: (Write-Only)  Test LDAP user login id. For ldap tests only.
+        user_attribute_map_email: Name of user record attributes used to indicate email address field
+        user_attribute_map_first_name: Name of user record attributes used to indicate first name
+        user_attribute_map_last_name: Name of user record attributes used to indicate last name
+        user_attribute_map_ldap_id: Name of user record attributes used to indicate unique record id
+        user_attributes_with_ids: (Read/Write) Array of mappings between LDAP User Attributes and arrays of Looker User Attribute ids
+        user_bind_base_dn: Distinguished name of LDAP node used as the base for user searches
+        user_custom_filter: (Optional) Custom RFC-2254 filter clause for use in finding user during login. Combined via 'and' with the other generated filter clauses.
+        user_id_attribute_names: Name(s) of user record attributes used for matching user login id (comma separated list)
+        user_objectclass: (Optional) Name of user record objectclass used for finding user during login id
+        allow_normal_group_membership: Allow LDAP auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+        allow_roles_from_normal_groups: LDAP auth'd users will be able to inherit roles from non-reflected Looker groups.
+        allow_direct_roles: Allows roles to be directly assigned to LDAP auth'd users.
     """
-
     alternate_email_login_allowed: Optional[bool] = None
     auth_password: Optional[str] = None
     auth_requires_role: Optional[bool] = None
@@ -10866,44 +10299,41 @@ class WriteLDAPConfig(model.Model):
     allow_roles_from_normal_groups: Optional[bool] = None
     allow_direct_roles: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        alternate_email_login_allowed: Optional[bool] = None,
-        auth_password: Optional[str] = None,
-        auth_requires_role: Optional[bool] = None,
-        auth_username: Optional[str] = None,
-        connection_host: Optional[str] = None,
-        connection_port: Optional[str] = None,
-        connection_tls: Optional[bool] = None,
-        connection_tls_no_verify: Optional[bool] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        enabled: Optional[bool] = None,
-        force_no_page: Optional[bool] = None,
-        groups_base_dn: Optional[str] = None,
-        groups_finder_type: Optional[str] = None,
-        groups_member_attribute: Optional[str] = None,
-        groups_objectclasses: Optional[str] = None,
-        groups_user_attribute: Optional[str] = None,
-        groups_with_role_ids: Optional[Sequence["LDAPGroupWrite"]] = None,
-        merge_new_users_by_email: Optional[bool] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        test_ldap_password: Optional[str] = None,
-        test_ldap_user: Optional[str] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        user_attribute_map_ldap_id: Optional[str] = None,
-        user_attributes_with_ids: Optional[Sequence["LDAPUserAttributeWrite"]] = None,
-        user_bind_base_dn: Optional[str] = None,
-        user_custom_filter: Optional[str] = None,
-        user_id_attribute_names: Optional[str] = None,
-        user_objectclass: Optional[str] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            alternate_email_login_allowed: Optional[bool] = None,
+            auth_password: Optional[str] = None,
+            auth_requires_role: Optional[bool] = None,
+            auth_username: Optional[str] = None,
+            connection_host: Optional[str] = None,
+            connection_port: Optional[str] = None,
+            connection_tls: Optional[bool] = None,
+            connection_tls_no_verify: Optional[bool] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            enabled: Optional[bool] = None,
+            force_no_page: Optional[bool] = None,
+            groups_base_dn: Optional[str] = None,
+            groups_finder_type: Optional[str] = None,
+            groups_member_attribute: Optional[str] = None,
+            groups_objectclasses: Optional[str] = None,
+            groups_user_attribute: Optional[str] = None,
+            groups_with_role_ids: Optional[Sequence["LDAPGroupWrite"]] = None,
+            merge_new_users_by_email: Optional[bool] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            test_ldap_password: Optional[str] = None,
+            test_ldap_user: Optional[str] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            user_attribute_map_ldap_id: Optional[str] = None,
+            user_attributes_with_ids: Optional[Sequence["LDAPUserAttributeWrite"]] = None,
+            user_bind_base_dn: Optional[str] = None,
+            user_custom_filter: Optional[str] = None,
+            user_id_attribute_names: Optional[str] = None,
+            user_objectclass: Optional[str] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None):
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.auth_password = auth_password
         self.auth_requires_role = auth_requires_role
@@ -10943,45 +10373,41 @@ class WriteLDAPConfig(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteLegacyFeature(model.Model):
     """
-        Dynamic writeable type for LegacyFeature removes:
-    can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
+    Dynamic writeable type for LegacyFeature removes:
+can, id, name, description, enabled, disallowed_as_of_version, disable_on_upgrade_to_version, end_of_life_version, documentation_url, approximate_disable_date, approximate_end_of_life_date, has_disabled_on_upgrade
 
-        Attributes:
-            enabled_locally: Whether this feature has been enabled by a user
+    Attributes:
+        enabled_locally: Whether this feature has been enabled by a user
     """
-
     enabled_locally: Optional[bool] = None
 
-    def __init__(self, *, enabled_locally: Optional[bool] = None):
+    def __init__(self, *,
+            enabled_locally: Optional[bool] = None):
         self.enabled_locally = enabled_locally
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteLookmlModel(model.Model):
     """
-        Dynamic writeable type for LookmlModel removes:
-    can, explores, has_content, label
+    Dynamic writeable type for LookmlModel removes:
+can, explores, has_content, label
 
-        Attributes:
-            allowed_db_connection_names: Array of names of connections this model is allowed to use
-            name: Name of the model. Also used as the unique identifier
-            project_name: Name of project containing the model
-            unlimited_db_connections: Is this model allowed to use all current and future connections
+    Attributes:
+        allowed_db_connection_names: Array of names of connections this model is allowed to use
+        name: Name of the model. Also used as the unique identifier
+        project_name: Name of project containing the model
+        unlimited_db_connections: Is this model allowed to use all current and future connections
     """
-
     allowed_db_connection_names: Optional[Sequence[str]] = None
     name: Optional[str] = None
     project_name: Optional[str] = None
     unlimited_db_connections: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        allowed_db_connection_names: Optional[Sequence[str]] = None,
-        name: Optional[str] = None,
-        project_name: Optional[str] = None,
-        unlimited_db_connections: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            allowed_db_connection_names: Optional[Sequence[str]] = None,
+            name: Optional[str] = None,
+            project_name: Optional[str] = None,
+            unlimited_db_connections: Optional[bool] = None):
         self.allowed_db_connection_names = allowed_db_connection_names
         self.name = name
         self.project_name = project_name
@@ -10991,27 +10417,26 @@ class WriteLookmlModel(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteLookWithQuery(model.Model):
     """
-        Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
+    Dynamic writeable type for LookWithQuery removes:
+can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, user, url
 
-        Attributes:
-            title: Look Title
-            deleted: Whether or not a look is 'soft' deleted.
-            description: Description
-            is_run_on_load: auto-run query when Look viewed
-            public: Is Public
-            query_id: Query Id
-            folder: Dynamic writeable type for FolderBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            folder_id: Folder Id
-            user_id: User Id
-            space_id: Space Id
-            space: Dynamic writeable type for SpaceBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
-            query: Dynamic writeable type for Query removes:
-    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+    Attributes:
+        title: Look Title
+        deleted: Whether or not a look is 'soft' deleted.
+        description: Description
+        is_run_on_load: auto-run query when Look viewed
+        public: Is Public
+        query_id: Query Id
+        folder: Dynamic writeable type for FolderBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        folder_id: Folder Id
+        user_id: User Id
+        space_id: Space Id
+        space: Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
-
     title: Optional[str] = None
     deleted: Optional[bool] = None
     description: Optional[str] = None
@@ -11025,22 +10450,19 @@ class WriteLookWithQuery(model.Model):
     space: Optional["WriteSpaceBase"] = None
     query: Optional["WriteQuery"] = None
 
-    def __init__(
-        self,
-        *,
-        title: Optional[str] = None,
-        deleted: Optional[bool] = None,
-        description: Optional[str] = None,
-        is_run_on_load: Optional[bool] = None,
-        public: Optional[bool] = None,
-        query_id: Optional[int] = None,
-        folder: Optional["WriteFolderBase"] = None,
-        folder_id: Optional[str] = None,
-        user_id: Optional[int] = None,
-        space_id: Optional[str] = None,
-        space: Optional["WriteSpaceBase"] = None,
-        query: Optional["WriteQuery"] = None
-    ):
+    def __init__(self, *,
+            title: Optional[str] = None,
+            deleted: Optional[bool] = None,
+            description: Optional[str] = None,
+            is_run_on_load: Optional[bool] = None,
+            public: Optional[bool] = None,
+            query_id: Optional[int] = None,
+            folder: Optional["WriteFolderBase"] = None,
+            folder_id: Optional[str] = None,
+            user_id: Optional[int] = None,
+            space_id: Optional[str] = None,
+            space: Optional["WriteSpaceBase"] = None,
+            query: Optional["WriteQuery"] = None):
         self.title = title
         self.deleted = deleted
         self.description = description
@@ -11058,19 +10480,18 @@ class WriteLookWithQuery(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteMergeQuery(model.Model):
     """
-        Dynamic writeable type for MergeQuery removes:
-    can, id, result_maker_id
+    Dynamic writeable type for MergeQuery removes:
+can, id, result_maker_id
 
-        Attributes:
-            column_limit: Column Limit
-            dynamic_fields: Dynamic Fields
-            pivots: Pivots
-            sorts: Sorts
-            source_queries: Source Queries defining the results to be merged.
-            total: Total
-            vis_config: Visualization Config
+    Attributes:
+        column_limit: Column Limit
+        dynamic_fields: Dynamic Fields
+        pivots: Pivots
+        sorts: Sorts
+        source_queries: Source Queries defining the results to be merged.
+        total: Total
+        vis_config: Visualization Config
     """
-
     column_limit: Optional[str] = None
     dynamic_fields: Optional[str] = None
     pivots: Optional[Sequence[str]] = None
@@ -11079,17 +10500,14 @@ class WriteMergeQuery(model.Model):
     total: Optional[bool] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        column_limit: Optional[str] = None,
-        dynamic_fields: Optional[str] = None,
-        pivots: Optional[Sequence[str]] = None,
-        sorts: Optional[Sequence[str]] = None,
-        source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
-        total: Optional[bool] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            column_limit: Optional[str] = None,
+            dynamic_fields: Optional[str] = None,
+            pivots: Optional[Sequence[str]] = None,
+            sorts: Optional[Sequence[str]] = None,
+            source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
+            total: Optional[bool] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None):
         self.column_limit = column_limit
         self.dynamic_fields = dynamic_fields
         self.pivots = pivots
@@ -11102,20 +10520,19 @@ class WriteMergeQuery(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteModelSet(model.Model):
     """
-        Dynamic writeable type for ModelSet removes:
-    can, all_access, built_in, id, url
+    Dynamic writeable type for ModelSet removes:
+can, all_access, built_in, id, url
 
-        Attributes:
-            models:
-            name: Name of ModelSet
+    Attributes:
+        models:
+        name: Name of ModelSet
     """
-
     models: Optional[Sequence[str]] = None
     name: Optional[str] = None
 
-    def __init__(
-        self, *, models: Optional[Sequence[str]] = None, name: Optional[str] = None
-    ):
+    def __init__(self, *,
+            models: Optional[Sequence[str]] = None,
+            name: Optional[str] = None):
         self.models = models
         self.name = name
 
@@ -11123,36 +10540,35 @@ class WriteModelSet(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteOIDCConfig(model.Model):
     """
-        Dynamic writeable type for OIDCConfig removes:
-    can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
+    Dynamic writeable type for OIDCConfig removes:
+can, default_new_user_groups, default_new_user_roles, groups, modified_at, modified_by, test_slug, user_attributes, url
 
-        Attributes:
-            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-            audience: OpenID Provider Audience
-            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
-            authorization_endpoint: OpenID Provider Authorization Url
-            default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
-            default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
-            enabled: Enable/Disable OIDC authentication for the server
-            groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-            groups_with_role_ids: (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
-            identifier: Relying Party Identifier (provided by OpenID Provider)
-            issuer: OpenID Provider Issuer
-            new_user_migration_types: Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-            scopes: Array of scopes to request.
-            secret: (Write-Only) Relying Party Secret (provided by OpenID Provider)
-            set_roles_from_groups: Set user roles in Looker based on groups from OIDC
-            token_endpoint: OpenID Provider Token Url
-            user_attribute_map_email: Name of user record attributes used to indicate email address field
-            user_attribute_map_first_name: Name of user record attributes used to indicate first name
-            user_attribute_map_last_name: Name of user record attributes used to indicate last name
-            user_attributes_with_ids: (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
-            userinfo_endpoint: OpenID Provider User Information Url
-            allow_normal_group_membership: Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-            allow_roles_from_normal_groups: OIDC auth'd users will inherit roles from non-reflected Looker groups.
-            allow_direct_roles: Allows roles to be directly assigned to OIDC auth'd users.
+    Attributes:
+        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+        audience: OpenID Provider Audience
+        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in OIDC if set to true
+        authorization_endpoint: OpenID Provider Authorization Url
+        default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via OIDC
+        default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via OIDC
+        enabled: Enable/Disable OIDC authentication for the server
+        groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+        groups_with_role_ids: (Read/Write) Array of mappings between OIDC Groups and arrays of Looker Role ids
+        identifier: Relying Party Identifier (provided by OpenID Provider)
+        issuer: OpenID Provider Issuer
+        new_user_migration_types: Merge first-time oidc login to existing user account by email addresses. When a user logs in for the first time via oidc this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+        scopes: Array of scopes to request.
+        secret: (Write-Only) Relying Party Secret (provided by OpenID Provider)
+        set_roles_from_groups: Set user roles in Looker based on groups from OIDC
+        token_endpoint: OpenID Provider Token Url
+        user_attribute_map_email: Name of user record attributes used to indicate email address field
+        user_attribute_map_first_name: Name of user record attributes used to indicate first name
+        user_attribute_map_last_name: Name of user record attributes used to indicate last name
+        user_attributes_with_ids: (Read/Write) Array of mappings between OIDC User Attributes and arrays of Looker User Attribute ids
+        userinfo_endpoint: OpenID Provider User Information Url
+        allow_normal_group_membership: Allow OIDC auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+        allow_roles_from_normal_groups: OIDC auth'd users will inherit roles from non-reflected Looker groups.
+        allow_direct_roles: Allows roles to be directly assigned to OIDC auth'd users.
     """
-
     alternate_email_login_allowed: Optional[bool] = None
     audience: Optional[str] = None
     auth_requires_role: Optional[bool] = None
@@ -11178,34 +10594,31 @@ class WriteOIDCConfig(model.Model):
     allow_roles_from_normal_groups: Optional[bool] = None
     allow_direct_roles: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        alternate_email_login_allowed: Optional[bool] = None,
-        audience: Optional[str] = None,
-        auth_requires_role: Optional[bool] = None,
-        authorization_endpoint: Optional[str] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        enabled: Optional[bool] = None,
-        groups_attribute: Optional[str] = None,
-        groups_with_role_ids: Optional[Sequence["OIDCGroupWrite"]] = None,
-        identifier: Optional[str] = None,
-        issuer: Optional[str] = None,
-        new_user_migration_types: Optional[str] = None,
-        scopes: Optional[Sequence[str]] = None,
-        secret: Optional[str] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        token_endpoint: Optional[str] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        user_attributes_with_ids: Optional[Sequence["OIDCUserAttributeWrite"]] = None,
-        userinfo_endpoint: Optional[str] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            alternate_email_login_allowed: Optional[bool] = None,
+            audience: Optional[str] = None,
+            auth_requires_role: Optional[bool] = None,
+            authorization_endpoint: Optional[str] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            enabled: Optional[bool] = None,
+            groups_attribute: Optional[str] = None,
+            groups_with_role_ids: Optional[Sequence["OIDCGroupWrite"]] = None,
+            identifier: Optional[str] = None,
+            issuer: Optional[str] = None,
+            new_user_migration_types: Optional[str] = None,
+            scopes: Optional[Sequence[str]] = None,
+            secret: Optional[str] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            token_endpoint: Optional[str] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            user_attributes_with_ids: Optional[Sequence["OIDCUserAttributeWrite"]] = None,
+            userinfo_endpoint: Optional[str] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None):
         self.alternate_email_login_allowed = alternate_email_login_allowed
         self.audience = audience
         self.auth_requires_role = auth_requires_role
@@ -11235,29 +10648,25 @@ class WriteOIDCConfig(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WritePasswordConfig(model.Model):
     """
-        Dynamic writeable type for PasswordConfig removes:
-    can
+    Dynamic writeable type for PasswordConfig removes:
+can
 
-        Attributes:
-            min_length: Minimum number of characters required for a new password.  Must be between 7 and 100
-            require_numeric: Require at least one numeric character
-            require_upperlower: Require at least one uppercase and one lowercase letter
-            require_special: Require at least one special character
+    Attributes:
+        min_length: Minimum number of characters required for a new password.  Must be between 7 and 100
+        require_numeric: Require at least one numeric character
+        require_upperlower: Require at least one uppercase and one lowercase letter
+        require_special: Require at least one special character
     """
-
     min_length: Optional[int] = None
     require_numeric: Optional[bool] = None
     require_upperlower: Optional[bool] = None
     require_special: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        min_length: Optional[int] = None,
-        require_numeric: Optional[bool] = None,
-        require_upperlower: Optional[bool] = None,
-        require_special: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            min_length: Optional[int] = None,
+            require_numeric: Optional[bool] = None,
+            require_upperlower: Optional[bool] = None,
+            require_special: Optional[bool] = None):
         self.min_length = min_length
         self.require_numeric = require_numeric
         self.require_upperlower = require_upperlower
@@ -11267,20 +10676,19 @@ class WritePasswordConfig(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WritePermissionSet(model.Model):
     """
-        Dynamic writeable type for PermissionSet removes:
-    can, all_access, built_in, id, url
+    Dynamic writeable type for PermissionSet removes:
+can, all_access, built_in, id, url
 
-        Attributes:
-            name: Name of PermissionSet
-            permissions:
+    Attributes:
+        name: Name of PermissionSet
+        permissions:
     """
-
     name: Optional[str] = None
     permissions: Optional[Sequence[str]] = None
 
-    def __init__(
-        self, *, name: Optional[str] = None, permissions: Optional[Sequence[str]] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            permissions: Optional[Sequence[str]] = None):
         self.name = name
         self.permissions = permissions
 
@@ -11288,29 +10696,28 @@ class WritePermissionSet(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteProject(model.Model):
     """
-        Dynamic writeable type for Project removes:
-    can, id, uses_git, is_example
+    Dynamic writeable type for Project removes:
+can, id, uses_git, is_example
 
-        Attributes:
-            name: Project display name
-            git_remote_url: Git remote repository url
-            git_username: Git username for HTTPS authentication. (For production only, if using user attributes.)
-            git_password: (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
-            git_production_branch_name: Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
-            use_git_cookie_auth: If true, the project uses a git cookie for authentication.
-            git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
-            git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
-            git_service_name: Name of the git service provider
-            git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
-            git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.)
-            deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
-            unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
-            pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
-            validation_required: Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
-            git_release_mgmt_enabled: If true, advanced git release management is enabled for this project
-            allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
+    Attributes:
+        name: Project display name
+        git_remote_url: Git remote repository url
+        git_username: Git username for HTTPS authentication. (For production only, if using user attributes.)
+        git_password: (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
+        git_production_branch_name: Git production branch name. Defaults to master. Supported only in Looker 21.0 and higher.
+        use_git_cookie_auth: If true, the project uses a git cookie for authentication.
+        git_username_user_attribute: User attribute name for username in per-user HTTPS authentication.
+        git_password_user_attribute: User attribute name for password in per-user HTTPS authentication.
+        git_service_name: Name of the git service provider
+        git_application_server_http_port: Port that HTTP(S) application server is running on (for PRs, file browsing, etc.)
+        git_application_server_http_scheme: Scheme that is running on application server (for PRs, file browsing, etc.)
+        deploy_secret: (Write-Only) Optional secret token with which to authenticate requests to the webhook deploy endpoint. If not set, endpoint is unauthenticated.
+        unset_deploy_secret: (Write-Only) When true, unsets the deploy secret to allow unauthenticated access to the webhook deploy endpoint.
+        pull_request_mode: The git pull request policy for this project. Valid values are: "off", "links", "recommended", "required".
+        validation_required: Validation policy: If true, the project must pass validation checks before project changes can be committed to the git repository
+        git_release_mgmt_enabled: If true, advanced git release management is enabled for this project
+        allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
     """
-
     name: Optional[str] = None
     git_remote_url: Optional[str] = None
     git_username: Optional[str] = None
@@ -11329,27 +10736,24 @@ class WriteProject(model.Model):
     git_release_mgmt_enabled: Optional[bool] = None
     allow_warnings: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        git_remote_url: Optional[str] = None,
-        git_username: Optional[str] = None,
-        git_password: Optional[str] = None,
-        git_production_branch_name: Optional[str] = None,
-        use_git_cookie_auth: Optional[bool] = None,
-        git_username_user_attribute: Optional[str] = None,
-        git_password_user_attribute: Optional[str] = None,
-        git_service_name: Optional[str] = None,
-        git_application_server_http_port: Optional[int] = None,
-        git_application_server_http_scheme: Optional[str] = None,
-        deploy_secret: Optional[str] = None,
-        unset_deploy_secret: Optional[bool] = None,
-        pull_request_mode: Optional["PullRequestMode"] = None,
-        validation_required: Optional[bool] = None,
-        git_release_mgmt_enabled: Optional[bool] = None,
-        allow_warnings: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            git_remote_url: Optional[str] = None,
+            git_username: Optional[str] = None,
+            git_password: Optional[str] = None,
+            git_production_branch_name: Optional[str] = None,
+            use_git_cookie_auth: Optional[bool] = None,
+            git_username_user_attribute: Optional[str] = None,
+            git_password_user_attribute: Optional[str] = None,
+            git_service_name: Optional[str] = None,
+            git_application_server_http_port: Optional[int] = None,
+            git_application_server_http_scheme: Optional[str] = None,
+            deploy_secret: Optional[str] = None,
+            unset_deploy_secret: Optional[bool] = None,
+            pull_request_mode: Optional["PullRequestMode"] = None,
+            validation_required: Optional[bool] = None,
+            git_release_mgmt_enabled: Optional[bool] = None,
+            allow_warnings: Optional[bool] = None):
         self.name = name
         self.git_remote_url = git_remote_url
         self.git_username = git_username
@@ -11372,32 +10776,31 @@ class WriteProject(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteQuery(model.Model):
     """
-        Dynamic writeable type for Query removes:
-    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+    Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 
-        Attributes:
-            model: Model
-            view: Explore Name
-            fields: Fields
-            pivots: Pivots
-            fill_fields: Fill Fields
-            filters: Filters
-            filter_expression: Filter Expression
-            sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-            limit: Limit
-            column_limit: Column Limit
-            total: Total
-            row_total: Raw Total
-            subtotals: Fields on which to run subtotals
-            vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
-            filter_config: The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
-            visible_ui_sections: Visible UI Sections
-            dynamic_fields: Dynamic Fields
-            client_id: Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
-            query_timezone: Query Timezone
-            runtime: (DEPRECATED) Runtime (Deprecated)
+    Attributes:
+        model: Model
+        view: Explore Name
+        fields: Fields
+        pivots: Pivots
+        fill_fields: Fill Fields
+        filters: Filters
+        filter_expression: Filter Expression
+        sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
+        limit: Limit
+        column_limit: Column Limit
+        total: Total
+        row_total: Raw Total
+        subtotals: Fields on which to run subtotals
+        vis_config: Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.
+        filter_config: The filter_config represents the state of the filter UI on the explore page for a given query. When running a query via the Looker UI, this parameter takes precedence over "filters". When creating a query or modifying an existing query, "filter_config" should be set to null. Setting it to any other value could cause unexpected filtering behavior. The format should be considered opaque.
+        visible_ui_sections: Visible UI Sections
+        dynamic_fields: Dynamic Fields
+        client_id: Client Id: used to generate shortened explore URLs. If set by client, must be a unique 22 character alphanumeric string. Otherwise one will be generated.
+        query_timezone: Query Timezone
+        runtime: (DEPRECATED) Runtime (Deprecated)
     """
-
     model: str
     view: str
     fields: Optional[Sequence[str]] = None
@@ -11419,30 +10822,27 @@ class WriteQuery(model.Model):
     query_timezone: Optional[str] = None
     runtime: Optional[float] = None
 
-    def __init__(
-        self,
-        *,
-        model: str,
-        view: str,
-        fields: Optional[Sequence[str]] = None,
-        pivots: Optional[Sequence[str]] = None,
-        fill_fields: Optional[Sequence[str]] = None,
-        filters: Optional[MutableMapping[str, Any]] = None,
-        filter_expression: Optional[str] = None,
-        sorts: Optional[Sequence[str]] = None,
-        limit: Optional[str] = None,
-        column_limit: Optional[str] = None,
-        total: Optional[bool] = None,
-        row_total: Optional[str] = None,
-        subtotals: Optional[Sequence[str]] = None,
-        vis_config: Optional[MutableMapping[str, Any]] = None,
-        filter_config: Optional[MutableMapping[str, Any]] = None,
-        visible_ui_sections: Optional[str] = None,
-        dynamic_fields: Optional[str] = None,
-        client_id: Optional[str] = None,
-        query_timezone: Optional[str] = None,
-        runtime: Optional[float] = None
-    ):
+    def __init__(self, *,
+            model: str,
+            view: str,
+            fields: Optional[Sequence[str]] = None,
+            pivots: Optional[Sequence[str]] = None,
+            fill_fields: Optional[Sequence[str]] = None,
+            filters: Optional[MutableMapping[str, Any]] = None,
+            filter_expression: Optional[str] = None,
+            sorts: Optional[Sequence[str]] = None,
+            limit: Optional[str] = None,
+            column_limit: Optional[str] = None,
+            total: Optional[bool] = None,
+            row_total: Optional[str] = None,
+            subtotals: Optional[Sequence[str]] = None,
+            vis_config: Optional[MutableMapping[str, Any]] = None,
+            filter_config: Optional[MutableMapping[str, Any]] = None,
+            visible_ui_sections: Optional[str] = None,
+            dynamic_fields: Optional[str] = None,
+            client_id: Optional[str] = None,
+            query_timezone: Optional[str] = None,
+            runtime: Optional[float] = None):
         self.model = model
         self.view = view
         self.fields = fields
@@ -11468,26 +10868,22 @@ class WriteQuery(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteRepositoryCredential(model.Model):
     """
-        Dynamic writeable type for RepositoryCredential removes:
-    can, id, root_project_id, remote_url, is_configured
+    Dynamic writeable type for RepositoryCredential removes:
+can, id, root_project_id, remote_url, is_configured
 
-        Attributes:
-            git_username: Git username for HTTPS authentication.
-            git_password: (Write-Only) Git password for HTTPS authentication.
-            ssh_public_key: Public deploy key for SSH authentication.
+    Attributes:
+        git_username: Git username for HTTPS authentication.
+        git_password: (Write-Only) Git password for HTTPS authentication.
+        ssh_public_key: Public deploy key for SSH authentication.
     """
-
     git_username: Optional[str] = None
     git_password: Optional[str] = None
     ssh_public_key: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        git_username: Optional[str] = None,
-        git_password: Optional[str] = None,
-        ssh_public_key: Optional[str] = None
-    ):
+    def __init__(self, *,
+            git_username: Optional[str] = None,
+            git_password: Optional[str] = None,
+            ssh_public_key: Optional[str] = None):
         self.git_username = git_username
         self.git_password = git_password
         self.ssh_public_key = ssh_public_key
@@ -11496,51 +10892,47 @@ class WriteRepositoryCredential(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     """
-        Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+    Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
+id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
 
-        Attributes:
-            query: Dynamic writeable type for Query removes:
-    can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+    Attributes:
+        query: Dynamic writeable type for Query removes:
+can, id, slug, share_url, expanded_share_url, url, has_table_calculations
     """
-
     query: Optional["WriteQuery"] = None
 
-    def __init__(self, *, query: Optional["WriteQuery"] = None):
+    def __init__(self, *,
+            query: Optional["WriteQuery"] = None):
         self.query = query
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteRole(model.Model):
     """
-        Dynamic writeable type for Role removes:
-    can, id, url, users_url
+    Dynamic writeable type for Role removes:
+can, id, url, users_url
 
-        Attributes:
-            name: Name of Role
-            permission_set: Dynamic writeable type for PermissionSet removes:
-    can, all_access, built_in, id, url
-            permission_set_id: (Write-Only) Id of permission set
-            model_set: Dynamic writeable type for ModelSet removes:
-    can, all_access, built_in, id, url
-            model_set_id: (Write-Only) Id of model set
+    Attributes:
+        name: Name of Role
+        permission_set: Dynamic writeable type for PermissionSet removes:
+can, all_access, built_in, id, url
+        permission_set_id: (Write-Only) Id of permission set
+        model_set: Dynamic writeable type for ModelSet removes:
+can, all_access, built_in, id, url
+        model_set_id: (Write-Only) Id of model set
     """
-
     name: Optional[str] = None
     permission_set: Optional["WritePermissionSet"] = None
     permission_set_id: Optional[int] = None
     model_set: Optional["WriteModelSet"] = None
     model_set_id: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        permission_set: Optional["WritePermissionSet"] = None,
-        permission_set_id: Optional[int] = None,
-        model_set: Optional["WriteModelSet"] = None,
-        model_set_id: Optional[int] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            permission_set: Optional["WritePermissionSet"] = None,
+            permission_set_id: Optional[int] = None,
+            model_set: Optional["WriteModelSet"] = None,
+            model_set_id: Optional[int] = None):
         self.name = name
         self.permission_set = permission_set
         self.permission_set_id = permission_set_id
@@ -11551,36 +10943,35 @@ class WriteRole(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteSamlConfig(model.Model):
     """
-        Dynamic writeable type for SamlConfig removes:
-    can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+    Dynamic writeable type for SamlConfig removes:
+can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
 
-        Attributes:
-            enabled: Enable/Disable Saml authentication for the server
-            idp_cert: Identity Provider Certificate (provided by IdP)
-            idp_url: Identity Provider Url (provided by IdP)
-            idp_issuer: Identity Provider Issuer (provided by IdP)
-            idp_audience: Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
-            allowed_clock_drift: Count of seconds of clock drift to allow when validating timestamps of assertions.
-            user_attribute_map_email: Name of user record attributes used to indicate email address field
-            user_attribute_map_first_name: Name of user record attributes used to indicate first name
-            user_attribute_map_last_name: Name of user record attributes used to indicate last name
-            new_user_migration_types: Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
-            alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
-            default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
-            default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
-            set_roles_from_groups: Set user roles in Looker based on groups from Saml
-            groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
-            groups_with_role_ids: (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
-            auth_requires_role: Users will not be allowed to login at all unless a role for them is found in Saml if set to true
-            user_attributes_with_ids: (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
-            groups_finder_type: Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
-            groups_member_value: Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
-            bypass_login_page: Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
-            allow_normal_group_membership: Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
-            allow_roles_from_normal_groups: SAML auth'd users will inherit roles from non-reflected Looker groups.
-            allow_direct_roles: Allows roles to be directly assigned to SAML auth'd users.
+    Attributes:
+        enabled: Enable/Disable Saml authentication for the server
+        idp_cert: Identity Provider Certificate (provided by IdP)
+        idp_url: Identity Provider Url (provided by IdP)
+        idp_issuer: Identity Provider Issuer (provided by IdP)
+        idp_audience: Identity Provider Audience (set in IdP config). Optional in Looker. Set this only if you want Looker to validate the audience value returned by the IdP.
+        allowed_clock_drift: Count of seconds of clock drift to allow when validating timestamps of assertions.
+        user_attribute_map_email: Name of user record attributes used to indicate email address field
+        user_attribute_map_first_name: Name of user record attributes used to indicate first name
+        user_attribute_map_last_name: Name of user record attributes used to indicate last name
+        new_user_migration_types: Merge first-time saml login to existing user account by email addresses. When a user logs in for the first time via saml this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+        alternate_email_login_allowed: Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
+        default_new_user_role_ids: (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Saml
+        default_new_user_group_ids: (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Saml
+        set_roles_from_groups: Set user roles in Looker based on groups from Saml
+        groups_attribute: Name of user record attributes used to indicate groups. Used when 'groups_finder_type' is set to 'grouped_attribute_values'
+        groups_with_role_ids: (Read/Write) Array of mappings between Saml Groups and arrays of Looker Role ids
+        auth_requires_role: Users will not be allowed to login at all unless a role for them is found in Saml if set to true
+        user_attributes_with_ids: (Read/Write) Array of mappings between Saml User Attributes and arrays of Looker User Attribute ids
+        groups_finder_type: Identifier for a strategy for how Looker will find groups in the SAML response. One of ['grouped_attribute_values', 'individual_attributes']
+        groups_member_value: Value for group attribute used to indicate membership. Used when 'groups_finder_type' is set to 'individual_attributes'
+        bypass_login_page: Bypass the login page when user authentication is required. Redirect to IdP immediately instead.
+        allow_normal_group_membership: Allow SAML auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+        allow_roles_from_normal_groups: SAML auth'd users will inherit roles from non-reflected Looker groups.
+        allow_direct_roles: Allows roles to be directly assigned to SAML auth'd users.
     """
-
     enabled: Optional[bool] = None
     idp_cert: Optional[str] = None
     idp_url: Optional[str] = None
@@ -11606,34 +10997,31 @@ class WriteSamlConfig(model.Model):
     allow_roles_from_normal_groups: Optional[bool] = None
     allow_direct_roles: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        enabled: Optional[bool] = None,
-        idp_cert: Optional[str] = None,
-        idp_url: Optional[str] = None,
-        idp_issuer: Optional[str] = None,
-        idp_audience: Optional[str] = None,
-        allowed_clock_drift: Optional[int] = None,
-        user_attribute_map_email: Optional[str] = None,
-        user_attribute_map_first_name: Optional[str] = None,
-        user_attribute_map_last_name: Optional[str] = None,
-        new_user_migration_types: Optional[str] = None,
-        alternate_email_login_allowed: Optional[bool] = None,
-        default_new_user_role_ids: Optional[Sequence[int]] = None,
-        default_new_user_group_ids: Optional[Sequence[int]] = None,
-        set_roles_from_groups: Optional[bool] = None,
-        groups_attribute: Optional[str] = None,
-        groups_with_role_ids: Optional[Sequence["SamlGroupWrite"]] = None,
-        auth_requires_role: Optional[bool] = None,
-        user_attributes_with_ids: Optional[Sequence["SamlUserAttributeWrite"]] = None,
-        groups_finder_type: Optional[str] = None,
-        groups_member_value: Optional[str] = None,
-        bypass_login_page: Optional[bool] = None,
-        allow_normal_group_membership: Optional[bool] = None,
-        allow_roles_from_normal_groups: Optional[bool] = None,
-        allow_direct_roles: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            enabled: Optional[bool] = None,
+            idp_cert: Optional[str] = None,
+            idp_url: Optional[str] = None,
+            idp_issuer: Optional[str] = None,
+            idp_audience: Optional[str] = None,
+            allowed_clock_drift: Optional[int] = None,
+            user_attribute_map_email: Optional[str] = None,
+            user_attribute_map_first_name: Optional[str] = None,
+            user_attribute_map_last_name: Optional[str] = None,
+            new_user_migration_types: Optional[str] = None,
+            alternate_email_login_allowed: Optional[bool] = None,
+            default_new_user_role_ids: Optional[Sequence[int]] = None,
+            default_new_user_group_ids: Optional[Sequence[int]] = None,
+            set_roles_from_groups: Optional[bool] = None,
+            groups_attribute: Optional[str] = None,
+            groups_with_role_ids: Optional[Sequence["SamlGroupWrite"]] = None,
+            auth_requires_role: Optional[bool] = None,
+            user_attributes_with_ids: Optional[Sequence["SamlUserAttributeWrite"]] = None,
+            groups_finder_type: Optional[str] = None,
+            groups_member_value: Optional[str] = None,
+            bypass_login_page: Optional[bool] = None,
+            allow_normal_group_membership: Optional[bool] = None,
+            allow_roles_from_normal_groups: Optional[bool] = None,
+            allow_direct_roles: Optional[bool] = None):
         self.enabled = enabled
         self.idp_cert = idp_cert
         self.idp_url = idp_url
@@ -11663,38 +11051,41 @@ class WriteSamlConfig(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteScheduledPlan(model.Model):
     """
-        Dynamic writeable type for ScheduledPlan removes:
-    id, created_at, updated_at, title, user, next_run_at, last_run_at, can
+    Dynamic writeable type for ScheduledPlan removes:
+id, created_at, updated_at, title, user, next_run_at, last_run_at, can
 
-        Attributes:
-            name: Name of this scheduled plan
-            user_id: User Id which owns this scheduled plan
-            run_as_recipient: Whether schedule is run as recipient (only applicable for email recipients)
-            enabled: Whether the ScheduledPlan is enabled
-            look_id: Id of a look
-            dashboard_id: Id of a dashboard
-            lookml_dashboard_id: Id of a LookML dashboard
-            filters_string: Query string to run look or dashboard with
-            dashboard_filters: (DEPRECATED) Alias for filters_string field
-            require_results: Delivery should occur if running the dashboard or look returns results
-            require_no_results: Delivery should occur if the dashboard look does not return results
-            require_change: Delivery should occur if data have changed since the last run
-            send_all_results: Will run an unlimited query and send all results.
-            crontab: Vixie-Style crontab specification when to run
-            datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
-            timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
-            query_id: Query id
-            scheduled_plan_destination: Scheduled plan destinations
-            run_once: Whether the plan in question should only be run once (usually for testing)
-            include_links: Whether links back to Looker should be included in this ScheduledPlan
-            pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
-            pdf_landscape: Whether the PDF should be formatted for landscape orientation
-            embed: Whether this schedule is in an embed context or not
-            color_theme: Color scheme of the dashboard if applicable
-            long_tables: Whether or not to expand table vis to full length
-            inline_table_width: The pixel width at which we render the inline table visualizations
+    Attributes:
+        name: Name of this scheduled plan
+        user_id: User Id which owns this scheduled plan
+        run_as_recipient: Whether schedule is run as recipient (only applicable for email recipients)
+        enabled: Whether the ScheduledPlan is enabled
+        look_id: Id of a look
+        dashboard_id: Id of a dashboard
+        lookml_dashboard_id: Id of a LookML dashboard
+        filters_string: Query string to run look or dashboard with
+        dashboard_filters: (DEPRECATED) Alias for filters_string field
+        require_results: Delivery should occur if running the dashboard or look returns results
+        require_no_results: Delivery should occur if the dashboard look does not return results
+        require_change: Delivery should occur if data have changed since the last run
+        send_all_results: Will run an unlimited query and send all results.
+        crontab: Vixie-Style crontab specification when to run
+        datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
+        timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
+        query_id: Query id
+        scheduled_plan_destination: Scheduled plan destinations
+        run_once: Whether the plan in question should only be run once (usually for testing)
+        include_links: Whether links back to Looker should be included in this ScheduledPlan
+        custom_url_base: Custom url domain for the scheduled entity
+        custom_url_params: Custom url path and parameters for the scheduled entity
+        custom_url_label: Custom url label for the scheduled entity
+        show_custom_url: Whether to show custom link back instead of standard looker link
+        pdf_paper_size: The size of paper the PDF should be formatted to fit. Valid values are: "letter", "legal", "tabloid", "a0", "a1", "a2", "a3", "a4", "a5".
+        pdf_landscape: Whether the PDF should be formatted for landscape orientation
+        embed: Whether this schedule is in an embed context or not
+        color_theme: Color scheme of the dashboard if applicable
+        long_tables: Whether or not to expand table vis to full length
+        inline_table_width: The pixel width at which we render the inline table visualizations
     """
-
     name: Optional[str] = None
     user_id: Optional[int] = None
     run_as_recipient: Optional[bool] = None
@@ -11715,6 +11106,10 @@ class WriteScheduledPlan(model.Model):
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
+    custom_url_base: Optional[str] = None
+    custom_url_params: Optional[str] = None
+    custom_url_label: Optional[str] = None
+    show_custom_url: Optional[bool] = None
     pdf_paper_size: Optional[str] = None
     pdf_landscape: Optional[bool] = None
     embed: Optional[bool] = None
@@ -11722,38 +11117,37 @@ class WriteScheduledPlan(model.Model):
     long_tables: Optional[bool] = None
     inline_table_width: Optional[int] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        user_id: Optional[int] = None,
-        run_as_recipient: Optional[bool] = None,
-        enabled: Optional[bool] = None,
-        look_id: Optional[int] = None,
-        dashboard_id: Optional[int] = None,
-        lookml_dashboard_id: Optional[str] = None,
-        filters_string: Optional[str] = None,
-        dashboard_filters: Optional[str] = None,
-        require_results: Optional[bool] = None,
-        require_no_results: Optional[bool] = None,
-        require_change: Optional[bool] = None,
-        send_all_results: Optional[bool] = None,
-        crontab: Optional[str] = None,
-        datagroup: Optional[str] = None,
-        timezone: Optional[str] = None,
-        query_id: Optional[str] = None,
-        scheduled_plan_destination: Optional[
-            Sequence["ScheduledPlanDestination"]
-        ] = None,
-        run_once: Optional[bool] = None,
-        include_links: Optional[bool] = None,
-        pdf_paper_size: Optional[str] = None,
-        pdf_landscape: Optional[bool] = None,
-        embed: Optional[bool] = None,
-        color_theme: Optional[str] = None,
-        long_tables: Optional[bool] = None,
-        inline_table_width: Optional[int] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            user_id: Optional[int] = None,
+            run_as_recipient: Optional[bool] = None,
+            enabled: Optional[bool] = None,
+            look_id: Optional[int] = None,
+            dashboard_id: Optional[int] = None,
+            lookml_dashboard_id: Optional[str] = None,
+            filters_string: Optional[str] = None,
+            dashboard_filters: Optional[str] = None,
+            require_results: Optional[bool] = None,
+            require_no_results: Optional[bool] = None,
+            require_change: Optional[bool] = None,
+            send_all_results: Optional[bool] = None,
+            crontab: Optional[str] = None,
+            datagroup: Optional[str] = None,
+            timezone: Optional[str] = None,
+            query_id: Optional[str] = None,
+            scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None,
+            run_once: Optional[bool] = None,
+            include_links: Optional[bool] = None,
+            custom_url_base: Optional[str] = None,
+            custom_url_params: Optional[str] = None,
+            custom_url_label: Optional[str] = None,
+            show_custom_url: Optional[bool] = None,
+            pdf_paper_size: Optional[str] = None,
+            pdf_landscape: Optional[bool] = None,
+            embed: Optional[bool] = None,
+            color_theme: Optional[str] = None,
+            long_tables: Optional[bool] = None,
+            inline_table_width: Optional[int] = None):
         self.name = name
         self.user_id = user_id
         self.run_as_recipient = run_as_recipient
@@ -11774,6 +11168,10 @@ class WriteScheduledPlan(model.Model):
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.custom_url_base = custom_url_base
+        self.custom_url_params = custom_url_params
+        self.custom_url_label = custom_url_label
+        self.show_custom_url = show_custom_url
         self.pdf_paper_size = pdf_paper_size
         self.pdf_landscape = pdf_landscape
         self.embed = embed
@@ -11785,32 +11183,28 @@ class WriteScheduledPlan(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteSessionConfig(model.Model):
     """
-        Dynamic writeable type for SessionConfig removes:
-    can
+    Dynamic writeable type for SessionConfig removes:
+can
 
-        Attributes:
-            allow_persistent_sessions: Allow users to have persistent sessions when they login
-            session_minutes: Number of minutes for user sessions.  Must be between 5 and 43200
-            unlimited_sessions_per_user: Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
-            use_inactivity_based_logout: Enforce session logout for sessions that are inactive for 15 minutes.
-            track_session_location: Track location of session when user logs in.
+    Attributes:
+        allow_persistent_sessions: Allow users to have persistent sessions when they login
+        session_minutes: Number of minutes for user sessions.  Must be between 5 and 43200
+        unlimited_sessions_per_user: Allow users to have an unbounded number of concurrent sessions (otherwise, users will be limited to only one session at a time).
+        use_inactivity_based_logout: Enforce session logout for sessions that are inactive for 15 minutes.
+        track_session_location: Track location of session when user logs in.
     """
-
     allow_persistent_sessions: Optional[bool] = None
     session_minutes: Optional[int] = None
     unlimited_sessions_per_user: Optional[bool] = None
     use_inactivity_based_logout: Optional[bool] = None
     track_session_location: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        allow_persistent_sessions: Optional[bool] = None,
-        session_minutes: Optional[int] = None,
-        unlimited_sessions_per_user: Optional[bool] = None,
-        use_inactivity_based_logout: Optional[bool] = None,
-        track_session_location: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            allow_persistent_sessions: Optional[bool] = None,
+            session_minutes: Optional[int] = None,
+            unlimited_sessions_per_user: Optional[bool] = None,
+            use_inactivity_based_logout: Optional[bool] = None,
+            track_session_location: Optional[bool] = None):
         self.allow_persistent_sessions = allow_persistent_sessions
         self.session_minutes = session_minutes
         self.unlimited_sessions_per_user = unlimited_sessions_per_user
@@ -11821,18 +11215,19 @@ class WriteSessionConfig(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteSpaceBase(model.Model):
     """
-        Dynamic writeable type for SpaceBase removes:
-    id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
+    Dynamic writeable type for SpaceBase removes:
+id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
 
-        Attributes:
-            name: Unique Name
-            parent_id: Id of Parent. If the parent id is null, this is a root-level entry
+    Attributes:
+        name: Unique Name
+        parent_id: Id of Parent. If the parent id is null, this is a root-level entry
     """
-
     name: str
     parent_id: Optional[str] = None
 
-    def __init__(self, *, name: str, parent_id: Optional[str] = None):
+    def __init__(self, *,
+            name: str,
+            parent_id: Optional[str] = None):
         self.name = name
         self.parent_id = parent_id
 
@@ -11840,29 +11235,25 @@ class WriteSpaceBase(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteTheme(model.Model):
     """
-        Dynamic writeable type for Theme removes:
-    can, id
+    Dynamic writeable type for Theme removes:
+can, id
 
-        Attributes:
-            begin_at: Timestamp for when this theme becomes active. Null=always
-            end_at: Timestamp for when this theme expires. Null=never
-            name: Name of theme. Can only be alphanumeric and underscores.
-            settings:
+    Attributes:
+        begin_at: Timestamp for when this theme becomes active. Null=always
+        end_at: Timestamp for when this theme expires. Null=never
+        name: Name of theme. Can only be alphanumeric and underscores.
+        settings:
     """
-
     begin_at: Optional[datetime.datetime] = None
     end_at: Optional[datetime.datetime] = None
     name: Optional[str] = None
     settings: Optional["ThemeSettings"] = None
 
-    def __init__(
-        self,
-        *,
-        begin_at: Optional[datetime.datetime] = None,
-        end_at: Optional[datetime.datetime] = None,
-        name: Optional[str] = None,
-        settings: Optional["ThemeSettings"] = None
-    ):
+    def __init__(self, *,
+            begin_at: Optional[datetime.datetime] = None,
+            end_at: Optional[datetime.datetime] = None,
+            name: Optional[str] = None,
+            settings: Optional["ThemeSettings"] = None):
         self.begin_at = begin_at
         self.end_at = end_at
         self.name = name
@@ -11872,22 +11263,21 @@ class WriteTheme(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteUser(model.Model):
     """
-        Dynamic writeable type for User removes:
-    can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
+    Dynamic writeable type for User removes:
+can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_space_id, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, url
 
-        Attributes:
-            credentials_email: Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, is_disabled, logged_in_at, password_reset_url, type, url, user_url
-            first_name: First name
-            home_space_id: ID string for user's home space
-            home_folder_id: ID string for user's home folder
-            is_disabled: Account has been disabled
-            last_name: Last name
-            locale: User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
-            models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
-            ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
+    Attributes:
+        credentials_email: Dynamic writeable type for CredentialsEmail removes:
+can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+        first_name: First name
+        home_space_id: ID string for user's home space
+        home_folder_id: ID string for user's home folder
+        is_disabled: Account has been disabled
+        last_name: Last name
+        locale: User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
+        models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
+        ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
     """
-
     credentials_email: Optional["WriteCredentialsEmail"] = None
     first_name: Optional[str] = None
     home_space_id: Optional[str] = None
@@ -11898,19 +11288,16 @@ class WriteUser(model.Model):
     models_dir_validated: Optional[bool] = None
     ui_state: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(
-        self,
-        *,
-        credentials_email: Optional["WriteCredentialsEmail"] = None,
-        first_name: Optional[str] = None,
-        home_space_id: Optional[str] = None,
-        home_folder_id: Optional[str] = None,
-        is_disabled: Optional[bool] = None,
-        last_name: Optional[str] = None,
-        locale: Optional[str] = None,
-        models_dir_validated: Optional[bool] = None,
-        ui_state: Optional[MutableMapping[str, Any]] = None
-    ):
+    def __init__(self, *,
+            credentials_email: Optional["WriteCredentialsEmail"] = None,
+            first_name: Optional[str] = None,
+            home_space_id: Optional[str] = None,
+            home_folder_id: Optional[str] = None,
+            is_disabled: Optional[bool] = None,
+            last_name: Optional[str] = None,
+            locale: Optional[str] = None,
+            models_dir_validated: Optional[bool] = None,
+            ui_state: Optional[MutableMapping[str, Any]] = None):
         self.credentials_email = credentials_email
         self.first_name = first_name
         self.home_space_id = home_space_id
@@ -11925,20 +11312,19 @@ class WriteUser(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttribute(model.Model):
     """
-        Dynamic writeable type for UserAttribute removes:
-    can, id, is_system, is_permanent
+    Dynamic writeable type for UserAttribute removes:
+can, id, is_system, is_permanent
 
-        Attributes:
-            name: Name of user attribute
-            label: Human-friendly label for user attribute
-            type: Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
-            default_value: Default value for when no value is set on the user
-            value_is_hidden: If true, users will not be able to view values of this attribute
-            user_can_view: Non-admin users can see the values of their attributes and use them in filters
-            user_can_edit: Users can change the value of this attribute for themselves
-            hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
+    Attributes:
+        name: Name of user attribute
+        label: Human-friendly label for user attribute
+        type: Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+        default_value: Default value for when no value is set on the user
+        value_is_hidden: If true, users will not be able to view values of this attribute
+        user_can_view: Non-admin users can see the values of their attributes and use them in filters
+        user_can_edit: Users can change the value of this attribute for themselves
+        hidden_value_domain_whitelist: Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
     """
-
     name: Optional[str] = None
     label: Optional[str] = None
     type: Optional[str] = None
@@ -11948,18 +11334,15 @@ class WriteUserAttribute(model.Model):
     user_can_edit: Optional[bool] = None
     hidden_value_domain_whitelist: Optional[str] = None
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = None,
-        label: Optional[str] = None,
-        type: Optional[str] = None,
-        default_value: Optional[str] = None,
-        value_is_hidden: Optional[bool] = None,
-        user_can_view: Optional[bool] = None,
-        user_can_edit: Optional[bool] = None,
-        hidden_value_domain_whitelist: Optional[str] = None
-    ):
+    def __init__(self, *,
+            name: Optional[str] = None,
+            label: Optional[str] = None,
+            type: Optional[str] = None,
+            default_value: Optional[str] = None,
+            value_is_hidden: Optional[bool] = None,
+            user_can_view: Optional[bool] = None,
+            user_can_edit: Optional[bool] = None,
+            hidden_value_domain_whitelist: Optional[str] = None):
         self.name = name
         self.label = label
         self.type = type
@@ -11973,41 +11356,40 @@ class WriteUserAttribute(model.Model):
 @attr.s(auto_attribs=True, init=False)
 class WriteUserAttributeWithValue(model.Model):
     """
-        Dynamic writeable type for UserAttributeWithValue removes:
-    can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
+    Dynamic writeable type for UserAttributeWithValue removes:
+can, name, label, rank, user_id, user_can_edit, value_is_hidden, user_attribute_id, source, hidden_value_domain_whitelist
 
-        Attributes:
-            value: Value of attribute for user
+    Attributes:
+        value: Value of attribute for user
     """
-
     value: Optional[str] = None
 
-    def __init__(self, *, value: Optional[str] = None):
+    def __init__(self, *,
+            value: Optional[str] = None):
         self.value = value
 
 
 @attr.s(auto_attribs=True, init=False)
 class WriteWhitelabelConfiguration(model.Model):
     """
-        Dynamic writeable type for WhitelabelConfiguration removes:
-    id, logo_url, favicon_url
+    Dynamic writeable type for WhitelabelConfiguration removes:
+id, logo_url, favicon_url
 
-        Attributes:
-            logo_file: Customer logo image. Expected base64 encoded data (write-only)
-            favicon_file: Custom favicon image. Expected base64 encoded data (write-only)
-            default_title: Default page title
-            show_help_menu: Boolean to toggle showing help menus
-            show_docs: Boolean to toggle showing docs
-            show_email_sub_options: Boolean to toggle showing email subscription options.
-            allow_looker_mentions: Boolean to toggle mentions of Looker in emails
-            allow_looker_links: Boolean to toggle links to Looker in emails
-            custom_welcome_email_advanced: Allow subject line and email heading customization in customized emails”
-            setup_mentions: Remove the word Looker from appearing in the account setup page
-            alerts_logo: Remove Looker logo from Alerts
-            alerts_links: Remove Looker links from Alerts
-            folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
+    Attributes:
+        logo_file: Customer logo image. Expected base64 encoded data (write-only)
+        favicon_file: Custom favicon image. Expected base64 encoded data (write-only)
+        default_title: Default page title
+        show_help_menu: Boolean to toggle showing help menus
+        show_docs: Boolean to toggle showing docs
+        show_email_sub_options: Boolean to toggle showing email subscription options.
+        allow_looker_mentions: Boolean to toggle mentions of Looker in emails
+        allow_looker_links: Boolean to toggle links to Looker in emails
+        custom_welcome_email_advanced: Allow subject line and email heading customization in customized emails”
+        setup_mentions: Remove the word Looker from appearing in the account setup page
+        alerts_logo: Remove Looker logo from Alerts
+        alerts_links: Remove Looker links from Alerts
+        folders_mentions: Remove Looker mentions in home folder page when you don’t have any items saved
     """
-
     logo_file: Optional[str] = None
     favicon_file: Optional[str] = None
     default_title: Optional[str] = None
@@ -12022,23 +11404,20 @@ class WriteWhitelabelConfiguration(model.Model):
     alerts_links: Optional[bool] = None
     folders_mentions: Optional[bool] = None
 
-    def __init__(
-        self,
-        *,
-        logo_file: Optional[str] = None,
-        favicon_file: Optional[str] = None,
-        default_title: Optional[str] = None,
-        show_help_menu: Optional[bool] = None,
-        show_docs: Optional[bool] = None,
-        show_email_sub_options: Optional[bool] = None,
-        allow_looker_mentions: Optional[bool] = None,
-        allow_looker_links: Optional[bool] = None,
-        custom_welcome_email_advanced: Optional[bool] = None,
-        setup_mentions: Optional[bool] = None,
-        alerts_logo: Optional[bool] = None,
-        alerts_links: Optional[bool] = None,
-        folders_mentions: Optional[bool] = None
-    ):
+    def __init__(self, *,
+            logo_file: Optional[str] = None,
+            favicon_file: Optional[str] = None,
+            default_title: Optional[str] = None,
+            show_help_menu: Optional[bool] = None,
+            show_docs: Optional[bool] = None,
+            show_email_sub_options: Optional[bool] = None,
+            allow_looker_mentions: Optional[bool] = None,
+            allow_looker_links: Optional[bool] = None,
+            custom_welcome_email_advanced: Optional[bool] = None,
+            setup_mentions: Optional[bool] = None,
+            alerts_logo: Optional[bool] = None,
+            alerts_links: Optional[bool] = None,
+            folders_mentions: Optional[bool] = None):
         self.logo_file = logo_file
         self.favicon_file = favicon_file
         self.default_title = default_title
@@ -12053,7 +11432,6 @@ class WriteWhitelabelConfiguration(model.Model):
         self.alerts_links = alerts_links
         self.folders_mentions = folders_mentions
 
-
 import functools  # noqa:E402
 
 forward_ref_structure_hook = functools.partial(
@@ -12062,14 +11440,12 @@ forward_ref_structure_hook = functools.partial(
 sr.converter31.register_structure_hook_func(
     lambda t: t.__class__ is ForwardRef, forward_ref_structure_hook
 )
-translate_keys_structure_hook = functools.partial(
-    sr.translate_keys_structure_hook, sr.converter31
-)
+translate_keys_structure_hook = functools.partial(sr.translate_keys_structure_hook, sr.converter31)
 sr.converter31.register_structure_hook(
     LookmlModelExploreJoins,  # type: ignore
-    translate_keys_structure_hook,  # type:ignore
+    translate_keys_structure_hook  # type:ignore
 )
 sr.converter31.register_structure_hook(
     SmtpSettings,  # type: ignore
-    translate_keys_structure_hook,  # type:ignore
+    translate_keys_structure_hook  # type:ignore
 )

@@ -109,7 +109,7 @@ typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
 class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl): IErrorDoc {
     companion object {
         /** Location of the public CDN for Looker API Error codes */
-        const val ErrorCodesUrl = "https://marketplace-api.looker.com/errorcodes/"
+        const val ErrorCodesUrl = "https://static-a.cdn.looker.app/errorcodes/"
 
         /** Default "not found" content for error documents that don't (yet) exist */
         const val ErrorDocNotFound = "### No documentation found for "

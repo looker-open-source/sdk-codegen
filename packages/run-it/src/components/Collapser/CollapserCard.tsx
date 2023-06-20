@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { FC, ReactElement } from 'react'
+import type { ReactElement } from 'react'
 import React from 'react'
 import { useToggle, Accordion2, Divider, Box2 } from '@looker/components'
 import { ArrowRight } from '@styled-icons/material/ArrowRight'
@@ -42,13 +42,13 @@ interface CollapserCardProps {
 /**
  * Render a collapsable header and children
  */
-export const CollapserCard: FC<CollapserCardProps> = ({
+export const CollapserCard = ({
   id,
   heading,
   children,
   defaultOpen = true,
   divider = true,
-}) => {
+}: CollapserCardProps) => {
   const level = divider ? 'h3' : 'h4'
   const { value, toggle } = useToggle(defaultOpen)
 

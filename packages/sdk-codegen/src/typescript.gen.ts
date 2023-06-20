@@ -34,7 +34,7 @@ import type {
 } from './sdkModels'
 import { describeParam, EnumType, isSpecialName, strBody } from './sdkModels'
 import type { CodeAssignment, IMappedType } from './codeGen'
-import { CodeGen, trimInputs, commentBlock } from './codeGen'
+import { CodeGen, commentBlock } from './codeGen'
 
 /**
  * TypeScript code generator
@@ -295,7 +295,6 @@ export class ${this.packageName}Stream extends APIMethods {
   }
 
   makeTheCall(method: IMethod, inputs: ArgValues): string {
-    inputs = trimInputs(inputs)
     const args = this.assignParams(method, inputs)
     const fun = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(${method.name}(sdk${args ? ',' : ''}`
