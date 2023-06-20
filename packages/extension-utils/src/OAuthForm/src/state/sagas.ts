@@ -38,7 +38,7 @@ import { OAuthFormSlice, OAuthFormActions } from './slice'
 /**
  * get saved configData from localStorage key
  */
-const getLocalStorageConfig = (configKey: string) => {
+const getLocalStorageConfig = (configKey: string): ConfigValues => {
   const EmptyConfig = {
     base_url: '',
     looker_url: '',
@@ -46,7 +46,7 @@ const getLocalStorageConfig = (configKey: string) => {
   const data = localStorage.getItem(configKey)
   const result = data ? JSON.parse(data) : EmptyConfig
 
-  return result as ConfigValues
+  return result
 }
 
 /**
