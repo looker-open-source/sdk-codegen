@@ -28,12 +28,12 @@ import { takeEvery, put, call, select } from 'typed-redux-saga'
 import type { ConfigValues } from '../utils'
 import { getVersions, validateUrl } from '../utils'
 import type {
-  ClearFormActionPayload,
-  HandleUrlChangePayload,
+  ClearConfigActionPayload,
+  SetUrlActionPayload,
   OAuthFormState,
   SaveConfigPayload,
 } from './slice'
-import { OAuthFormActions } from './slice'
+import { OAuthFormSlice, OAuthFormActions } from './slice'
 
 /**
  * get saved configData from localStorage key
@@ -53,51 +53,53 @@ const getLocalStorageConfig = (configKey: string) => {
  * checks for saved configData in localStorage
  */
 function* initSaga(action: PayloadAction<string>) {
-  const { initFormSuccessAction, setFailureAction } = OAuthFormActions
+  const { initSuccessAction, setFailureAction } = OAuthFormActions
   try {
     const result = yield* call(getLocalStorageConfig, action.payload)
-    yield* put(initFormSuccessAction(result))
+    yield* put(initSuccessAction(result))
   } catch (error: any) {
     yield* put(setFailureAction(error.message))
   }
 }
 
 /**
- * handles validating the new url and adds or removes form validation message
+ * updates the new url and adds or removes form validation message
  */
-function* handleUrlChangeSaga(action: PayloadAction<HandleUrlChangePayload>) {
-  const { updateValidationMessagesAction, hanldeUrlChangeSuccess } =
-    OAuthFormActions
+function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
+  const { updateValidationMessages, setUrlActionSuccess } = OAuthFormActions
   try {
     const url = validateUrl(action.payload.value)
     if (!url) throw new Error(`${action.payload.value} is not a valid url`)
 
     // clear the error message if one was there
     yield* put(
-      updateValidationMessagesAction({
+      updateValidationMessages({
         elementName: action.payload.name,
         newMessage: null,
       })
     )
   } catch (error: any) {
     yield* put(
-      updateValidationMessagesAction({
+      updateValidationMessages({
         elementName: action.payload.name,
-        newMessage: error,
+        newMessage: {
+          message: error.message,
+          type: 'error',
+        },
       })
     )
   } finally {
     // update the form element
     const url = validateUrl(action.payload.value)
-    yield* put(hanldeUrlChangeSuccess(url || action.payload.value))
+    yield* put(setUrlActionSuccess(url || action.payload.value))
   }
 }
 
 /**
  * clears form, removes local storage config key and triggers callback function
  */
-function* clearFormSaga(action: PayloadAction<ClearFormActionPayload>) {
-  const { clearFormActionSuccess, setFailureAction, updateMessageBarAction } =
+function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
+  const { clearConfigActionSuccess, setFailureAction, updateMessageBarAction } =
     OAuthFormActions
   try {
     const { configKey, setHasConfig, isAuthenticated } = action.payload
@@ -111,7 +113,7 @@ function* clearFormSaga(action: PayloadAction<ClearFormActionPayload>) {
         })
       )
     }
-    yield* put(clearFormActionSuccess())
+    yield* put(clearConfigActionSuccess())
   } catch (error: any) {
     yield* put(setFailureAction(error.message))
   }
@@ -120,15 +122,13 @@ function* clearFormSaga(action: PayloadAction<ClearFormActionPayload>) {
 /**
  * verify button clicked, verifys apiServerUrl and populates OAuth server URL if valid
  */
-function* handleVerifySaga() {
-  const apiServerUrl = yield* select(
-    (state: OAuthFormState) => state.apiServerUrl
-  )
-  const {
-    handleVerifyActionFailure,
-    handleVerifyActionSuccess,
-    clearMessageBarAction,
-  } = OAuthFormActions
+function* verifySaga() {
+  const apiServerUrl = yield* select((storeState) => {
+    const formState: OAuthFormState = storeState[OAuthFormSlice.name]
+    return formState.apiServerUrl
+  })
+  const { verifyActionFailure, verifyActionSuccess, clearMessageBarAction } =
+    OAuthFormActions
 
   try {
     yield* put(clearMessageBarAction())
@@ -137,23 +137,24 @@ function* handleVerifySaga() {
     const versions = yield* call(getVersions, versionsUrl)
     if (!versions) throw new Error()
 
-    yield* put(handleVerifyActionSuccess(versions.web_server_url))
+    yield* put(verifyActionSuccess(versions.web_server_url))
   } catch (error: any) {
-    yield* put(handleVerifyActionFailure(error.message))
+    yield* put(verifyActionFailure(error.message))
   }
 }
 
 /**
  * save button clicked, verify api server url and if valid save config data to localstorage
  */
-function* handleSaveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
-  const apiServerUrl = yield* select(
-    (state: OAuthFormState) => state.apiServerUrl
-  )
+function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
+  const apiServerUrl = yield* select((storeState) => {
+    const formState: OAuthFormState = storeState[OAuthFormSlice.name]
+    return formState.apiServerUrl
+  })
   const {
-    handleVerifyActionFailure,
+    verifyActionFailure,
     clearMessageBarAction,
-    handleSaveConfigSuccess,
+    saveConfigActionSuccess,
   } = OAuthFormActions
   const { configKey, setHasConfig, client_id, redirect_uri } = action.payload
 
@@ -164,10 +165,9 @@ function* handleSaveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
     const versions = yield* call(getVersions, versionsUrl)
     if (!versions) throw new Error()
 
-    const { api_server_url, web_server_url } = versions
     const data = {
-      base_url: api_server_url,
-      looker_url: web_server_url,
+      base_url: versions.api_server_url,
+      looker_url: versions.web_server_url,
       client_id,
       redirect_uri,
     }
@@ -175,27 +175,27 @@ function* handleSaveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
     if (setHasConfig) setHasConfig(true)
 
     yield* put(
-      handleSaveConfigSuccess({
-        base_url: api_server_url,
-        looker_url: web_server_url,
+      saveConfigActionSuccess({
+        base_url: versions.api_server_url,
+        looker_url: versions.web_server_url,
       })
     )
   } catch (error: any) {
-    yield* put(handleVerifyActionFailure(error.message))
+    yield* put(verifyActionFailure(error.message))
   }
 }
 
 export function* saga() {
   const {
     initAction,
-    handleUrlChangeAction,
-    clearFormAction,
-    handleVerifyAction,
-    handleSaveConfigAction,
+    setUrlAction,
+    clearConfigAction,
+    verifyAction,
+    saveConfigAction,
   } = OAuthFormActions
   yield* takeEvery(initAction, initSaga)
-  yield* takeEvery(handleUrlChangeAction, handleUrlChangeSaga)
-  yield* takeEvery(clearFormAction, clearFormSaga)
-  yield* takeEvery(handleVerifyAction, handleVerifySaga)
-  yield* takeEvery(handleSaveConfigAction, handleSaveConfigSaga)
+  yield* takeEvery(setUrlAction, setUrlSaga)
+  yield* takeEvery(clearConfigAction, clearConfigSaga)
+  yield* takeEvery(verifyAction, verifySaga)
+  yield* takeEvery(saveConfigAction, saveConfigSaga)
 }

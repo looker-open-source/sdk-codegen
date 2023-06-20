@@ -81,11 +81,11 @@ export const OAuthForm = ({
 
   const {
     initAction,
-    handleUrlChangeAction,
-    clearFormAction,
-    handleVerifyAction,
+    setUrlAction,
+    clearConfigAction,
+    verifyAction,
     clearMessageBarAction,
-    handleSaveConfigAction,
+    saveConfigAction,
   } = useOAuthFormActions()
   const {
     apiServerUrl,
@@ -106,7 +106,7 @@ export const OAuthForm = ({
   }
 
   const handleSave = () => {
-    handleSaveConfigAction({
+    saveConfigAction({
       configKey,
       setHasConfig,
       client_id: clientId,
@@ -115,11 +115,11 @@ export const OAuthForm = ({
   }
 
   const handleVerify = () => {
-    handleVerifyAction()
+    verifyAction()
   }
 
-  const handleClear = async (_e: BaseSyntheticEvent) => {
-    clearFormAction({
+  const handleClear = async () => {
+    clearConfigAction({
       configKey,
       setHasConfig: setHasConfig,
       isAuthenticated: isAuthenticated(),
@@ -127,7 +127,7 @@ export const OAuthForm = ({
   }
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
-    handleUrlChangeAction({
+    setUrlAction({
       name: event.currentTarget.name,
       value: event.currentTarget.value,
     })
@@ -155,7 +155,7 @@ export const OAuthForm = ({
 
   useEffect(() => {
     initAction(configKey)
-  }, [])
+  }, [configKey, initAction])
 
   return (
     <SpaceVertical gap="u2">
@@ -193,7 +193,7 @@ export const OAuthForm = ({
                 placeholder="Click 'Verify' to retrieve"
                 name="webUrl"
                 value={webUrl}
-                disabled={true}
+                disabled
               />
             </Fieldset>
           </Form>

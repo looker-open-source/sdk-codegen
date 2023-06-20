@@ -63,13 +63,13 @@ export const defaultOAuthFormState: OAuthFormState = {
   savedConfig: { base_url: '', looker_url: '' },
 }
 
-export interface ClearFormActionPayload {
+export interface ClearConfigActionPayload {
   configKey: string
   setHasConfig?: Dispatch<boolean>
   isAuthenticated: boolean
 }
 
-export interface HandleUrlChangePayload {
+export interface SetUrlActionPayload {
   name: string
   value: string
 }
@@ -98,21 +98,18 @@ export const OAuthFormSlice = createSlice({
     initAction(_state, _action: PayloadAction<string>) {
       // noop
     },
-    initFormSuccessAction(state, action: PayloadAction<ConfigValues>) {
+    initSuccessAction(state, action: PayloadAction<ConfigValues>) {
       state.apiServerUrl = action.payload.base_url
       state.webUrl = action.payload.looker_url
     },
-    handleUrlChangeAction(
-      _state,
-      _action: PayloadAction<HandleUrlChangePayload>
-    ) {
+    setUrlAction(_state, _action: PayloadAction<SetUrlActionPayload>) {
       // noop
     },
-    hanldeUrlChangeSuccess(state, action) {
+    setUrlActionSuccess(state, action: PayloadAction<string>) {
       state.apiServerUrl = action.payload
       state.webUrl = ''
     },
-    updateValidationMessagesAction(
+    updateValidationMessages(
       state,
       action: PayloadAction<UpdateValidationMessagesPayload>
     ) {
@@ -129,30 +126,33 @@ export const OAuthFormSlice = createSlice({
       }
       state.validationMessages = newValidationMessages
     },
-    clearFormAction(_state, _action: PayloadAction<ClearFormActionPayload>) {
+    clearConfigAction(
+      _state,
+      _action: PayloadAction<ClearConfigActionPayload>
+    ) {
       // noop
     },
-    clearFormActionSuccess() {
+    clearConfigActionSuccess() {
       return { ...defaultOAuthFormState }
     },
-    handleVerifyAction(state) {
+    verifyAction(state) {
       state.fetchedUrl = `${state.apiServerUrl}/versions`
     },
-    handleVerifyActionSuccess(state, action: PayloadAction<string>) {
+    verifyActionSuccess(state, action: PayloadAction<string>) {
       state.messageBar = {
         intent: 'positive',
         text: `Configuration is valid`,
       }
       state.webUrl = action.payload
     },
-    handleVerifyActionFailure(state, action: PayloadAction<string>) {
+    verifyActionFailure(state, action: PayloadAction<string>) {
       state.messageBar = { intent: 'critical', text: action.payload }
       state.webUrl = ''
     },
-    handleSaveConfigAction(_state, _action: PayloadAction<SaveConfigPayload>) {
+    saveConfigAction(_state, _action: PayloadAction<SaveConfigPayload>) {
       // noop
     },
-    handleSaveConfigSuccess(
+    saveConfigActionSuccess(
       state,
       action: PayloadAction<SaveConfigSuccessPaylaod>
     ) {

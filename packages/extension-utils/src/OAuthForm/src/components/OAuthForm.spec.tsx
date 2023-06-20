@@ -26,7 +26,7 @@
 import type { ReactElement } from 'react'
 import React from 'react'
 import type { Store } from 'redux'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import type { IApiSettings } from '@looker/sdk-rtl'
@@ -114,11 +114,11 @@ jest.mock('../state/slice', () => ({
   useOAuthFormState: jest.fn(),
   useOAuthFormActions: jest.fn().mockReturnValue({
     initAction: jest.fn(),
-    handleUrlChangeAction: jest.fn(),
-    clearFormAction: jest.fn(),
-    handleVerifyAction: jest.fn(),
+    setUrlAction: jest.fn(),
+    clearConfigAction: jest.fn(),
+    verifyAction: jest.fn(),
     clearMessageBarAction: jest.fn(),
-    handleSaveConfigAction: jest.fn(),
+    saveConfigAction: jest.fn(),
   }),
 }))
 
@@ -182,11 +182,11 @@ describe('ConfigForm', () => {
     localStorage.removeItem(ConfigKey)
     ;(useOAuthFormActions as jest.Mock).mockReturnValue({
       initAction: jest.fn(),
-      handleUrlChangeAction: jest.fn(),
-      clearFormAction: jest.fn(),
-      handleVerifyAction: jest.fn(),
+      setUrlAction: jest.fn(),
+      clearConfigAction: jest.fn(),
+      verifyAction: jest.fn(),
       clearMessageBarAction: jest.fn(),
-      handleSaveConfigAction: jest.fn(),
+      saveConfigAction: jest.fn(),
     })
   })
 
@@ -298,7 +298,7 @@ describe('ConfigForm', () => {
       />,
       store
     )
-    const { handleUrlChangeAction } = useOAuthFormActions()
+    const { setUrlAction } = useOAuthFormActions()
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
     }) as HTMLInputElement
@@ -306,7 +306,7 @@ describe('ConfigForm', () => {
     expect(apiUrl).toHaveValue('')
 
     await userEvent.type(apiUrl, 'bad')
-    expect(handleUrlChangeAction).toHaveBeenCalled()
+    expect(setUrlAction).toHaveBeenCalled()
   })
 
   test('verify button enabled if valid url', async () => {
@@ -317,7 +317,7 @@ describe('ConfigForm', () => {
     ;(useOAuthFormState as jest.Mock).mockReturnValue(
       store.getState().OAuthForm
     )
-    const { handleVerifyAction } = useOAuthFormActions()
+    const { verifyAction } = useOAuthFormActions()
 
     renderWithReduxProvider(
       <OAuthForm
@@ -334,7 +334,7 @@ describe('ConfigForm', () => {
     expect(button).toBeInTheDocument()
     expect(button).toBeEnabled()
     fireEvent.click(button)
-    expect(handleVerifyAction).toHaveBeenCalled()
+    expect(verifyAction).toHaveBeenCalled()
   })
 
   test('it shows Oauth help message after verify and enabled save button', async () => {
@@ -389,7 +389,7 @@ describe('ConfigForm', () => {
       store.getState().OAuthForm
     )
     ;(getVersions as jest.Mock).mockResolvedValueOnce(mockedVersionRes)
-    const { handleSaveConfigAction } = useOAuthFormActions()
+    const { saveConfigAction } = useOAuthFormActions()
 
     renderWithReduxProvider(
       <OAuthForm
@@ -405,7 +405,7 @@ describe('ConfigForm', () => {
     })
     expect(saveBtn).toBeEnabled()
     fireEvent.click(saveBtn)
-    expect(handleSaveConfigAction).toHaveBeenCalled()
+    expect(saveConfigAction).toHaveBeenCalled()
   })
 
   test('it calls adaptors login on login click', async () => {
