@@ -918,13 +918,12 @@ describe('extension_host_api tests', () => {
     )
   })
 
-  it('renders', async (done) => {
+  it('renders', async () => {
     const hostApi = createHostApi()
     await hostApi.rendered('Oh No!')
-    expect(sendSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+    await expect(sendSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
       payload: { failureMessage: 'Oh No!' },
       type: 'RENDERED',
     })
-    done()
   })
 })

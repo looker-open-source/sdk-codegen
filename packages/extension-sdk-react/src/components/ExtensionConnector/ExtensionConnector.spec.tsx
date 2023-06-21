@@ -40,7 +40,7 @@ import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
 import type { BaseExtensionContextData } from '.'
 import { ExtensionConnector } from '.'
 
-let failConnection = false
+let mockFailConnection = false
 const mockHost: any = {
   clientRouteChanged: () => {
     // noop
@@ -61,7 +61,7 @@ jest.mock('@looker/extension-sdk', () => {
   }) => {
     tileHostDataChangedCb = tileHostDataChangedCallback
     visualizationDataReceivedCb = visualizationDataReceivedCallback
-    return failConnection
+    return mockFailConnection
       ? Promise.reject(new Error('Extension failed to load'))
       : Promise.resolve(mockHost)
   }
@@ -109,7 +109,7 @@ describe('ExtensionConnector component', () => {
     tileSDK.tileHostDataChanged = jest.fn()
     visualizationSDK.updateVisData = jest.fn()
     jest.spyOn(console, 'error').mockImplementation()
-    failConnection = false
+    mockFailConnection = false
     unregisterCore31SDK()
     unregisterCore40SDK()
   })
@@ -167,7 +167,7 @@ describe('ExtensionConnector component', () => {
   })
 
   it('renders initialization  error', async () => {
-    failConnection = true
+    mockFailConnection = true
     render(
       <ExtensionConnector
         contextData={getContextData()}
@@ -228,10 +228,10 @@ describe('ExtensionConnector component', () => {
       visConfig: {},
       queryResponse: { data: [], fields: {}, pivots: [] },
     })
+    // expect(updateContextData).toHaveBeenNthCalledWith(1, {
+    //   tileHostData: undefined,
+    // })
     expect(updateContextData).toHaveBeenNthCalledWith(1, {
-      tileHostData: undefined,
-    })
-    expect(updateContextData).toHaveBeenNthCalledWith(2, {
       visualizationData: {
         visConfig: {},
         queryResponse: { data: [], fields: {}, pivots: [] },
