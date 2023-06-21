@@ -111,6 +111,9 @@ export interface QueryResponse {
   fieldDimensionLike: Dimension[]
 }
 
+/**
+ * Extension visualization SDK
+ */
 export interface VisualizationSDK {
   visualizationData?: RawVisualizationData
   visConfig: VisualizationConfig

@@ -208,6 +208,9 @@ export interface Filters {
   [key: string]: string
 }
 
+/**
+ * Extension tile SDK
+ */
 export interface TileSDK {
   tileHostData: TileHostData
   tileHostDataChanged: (hostData: Partial<TileHostData>) => void

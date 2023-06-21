@@ -35,6 +35,9 @@ import type {
 import { ExtensionConnector } from '../ExtensionConnector'
 import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
 
+/**
+ * Extension context data
+ */
 export interface ExtensionContextData40 extends BaseExtensionContextData {
   coreSDK: ILooker40SDK
 }
