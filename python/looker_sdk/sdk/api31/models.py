@@ -1000,7 +1000,7 @@ class CreateQueryTask(model.Model):
     """
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
         can: Operations the current user is able to perform on this object
         source: Source of query task
         deferred: Create the task but defer execution
@@ -6986,13 +6986,14 @@ class RepositoryCredential(model.Model):
 
 class ResultFormat(enum.Enum):
     """
-    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 
     """
     inline_json = "inline_json"
     json = "json"
     json_detail = "json_detail"
     json_fe = "json_fe"
+    json_bi = "json_bi"
     csv = "csv"
     html = "html"
     md = "md"
@@ -8327,6 +8328,7 @@ class ThemeSettings(model.Model):
         tile_title_font_size: Font size for tiles.
         column_gap_size: The vertical gap/gutter size between tiles.
         row_gap_size: The horizontal gap/gutter size between tiles.
+        border_radius: The border radius for tiles.
     """
     background_color: Optional[str] = None
     base_font_size: Optional[str] = None
@@ -8372,6 +8374,7 @@ class ThemeSettings(model.Model):
     tile_title_font_size: Optional[str] = None
     column_gap_size: Optional[str] = None
     row_gap_size: Optional[str] = None
+    border_radius: Optional[str] = None
 
     def __init__(self, *,
             background_color: Optional[str] = None,
@@ -8417,7 +8420,8 @@ class ThemeSettings(model.Model):
             show_look_actions_button: Optional[bool] = None,
             tile_title_font_size: Optional[str] = None,
             column_gap_size: Optional[str] = None,
-            row_gap_size: Optional[str] = None):
+            row_gap_size: Optional[str] = None,
+            border_radius: Optional[str] = None):
         self.background_color = background_color
         self.base_font_size = base_font_size
         self.color_collection_id = color_collection_id
@@ -8462,6 +8466,7 @@ class ThemeSettings(model.Model):
         self.tile_title_font_size = tile_title_font_size
         self.column_gap_size = column_gap_size
         self.row_gap_size = row_gap_size
+        self.border_radius = border_radius
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9314,7 +9319,7 @@ can
 
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
         source: Source of query task
         deferred: Create the task but defer execution
         look_id: Id of look associated with query.

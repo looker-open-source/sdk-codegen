@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
+/// 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -943,7 +943,7 @@ public class CreateQueryTask : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -2578,6 +2578,12 @@ public enum InvestigativeContentType
   dashboard
 }
 
+public class JdbcInterface : SdkModel
+{
+  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
+  public string? results { get; set; } = null;
+}
+
 public class LDAPConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4197,7 +4203,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -4208,6 +4214,8 @@ public enum ResultFormat
   json_detail,
   [EnumMember(Value = "json_fe")]
   json_fe,
+  [EnumMember(Value = "json_bi")]
+  json_bi,
   [EnumMember(Value = "csv")]
   csv,
   [EnumMember(Value = "html")]
@@ -4733,6 +4741,8 @@ public class Setting : SdkModel
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
+  public bool? marketplace_terms_accepted { get; set; } = null;
   public PrivatelabelConfiguration? privatelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
@@ -5127,6 +5137,8 @@ public class ThemeSettings : SdkModel
   public string? column_gap_size { get; set; } = null;
   /// <summary>The horizontal gap/gutter size between tiles.</summary>
   public string? row_gap_size { get; set; } = null;
+  /// <summary>The border radius for tiles.</summary>
+  public string? border_radius { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -5687,7 +5699,7 @@ public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -6703,6 +6715,8 @@ public class WriteSetting : SdkModel
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
+  public bool? marketplace_terms_accepted { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for PrivatelabelConfiguration removes:
   /// logo_url, favicon_url
