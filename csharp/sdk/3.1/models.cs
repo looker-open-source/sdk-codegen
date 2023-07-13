@@ -499,7 +499,7 @@ public class CreateQueryTask : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -3421,7 +3421,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -3432,6 +3432,8 @@ public enum ResultFormat
   json_detail,
   [EnumMember(Value = "json_fe")]
   json_fe,
+  [EnumMember(Value = "json_bi")]
+  json_bi,
   [EnumMember(Value = "csv")]
   csv,
   [EnumMember(Value = "html")]
@@ -4186,6 +4188,8 @@ public class ThemeSettings : SdkModel
   public string? column_gap_size { get; set; } = null;
   /// <summary>The horizontal gap/gutter size between tiles.</summary>
   public string? row_gap_size { get; set; } = null;
+  /// <summary>The border radius for tiles.</summary>
+  public string? border_radius { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -4625,7 +4629,7 @@ public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public long query_id { get; set; }
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>

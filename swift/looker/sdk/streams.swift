@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 
@@ -2818,6 +2818,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -2851,6 +2852,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -5218,10 +5220,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} is_shared_root Match is shared root
          */
         is_shared_root: Bool? = nil,
+        /**
+         * @param {Bool} is_users_root Match is users root
+         */
+        is_users_root: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/folders/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?, "is_shared_root": is_shared_root as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?, "is_shared_root": is_shared_root as Any?, "is_users_root": is_users_root as Any?], nil, options)
         return result
     }
 
@@ -6310,6 +6316,27 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_integration_id = encodeParam(integration_id)
         let result: SDKResponse<Data, SDKError> = self.post("/integrations/\(path_integration_id)/test", nil, nil, options)
+        return result
+    }
+
+
+
+    // MARK JdbcInterface: LookML Model metadata for JDBC Clients
+
+    /**
+     * ### Handle Avatica RPC Requests
+     *
+     * GET /__jdbc_interface__ -> JdbcInterface
+     */
+    public func jdbc_interface(
+        /**
+         * @param {String} avatica_request Avatica RPC request
+         */
+        avatica_request: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/__jdbc_interface__", 
+            ["avatica_request": avatica_request], nil, options)
         return result
     }
 
@@ -8684,7 +8711,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ slug: String,
         /**
-         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
          */
         _ result_format: String,
         /**

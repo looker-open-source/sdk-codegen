@@ -4124,6 +4124,7 @@ export class Looker31SDKStream extends APIMethods {
         creator_id: request.creator_id,
         filter_or: request.filter_or,
         is_shared_root: request.is_shared_root,
+        is_users_root: request.is_users_root,
       },
       null,
       options
@@ -7853,7 +7854,7 @@ export class Looker31SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *
@@ -9474,6 +9475,7 @@ export class Looker31SDKStream extends APIMethods {
         creator_id: request.creator_id,
         filter_or: request.filter_or,
         is_shared_root: request.is_shared_root,
+        is_users_root: request.is_users_root,
       },
       null,
       options

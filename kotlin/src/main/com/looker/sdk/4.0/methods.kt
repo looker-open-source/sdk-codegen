@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 
@@ -2514,6 +2514,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -2545,6 +2546,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -4524,6 +4526,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} creator_id Filter on folder created by a particular user.
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      * @param {Boolean} is_shared_root Match is shared root
+     * @param {Boolean} is_users_root Match is users root
      *
      * GET /folders/search -> Array<Folder>
      */
@@ -4539,7 +4542,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         parent_id: String? = null,
         creator_id: String? = null,
         filter_or: Boolean? = null,
-        is_shared_root: Boolean? = null
+        is_shared_root: Boolean? = null,
+        is_users_root: Boolean? = null
     ) : SDKResponse {
         return this.get<Array<Folder>>("/folders/search", 
             mapOf("fields" to fields,
@@ -4553,7 +4557,8 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
                  "parent_id" to parent_id,
                  "creator_id" to creator_id,
                  "filter_or" to filter_or,
-                 "is_shared_root" to is_shared_root))
+                 "is_shared_root" to is_shared_root,
+                 "is_users_root" to is_users_root))
     }
 
 
@@ -5461,6 +5466,25 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     }
 
     //endregion Integration: Manage Integrations
+
+    //region JdbcInterface: LookML Model metadata for JDBC Clients
+
+
+    /**
+     * ### Handle Avatica RPC Requests
+     *
+     * @param {String} avatica_request Avatica RPC request
+     *
+     * GET /__jdbc_interface__ -> JdbcInterface
+     */
+    @JvmOverloads fun jdbc_interface(
+        avatica_request: String? = null
+    ) : SDKResponse {
+        return this.get<JdbcInterface>("/__jdbc_interface__", 
+            mapOf("avatica_request" to avatica_request))
+    }
+
+    //endregion JdbcInterface: LookML Model metadata for JDBC Clients
 
     //region Look: Run and Manage Looks
 
@@ -7479,7 +7503,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * Execute a SQL Runner query in a given result_format.
      *
      * @param {String} slug slug of query
-     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> String
