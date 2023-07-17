@@ -1,5 +1,13 @@
 # Changelog
 
+## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.10.0...sdk-codegen-all-v23.12.0) (2023-07-17)
+
+
+### Features
+
+* Add sagas to OAuth Form ([#1330](https://github.com/looker-open-source/sdk-codegen/issues/1330)) ([3095a48](https://github.com/looker-open-source/sdk-codegen/commit/3095a488d578bf5496f6e1622271bc568a4512f9))
+* generate SDKs for Looker 23.12 ([#1335](https://github.com/looker-open-source/sdk-codegen/issues/1335)) ([fba4161](https://github.com/looker-open-source/sdk-codegen/commit/fba4161497fe4688508e2e3a7ba476fc2d4ea11d))
+
 ## [23.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.1...sdk-codegen-all-v23.10.0) (2023-06-15)
 
 
