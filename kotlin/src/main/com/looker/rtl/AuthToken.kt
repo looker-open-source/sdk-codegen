@@ -40,7 +40,7 @@ data class AuthToken(
     @SerializedName("expires_in")
     var expiresIn: Long = 0L,
     @SerializedName("refresh_token")
-    var refreshToken: String? = null
+    var refreshToken: String? = null,
 ) {
 
     var expiresAt: LocalDateTime = LocalDateTime.now()
@@ -53,7 +53,7 @@ data class AuthToken(
         token.access_token!!,
         token.token_type!!,
         token.expires_in!!.toLong(),
-        token.refresh_token
+        token.refresh_token,
     )
 
     init {

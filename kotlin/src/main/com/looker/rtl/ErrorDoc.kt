@@ -33,10 +33,13 @@ typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
 interface IErrorDocLink {
     /** base redirector url */
     var redirector: String
+
     /** api version of the error link */
     var apiVersion: String
+
     /** HTTP status code */
     var statusCode: String
+
     /** REST API Path */
     var apiPath: String
 }
@@ -143,7 +146,7 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) : IError
             match.groupValues[1],
             match.groupValues[2],
             match.groupValues[3],
-            match.groupValues[4]
+            match.groupValues[4],
         )
     }
 
@@ -182,7 +185,10 @@ class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) : IError
 
     override fun specPath(path: String): String {
         val rx = Regex("""(:\w+)""")
-        val result = path.replace(rx) { val x = it.value.substring(1); "{$x}" }
+        val result = path.replace(rx) {
+            val x = it.value.substring(1)
+            "{$x}"
+        }
         return result
     }
 
@@ -220,5 +226,5 @@ class ErrorDocLink(
     override var redirector: String = "",
     override var apiVersion: String = "",
     override var statusCode: String = "",
-    override var apiPath: String = ""
+    override var apiPath: String = "",
 ) : IErrorDocLink
