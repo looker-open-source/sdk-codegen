@@ -57,7 +57,7 @@ sealed class SDKResponse {
     /** A successful SDK call. */
     data class SDKSuccessResponse<T>(
         /** The object returned by the SDK call. */
-        val value: T
+        val value: T,
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = true
@@ -66,7 +66,7 @@ sealed class SDKResponse {
     /** An erroring SDK call. */
     data class SDKErrorResponse<T>(
         /** The error object returned by the SDK call. */
-        val value: T
+        val value: T,
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
@@ -96,14 +96,14 @@ enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
     PUT(io.ktor.http.HttpMethod.Put),
     DELETE(io.ktor.http.HttpMethod.Delete),
     PATCH(io.ktor.http.HttpMethod.Patch),
-    HEAD(io.ktor.http.HttpMethod.Head)
+    HEAD(io.ktor.http.HttpMethod.Head),
     // TODO: Using the ktor-client-apache may support TRACE?
 }
 
 data class RequestSettings(
     val method: HttpMethod,
     val url: String,
-    val headers: Map<String, String> = emptyMap()
+    val headers: Map<String, String> = emptyMap(),
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
@@ -209,14 +209,14 @@ fun customClient(options: TransportOptions): HttpClient {
                         @Throws(CertificateException::class)
                         override fun checkClientTrusted(
                             certs: Array<X509Certificate?>?,
-                            authType: String?
+                            authType: String?,
                         ) {
                         }
 
                         @Throws(CertificateException::class)
                         override fun checkServerTrusted(
                             certs: Array<X509Certificate?>?,
-                            authType: String?
+                            authType: String?,
                         ) {
                         }
                     }
@@ -225,7 +225,8 @@ fun customClient(options: TransportOptions): HttpClient {
                     sslContext.init(null, trustAllCerts, SecureRandom())
                     val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
                     sslSocketFactory(
-                        sslSocketFactory, tm
+                        sslSocketFactory,
+                        tm,
                     )
 
                     val hostnameVerifier = HostnameVerifier { _, _ ->
@@ -252,7 +253,7 @@ class Transport(val options: TransportOptions) {
     fun makeUrl(
         path: String,
         queryParams: Values = emptyMap(),
-        authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
+        authenticator: Authenticator? = null, // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
     ): String {
         return if (path.startsWith("http://", true) ||
             path.startsWith("https://", true)
@@ -272,7 +273,7 @@ class Transport(val options: TransportOptions) {
         path: String,
         queryParams: Values = emptyMap(),
         body: Any? = null,
-        noinline authenticator: Authenticator? = null
+        noinline authenticator: Authenticator? = null,
     ): SDKResponse {
         // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
@@ -293,7 +294,7 @@ class Transport(val options: TransportOptions) {
                 SDKResponse.SDKSuccessResponse(
                     client.request<HttpStatement>(builder).execute { response: HttpResponse ->
                         response.receive<T>()
-                    }
+                    },
                 )
             }
         } catch (e: Exception) {
@@ -310,7 +311,7 @@ class Transport(val options: TransportOptions) {
         path: String,
         queryParams: Values,
         authenticator: Authenticator?,
-        body: Any?
+        body: Any?,
     ): HttpRequestBuilder {
         val builder = HttpRequestBuilder()
         // Set the request method
@@ -323,7 +324,8 @@ class Transport(val options: TransportOptions) {
 
         var auth = authenticator ?: ::defaultAuthenticator
         if (path.startsWith("http://", true) ||
-            path.startsWith("https://", true)) {
+            path.startsWith("https://", true)
+        ) {
             // if a full path is passed in, this is a straight fetch, not an API call
             // so don't authenticate
             auth = ::defaultAuthenticator

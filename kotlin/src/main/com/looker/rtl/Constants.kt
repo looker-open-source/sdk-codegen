@@ -95,7 +95,7 @@ fun unQuote(value: String?): String {
 enum class ResponseMode {
     String,
     Binary,
-    Unknown
+    Unknown,
 }
 
 fun responseMode(contentType: String): ResponseMode {
