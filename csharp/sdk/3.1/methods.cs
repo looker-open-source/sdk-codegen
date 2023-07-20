@@ -171,6 +171,9 @@ namespace Looker.SDK.API31
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
   ///
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
   /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
@@ -2645,6 +2648,7 @@ namespace Looker.SDK.API31
   /// <param name="creator_id">Filter on folder created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  /// <param name="is_users_root">Match is users root</param>
   public async Task<SdkResponse<Folder[], Exception>> search_folders(
     string? fields = null,
     long? page = null,
@@ -2658,6 +2662,7 @@ namespace Looker.SDK.API31
     string? creator_id = null,
     bool? filter_or = null,
     bool? is_shared_root = null,
+    bool? is_users_root = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders/search", new Values {
@@ -2672,7 +2677,8 @@ namespace Looker.SDK.API31
       { "parent_id", parent_id },
       { "creator_id", creator_id },
       { "filter_or", filter_or },
-      { "is_shared_root", is_shared_root }},null,options);
+      { "is_shared_root", is_shared_root },
+      { "is_users_root", is_users_root }},null,options);
   }
 
   /// ### Get information about the folder with a specific id.
@@ -5449,7 +5455,7 @@ namespace Looker.SDK.API31
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
@@ -6677,6 +6683,7 @@ namespace Looker.SDK.API31
   /// <param name="creator_id">Filter on spaces created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  /// <param name="is_users_root">Match is users root</param>
   [Obsolete("Deprecated")]
   public async Task<SdkResponse<Space[], Exception>> search_spaces(
     string? fields = null,
@@ -6691,6 +6698,7 @@ namespace Looker.SDK.API31
     string? creator_id = null,
     bool? filter_or = null,
     bool? is_shared_root = null,
+    bool? is_users_root = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Space[], Exception>(HttpMethod.Get, "/spaces/search", new Values {
@@ -6705,7 +6713,8 @@ namespace Looker.SDK.API31
       { "parent_id", parent_id },
       { "creator_id", creator_id },
       { "filter_or", filter_or },
-      { "is_shared_root", is_shared_root }},null,options);
+      { "is_shared_root", is_shared_root },
+      { "is_users_root", is_users_root }},null,options);
   }
 
   /// ### Get information about the space with a specific id.
@@ -7891,7 +7900,7 @@ namespace Looker.SDK.API31
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
   ///
@@ -7912,7 +7921,7 @@ namespace Looker.SDK.API31
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
   ///
@@ -7930,7 +7939,7 @@ namespace Looker.SDK.API31
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
   ///

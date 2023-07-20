@@ -25,7 +25,7 @@
  */
 
 /**
- * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
+ * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -998,7 +998,7 @@ data class CreateOAuthApplicationUserStateResponse (
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -2717,6 +2717,13 @@ enum class InvestigativeContentType : Serializable {
 }
 
 /**
+ * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
+ */
+data class JdbcInterface (
+    var results: String? = null
+) : Serializable
+
+/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
  * @property auth_password (Write-Only)  Password for the LDAP account used to access the LDAP server
@@ -4401,19 +4408,21 @@ data class RepositoryCredential (
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
     json,
     json_detail,
     json_fe,
+    json_bi,
     csv,
     html,
     md,
     txt,
     xlsx,
-    gsxml
+    gsxml,
+    sql
 }
 
 /**
@@ -4950,6 +4959,7 @@ data class SessionConfig (
  * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
+ * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
@@ -4960,12 +4970,14 @@ data class SessionConfig (
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
  * @property embed_cookieless_v2 Toggle cookieless embed setting
+ * @property embed_enabled True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
+    var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,
@@ -4975,7 +4987,8 @@ data class Setting (
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
     var email_domain_allowlist: Array<String>? = null,
-    var embed_cookieless_v2: Boolean? = null
+    var embed_cookieless_v2: Boolean? = null,
+    var embed_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -5283,6 +5296,25 @@ data class Theme (
  * @property center_dashboard_title Toggle to center the dashboard title. Defaults to false.
  * @property dashboard_title_font_size Dashboard title font size.
  * @property box_shadow Default box shadow.
+ * @property page_margin_top Dashboard page margin top.
+ * @property page_margin_bottom Dashboard page margin bottom.
+ * @property page_margin_sides Dashboard page margin left and right.
+ * @property show_explore_header Toggle to show the explore page header. Defaults to true.
+ * @property show_explore_title Toggle to show the explore page title. Defaults to true.
+ * @property show_explore_last_run Toggle to show the explore page last run. Defaults to true.
+ * @property show_explore_timezone Toggle to show the explore page timezone. Defaults to true.
+ * @property show_explore_run_stop_button Toggle to show the explore page run button. Defaults to true.
+ * @property show_explore_actions_button Toggle to show the explore page actions button. Defaults to true.
+ * @property show_look_header Toggle to show the look page header. Defaults to true.
+ * @property show_look_title Toggle to show the look page title. Defaults to true.
+ * @property show_look_last_run Toggle to show the look page last run. Defaults to true.
+ * @property show_look_timezone Toggle to show the look page timezone Defaults to true.
+ * @property show_look_run_stop_button Toggle to show the look page run button. Defaults to true.
+ * @property show_look_actions_button Toggle to show the look page actions button. Defaults to true.
+ * @property tile_title_font_size Font size for tiles.
+ * @property column_gap_size The vertical gap/gutter size between tiles.
+ * @property row_gap_size The horizontal gap/gutter size between tiles.
+ * @property border_radius The border radius for tiles.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5310,7 +5342,26 @@ data class ThemeSettings (
     var show_dashboard_header: Boolean? = null,
     var center_dashboard_title: Boolean? = null,
     var dashboard_title_font_size: String? = null,
-    var box_shadow: String? = null
+    var box_shadow: String? = null,
+    var page_margin_top: String? = null,
+    var page_margin_bottom: String? = null,
+    var page_margin_sides: String? = null,
+    var show_explore_header: Boolean? = null,
+    var show_explore_title: Boolean? = null,
+    var show_explore_last_run: Boolean? = null,
+    var show_explore_timezone: Boolean? = null,
+    var show_explore_run_stop_button: Boolean? = null,
+    var show_explore_actions_button: Boolean? = null,
+    var show_look_header: Boolean? = null,
+    var show_look_title: Boolean? = null,
+    var show_look_last_run: Boolean? = null,
+    var show_look_timezone: Boolean? = null,
+    var show_look_run_stop_button: Boolean? = null,
+    var show_look_actions_button: Boolean? = null,
+    var tile_title_font_size: String? = null,
+    var column_gap_size: String? = null,
+    var row_gap_size: String? = null,
+    var border_radius: String? = null
 ) : Serializable
 
 /**
@@ -5895,7 +5946,7 @@ data class WriteCreateDashboardFilter (
  * can
  *
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -6962,12 +7013,14 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  *
  * @property extension_framework_enabled Toggle extension framework on or off
  * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
+ * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
  * logo_url, favicon_url
  * @property custom_welcome_email
@@ -6985,6 +7038,7 @@ data class WriteSetting (
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
+    var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,

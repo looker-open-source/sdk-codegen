@@ -1,5 +1,27 @@
 # Changelog
 
+## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.10.0...sdk-codegen-all-v23.12.0) (2023-07-17)
+
+
+### Features
+
+* Add sagas to OAuth Form ([#1330](https://github.com/looker-open-source/sdk-codegen/issues/1330)) ([3095a48](https://github.com/looker-open-source/sdk-codegen/commit/3095a488d578bf5496f6e1622271bc568a4512f9))
+* generate SDKs for Looker 23.12 ([#1335](https://github.com/looker-open-source/sdk-codegen/issues/1335)) ([fba4161](https://github.com/looker-open-source/sdk-codegen/commit/fba4161497fe4688508e2e3a7ba476fc2d4ea11d))
+
+## [23.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.1...sdk-codegen-all-v23.10.0) (2023-06-15)
+
+
+### Features
+
+* change "Cancel" to "Close" in QuickEmbed component ([#1317](https://github.com/looker-open-source/sdk-codegen/issues/1317)) ([6eedf6f](https://github.com/looker-open-source/sdk-codegen/commit/6eedf6ffaf0e3487152bc283d925c86058cd9f59))
+* generate SDKs for Looker 23.10 ([#1326](https://github.com/looker-open-source/sdk-codegen/issues/1326)) ([121b90e](https://github.com/looker-open-source/sdk-codegen/commit/121b90e9258a49de51e2332f6f2b639b96956c36))
+* minor tweaks to embed-components and embed-services ([#1315](https://github.com/looker-open-source/sdk-codegen/issues/1315)) ([f3c5fc4](https://github.com/looker-open-source/sdk-codegen/commit/f3c5fc44a6161c0aab519527a4feb68e1f826bce))
+
+
+### Bug Fixes
+
+* use new CDN for errorcodes repository ([#1320](https://github.com/looker-open-source/sdk-codegen/issues/1320)) ([df40441](https://github.com/looker-open-source/sdk-codegen/commit/df40441cb1f187df5469f834486f8ff4de82c266))
+
 ## [23.8.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.8.0...sdk-codegen-all-v23.8.1) (2023-05-11)
 
 

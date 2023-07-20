@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 
@@ -701,6 +701,8 @@ open class LookerSDKStream: APIMethods {
      *
      * The value of the `secret` field will be set by Looker and returned.
      *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * POST /embed_config/secrets -> EmbedSecret
      */
     public func create_embed_secret(
@@ -716,6 +718,8 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Delete an embed secret.
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * DELETE /embed_config/secrets/{embed_secret_id} -> String
      */
@@ -767,6 +771,9 @@ open class LookerSDKStream: APIMethods {
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
      *
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
     public func create_sso_embed_url(
@@ -803,9 +810,12 @@ open class LookerSDKStream: APIMethods {
      * copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
      *
      * #### Security Note
-     * Protect this embed URL as you would an access token or password credentials - do not write
+     * Protect this signed URL as you would an access token or password credentials - do not write
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
+     *
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * POST /embed/token_url/me -> EmbedUrlResponse
      */
@@ -852,6 +862,8 @@ open class LookerSDKStream: APIMethods {
      * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
      *   the iframe.
      *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     *
      * POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
      */
     public func acquire_embed_cookieless_session(
@@ -871,6 +883,8 @@ open class LookerSDKStream: APIMethods {
      * This will delete the session associated with the given session reference token. Calling this endpoint will result
      * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
      * user out of the Looker instance.
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * DELETE /embed/cookieless_session/{session_reference_token} -> String
      */
@@ -894,6 +908,8 @@ open class LookerSDKStream: APIMethods {
      * - Navigation token.
      * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
      * first time when the tokens returned by the acquire_session endpoint should be used).
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
      */
@@ -2802,6 +2818,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -2809,6 +2826,7 @@ open class LookerSDKStream: APIMethods {
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
+     *  - embed_enabled
      *
      * GET /setting -> Setting
      */
@@ -2834,6 +2852,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - marketplace_auto_install_enabled
+     *  - marketplace_terms_accepted
      *  - marketplace_enabled
      *  - onboarding_enabled
      *  - privatelabel_configuration
@@ -2841,8 +2860,11 @@ open class LookerSDKStream: APIMethods {
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
+     *  - embed_enabled
      *
      * See the `Setting` type for more information on the specific values that can be configured.
+     *
+     * If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
      *
      * PATCH /setting -> Setting
      */
@@ -4145,10 +4167,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {Bool} not_owned_by Filter out the dashboards owned by the user passed at the :user_id params
+         */
+        not_owned_by: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/dashboards/search", 
-            ["id": id, "slug": slug, "title": title, "description": description, "content_favorite_id": content_favorite_id, "folder_id": folder_id, "deleted": deleted, "user_id": user_id, "view_count": view_count, "content_metadata_id": content_metadata_id, "curate": curate as Any?, "last_viewed_at": last_viewed_at, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?], nil, options)
+            ["id": id, "slug": slug, "title": title, "description": description, "content_favorite_id": content_favorite_id, "folder_id": folder_id, "deleted": deleted, "user_id": user_id, "view_count": view_count, "content_metadata_id": content_metadata_id, "curate": curate as Any?, "last_viewed_at": last_viewed_at, "fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?], nil, options)
         return result
     }
 
@@ -5194,10 +5220,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} is_shared_root Match is shared root
          */
         is_shared_root: Bool? = nil,
+        /**
+         * @param {Bool} is_users_root Match is users root
+         */
+        is_users_root: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/folders/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?, "is_shared_root": is_shared_root as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or as Any?, "is_shared_root": is_shared_root as Any?, "is_users_root": is_users_root as Any?], nil, options)
         return result
     }
 
@@ -6286,6 +6316,27 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_integration_id = encodeParam(integration_id)
         let result: SDKResponse<Data, SDKError> = self.post("/integrations/\(path_integration_id)/test", nil, nil, options)
+        return result
+    }
+
+
+
+    // MARK JdbcInterface: LookML Model metadata for JDBC Clients
+
+    /**
+     * ### Handle Avatica RPC Requests
+     *
+     * GET /__jdbc_interface__ -> JdbcInterface
+     */
+    public func jdbc_interface(
+        /**
+         * @param {String} avatica_request Avatica RPC request
+         */
+        avatica_request: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/__jdbc_interface__", 
+            ["avatica_request": avatica_request], nil, options)
         return result
     }
 
@@ -8660,7 +8711,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ slug: String,
         /**
-         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
          */
         _ result_format: String,
         /**
@@ -11364,7 +11415,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
@@ -11393,7 +11444,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
@@ -11417,7 +11468,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * GET /users/{user_id}/credentials_embed -> [CredentialsEmbed]
      */
@@ -11815,6 +11866,8 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * Create an embed user from an external user ID
+     *
+     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * POST /users/embed_user -> UserPublic
      */

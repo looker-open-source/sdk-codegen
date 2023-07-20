@@ -23,6 +23,32 @@
     * @looker/extension-sdk-react bumped from ^23.8.0 to ^23.8.1
     * @looker/sdk bumped from ^23.8.0 to ^23.8.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.28 to ^0.1.29
+    * @looker/extension-sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/extension-sdk-react bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
+
+## [0.1.27](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.26...extension-utils-v0.1.27) (2023-07-17)
+
+
+### Features
+
+* Add sagas to OAuth Form ([#1330](https://github.com/looker-open-source/sdk-codegen/issues/1330)) ([3095a48](https://github.com/looker-open-source/sdk-codegen/commit/3095a488d578bf5496f6e1622271bc568a4512f9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.10.0 to ^23.12.0
+    * @looker/extension-sdk-react bumped from ^23.10.0 to ^23.12.0
+    * @looker/sdk bumped from ^23.10.0 to ^23.12.0
+
 ## [0.1.24](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.23...extension-utils-v0.1.24) (2023-05-11)
 
 

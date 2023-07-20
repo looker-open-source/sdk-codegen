@@ -1000,7 +1000,7 @@ class CreateQueryTask(model.Model):
     """
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
         can: Operations the current user is able to perform on this object
         source: Source of query task
         deferred: Create the task but defer execution
@@ -6986,19 +6986,21 @@ class RepositoryCredential(model.Model):
 
 class ResultFormat(enum.Enum):
     """
-    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 
     """
     inline_json = "inline_json"
     json = "json"
     json_detail = "json_detail"
     json_fe = "json_fe"
+    json_bi = "json_bi"
     csv = "csv"
     html = "html"
     md = "md"
     txt = "txt"
     xlsx = "xlsx"
     gsxml = "gsxml"
+    sql = "sql"
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
@@ -8308,6 +8310,25 @@ class ThemeSettings(model.Model):
         center_dashboard_title: Toggle to center the dashboard title. Defaults to false.
         dashboard_title_font_size: Dashboard title font size.
         box_shadow: Default box shadow.
+        page_margin_top: Dashboard page margin top.
+        page_margin_bottom: Dashboard page margin bottom.
+        page_margin_sides: Dashboard page margin left and right.
+        show_explore_header: Toggle to show the explore page header. Defaults to true.
+        show_explore_title: Toggle to show the explore page title. Defaults to true.
+        show_explore_last_run: Toggle to show the explore page last run. Defaults to true.
+        show_explore_timezone: Toggle to show the explore page timezone. Defaults to true.
+        show_explore_run_stop_button: Toggle to show the explore page run button. Defaults to true.
+        show_explore_actions_button: Toggle to show the explore page actions button. Defaults to true.
+        show_look_header: Toggle to show the look page header. Defaults to true.
+        show_look_title: Toggle to show the look page title. Defaults to true.
+        show_look_last_run: Toggle to show the look page last run. Defaults to true.
+        show_look_timezone: Toggle to show the look page timezone Defaults to true.
+        show_look_run_stop_button: Toggle to show the look page run button. Defaults to true.
+        show_look_actions_button: Toggle to show the look page actions button. Defaults to true.
+        tile_title_font_size: Font size for tiles.
+        column_gap_size: The vertical gap/gutter size between tiles.
+        row_gap_size: The horizontal gap/gutter size between tiles.
+        border_radius: The border radius for tiles.
     """
     background_color: Optional[str] = None
     base_font_size: Optional[str] = None
@@ -8335,6 +8356,25 @@ class ThemeSettings(model.Model):
     center_dashboard_title: Optional[bool] = None
     dashboard_title_font_size: Optional[str] = None
     box_shadow: Optional[str] = None
+    page_margin_top: Optional[str] = None
+    page_margin_bottom: Optional[str] = None
+    page_margin_sides: Optional[str] = None
+    show_explore_header: Optional[bool] = None
+    show_explore_title: Optional[bool] = None
+    show_explore_last_run: Optional[bool] = None
+    show_explore_timezone: Optional[bool] = None
+    show_explore_run_stop_button: Optional[bool] = None
+    show_explore_actions_button: Optional[bool] = None
+    show_look_header: Optional[bool] = None
+    show_look_title: Optional[bool] = None
+    show_look_last_run: Optional[bool] = None
+    show_look_timezone: Optional[bool] = None
+    show_look_run_stop_button: Optional[bool] = None
+    show_look_actions_button: Optional[bool] = None
+    tile_title_font_size: Optional[str] = None
+    column_gap_size: Optional[str] = None
+    row_gap_size: Optional[str] = None
+    border_radius: Optional[str] = None
 
     def __init__(self, *,
             background_color: Optional[str] = None,
@@ -8362,7 +8402,26 @@ class ThemeSettings(model.Model):
             show_dashboard_header: Optional[bool] = None,
             center_dashboard_title: Optional[bool] = None,
             dashboard_title_font_size: Optional[str] = None,
-            box_shadow: Optional[str] = None):
+            box_shadow: Optional[str] = None,
+            page_margin_top: Optional[str] = None,
+            page_margin_bottom: Optional[str] = None,
+            page_margin_sides: Optional[str] = None,
+            show_explore_header: Optional[bool] = None,
+            show_explore_title: Optional[bool] = None,
+            show_explore_last_run: Optional[bool] = None,
+            show_explore_timezone: Optional[bool] = None,
+            show_explore_run_stop_button: Optional[bool] = None,
+            show_explore_actions_button: Optional[bool] = None,
+            show_look_header: Optional[bool] = None,
+            show_look_title: Optional[bool] = None,
+            show_look_last_run: Optional[bool] = None,
+            show_look_timezone: Optional[bool] = None,
+            show_look_run_stop_button: Optional[bool] = None,
+            show_look_actions_button: Optional[bool] = None,
+            tile_title_font_size: Optional[str] = None,
+            column_gap_size: Optional[str] = None,
+            row_gap_size: Optional[str] = None,
+            border_radius: Optional[str] = None):
         self.background_color = background_color
         self.base_font_size = base_font_size
         self.color_collection_id = color_collection_id
@@ -8389,6 +8448,25 @@ class ThemeSettings(model.Model):
         self.center_dashboard_title = center_dashboard_title
         self.dashboard_title_font_size = dashboard_title_font_size
         self.box_shadow = box_shadow
+        self.page_margin_top = page_margin_top
+        self.page_margin_bottom = page_margin_bottom
+        self.page_margin_sides = page_margin_sides
+        self.show_explore_header = show_explore_header
+        self.show_explore_title = show_explore_title
+        self.show_explore_last_run = show_explore_last_run
+        self.show_explore_timezone = show_explore_timezone
+        self.show_explore_run_stop_button = show_explore_run_stop_button
+        self.show_explore_actions_button = show_explore_actions_button
+        self.show_look_header = show_look_header
+        self.show_look_title = show_look_title
+        self.show_look_last_run = show_look_last_run
+        self.show_look_timezone = show_look_timezone
+        self.show_look_run_stop_button = show_look_run_stop_button
+        self.show_look_actions_button = show_look_actions_button
+        self.tile_title_font_size = tile_title_font_size
+        self.column_gap_size = column_gap_size
+        self.row_gap_size = row_gap_size
+        self.border_radius = border_radius
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9241,7 +9319,7 @@ can
 
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
         source: Source of query task
         deferred: Create the task but defer execution
         look_id: Id of look associated with query.

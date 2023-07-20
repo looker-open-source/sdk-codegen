@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
+/// 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -943,7 +943,7 @@ public class CreateQueryTask : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -2578,6 +2578,12 @@ public enum InvestigativeContentType
   dashboard
 }
 
+public class JdbcInterface : SdkModel
+{
+  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
+  public string? results { get; set; } = null;
+}
+
 public class LDAPConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -4197,7 +4203,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -4208,6 +4214,8 @@ public enum ResultFormat
   json_detail,
   [EnumMember(Value = "json_fe")]
   json_fe,
+  [EnumMember(Value = "json_bi")]
+  json_bi,
   [EnumMember(Value = "csv")]
   csv,
   [EnumMember(Value = "html")]
@@ -4219,7 +4227,9 @@ public enum ResultFormat
   [EnumMember(Value = "xlsx")]
   xlsx,
   [EnumMember(Value = "gsxml")]
-  gsxml
+  gsxml,
+  [EnumMember(Value = "sql")]
+  sql
 }
 
 public class ResultMakerFilterables : SdkModel
@@ -4731,6 +4741,8 @@ public class Setting : SdkModel
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
+  public bool? marketplace_terms_accepted { get; set; } = null;
   public PrivatelabelConfiguration? privatelabel_configuration { get; set; }
   public CustomWelcomeEmail? custom_welcome_email { get; set; }
   /// <summary>Toggle onboarding on or off</summary>
@@ -4749,6 +4761,8 @@ public class Setting : SdkModel
   public string[]? email_domain_allowlist { get; set; } = null;
   /// <summary>Toggle cookieless embed setting</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
+  public bool? embed_enabled { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5087,6 +5101,44 @@ public class ThemeSettings : SdkModel
   public string? dashboard_title_font_size { get; set; } = null;
   /// <summary>Default box shadow.</summary>
   public string? box_shadow { get; set; } = null;
+  /// <summary>Dashboard page margin top.</summary>
+  public string? page_margin_top { get; set; } = null;
+  /// <summary>Dashboard page margin bottom.</summary>
+  public string? page_margin_bottom { get; set; } = null;
+  /// <summary>Dashboard page margin left and right.</summary>
+  public string? page_margin_sides { get; set; } = null;
+  /// <summary>Toggle to show the explore page header. Defaults to true.</summary>
+  public bool? show_explore_header { get; set; } = null;
+  /// <summary>Toggle to show the explore page title. Defaults to true.</summary>
+  public bool? show_explore_title { get; set; } = null;
+  /// <summary>Toggle to show the explore page last run. Defaults to true.</summary>
+  public bool? show_explore_last_run { get; set; } = null;
+  /// <summary>Toggle to show the explore page timezone. Defaults to true.</summary>
+  public bool? show_explore_timezone { get; set; } = null;
+  /// <summary>Toggle to show the explore page run button. Defaults to true.</summary>
+  public bool? show_explore_run_stop_button { get; set; } = null;
+  /// <summary>Toggle to show the explore page actions button. Defaults to true.</summary>
+  public bool? show_explore_actions_button { get; set; } = null;
+  /// <summary>Toggle to show the look page header. Defaults to true.</summary>
+  public bool? show_look_header { get; set; } = null;
+  /// <summary>Toggle to show the look page title. Defaults to true.</summary>
+  public bool? show_look_title { get; set; } = null;
+  /// <summary>Toggle to show the look page last run. Defaults to true.</summary>
+  public bool? show_look_last_run { get; set; } = null;
+  /// <summary>Toggle to show the look page timezone Defaults to true.</summary>
+  public bool? show_look_timezone { get; set; } = null;
+  /// <summary>Toggle to show the look page run button. Defaults to true.</summary>
+  public bool? show_look_run_stop_button { get; set; } = null;
+  /// <summary>Toggle to show the look page actions button. Defaults to true.</summary>
+  public bool? show_look_actions_button { get; set; } = null;
+  /// <summary>Font size for tiles.</summary>
+  public string? tile_title_font_size { get; set; } = null;
+  /// <summary>The vertical gap/gutter size between tiles.</summary>
+  public string? column_gap_size { get; set; } = null;
+  /// <summary>The horizontal gap/gutter size between tiles.</summary>
+  public string? row_gap_size { get; set; } = null;
+  /// <summary>The border radius for tiles.</summary>
+  public string? border_radius { get; set; } = null;
 }
 
 public class Timezone : SdkModel
@@ -5647,7 +5699,7 @@ public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -6651,7 +6703,8 @@ public class WriteSessionConfig : SdkModel
   public bool? track_session_location { get; set; } = null;
 }
 
-/// Dynamic writeable type for Setting
+/// Dynamic writeable type for Setting removes:
+/// embed_enabled
 public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
@@ -6662,6 +6715,8 @@ public class WriteSetting : SdkModel
   public bool? marketplace_auto_install_enabled { get; set; } = null;
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
+  public bool? marketplace_terms_accepted { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for PrivatelabelConfiguration removes:
   /// logo_url, favicon_url

@@ -185,6 +185,9 @@ class Looker31SDK(api_methods.APIMethods):
     # it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
     # encrypted transport.
     #
+    #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    #
     # POST /embed/sso_url -> mdls.EmbedUrlResponse
     def create_sso_embed_url(
         self,
@@ -3380,6 +3383,8 @@ class Looker31SDK(api_methods.APIMethods):
         filter_or: Optional[bool] = None,
         # Match is shared root
         is_shared_root: Optional[bool] = None,
+        # Match is users root
+        is_users_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Folder]:
         """Search Folders"""
@@ -3388,7 +3393,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.get(
                 path="/folders/search",
                 structure=Sequence[mdls.Folder],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root},
+                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root, "is_users_root": is_users_root},
                 transport_options=transport_options
             )
         )
@@ -6696,7 +6701,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # slug of query
         slug: str,
-        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
         result_format: str,
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,
@@ -8156,6 +8161,8 @@ class Looker31SDK(api_methods.APIMethods):
         filter_or: Optional[bool] = None,
         # Match is shared root
         is_shared_root: Optional[bool] = None,
+        # Match is users root
+        is_users_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Space]:
         """Search Spaces"""
@@ -8164,7 +8171,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.get(
                 path="/spaces/search",
                 structure=Sequence[mdls.Space],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root},
+                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root, "is_users_root": is_users_root},
                 transport_options=transport_options
             )
         )
@@ -9610,7 +9617,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> mdls.CredentialsEmbed
     def user_credentials_embed(
@@ -9637,7 +9644,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> str
     def delete_user_credentials_embed(
@@ -9661,7 +9668,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(
