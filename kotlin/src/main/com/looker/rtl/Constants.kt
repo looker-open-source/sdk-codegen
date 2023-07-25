@@ -61,12 +61,12 @@ class DelimArray<T> : Array<T>() {
  */
 
 fun isTrue(value: String?): Boolean {
-    val low = unQuote(value?.toLowerCase())
+    val low = unQuote(value?.lowercase())
     return low == "true" || low == "1" || low == "t" || low == "y" || low == "yes"
 }
 
 fun isFalse(value: String?): Boolean {
-    val low = unQuote(value?.toLowerCase())
+    val low = unQuote(value?.lowercase())
     return low == "false" || low == "0" || low == "f" || low == "n" || low == "no"
 }
 

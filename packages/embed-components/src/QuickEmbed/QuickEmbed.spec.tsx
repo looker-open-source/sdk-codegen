@@ -50,6 +50,8 @@ describe('QuickEmbed', () => {
     ...overrides,
   })
   const onClose = jest.fn()
+  const onCopy = jest.fn()
+  document.execCommand = jest.fn()
 
   beforeEach(() => {
     jest.spyOn(window, 'location', 'get').mockReturnValue({
@@ -69,10 +71,10 @@ describe('QuickEmbed', () => {
   })
 
   it('renders', () => {
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
     const textboxes = screen.getAllByRole('textbox')
 
@@ -95,7 +97,7 @@ describe('QuickEmbed', () => {
     expect(
       screen.getByRole('button', { name: 'Copy Link' })
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument()
   })
 
   it('does not render theme selector for non-themable content', () => {
@@ -103,10 +105,10 @@ describe('QuickEmbed', () => {
       href: 'https://example.com/looks/42',
       pathname: '/looks/42',
     } as Location)
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
 
     expect(screen.queryByText(/Apply theme to/)).not.toBeInTheDocument()
@@ -124,10 +126,10 @@ describe('QuickEmbed', () => {
     ;(useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({ selectedTheme: customTheme1 })
     )
-    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
 
     expect(
-      screen.getByRole('heading', { name: 'Get embed url' })
+      screen.getByRole('heading', { name: 'Get embed URL' })
     ).toBeInTheDocument()
 
     expect(screen.getByText('Apply theme to dashboard URL')).toBeInTheDocument()
@@ -152,5 +154,35 @@ describe('QuickEmbed', () => {
         'https://example.com/embed/dashboards/42?foo=bar&theme=custom_theme_1'
       )
     })
+  })
+
+  it('close button function triggers on click', async () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
+    const closeBtn = screen.getByRole('button', { name: 'Close' })
+
+    expect(closeBtn).toBeInTheDocument()
+    await userEvent.click(closeBtn)
+
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it('onCopy not called when not passed in', async () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} />)
+    const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
+
+    expect(copyBtn).toBeInTheDocument()
+    await userEvent.click(copyBtn)
+
+    expect(onCopy).not.toHaveBeenCalled()
+  })
+
+  it('copy button function triggers on click', async () => {
+    renderWithTheme(<QuickEmbed onClose={onClose} onCopy={onCopy} />)
+    const copyBtn = screen.getByRole('button', { name: 'Copy Link' })
+
+    expect(copyBtn).toBeInTheDocument()
+    await userEvent.click(copyBtn)
+
+    expect(onCopy).toHaveBeenCalled()
   })
 })

@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 459 API methods
+/// 461 API methods
 
 #nullable enable
 using System;
@@ -345,6 +345,8 @@ namespace Looker.SDK.API40
   ///
   /// See 'login' for more detail on the access token and how to use it.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /login/{user_id} -> AccessToken
   ///
   /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
@@ -613,6 +615,8 @@ namespace Looker.SDK.API40
   ///
   /// The value of the `secret` field will be set by Looker and returned.
   ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed_config/secrets -> EmbedSecret
   ///
   /// <returns><c>EmbedSecret</c> embed secret (application/json)</returns>
@@ -625,6 +629,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Delete an embed secret.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /embed_config/secrets/{embed_secret_id} -> string
   ///
@@ -674,6 +680,9 @@ namespace Looker.SDK.API40
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
   ///
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
   /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
@@ -707,9 +716,12 @@ namespace Looker.SDK.API40
   /// copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
   ///
   /// #### Security Note
-  /// Protect this embed URL as you would an access token or password credentials - do not write
+  /// Protect this signed URL as you would an access token or password credentials - do not write
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
+  ///
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// POST /embed/token_url/me -> EmbedUrlResponse
   ///
@@ -753,6 +765,8 @@ namespace Looker.SDK.API40
   /// - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
   ///   the iframe.
   ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
   ///
   /// <returns><c>EmbedCookielessSessionAcquireResponse</c> Embed cookieless acquire session response (application/json)</returns>
@@ -769,6 +783,8 @@ namespace Looker.SDK.API40
   /// This will delete the session associated with the given session reference token. Calling this endpoint will result
   /// in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
   /// user out of the Looker instance.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// DELETE /embed/cookieless_session/{session_reference_token} -> string
   ///
@@ -790,6 +806,8 @@ namespace Looker.SDK.API40
   /// - Navigation token.
   /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
   /// first time when the tokens returned by the acquire_session endpoint should be used).
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
   ///
@@ -819,6 +837,8 @@ namespace Looker.SDK.API40
   ///
   /// See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /ldap_config -> LDAPConfig
   ///
   /// <returns><c>LDAPConfig</c> LDAP Configuration. (application/json)</returns>
@@ -840,6 +860,8 @@ namespace Looker.SDK.API40
   /// It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
   ///
   /// See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PATCH /ldap_config -> LDAPConfig
   ///
@@ -870,6 +892,8 @@ namespace Looker.SDK.API40
   /// No authentication to the LDAP server is attempted.
   ///
   /// The active LDAP settings are not modified.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PUT /ldap_config/test_connection -> LDAPConfigTestResult
   ///
@@ -903,6 +927,8 @@ namespace Looker.SDK.API40
   ///
   /// The active LDAP settings are not modified.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PUT /ldap_config/test_auth -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
@@ -924,6 +950,8 @@ namespace Looker.SDK.API40
   ///
   /// The active LDAP settings are not modified.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PUT /ldap_config/test_user_info -> LDAPConfigTestResult
   ///
   /// <returns><c>LDAPConfigTestResult</c> Result info. (application/json)</returns>
@@ -944,6 +972,8 @@ namespace Looker.SDK.API40
   /// **test_ldap_user** and **test_ldap_password** are required.
   ///
   /// The active LDAP settings are not modified.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
   ///
@@ -1200,6 +1230,8 @@ namespace Looker.SDK.API40
   ///
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /oidc_config -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> OIDC Configuration. (application/json)</returns>
@@ -1220,6 +1252,8 @@ namespace Looker.SDK.API40
   ///
   /// It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PATCH /oidc_config -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> New state for OIDC Configuration. (application/json)</returns>
@@ -1232,6 +1266,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Get a OIDC test configuration by test_slug.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /oidc_test_configs/{test_slug} -> OIDCConfig
   ///
@@ -1248,6 +1284,8 @@ namespace Looker.SDK.API40
 
   /// ### Delete a OIDC test configuration.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /oidc_test_configs/{test_slug} -> string
   ///
   /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
@@ -1263,6 +1301,8 @@ namespace Looker.SDK.API40
 
   /// ### Create a OIDC test configuration.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /oidc_test_configs -> OIDCConfig
   ///
   /// <returns><c>OIDCConfig</c> OIDC test config (application/json)</returns>
@@ -1276,6 +1316,8 @@ namespace Looker.SDK.API40
 
   /// ### Get password config.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /password_config -> PasswordConfig
   ///
   /// <returns><c>PasswordConfig</c> Password Config (application/json)</returns>
@@ -1287,6 +1329,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update password config.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PATCH /password_config -> PasswordConfig
   ///
@@ -1300,6 +1344,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Force all credentials_email users to reset their login passwords upon their next login.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
   ///
@@ -1324,6 +1370,8 @@ namespace Looker.SDK.API40
   ///
   /// SAML is enabled or disabled for Looker using the **enabled** field.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /saml_config -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> SAML Configuration. (application/json)</returns>
@@ -1344,6 +1392,8 @@ namespace Looker.SDK.API40
   ///
   /// It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PATCH /saml_config -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> New state for SAML Configuration. (application/json)</returns>
@@ -1356,6 +1406,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Get a SAML test configuration by test_slug.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /saml_test_configs/{test_slug} -> SamlConfig
   ///
@@ -1372,6 +1424,8 @@ namespace Looker.SDK.API40
 
   /// ### Delete a SAML test configuration.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /saml_test_configs/{test_slug} -> string
   ///
   /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
@@ -1387,6 +1441,8 @@ namespace Looker.SDK.API40
 
   /// ### Create a SAML test configuration.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /saml_test_configs -> SamlConfig
   ///
   /// <returns><c>SamlConfig</c> SAML test config (application/json)</returns>
@@ -1399,6 +1455,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Parse the given xml as a SAML IdP metadata document and return the result.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /parse_saml_idp_metadata -> SamlMetadataParseResult
   ///
@@ -1414,6 +1472,8 @@ namespace Looker.SDK.API40
   /// ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
   /// Note that this requires that the url be public or at least at a location where the Looker instance
   /// can fetch it without requiring any special authentication.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
   ///
@@ -1455,6 +1515,8 @@ namespace Looker.SDK.API40
   ///
   /// Returns the users that have been added to the Support Access Allowlist
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /support_access/allowlist -> SupportAccessAllowlistEntry[]
   ///
   /// <returns><c>SupportAccessAllowlistEntry[]</c> Support Access Allowlist Entries (application/json)</returns>
@@ -1472,6 +1534,8 @@ namespace Looker.SDK.API40
   ///
   /// Adds a list of emails to the Allowlist, using the provided reason
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /support_access/allowlist -> SupportAccessAllowlistEntry[]
   ///
   /// <returns><c>SupportAccessAllowlistEntry[]</c> Support Access Allowlist Entries (application/json)</returns>
@@ -1486,6 +1550,8 @@ namespace Looker.SDK.API40
   /// ### Delete Support Access Allowlist User
   ///
   /// Deletes the specified Allowlist Entry Id
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// DELETE /support_access/allowlist/{entry_id} -> string
   ///
@@ -1504,6 +1570,8 @@ namespace Looker.SDK.API40
   ///
   /// Enables Support Access for the provided duration
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PUT /support_access/enable -> SupportAccessStatus
   ///
   /// <returns><c>SupportAccessStatus</c> Support Access Status (application/json)</returns>
@@ -1519,6 +1587,8 @@ namespace Looker.SDK.API40
   ///
   /// Disables Support Access immediately
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PUT /support_access/disable -> SupportAccessStatus
   ///
   /// <returns><c>SupportAccessStatus</c> Support Access Status (application/json)</returns>
@@ -1532,6 +1602,8 @@ namespace Looker.SDK.API40
   /// ### Support Access Status
   ///
   /// Returns the current Support Access Status
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /support_access/status -> SupportAccessStatus
   ///
@@ -2257,6 +2329,8 @@ namespace Looker.SDK.API40
   ///
   /// Returns the list of public egress IP Addresses for a hosted customer's instance
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /public_egress_ip_addresses -> EgressIpAddresses
   ///
   /// <returns><c>EgressIpAddresses</c> Public Egress IP Addresses (application/json)</returns>
@@ -2319,6 +2393,8 @@ namespace Looker.SDK.API40
 
   /// ### Get all legacy features.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /legacy_features -> LegacyFeature[]
   ///
   /// <returns><c>LegacyFeature[]</c> Legacy Feature (application/json)</returns>
@@ -2330,6 +2406,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Get information about the legacy feature with a specific id.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /legacy_features/{legacy_feature_id} -> LegacyFeature
   ///
@@ -2345,6 +2423,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update information about the legacy feature with a specific id.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
   ///
@@ -2393,12 +2473,15 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
+  ///  - embed_cookieless_v2
+  ///  - embed_enabled
   ///
   /// GET /setting -> Setting
   ///
@@ -2422,14 +2505,19 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
+  ///  - embed_cookieless_v2
+  ///  - embed_enabled
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
+  ///
+  /// If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
   ///
   /// PATCH /setting -> Setting
   ///
@@ -2447,7 +2535,7 @@ namespace Looker.SDK.API40
 
   /// ### Configure SMTP Settings
   ///   This API allows users to configure the SMTP settings on the Looker instance.
-  ///   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+  ///   Only admin users are authorised to call this API.
   ///
   /// POST /smtp_settings -> void
   ///
@@ -3492,6 +3580,7 @@ namespace Looker.SDK.API40
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="not_owned_by">Filter out the dashboards owned by the user passed at the :user_id params</param>
   public async Task<SdkResponse<Dashboard[], Exception>> search_dashboards(
     string? id = null,
     string? slug = null,
@@ -3512,6 +3601,7 @@ namespace Looker.SDK.API40
     long? offset = null,
     string? sorts = null,
     bool? filter_or = null,
+    bool? not_owned_by = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, "/dashboards/search", new Values {
@@ -3533,7 +3623,8 @@ namespace Looker.SDK.API40
       { "limit", limit },
       { "offset", offset },
       { "sorts", sorts },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "not_owned_by", not_owned_by }},null,options);
   }
 
   /// ### Import a LookML dashboard to a space as a UDD
@@ -4369,6 +4460,7 @@ namespace Looker.SDK.API40
   /// <param name="creator_id">Filter on folder created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  /// <param name="is_users_root">Match is users root</param>
   public async Task<SdkResponse<Folder[], Exception>> search_folders(
     string? fields = null,
     long? page = null,
@@ -4382,6 +4474,7 @@ namespace Looker.SDK.API40
     string? creator_id = null,
     bool? filter_or = null,
     bool? is_shared_root = null,
+    bool? is_users_root = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders/search", new Values {
@@ -4396,7 +4489,8 @@ namespace Looker.SDK.API40
       { "parent_id", parent_id },
       { "creator_id", creator_id },
       { "filter_or", filter_or },
-      { "is_shared_root", is_shared_root }},null,options);
+      { "is_shared_root", is_shared_root },
+      { "is_users_root", is_users_root }},null,options);
   }
 
   /// ### Get information about the folder with a specific id.
@@ -5293,6 +5387,25 @@ namespace Looker.SDK.API40
   }
 
   #endregion Integration: Manage Integrations
+
+  #region JdbcInterface: LookML Model metadata for JDBC Clients
+
+  /// ### Handle Avatica RPC Requests
+  ///
+  /// GET /__jdbc_interface__ -> JdbcInterface
+  ///
+  /// <returns><c>JdbcInterface</c>  (application/json)</returns>
+  ///
+  /// <param name="avatica_request">Avatica RPC request</param>
+  public async Task<SdkResponse<JdbcInterface, Exception>> jdbc_interface(
+    string? avatica_request = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<JdbcInterface, Exception>(HttpMethod.Get, "/__jdbc_interface__", new Values {
+      { "avatica_request", avatica_request }},null,options);
+  }
+
+  #endregion JdbcInterface: LookML Model metadata for JDBC Clients
 
   #region Look: Run and Manage Looks
 
@@ -7350,7 +7463,7 @@ namespace Looker.SDK.API40
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
@@ -8066,6 +8179,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Set all groups for a role, removing all existing group associations from that role.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PUT /roles/{role_id}/groups -> Group[]
   ///
@@ -8942,6 +9057,9 @@ namespace Looker.SDK.API40
   ///
   /// Boolean search params accept only "true" and "false" as values.
   ///
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /credentials_email/search -> CredentialsEmailSearch[]
   ///
   /// <returns><c>CredentialsEmailSearch[]</c> Credentials Email (application/json)</returns>
@@ -9272,6 +9390,8 @@ namespace Looker.SDK.API40
   ///
   /// **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /users/credential/{credential_type}/{credential_id} -> User
   ///
   /// <returns><c>User</c> Specified user. (application/json)</returns>
@@ -9293,6 +9413,8 @@ namespace Looker.SDK.API40
 
   /// ### Email/password login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /users/{user_id}/credentials_email -> CredentialsEmail
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
@@ -9310,6 +9432,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Email/password login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /users/{user_id}/credentials_email -> CredentialsEmail
   ///
@@ -9330,6 +9454,8 @@ namespace Looker.SDK.API40
 
   /// ### Email/password login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// PATCH /users/{user_id}/credentials_email -> CredentialsEmail
   ///
   /// <returns><c>CredentialsEmail</c> Email/Password Credential (application/json)</returns>
@@ -9349,6 +9475,8 @@ namespace Looker.SDK.API40
 
   /// ### Email/password login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_email -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9363,6 +9491,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Two-factor login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_totp -> CredentialsTotp
   ///
@@ -9381,6 +9511,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Two-factor login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /users/{user_id}/credentials_totp -> CredentialsTotp
   ///
@@ -9401,6 +9533,8 @@ namespace Looker.SDK.API40
 
   /// ### Two-factor login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_totp -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9415,6 +9549,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### LDAP login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
   ///
@@ -9434,6 +9570,8 @@ namespace Looker.SDK.API40
 
   /// ### LDAP login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_ldap -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9448,6 +9586,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Google authentication login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_google -> CredentialsGoogle
   ///
@@ -9467,6 +9607,8 @@ namespace Looker.SDK.API40
 
   /// ### Google authentication login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_google -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9481,6 +9623,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Saml authentication login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
   ///
@@ -9500,6 +9644,8 @@ namespace Looker.SDK.API40
 
   /// ### Saml authentication login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_saml -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9514,6 +9660,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
   ///
@@ -9533,6 +9681,8 @@ namespace Looker.SDK.API40
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_oidc -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9547,6 +9697,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
   ///
@@ -9569,6 +9721,8 @@ namespace Looker.SDK.API40
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9586,6 +9740,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_api3 -> CredentialsApi3[]
   ///
@@ -9605,6 +9761,8 @@ namespace Looker.SDK.API40
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
   ///
   /// <returns><c>CreateCredentialsApi3</c> API Credential (application/json)</returns>
@@ -9622,6 +9780,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Embed login information for the specified user.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
   ///
@@ -9644,6 +9804,8 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9661,6 +9823,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Embed login information for the specified user.
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
   ///
@@ -9680,6 +9844,8 @@ namespace Looker.SDK.API40
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
   ///
   /// <returns><c>CredentialsLookerOpenid</c> Looker OpenId Credential (application/json)</returns>
@@ -9698,6 +9864,8 @@ namespace Looker.SDK.API40
 
   /// ### Looker Openid login information for the specified user. Used by Looker Analysts.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/credentials_looker_openid -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9712,6 +9880,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Web login session for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/sessions/{session_id} -> Session
   ///
@@ -9734,6 +9904,8 @@ namespace Looker.SDK.API40
 
   /// ### Web login session for the specified user.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// DELETE /users/{user_id}/sessions/{session_id} -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -9751,6 +9923,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Web login session for the specified user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/sessions -> Session[]
   ///
@@ -9777,6 +9951,8 @@ namespace Looker.SDK.API40
   /// Invitation emails for new users typically are not set to expire.
   /// The expire period is always 60 minutes when expires is enabled.
   /// This method can be called with an empty body.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
   ///
@@ -9931,6 +10107,8 @@ namespace Looker.SDK.API40
   /// Password reset URLs will expire in 60 minutes.
   /// This method can be called with an empty body.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
   ///
   /// <returns><c>CredentialsEmail</c> email/password credential (application/json)</returns>
@@ -9954,6 +10132,8 @@ namespace Looker.SDK.API40
   /// the value supplied in the 'email' body param.
   /// The user's 'is_disabled' status must be true.
   ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
   /// POST /users/{user_id}/update_emails -> User
   ///
   /// <returns><c>User</c> New state for specified user. (application/json)</returns>
@@ -9972,6 +10152,8 @@ namespace Looker.SDK.API40
   }
 
   /// Create an embed user from an external user ID
+  ///
+  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// POST /users/embed_user -> UserPublic
   ///

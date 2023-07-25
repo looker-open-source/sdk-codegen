@@ -106,7 +106,7 @@ class TestErrorDoc {
         assertEquals("login", errDoc.methodName("/login_404.md"))
         assertEquals("login_2", errDoc.methodName("/login_2_404.md"))
         assertEquals("and_another", errDoc.methodName("/and_another_404.md"))
-        assertEquals("login", errDoc.methodName("errorcodes/live/login_404.md"))
-        assertEquals("login", errDoc.methodName("https://foo.bar.com/live/login_404.md"))
+        assertEquals("login", errDoc.methodName("errorcodes/login_404.md"))
+        assertEquals("login", errDoc.methodName("https://foo.bar.com/login_404.md"))
     }
 }

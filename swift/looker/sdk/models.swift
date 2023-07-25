@@ -25,7 +25,7 @@
  */
 
 /**
- * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
+ * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -3846,7 +3846,7 @@ public struct CreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
      */
     public var result_format: ResultFormat
 
@@ -7996,6 +7996,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         case _external_group_id = "external_group_id"
         case user_attributes
         case _session_reference_token = "session_reference_token"
+        case _embed_domain = "embed_domain"
     }
     private var _session_length: AnyInt?
     /**
@@ -8097,7 +8098,16 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         set { _session_reference_token = newValue.map(AnyString.init) }
     }
 
-    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil) {
+    private var _embed_domain: AnyString?
+    /**
+     * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
+     */
+    public var embed_domain: String? {
+        get { _embed_domain?.value }
+        set { _embed_domain = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil, embed_domain: String? = nil) {
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
         self._external_user_id = external_user_id.map(AnyString.init)
@@ -8110,6 +8120,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._session_reference_token = session_reference_token.map(AnyString.init)
+        self._embed_domain = embed_domain.map(AnyString.init)
     }
 
 }
@@ -10699,6 +10710,26 @@ public struct InternalHelpResourcesContent: SDKModel {
  */
 public enum InvestigativeContentType: String, Codable {
     case dashboard = "dashboard"
+}
+
+public struct JdbcInterface: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _results = "results"
+    }
+    private var _results: AnyString?
+    /**
+     * JDBC Metadata to inflate Avatica response classes. (read-only)
+     */
+    public var results: String? {
+        get { _results?.value }
+        set { _results = newValue.map(AnyString.init) }
+    }
+
+    public init(results: String? = nil) {
+        self._results = results.map(AnyString.init)
+    }
+
 }
 
 public struct LDAPConfig: SDKModel {
@@ -17504,19 +17535,21 @@ public struct RepositoryCredential: SDKModel {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 public enum ResultFormat: String, Codable {
     case inline_json = "inline_json"
     case json = "json"
     case json_detail = "json_detail"
     case json_fe = "json_fe"
+    case json_bi = "json_bi"
     case csv = "csv"
     case html = "html"
     case md = "md"
     case txt = "txt"
     case xlsx = "xlsx"
     case gsxml = "gsxml"
+    case sql = "sql"
 }
 
 public struct ResultMakerFilterables: SDKModel {
@@ -19693,6 +19726,7 @@ public struct Setting: SDKModel {
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
         case marketplace_enabled
+        case marketplace_terms_accepted
         case privatelabel_configuration
         case custom_welcome_email
         case onboarding_enabled
@@ -19702,6 +19736,8 @@ public struct Setting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case embed_cookieless_v2
+        case embed_enabled
     }
     /**
      * Toggle extension framework on or off
@@ -19722,6 +19758,11 @@ public struct Setting: SDKModel {
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
+    /**
+     * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
+     */
+    public var marketplace_terms_accepted: Bool?
 
     public var privatelabel_configuration: PrivatelabelConfiguration?
 
@@ -19774,11 +19815,22 @@ public struct Setting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    /**
+     * Toggle cookieless embed setting
+     */
+    public var embed_cookieless_v2: Bool?
+
+    /**
+     * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+     */
+    public var embed_enabled: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
+        self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
@@ -19788,6 +19840,8 @@ public struct Setting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_enabled = embed_enabled
     }
 
 }
@@ -20722,6 +20776,25 @@ public struct ThemeSettings: SDKModel {
         case center_dashboard_title
         case _dashboard_title_font_size = "dashboard_title_font_size"
         case _box_shadow = "box_shadow"
+        case _page_margin_top = "page_margin_top"
+        case _page_margin_bottom = "page_margin_bottom"
+        case _page_margin_sides = "page_margin_sides"
+        case show_explore_header
+        case show_explore_title
+        case show_explore_last_run
+        case show_explore_timezone
+        case show_explore_run_stop_button
+        case show_explore_actions_button
+        case show_look_header
+        case show_look_title
+        case show_look_last_run
+        case show_look_timezone
+        case show_look_run_stop_button
+        case show_look_actions_button
+        case _tile_title_font_size = "tile_title_font_size"
+        case _column_gap_size = "column_gap_size"
+        case _row_gap_size = "row_gap_size"
+        case _border_radius = "border_radius"
     }
     private var _background_color: AnyString?
     /**
@@ -20921,7 +20994,130 @@ public struct ThemeSettings: SDKModel {
         set { _box_shadow = newValue.map(AnyString.init) }
     }
 
-    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil) {
+    private var _page_margin_top: AnyString?
+    /**
+     * Dashboard page margin top.
+     */
+    public var page_margin_top: String? {
+        get { _page_margin_top?.value }
+        set { _page_margin_top = newValue.map(AnyString.init) }
+    }
+
+    private var _page_margin_bottom: AnyString?
+    /**
+     * Dashboard page margin bottom.
+     */
+    public var page_margin_bottom: String? {
+        get { _page_margin_bottom?.value }
+        set { _page_margin_bottom = newValue.map(AnyString.init) }
+    }
+
+    private var _page_margin_sides: AnyString?
+    /**
+     * Dashboard page margin left and right.
+     */
+    public var page_margin_sides: String? {
+        get { _page_margin_sides?.value }
+        set { _page_margin_sides = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Toggle to show the explore page header. Defaults to true.
+     */
+    public var show_explore_header: Bool?
+
+    /**
+     * Toggle to show the explore page title. Defaults to true.
+     */
+    public var show_explore_title: Bool?
+
+    /**
+     * Toggle to show the explore page last run. Defaults to true.
+     */
+    public var show_explore_last_run: Bool?
+
+    /**
+     * Toggle to show the explore page timezone. Defaults to true.
+     */
+    public var show_explore_timezone: Bool?
+
+    /**
+     * Toggle to show the explore page run button. Defaults to true.
+     */
+    public var show_explore_run_stop_button: Bool?
+
+    /**
+     * Toggle to show the explore page actions button. Defaults to true.
+     */
+    public var show_explore_actions_button: Bool?
+
+    /**
+     * Toggle to show the look page header. Defaults to true.
+     */
+    public var show_look_header: Bool?
+
+    /**
+     * Toggle to show the look page title. Defaults to true.
+     */
+    public var show_look_title: Bool?
+
+    /**
+     * Toggle to show the look page last run. Defaults to true.
+     */
+    public var show_look_last_run: Bool?
+
+    /**
+     * Toggle to show the look page timezone Defaults to true.
+     */
+    public var show_look_timezone: Bool?
+
+    /**
+     * Toggle to show the look page run button. Defaults to true.
+     */
+    public var show_look_run_stop_button: Bool?
+
+    /**
+     * Toggle to show the look page actions button. Defaults to true.
+     */
+    public var show_look_actions_button: Bool?
+
+    private var _tile_title_font_size: AnyString?
+    /**
+     * Font size for tiles.
+     */
+    public var tile_title_font_size: String? {
+        get { _tile_title_font_size?.value }
+        set { _tile_title_font_size = newValue.map(AnyString.init) }
+    }
+
+    private var _column_gap_size: AnyString?
+    /**
+     * The vertical gap/gutter size between tiles.
+     */
+    public var column_gap_size: String? {
+        get { _column_gap_size?.value }
+        set { _column_gap_size = newValue.map(AnyString.init) }
+    }
+
+    private var _row_gap_size: AnyString?
+    /**
+     * The horizontal gap/gutter size between tiles.
+     */
+    public var row_gap_size: String? {
+        get { _row_gap_size?.value }
+        set { _row_gap_size = newValue.map(AnyString.init) }
+    }
+
+    private var _border_radius: AnyString?
+    /**
+     * The border radius for tiles.
+     */
+    public var border_radius: String? {
+        get { _border_radius?.value }
+        set { _border_radius = newValue.map(AnyString.init) }
+    }
+
+    public init(background_color: String? = nil, base_font_size: String? = nil, color_collection_id: String? = nil, font_color: String? = nil, font_family: String? = nil, font_source: String? = nil, info_button_color: String? = nil, primary_button_color: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, text_tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, warn_button_color: String? = nil, tile_title_alignment: String? = nil, tile_shadow: Bool? = nil, show_last_updated_indicator: Bool? = nil, show_reload_data_icon: Bool? = nil, show_dashboard_menu: Bool? = nil, show_filters_toggle: Bool? = nil, show_dashboard_header: Bool? = nil, center_dashboard_title: Bool? = nil, dashboard_title_font_size: String? = nil, box_shadow: String? = nil, page_margin_top: String? = nil, page_margin_bottom: String? = nil, page_margin_sides: String? = nil, show_explore_header: Bool? = nil, show_explore_title: Bool? = nil, show_explore_last_run: Bool? = nil, show_explore_timezone: Bool? = nil, show_explore_run_stop_button: Bool? = nil, show_explore_actions_button: Bool? = nil, show_look_header: Bool? = nil, show_look_title: Bool? = nil, show_look_last_run: Bool? = nil, show_look_timezone: Bool? = nil, show_look_run_stop_button: Bool? = nil, show_look_actions_button: Bool? = nil, tile_title_font_size: String? = nil, column_gap_size: String? = nil, row_gap_size: String? = nil, border_radius: String? = nil) {
         self._background_color = background_color.map(AnyString.init)
         self._base_font_size = base_font_size.map(AnyString.init)
         self._color_collection_id = color_collection_id.map(AnyString.init)
@@ -20948,6 +21144,25 @@ public struct ThemeSettings: SDKModel {
         self.center_dashboard_title = center_dashboard_title
         self._dashboard_title_font_size = dashboard_title_font_size.map(AnyString.init)
         self._box_shadow = box_shadow.map(AnyString.init)
+        self._page_margin_top = page_margin_top.map(AnyString.init)
+        self._page_margin_bottom = page_margin_bottom.map(AnyString.init)
+        self._page_margin_sides = page_margin_sides.map(AnyString.init)
+        self.show_explore_header = show_explore_header
+        self.show_explore_title = show_explore_title
+        self.show_explore_last_run = show_explore_last_run
+        self.show_explore_timezone = show_explore_timezone
+        self.show_explore_run_stop_button = show_explore_run_stop_button
+        self.show_explore_actions_button = show_explore_actions_button
+        self.show_look_header = show_look_header
+        self.show_look_title = show_look_title
+        self.show_look_last_run = show_look_last_run
+        self.show_look_timezone = show_look_timezone
+        self.show_look_run_stop_button = show_look_run_stop_button
+        self.show_look_actions_button = show_look_actions_button
+        self._tile_title_font_size = tile_title_font_size.map(AnyString.init)
+        self._column_gap_size = column_gap_size.map(AnyString.init)
+        self._row_gap_size = row_gap_size.map(AnyString.init)
+        self._border_radius = border_radius.map(AnyString.init)
     }
 
 }
@@ -21120,6 +21335,7 @@ public struct User: SDKModel {
         case allow_normal_group_membership
         case allow_roles_from_normal_groups
         case _embed_group_folder_id = "embed_group_folder_id"
+        case is_iam_admin
         case _url = "url"
     }
     /**
@@ -21336,6 +21552,11 @@ public struct User: SDKModel {
         set { _embed_group_folder_id = newValue.map(AnyString.init) }
     }
 
+    /**
+     * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+     */
+    public var is_iam_admin: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -21345,7 +21566,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -21381,6 +21602,7 @@ public struct User: SDKModel {
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
+        self.is_iam_admin = is_iam_admin
         self._url = url.map(AnyString.init)
     }
 
@@ -23117,7 +23339,7 @@ public struct WriteCreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
      */
     public var result_format: ResultFormat
 
@@ -27116,7 +27338,8 @@ public struct WriteSessionConfig: SDKModel {
 }
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  */
 public struct WriteSetting: SDKModel {
 
@@ -27125,6 +27348,7 @@ public struct WriteSetting: SDKModel {
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
         case marketplace_enabled
+        case marketplace_terms_accepted
         case privatelabel_configuration
         case custom_welcome_email
         case onboarding_enabled
@@ -27134,6 +27358,7 @@ public struct WriteSetting: SDKModel {
         case _host_url = "host_url"
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
+        case embed_cookieless_v2
     }
     /**
      * Toggle extension framework on or off
@@ -27154,6 +27379,11 @@ public struct WriteSetting: SDKModel {
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
+    /**
+     * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
+     */
+    public var marketplace_terms_accepted: Bool?
 
     /**
      * Dynamic writeable type for PrivatelabelConfiguration removes:
@@ -27210,11 +27440,17 @@ public struct WriteSetting: SDKModel {
         set { if let v = newValue { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil) {
+    /**
+     * Toggle cookieless embed setting
+     */
+    public var embed_cookieless_v2: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
         self.marketplace_enabled = marketplace_enabled
+        self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
         self.onboarding_enabled = onboarding_enabled
@@ -27224,6 +27460,7 @@ public struct WriteSetting: SDKModel {
         self._host_url = host_url.map(AnyString.init)
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
+        self.embed_cookieless_v2 = embed_cookieless_v2
     }
 
 }
@@ -27386,7 +27623,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 public struct WriteUser: SDKModel {
 

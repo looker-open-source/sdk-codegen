@@ -38,6 +38,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from ^21.5.2 to ^21.5.3
     * @looker/sdk-node bumped from ^23.4.0 to ^23.6.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.24 to ^0.1.25
+    * @looker/run-it bumped from ^0.9.47 to ^0.9.48
+    * @looker/sdk bumped from ^23.8.0 to ^23.8.1
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.5.4 to ^21.5.5
+    * @looker/sdk-node bumped from ^23.8.0 to ^23.8.1
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from ^0.1.28 to ^0.1.29
+    * @looker/extension-utils bumped from ^0.1.25 to ^0.1.26
+    * @looker/run-it bumped from ^0.9.48 to ^0.9.49
+    * @looker/sdk bumped from ^23.8.1 to ^23.10.0
+    * @looker/sdk-codegen bumped from ^21.8.0 to ^21.8.1
+    * @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.5.5 to ^21.5.6
+    * @looker/sdk-node bumped from ^23.8.1 to ^23.10.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.26 to ^0.1.27
+    * @looker/run-it bumped from ^0.9.49 to ^0.9.50
+    * @looker/sdk bumped from ^23.10.0 to ^23.12.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.5.6 to ^21.5.7
+    * @looker/sdk-node bumped from ^23.10.0 to ^23.12.0
+
+## [0.9.47](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.46...api-explorer-v0.9.47) (2023-05-11)
+
+
+### Features
+
+* replace @looker/redux for with npm dependency ([#1307](https://github.com/looker-open-source/sdk-codegen/issues/1307)) ([baa58db](https://github.com/looker-open-source/sdk-codegen/commit/baa58db1bce9d974384c63a0e11301f38774a7b2))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from ^0.1.23 to ^0.1.24
+    * @looker/run-it bumped from ^0.9.46 to ^0.9.47
+    * @looker/sdk bumped from ^23.6.0 to ^23.8.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from ^21.5.3 to ^21.5.4
+    * @looker/sdk-node bumped from ^23.6.0 to ^23.8.0
+
 ## [0.9.43](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.42...api-explorer-v0.9.43) (2023-02-22)
 
 

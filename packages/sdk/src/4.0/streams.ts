@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -126,6 +126,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJdbcInterface,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -166,10 +167,8 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -209,13 +208,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -744,6 +739,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * See 'login' for more detail on the access token and how to use it.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /login/{user_id} -> IAccessToken
    *
    * @param callback streaming output function
@@ -1091,6 +1088,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * The value of the `secret` field will be set by Looker and returned.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed_config/secrets -> IEmbedSecret
    *
    * @param callback streaming output function
@@ -1115,6 +1114,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Delete an embed secret.
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * DELETE /embed_config/secrets/{embed_secret_id} -> string
    *
@@ -1175,6 +1176,9 @@ export class Looker40SDKStream extends APIMethods {
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
    *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/sso_url -> IEmbedUrlResponse
    *
    * @param callback streaming output function
@@ -1220,9 +1224,12 @@ export class Looker40SDKStream extends APIMethods {
    * copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
    *
    * #### Security Note
-   * Protect this embed URL as you would an access token or password credentials - do not write
+   * Protect this signed URL as you would an access token or password credentials - do not write
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
+   *
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * POST /embed/token_url/me -> IEmbedUrlResponse
    *
@@ -1278,6 +1285,8 @@ export class Looker40SDKStream extends APIMethods {
    * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
    *   the iframe.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
    *
    * @param callback streaming output function
@@ -1308,6 +1317,8 @@ export class Looker40SDKStream extends APIMethods {
    * This will delete the session associated with the given session reference token. Calling this endpoint will result
    * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
    * user out of the Looker instance.
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * DELETE /embed/cookieless_session/{session_reference_token} -> string
    *
@@ -1340,6 +1351,8 @@ export class Looker40SDKStream extends APIMethods {
    * - Navigation token.
    * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
    * first time when the tokens returned by the acquire_session endpoint should be used).
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
    *
@@ -1383,6 +1396,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /ldap_config -> ILDAPConfig
    *
    * @param callback streaming output function
@@ -1415,6 +1430,8 @@ export class Looker40SDKStream extends APIMethods {
    * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
    *
    * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /ldap_config -> ILDAPConfig
    *
@@ -1457,6 +1474,8 @@ export class Looker40SDKStream extends APIMethods {
    * No authentication to the LDAP server is attempted.
    *
    * The active LDAP settings are not modified.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /ldap_config/test_connection -> ILDAPConfigTestResult
    *
@@ -1502,6 +1521,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * The active LDAP settings are not modified.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /ldap_config/test_auth -> ILDAPConfigTestResult
    *
    * @param callback streaming output function
@@ -1535,6 +1556,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * The active LDAP settings are not modified.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /ldap_config/test_user_info -> ILDAPConfigTestResult
    *
    * @param callback streaming output function
@@ -1567,6 +1590,8 @@ export class Looker40SDKStream extends APIMethods {
    * **test_ldap_user** and **test_ldap_password** are required.
    *
    * The active LDAP settings are not modified.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /ldap_config/test_user_auth -> ILDAPConfigTestResult
    *
@@ -1950,6 +1975,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * OIDC is enabled or disabled for Looker using the **enabled** field.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /oidc_config -> IOIDCConfig
    *
    * @param callback streaming output function
@@ -1981,6 +2008,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /oidc_config -> IOIDCConfig
    *
    * @param callback streaming output function
@@ -2005,6 +2034,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Get a OIDC test configuration by test_slug.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /oidc_test_configs/{test_slug} -> IOIDCConfig
    *
@@ -2032,6 +2063,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Delete a OIDC test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /oidc_test_configs/{test_slug} -> string
    *
    * @param callback streaming output function
@@ -2058,6 +2091,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Create a OIDC test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /oidc_test_configs -> IOIDCConfig
    *
    * @param callback streaming output function
@@ -2083,6 +2118,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Get password config.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /password_config -> IPasswordConfig
    *
    * @param callback streaming output function
@@ -2105,6 +2142,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Update password config.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /password_config -> IPasswordConfig
    *
@@ -2130,6 +2169,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Force all credentials_email users to reset their login passwords upon their next login.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
    *
@@ -2165,6 +2206,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * SAML is enabled or disabled for Looker using the **enabled** field.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /saml_config -> ISamlConfig
    *
    * @param callback streaming output function
@@ -2196,6 +2239,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /saml_config -> ISamlConfig
    *
    * @param callback streaming output function
@@ -2220,6 +2265,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Get a SAML test configuration by test_slug.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /saml_test_configs/{test_slug} -> ISamlConfig
    *
@@ -2247,6 +2294,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Delete a SAML test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /saml_test_configs/{test_slug} -> string
    *
    * @param callback streaming output function
@@ -2273,6 +2322,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Create a SAML test configuration.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /saml_test_configs -> ISamlConfig
    *
    * @param callback streaming output function
@@ -2297,6 +2348,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Parse the given xml as a SAML IdP metadata document and return the result.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
@@ -2324,6 +2377,8 @@ export class Looker40SDKStream extends APIMethods {
    * ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
    * Note that this requires that the url be public or at least at a location where the Looker instance
    * can fetch it without requiring any special authentication.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
    *
@@ -2400,6 +2455,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Returns the users that have been added to the Support Access Allowlist
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
    *
    * @param callback streaming output function
@@ -2427,6 +2484,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Adds a list of emails to the Allowlist, using the provided reason
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
    *
    * @param callback streaming output function
@@ -2453,6 +2512,8 @@ export class Looker40SDKStream extends APIMethods {
    * ### Delete Support Access Allowlist User
    *
    * Deletes the specified Allowlist Entry Id
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * DELETE /support_access/allowlist/{entry_id} -> string
    *
@@ -2482,6 +2543,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Enables Support Access for the provided duration
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /support_access/enable -> ISupportAccessStatus
    *
    * @param callback streaming output function
@@ -2509,6 +2572,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Disables Support Access immediately
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PUT /support_access/disable -> ISupportAccessStatus
    *
    * @param callback streaming output function
@@ -2533,6 +2598,8 @@ export class Looker40SDKStream extends APIMethods {
    * ### Support Access Status
    *
    * Returns the current Support Access Status
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /support_access/status -> ISupportAccessStatus
    *
@@ -3611,6 +3678,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Returns the list of public egress IP Addresses for a hosted customer's instance
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /public_egress_ip_addresses -> IEgressIpAddresses
    *
    * @param callback streaming output function
@@ -3730,6 +3799,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Get all legacy features.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /legacy_features -> ILegacyFeature[]
    *
    * @param callback streaming output function
@@ -3752,6 +3823,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Get information about the legacy feature with a specific id.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /legacy_features/{legacy_feature_id} -> ILegacyFeature
    *
@@ -3778,6 +3851,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Update information about the legacy feature with a specific id.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /legacy_features/{legacy_feature_id} -> ILegacyFeature
    *
@@ -3860,12 +3935,15 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
+   *  - marketplace_terms_accepted
    *  - marketplace_enabled
    *  - onboarding_enabled
    *  - privatelabel_configuration
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
+   *  - embed_cookieless_v2
+   *  - embed_enabled
    *
    * GET /setting -> ISetting
    *
@@ -3899,14 +3977,19 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
+   *  - marketplace_terms_accepted
    *  - marketplace_enabled
    *  - onboarding_enabled
    *  - privatelabel_configuration
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
+   *  - embed_cookieless_v2
+   *  - embed_enabled
    *
    * See the `Setting` type for more information on the specific values that can be configured.
+   *
+   * If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
    *
    * PATCH /setting -> ISetting
    *
@@ -3935,7 +4018,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Configure SMTP Settings
    *   This API allows users to configure the SMTP settings on the Looker instance.
-   *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+   *   Only admin users are authorised to call this API.
    *
    * POST /smtp_settings -> void
    *
@@ -5474,6 +5557,7 @@ export class Looker40SDKStream extends APIMethods {
         offset: request.offset,
         sorts: request.sorts,
         filter_or: request.filter_or,
+        not_owned_by: request.not_owned_by,
       },
       null,
       options
@@ -6724,6 +6808,7 @@ export class Looker40SDKStream extends APIMethods {
         creator_id: request.creator_id,
         filter_or: request.filter_or,
         is_shared_root: request.is_shared_root,
+        is_users_root: request.is_users_root,
       },
       null,
       options
@@ -7198,13 +7283,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_roles(
     callback: (readable: Readable) => Promise<IGroupSearch[]>,
-    request: IRequestSearchGroupsWithRoles,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupSearch[]>(
@@ -7258,13 +7343,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_hierarchy(
     callback: (readable: Readable) => Promise<IGroupHierarchy[]>,
-    request: IRequestSearchGroupsWithHierarchy,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupHierarchy[]>(
@@ -7950,6 +8035,35 @@ export class Looker40SDKStream extends APIMethods {
 
   //#endregion Integration: Manage Integrations
 
+  //#region JdbcInterface: LookML Model metadata for JDBC Clients
+
+  /**
+   * ### Handle Avatica RPC Requests
+   *
+   * GET /__jdbc_interface__ -> IJdbcInterface
+   *
+   * @param callback streaming output function
+   * @param avatica_request Avatica RPC request
+   * @param options one-time API call overrides
+   *
+   */
+  async jdbc_interface(
+    callback: (readable: Readable) => Promise<IJdbcInterface>,
+    avatica_request?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IJdbcInterface>(
+      callback,
+      'GET',
+      '/__jdbc_interface__',
+      { avatica_request },
+      null,
+      options
+    )
+  }
+
+  //#endregion JdbcInterface: LookML Model metadata for JDBC Clients
+
   //#region Look: Run and Manage Looks
 
   /**
@@ -8334,13 +8448,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /lookml_models -> ILookmlModel[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+   * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_lookml_models(
     callback: (readable: Readable) => Promise<ILookmlModel[]>,
-    request: IRequestAllLookmlModels,
+    request: IRequestArtifactNamespaces,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookmlModel[]>(
@@ -10516,7 +10630,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *
@@ -11018,13 +11132,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /permission_sets/search -> IPermissionSet[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
     callback: (readable: Readable) => Promise<IPermissionSet[]>,
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
@@ -11316,13 +11430,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+   * @param request composed interface "IRequestSearchRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_roles_with_user_count(
     callback: (readable: Readable) => Promise<IRoleSearch[]>,
-    request: IRequestSearchRolesWithUserCount,
+    request: IRequestSearchRoles,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRoleSearch[]>(
@@ -11454,6 +11568,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Set all groups for a role, removing all existing group associations from that role.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PUT /roles/{role_id}/groups -> IGroup[]
    *
@@ -12583,6 +12699,9 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Boolean search params accept only "true" and "false" as values.
    *
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /credentials_email/search -> ICredentialsEmailSearch[]
    *
    * @param callback streaming output function
@@ -12934,6 +13053,8 @@ export class Looker40SDKStream extends APIMethods {
    *
    * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/credential/{credential_type}/{credential_id} -> IUser
    *
    * @param callback streaming output function
@@ -12965,6 +13086,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
@@ -12992,6 +13115,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_email -> ICredentialsEmail
    *
@@ -13023,6 +13148,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
    *
    * @param callback streaming output function
@@ -13053,6 +13180,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Email/password login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_email -> string
    *
    * @param callback streaming output function
@@ -13078,6 +13207,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
@@ -13106,6 +13237,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
    *
@@ -13137,6 +13270,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Two-factor login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_totp -> string
    *
    * @param callback streaming output function
@@ -13162,6 +13297,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### LDAP login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
    *
@@ -13191,6 +13328,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### LDAP login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_ldap -> string
    *
    * @param callback streaming output function
@@ -13216,6 +13355,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Google authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
@@ -13245,6 +13386,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Google authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_google -> string
    *
    * @param callback streaming output function
@@ -13270,6 +13413,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Saml authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
@@ -13299,6 +13444,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Saml authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
    * @param callback streaming output function
@@ -13324,6 +13471,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
@@ -13353,6 +13502,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
    * @param callback streaming output function
@@ -13378,6 +13529,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
    *
@@ -13410,6 +13563,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param callback streaming output function
@@ -13439,6 +13594,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
    * @param callback streaming output function
@@ -13467,6 +13624,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
    * @param callback streaming output function
@@ -13494,6 +13653,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Embed login information for the specified user.
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
    *
@@ -13526,6 +13687,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Embed login information for the specified user.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
    * @param callback streaming output function
@@ -13555,6 +13718,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Embed login information for the specified user.
    *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
    * @param callback streaming output function
@@ -13582,6 +13747,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
    *
@@ -13611,6 +13778,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Looker Openid login information for the specified user. Used by Looker Analysts.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/credentials_looker_openid -> string
    *
    * @param callback streaming output function
@@ -13636,6 +13805,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Web login session for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/sessions/{session_id} -> ISession
    *
@@ -13668,6 +13839,8 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Web login session for the specified user.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
    * @param callback streaming output function
@@ -13696,6 +13869,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * ### Web login session for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
@@ -13732,6 +13907,8 @@ export class Looker40SDKStream extends APIMethods {
    * Invitation emails for new users typically are not set to expire.
    * The expire period is always 60 minutes when expires is enabled.
    * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
    *
@@ -13937,6 +14114,8 @@ export class Looker40SDKStream extends APIMethods {
    * Password reset URLs will expire in 60 minutes.
    * This method can be called with an empty body.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
    *
    * @param callback streaming output function
@@ -13970,6 +14149,8 @@ export class Looker40SDKStream extends APIMethods {
    * the value supplied in the 'email' body param.
    * The user's 'is_disabled' status must be true.
    *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
    * POST /users/{user_id}/update_emails -> IUser
    *
    * @param callback streaming output function
@@ -13999,6 +14180,8 @@ export class Looker40SDKStream extends APIMethods {
 
   /**
    * Create an embed user from an external user ID
+   *
+   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
    * POST /users/embed_user -> IUserPublic
    *
@@ -14032,13 +14215,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /user_attributes -> IUserAttribute[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
     callback: (readable: Readable) => Promise<IUserAttribute[]>,
-    request: IRequestAllUserAttributes,
+    request: IRequestAllBoardSections,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(

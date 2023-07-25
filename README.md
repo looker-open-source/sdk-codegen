@@ -1,10 +1,24 @@
 # SDK Codegen
 
-This Looker Open Source repository is released under the MIT license. By using this repository, you agree to the terms of that license, and acknowledge that you are doing so at your own risk.
+This Looker Open Source repository is released under the MIT license. By using
+this repository, you agree to the terms of that license, and acknowledge that
+you are doing so at your own risk.
 
-While Looker has developed and tested this code internally, we cannot guarantee that the open-source tools used by the scripts in this repository have not been modified with malicious code.
+While Looker has developed and tested this code internally, we cannot guarantee
+that the open-source tools used by the scripts in this repository have not been
+modified with malicious code.
 
-**Important** - If you are using the Looker TypeScript SDK, please see the [note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk) of this file explaining changes to dependencies and packaging.
+**Important** - If you are using the Looker TypeScript SDK, please see the
+[note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk)
+of this file explaining changes to dependencies and packaging.
+
+### Support
+The TypeScript and Python SDKs are officially supported by Looker/Google.
+Issues can be logged here in the GitHub Issues page, but can also be logged
+with Looker Support. The other language SDKs are community supported. Issues
+for these should be logged only in the GitHub Issues page. Details of Looker
+API and SDK support can be found at [https://cloud.google.com/looker/docs/api-sdk-support-policy](https://cloud.google.com/looker/docs/api-sdk-support-policy).
+
 
 ## Overview
 
@@ -20,33 +34,57 @@ This repository contains:
 
 ## The parts of the Looker SDK
 
-We hope to help people who want to use Looker as a platform get up and running quickly, largely by providing pre-built client SDKs in the most popular languages, and implementing consistency across all languages and platforms.
+We hope to help people who want to use Looker as a platform get up and running
+quickly, largely by providing pre-built client SDKs in the most popular
+languages, and implementing consistency across all languages and platforms.
 
 The Looker SDK has several parts:
 
-- The **Looker API**, described by an [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification) (e.g., the Swagger 2.x representation found at
-  `https://<your-looker-domain>:19999/api/4.0/swagger.json`). The 4.0 API is our current & stable API. As of June 2022, [3.x is deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
+- The **Looker API**, described by an [OpenAPI
+  specification](https://github.com/OAI/OpenAPI-Specification) (e.g., the
+  Swagger 2.x representation found at
+  `https://<your-looker-domain>:19999/api/4.0/swagger.json`). The 4.0 API is
+  our current & stable API. As of June 2022, [3.x is
+  deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-- The **Looker API Explorer**, an interactive reference, accessible either stand-alone at [developers.looker.com/api/explorer/](https://developers.looker.com/api/explorer/), or installable into your Looker instance as an extension from the Looker Marketplace.
+- The **Looker API Explorer**, an interactive reference, accessible either
+  stand-alone at
+  [developers.looker.com/api/explorer/](https://developers.looker.com/api/explorer/),
+  or installable into your Looker instance as an extension from the Looker
+  Marketplace.
 
-- **Language SDKs**, "smarter" client language classes and methods to improve the experience of calling the Looker API in various popular coding languages. Some SDKs are [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#support_levels) whereas others are community-supported.
+- **Language SDKs**, "smarter" client language classes and methods to improve
+  the experience of calling the Looker API in various popular coding languages.
+  Some SDKs are
+  [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#support_levels)
+  whereas others are community-supported.
 
 ## SDK multi-API-version support
 
-The 4.0 version of the API is the current and stable version of the API, in addition to the 3.x API which is now [deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
+The 4.0 version of the API is the current and stable version of the API, in
+addition to the 3.x API which is now
+[deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
 
-Some SDKs support and expose both API versions in the same SDK package, including all [Looker-supported SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
+Some SDKs support and expose both API versions in the same SDK package,
+including all [Looker-supported
+SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
 
-For SDKs that support multiple API versions, there will be `methods.*` and `models.*` collections generated for each API version. Each API version is exposed under a distinct class name from which to instantiate an initial SDK object.
+For SDKs that support multiple API versions, there will be `methods.*` and
+`models.*` collections generated for each API version. Each API version is
+exposed under a distinct class name from which to instantiate an initial SDK
+object.
 
-API-version-specific files generally use shared Run-Time Library (RTL) code in the SDK package to minimize code duplication.
+API-version-specific files generally use shared Run-Time Library (RTL) code in
+the SDK package to minimize code duplication.
 
-Regardless of which API version you use, API credentials are unchanged, and may continue to be referred to as "API3" credentials.
+Regardless of which API version you use, API credentials are unchanged, and may
+continue to be referred to as "API3" credentials.
 
 
 ### Looker SDKs
 
-Please review the following table for a breakdown of the options to initialize the desired SDK object.
+Please review the following table for a breakdown of the options to initialize
+the desired SDK object.
 
 | SDK                        | API 3.1 [(deprecated)](https://developers.looker.com/api/advanced-usage/version-3x-deprecation) | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
 | -------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -57,7 +95,10 @@ Please review the following table for a breakdown of the options to initialize t
 | [Look#](csharp)            | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
 | [GoLook](go)               | Not supported                                                                                   | `v4.NewLookerSDK()`                                                      | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
 
-By supporting both API versions in the same SDK package, we hope the migration path to the latest API is simplified. Both SDK versions can be used at the same time, in the same source file, which should allow for iterative work to move to the new API version.
+By supporting both API versions in the same SDK package, we hope the migration
+path to the latest API is simplified. Both SDK versions can be used at the same
+time, in the same source file, which should allow for iterative work to move to
+the new API version.
 
 For example:
 
@@ -80,15 +121,26 @@ const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
 
 ## Automatic URL encoding for input values
 
-TL;DR: don't URL encode your inputs because the SDKs will automatically handle it.
+TL;DR: don't URL encode your inputs because the SDKs will automatically handle
+it.
 
-All SDKs URL encode (also known as [percent encoding](https://en.wikipedia.org/wiki/Percent-encoding)) input values for passing to the API endpoints automatically. Furthermore, except for Swift, which has problematic URL decoding support, the other SDKs will avoid double-encoding inputs that may already be encoded.
+All SDKs URL encode (also known as [percent
+encoding](https://en.wikipedia.org/wiki/Percent-encoding)) input values for
+passing to the API endpoints automatically. Furthermore, except for Swift,
+which has problematic URL decoding support, the other SDKs will avoid
+double-encoding inputs that may already be encoded.
 
 ## Using existing, pre-generated SDKs
 
-When a specific language SDK has been developed, Looker makes that SDK available using the standard package manager for that platform. Currently, the [Python SDK](python) and the [TypeScript SDK](packages/sdk) can be installed from their respective package managers by following the instructions in their readmes.
+When a specific language SDK has been developed, Looker makes that SDK
+available using the standard package manager for that platform. Currently, the
+[Python SDK](python) and the [TypeScript SDK](packages/sdk) can be installed
+from their respective package managers by following the instructions in their
+readmes.
 
-For the other SDKs in this repository, you can copy and paste the source code into a module for your own project. Every SDK will eventually have a deployed package version.
+For the other SDKs in this repository, you can copy and paste the source code
+into a module for your own project. Every SDK will eventually have a deployed
+package version.
 
 If you want to use the generation options for an SDK, read on.
 
@@ -96,9 +148,14 @@ If you want to use the generation options for an SDK, read on.
 
 There are three steps for generating an SDK with this project:
 
-- [configure a `looker.ini` file](#configuring-lookerini-or-env) so the Looker API specification can be retrieved from your Looker server.
+- [configure a `looker.ini` file](#configuring-lookerini-or-env) so the Looker
+  API specification can be retrieved from your Looker server.
 
-  - **Note**: previous versions of the `looker.ini` file had an `api_version` entry. This is no longer required. The code generator project will read an `api_versions` value if that is found, but the SDKs ignore this value. If `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for the generator to produce the definitions for the supported API versions.
+  - **Note**: previous versions of the `looker.ini` file had an `api_version`
+    entry. This is no longer required. The code generator project will read an
+    `api_versions` value if that is found, but the SDKs ignore this value. If
+    `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for
+    the generator to produce the definitions for the supported API versions.
 
 - install the code generator project dependencies by running:
 
@@ -117,15 +174,34 @@ The resources required to run the code generator are in [package.json](package.j
 
 ## Configuring `looker.ini` or `.env`
 
-The code generator and other scripts and tests read a configuration file called `looker.ini` to fetch the API specification from a server. This configuration file needs to be in the root folder of the code generator.
+The code generator and other scripts and tests read a configuration file called
+`looker.ini` to fetch the API specification from a server. This configuration
+file needs to be in the root folder of the code generator.
 
-To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to `looker.ini` and fill in the required values. The values for `client_id` and `client_secret` can be retrieved by navigating to `https://<your_looker_endpoint>/admin/users`, editing your user, editing API3 keys, and clicking the "reveal" button to view your `client_id` and `client_secret`. If there are currently no API3 credentials, they can be generated by clicking “New API3 Key.”
+To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to
+`looker.ini` and fill in the required values. The values for `client_id` and
+`client_secret` can be retrieved by navigating to
+`https://<your_looker_endpoint>/admin/users`, editing your user, editing API3
+keys, and clicking the "reveal" button to view your `client_id` and
+`client_secret`. If there are currently no API3 credentials, they can be
+generated by clicking “New API3 Key.”
 
-For your own source code repositories, be sure to configure your version control system to ignore the SDK configuration `.ini` file so it doesn't accidentally get published somewhere unauthorized people can see it.
+For your own source code repositories, be sure to configure your version
+control system to ignore the SDK configuration `.ini` file so it doesn't
+accidentally get published somewhere unauthorized people can see it.
 
-Unlike some other OpenAPI code generators, the Looker SDK code generator **never** writes access information into SDK source code. All SDKs provided by Looker are designed to receive the credentials required to call API methods via a `readConfig()` method that returns a key/value collection, where `client_id` and `client_secret` are retrieved, and used only for the time it takes to complete a login for authentication token retrieval, then they are immediately discarded from memory.
+Unlike some other OpenAPI code generators, the Looker SDK code generator
+**never** writes access information into SDK source code. All SDKs provided by
+Looker are designed to receive the credentials required to call API methods via
+a `readConfig()` method that returns a key/value collection, where `client_id`
+and `client_secret` are retrieved, and used only for the time it takes to
+complete a login for authentication token retrieval, then they are immediately
+discarded from memory.
 
-**Note**: If a `.env` file is found, this will override values from `looker.ini`. To use a `.env` file for configuration instead, copy [`env-sample`](env-sample) to `.env` and provide the correct values for the environment variables.
+**Note**: If a `.env` file is found, this will override values from
+`looker.ini`. To use a `.env` file for configuration instead, copy
+[`env-sample`](env-sample) to `.env` and provide the correct values for the
+environment variables.
 
 Invoke the SDK code generator with the command:
 
@@ -143,17 +219,23 @@ The code generator will:
 
 - read the Looker API configuration(s) from the `looker.ini` file.
 
-  - **Note**: Normally there should only be one (1) entry in `looker.ini`. This first ini section is what is used for the SDKs by default, and also by the code generator.
+  - **Note**: Normally there should only be one (1) entry in `looker.ini`. This
+    first ini section is what is used for the SDKs by default, and also by the
+    code generator.
 
-- download (if the API specification file is not already present) the Looker API specification file(s) from the configured Looker server(s)
+- download (if the API specification file is not already present) the Looker
+  API specification file(s) from the configured Looker server(s)
 
-- convert (if the converted file is not already present) the downloaded Swagger 2 specification file(s) to OpenAPI 3.x
+- convert (if the converted file is not already present) the downloaded Swagger
+  2 specification file(s) to OpenAPI 3.x
 
 - validate the OpenAPI 3.x file(s)
 
-- by default, call the code generator for each active language 
+- by default, call the code generator for each active language
 
-  - To generate one specific language SDK, use `yarn gen {language}`. The supported languages have a factory declared in the `Generators` array in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
+  - To generate one specific language SDK, use `yarn gen {language}`. The
+    supported languages have a factory declared in the `Generators` array in
+    [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts)
 
 When the generator completes successfully, the output will be similar to:
 
@@ -167,15 +249,20 @@ python
       models.py (automatically generated)
 ```
 
-**Note:** If you're unable to download the API specification file because you're using an instance of Looker that is self-signed and errors are thrown, you can explicitly turn off SSL verification by putting `verify_ssl=false` in the `looker.ini` file configuration section.
+**Note:** If you're unable to download the API specification file because
+you're using an instance of Looker that is self-signed and errors are thrown,
+you can explicitly turn off SSL verification by putting `verify_ssl=false` in
+the `looker.ini` file configuration section.
 
 ### Using the Legacy generator
 
-To generate a language currently not supported by Looker's SDK code generator with the OpenAPI generator:
+To generate a language currently not supported by Looker's SDK code generator
+with the OpenAPI generator:
 
 - configure the desired language in [`codeGenerators.ts`](packages/sdk-codegen/src/codeGenerators.ts).
 
-- use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI generator to output files to the `./api/*` path
+- use `yarn legacy` to call the OpenAPI generator. This will use the OpenAPI
+  generator to output files to the `./api/*` path
 
 ### Additional scripts
 
@@ -214,7 +301,9 @@ yarn lint --quick --fix
 
 ## SDK Examples
 
-The [examples directory](/examples) contains code snippets and projects written using the Looker language SDKs. You may find useful code in that repository. and are also welcome to contribute additional examples.
+The [examples directory](/examples) contains code snippets and projects written
+using the Looker language SDKs. You may find useful code in that repository.
+and are also welcome to contribute additional examples.
 
 ## API Troubleshooting
 
@@ -226,13 +315,30 @@ In addition to swagger being deprecated, this [visual guide](https://blog.readme
 
 ## Securing your SDK credentials
 
-Looker improves on the security of the generated code for SDKs by **never** storing your server location or API credentials in the source code generated by the Looker code generator. The SDKs also provide some customizable support for providing API configuration values like server location and credentials to the SDK. In every Looker SDK, there is an overrideable method called `readConfig()` that can be customized to retrieve and return SDK configuration values from your preferred secure storage location.
+Looker improves on the security of the generated code for SDKs by **never**
+storing your server location or API credentials in the source code generated by
+the Looker code generator. The SDKs also provide some customizable support for
+providing API configuration values like server location and credentials to the
+SDK. In every Looker SDK, there is an overrideable method called `readConfig()`
+that can be customized to retrieve and return SDK configuration values from
+your preferred secure storage location.
 
-Each Looker SDK has existing `readConfig()` examples that read from `.ini` files or environment variables. These are intended to support a quick start when developing with a Looker SDK. If a production environment prohibits secure use of `.ini` files or environment variables, another method of retrieving API configuration values is required. The API configuration retrieval function `readConfig()` can be overridden to support alternate storage scenarios.
+Each Looker SDK has existing `readConfig()` examples that read from `.ini`
+files or environment variables. These are intended to support a quick start
+when developing with a Looker SDK. If a production environment prohibits secure
+use of `.ini` files or environment variables, another method of retrieving API
+configuration values is required. The API configuration retrieval function
+`readConfig()` can be overridden to support alternate storage scenarios.
 
-Typically, `client_id` and `client_secret` are the only key values that will need to be dynamically retrieved from the `readConfig()` override method because the other configuration values are saved in memory by the initialized SDK client. In the near future, there will be additional authentication flows (such as OAuth) supported by Looker SDKs. The dynamic result that is returned by `readConfig()` can also be useful in those additional scenarios.
+Typically, `client_id` and `client_secret` are the only key values that will
+need to be dynamically retrieved from the `readConfig()` override method
+because the other configuration values are saved in memory by the initialized
+SDK client. In the near future, there will be additional authentication flows
+(such as OAuth) supported by Looker SDKs. The dynamic result that is returned
+by `readConfig()` can also be useful in those additional scenarios.
 
-A short [TypeScript SDK example](https://github.com/looker-open-source/sdk-examples/blob/6f7b42891923a7430e0bb8341c7b5c567a2e1269/typescript/customConfigReader.ts#L15:L28) that customizes `readConfig()` is available in the SDK Examples repository.
+A short [TypeScript SDK example](https://github.com/looker-open-source/sdk-examples/blob/6f7b42891923a7430e0bb8341c7b5c567a2e1269/typescript/customConfigReader.ts#L15:L28)
+that customizes `readConfig()` is available in the SDK Examples repository.
 
 There is also a Kotlin SDK unit test in this repository with a short example:
 
@@ -251,21 +357,34 @@ class MockSettings(contents: String) : ApiSettings(contents) {
 }
 ```
 
-Please consult with the security professionals in your organization to determine the best way to secure your credentials for your own Looker SDK usage.
+Please consult with the security professionals in your organization to
+determine the best way to secure your credentials for your own Looker SDK
+usage.
 
 ### Warnings for using `.ini` files to configure the SDK
 
-To streamline getting started with the Looker SDKs, support for reading SDK credentials from an `.ini` file is included as a simple method for providing access information (server url and API credentials) to the SDK. If the source code to your Looker SDK application is shared in a version control system, the `.ini` file should be ignored so it never gets inadvertently published.
+To streamline getting started with the Looker SDKs, support for reading SDK
+credentials from an `.ini` file is included as a simple method for providing
+access information (server url and API credentials) to the SDK. If the source
+code to your Looker SDK application is shared in a version control system, the
+`.ini` file should be ignored so it never gets inadvertently published.
 
-If the SDK application using an `.ini` file is available publicly, download or viewing of this `.ini` file should also be prohibited by the server hosting the application.
+If the SDK application using an `.ini` file is available publicly, download or
+viewing of this `.ini` file should also be prohibited by the server hosting the
+application.
 
 ### Warnings for using Environment variables to configure the SDK
 
-If the host environment for a Looker SDK supports environment variables, the SDK can also read environment variables to retrieve the server url and API credentials. Environment variables could also be visible to intrusive malware that may penetrate your application, so this option for providing credentials should also be used with caution.
+If the host environment for a Looker SDK supports environment variables, the
+SDK can also read environment variables to retrieve the server url and API
+credentials. Environment variables could also be visible to intrusive malware
+that may penetrate your application, so this option for providing credentials
+should also be used with caution.
 
 ## Environment variable configuration
 
-Environment variables can be used for any SDK runtime that supports reading environment variables. Environment variables can be used in the:
+Environment variables can be used for any SDK runtime that supports reading
+environment variables. Environment variables can be used in the:
 
 - **Node** version of the TypeScript/JavaScript Looker SDK
 - Python SDK
@@ -273,7 +392,9 @@ Environment variables can be used for any SDK runtime that supports reading envi
 - Kotlin SDK
 - Go SDK
 
-The following table describes the environment variables. By default, the SDK "namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming environment variables.
+The following table describes the environment variables. By default, the SDK
+"namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming
+environment variables.
 
 | Variable name           | Description                                                                                                                                                           |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

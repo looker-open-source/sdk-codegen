@@ -24,7 +24,7 @@
 
  */
 import {
-  Looker40SDK as LookerSDK,
+  functionalSdk40 as funSdk,
   all_themes,
   update_theme,
   create_theme,
@@ -38,11 +38,10 @@ import { themeServiceCreator } from './ThemeService'
 import type { IThemeService } from './ThemeService'
 import { TestConfig, session, timeout } from './test-utils'
 
-const config = TestConfig()
-const themes = config.testData.themes
-
 describe('ThemeService', () => {
-  const sdk: IAPIMethods = new LookerSDK(session)
+  const config = TestConfig()
+  const themes = config.testData.themes
+  const sdk: IAPIMethods = funSdk(session)
   let service: IThemeService
   let testThemes: ITheme[]
   const themeCount = themes.length + 1 // includes the Looker theme

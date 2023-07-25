@@ -25,7 +25,7 @@
  */
 
 /**
- * 311 API models: 190 Spec, 53 Request, 51 Write, 17 Enum
+ * 308 API models: 190 Spec, 50 Request, 51 Write, 17 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -769,7 +769,7 @@ export interface ICreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -6003,20 +6003,6 @@ export interface IRequestAllScheduledPlans {
 }
 
 /**
- * Dynamically generated request type for all_user_attributes
- */
-export interface IRequestAllUserAttributes {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Fields to order the results by. Sortable fields include: name, label
-   */
-  sorts?: string | null
-}
-
-/**
  * Dynamically generated request type for all_users
  */
 export interface IRequestAllUsers {
@@ -6893,60 +6879,6 @@ export interface IRequestSearchDashboards {
 }
 
 /**
- * Dynamically generated request type for search_folders
- */
-export interface IRequestSearchFolders {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Return only page N of paginated results
-   */
-  page?: number | null
-  /**
-   * Return N rows of data per page
-   */
-  per_page?: number | null
-  /**
-   * Number of results to return. (used with offset and takes priority over page and per_page)
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match Space title.
-   */
-  name?: string | null
-  /**
-   * Match Space id
-   */
-  id?: number | null
-  /**
-   * Filter on a children of a particular folder.
-   */
-  parent_id?: string | null
-  /**
-   * Filter on folder created by a particular user.
-   */
-  creator_id?: string | null
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null
-  /**
-   * Match is shared root
-   */
-  is_shared_root?: boolean | null
-}
-
-/**
  * Dynamically generated request type for search_groups
  */
 export interface IRequestSearchGroups {
@@ -7159,48 +7091,6 @@ export interface IRequestSearchModelSets {
 }
 
 /**
- * Dynamically generated request type for search_permission_sets
- */
-export interface IRequestSearchPermissionSets {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null
-  /**
-   * Match permission set id.
-   */
-  id?: number | null
-  /**
-   * Match permission set name.
-   */
-  name?: string | null
-  /**
-   * Match permission sets by all_access status.
-   */
-  all_access?: boolean | null
-  /**
-   * Match permission sets by built_in status.
-   */
-  built_in?: boolean | null
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null
-}
-
-/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
@@ -7290,6 +7180,10 @@ export interface IRequestSearchSpaces {
    * Match is shared root
    */
   is_shared_root?: boolean | null
+  /**
+   * Match is users root
+   */
+  is_users_root?: boolean | null
 }
 
 /**
@@ -7637,19 +7531,21 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
   json_fe = 'json_fe',
+  json_bi = 'json_bi',
   csv = 'csv',
   html = 'html',
   md = 'md',
   txt = 'txt',
   xlsx = 'xlsx',
   gsxml = 'gsxml',
+  sql = 'sql',
 }
 
 export interface IResultMakerFilterables {
@@ -8828,6 +8724,82 @@ export interface IThemeSettings {
    * Default box shadow.
    */
   box_shadow?: string
+  /**
+   * Dashboard page margin top.
+   */
+  page_margin_top?: string
+  /**
+   * Dashboard page margin bottom.
+   */
+  page_margin_bottom?: string
+  /**
+   * Dashboard page margin left and right.
+   */
+  page_margin_sides?: string
+  /**
+   * Toggle to show the explore page header. Defaults to true.
+   */
+  show_explore_header?: boolean
+  /**
+   * Toggle to show the explore page title. Defaults to true.
+   */
+  show_explore_title?: boolean
+  /**
+   * Toggle to show the explore page last run. Defaults to true.
+   */
+  show_explore_last_run?: boolean
+  /**
+   * Toggle to show the explore page timezone. Defaults to true.
+   */
+  show_explore_timezone?: boolean
+  /**
+   * Toggle to show the explore page run button. Defaults to true.
+   */
+  show_explore_run_stop_button?: boolean
+  /**
+   * Toggle to show the explore page actions button. Defaults to true.
+   */
+  show_explore_actions_button?: boolean
+  /**
+   * Toggle to show the look page header. Defaults to true.
+   */
+  show_look_header?: boolean
+  /**
+   * Toggle to show the look page title. Defaults to true.
+   */
+  show_look_title?: boolean
+  /**
+   * Toggle to show the look page last run. Defaults to true.
+   */
+  show_look_last_run?: boolean
+  /**
+   * Toggle to show the look page timezone Defaults to true.
+   */
+  show_look_timezone?: boolean
+  /**
+   * Toggle to show the look page run button. Defaults to true.
+   */
+  show_look_run_stop_button?: boolean
+  /**
+   * Toggle to show the look page actions button. Defaults to true.
+   */
+  show_look_actions_button?: boolean
+  /**
+   * Font size for tiles.
+   */
+  tile_title_font_size?: string
+  /**
+   * The vertical gap/gutter size between tiles.
+   */
+  column_gap_size?: string
+  /**
+   * The horizontal gap/gutter size between tiles.
+   */
+  row_gap_size?: string
+  /**
+   * The border radius for tiles.
+   */
+  border_radius?: string
 }
 
 export interface ITimezone {
@@ -9530,7 +9502,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**

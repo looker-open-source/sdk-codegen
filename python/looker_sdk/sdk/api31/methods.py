@@ -104,6 +104,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # See 'login' for more detail on the access token and how to use it.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # POST /login/{user_id} -> mdls.AccessToken
     def login_user(
         self,
@@ -183,6 +185,9 @@ class Looker31SDK(api_methods.APIMethods):
     # it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
     # encrypted transport.
     #
+    #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    #
     # POST /embed/sso_url -> mdls.EmbedUrlResponse
     def create_sso_embed_url(
         self,
@@ -218,6 +223,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /ldap_config -> mdls.LDAPConfig
     def ldap_config(
         self,
@@ -245,6 +252,8 @@ class Looker31SDK(api_methods.APIMethods):
     # It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
     #
     # See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PATCH /ldap_config -> mdls.LDAPConfig
     def update_ldap_config(
@@ -282,6 +291,8 @@ class Looker31SDK(api_methods.APIMethods):
     # No authentication to the LDAP server is attempted.
     #
     # The active LDAP settings are not modified.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PUT /ldap_config/test_connection -> mdls.LDAPConfigTestResult
     def test_ldap_config_connection(
@@ -322,6 +333,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PUT /ldap_config/test_auth -> mdls.LDAPConfigTestResult
     def test_ldap_config_auth(
         self,
@@ -350,6 +363,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # The active LDAP settings are not modified.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PUT /ldap_config/test_user_info -> mdls.LDAPConfigTestResult
     def test_ldap_config_user_info(
         self,
@@ -377,6 +392,8 @@ class Looker31SDK(api_methods.APIMethods):
     # **test_ldap_user** and **test_ldap_password** are required.
     #
     # The active LDAP settings are not modified.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PUT /ldap_config/test_user_auth -> mdls.LDAPConfigTestResult
     def test_ldap_config_user_auth(
@@ -409,6 +426,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # OIDC is enabled or disabled for Looker using the **enabled** field.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /oidc_config -> mdls.OIDCConfig
     def oidc_config(
         self,
@@ -435,6 +454,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PATCH /oidc_config -> mdls.OIDCConfig
     def update_oidc_config(
         self,
@@ -454,6 +475,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Get a OIDC test configuration by test_slug.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /oidc_test_configs/{test_slug} -> mdls.OIDCConfig
     def oidc_test_config(
@@ -476,6 +499,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Delete a OIDC test configuration.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /oidc_test_configs/{test_slug} -> str
     def delete_oidc_test_config(
         self,
@@ -497,6 +522,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a OIDC test configuration.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # POST /oidc_test_configs -> mdls.OIDCConfig
     def create_oidc_test_config(
         self,
@@ -517,6 +544,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get password config.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /password_config -> mdls.PasswordConfig
     def password_config(
         self,
@@ -534,6 +563,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Update password config.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PATCH /password_config -> mdls.PasswordConfig
     def update_password_config(
@@ -554,6 +585,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Force all credentials_email users to reset their login passwords upon their next login.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PUT /password_config/force_password_reset_at_next_login_for_all_users -> str
     def force_password_reset_at_next_login_for_all_users(
@@ -584,6 +617,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # SAML is enabled or disabled for Looker using the **enabled** field.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /saml_config -> mdls.SamlConfig
     def saml_config(
         self,
@@ -610,6 +645,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PATCH /saml_config -> mdls.SamlConfig
     def update_saml_config(
         self,
@@ -629,6 +666,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Get a SAML test configuration by test_slug.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /saml_test_configs/{test_slug} -> mdls.SamlConfig
     def saml_test_config(
@@ -651,6 +690,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Delete a SAML test configuration.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /saml_test_configs/{test_slug} -> str
     def delete_saml_test_config(
         self,
@@ -672,6 +713,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Create a SAML test configuration.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # POST /saml_test_configs -> mdls.SamlConfig
     def create_saml_test_config(
         self,
@@ -691,6 +734,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Parse the given xml as a SAML IdP metadata document and return the result.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def parse_saml_idp_metadata(
@@ -713,6 +758,8 @@ class Looker31SDK(api_methods.APIMethods):
     # ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
     # Note that this requires that the url be public or at least at a location where the Looker instance
     # can fetch it without requiring any special authentication.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /fetch_and_parse_saml_idp_metadata -> mdls.SamlMetadataParseResult
     def fetch_and_parse_saml_idp_metadata(
@@ -1369,6 +1416,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Get all legacy features.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /legacy_features -> Sequence[mdls.LegacyFeature]
     def all_legacy_features(
         self,
@@ -1386,6 +1435,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Get information about the legacy feature with a specific id.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /legacy_features/{legacy_feature_id} -> mdls.LegacyFeature
     def legacy_feature(
@@ -1406,6 +1457,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Update information about the legacy feature with a specific id.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # PATCH /legacy_features/{legacy_feature_id} -> mdls.LegacyFeature
     def update_legacy_feature(
@@ -1447,7 +1500,7 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Configure SMTP Settings
     #   This API allows users to configure the SMTP settings on the Looker instance.
-    #   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+    #   Only admin users are authorised to call this API.
     #
     # POST /smtp_settings -> None
     def set_smtp_settings(
@@ -3330,6 +3383,8 @@ class Looker31SDK(api_methods.APIMethods):
         filter_or: Optional[bool] = None,
         # Match is shared root
         is_shared_root: Optional[bool] = None,
+        # Match is users root
+        is_users_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Folder]:
         """Search Folders"""
@@ -3338,7 +3393,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.get(
                 path="/folders/search",
                 structure=Sequence[mdls.Folder],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root},
+                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root, "is_users_root": is_users_root},
                 transport_options=transport_options
             )
         )
@@ -6646,7 +6701,7 @@ class Looker31SDK(api_methods.APIMethods):
         self,
         # slug of query
         slug: str,
-        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
         result_format: str,
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,
@@ -7424,6 +7479,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Set all groups for a role, removing all existing group associations from that role.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PUT /roles/{role_id}/groups -> Sequence[mdls.Group]
     def set_role_groups(
         self,
@@ -8104,6 +8161,8 @@ class Looker31SDK(api_methods.APIMethods):
         filter_or: Optional[bool] = None,
         # Match is shared root
         is_shared_root: Optional[bool] = None,
+        # Match is users root
+        is_users_root: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.Space]:
         """Search Spaces"""
@@ -8112,7 +8171,7 @@ class Looker31SDK(api_methods.APIMethods):
             self.get(
                 path="/spaces/search",
                 structure=Sequence[mdls.Space],
-                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root},
+                query_params={"fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "id": id, "parent_id": parent_id, "creator_id": creator_id, "filter_or": filter_or, "is_shared_root": is_shared_root, "is_users_root": is_users_root},
                 transport_options=transport_options
             )
         )
@@ -9061,6 +9120,8 @@ class Looker31SDK(api_methods.APIMethods):
     #
     # **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /users/credential/{credential_type}/{credential_id} -> mdls.User
     def user_for_credential(
         self,
@@ -9088,6 +9149,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def user_credentials_email(
         self,
@@ -9110,6 +9173,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Email/password login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def create_user_credentials_email(
@@ -9136,6 +9201,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # PATCH /users/{user_id}/credentials_email -> mdls.CredentialsEmail
     def update_user_credentials_email(
         self,
@@ -9161,6 +9228,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Email/password login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_email -> str
     def delete_user_credentials_email(
         self,
@@ -9180,6 +9249,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Two-factor login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def user_credentials_totp(
@@ -9203,6 +9274,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Two-factor login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /users/{user_id}/credentials_totp -> mdls.CredentialsTotp
     def create_user_credentials_totp(
@@ -9230,6 +9303,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Two-factor login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_totp -> str
     def delete_user_credentials_totp(
         self,
@@ -9249,6 +9324,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### LDAP login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_ldap -> mdls.CredentialsLDAP
     def user_credentials_ldap(
@@ -9273,6 +9350,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### LDAP login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_ldap -> str
     def delete_user_credentials_ldap(
         self,
@@ -9292,6 +9371,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Google authentication login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_google -> mdls.CredentialsGoogle
     def user_credentials_google(
@@ -9316,6 +9397,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Google authentication login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_google -> str
     def delete_user_credentials_google(
         self,
@@ -9335,6 +9418,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Saml authentication login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_saml -> mdls.CredentialsSaml
     def user_credentials_saml(
@@ -9359,6 +9444,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Saml authentication login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_saml -> str
     def delete_user_credentials_saml(
         self,
@@ -9378,6 +9465,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### OpenID Connect (OIDC) authentication login information for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_oidc -> mdls.CredentialsOIDC
     def user_credentials_oidc(
@@ -9402,6 +9491,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### OpenID Connect (OIDC) authentication login information for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_oidc -> str
     def delete_user_credentials_oidc(
         self,
@@ -9421,6 +9512,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> mdls.CredentialsApi3
     def user_credentials_api3(
@@ -9447,6 +9540,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### API login information for the specified user. This is for the newer API keys that can be added for any user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> str
     def delete_user_credentials_api3(
         self,
@@ -9468,6 +9563,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/credentials_api3 -> Sequence[mdls.CredentialsApi3]
     def all_user_credentials_api3s(
@@ -9491,6 +9588,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /users/{user_id}/credentials_api3 -> mdls.CredentialsApi3
     def create_user_credentials_api3(
@@ -9518,6 +9617,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    #
     # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> mdls.CredentialsEmbed
     def user_credentials_embed(
         self,
@@ -9543,6 +9644,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    #
     # DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> str
     def delete_user_credentials_embed(
         self,
@@ -9564,6 +9667,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Embed login information for the specified user.
+    #
+    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
     # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(
@@ -9588,6 +9693,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Looker Openid login information for the specified user. Used by Looker Analysts.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # GET /users/{user_id}/credentials_looker_openid -> mdls.CredentialsLookerOpenid
     def user_credentials_looker_openid(
         self,
@@ -9611,6 +9718,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Looker Openid login information for the specified user. Used by Looker Analysts.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/credentials_looker_openid -> str
     def delete_user_credentials_looker_openid(
         self,
@@ -9630,6 +9739,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Web login session for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/sessions/{session_id} -> mdls.Session
     def user_session(
@@ -9656,6 +9767,8 @@ class Looker31SDK(api_methods.APIMethods):
 
     # ### Web login session for the specified user.
     #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+    #
     # DELETE /users/{user_id}/sessions/{session_id} -> str
     def delete_user_session(
         self,
@@ -9677,6 +9790,8 @@ class Looker31SDK(api_methods.APIMethods):
         return response
 
     # ### Web login session for the specified user.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # GET /users/{user_id}/sessions -> Sequence[mdls.Session]
     def all_user_sessions(
@@ -9708,6 +9823,8 @@ class Looker31SDK(api_methods.APIMethods):
     # Invitation emails for new users typically are not set to expire.
     # The expire period is always 60 minutes when expires is enabled.
     # This method can be called with an empty body.
+    #
+    # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #
     # POST /users/{user_id}/credentials_email/password_reset -> mdls.CredentialsEmail
     def create_user_credentials_email_password_reset(

@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 import type {
@@ -129,6 +129,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJdbcInterface,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -169,10 +170,8 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -212,13 +211,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -710,6 +705,8 @@ export const login = async (
  *
  * See 'login' for more detail on the access token and how to use it.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /login/{user_id} -> IAccessToken
  *
  * @param sdk IAPIMethods implementation
@@ -1032,6 +1029,8 @@ export const update_artifacts = async (
  *
  * The value of the `secret` field will be set by Looker and returned.
  *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * POST /embed_config/secrets -> IEmbedSecret
  *
  * @param sdk IAPIMethods implementation
@@ -1054,6 +1053,8 @@ export const create_embed_secret = async (
 
 /**
  * ### Delete an embed secret.
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
  * DELETE /embed_config/secrets/{embed_secret_id} -> string
  *
@@ -1112,6 +1113,9 @@ export const delete_embed_secret = async (
  * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
  * encrypted transport.
  *
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * POST /embed/sso_url -> IEmbedUrlResponse
  *
  * @param sdk IAPIMethods implementation
@@ -1155,9 +1159,12 @@ export const create_sso_embed_url = async (
  * copy the URL shown in the browser address bar, insert "/embed" after the host/port, and paste it into the `target_url` property as a quoted string value in this API request.
  *
  * #### Security Note
- * Protect this embed URL as you would an access token or password credentials - do not write
+ * Protect this signed URL as you would an access token or password credentials - do not write
  * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
  * encrypted transport.
+ *
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
  * POST /embed/token_url/me -> IEmbedUrlResponse
  *
@@ -1211,6 +1218,8 @@ export const create_embed_url_as_me = async (
  * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
  *   the iframe.
  *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
  *
  * @param sdk IAPIMethods implementation
@@ -1237,6 +1246,8 @@ export const acquire_embed_cookieless_session = async (
  * This will delete the session associated with the given session reference token. Calling this endpoint will result
  * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
  * user out of the Looker instance.
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
  * DELETE /embed/cookieless_session/{session_reference_token} -> string
  *
@@ -1267,6 +1278,8 @@ export const delete_embed_cookieless_session = async (
  * - Navigation token.
  * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
  * first time when the tokens returned by the acquire_session endpoint should be used).
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
  * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
  *
@@ -1309,6 +1322,8 @@ export const generate_tokens_for_cookieless_session = async (
  *
  * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /ldap_config -> ILDAPConfig
  *
  * @param sdk IAPIMethods implementation
@@ -1334,6 +1349,8 @@ export const ldap_config = async (
  * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
  *
  * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /ldap_config -> ILDAPConfig
  *
@@ -1374,6 +1391,8 @@ export const update_ldap_config = async (
  * No authentication to the LDAP server is attempted.
  *
  * The active LDAP settings are not modified.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_connection -> ILDAPConfigTestResult
  *
@@ -1417,6 +1436,8 @@ export const test_ldap_config_connection = async (
  *
  * The active LDAP settings are not modified.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PUT /ldap_config/test_auth -> ILDAPConfigTestResult
  *
  * @param sdk IAPIMethods implementation
@@ -1448,6 +1469,8 @@ export const test_ldap_config_auth = async (
  *
  * The active LDAP settings are not modified.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PUT /ldap_config/test_user_info -> ILDAPConfigTestResult
  *
  * @param sdk IAPIMethods implementation
@@ -1478,6 +1501,8 @@ export const test_ldap_config_user_info = async (
  * **test_ldap_user** and **test_ldap_password** are required.
  *
  * The active LDAP settings are not modified.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_user_auth -> ILDAPConfigTestResult
  *
@@ -1837,6 +1862,8 @@ export const deactivate_app_user = async (
  *
  * OIDC is enabled or disabled for Looker using the **enabled** field.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /oidc_config -> IOIDCConfig
  *
  * @param sdk IAPIMethods implementation
@@ -1861,6 +1888,8 @@ export const oidc_config = async (
  *
  * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PATCH /oidc_config -> IOIDCConfig
  *
  * @param sdk IAPIMethods implementation
@@ -1883,6 +1912,8 @@ export const update_oidc_config = async (
 
 /**
  * ### Get a OIDC test configuration by test_slug.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /oidc_test_configs/{test_slug} -> IOIDCConfig
  *
@@ -1908,6 +1939,8 @@ export const oidc_test_config = async (
 /**
  * ### Delete a OIDC test configuration.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /oidc_test_configs/{test_slug} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -1932,6 +1965,8 @@ export const delete_oidc_test_config = async (
 /**
  * ### Create a OIDC test configuration.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /oidc_test_configs -> IOIDCConfig
  *
  * @param sdk IAPIMethods implementation
@@ -1955,6 +1990,8 @@ export const create_oidc_test_config = async (
 /**
  * ### Get password config.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /password_config -> IPasswordConfig
  *
  * @param sdk IAPIMethods implementation
@@ -1975,6 +2012,8 @@ export const password_config = async (
 
 /**
  * ### Update password config.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /password_config -> IPasswordConfig
  *
@@ -1998,6 +2037,8 @@ export const update_password_config = async (
 
 /**
  * ### Force all credentials_email users to reset their login passwords upon their next login.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
  *
@@ -2031,6 +2072,8 @@ export const force_password_reset_at_next_login_for_all_users = async (
  *
  * SAML is enabled or disabled for Looker using the **enabled** field.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /saml_config -> ISamlConfig
  *
  * @param sdk IAPIMethods implementation
@@ -2055,6 +2098,8 @@ export const saml_config = async (
  *
  * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PATCH /saml_config -> ISamlConfig
  *
  * @param sdk IAPIMethods implementation
@@ -2077,6 +2122,8 @@ export const update_saml_config = async (
 
 /**
  * ### Get a SAML test configuration by test_slug.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /saml_test_configs/{test_slug} -> ISamlConfig
  *
@@ -2102,6 +2149,8 @@ export const saml_test_config = async (
 /**
  * ### Delete a SAML test configuration.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /saml_test_configs/{test_slug} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -2126,6 +2175,8 @@ export const delete_saml_test_config = async (
 /**
  * ### Create a SAML test configuration.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /saml_test_configs -> ISamlConfig
  *
  * @param sdk IAPIMethods implementation
@@ -2148,6 +2199,8 @@ export const create_saml_test_config = async (
 
 /**
  * ### Parse the given xml as a SAML IdP metadata document and return the result.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
@@ -2173,6 +2226,8 @@ export const parse_saml_idp_metadata = async (
  * ### Fetch the given url and parse it as a SAML IdP metadata document and return the result.
  * Note that this requires that the url be public or at least at a location where the Looker instance
  * can fetch it without requiring any special authentication.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
@@ -2238,6 +2293,8 @@ export const update_session_config = async (
  *
  * Returns the users that have been added to the Support Access Allowlist
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
  *
  * @param sdk IAPIMethods implementation
@@ -2262,6 +2319,8 @@ export const get_support_access_allowlist_entries = async (
  * ### Add Support Access Allowlist Users
  *
  * Adds a list of emails to the Allowlist, using the provided reason
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
  *
@@ -2290,6 +2349,8 @@ export const add_support_access_allowlist_entries = async (
  *
  * Deletes the specified Allowlist Entry Id
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /support_access/allowlist/{entry_id} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -2316,6 +2377,8 @@ export const delete_support_access_allowlist_entry = async (
  *
  * Enables Support Access for the provided duration
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PUT /support_access/enable -> ISupportAccessStatus
  *
  * @param sdk IAPIMethods implementation
@@ -2341,6 +2404,8 @@ export const enable_support_access = async (
  *
  * Disables Support Access immediately
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PUT /support_access/disable -> ISupportAccessStatus
  *
  * @param sdk IAPIMethods implementation
@@ -2363,6 +2428,8 @@ export const disable_support_access = async (
  * ### Support Access Status
  *
  * Returns the current Support Access Status
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /support_access/status -> ISupportAccessStatus
  *
@@ -3357,6 +3424,8 @@ export const create_digest_email_send = async (
  *
  * Returns the list of public egress IP Addresses for a hosted customer's instance
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /public_egress_ip_addresses -> IEgressIpAddresses
  *
  * @param sdk IAPIMethods implementation
@@ -3468,6 +3537,8 @@ export const update_internal_help_resources = async (
 /**
  * ### Get all legacy features.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /legacy_features -> ILegacyFeature[]
  *
  * @param sdk IAPIMethods implementation
@@ -3488,6 +3559,8 @@ export const all_legacy_features = async (
 
 /**
  * ### Get information about the legacy feature with a specific id.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /legacy_features/{legacy_feature_id} -> ILegacyFeature
  *
@@ -3512,6 +3585,8 @@ export const legacy_feature = async (
 
 /**
  * ### Update information about the legacy feature with a specific id.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /legacy_features/{legacy_feature_id} -> ILegacyFeature
  *
@@ -3583,12 +3658,15 @@ export const mobile_settings = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
+ *  - marketplace_terms_accepted
  *  - marketplace_enabled
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
+ *  - embed_cookieless_v2
+ *  - embed_enabled
  *
  * GET /setting -> ISetting
  *
@@ -3620,14 +3698,19 @@ export const get_setting = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
+ *  - marketplace_terms_accepted
  *  - marketplace_enabled
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
+ *  - embed_cookieless_v2
+ *  - embed_enabled
  *
  * See the `Setting` type for more information on the specific values that can be configured.
+ *
+ * If a setting update is rejected, the API error payload should provide information on the cause of the rejection.
  *
  * PATCH /setting -> ISetting
  *
@@ -3654,7 +3737,7 @@ export const set_setting = async (
 /**
  * ### Configure SMTP Settings
  *   This API allows users to configure the SMTP settings on the Looker instance.
- *   This API is only supported in the OEM jar. Additionally, only admin users are authorised to call this API.
+ *   Only admin users are authorised to call this API.
  *
  * POST /smtp_settings -> void
  *
@@ -5078,6 +5161,7 @@ export const search_dashboards = async (
       offset: request.offset,
       sorts: request.sorts,
       filter_or: request.filter_or,
+      not_owned_by: request.not_owned_by,
     },
     null,
     options
@@ -6243,6 +6327,7 @@ export const search_folders = async (
       creator_id: request.creator_id,
       filter_or: request.filter_or,
       is_shared_root: request.is_shared_root,
+      is_users_root: request.is_users_root,
     },
     null,
     options
@@ -6684,13 +6769,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithRoles,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6742,13 +6827,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithHierarchy,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -7380,6 +7465,33 @@ export const test_integration = async (
 
 //#endregion Integration: Manage Integrations
 
+//#region JdbcInterface: LookML Model metadata for JDBC Clients
+
+/**
+ * ### Handle Avatica RPC Requests
+ *
+ * GET /__jdbc_interface__ -> IJdbcInterface
+ *
+ * @param sdk IAPIMethods implementation
+ * @param avatica_request Avatica RPC request
+ * @param options one-time API call overrides
+ *
+ */
+export const jdbc_interface = async (
+  sdk: IAPIMethods,
+  avatica_request?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IJdbcInterface, IError>> => {
+  return sdk.get<IJdbcInterface, IError>(
+    '/__jdbc_interface__',
+    { avatica_request },
+    null,
+    options
+  )
+}
+
+//#endregion JdbcInterface: LookML Model metadata for JDBC Clients
+
 //#region Look: Run and Manage Looks
 
 /**
@@ -7736,13 +7848,13 @@ export const move_look = async (
  * GET /lookml_models -> ILookmlModel[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+ * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestAllLookmlModels,
+  request: IRequestArtifactNamespaces,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -9778,7 +9890,7 @@ export const create_sql_query = async (
  *
  * @param sdk IAPIMethods implementation
  * @param slug slug of query
- * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "json_label"]
+ * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
  * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
  * @param options one-time API call overrides
  *
@@ -10242,13 +10354,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+ * @param request composed interface "IRequestSearchModelSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchPermissionSets,
+  request: IRequestSearchModelSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10522,13 +10634,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+ * @param request composed interface "IRequestSearchRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRolesWithUserCount,
+  request: IRequestSearchRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -10640,6 +10752,8 @@ export const role_groups = async (
 
 /**
  * ### Set all groups for a role, removing all existing group associations from that role.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /roles/{role_id}/groups -> IGroup[]
  *
@@ -11695,6 +11809,9 @@ export const delete_theme = async (
  *
  * Boolean search params accept only "true" and "false" as values.
  *
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /credentials_email/search -> ICredentialsEmailSearch[]
  *
  * @param sdk IAPIMethods implementation
@@ -12013,6 +12130,8 @@ export const delete_user = async (
  *
  * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /users/credential/{credential_type}/{credential_id} -> IUser
  *
  * @param sdk IAPIMethods implementation
@@ -12042,6 +12161,8 @@ export const user_for_credential = async (
 /**
  * ### Email/password login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
@@ -12067,6 +12188,8 @@ export const user_credentials_email = async (
 
 /**
  * ### Email/password login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  *
@@ -12096,6 +12219,8 @@ export const create_user_credentials_email = async (
 /**
  * ### Email/password login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
@@ -12124,6 +12249,8 @@ export const update_user_credentials_email = async (
 /**
  * ### Email/password login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_email -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12147,6 +12274,8 @@ export const delete_user_credentials_email = async (
 
 /**
  * ### Two-factor login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
@@ -12173,6 +12302,8 @@ export const user_credentials_totp = async (
 
 /**
  * ### Two-factor login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
@@ -12202,6 +12333,8 @@ export const create_user_credentials_totp = async (
 /**
  * ### Two-factor login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_totp -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12225,6 +12358,8 @@ export const delete_user_credentials_totp = async (
 
 /**
  * ### LDAP login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
  *
@@ -12252,6 +12387,8 @@ export const user_credentials_ldap = async (
 /**
  * ### LDAP login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_ldap -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12275,6 +12412,8 @@ export const delete_user_credentials_ldap = async (
 
 /**
  * ### Google authentication login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
  *
@@ -12302,6 +12441,8 @@ export const user_credentials_google = async (
 /**
  * ### Google authentication login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_google -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12325,6 +12466,8 @@ export const delete_user_credentials_google = async (
 
 /**
  * ### Saml authentication login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
  *
@@ -12352,6 +12495,8 @@ export const user_credentials_saml = async (
 /**
  * ### Saml authentication login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_saml -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12375,6 +12520,8 @@ export const delete_user_credentials_saml = async (
 
 /**
  * ### OpenID Connect (OIDC) authentication login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
  *
@@ -12402,6 +12549,8 @@ export const user_credentials_oidc = async (
 /**
  * ### OpenID Connect (OIDC) authentication login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_oidc -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12425,6 +12574,8 @@ export const delete_user_credentials_oidc = async (
 
 /**
  * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
  *
@@ -12455,6 +12606,8 @@ export const user_credentials_api3 = async (
 /**
  * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12482,6 +12635,8 @@ export const delete_user_credentials_api3 = async (
 /**
  * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
  *
  * @param sdk IAPIMethods implementation
@@ -12508,6 +12663,8 @@ export const all_user_credentials_api3s = async (
 /**
  * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
  *
  * @param sdk IAPIMethods implementation
@@ -12533,6 +12690,8 @@ export const create_user_credentials_api3 = async (
 
 /**
  * ### Embed login information for the specified user.
+ *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
  * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
  *
@@ -12563,6 +12722,8 @@ export const user_credentials_embed = async (
 /**
  * ### Embed login information for the specified user.
  *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12590,6 +12751,8 @@ export const delete_user_credentials_embed = async (
 /**
  * ### Embed login information for the specified user.
  *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
  *
  * @param sdk IAPIMethods implementation
@@ -12615,6 +12778,8 @@ export const all_user_credentials_embeds = async (
 
 /**
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
  *
@@ -12642,6 +12807,8 @@ export const user_credentials_looker_openid = async (
 /**
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/credentials_looker_openid -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12665,6 +12832,8 @@ export const delete_user_credentials_looker_openid = async (
 
 /**
  * ### Web login session for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/sessions/{session_id} -> ISession
  *
@@ -12695,6 +12864,8 @@ export const user_session = async (
 /**
  * ### Web login session for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * DELETE /users/{user_id}/sessions/{session_id} -> string
  *
  * @param sdk IAPIMethods implementation
@@ -12721,6 +12892,8 @@ export const delete_user_session = async (
 
 /**
  * ### Web login session for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/sessions -> ISession[]
  *
@@ -12755,6 +12928,8 @@ export const all_user_sessions = async (
  * Invitation emails for new users typically are not set to expire.
  * The expire period is always 60 minutes when expires is enabled.
  * This method can be called with an empty body.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
  *
@@ -12948,6 +13123,8 @@ export const delete_user_attribute_user_value = async (
  * Password reset URLs will expire in 60 minutes.
  * This method can be called with an empty body.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
  *
  * @param sdk IAPIMethods implementation
@@ -12979,6 +13156,8 @@ export const send_user_credentials_email_password_reset = async (
  * the value supplied in the 'email' body param.
  * The user's 'is_disabled' status must be true.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /users/{user_id}/update_emails -> IUser
  *
  * @param sdk IAPIMethods implementation
@@ -13007,6 +13186,8 @@ export const wipeout_user_emails = async (
 /**
  * Create an embed user from an external user ID
  *
+ * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+ *
  * POST /users/embed_user -> IUserPublic
  *
  * @param sdk IAPIMethods implementation
@@ -13032,13 +13213,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+ * @param request composed interface "IRequestAllBoardSections" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllUserAttributes,
+  request: IRequestAllBoardSections,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

@@ -25,7 +25,7 @@
  */
 
 /**
- * 326 API models: 244 Spec, 0 Request, 60 Write, 22 Enum
+ * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -998,7 +998,7 @@ data class CreateOAuthApplicationUserStateResponse (
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -2043,6 +2043,7 @@ data class EgressIpAddresses (
  * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
  * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
  * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+ * @property embed_domain The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
  */
 data class EmbedCookielessSessionAcquire (
     var session_length: Long? = null,
@@ -2056,7 +2057,8 @@ data class EmbedCookielessSessionAcquire (
     var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var session_reference_token: String? = null
+    var session_reference_token: String? = null,
+    var embed_domain: String? = null
 ) : Serializable
 
 /**
@@ -2713,6 +2715,13 @@ data class InternalHelpResourcesContent (
 enum class InvestigativeContentType : Serializable {
     dashboard
 }
+
+/**
+ * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
+ */
+data class JdbcInterface (
+    var results: String? = null
+) : Serializable
 
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
@@ -4399,19 +4408,21 @@ data class RepositoryCredential (
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
     json,
     json_detail,
     json_fe,
+    json_bi,
     csv,
     html,
     md,
     txt,
     xlsx,
-    gsxml
+    gsxml,
+    sql
 }
 
 /**
@@ -4948,6 +4959,7 @@ data class SessionConfig (
  * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
+ * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration
  * @property custom_welcome_email
  * @property onboarding_enabled Toggle onboarding on or off
@@ -4957,12 +4969,15 @@ data class SessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
+ * @property embed_enabled True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
+    var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,
@@ -4971,7 +4986,9 @@ data class Setting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null,
+    var embed_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -5279,6 +5296,25 @@ data class Theme (
  * @property center_dashboard_title Toggle to center the dashboard title. Defaults to false.
  * @property dashboard_title_font_size Dashboard title font size.
  * @property box_shadow Default box shadow.
+ * @property page_margin_top Dashboard page margin top.
+ * @property page_margin_bottom Dashboard page margin bottom.
+ * @property page_margin_sides Dashboard page margin left and right.
+ * @property show_explore_header Toggle to show the explore page header. Defaults to true.
+ * @property show_explore_title Toggle to show the explore page title. Defaults to true.
+ * @property show_explore_last_run Toggle to show the explore page last run. Defaults to true.
+ * @property show_explore_timezone Toggle to show the explore page timezone. Defaults to true.
+ * @property show_explore_run_stop_button Toggle to show the explore page run button. Defaults to true.
+ * @property show_explore_actions_button Toggle to show the explore page actions button. Defaults to true.
+ * @property show_look_header Toggle to show the look page header. Defaults to true.
+ * @property show_look_title Toggle to show the look page title. Defaults to true.
+ * @property show_look_last_run Toggle to show the look page last run. Defaults to true.
+ * @property show_look_timezone Toggle to show the look page timezone Defaults to true.
+ * @property show_look_run_stop_button Toggle to show the look page run button. Defaults to true.
+ * @property show_look_actions_button Toggle to show the look page actions button. Defaults to true.
+ * @property tile_title_font_size Font size for tiles.
+ * @property column_gap_size The vertical gap/gutter size between tiles.
+ * @property row_gap_size The horizontal gap/gutter size between tiles.
+ * @property border_radius The border radius for tiles.
  */
 data class ThemeSettings (
     var background_color: String? = null,
@@ -5306,7 +5342,26 @@ data class ThemeSettings (
     var show_dashboard_header: Boolean? = null,
     var center_dashboard_title: Boolean? = null,
     var dashboard_title_font_size: String? = null,
-    var box_shadow: String? = null
+    var box_shadow: String? = null,
+    var page_margin_top: String? = null,
+    var page_margin_bottom: String? = null,
+    var page_margin_sides: String? = null,
+    var show_explore_header: Boolean? = null,
+    var show_explore_title: Boolean? = null,
+    var show_explore_last_run: Boolean? = null,
+    var show_explore_timezone: Boolean? = null,
+    var show_explore_run_stop_button: Boolean? = null,
+    var show_explore_actions_button: Boolean? = null,
+    var show_look_header: Boolean? = null,
+    var show_look_title: Boolean? = null,
+    var show_look_last_run: Boolean? = null,
+    var show_look_timezone: Boolean? = null,
+    var show_look_run_stop_button: Boolean? = null,
+    var show_look_actions_button: Boolean? = null,
+    var tile_title_font_size: String? = null,
+    var column_gap_size: String? = null,
+    var row_gap_size: String? = null,
+    var border_radius: String? = null
 ) : Serializable
 
 /**
@@ -5378,6 +5433,7 @@ data class UpdateFolder (
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
  * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
+ * @property is_iam_admin User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
  * @property url Link to get this item (read-only)
  */
 data class User (
@@ -5416,6 +5472,7 @@ data class User (
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var embed_group_folder_id: String? = null,
+    var is_iam_admin: Boolean? = null,
     var url: String? = null
 ) : Serializable
 
@@ -5889,7 +5946,7 @@ data class WriteCreateDashboardFilter (
  * can
  *
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -6956,12 +7013,14 @@ data class WriteSessionConfig (
 ) : Serializable
 
 /**
- * Dynamic writeable type for Setting
+ * Dynamic writeable type for Setting removes:
+ * embed_enabled
  *
  * @property extension_framework_enabled Toggle extension framework on or off
  * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
  * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
  * @property marketplace_enabled Toggle marketplace on or off
+ * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
  * logo_url, favicon_url
  * @property custom_welcome_email
@@ -6972,12 +7031,14 @@ data class WriteSessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
+ * @property embed_cookieless_v2 Toggle cookieless embed setting
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
     var marketplace_enabled: Boolean? = null,
+    var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
     var onboarding_enabled: Boolean? = null,
@@ -6986,7 +7047,8 @@ data class WriteSetting (
     var data_connector_default_enabled: Boolean? = null,
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
-    var email_domain_allowlist: Array<String>? = null
+    var email_domain_allowlist: Array<String>? = null,
+    var embed_cookieless_v2: Boolean? = null
 ) : Serializable
 
 /**
@@ -7039,7 +7101,7 @@ data class WriteTheme (
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url

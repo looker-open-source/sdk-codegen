@@ -6,6 +6,8 @@
     "type":"linked-versions",
     "group-name": "calendar versioned sdks",
     "components": [
+      "embed-components",
+      "embed-services",
       "extension-sdk",
       "extension-sdk-react",
       "sdk",
@@ -23,6 +25,14 @@
     "packages/extension-playground": {},
     "packages/extension-sdk": {
       "component": "extension-sdk",
+      "versioning": "always-bump-patch"
+    },
+    "packages/embed-components": {
+      "component": "embed-components",
+      "versioning": "always-bump-patch"
+    },
+    "packages/embed-services": {
+      "component": "embed-services",
       "versioning": "always-bump-patch"
     },
     "packages/extension-sdk-react": {
