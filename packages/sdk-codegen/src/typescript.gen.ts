@@ -452,7 +452,7 @@ let response = await sdk.ok(sdk.${method.name}(`
     return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
   }
 
-  captainSliceFactory(method: IMethod) {
+  sdkSliceFactory(method: IMethod) {
     const testExp = (regex: RegExp) => (method: IMethod) =>
       regex.test(method.name)
     return cond([
@@ -461,18 +461,6 @@ let response = await sdk.ok(sdk.${method.name}(`
       [testExp(/^delete_/), () => 'createDeleteDataSlice'],
       [testExp(/^update_/), () => 'createUpdateDataSlice'],
       [() => true, () => 'createReadDataSlice'],
-    ])(method)
-  }
-
-  captainHookFactory(method: IMethod) {
-    const testExp = (regex: RegExp) => (method: IMethod) =>
-      regex.test(method.name)
-    return cond([
-      [testExp(/^all_/), () => 'createReadAllDataSliceHooks'],
-      [testExp(/^create_/), () => 'createCreateDataSliceHooks'],
-      [testExp(/^delete_/), () => 'createDeleteDataSliceHooks'],
-      [testExp(/^update_/), () => 'createUpdateDataSliceHooks'],
-      [() => true, () => 'createReadDataSliceHooks'],
     ])(method)
   }
 
@@ -542,7 +530,7 @@ let response = await sdk.ok(sdk.${method.name}(`
     }
     const mapped = this.typeMap(method.type)
     const dataType = `${mapped.name},`
-    const hookName = this.captainHookFactory(method)
+    const hookName = this.sdkSliceFactory(method) + 'Hooks'
 
     return `
 ${this.commentHeader(indent, headComment)}
@@ -561,7 +549,7 @@ ${indent}>(${camelCase(method.name)}Slice)
     const requestType = this.requestTypeName(method)
     const params: string[] = []
 
-    // const headComment = this.customHeaderComment('custom slice', method)
+    const headComment = this.customHeaderComment('custom slice', method)
     const args = method.allParams // get the params in signature order
     let argNames = args.map((p) => p.name)
 
@@ -583,11 +571,12 @@ ${indent}>(${camelCase(method.name)}Slice)
     const mapped = this.typeMap(method.type)
     const dataType = `${mapped.name},`
 
-    const sliceName = this.captainSliceFactory(method)
+    const sliceName = this.sdkSliceFactory(method)
     const sliceParams =
       argNames.length > 0 ? `params.${argNames.join(', params.')}, ` : ''
 
     return `
+${headComment}
 ${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
 ${bump}${dataType}
 ${bump}{ ${fragment}${
