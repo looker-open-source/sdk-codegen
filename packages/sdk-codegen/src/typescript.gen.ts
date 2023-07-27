@@ -463,6 +463,7 @@ let response = await sdk.ok(sdk.${method.name}(`
       [() => true, () => 'createReadDataSlice'],
     ])(method)
   }
+
   captainHookFactory(method: IMethod) {
     const testExp = (regex: RegExp) => (method: IMethod) =>
       regex.test(method.name)
@@ -560,14 +561,9 @@ ${indent}>(${camelCase(method.name)}Slice)
     const requestType = this.requestTypeName(method)
     const params: string[] = []
 
-    const headComment = this.customHeaderComment('custom slice', method)
+    // const headComment = this.customHeaderComment('custom slice', method)
 
     if (requestType) {
-      // use the request type that will be generated in models.ts
-      // No longer using Partial<T> by default here because required and
-      // optional are supposed to be accurate. However, for update methods
-      // (iow, patch) Partial<T> is still necessary since only the delta gets
-      // set
       fragment =
         method.httpMethod === 'PATCH'
           ? `request: Partial<I${requestType}>`
@@ -585,12 +581,8 @@ ${indent}>(${camelCase(method.name)}Slice)
     const mapped = this.typeMap(method.type)
     const dataType = `${mapped.name},`
 
-    // create a name factory for the hooks
-    // map method.httpMethod
     const sliceName = this.captainSliceFactory(method)
 
-// ${this.commentHeader(indent, headComment)}
-// ${indent}>(${camelCase(method.name)}Slice)
     return `
 ${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
 ${bump}${dataType}
