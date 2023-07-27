@@ -562,6 +562,8 @@ ${indent}>(${camelCase(method.name)}Slice)
     const params: string[] = []
 
     // const headComment = this.customHeaderComment('custom slice', method)
+    const args = method.allParams // get the params in signature order
+    let argNames = args.map((p) => p.name)
 
     if (requestType) {
       fragment =
@@ -570,8 +572,8 @@ ${indent}>(${camelCase(method.name)}Slice)
           : `request: I${requestType}`
       params.push(fragment)
       fragment = params.join('; ')
+      argNames = ['request']
     } else {
-      const args = method.allParams // get the params in signature order
       if (args && args.length > 0)
         args.forEach((p) => {
           params.push(this.declareParameter('', method, p))
@@ -582,6 +584,8 @@ ${indent}>(${camelCase(method.name)}Slice)
     const dataType = `${mapped.name},`
 
     const sliceName = this.captainSliceFactory(method)
+    const sliceParams =
+      argNames.length > 0 ? `params.${argNames.join(', params.')}, ` : ''
 
     return `
 ${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
@@ -591,9 +595,11 @@ ${bump}{ ${fragment}${
     } options?: Partial<ITransportSettings> }
 ${indent}>({
 ${bump}key: ${method.name}.name,
-${bump}fetchFn:
+${bump}fetchFn: params => sdk.ok(${
+      method.name
+    }(sdk, ${sliceParams}params.options)),
 ${bump}defaultValue: ${/^all_/.test(method.name) ? `[]` : `{}`},
-`
+${indent}})`
   }
 
   declareSlice(indent: string, method: IMethod): string {
