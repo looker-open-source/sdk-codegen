@@ -1502,115 +1502,44 @@ export enum Align {
     it.only('create TDD', () => {
       const method = apiTestModel.methods.create_user
       const expected = `
-/**
- * Custom hook for creating a new user.
- *
- * @returns {[EndpointState<IUser>, CreateDataActions<{
- *   body?: Partial<IWriteUser>;
- *   fields?: string;
- *   options?: Partial<ITransportSettings>;
- * }>] - A tuple containing the data state and create data actions.
- * @example
- * const [state, actions] = useCreateUser();
- * actions.create({ body: { name: "John", age: 30 } });
- */
-export const useCreateUser = createCreateDataSliceHooks<
+export const createUserSlice = createCreateDataSlice<
   IUser,
   { body?: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings> }
->(createUserSlice)
-`
-      const actual = gen.declareHook(method)
+>({
+  key: create_user.name,
+  fetchFn: params => sdk.ok(create_user(sdk, params.body, params.fields, params.options)),
+  defaultValue: {},
+})`
+      const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
-    it('read TDD', () => {
+
+    it.only('read TDD', () => {
       const method = apiTestModel.methods.user
       const expected = `
-/**
- * Custom hook for fetching a single user by ID.
- *
- * @returns {[EndpointState<IUser>, ReadDataActions<{
- *   user_id: string;
- *   fields?: string;
- *   options?: Partial<ITransportSettings>;
- * }>] - A tuple containing the data state and read data actions.
- * @example
- * const [state, actions] = useUser({ user_id: "123" });
- * actions.load();
- */
-export const useUser = createReadDataSliceHooks<
-  IUser,
-  { user_id: string; fields?: string; options?: Partial<ITransportSettings> }
->(userSlice)
 `
-      const actual = gen.declareHook(method)
+      const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
     it('readAll TDD', () => {
       const method = apiTestModel.methods.all_users
       const expected = `
-/**
- * Custom hook for fetching all users.
- *
- * @returns {[EndpointState<IUser[]>, ReadDataActions<{
- *   request: IRequestSearchUsers;
- *   options?: Partial<ITransportSettings>;
- * }>] - A tuple containing the data state and read data actions.
- * @example
- * const [state, actions] = useAllUsers({ request: { fields: "id" }});
- * actions.load();
- */
-export const useAllUsers = createReadAllDataSliceHooks<
-  IUser[],
-  { request: IRequestAllUsers; options?: Partial<ITransportSettings> }
->(allUsersSlice)
 `
-      const actual = gen.declareHook(method)
+      const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
     it('update TDD', () => {
       const method = apiTestModel.methods.update_user
       const expected = `
-/**
- * Custom hook for updating an existing user.
- *
- * @returns {[EndpointState<IUser>, UpdateDataActions<{
- *   user_id: string;
- *   body: Partial<IWriteUser>;
- *   fields?: string;
- *   options?: Partial<ITransportSettings>;
- * }>] - A tuple containing the data state and update data actions.
- * @example
- * const [state, actions] = useUpdateUser();
- * actions.update({ user_id: "123", body: { age: 31 } });
- */
-export const useUpdateUser = createUpdateDataSliceHooks<
-  IUser,
-  { user_id: string; body: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings>; }
->(updateUserSlice)
 `
-      const actual = gen.declareHook(method)
+      const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
     it('delete TDD', () => {
       const method = apiTestModel.methods.delete_user
       const expected = `
-/**
- * Custom hook for deleting a user by ID.
- *
- * @returns {[EndpointState<string>, DeleteDataActions<{
- *   user_id: string;
- *   options?: Partial<ITransportSettings>;
- * }>] - A tuple containing the data state and delete data actions.
- * @example
- * const [state, actions] = useDeleteUser();
- * actions.delete({ user_id: "123" });
- */
-export const useDeleteUser = createDeleteDataSliceHooks<
-  string,
-  { user_id: string; options?: Partial<ITransportSettings> }
->(deleteUserSlice)
 `
-      const actual = gen.declareHook(method)
+      const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
   })

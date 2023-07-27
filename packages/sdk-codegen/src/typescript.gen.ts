@@ -452,6 +452,17 @@ let response = await sdk.ok(sdk.${method.name}(`
     return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
   }
 
+  captainSliceFactory(method: IMethod) {
+    const testExp = (regex: RegExp) => (method: IMethod) =>
+      regex.test(method.name)
+    return cond([
+      [testExp(/^all_/), () => 'createReadAllDataSlice'],
+      [testExp(/^create_/), () => 'createCreateDataSlice'],
+      [testExp(/^delete_/), () => 'createDeleteDataSlice'],
+      [testExp(/^update_/), () => 'createUpdateDataSlice'],
+      [() => true, () => 'createReadDataSlice'],
+    ])(method)
+  }
   captainHookFactory(method: IMethod) {
     const testExp = (regex: RegExp) => (method: IMethod) =>
       regex.test(method.name)
@@ -464,12 +475,54 @@ let response = await sdk.ok(sdk.${method.name}(`
     ])(method)
   }
 
-  hookSignature(method: IMethod): string {
+  customHeaderComment(term: string, method: IMethod, params: string[] = []) {
+    if (this.noComment) return ''
+    const lines: string[] = []
+
+    lines.push(`${method.description?.trim() || method.name} ${term}`)
+    lines.push('')
+
+    const resultType = this.typeMap(method.type).name
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`)
+    lines.push('')
+
+    if (method.deprecated) {
+      lines.push('@deprecated')
+      lines.push('')
+    }
+
+    params.forEach((p) => lines.push(`@param ${p}`))
+
+    const args = method.allParams
+    if (args.length) {
+      let requestType = this.requestTypeName(method)
+
+      if (requestType) {
+        requestType =
+          method.httpMethod === 'PATCH'
+            ? `Partial<I${requestType}>`
+            : `I${requestType}`
+        lines.push(
+          `@param request composed interface "${requestType}" for complex method parameters`
+        )
+      } else {
+        args.forEach((p) =>
+          lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+        )
+      }
+    }
+    lines.push('@param options one-time API call overrides')
+    lines.push('')
+
+    return lines.join('\n')
+  }
+
+  hookSignature(indent: string, method: IMethod): string {
     let fragment: string
+    const bump = this.bumper(indent)
     const requestType = this.requestTypeName(method)
     const params: string[] = []
-
-    // const args = method.allParams // get the params in signature order
+    const headComment = this.customHeaderComment('hook', method)
 
     if (requestType) {
       fragment =
@@ -489,14 +542,16 @@ let response = await sdk.ok(sdk.${method.name}(`
     const mapped = this.typeMap(method.type)
     const dataType = `${mapped.name},`
     const hookName = this.captainHookFactory(method)
-    const headComment = `sdk IAPIMethods implementation`
 
     return `
-${headComment}
-export const use${titleCase(method.name)} = ${hookName}<
-  ${dataType}
-  { ${fragment}${fragment ? ';' : ''} options?: Partial<ITransportSettings> }
->(${camelCase(method.name)}Slice)`
+${this.commentHeader(indent, headComment)}
+${indent}export const use${titleCase(method.name)} = ${hookName}<
+${bump}${dataType}
+${bump}{ ${fragment}${
+      fragment ? ';' : ''
+    } options?: Partial<ITransportSettings> }
+${indent}>(${camelCase(method.name)}Slice)
+`
   }
 
   sliceSignature(indent: string, method: IMethod): string {
@@ -505,11 +560,7 @@ export const use${titleCase(method.name)} = ${hookName}<
     const requestType = this.requestTypeName(method)
     const params: string[] = []
 
-    // const headComment = this.methodHeaderComment(method, [
-    //   'sdk IAPIMethods implementation',
-    // ])
-
-    // const args = method.allParams // get the params in signature order
+    const headComment = this.customHeaderComment('custom slice', method)
 
     if (requestType) {
       // use the request type that will be generated in models.ts
@@ -536,15 +587,20 @@ export const use${titleCase(method.name)} = ${hookName}<
 
     // create a name factory for the hooks
     // map method.httpMethod
-    const hookName = this.captainHookFactory(method)
+    const sliceName = this.captainSliceFactory(method)
 
+// ${this.commentHeader(indent, headComment)}
+// ${indent}>(${camelCase(method.name)}Slice)
     return `
-${indent}export const use${titleCase(method.name)} = ${hookName}<
+${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
 ${bump}${dataType}
 ${bump}{ ${fragment}${
       fragment ? ';' : ''
     } options?: Partial<ITransportSettings> }
-${indent}>(${camelCase(method.name)}Slice)
+${indent}>({
+${bump}key: ${method.name}.name,
+${bump}fetchFn:
+${bump}defaultValue: ${/^all_/.test(method.name) ? `[]` : `{}`},
 `
   }
 
@@ -552,8 +608,8 @@ ${indent}>(${camelCase(method.name)}Slice)
     return this.sliceSignature(indent, method)
   }
 
-  declareHook(method: IMethod): string {
-    return this.hookSignature(method)
+  declareHook(indent: string, method: IMethod): string {
+    return this.hookSignature(indent, method)
   }
 
   functionSignature(indent: string, method: IMethod): string {
