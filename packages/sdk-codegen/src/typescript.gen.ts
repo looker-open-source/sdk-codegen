@@ -128,6 +128,38 @@ export class ${this.packageName} extends APIMethods implements I${
 `
   }
 
+  hooksPrologue(_indent: string) {
+    return `
+import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
+import { ${Object.keys(this.api.methods).join(', ')} } from '@looker/sdk'
+import {
+  createCreateDataSlice,
+  createCreateDataSliceHooks,
+  createDeleteDataSlice,
+  createDeleteDataSliceHooks,
+  createReadAllDataSliceHooks,
+  createReadDataSlice,
+  createReadDataSliceHooks,
+  createUpdateDataSlice,
+  createUpdateDataSliceHooks,
+} from '@looker/redux';
+import { funSdk40 as sdk } from 'src/legacy/fun_sdk_40';
+import type { ITransportSettings } from '@looker/sdk-rtl';
+
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+import type { ${this.typeNames().join(', ')} } from './models'
+`
+  }
+
+  hooksEpilogue(_indent: string) {
+    return '\n}'
+  }
+
   functionsPrologue(_indent: string) {
     return `
 import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
