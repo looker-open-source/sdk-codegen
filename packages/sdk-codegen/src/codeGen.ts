@@ -234,6 +234,9 @@ export interface ICodeGen {
   /** Use named/keyword arguments in calling syntax */
   useNamedArguments: boolean
 
+  /** Mainly for TypeScript SDK tree-shaking support. True produces slices.ext */
+  useSlices: boolean
+
   /** Mainly for TypeScript SDK tree-shaking support. True produces funcs.ext */
   useFunctions: boolean
 
@@ -749,6 +752,7 @@ export abstract class CodeGen implements ICodeGen {
   useNamedParameters = true
   useNamedArguments = true
   useFunctions = false
+  useSlices = false
   useInterfaces = false
 
   // makeTheCall definitions
@@ -1292,6 +1296,7 @@ export abstract class CodeGen implements ICodeGen {
   requestTypeName(method: IMethod): string {
     if (!this.useRequest(method)) return ''
     const request = this.api.getRequestType(method)
+    // PB: determines if there is a request object vs flat list
     if (!request) return ''
     request.refCount++
     method.addType(this.api, request)

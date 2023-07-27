@@ -24,17 +24,20 @@
 
  */
 
-import type {
+import {
   Arg,
   ArgValues,
+  camelCase,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  titleCase,
 } from './sdkModels'
 import { describeParam, EnumType, isSpecialName, strBody } from './sdkModels'
 import type { CodeAssignment, IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
+import cond from 'lodash/fp/cond'
 
 /**
  * TypeScript code generator
@@ -48,6 +51,7 @@ export class TypescriptGen extends CodeGen {
    * special case for TypeScript output path due to mono repository
    */
   useFunctions = true
+  useSlices = true
   useInterfaces = true
   packagePath = 'sdk/src'
   itself = 'this'
@@ -441,6 +445,109 @@ let response = await sdk.ok(sdk.${method.name}(`
     const mapped = this.typeMap(method.type)
     const errors = this.errorResponses(indent, method)
     return `Promise<SDKResponse<${mapped.name}, ${errors}>>`
+  }
+
+  captainHookFactory(method: IMethod) {
+    const testExp = (regex: RegExp) => (method: IMethod) => regex.test(method.name)
+    return cond([
+      [testExp(/^all_/), () => 'createReadAllDataSliceHooks'],
+      [testExp(/^create_/), () => 'createCreateDataSliceHooks'],
+      [testExp(/^delete_/), () => 'createDeleteDataSliceHooks'],
+      [testExp(/^update_/), () => 'createUpdateDataSliceHooks'],
+      [() => true, () => 'createReadDataSliceHooks'],
+    ])(method)
+  }
+
+  hookSignature(method: IMethod): string {
+    let fragment: string
+    const requestType = this.requestTypeName(method)
+    const params: string[] = []
+
+    // const headComment = this.methodHeaderComment(method, [
+    //   'sdk IAPIMethods implementation',
+    // ])
+
+    // const args = method.allParams // get the params in signature order
+
+    if (requestType) {
+      fragment =
+        method.httpMethod === 'PATCH'
+          ? `request: Partial<I${requestType}>`
+          : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join('; ')
+    } else {
+      const args = method.allParams
+      if (args && args.length > 0)
+        args.forEach((p) => {
+          params.push(this.declareParameter('', method, p))
+        })
+      fragment = params.length > 0 ? `${params.join('; ')}` : ''
+    }
+    const mapped = this.typeMap(method.type)
+    const dataType = `${mapped.name},`
+    const hookName = this.captainHookFactory(method)
+
+    return `
+export const use${titleCase(method.name)} = ${hookName}<
+  ${dataType}
+  { ${fragment}${fragment ? ';' : ''} options?: Partial<ITransportSettings> }
+>(${camelCase(method.name)}Slice)
+`
+  }
+
+  sliceSignature(indent: string, method: IMethod): string {
+    let fragment: string
+    const requestType = this.requestTypeName(method)
+    const params: string[] = []
+
+    // const headComment = this.methodHeaderComment(method, [
+    //   'sdk IAPIMethods implementation',
+    // ])
+
+    // const args = method.allParams // get the params in signature order
+
+    if (requestType) {
+      // use the request type that will be generated in models.ts
+      // No longer using Partial<T> by default here because required and
+      // optional are supposed to be accurate. However, for update methods
+      // (iow, patch) Partial<T> is still necessary since only the delta gets
+      // set
+      fragment =
+        method.httpMethod === 'PATCH'
+          ? `request: Partial<I${requestType}>`
+          : `request: I${requestType}`
+      params.push(fragment)
+      fragment = params.join('; ')
+    } else {
+      const args = method.allParams // get the params in signature order
+      if (args && args.length > 0)
+        args.forEach((p) => {
+          params.push(this.declareParameter('', method, p))
+        })
+      fragment = params.length > 0 ? `${params.join('; ')}` : ''
+    }
+    const mapped = this.typeMap(method.type)
+    const dataType = `${mapped.name},`
+
+    // create a name factory for the hooks
+    // map method.httpMethod
+    const hookName = this.captainHookFactory(method)
+
+    return `
+export const use${titleCase(method.name)} = ${hookName}<
+  ${dataType}
+  { ${fragment}${fragment ? ';' : ''} options?: Partial<ITransportSettings> }
+>(${camelCase(method.name)}Slice)
+`
+  }
+
+  declareSlice(indent: string, method: IMethod): string {
+    return this.sliceSignature(indent, method)
+  }
+
+  declareHook(method: IMethod): string {
+    return this.hookSignature(method)
   }
 
   functionSignature(indent: string, method: IMethod): string {
