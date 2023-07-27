@@ -1499,7 +1499,7 @@ export enum Align {
     })
   })
   describe.only('quokkas', () => {
-    it('create TDD', () => {
+    it.only('create TDD', () => {
       const method = apiTestModel.methods.create_user
       const expected = `
 /**
@@ -1519,7 +1519,7 @@ export const useCreateUser = createCreateDataSliceHooks<
   { body?: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings> }
 >(createUserSlice)
 `
-      const actual = gen.declareSlice(indent, method)
+      const actual = gen.declareHook(method)
       expect(actual).toEqual(expected)
     })
     it('read TDD', () => {
@@ -1542,7 +1542,7 @@ export const useUser = createReadDataSliceHooks<
   { user_id: string; fields?: string; options?: Partial<ITransportSettings> }
 >(userSlice)
 `
-      const actual = gen.declareSlice(indent, method)
+      const actual = gen.declareHook(method)
       expect(actual).toEqual(expected)
     })
     it('readAll TDD', () => {
@@ -1564,7 +1564,7 @@ export const useAllUsers = createReadAllDataSliceHooks<
   { request: IRequestAllUsers; options?: Partial<ITransportSettings> }
 >(allUsersSlice)
 `
-      const actual = gen.declareSlice(indent, method)
+      const actual = gen.declareHook(method)
       expect(actual).toEqual(expected)
     })
     it('update TDD', () => {
@@ -1588,7 +1588,7 @@ export const useUpdateUser = createUpdateDataSliceHooks<
   { user_id: string; body: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings>; }
 >(updateUserSlice)
 `
-      const actual = gen.declareSlice(indent, method)
+      const actual = gen.declareHook(method)
       expect(actual).toEqual(expected)
     })
     it('delete TDD', () => {
@@ -1610,7 +1610,7 @@ export const useDeleteUser = createDeleteDataSliceHooks<
   { user_id: string; options?: Partial<ITransportSettings> }
 >(deleteUserSlice)
 `
-      const actual = gen.declareSlice(indent, method)
+      const actual = gen.declareHook(method)
       expect(actual).toEqual(expected)
     })
   })

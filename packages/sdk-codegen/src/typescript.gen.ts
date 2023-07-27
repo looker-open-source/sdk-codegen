@@ -469,10 +469,6 @@ let response = await sdk.ok(sdk.${method.name}(`
     const requestType = this.requestTypeName(method)
     const params: string[] = []
 
-    // const headComment = this.methodHeaderComment(method, [
-    //   'sdk IAPIMethods implementation',
-    // ])
-
     // const args = method.allParams // get the params in signature order
 
     if (requestType) {
@@ -493,13 +489,14 @@ let response = await sdk.ok(sdk.${method.name}(`
     const mapped = this.typeMap(method.type)
     const dataType = `${mapped.name},`
     const hookName = this.captainHookFactory(method)
+    const headComment = `sdk IAPIMethods implementation`
 
     return `
+${headComment}
 export const use${titleCase(method.name)} = ${hookName}<
   ${dataType}
   { ${fragment}${fragment ? ';' : ''} options?: Partial<ITransportSettings> }
->(${camelCase(method.name)}Slice)
-`
+>(${camelCase(method.name)}Slice)`
   }
 
   sliceSignature(indent: string, method: IMethod): string {
