@@ -77,6 +77,7 @@ const generatorHelp = () => {
   languages...:   zero or more language specifiers separated by space or comma. Defaults to all supported languages.
   -v|--versions:  location of a JSON versions file in ILookerVersions format to read for getting specs
   -n|--nostreams: skip generation of a language SDK 'streams' files (if it supports streaming)
+  -ho|--hooks:    generate slices and hooks for the TypeScript SDK
   -h|--help:      display this output
 
   examples:
