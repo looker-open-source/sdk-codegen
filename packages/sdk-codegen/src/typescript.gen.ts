@@ -576,7 +576,7 @@ ${indent}>(${camelCase(method.name)}Slice)
       argNames.length > 0 ? `params.${argNames.join(', params.')}, ` : ''
 
     return `
-${headComment}
+${this.commentHeader(indent, headComment)}
 ${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
 ${bump}${dataType}
 ${bump}{ ${fragment}${

@@ -1498,10 +1498,21 @@ export enum Align {
       })
     })
   })
-  describe.only('quokkas', () => {
-    it.only('create TDD', () => {
+  describe('CRUDS SDK data slice hooks', () => {
+    it('createCreateDataSlice', () => {
       const method = apiTestModel.methods.create_user
       const expected = `
+/**
+ * ### Create a user with the specified information. custom slice
+ *
+ * POST /users -> IUser
+ *
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+
 export const createUserSlice = createCreateDataSlice<
   IUser,
   { body?: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings> }
@@ -1514,31 +1525,114 @@ export const createUserSlice = createCreateDataSlice<
       expect(actual).toEqual(expected)
     })
 
-    it.only('read TDD', () => {
+    it('createReadDataSlice', () => {
       const method = apiTestModel.methods.user
       const expected = `
-`
+/**
+ * ### Get information about the user with a specific id.
+ *
+ * If the caller is an admin or the caller is the user being specified, then full user information will
+ * be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
+ * The user name and avatar url, but no sensitive information. custom slice
+ *
+ * GET /users/{user_id} -> IUser
+ *
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+
+export const userSlice = createReadDataSlice<
+  IUser,
+  { user_id: string; fields?: string; options?: Partial<ITransportSettings> }
+>({
+  key: user.name,
+  fetchFn: params => sdk.ok(user(sdk, params.user_id, params.fields, params.options)),
+  defaultValue: {},
+})`
       const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
-    it('readAll TDD', () => {
+    it('createReadAllDataSlice', () => {
       const method = apiTestModel.methods.all_users
       const expected = `
-`
+/**
+ * ### Get information about all users. custom slice
+ *
+ * GET /users -> IUser[]
+ *
+ * @param request composed interface "IRequestAllUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+
+export const allUsersSlice = createReadAllDataSlice<
+  IUser[],
+  { request: IRequestAllUsers; options?: Partial<ITransportSettings> }
+>({
+  key: all_users.name,
+  fetchFn: params => sdk.ok(all_users(sdk, params.request, params.options)),
+  defaultValue: [],
+})`
       const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
-    it('update TDD', () => {
+    it('createUpdateDataSlice', () => {
       const method = apiTestModel.methods.update_user
       const expected = `
-`
+/**
+ * ### Update information about the user with a specific id. custom slice
+ *
+ * PATCH /users/{user_id} -> IUser
+ *
+ * @param user_id Id of user
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+
+export const updateUserSlice = createUpdateDataSlice<
+  IUser,
+  { user_id: string; body: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings> }
+>({
+  key: update_user.name,
+  fetchFn: params => sdk.ok(update_user(sdk, params.user_id, params.body, params.fields, params.options)),
+  defaultValue: {},
+})`
       const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
-    it('delete TDD', () => {
+    it('createDeleteDataSlice', () => {
       const method = apiTestModel.methods.delete_user
       const expected = `
-`
+/**
+ * ### Delete the user with a specific id.
+ *
+ * **DANGER** this will delete the user and all looks and other information owned by the user. custom slice
+ *
+ * DELETE /users/{user_id} -> string
+ *
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+
+export const deleteUserSlice = createDeleteDataSlice<
+  string,
+  { user_id: string; options?: Partial<ITransportSettings> }
+>({
+  key: delete_user.name,
+  fetchFn: params => sdk.ok(delete_user(sdk, params.user_id, params.options)),
+  defaultValue: {},
+})`
+      const actual = gen.declareSlice(indent, method)
+      expect(actual).toEqual(expected)
+    })
+    it.only('(search) createReadDataSlice', () => {
+      const method = apiTestModel.methods.search_users
+      const expected = 'Batman JS'
       const actual = gen.declareSlice(indent, method)
       expect(actual).toEqual(expected)
     })
