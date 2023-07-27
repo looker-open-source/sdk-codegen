@@ -24,20 +24,25 @@
 
  */
 
-import {
+import cond from 'lodash/fp/cond'
+import type {
   Arg,
   ArgValues,
-  camelCase,
   IMethod,
   IParameter,
   IProperty,
   IType,
-  titleCase,
 } from './sdkModels'
-import { describeParam, EnumType, isSpecialName, strBody } from './sdkModels'
+import {
+  camelCase,
+  titleCase,
+  describeParam,
+  EnumType,
+  isSpecialName,
+  strBody,
+} from './sdkModels'
 import type { CodeAssignment, IMappedType } from './codeGen'
 import { CodeGen, commentBlock } from './codeGen'
-import cond from 'lodash/fp/cond'
 
 /**
  * TypeScript code generator
@@ -448,7 +453,8 @@ let response = await sdk.ok(sdk.${method.name}(`
   }
 
   captainHookFactory(method: IMethod) {
-    const testExp = (regex: RegExp) => (method: IMethod) => regex.test(method.name)
+    const testExp = (regex: RegExp) => (method: IMethod) =>
+      regex.test(method.name)
     return cond([
       [testExp(/^all_/), () => 'createReadAllDataSliceHooks'],
       [testExp(/^create_/), () => 'createCreateDataSliceHooks'],
@@ -498,6 +504,7 @@ export const use${titleCase(method.name)} = ${hookName}<
 
   sliceSignature(indent: string, method: IMethod): string {
     let fragment: string
+    const bump = this.bumper(indent)
     const requestType = this.requestTypeName(method)
     const params: string[] = []
 
@@ -535,10 +542,12 @@ export const use${titleCase(method.name)} = ${hookName}<
     const hookName = this.captainHookFactory(method)
 
     return `
-export const use${titleCase(method.name)} = ${hookName}<
-  ${dataType}
-  { ${fragment}${fragment ? ';' : ''} options?: Partial<ITransportSettings> }
->(${camelCase(method.name)}Slice)
+${indent}export const use${titleCase(method.name)} = ${hookName}<
+${bump}${dataType}
+${bump}{ ${fragment}${
+      fragment ? ';' : ''
+    } options?: Partial<ITransportSettings> }
+${indent}>(${camelCase(method.name)}Slice)
 `
   }
 
