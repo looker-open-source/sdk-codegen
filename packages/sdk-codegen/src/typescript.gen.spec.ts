@@ -1595,7 +1595,7 @@ export const useUpdateUser = createUpdateDataSliceHooks<
       const method = apiTestModel.methods.delete_user
       const expected = `
 /**
- * Custom hook for deleting a user by ID.
+ * ### Delete the user with a specific id custom slice
  *
  * @returns {[EndpointState<string>, DeleteDataActions<{
  *   user_id: string;
