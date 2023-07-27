@@ -401,6 +401,12 @@ export interface ICodeGen {
   functionsPrologue(indent: string): string
 
   /**
+   * standard code to insert at the top of the generated "hooks" file(s)
+   * @param indent code indentation
+   */
+  hooksPrologue(indent: string): string
+
+  /**
    * standard code to insert at the top of the generated "methodsInterface" file(s)
    * @param indent code indentation
    */
@@ -417,6 +423,12 @@ export interface ICodeGen {
    * @param indent code indentation
    */
   functionsEpilogue(indent: string): string
+
+  /**
+   * standard code to append to the bottom of the generated "hooks" file(s)
+   * @param indent code indentation
+   */
+  hooksEpilogue(indent: string): string
 
   /**
    * standard code to insert at the top of the generated "streams" file(s)
@@ -622,6 +634,14 @@ export interface ICodeGen {
   declareFunction(indent: string, method: IMethod): string
 
   /**
+   * generates both the hooks and the slice for the function
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the hooks and slice
+   */
+  declareHook(indent: string, method: IMethod): string
+
+  /**
    * generates the method's interface declaration
    * @param indent code indentation
    * @param method structure of method to declare
@@ -820,6 +840,14 @@ export abstract class CodeGen implements ICodeGen {
     return ''
   }
 
+  hooksPrologue(_indent: string): string {
+    return ''
+  }
+
+  hooksEpilogue(_indent: string): string {
+    return ''
+  }
+
   interfacesPrologue(_indent: string): string {
     return ''
   }
@@ -885,6 +913,10 @@ export abstract class CodeGen implements ICodeGen {
   abstract declareMethod(indent: string, method: IMethod): string
 
   declareFunction(_indent: string, _method: IMethod): string {
+    return ''
+  }
+
+  declareHook(_indent: string, _method: IMethod): string {
     return ''
   }
 

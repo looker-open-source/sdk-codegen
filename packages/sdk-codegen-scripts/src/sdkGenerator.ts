@@ -175,6 +175,20 @@ export class FunctionGenerator extends MethodGenerator {
   }
 }
 
+export class HookGenerator extends MethodGenerator {
+  itemGenerator(indent: string, method: Models.IMethod) {
+    return this.codeFormatter.declareHook(indent, method)
+  }
+
+  prologue(indent: string) {
+    return this.codeFormatter.hooksPrologue(indent)
+  }
+
+  epilogue(indent: string) {
+    return this.codeFormatter.hooksEpilogue(indent)
+  }
+}
+
 export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string, noStreams = false) {
     this.codeFormatter.reset()
