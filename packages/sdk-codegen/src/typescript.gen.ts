@@ -130,10 +130,6 @@ export class ${this.packageName} extends APIMethods implements I${
 
   hooksPrologue(_indent: string) {
     return `
-import type { ${this.typeNames().join(', ')} } from './models'
-import { funSdk40 as sdk } from 'src/legacy/fun_sdk_40';
-import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
-import { ${Object.keys(this.api.methods).join(', ')} } from '@looker/sdk'
 import {
   createCreateDataSlice,
   createCreateDataSliceHooks,
@@ -145,6 +141,10 @@ import {
   createUpdateDataSlice,
   createUpdateDataSliceHooks,
 } from '@looker/redux';
+import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import { ${Object.keys(this.api.methods).join(', ')} } from '@looker/sdk'
+import type { ${this.typeNames().join(', ')} } from './models'
+import { funSdk40 as sdk } from 'src/legacy/fun_sdk_40';
 
 /**
  * ${this.warnEditing()}
