@@ -626,7 +626,7 @@ ${indent}})`
   }
 
   declareHook(_indent: string, method: IMethod): string {
-    return `${this.hookSignature('', method)}\n${this.declareSlice('', method)}`
+    return `${this.declareSlice('', method)}\n${this.hookSignature('', method)}`
   }
 
   functionSignature(indent: string, method: IMethod): string {
