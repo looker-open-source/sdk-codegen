@@ -141,7 +141,7 @@ import {
   createUpdateDataSlice,
   createUpdateDataSliceHooks,
 } from '@looker/redux';
-import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}ITransportSettings } from '@looker/sdk-rtl'
 import { ${Object.keys(this.api.methods).join(', ')} } from '@looker/sdk'
 import type { ${this.typeNames().join(', ')} } from './models'
 import { funSdk40 as sdk } from 'src/legacy/fun_sdk_40';
@@ -625,8 +625,8 @@ ${indent}})`
     return this.sliceSignature(indent, method)
   }
 
-  declareHook(indent: string, method: IMethod): string {
-    return this.hookSignature(indent, method)
+  declareHook(_indent: string, method: IMethod): string {
+    return `${this.hookSignature('', method)}\n${this.declareSlice('', method)}`
   }
 
   functionSignature(indent: string, method: IMethod): string {
