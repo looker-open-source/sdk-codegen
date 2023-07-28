@@ -573,6 +573,12 @@ ${indent}>(${camelCase(method.name)}Slice)
 `
   }
 
+  defaultSliceValue(type: IMappedType): string {
+    if (type.default) return type.default
+    if (type.name === 'string') return `''`
+    return `{} as ${type.name}`
+  }
+
   sliceSignature(indent: string, method: IMethod): string {
     let fragment: string
     const bump = this.bumper(indent)
@@ -599,7 +605,8 @@ ${indent}>(${camelCase(method.name)}Slice)
       fragment = params.length > 0 ? `${params.join('; ')}` : ''
     }
     const mapped = this.typeMap(method.type)
-    const dataType = `${mapped.name},`
+    const dataType = `${mapped.name}`
+    const defaultValue = this.defaultSliceValue(mapped)
 
     const sliceName = this.sdkSliceFactory(method)
     const sliceParams =
@@ -608,7 +615,7 @@ ${indent}>(${camelCase(method.name)}Slice)
     return `
 ${this.commentHeader(indent, headComment)}
 ${indent}export const ${camelCase(method.name)}Slice = ${sliceName}<
-${bump}${dataType}
+${bump}${dataType},
 ${bump}{ ${fragment}${
       fragment ? ';' : ''
     } options?: Partial<ITransportSettings> }
@@ -617,7 +624,7 @@ ${bump}key: ${method.name}.name,
 ${bump}fetchFn: params => sdk.ok(${
       method.name
     }(sdk, ${sliceParams}params.options)),
-${bump}defaultValue: ${/^all_/.test(method.name) ? `[]` : `{}`},
+${bump}defaultValue: ${defaultValue},
 ${indent}})`
   }
 
