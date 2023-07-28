@@ -157,7 +157,7 @@ import type { ${this.typeNames().join(', ')} } from './models'
   }
 
   hooksEpilogue(_indent: string) {
-    return '\n}'
+    return ''
   }
 
   functionsPrologue(_indent: string) {
