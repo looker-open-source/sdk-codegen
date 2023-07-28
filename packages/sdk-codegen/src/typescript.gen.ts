@@ -132,7 +132,6 @@ export class ${this.packageName} extends APIMethods implements I${
     return `
 import { funSdk40 as sdk } from 'src/legacy/fun_sdk_40';
 import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
-import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
 import { ${Object.keys(this.api.methods).join(', ')} } from '@looker/sdk'
 import {
   createCreateDataSlice,
