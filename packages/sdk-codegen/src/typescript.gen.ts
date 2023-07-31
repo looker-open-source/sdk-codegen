@@ -576,6 +576,7 @@ ${indent}>(${camelCase(method.name)}Slice)
   defaultSliceValue(type: IMappedType): string {
     if (type.default) return type.default
     if (type.name === 'string') return `''`
+    if (type.name === 'void') return 'undefined'
     return `{} as ${type.name}`
   }
 
