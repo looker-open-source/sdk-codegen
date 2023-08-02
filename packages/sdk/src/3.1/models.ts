@@ -769,7 +769,7 @@ export interface ICreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -7180,6 +7180,10 @@ export interface IRequestSearchSpaces {
    * Match is shared root
    */
   is_shared_root?: boolean | null
+  /**
+   * Match is users root
+   */
+  is_users_root?: boolean | null
 }
 
 /**
@@ -7527,13 +7531,14 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
   json_fe = 'json_fe',
+  json_bi = 'json_bi',
   csv = 'csv',
   html = 'html',
   md = 'md',
@@ -8791,6 +8796,10 @@ export interface IThemeSettings {
    * The horizontal gap/gutter size between tiles.
    */
   row_gap_size?: string
+  /**
+   * The border radius for tiles.
+   */
+  border_radius?: string
 }
 
 export interface ITimezone {
@@ -9493,7 +9502,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: number | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**

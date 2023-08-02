@@ -25,7 +25,7 @@
  */
 
 /**
- * 386 API models: 244 Spec, 60 Request, 60 Write, 22 Enum
+ * 387 API models: 245 Spec, 60 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -1507,7 +1507,7 @@ export interface ICreateQueryTask {
    */
   query_id: string | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -4339,6 +4339,13 @@ export interface IInternalHelpResourcesContent {
  */
 export enum InvestigativeContentType {
   dashboard = 'dashboard',
+}
+
+export interface IJdbcInterface {
+  /**
+   * JDBC Metadata to inflate Avatica response classes. (read-only)
+   */
+  results?: string
 }
 
 export interface ILDAPConfig {
@@ -8660,6 +8667,10 @@ export interface IRequestSearchFolders {
    * Match is shared root
    */
   is_shared_root?: boolean | null
+  /**
+   * Match is users root
+   */
+  is_users_root?: boolean | null
 }
 
 /**
@@ -9187,13 +9198,14 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
   json_fe = 'json_fe',
+  json_bi = 'json_bi',
   csv = 'csv',
   html = 'html',
   md = 'md',
@@ -10093,6 +10105,10 @@ export interface ISetting {
    * Toggle marketplace on or off
    */
   marketplace_enabled?: boolean
+  /**
+   * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
+   */
+  marketplace_terms_accepted?: boolean
   privatelabel_configuration?: IPrivatelabelConfiguration
   custom_welcome_email?: ICustomWelcomeEmail
   /**
@@ -10697,6 +10713,10 @@ export interface IThemeSettings {
    * The horizontal gap/gutter size between tiles.
    */
   row_gap_size?: string
+  /**
+   * The border radius for tiles.
+   */
+  border_radius?: string
 }
 
 export interface ITimezone {
@@ -11610,7 +11630,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: string | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
   result_format: ResultFormat | null
   /**
@@ -13365,6 +13385,10 @@ export interface IWriteSetting {
    * Toggle marketplace on or off
    */
   marketplace_enabled?: boolean
+  /**
+   * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
+   */
+  marketplace_terms_accepted?: boolean
   /**
    * Dynamic writeable type for PrivatelabelConfiguration removes:
    * logo_url, favicon_url

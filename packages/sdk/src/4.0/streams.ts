@@ -25,7 +25,7 @@
  */
 
 /**
- * 459 API methods
+ * 461 API methods
  */
 
 import type { Readable } from 'readable-stream'
@@ -126,6 +126,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJdbcInterface,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -3934,6 +3935,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
+   *  - marketplace_terms_accepted
    *  - marketplace_enabled
    *  - onboarding_enabled
    *  - privatelabel_configuration
@@ -3975,6 +3977,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - marketplace_auto_install_enabled
+   *  - marketplace_terms_accepted
    *  - marketplace_enabled
    *  - onboarding_enabled
    *  - privatelabel_configuration
@@ -6805,6 +6808,7 @@ export class Looker40SDKStream extends APIMethods {
         creator_id: request.creator_id,
         filter_or: request.filter_or,
         is_shared_root: request.is_shared_root,
+        is_users_root: request.is_users_root,
       },
       null,
       options
@@ -8030,6 +8034,35 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   //#endregion Integration: Manage Integrations
+
+  //#region JdbcInterface: LookML Model metadata for JDBC Clients
+
+  /**
+   * ### Handle Avatica RPC Requests
+   *
+   * GET /__jdbc_interface__ -> IJdbcInterface
+   *
+   * @param callback streaming output function
+   * @param avatica_request Avatica RPC request
+   * @param options one-time API call overrides
+   *
+   */
+  async jdbc_interface(
+    callback: (readable: Readable) => Promise<IJdbcInterface>,
+    avatica_request?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IJdbcInterface>(
+      callback,
+      'GET',
+      '/__jdbc_interface__',
+      { avatica_request },
+      null,
+      options
+    )
+  }
+
+  //#endregion JdbcInterface: LookML Model metadata for JDBC Clients
 
   //#region Look: Run and Manage Looks
 
@@ -10597,7 +10630,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *

@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 459 API methods
+/// 461 API methods
 
 #nullable enable
 using System;
@@ -2473,6 +2473,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
@@ -2504,6 +2505,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
@@ -4458,6 +4460,7 @@ namespace Looker.SDK.API40
   /// <param name="creator_id">Filter on folder created by a particular user.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="is_shared_root">Match is shared root</param>
+  /// <param name="is_users_root">Match is users root</param>
   public async Task<SdkResponse<Folder[], Exception>> search_folders(
     string? fields = null,
     long? page = null,
@@ -4471,6 +4474,7 @@ namespace Looker.SDK.API40
     string? creator_id = null,
     bool? filter_or = null,
     bool? is_shared_root = null,
+    bool? is_users_root = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders/search", new Values {
@@ -4485,7 +4489,8 @@ namespace Looker.SDK.API40
       { "parent_id", parent_id },
       { "creator_id", creator_id },
       { "filter_or", filter_or },
-      { "is_shared_root", is_shared_root }},null,options);
+      { "is_shared_root", is_shared_root },
+      { "is_users_root", is_users_root }},null,options);
   }
 
   /// ### Get information about the folder with a specific id.
@@ -5382,6 +5387,25 @@ namespace Looker.SDK.API40
   }
 
   #endregion Integration: Manage Integrations
+
+  #region JdbcInterface: LookML Model metadata for JDBC Clients
+
+  /// ### Handle Avatica RPC Requests
+  ///
+  /// GET /__jdbc_interface__ -> JdbcInterface
+  ///
+  /// <returns><c>JdbcInterface</c>  (application/json)</returns>
+  ///
+  /// <param name="avatica_request">Avatica RPC request</param>
+  public async Task<SdkResponse<JdbcInterface, Exception>> jdbc_interface(
+    string? avatica_request = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<JdbcInterface, Exception>(HttpMethod.Get, "/__jdbc_interface__", new Values {
+      { "avatica_request", avatica_request }},null,options);
+  }
+
+  #endregion JdbcInterface: LookML Model metadata for JDBC Clients
 
   #region Look: Run and Manage Looks
 
@@ -7439,7 +7463,7 @@ namespace Looker.SDK.API40
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
