@@ -40,7 +40,7 @@ import { NavigateButton } from '../NavigateButton'
  * guaranteed that dashboardRunState from tileHostData will ever
  * indicate that the dashboard is running. This is due to performance
  * techniques used by the dashboard and happens when the dashboard does
- * not contain and tiles that run queries. A guaranteed technique to
+ * not contain any tiles that run queries. A guaranteed technique to
  * determine if the dashboard reload button has been clicked is to save
  * the lastRunStartTime value from the tileHostData. If this value changes
  * then the user has clicked the dashboard run button (or the dashboard
