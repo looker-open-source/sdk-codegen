@@ -138,6 +138,20 @@ export function* sagaCallbacks() {
 }
 ```
 
+### Tile Extension Context Data
+
+```ts
+import { ExtensionContext40 } from '@looker/extension-sdk-react'
+
+export const MyExtension: React.FC = () => {
+  const {
+    extensionSDK,
+    tileSDK,
+    tileHostData: { dashboardFilters },
+  } = useContext(ExtensionContext40)
+
+```
+
 ## Related Projects
 
 - [Looker extension examples](https://github.com/looker-open-source/extension-examples).

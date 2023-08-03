@@ -53,10 +53,18 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
   )
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: BaseExtensionContextData) => {
       return {
         ...previousState,
         extensionSDK: extensionHost,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
+        lookerHostData,
       }
     })
   }
@@ -65,12 +73,17 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
     // noop
   }
 
-  const updateContextData = (contextData: BaseExtensionContextData) => {
-    setExtensionData(contextData)
+  const updateContextData = (
+    contextData: Partial<BaseExtensionContextData>
+  ) => {
+    setExtensionData((previousContextData) => ({
+      ...previousContextData,
+      ...contextData,
+    }))
   }
 
   return (
-    <ExtensionContextBase.Provider value={extensionData!}>
+    <ExtensionContextBase.Provider value={extensionData}>
       <ExtensionConnector
         {...props}
         contextData={extensionData}

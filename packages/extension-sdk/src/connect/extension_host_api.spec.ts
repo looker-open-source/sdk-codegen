@@ -25,11 +25,13 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
+import type { RawVisQueryResponse } from './visualization/types'
 import {
   ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,
 } from './extension_host_api'
-import { ExtensionNotificationType, ApiVersion } from './types'
+import { ExtensionNotificationType, ApiVersion, MountPoint } from './types'
+import type { ExtensionInitializeMessage } from './types'
 
 describe('extension_host_api tests', () => {
   let chattyHost: ChattyHostConnection
@@ -69,14 +71,15 @@ describe('extension_host_api tests', () => {
       chattyHost,
       initializedCallback,
     })
-
     const resp = hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
+        extensionDashboardTileEnabled: false,
         lookerVersion,
         extensionId: 'ks::ks',
         route: '/sandbox',
         hostUrl: 'https://self-signed.looker.com:9999',
+        mountPoint: MountPoint.standalone,
         ...initMessage,
       },
     })
@@ -94,19 +97,22 @@ describe('extension_host_api tests', () => {
     })
     const response = api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
-    })
+    } as ExtensionInitializeMessage)
     expect(response?.errorMessage).toBeUndefined()
-    expect(api.lookerHostData).toEqual(undefined)
+    expect(api.lookerHostData).toEqual({ mountPoint: 'standalone' })
   })
 
   it('handles initialize notification with data', () => {
     const setInitialRoute = jest.fn()
     const initializedCallback = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: false,
+      extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
       lookerVersion: '6.25.00004168',
       hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.standalone,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -131,10 +137,13 @@ describe('extension_host_api tests', () => {
     const initializedCallback = jest.fn()
     const hostChangedRoute = jest.fn()
     const lookerHostData = {
+      extensionDashboardTileEnabled: false,
+      extensionId: 'a::b',
       route: '/sandbox',
       routeState: { hello: 'world' },
       lookerVersion: '7.6.0',
       hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.standalone,
     }
     const api = new ExtensionHostApiImpl({
       chattyHost,
@@ -159,6 +168,83 @@ describe('extension_host_api tests', () => {
     })
   })
 
+  it('handles visualization data notification', () => {
+    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn()
+    const hostChangedRoute = jest.fn()
+    const visualizationDataReceivedCallback = jest.fn()
+    const lookerHostData = {
+      extensionDashboardTileEnabled: true,
+      extensionId: 'a::b',
+      route: '/sandbox',
+      routeState: { hello: 'world' },
+      lookerVersion: '22.8.0',
+      hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.dashboardVisualization,
+    }
+    const api = new ExtensionHostApiImpl({
+      chattyHost,
+      initializedCallback,
+      setInitialRoute,
+      hostChangedRoute,
+      visualizationDataReceivedCallback,
+      requiredLookerVersion: '>=22.8.0',
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.INITIALIZE,
+      payload: lookerHostData,
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.VISUALIZATION_DATA,
+      payload: { visConfig: {}, queryResponse: {} as RawVisQueryResponse },
+    })
+    expect(api.visualizationSDK).toBeDefined()
+    expect(visualizationDataReceivedCallback).toHaveBeenCalledWith({
+      visConfig: {},
+      queryResponse: {},
+    })
+  })
+
+  it('handles tile host data notification', () => {
+    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn()
+    const hostChangedRoute = jest.fn()
+    const tileHostDataChangedCallback = jest.fn()
+    const lookerHostData = {
+      extensionDashboardTileEnabled: true,
+      extensionId: 'a::b',
+      route: '/sandbox',
+      routeState: { hello: 'world' },
+      lookerVersion: '22.8.0',
+      hostUrl: 'https://self-signed.looker.com:9999',
+      mountPoint: MountPoint.dashboardVisualization,
+    }
+    const api = new ExtensionHostApiImpl({
+      chattyHost,
+      initializedCallback,
+      setInitialRoute,
+      hostChangedRoute,
+      tileHostDataChangedCallback,
+      requiredLookerVersion: '>=22.8.0',
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.INITIALIZE,
+      payload: lookerHostData,
+    })
+    api.handleNotification({
+      type: ExtensionNotificationType.TILE_HOST_DATA,
+      payload: {
+        isDashboardEditing: true,
+        isDashboardCrossFilteringEnabled: true,
+      },
+    })
+    expect(api.tileSDK).toBeDefined()
+    expect(tileHostDataChangedCallback).toHaveBeenCalledWith({
+      isDashboardEditing: true,
+      isDashboardCrossFilteringEnabled: true,
+    })
+  })
+
   it('provides error when looker version not high enough', () => {
     const initializedCallback = jest.fn()
     const lookerHostData = {
@@ -174,7 +260,7 @@ describe('extension_host_api tests', () => {
     const resp = api.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: lookerHostData,
-    })
+    } as ExtensionInitializeMessage)
     expect(resp?.errorMessage).toEqual(
       'Extension requires Looker version >=7.0.0, got 6.25.0'
     )
@@ -830,5 +916,14 @@ describe('extension_host_api tests', () => {
     await expect(hostApi.refreshContextData()).rejects.toThrowError(
       'Extension requires Looker version >=7.13, got 7.12'
     )
+  })
+
+  it('renders', async () => {
+    const hostApi = createHostApi()
+    await hostApi.rendered('Oh No!')
+    await expect(sendSpy).toHaveBeenCalledWith('EXTENSION_API_REQUEST', {
+      payload: { failureMessage: 'Oh No!' },
+      type: 'RENDERED',
+    })
   })
 })

@@ -45,6 +45,7 @@
     "dev:hack": "yarn workspace @looker/hackathon develop",
     "dev:xapix": "yarn workspace @looker/extension-api-explorer develop",
     "dev:playground": "yarn workspace @looker/extension-playground develop",
+    "dev:tile": "yarn workspace @looker/extension-tile-playground develop",
     "clean": "rm -Rf packages/*/lib",
     "prepublishOnly": "jest packages/sdk-rtl packages/sdk-node/test",
     "fix": "yarn lint:es --fix",

@@ -47,6 +47,7 @@ export const ExtensionContext = React.createContext<ExtensionContextData>(
 /**
  * ExtensionProvider component. Provides access to the extension API and SDK (use
  * ExtensionContext) and react routing services.
+ * @deprecated use ExtensionProvider40
  */
 export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   children,
@@ -63,6 +64,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     // Provide global access for use by redux if needed
     registerCore31SDK(core31SDK)
     registerCore40SDK(core40SDK)
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: ExtensionContextData) => {
       return {
         ...previousState,
@@ -70,6 +74,11 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
         coreSDK: core31SDK,
         core31SDK,
         core40SDK,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
+        lookerHostData,
       }
     })
   }
@@ -79,7 +88,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     unregisterCore40SDK()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData) => {
       return {
         ...previousState,
@@ -89,7 +100,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   }
 
   return (
-    <ExtensionContext.Provider value={extensionData!}>
+    <ExtensionContext.Provider value={extensionData}>
       <ExtensionConnector
         {...props}
         contextData={extensionData}
