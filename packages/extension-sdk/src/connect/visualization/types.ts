@@ -78,20 +78,19 @@ export interface RawPivotConfig {
 }
 
 export interface Measure extends RawVisConfig {
-  // TODO flesh out detail
+  [key: string]: any
 }
 
 export interface Dimension extends RawVisConfig {
-  // TODO flesh out detail
   [key: string]: any
 }
 
 export interface TableCalculation {
-  // TODO flesh out detail
+  [key: string]: any
 }
 
 export interface PivotConfig extends RawPivotConfig {
-  // TODO flesh out detail
+  [key: string]: any
 }
 
 export interface VisualizationConfig {

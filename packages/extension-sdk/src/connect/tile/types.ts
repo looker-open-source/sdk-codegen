@@ -96,7 +96,7 @@ export interface TileHostData {
    * is being configured as an explore the state will be UNKNOWN.
    * Note that for dashboard performance reasons, the runstate
    * may NEVER be shown as running. This generally will happen
-   * if there no other tiles associated with a query (including
+   * if there are no other tiles associated with a query (including
    * the one the extension is associated with).
    * If the extension needs to know for certain that a dashboard
    * has been run, detecting differences in the lastRunStartTime
