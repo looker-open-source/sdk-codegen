@@ -2393,7 +2393,7 @@ export interface IEmbedSsoParams {
    */
   target_url: Url
   /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
   session_length?: number | null
   /**
@@ -2401,7 +2401,7 @@ export interface IEmbedSsoParams {
    */
   force_logout_login?: boolean
   /**
-   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
    */
   external_user_id?: string | null
   /**
@@ -2440,6 +2440,10 @@ export interface IEmbedSsoParams {
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
   secret_id?: number | null
+  /**
+   * Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
+   */
+  embed_domain?: string | null
 }
 
 export interface IEmbedUrlResponse {

@@ -25,7 +25,7 @@
  */
 
 /**
- * 387 API models: 245 Spec, 60 Request, 60 Write, 22 Enum
+ * 389 API models: 247 Spec, 60 Request, 60 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -3211,9 +3211,56 @@ export interface IEgressIpAddresses {
   egress_ip_addresses?: string[] | null
 }
 
+export interface IEmbedConfig {
+  /**
+   * List of domains to allow for embedding
+   */
+  domain_allowlist?: string[] | null
+  /**
+   * List of base urls to allow for alert/schedule
+   */
+  alert_url_allowlist?: string[] | null
+  /**
+   * Owner of who defines the alert/schedule params on the base url
+   */
+  alert_url_param_owner?: string | null
+  /**
+   * Label for the alert/schedule url
+   */
+  alert_url_label?: string | null
+  /**
+   * Is SSO embedding enabled for this Looker
+   */
+  sso_auth_enabled?: boolean
+  /**
+   * Is Cookieless embedding enabled for this Looker
+   */
+  embed_cookieless_v2?: boolean
+  /**
+   * Is embed content navigation enabled for this looker
+   */
+  embed_content_navigation?: boolean
+  /**
+   * Is embed content management enabled for this Looker
+   */
+  embed_content_management?: boolean
+  /**
+   * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+   */
+  strict_sameorigin_for_login?: boolean
+  /**
+   * When true, filters are enabled on embedded Looks
+   */
+  look_filters?: boolean
+  /**
+   * When true, removes navigation to Looks from embedded dashboards and explores.
+   */
+  hide_look_navigation?: boolean
+}
+
 export interface IEmbedCookielessSessionAcquire {
   /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
   session_length?: number | null
   /**
@@ -3221,7 +3268,7 @@ export interface IEmbedCookielessSessionAcquire {
    */
   force_logout_login?: boolean
   /**
-   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
    */
   external_user_id?: string | null
   /**
@@ -3257,13 +3304,13 @@ export interface IEmbedCookielessSessionAcquire {
    */
   user_attributes?: IDictionary<any> | null
   /**
-   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
-   */
-  session_reference_token?: string | null
-  /**
    * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
    */
   embed_domain?: string | null
+  /**
+   * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+   */
+  session_reference_token?: string | null
 }
 
 export interface IEmbedCookielessSessionAcquireResponse {
@@ -3349,7 +3396,7 @@ export interface IEmbedParams {
    */
   target_url: string
   /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
   session_length?: number | null
   /**
@@ -3395,7 +3442,7 @@ export interface IEmbedSsoParams {
    */
   target_url: string
   /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
   session_length?: number | null
   /**
@@ -3403,7 +3450,7 @@ export interface IEmbedSsoParams {
    */
   force_logout_login?: boolean
   /**
-   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
    */
   external_user_id?: string | null
   /**
@@ -3442,6 +3489,10 @@ export interface IEmbedSsoParams {
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
   secret_id?: string | null
+  /**
+   * Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
+   */
+  embed_domain?: string | null
 }
 
 export interface IEmbedUrlResponse {
@@ -5925,6 +5976,21 @@ export interface IManifest {
    */
   imports?: IImportedProject[] | null
   localization_settings?: ILocalizationSettings
+}
+
+export interface IMarketplaceAutomation {
+  /**
+   * Whether marketplace auto installation is enabled
+   */
+  install_enabled?: boolean
+  /**
+   * Whether marketplace auto update is enabled for looker extensions
+   */
+  update_looker_enabled?: boolean
+  /**
+   * Whether marketplace auto update is enabled for third party extensions
+   */
+  update_third_party_enabled?: boolean
 }
 
 export interface IMaterializePDT {
@@ -10094,17 +10160,22 @@ export interface ISetting {
    */
   extension_framework_enabled?: boolean
   /**
-   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
    */
   extension_load_url_enabled?: boolean
   /**
-   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
    */
   marketplace_auto_install_enabled?: boolean
+  marketplace_automation?: IMarketplaceAutomation
   /**
    * Toggle marketplace on or off
    */
   marketplace_enabled?: boolean
+  /**
+   * Location of Looker marketplace CDN (read-only)
+   */
+  marketplace_site?: string
   /**
    * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
    */
@@ -10140,13 +10211,14 @@ export interface ISetting {
    */
   email_domain_allowlist?: string[]
   /**
-   * Toggle cookieless embed setting
+   * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
    */
   embed_cookieless_v2?: boolean
   /**
    * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
    */
   embed_enabled?: boolean
+  embed_config?: IEmbedConfig
 }
 
 export interface ISmtpNodeStatus {
@@ -13366,7 +13438,7 @@ export interface IWriteSessionConfig {
 
 /**
  * Dynamic writeable type for Setting removes:
- * embed_enabled
+ * marketplace_site, embed_enabled
  */
 export interface IWriteSetting {
   /**
@@ -13374,13 +13446,14 @@ export interface IWriteSetting {
    */
   extension_framework_enabled?: boolean
   /**
-   * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+   * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
    */
   extension_load_url_enabled?: boolean
   /**
-   * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+   * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
    */
   marketplace_auto_install_enabled?: boolean
+  marketplace_automation?: IMarketplaceAutomation | null
   /**
    * Toggle marketplace on or off
    */
@@ -13424,9 +13497,10 @@ export interface IWriteSetting {
    */
   email_domain_allowlist?: string[] | null
   /**
-   * Toggle cookieless embed setting
+   * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
    */
   embed_cookieless_v2?: boolean
+  embed_config?: IEmbedConfig | null
 }
 
 /**

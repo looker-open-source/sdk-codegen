@@ -2929,9 +2929,9 @@ class EmbedSsoParams(model.Model):
     """
     Attributes:
         target_url: The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
-        session_length: Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+        session_length: Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
         force_logout_login: When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
-        external_user_id: A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+        external_user_id: A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
         first_name: First name of the embed user. Defaults to 'Embed' if not specified
         last_name: Last name of the embed user. Defaults to 'User' if not specified
         user_timezone: Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
@@ -2941,6 +2941,7 @@ class EmbedSsoParams(model.Model):
         external_group_id: A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
         user_attributes: A dictionary of name-value pairs associating a Looker user attribute name with a value.
         secret_id: Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
+        embed_domain: Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
     """
     target_url: str
     session_length: Optional[int] = None
@@ -2955,6 +2956,7 @@ class EmbedSsoParams(model.Model):
     external_group_id: Optional[str] = None
     user_attributes: Optional[MutableMapping[str, Any]] = None
     secret_id: Optional[int] = None
+    embed_domain: Optional[str] = None
 
     def __init__(self, *,
             target_url: str,
@@ -2969,7 +2971,8 @@ class EmbedSsoParams(model.Model):
             group_ids: Optional[Sequence[int]] = None,
             external_group_id: Optional[str] = None,
             user_attributes: Optional[MutableMapping[str, Any]] = None,
-            secret_id: Optional[int] = None):
+            secret_id: Optional[int] = None,
+            embed_domain: Optional[str] = None):
         self.target_url = target_url
         self.session_length = session_length
         self.force_logout_login = force_logout_login
@@ -2983,6 +2986,7 @@ class EmbedSsoParams(model.Model):
         self.external_group_id = external_group_id
         self.user_attributes = user_attributes
         self.secret_id = secret_id
+        self.embed_domain = embed_domain
 
 
 @attr.s(auto_attribs=True, init=False)
