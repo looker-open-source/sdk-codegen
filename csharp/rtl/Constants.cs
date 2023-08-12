@@ -59,7 +59,7 @@ namespace Looker.RTL
         internal static readonly Regex ContentPatternBinary = new Regex(MatchModeBinary,
             RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        public const string DefaultApiVersion = "3.1";
+        public const string DefaultApiVersion = "4.0";
         public const string AgentPrefix = "CS-SDK";
         public const string LookerVersion = "23.14";
 
