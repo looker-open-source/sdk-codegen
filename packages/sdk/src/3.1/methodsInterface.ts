@@ -133,6 +133,7 @@ import type {
   IRequestAllIntegrations,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
@@ -159,10 +160,12 @@ import type {
   IRequestSearchContentViews,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
+  IRequestSearchFolders,
   IRequestSearchGroups,
   IRequestSearchHomepages,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchSpaces,
   IRequestSearchThemes,
@@ -2595,12 +2598,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /folders/search -> IFolder[]
    *
-   * @param request composed interface "IRequestSearchSpaces" for complex method parameters
+   * @param request composed interface "IRequestSearchFolders" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_folders(
-    request: IRequestSearchSpaces,
+    request: IRequestSearchFolders,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IFolder[], IError>>
 
@@ -5217,12 +5220,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /permission_sets/search -> IPermissionSet[]
    *
-   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_permission_sets(
-    request: IRequestSearchModelSets,
+    request: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>>
 
@@ -7267,12 +7270,12 @@ export interface ILooker31SDK extends IAPIMethods {
    *
    * GET /user_attributes -> IUserAttribute[]
    *
-   * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
+   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   all_user_attributes(
-    request: IRequestAllHomepageSections,
+    request: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>>
 

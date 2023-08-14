@@ -135,6 +135,7 @@ import type {
   IRequestAllIntegrations,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
@@ -161,10 +162,12 @@ import type {
   IRequestSearchContentViews,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
+  IRequestSearchFolders,
   IRequestSearchGroups,
   IRequestSearchHomepages,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchSpaces,
   IRequestSearchThemes,
@@ -4102,13 +4105,13 @@ export class Looker31SDKStream extends APIMethods {
    * GET /folders/search -> IFolder[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchSpaces" for complex method parameters
+   * @param request composed interface "IRequestSearchFolders" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_folders(
     callback: (readable: Readable) => Promise<IFolder[]>,
-    request: IRequestSearchSpaces,
+    request: IRequestSearchFolders,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IFolder[]>(
@@ -8355,13 +8358,13 @@ export class Looker31SDKStream extends APIMethods {
    * GET /permission_sets/search -> IPermissionSet[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
     callback: (readable: Readable) => Promise<IPermissionSet[]>,
-    request: IRequestSearchModelSets,
+    request: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
@@ -11562,13 +11565,13 @@ export class Looker31SDKStream extends APIMethods {
    * GET /user_attributes -> IUserAttribute[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllHomepageSections" for complex method parameters
+   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
     callback: (readable: Readable) => Promise<IUserAttribute[]>,
-    request: IRequestAllHomepageSections,
+    request: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(
