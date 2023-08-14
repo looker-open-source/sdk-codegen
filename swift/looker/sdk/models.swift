@@ -25,7 +25,7 @@
  */
 
 /**
- * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
+ * 329 API models: 247 Spec, 0 Request, 60 Write, 22 Enum
  */
 
 
@@ -7981,6 +7981,108 @@ public struct EgressIpAddresses: SDKModel {
 
 }
 
+public struct EmbedConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _domain_allowlist = "domain_allowlist"
+        case _alert_url_allowlist = "alert_url_allowlist"
+        case _alert_url_param_owner = "alert_url_param_owner"
+        case _alert_url_label = "alert_url_label"
+        case sso_auth_enabled
+        case embed_cookieless_v2
+        case embed_content_navigation
+        case embed_content_management
+        case strict_sameorigin_for_login
+        case look_filters
+        case hide_look_navigation
+    }
+    private var _domain_allowlist: [AnyString]?
+    /**
+     * List of domains to allow for embedding
+     */
+    public var domain_allowlist: [String]? {
+        get { if let v = _domain_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil } }
+    }
+
+    private var _alert_url_allowlist: [AnyString]?
+    /**
+     * List of base urls to allow for alert/schedule
+     */
+    public var alert_url_allowlist: [String]? {
+        get { if let v = _alert_url_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil } }
+    }
+
+    private var _alert_url_param_owner: AnyString?
+    /**
+     * Owner of who defines the alert/schedule params on the base url
+     */
+    public var alert_url_param_owner: String? {
+        get { _alert_url_param_owner?.value }
+        set { _alert_url_param_owner = newValue.map(AnyString.init) }
+    }
+
+    private var _alert_url_label: AnyString?
+    /**
+     * Label for the alert/schedule url
+     */
+    public var alert_url_label: String? {
+        get { _alert_url_label?.value }
+        set { _alert_url_label = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Is SSO embedding enabled for this Looker
+     */
+    public var sso_auth_enabled: Bool?
+
+    /**
+     * Is Cookieless embedding enabled for this Looker
+     */
+    public var embed_cookieless_v2: Bool?
+
+    /**
+     * Is embed content navigation enabled for this looker
+     */
+    public var embed_content_navigation: Bool?
+
+    /**
+     * Is embed content management enabled for this Looker
+     */
+    public var embed_content_management: Bool?
+
+    /**
+     * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+     */
+    public var strict_sameorigin_for_login: Bool?
+
+    /**
+     * When true, filters are enabled on embedded Looks
+     */
+    public var look_filters: Bool?
+
+    /**
+     * When true, removes navigation to Looks from embedded dashboards and explores.
+     */
+    public var hide_look_navigation: Bool?
+
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
+        if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
+        if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
+        self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
+        self._alert_url_label = alert_url_label.map(AnyString.init)
+        self.sso_auth_enabled = sso_auth_enabled
+        self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_content_navigation = embed_content_navigation
+        self.embed_content_management = embed_content_management
+        self.strict_sameorigin_for_login = strict_sameorigin_for_login
+        self.look_filters = look_filters
+        self.hide_look_navigation = hide_look_navigation
+    }
+
+}
+
 public struct EmbedCookielessSessionAcquire: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -7995,12 +8097,12 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         case _group_ids = "group_ids"
         case _external_group_id = "external_group_id"
         case user_attributes
-        case _session_reference_token = "session_reference_token"
         case _embed_domain = "embed_domain"
+        case _session_reference_token = "session_reference_token"
     }
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8014,7 +8116,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
 
     private var _external_user_id: AnyString?
     /**
-     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
      */
     public var external_user_id: String? {
         get { _external_user_id?.value }
@@ -8089,15 +8191,6 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
      */
     public var user_attributes: StringDictionary<AnyCodable>?
 
-    private var _session_reference_token: AnyString?
-    /**
-     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
-     */
-    public var session_reference_token: String? {
-        get { _session_reference_token?.value }
-        set { _session_reference_token = newValue.map(AnyString.init) }
-    }
-
     private var _embed_domain: AnyString?
     /**
      * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
@@ -8107,7 +8200,16 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         set { _embed_domain = newValue.map(AnyString.init) }
     }
 
-    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil, embed_domain: String? = nil) {
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, embed_domain: String? = nil, session_reference_token: String? = nil) {
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
         self._external_user_id = external_user_id.map(AnyString.init)
@@ -8119,8 +8221,8 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
-        self._session_reference_token = session_reference_token.map(AnyString.init)
         self._embed_domain = embed_domain.map(AnyString.init)
+        self._session_reference_token = session_reference_token.map(AnyString.init)
     }
 
 }
@@ -8365,7 +8467,7 @@ public struct EmbedParams: SDKModel {
 
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8483,6 +8585,7 @@ public struct EmbedSsoParams: SDKModel {
         case _external_group_id = "external_group_id"
         case user_attributes
         case _secret_id = "secret_id"
+        case _embed_domain = "embed_domain"
     }
     private var _target_url: AnyString
     /**
@@ -8495,7 +8598,7 @@ public struct EmbedSsoParams: SDKModel {
 
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8509,7 +8612,7 @@ public struct EmbedSsoParams: SDKModel {
 
     private var _external_user_id: AnyString?
     /**
-     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
      */
     public var external_user_id: String? {
         get { _external_user_id?.value }
@@ -8593,7 +8696,16 @@ public struct EmbedSsoParams: SDKModel {
         set { _secret_id = newValue.map(AnyString.init) }
     }
 
-    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
+    private var _embed_domain: AnyString?
+    /**
+     * Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
+     */
+    public var embed_domain: String? {
+        get { _embed_domain?.value }
+        set { _embed_domain = newValue.map(AnyString.init) }
+    }
+
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil, embed_domain: String? = nil) {
         self._target_url = AnyString.init(target_url)
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
@@ -8607,10 +8719,11 @@ public struct EmbedSsoParams: SDKModel {
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._secret_id = secret_id.map(AnyString.init)
+        self._embed_domain = embed_domain.map(AnyString.init)
     }
 
-    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
-        self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id)
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil, embed_domain: String? = nil) {
+        self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id, embed_domain: embed_domain)
     }
 
 }
@@ -14610,6 +14723,30 @@ public struct Manifest: SDKModel {
 
 }
 
+public struct MarketplaceAutomation: SDKModel {
+    /**
+     * Whether marketplace auto installation is enabled
+     */
+    public var install_enabled: Bool?
+
+    /**
+     * Whether marketplace auto update is enabled for looker extensions
+     */
+    public var update_looker_enabled: Bool?
+
+    /**
+     * Whether marketplace auto update is enabled for third party extensions
+     */
+    public var update_third_party_enabled: Bool?
+
+    public init(install_enabled: Bool? = nil, update_looker_enabled: Bool? = nil, update_third_party_enabled: Bool? = nil) {
+        self.install_enabled = install_enabled
+        self.update_looker_enabled = update_looker_enabled
+        self.update_third_party_enabled = update_third_party_enabled
+    }
+
+}
+
 public struct MaterializePDT: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -19725,7 +19862,9 @@ public struct Setting: SDKModel {
         case extension_framework_enabled
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
+        case marketplace_automation
         case marketplace_enabled
+        case _marketplace_site = "marketplace_site"
         case marketplace_terms_accepted
         case privatelabel_configuration
         case custom_welcome_email
@@ -19738,6 +19877,7 @@ public struct Setting: SDKModel {
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
         case embed_enabled
+        case embed_config
     }
     /**
      * Toggle extension framework on or off
@@ -19745,19 +19885,30 @@ public struct Setting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
-     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
      */
     public var extension_load_url_enabled: Bool?
 
     /**
-     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+     * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
      */
     public var marketplace_auto_install_enabled: Bool?
+
+    public var marketplace_automation: MarketplaceAutomation?
 
     /**
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
+    private var _marketplace_site: AnyString?
+    /**
+     * Location of Looker marketplace CDN (read-only)
+     */
+    public var marketplace_site: String? {
+        get { _marketplace_site?.value }
+        set { _marketplace_site = newValue.map(AnyString.init) }
+    }
 
     /**
      * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
@@ -19816,7 +19967,7 @@ public struct Setting: SDKModel {
     }
 
     /**
-     * Toggle cookieless embed setting
+     * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
      */
     public var embed_cookieless_v2: Bool?
 
@@ -19825,11 +19976,15 @@ public struct Setting: SDKModel {
      */
     public var embed_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil) {
+    public var embed_config: EmbedConfig?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_automation = marketplace_automation
         self.marketplace_enabled = marketplace_enabled
+        self._marketplace_site = marketplace_site.map(AnyString.init)
         self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
@@ -19842,6 +19997,7 @@ public struct Setting: SDKModel {
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_enabled = embed_enabled
+        self.embed_config = embed_config
     }
 
 }
@@ -27339,7 +27495,7 @@ public struct WriteSessionConfig: SDKModel {
 
 /**
  * Dynamic writeable type for Setting removes:
- * embed_enabled
+ * marketplace_site, embed_enabled
  */
 public struct WriteSetting: SDKModel {
 
@@ -27347,6 +27503,7 @@ public struct WriteSetting: SDKModel {
         case extension_framework_enabled
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
+        case marketplace_automation
         case marketplace_enabled
         case marketplace_terms_accepted
         case privatelabel_configuration
@@ -27359,6 +27516,7 @@ public struct WriteSetting: SDKModel {
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
+        case embed_config
     }
     /**
      * Toggle extension framework on or off
@@ -27366,14 +27524,16 @@ public struct WriteSetting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
-     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
      */
     public var extension_load_url_enabled: Bool?
 
     /**
-     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+     * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
      */
     public var marketplace_auto_install_enabled: Bool?
+
+    public var marketplace_automation: MarketplaceAutomation?
 
     /**
      * Toggle marketplace on or off
@@ -27441,14 +27601,17 @@ public struct WriteSetting: SDKModel {
     }
 
     /**
-     * Toggle cookieless embed setting
+     * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
      */
     public var embed_cookieless_v2: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
+    public var embed_config: EmbedConfig?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: EmbedConfig? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_automation = marketplace_automation
         self.marketplace_enabled = marketplace_enabled
         self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
@@ -27461,6 +27624,7 @@ public struct WriteSetting: SDKModel {
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_config = embed_config
     }
 
 }
