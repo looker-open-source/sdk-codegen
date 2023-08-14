@@ -126,6 +126,9 @@ export class VisualizationSDKImpl implements VisualizationSDK {
       this.visualizationData = visualizationData
       if (this._visConfig) {
         this._visConfig.update(this.visualizationData.visConfig)
+        this.hostApi.send(ExtensionRequestType.VIS_CONFIG_UPDATE, {
+          updatedConfig: this.visualizationData.visConfig,
+        })
       }
       if (this._queryResponse) {
         this._queryResponse.update(this.visualizationData.queryResponse)
