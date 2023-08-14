@@ -152,4 +152,56 @@ describe('VisualizationSDK', () => {
     sdk.updateVisData(visualizationData)
     expect(sdk.visualizationData).toBeUndefined()
   })
+
+  it('updates visConfig remotely and queryResponse locally when provided', () => {
+    const sdk = new VisualizationSDKImpl(api)
+    expect(sdk.visualizationData).toBeUndefined()
+    const visConfig: RawVisConfig = {
+      query_fields: {
+        measures: [{ a: 'a' }],
+        dimensions: [{ a: 'b' }],
+        table_calculations: [{ a: 'c' }],
+        pivots: [{ a: 'd' }],
+      },
+    }
+    const queryResponse: RawVisQueryResponse = {
+      data: [{ abc: { value: 'xyz' } }],
+      fields: {
+        measures: [{ a: 'a' }],
+        dimensions: [{ a: 'b' }],
+        table_calculations: [{ a: 'c' }],
+        pivots: [{ a: 'd' }],
+        measure_like: [{ a: 'e' }],
+        dimension_like: [{ a: 'f' }],
+      },
+      pivots: [],
+    }
+    const visualizationData: RawVisualizationData = {
+      visConfig,
+      queryResponse,
+    }
+    sdk.updateVisData(visualizationData)
+    expect(sdk.visualizationData).toEqual(visualizationData)
+    expect(sdk.visConfig.visConfig).toEqual(visConfig)
+    expect(api.send).toHaveBeenCalledWith('VIS_CONFIG_UPDATE', {
+      updatedConfig: visConfig,
+    })
+
+    const updatedVisConfig = {
+      ...visConfig,
+      background_color: 'blue',
+    } as RawVisConfig
+    const updatedVisualizationData: RawVisualizationData = {
+      visConfig: updatedVisConfig,
+      queryResponse,
+    }
+
+    sdk.updateVisData(updatedVisualizationData)
+    expect(sdk.visualizationData).toEqual(updatedVisualizationData)
+    expect(sdk.visConfig.visConfig).toEqual(updatedVisConfig)
+    expect(api.send).toHaveBeenCalledWith('VIS_CONFIG_UPDATE', {
+      updatedConfig: updatedVisConfig,
+    })
+    expect(sdk.visualizationData).toEqual(updatedVisualizationData)
+  })
 })

@@ -92,6 +92,10 @@ class VisualizationConfigImpl implements VisualizationConfig {
     this._visConfig = visConfig
   }
 
+  get visConfig(): RawVisConfig | undefined {
+    return this._visConfig
+  }
+
   get queryFieldMeasures(): Measure[] {
     return this._visConfig?.query_fields?.measures || []
   }
@@ -124,10 +128,13 @@ export class VisualizationSDKImpl implements VisualizationSDK {
     // Should never happen.
     if (this.hostApi.isDashboardMountSupported) {
       this.visualizationData = visualizationData
-      if (this._visConfig) {
+      if (this.visConfig && this._visConfig) {
         this._visConfig.update(this.visualizationData.visConfig)
+        this.hostApi.send(ExtensionRequestType.VIS_CONFIG_UPDATE, {
+          updatedConfig: this.visualizationData.visConfig,
+        })
       }
-      if (this._queryResponse) {
+      if (this.queryResponse && this._queryResponse) {
         this._queryResponse.update(this.visualizationData.queryResponse)
       }
     }

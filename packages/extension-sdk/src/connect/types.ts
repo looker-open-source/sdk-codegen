@@ -128,6 +128,10 @@ export enum ExtensionRequestType {
    */
   VIS_DEFAULT_CONFIG = 'VIS_DEFAULT_CONFIG',
   /**
+   * Change visualization configuration after intial load
+   */
+  VIS_CONFIG_UPDATE = 'VIS_CONFIG_UPDATE',
+  /**
    * Tile add error messages
    */
   TILE_ADD_ERRORS = 'TILE_ADD_ERRORS',
