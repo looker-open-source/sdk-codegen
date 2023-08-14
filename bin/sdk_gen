@@ -23,7 +23,7 @@ async function sleep(ms) {
 
 /** wait for the Looker CI image to be responsive */
 const waitForLooker = async () => {
-  const max_tries = 30
+  const max_tries = 90
   const delay = 5
   let alive = false
   let tries = 1

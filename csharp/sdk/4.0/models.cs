@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
+/// 329 API models: 247 Spec, 0 Request, 60 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -1922,13 +1922,39 @@ public class EgressIpAddresses : SdkModel
   public string[]? egress_ip_addresses { get; set; } = null;
 }
 
+public class EmbedConfig : SdkModel
+{
+  /// <summary>List of domains to allow for embedding</summary>
+  public string[]? domain_allowlist { get; set; } = null;
+  /// <summary>List of base urls to allow for alert/schedule</summary>
+  public string[]? alert_url_allowlist { get; set; } = null;
+  /// <summary>Owner of who defines the alert/schedule params on the base url</summary>
+  public string? alert_url_param_owner { get; set; } = null;
+  /// <summary>Label for the alert/schedule url</summary>
+  public string? alert_url_label { get; set; } = null;
+  /// <summary>Is SSO embedding enabled for this Looker</summary>
+  public bool? sso_auth_enabled { get; set; } = null;
+  /// <summary>Is Cookieless embedding enabled for this Looker</summary>
+  public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>Is embed content navigation enabled for this looker</summary>
+  public bool? embed_content_navigation { get; set; } = null;
+  /// <summary>Is embed content management enabled for this Looker</summary>
+  public bool? embed_content_management { get; set; } = null;
+  /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
+  public bool? strict_sameorigin_for_login { get; set; } = null;
+  /// <summary>When true, filters are enabled on embedded Looks</summary>
+  public bool? look_filters { get; set; } = null;
+  /// <summary>When true, removes navigation to Looks from embedded dashboards and explores.</summary>
+  public bool? hide_look_navigation { get; set; } = null;
+}
+
 public class EmbedCookielessSessionAcquire : SdkModel
 {
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
-  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.</summary>
   public string? external_user_id { get; set; } = null;
   /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
   public string? first_name { get; set; } = null;
@@ -1946,10 +1972,10 @@ public class EmbedCookielessSessionAcquire : SdkModel
   public string? external_group_id { get; set; } = null;
   /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
   public StringDictionary<object>? user_attributes { get; set; } = null;
-  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
-  public string? session_reference_token { get; set; } = null;
   /// <summary>The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.</summary>
   public string? embed_domain { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string? session_reference_token { get; set; } = null;
 }
 
 public class EmbedCookielessSessionAcquireResponse : SdkModel
@@ -2002,7 +2028,7 @@ public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public string target_url { get; set; } = "";
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
@@ -2031,11 +2057,11 @@ public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public string target_url { get; set; } = "";
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
-  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.</summary>
   public string? external_user_id { get; set; } = null;
   /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
   public string? first_name { get; set; } = null;
@@ -2055,6 +2081,8 @@ public class EmbedSsoParams : SdkModel
   public StringDictionary<object>? user_attributes { get; set; } = null;
   /// <summary>Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.</summary>
   public string? secret_id { get; set; } = null;
+  /// <summary>Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list</summary>
+  public string? embed_domain { get; set; } = null;
 }
 
 public class EmbedUrlResponse : SdkModel
@@ -3478,6 +3506,16 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
+public class MarketplaceAutomation : SdkModel
+{
+  /// <summary>Whether marketplace auto installation is enabled</summary>
+  public bool? install_enabled { get; set; } = null;
+  /// <summary>Whether marketplace auto update is enabled for looker extensions</summary>
+  public bool? update_looker_enabled { get; set; } = null;
+  /// <summary>Whether marketplace auto update is enabled for third party extensions</summary>
+  public bool? update_third_party_enabled { get; set; } = null;
+}
+
 public class MaterializePDT : SdkModel
 {
   /// <summary>The ID of the enqueued materialization task (read-only)</summary>
@@ -4735,12 +4773,15 @@ public class Setting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
-  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  /// <summary>(DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
   public bool? extension_load_url_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  /// <summary>(DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
+  public MarketplaceAutomation? marketplace_automation { get; set; }
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Location of Looker marketplace CDN (read-only)</summary>
+  public string? marketplace_site { get; set; } = null;
   /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
   public bool? marketplace_terms_accepted { get; set; } = null;
   public PrivatelabelConfiguration? privatelabel_configuration { get; set; }
@@ -4759,10 +4800,11 @@ public class Setting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  /// <summary>Toggle cookieless embed setting</summary>
+  /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
   /// <summary>True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
+  public EmbedConfig? embed_config { get; set; }
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -6704,15 +6746,16 @@ public class WriteSessionConfig : SdkModel
 }
 
 /// Dynamic writeable type for Setting removes:
-/// embed_enabled
+/// marketplace_site, embed_enabled
 public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
-  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  /// <summary>(DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
   public bool? extension_load_url_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  /// <summary>(DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
+  public MarketplaceAutomation? marketplace_automation { get; set; }
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
   /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
@@ -6737,8 +6780,9 @@ public class WriteSetting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  /// <summary>Toggle cookieless embed setting</summary>
+  /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
+  public EmbedConfig? embed_config { get; set; }
 }
 
 /// Dynamic writeable type for SshServer removes:

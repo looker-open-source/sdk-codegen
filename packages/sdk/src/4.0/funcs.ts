@@ -170,8 +170,10 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
+  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -211,9 +213,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -1078,35 +1084,39 @@ export const delete_embed_secret = async (
 }
 
 /**
- * ### Create SSO Embed URL
+ * ### Create Signed Embed URL
  *
- * Creates an SSO embed URL and cryptographically signs it with an embed secret.
+ * Creates a signed embed URL and cryptographically signs it with an embed secret.
  * This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
- * Do not make any modifications to this URL - any change may invalidate the signature and
+ * Do not make any modifications to the returned URL - any change may invalidate the signature and
  * cause the URL to fail to load a Looker embed session.
  *
- * A signed SSO embed URL can only be used once. After it has been used to request a page from the
- * Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
+ * A signed embed URL can only be **used once**. After the URL has been used to request a page from the
+ * Looker server, it is invalid. Future requests using the same URL will fail. This is to prevent
  * 'replay attacks'.
  *
  * The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
  * To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
- * The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
- * copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
+ * The best way to obtain this `target_url` is to navigate to the desired Looker page in your web browser and use the "Get embed URL" menu option
+ * to copy it to your clipboard and paste it into the `target_url` property as a quoted string value in this API request.
  *
- * Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
+ * Permissions for the embed user are defined by the groups in which the embed user is a member (`group_ids` property)
  * and the lists of models and permissions assigned to the embed user.
- * At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
+ * At a minimum, you must provide values for either the `group_ids` property, or **both** the models and permissions properties.
  * These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
  *
- * The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
+ * The embed user's access is the union of permissions granted by the `group_ids`, `models`, and `permissions` properties.
  *
  * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
- * SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+ * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+ *
  * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
  *
  * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
- * if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
+ * if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
+ * a default secret will be created. This default secret is encrypted using HMAC/SHA-256.
+ *
+ * The `embed_domain` parameter is optional. If specified and valid, the domain will be added to the embed domain allowlist if it is missing.
  *
  * #### Security Note
  * Protect this signed URL as you would an access token or password credentials - do not write
@@ -1314,7 +1324,7 @@ export const generate_tokens_for_cookieless_session = async (
  *
  * Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
  *
- * Looker maintains a single LDAP configuration. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+ * Looker maintains a single LDAP configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
  *
  * LDAP is enabled or disabled for Looker using the **enabled** field.
  *
@@ -1417,9 +1427,9 @@ export const test_ldap_config_connection = async (
 /**
  * ### Test the connection authentication settings for an LDAP configuration.
  *
- * This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
+ * This tests that the connection is possible and that a 'server' account to be used by Looker can authenticate to the LDAP server given connection and authentication information.
  *
- * **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
+ * **connection_host**, **connection_port**, and **auth_username**, are required. **connection_tls** and **auth_password** are optional.
  *
  * Example:
  * ```json
@@ -1432,7 +1442,7 @@ export const test_ldap_config_connection = async (
  * }
  * ```
  *
- * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+ * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
  *
  * The active LDAP settings are not modified.
  *
@@ -1461,9 +1471,9 @@ export const test_ldap_config_auth = async (
 /**
  * ### Test the user authentication settings for an LDAP configuration without authenticating the user.
  *
- * This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
+ * This test will let you easily test the mapping for user properties and roles for any user withoutneeding to authenticate as that user.
  *
- * This test accepts a full LDAP configuration along with a username and attempts to find the full info      for the user from the LDAP server without actually authenticating the user. So, user password is not      required.The configuration is validated before attempting to contact the server.
+ * This test accepts a full LDAP configuration along with a username and attempts to find the full infofor the user from the LDAP server without actually authenticating the user. So, user password is notrequired.The configuration is validated before attempting to contact the server.
  *
  * **test_ldap_user** is required.
  *
@@ -1494,9 +1504,9 @@ export const test_ldap_config_user_info = async (
 /**
  * ### Test the user authentication settings for an LDAP configuration.
  *
- * This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
+ * This test accepts a full LDAP configuration along with a username/password pair and attempts to authenticate the user with the LDAP server. The configuration is validated before attempting the authentication.
  *
- * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+ * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
  *
  * **test_ldap_user** and **test_ldap_password** are required.
  *
@@ -1858,7 +1868,7 @@ export const deactivate_app_user = async (
  *
  * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
  *
- * Looker maintains a single OIDC configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+ * Looker maintains a single OIDC configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
  *
  * OIDC is enabled or disabled for Looker using the **enabled** field.
  *
@@ -2068,7 +2078,7 @@ export const force_password_reset_at_next_login_for_all_users = async (
  *
  * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
  *
- * Looker maintains a single SAML configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+ * Looker maintains a single SAML configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
  *
  * SAML is enabled or disabled for Looker using the **enabled** field.
  *
@@ -3658,8 +3668,10 @@ export const mobile_settings = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
+ *  - marketplace_automation
  *  - marketplace_terms_accepted
  *  - marketplace_enabled
+ *  - marketplace_site
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
@@ -3667,6 +3679,7 @@ export const mobile_settings = async (
  *  - email_domain_allowlist
  *  - embed_cookieless_v2
  *  - embed_enabled
+ *  - embed_config
  *
  * GET /setting -> ISetting
  *
@@ -3698,8 +3711,10 @@ export const get_setting = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - marketplace_auto_install_enabled
+ *  - marketplace_automation
  *  - marketplace_terms_accepted
  *  - marketplace_enabled
+ *  - marketplace_site
  *  - onboarding_enabled
  *  - privatelabel_configuration
  *  - timezone
@@ -3707,6 +3722,7 @@ export const get_setting = async (
  *  - email_domain_allowlist
  *  - embed_cookieless_v2
  *  - embed_enabled
+ *  - embed_config
  *
  * See the `Setting` type for more information on the specific values that can be configured.
  *
@@ -6769,13 +6785,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6827,13 +6843,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroups" for complex method parameters
+ * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroupsWithHierarchy,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -7848,13 +7864,13 @@ export const move_look = async (
  * GET /lookml_models -> ILookmlModel[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
+ * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestArtifactNamespaces,
+  request: IRequestAllLookmlModels,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -10354,13 +10370,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+ * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchPermissionSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10634,13 +10650,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRoles,
+  request: IRequestSearchRolesWithUserCount,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -13213,13 +13229,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+ * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardSections,
+  request: IRequestAllUserAttributes,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(
