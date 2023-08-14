@@ -98,6 +98,7 @@ export interface VisualizationConfig {
   queryFieldDimensions: Dimension[]
   queryFieldTableCalculations: TableCalculation[]
   queryFieldPivots: PivotConfig[]
+  visConfig: RawVisConfig
 }
 
 export interface QueryResponse {
