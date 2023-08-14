@@ -92,8 +92,8 @@ class VisualizationConfigImpl implements VisualizationConfig {
     this._visConfig = visConfig
   }
 
-  get visConfig(): RawVisConfig | undefined {
-    return this._visConfig
+  get visConfig(): RawVisConfig {
+    return this._visConfig || {}
   }
 
   get queryFieldMeasures(): Measure[] {
