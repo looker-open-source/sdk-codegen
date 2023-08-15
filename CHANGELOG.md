@@ -1,5 +1,23 @@
 # Changelog
 
+## [23.14.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.12.0...sdk-codegen-all-v23.14.1) (2023-08-15)
+
+
+### Features
+
+* generate SDKs for Looker 23.14 ([#1347](https://github.com/looker-open-source/sdk-codegen/issues/1347)) ([90f3f5f](https://github.com/looker-open-source/sdk-codegen/commit/90f3f5f3104c1a76cd1cce10e06e0b995e53c40f))
+* Send message on visConfig extension update ([#1348](https://github.com/looker-open-source/sdk-codegen/issues/1348)) ([20295d3](https://github.com/looker-open-source/sdk-codegen/commit/20295d318aa7aa59083342038f0c5168959ef3fd))
+
+
+### Bug Fixes
+
+* change visconfig types to reflect new getter ([#1350](https://github.com/looker-open-source/sdk-codegen/issues/1350)) ([c7648d9](https://github.com/looker-open-source/sdk-codegen/commit/c7648d9792bf976e2ea0ab0e94dfa0d45de83e66))
+
+
+### Miscellaneous Chores
+
+* Update Typescript SDK README.md ([#1353](https://github.com/looker-open-source/sdk-codegen/issues/1353)) ([b528e38](https://github.com/looker-open-source/sdk-codegen/commit/b528e3895fc4b5c7b864627fcfb9d421233f12a1))
+
 ## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.10.0...sdk-codegen-all-v23.12.0) (2023-07-17)
 
 
