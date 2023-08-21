@@ -964,7 +964,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.create_query_task
       const actual = gen.makeTheCall(method, inputs)
       const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.create_query_task(
-        body=mdls.WriteCreateQueryTask(
+    body=mdls.WriteCreateQueryTask(
         query_id=1,
         result_format=mdls.ResultFormat.csv
     ))`
