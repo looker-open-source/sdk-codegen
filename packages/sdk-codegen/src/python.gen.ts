@@ -266,7 +266,7 @@ ${this.hooks.join('\n')}
     this.argDelimiter = `,\n${this.indentStr}`
     let resp = `response = sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
-    if (args.includes('mdls')) {
+    if (args.match(/\bmdls\b/)) {
       resp = 'from looker_sdk import models as mdls\n\n' + resp
     }
     this.argDelimiter = origDelim
