@@ -264,8 +264,11 @@ ${this.hooks.join('\n')}
   makeTheCall(method: IMethod, inputs: ArgValues): string {
     const origDelim = this.argDelimiter
     this.argDelimiter = `,\n${this.indentStr}`
-    const resp = `response = sdk.${method.name}(`
+    let resp = `response = sdk.${method.name}(`
     const args = this.assignParams(method, inputs)
+    if (args.match(/\bmdls\b/)) {
+      resp = 'from looker_sdk import models as mdls\n\n' + resp
+    }
     this.argDelimiter = origDelim
     return `${resp}${args})`
   }

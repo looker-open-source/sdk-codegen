@@ -939,7 +939,7 @@ class MergeFields(model.Model):
       const inputs = { look_id: 17, body, fields }
       const method = apiTestModel.methods.update_look
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `response = sdk.update_look(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.update_look(
     look_id=17,
     body=mdls.WriteLookWithQuery(
         title="test title",
@@ -963,7 +963,7 @@ class MergeFields(model.Model):
       }
       const method = apiTestModel.methods.create_query_task
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `response = sdk.create_query_task(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.create_query_task(
     body=mdls.WriteCreateQueryTask(
         query_id=1,
         result_format=mdls.ResultFormat.csv
@@ -977,7 +977,7 @@ class MergeFields(model.Model):
       }
       const method = apiTestModel.methods.all_users
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `response = sdk.all_users(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.all_users(
     ids=mdls.DelimSequence([1,2,3]))`
       expect(actual).toEqual(expected)
     })
@@ -1013,7 +1013,7 @@ class MergeFields(model.Model):
       const inputs = { body, fields }
       const method = apiTestModel.methods.create_merge_query
       const actual = gen.makeTheCall(method, inputs)
-      const expected = `response = sdk.create_merge_query(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.create_merge_query(
     body=mdls.WriteMergeQuery(
         column_limit="5",
         pivots=[
@@ -1057,7 +1057,7 @@ class MergeFields(model.Model):
       }
       const inputs = { body: query }
       const method = apiTestModel.methods.create_sql_query
-      const expected = `response = sdk.create_sql_query(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.create_sql_query(
     body=mdls.SqlQueryCreate(
         connection_name="looker",
         model_name="the_look",
@@ -1108,7 +1108,7 @@ class MergeFields(model.Model):
         },
       }
       const method = apiTestModel.methods.update_dashboard
-      const expected = `response = sdk.update_dashboard(
+      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.update_dashboard(
     dashboard_id="10",
     body=mdls.WriteDashboard(
         description="",
