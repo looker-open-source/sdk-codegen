@@ -25,7 +25,7 @@
  */
 
 /**
- * 329 API models: 247 Spec, 0 Request, 60 Write, 22 Enum
+ * 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -129,7 +129,7 @@ public struct Alert: SDKModel {
 
     private var _cron: AnyString
     /**
-     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
      */
     public var cron: String {
         get { _cron.value }
@@ -7613,7 +7613,7 @@ public struct Dialect: SDKModel {
     }
 
     /**
-     * Suports streaming results (read-only)
+     * Supports streaming results (read-only)
      */
     public var supports_streaming: Bool?
 
@@ -10704,7 +10704,7 @@ public struct IntegrationRequiredField: SDKModel {
 
     private var _any_tag: [AnyString]?
     /**
-     * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
+     * If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)
      */
     public var any_tag: [String]? {
         get { if let v = _any_tag { return v.map { $0.value } } else { return nil } }
@@ -10713,7 +10713,7 @@ public struct IntegrationRequiredField: SDKModel {
 
     private var _all_tags: [AnyString]?
     /**
-     * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+     * If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)
      */
     public var all_tags: [String]? {
         get { if let v = _all_tags { return v.map { $0.value } } else { return nil } }
@@ -16314,6 +16314,7 @@ public struct Project: SDKModel {
         case allow_warnings
         case is_example
         case _dependency_status = "dependency_status"
+        case _data_tests_count = "data_tests_count"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -16477,7 +16478,16 @@ public struct Project: SDKModel {
         set { _dependency_status = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
+    private var _data_tests_count: AnyInt?
+    /**
+     * Number of data tests within project (read-only)
+     */
+    public var data_tests_count: Int64? {
+        get { _data_tests_count?.value }
+        set { _data_tests_count = newValue.map(AnyInt.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil, data_tests_count: Int64? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -16500,6 +16510,7 @@ public struct Project: SDKModel {
         self.allow_warnings = allow_warnings
         self.is_example = is_example
         self._dependency_status = dependency_status.map(AnyString.init)
+        self._data_tests_count = data_tests_count.map(AnyInt.init)
     }
 
 }
@@ -20201,6 +20212,86 @@ public struct Snippet: SDKModel {
 
 }
 
+public struct SqlInterfaceQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _signature = "signature"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyInt?
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyInt.init) }
+    }
+
+    private var _signature: AnyString
+    /**
+     * Calcite signature (read-only)
+     */
+    public var signature: String {
+        get { _signature.value }
+        set { _signature = AnyString.init(newValue) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, signature: String) {
+        self.can = can
+        self._id = id.map(AnyInt.init)
+        self._signature = AnyString.init(signature)
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, _ signature: String) {
+        self.init(can: can, id: id, signature: signature)
+    }
+
+}
+
+public struct SqlInterfaceQueryCreate: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _sql = "sql"
+        case jdbc_client
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _sql: AnyString
+    /**
+     * Original SQL request
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    /**
+     * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+     */
+    public var jdbc_client: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, sql: String, jdbc_client: Bool? = nil) {
+        self.can = can
+        self._sql = AnyString.init(sql)
+        self.jdbc_client = jdbc_client
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, _ sql: String, jdbc_client: Bool? = nil) {
+        self.init(can: can, sql: sql, jdbc_client: jdbc_client)
+    }
+
+}
+
 public struct SqlQuery: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -22691,7 +22782,7 @@ public struct WriteAlert: SDKModel {
 
     private var _cron: AnyString
     /**
-     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
      */
     public var cron: String {
         get { _cron.value }
@@ -26393,7 +26484,7 @@ public struct WritePrivatelabelConfiguration: SDKModel {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example
+ * can, id, uses_git, is_example, data_tests_count
  */
 public struct WriteProject: SDKModel {
 
@@ -27625,6 +27716,41 @@ public struct WriteSetting: SDKModel {
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_config = embed_config
+    }
+
+}
+
+/**
+ * Dynamic writeable type for SqlInterfaceQueryCreate removes:
+ * can
+ */
+public struct WriteSqlInterfaceQueryCreate: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _sql = "sql"
+        case jdbc_client
+    }
+    private var _sql: AnyString
+    /**
+     * Original SQL request
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    /**
+     * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+     */
+    public var jdbc_client: Bool?
+
+    public init(sql: String, jdbc_client: Bool? = nil) {
+        self._sql = AnyString.init(sql)
+        self.jdbc_client = jdbc_client
+    }
+
+    public init(_ sql: String, jdbc_client: Bool? = nil) {
+        self.init(sql: sql, jdbc_client: jdbc_client)
     }
 
 }

@@ -20,5 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-sdk_version = "23.14"
+sdk_version = "23.17"
 environment_prefix = "LOOKERSDK"
