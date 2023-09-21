@@ -1,5 +1,18 @@
 # Changelog
 
+## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.14.1...sdk-codegen-all-v23.16.0) (2023-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 23.16 ([#1365](https://github.com/looker-open-source/sdk-codegen/issues/1365)) ([9d6937a](https://github.com/looker-open-source/sdk-codegen/commit/9d6937a042d1649b41bc1851d579b5aa5360ad44))
+
+
+### Bug Fixes
+
+* add mdls import to makeTheCall when mdls is used ([#1355](https://github.com/looker-open-source/sdk-codegen/issues/1355)) ([4f5ed2b](https://github.com/looker-open-source/sdk-codegen/commit/4f5ed2be97cc1462b980c20c2e9140cee087865f))
+* sync up package versions ([#1356](https://github.com/looker-open-source/sdk-codegen/issues/1356)) ([351a15d](https://github.com/looker-open-source/sdk-codegen/commit/351a15d71dd6b87124a0275a9b2d126f4e5c3ed1))
+
 ## [23.14.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.12.0...sdk-codegen-all-v23.14.1) (2023-08-15)
 
 

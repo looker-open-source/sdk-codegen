@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * dependencies
     * @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
 
+## [21.8.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.8.1...sdk-codegen-v21.8.2) (2023-09-21)
+
+
+### Bug Fixes
+
+* add mdls import to makeTheCall when mdls is used ([#1355](https://github.com/looker-open-source/sdk-codegen/issues/1355)) ([4f5ed2b](https://github.com/looker-open-source/sdk-codegen/commit/4f5ed2be97cc1462b980c20c2e9140cee087865f))
+
 ## [21.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.7.4...sdk-codegen-v21.8.0) (2023-02-22)
 
 
