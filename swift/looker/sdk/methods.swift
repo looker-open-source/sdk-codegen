@@ -25,7 +25,7 @@
  */
 
 /**
- * 461 API methods
+ * 464 API methods
  */
 
 
@@ -833,6 +833,23 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<EmbedUrlResponse, SDKError> {
         let result: SDKResponse<EmbedUrlResponse, SDKError> = self.post("/embed/token_url/me", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Validate a Signed Embed URL
+     *
+     * GET /embed/sso/validate -> EmbedUrlResponse
+     */
+    public func validate_embed_url(
+        /**
+         * @param {String} url URL to validate
+         */
+        url: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<EmbedUrlResponse, SDKError> {
+        let result: SDKResponse<EmbedUrlResponse, SDKError> = self.get("/embed/sso/validate", 
+            ["url": url], nil, options)
         return result
     }
 
@@ -2015,19 +2032,19 @@ open class LookerSDK: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} page The page to return. DEPRECATED. Use offset instead.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page The number of items in the returned page. DEPRECATED. Use limit instead.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         /**
-         * @param {Int64} offset The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
+         * @param {Int64} offset Number of results to return. (used with offset and takes priority over page and per_page)
          */
         offset: Int64? = nil,
         /**
-         * @param {Int64} limit The maximum number of items to return. (used with offset and takes priority over page and per_page)
+         * @param {Int64} limit Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
          */
         limit: Int64? = nil,
         /**
@@ -2986,7 +3003,10 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### This feature is enabled only by special license.
-     * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
+     *
+     * This endpoint provides the private label configuration, which includes hiding documentation links, custom favicon uploading, etc.
+     *
+     * This endpoint is deprecated. [Get Setting](#!/Config/get_setting) should be used to retrieve private label settings instead
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
@@ -3004,7 +3024,9 @@ open class LookerSDK: APIMethods {
     }
 
     /**
-     * ### Update the whitelabel configuration
+     * ### Update the private label configuration
+     *
+     * This endpoint is deprecated. [Set Setting](#!/Config/set_setting) should be used to update private label settings instead
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
@@ -3810,11 +3832,11 @@ open class LookerSDK: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         options: ITransportSettings? = nil
@@ -4124,7 +4146,7 @@ open class LookerSDK: APIMethods {
          */
         content_favorite_id: String? = nil,
         /**
-         * @param {String} folder_id Filter on a particular space.
+         * @param {String} folder_id Filter on a particular folder.
          */
         folder_id: String? = nil,
         /**
@@ -5307,10 +5329,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
-     * or if they contain soft-deleted content.
-     *
-     * In API 4.0+, all personal folders will be returned.
+     * All personal folders will be returned.
      *
      * GET /folders -> [Folder]
      */
@@ -5463,7 +5482,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### Get all looks in a folder.
-     * In API 3.x, this will return all looks in a folder, including looks in the trash.
      * In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
      *
      * GET /folders/{folder_id}/looks -> [LookWithQuery]
@@ -6558,7 +6576,7 @@ open class LookerSDK: APIMethods {
      *
      * Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
      * essentially disappear from view even though they still reside in the db.
-     * In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
+     * You can pass `deleted: true` as a parameter to [search_looks()](#!/Look/search_looks) to list soft-deleted looks.
      *
      * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
      * database and destroyed. There is no "undo" for `delete_look()`.
@@ -6619,7 +6637,8 @@ open class LookerSDK: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8300,7 +8319,8 @@ open class LookerSDK: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8426,7 +8446,8 @@ open class LookerSDK: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8523,7 +8544,7 @@ open class LookerSDK: APIMethods {
      * Here is an example inline query URL:
      *
      * ```
-     * https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+     * https://looker.mycompany.com:19999/api/4.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
      * ```
      *
      * When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
@@ -8549,7 +8570,8 @@ open class LookerSDK: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8676,19 +8698,69 @@ open class LookerSDK: APIMethods {
     }
 
     /**
-     * Get a SQL Runner query.
+     * ### Run a saved SQL interface query.
      *
-     * GET /sql_queries/{slug} -> SqlQuery
+     * This runs a previously created SQL interface query.
+     *
+     * The 'result_format' parameter specifies the desired structure and format of the response.
+     *
+     * Supported formats:
+     *
+     * | result_format | Description
+     * | :-----------: | :--- |
+     * | json | Plain json
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | csv | Comma separated values with a header
+     * | txt | Tab separated values with a header
+     * | html | Simple html
+     * | md | Simple markdown
+     * | xlsx | MS Excel spreadsheet
+     * | sql | Returns the generated SQL rather than running the query
+     * | png | A PNG image of the visualization of the query
+     * | jpg | A JPG image of the visualization of the query
+     *
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> String
+     *
+     * **Note**: Binary content may be returned by this method.
      */
-    public func sql_query(
+    public func run_sql_interface_query(
         /**
-         * @param {String} slug slug of query
+         * @param {Int64} query_id Integer id of query
          */
-        _ slug: String,
+        _ query_id: Int64,
+        /**
+         * @param {String} result_format Format of result, options are: ["json_bi"]
+         */
+        _ result_format: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<SqlQuery, SDKError> {
-        let path_slug = encodeParam(slug)
-        let result: SDKResponse<SqlQuery, SDKError> = self.get("/sql_queries/\(path_slug)", nil, nil, options)
+    ) -> SDKResponse<String, SDKError> {
+        let path_query_id = encodeParam(query_id)
+        let path_result_format = encodeParam(result_format)
+        let result: SDKResponse<String, SDKError> = self.get("/sql_interface_queries/\(path_query_id)/run/\(path_result_format)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a SQL interface query.
+     *
+     * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+     * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+     * will be returned and no new query will be created. Whether a new query is created or not, you can use
+     * the 'id' in the returned query with the 'run' method.
+     *
+     * The query parameters are passed as json in the body of the request.
+     *
+     * POST /sql_interface_queries -> SqlInterfaceQuery
+     */
+    public func create_sql_interface_query(
+        /**
+         * @param {WriteSqlInterfaceQueryCreate} body
+         */
+        _ body: WriteSqlInterfaceQueryCreate,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SqlInterfaceQuery, SDKError> {
+        let result: SDKResponse<SqlInterfaceQuery, SDKError> = self.post("/sql_interface_queries", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8707,6 +8779,23 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<SqlQuery, SDKError> {
         let result: SDKResponse<SqlQuery, SDKError> = self.post("/sql_queries", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * Get a SQL Runner query.
+     *
+     * GET /sql_queries/{slug} -> SqlQuery
+     */
+    public func sql_query(
+        /**
+         * @param {String} slug slug of query
+         */
+        _ slug: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<SqlQuery, SDKError> {
+        let path_slug = encodeParam(slug)
+        let result: SDKResponse<SqlQuery, SDKError> = self.get("/sql_queries/\(path_slug)", nil, nil, options)
         return result
     }
 
@@ -8867,12 +8956,16 @@ open class LookerSDK: APIMethods {
          * @param {Bool} long_tables Whether or not to expand table vis to full length
          */
         long_tables: Bool? = nil,
+        /**
+         * @param {String} theme Theme to apply. Will render embedded version of dashboard if valid
+         */
+        theme: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<RenderTask, SDKError> {
         let path_dashboard_id = encodeParam(dashboard_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<RenderTask, SDKError> = self.post("/render_tasks/dashboards/\(path_dashboard_id)/\(path_result_format)", 
-            ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?, "long_tables": long_tables as Any?], try! self.encode(body), options)
+            ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?, "long_tables": long_tables as Any?, "theme": theme], try! self.encode(body), options)
         return result
     }
 

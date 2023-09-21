@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 329 API models: 247 Spec, 0 Request, 60 Write, 22 Enum
+/// 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -58,7 +58,7 @@ public class Alert : SdkModel
   /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
-  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
@@ -1811,7 +1811,7 @@ public class Dialect : SdkModel
   public string? persistent_table_sortkeys { get; set; } = null;
   /// <summary>PDT distkey column (read-only)</summary>
   public string? persistent_table_distkey { get; set; } = null;
-  /// <summary>Suports streaming results (read-only)</summary>
+  /// <summary>Supports streaming results (read-only)</summary>
   public bool? supports_streaming { get; set; } = null;
   /// <summary>Should SQL Runner snippets automatically be run (read-only)</summary>
   public bool? automatically_run_sql_runner_snippets { get; set; } = null;
@@ -2565,9 +2565,9 @@ public class IntegrationRequiredField : SdkModel
 {
   /// <summary>Matches a field that has this tag. (read-only)</summary>
   public string? tag { get; set; } = null;
-  /// <summary>If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)</summary>
+  /// <summary>If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)</summary>
   public string[]? any_tag { get; set; } = null;
-  /// <summary>If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)</summary>
+  /// <summary>If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)</summary>
   public string[]? all_tags { get; set; } = null;
 }
 
@@ -3970,6 +3970,8 @@ public class Project : SdkModel
   public bool? is_example { get; set; } = null;
   /// <summary>Status of dependencies in your manifest & lockfile</summary>
   public string? dependency_status { get; set; } = null;
+  /// <summary>Number of data tests within project (read-only)</summary>
+  public long? data_tests_count { get; set; } = null;
 }
 
 public class ProjectError : SdkModel
@@ -4858,6 +4860,26 @@ public class Snippet : SdkModel
   public string? sql { get; set; } = null;
 }
 
+public class SqlInterfaceQuery : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Calcite signature (read-only)</summary>
+  public string signature { get; set; } = "";
+}
+
+public class SqlInterfaceQueryCreate : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Original SQL request</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.</summary>
+  public bool? jdbc_client { get; set; } = null;
+}
+
 public class SqlQuery : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -5534,7 +5556,7 @@ public class WriteAlert : SdkModel
   /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
-  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
@@ -6478,7 +6500,7 @@ public class WritePrivatelabelConfiguration : SdkModel
 }
 
 /// Dynamic writeable type for Project removes:
-/// can, id, uses_git, is_example
+/// can, id, uses_git, is_example, data_tests_count
 public class WriteProject : SdkModel
 {
   /// <summary>Project display name</summary>
@@ -6783,6 +6805,16 @@ public class WriteSetting : SdkModel
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
   public EmbedConfig? embed_config { get; set; }
+}
+
+/// Dynamic writeable type for SqlInterfaceQueryCreate removes:
+/// can
+public class WriteSqlInterfaceQueryCreate : SdkModel
+{
+  /// <summary>Original SQL request</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.</summary>
+  public bool? jdbc_client { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:

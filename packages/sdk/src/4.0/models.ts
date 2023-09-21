@@ -25,7 +25,7 @@
  */
 
 /**
- * 395 API models: 247 Spec, 66 Request, 60 Write, 22 Enum
+ * 398 API models: 249 Spec, 66 Request, 61 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -63,7 +63,7 @@ export interface IAlert {
    */
   comparison_type: ComparisonType
   /**
-   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
    */
   cron: string
   /**
@@ -3023,7 +3023,7 @@ export interface IDialect {
    */
   persistent_table_distkey?: string
   /**
-   * Suports streaming results (read-only)
+   * Supports streaming results (read-only)
    */
   supports_streaming?: boolean
   /**
@@ -4335,11 +4335,11 @@ export interface IIntegrationRequiredField {
    */
   tag?: string | null
   /**
-   * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
+   * If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)
    */
   any_tag?: string[] | null
   /**
-   * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+   * If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)
    */
   all_tags?: string[] | null
 }
@@ -6733,6 +6733,10 @@ export interface IProject {
    * Status of dependencies in your manifest & lockfile
    */
   dependency_status?: string | null
+  /**
+   * Number of data tests within project (read-only)
+   */
+  data_tests_count?: number
 }
 
 export interface IProjectError {
@@ -7717,6 +7721,10 @@ export interface IRequestCreateDashboardRenderTask {
    * Whether or not to expand table vis to full length
    */
   long_tables?: boolean | null
+  /**
+   * Theme to apply. Will render embedded version of dashboard if valid
+   */
+  theme?: string | null
 }
 
 /**
@@ -8388,19 +8396,19 @@ export interface IRequestSearchBoards {
    */
   sorts?: string | null
   /**
-   * The page to return. DEPRECATED. Use offset instead.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * The number of items in the returned page. DEPRECATED. Use limit instead.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
   /**
-   * The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
+   * Number of results to return. (used with offset and takes priority over page and per_page)
    */
   offset?: number | null
   /**
-   * The maximum number of items to return. (used with offset and takes priority over page and per_page)
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
    */
   limit?: number | null
   /**
@@ -8438,11 +8446,11 @@ export interface IRequestSearchContent {
    */
   offset?: number | null
   /**
-   * Requested page.
+   * DEPRECATED. Use limit and offset instead. Return only page N of paginated results
    */
   page?: number | null
   /**
-   * Results per page.
+   * DEPRECATED. Use limit and offset instead. Return N rows of data per page
    */
   per_page?: number | null
 }
@@ -8652,7 +8660,7 @@ export interface IRequestSearchDashboards {
    */
   content_favorite_id?: string | null
   /**
-   * Filter on a particular space.
+   * Filter on a particular folder.
    */
   folder_id?: string | null
   /**
@@ -10505,6 +10513,36 @@ export interface ISnippet {
   sql?: string
 }
 
+export interface ISqlInterfaceQuery {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Unique Id (read-only)
+   */
+  id?: number
+  /**
+   * Calcite signature (read-only)
+   */
+  signature: string | null
+}
+
+export interface ISqlInterfaceQueryCreate {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>
+  /**
+   * Original SQL request
+   */
+  sql: string | null
+  /**
+   * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+   */
+  jdbc_client?: boolean
+}
+
 export interface ISqlQuery {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -11556,7 +11594,7 @@ export interface IWriteAlert {
    */
   comparison_type: ComparisonType | null
   /**
-   * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+   * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
    */
   cron: string
   /**
@@ -13163,7 +13201,7 @@ export interface IWritePrivatelabelConfiguration {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example
+ * can, id, uses_git, is_example, data_tests_count
  */
 export interface IWriteProject {
   /**
@@ -13705,6 +13743,21 @@ export interface IWriteSetting {
    */
   embed_cookieless_v2?: boolean
   embed_config?: IEmbedConfig | null
+}
+
+/**
+ * Dynamic writeable type for SqlInterfaceQueryCreate removes:
+ * can
+ */
+export interface IWriteSqlInterfaceQueryCreate {
+  /**
+   * Original SQL request
+   */
+  sql: string | null
+  /**
+   * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+   */
+  jdbc_client?: boolean
 }
 
 /**

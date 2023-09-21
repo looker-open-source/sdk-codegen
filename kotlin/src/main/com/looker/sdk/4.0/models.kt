@@ -25,7 +25,7 @@
  */
 
 /**
- * 329 API models: 247 Spec, 0 Request, 60 Write, 22 Enum
+ * 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -53,7 +53,7 @@ data class AccessToken (
 /**
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
  * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
- * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
  * @property custom_url_label Label for the custom url defined by the alert creator
@@ -1903,7 +1903,7 @@ enum class DeviceType : Serializable {
  * @property persistent_table_indexes PDT index columns (read-only)
  * @property persistent_table_sortkeys PDT sortkey columns (read-only)
  * @property persistent_table_distkey PDT distkey column (read-only)
- * @property supports_streaming Suports streaming results (read-only)
+ * @property supports_streaming Supports streaming results (read-only)
  * @property automatically_run_sql_runner_snippets Should SQL Runner snippets automatically be run (read-only)
  * @property connection_tests Array of names of the tests that can be run on a connection using this dialect (read-only)
  * @property supports_inducer Is supported with the inducer (i.e. generate from sql) (read-only)
@@ -2698,8 +2698,8 @@ data class IntegrationParam (
 
 /**
  * @property tag Matches a field that has this tag. (read-only)
- * @property any_tag If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
- * @property all_tags If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+ * @property any_tag If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)
+ * @property all_tags If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)
  */
 data class IntegrationRequiredField (
     var tag: String? = null,
@@ -4144,6 +4144,7 @@ data class PrivatelabelConfiguration (
  * @property allow_warnings Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
  * @property is_example If true the project is an example project and cannot be modified (read-only)
  * @property dependency_status Status of dependencies in your manifest & lockfile
+ * @property data_tests_count Number of data tests within project (read-only)
  */
 data class Project (
     var can: Map<String,Boolean>? = null,
@@ -4167,7 +4168,8 @@ data class Project (
     var git_release_mgmt_enabled: Boolean? = null,
     var allow_warnings: Boolean? = null,
     var is_example: Boolean? = null,
-    var dependency_status: String? = null
+    var dependency_status: String? = null,
+    var data_tests_count: Long? = null
 ) : Serializable
 
 /**
@@ -5093,6 +5095,28 @@ data class Snippet (
 
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property signature Calcite signature (read-only)
+ */
+data class SqlInterfaceQuery (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var signature: String
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property sql Original SQL request
+ * @property jdbc_client Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+ */
+data class SqlInterfaceQueryCreate (
+    var can: Map<String,Boolean>? = null,
+    var sql: String,
+    var jdbc_client: Boolean? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
  * @property slug The identifier of the SQL query (read-only)
  * @property last_runtime Number of seconds this query took to run the most recent time it was run (read-only)
  * @property run_count Number of times this query has been run (read-only)
@@ -5767,7 +5791,7 @@ data class Workspace (
  *
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
  * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
- * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
  * @property custom_url_label Label for the custom url defined by the alert creator
@@ -6783,7 +6807,7 @@ data class WritePrivatelabelConfiguration (
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example
+ * can, id, uses_git, is_example, data_tests_count
  *
  * @property name Project display name
  * @property git_remote_url Git remote repository url
@@ -7099,6 +7123,18 @@ data class WriteSetting (
     var email_domain_allowlist: Array<String>? = null,
     var embed_cookieless_v2: Boolean? = null,
     var embed_config: EmbedConfig? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for SqlInterfaceQueryCreate removes:
+ * can
+ *
+ * @property sql Original SQL request
+ * @property jdbc_client Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+ */
+data class WriteSqlInterfaceQueryCreate (
+    var sql: String,
+    var jdbc_client: Boolean? = null
 ) : Serializable
 
 /**

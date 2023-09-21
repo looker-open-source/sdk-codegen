@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 461 API methods
+/// 464 API methods
 
 #nullable enable
 using System;
@@ -736,6 +736,21 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Post, "/embed/token_url/me", null,body,options);
+  }
+
+  /// ### Validate a Signed Embed URL
+  ///
+  /// GET /embed/sso/validate -> EmbedUrlResponse
+  ///
+  /// <returns><c>EmbedUrlResponse</c> Embed URL Validation (application/json)</returns>
+  ///
+  /// <param name="url">URL to validate</param>
+  public async Task<SdkResponse<EmbedUrlResponse, Exception>> validate_embed_url(
+    string? url = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Get, "/embed/sso/validate", new Values {
+      { "url", url }},null,options);
   }
 
   /// ### Acquire a cookieless embed session.
@@ -1764,10 +1779,10 @@ namespace Looker.SDK.API40
   /// <param name="favorited">Return favorited boards when true.</param>
   /// <param name="creator_id">Filter on boards created by a particular user.</param>
   /// <param name="sorts">The fields to sort the results by</param>
-  /// <param name="page">The page to return. DEPRECATED. Use offset instead.</param>
-  /// <param name="per_page">The number of items in the returned page. DEPRECATED. Use limit instead.</param>
-  /// <param name="offset">The number of items to skip before returning any. (used with limit and takes priority over page and per_page)</param>
-  /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="offset">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="limit">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="permission">Filter results based on permission, either show (default) or update</param>
   public async Task<SdkResponse<Board[], Exception>> search_boards(
@@ -2621,11 +2636,14 @@ namespace Looker.SDK.API40
   }
 
   /// ### This feature is enabled only by special license.
-  /// ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
+  ///
+  /// This endpoint provides the private label configuration, which includes hiding documentation links, custom favicon uploading, etc.
+  ///
+  /// This endpoint is deprecated. [Get Setting](#!/Config/get_setting) should be used to retrieve private label settings instead
   ///
   /// GET /whitelabel_configuration -> WhitelabelConfiguration
   ///
-  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  /// <returns><c>WhitelabelConfiguration</c> Private label configuration (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
   [Obsolete("Deprecated")]
@@ -2637,11 +2655,13 @@ namespace Looker.SDK.API40
       { "fields", fields }},null,options);
   }
 
-  /// ### Update the whitelabel configuration
+  /// ### Update the private label configuration
+  ///
+  /// This endpoint is deprecated. [Set Setting](#!/Config/set_setting) should be used to update private label settings instead
   ///
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
   ///
-  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  /// <returns><c>WhitelabelConfiguration</c> Private label configuration (application/json)</returns>
   ///
   [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
@@ -3298,15 +3318,15 @@ namespace Looker.SDK.API40
   ///
   /// GET /content/{terms} -> ContentSearch[]
   ///
-  /// <returns><c>ContentSearch[]</c> content (application/json)</returns>
+  /// <returns><c>ContentSearch[]</c> Matching content (application/json)</returns>
   ///
   /// <param name="terms">Search terms</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="types">Content types requested (dashboard, look, lookml_dashboard).</param>
   /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
   public async Task<SdkResponse<ContentSearch[], Exception>> search_content(
     string terms,
     string? fields = null,
@@ -3576,7 +3596,7 @@ namespace Looker.SDK.API40
   /// <param name="title">Match Dashboard title.</param>
   /// <param name="description">Match Dashboard description.</param>
   /// <param name="content_favorite_id">Filter on a content favorite id.</param>
-  /// <param name="folder_id">Filter on a particular space.</param>
+  /// <param name="folder_id">Filter on a particular folder.</param>
   /// <param name="deleted">Filter on dashboards deleted status.</param>
   /// <param name="user_id">Filter on dashboards created by a particular user.</param>
   /// <param name="view_count">Filter on a particular value of view_count</param>
@@ -4555,10 +4575,7 @@ namespace Looker.SDK.API40
 
   /// ### Get information about all folders.
   ///
-  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
-  /// or if they contain soft-deleted content.
-  ///
-  /// In API 4.0+, all personal folders will be returned.
+  /// All personal folders will be returned.
   ///
   /// GET /folders -> Folder[]
   ///
@@ -4683,7 +4700,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### Get all looks in a folder.
-  /// In API 3.x, this will return all looks in a folder, including looks in the trash.
   /// In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
   ///
   /// GET /folders/{folder_id}/looks -> LookWithQuery[]
@@ -5590,7 +5606,7 @@ namespace Looker.SDK.API40
   ///
   /// Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
   /// essentially disappear from view even though they still reside in the db.
-  /// In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
+  /// You can pass `deleted: true` as a parameter to [search_looks()](#!/Look/search_looks) to list soft-deleted looks.
   ///
   /// NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
   /// database and destroyed. There is no "undo" for `delete_look()`.
@@ -5642,7 +5658,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7091,7 +7108,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7204,7 +7222,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7288,7 +7307,7 @@ namespace Looker.SDK.API40
   /// Here is an example inline query URL:
   ///
   /// ```
-  /// https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+  /// https://looker.mycompany.com:19999/api/4.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
   /// ```
   ///
   /// When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
@@ -7314,7 +7333,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7429,19 +7449,68 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/running_queries/{query_task_id}", null,null,options);
   }
 
-  /// Get a SQL Runner query.
+  /// ### Run a saved SQL interface query.
   ///
-  /// GET /sql_queries/{slug} -> SqlQuery
+  /// This runs a previously created SQL interface query.
   ///
-  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  /// The 'result_format' parameter specifies the desired structure and format of the response.
   ///
-  /// <param name="slug">slug of query</param>
-  public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
-    string slug,
+  /// Supported formats:
+  ///
+  /// | result_format | Description
+  /// | :-----------: | :--- |
+  /// | json | Plain json
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | csv | Comma separated values with a header
+  /// | txt | Tab separated values with a header
+  /// | html | Simple html
+  /// | md | Simple markdown
+  /// | xlsx | MS Excel spreadsheet
+  /// | sql | Returns the generated SQL rather than running the query
+  /// | png | A PNG image of the visualization of the query
+  /// | jpg | A JPG image of the visualization of the query
+  ///
+  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
+  ///
+  /// **Note**: Binary content may be returned by this method.
+  ///
+  /// <returns>
+  /// <c>string</c> SQL Interface Query (text)
+  /// <c>string</c> SQL Interface Query (application/json)
+  /// <c>string</c> SQL Interface Query (image/png)
+  /// <c>string</c> SQL Interface Query (image/jpeg)
+  /// </returns>
+  ///
+  /// <param name="query_id">Integer id of query</param>
+  /// <param name="result_format">Format of result, options are: ["json_bi"]</param>
+  public async Task<SdkResponse<TSuccess, Exception>> run_sql_interface_query<TSuccess>(
+    long query_id,
+    string result_format,
+    ITransportSettings? options = null) where TSuccess : class
+{  
+      result_format = SdkUtils.EncodeParam(result_format);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/sql_interface_queries/{query_id}/run/{result_format}", null,null,options);
+  }
+
+  /// ### Create a SQL interface query.
+  ///
+  /// This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+  /// and are not deleted. If you create a query that is exactly like an existing query then the existing query
+  /// will be returned and no new query will be created. Whether a new query is created or not, you can use
+  /// the 'id' in the returned query with the 'run' method.
+  ///
+  /// The query parameters are passed as json in the body of the request.
+  ///
+  /// POST /sql_interface_queries -> SqlInterfaceQuery
+  ///
+  /// <returns><c>SqlInterfaceQuery</c> SQL Interface Query (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SqlInterfaceQuery, Exception>> create_sql_interface_query(
+    WriteSqlInterfaceQueryCreate body,
     ITransportSettings? options = null)
 {  
-      slug = SdkUtils.EncodeParam(slug);
-    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
+    return await AuthRequest<SqlInterfaceQuery, Exception>(HttpMethod.Post, "/sql_interface_queries", null,body,options);
   }
 
   /// ### Create a SQL Runner Query
@@ -7457,6 +7526,21 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<SqlQuery, Exception>(HttpMethod.Post, "/sql_queries", null,body,options);
+  }
+
+  /// Get a SQL Runner query.
+  ///
+  /// GET /sql_queries/{slug} -> SqlQuery
+  ///
+  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  ///
+  /// <param name="slug">slug of query</param>
+  public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
+    string slug,
+    ITransportSettings? options = null)
+{  
+      slug = SdkUtils.EncodeParam(slug);
+    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
   }
 
   /// Execute a SQL Runner query in a given result_format.
@@ -7571,6 +7655,7 @@ namespace Looker.SDK.API40
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape paper orientation</param>
   /// <param name="long_tables">Whether or not to expand table vis to full length</param>
+  /// <param name="theme">Theme to apply. Will render embedded version of dashboard if valid</param>
   public async Task<SdkResponse<RenderTask, Exception>> create_dashboard_render_task(
     string dashboard_id,
     string result_format,
@@ -7581,6 +7666,7 @@ namespace Looker.SDK.API40
     string? pdf_paper_size = null,
     bool? pdf_landscape = null,
     bool? long_tables = null,
+    string? theme = null,
     ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
@@ -7591,7 +7677,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "pdf_paper_size", pdf_paper_size },
       { "pdf_landscape", pdf_landscape },
-      { "long_tables", long_tables }},body,options);
+      { "long_tables", long_tables },
+      { "theme", theme }},body,options);
   }
 
   /// ### Get information about a render task.

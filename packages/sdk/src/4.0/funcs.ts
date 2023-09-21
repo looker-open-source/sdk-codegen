@@ -25,7 +25,7 @@
  */
 
 /**
- * 461 API methods
+ * 464 API methods
  */
 
 import type {
@@ -242,6 +242,7 @@ import type {
   ISetting,
   ISmtpSettings,
   ISmtpStatus,
+  ISqlInterfaceQuery,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -312,6 +313,7 @@ import type {
   IWriteScheduledPlan,
   IWriteSessionConfig,
   IWriteSetting,
+  IWriteSqlInterfaceQueryCreate,
   IWriteSshServer,
   IWriteSshTunnel,
   IWriteTheme,
@@ -1192,6 +1194,29 @@ export const create_embed_url_as_me = async (
     '/embed/token_url/me',
     null,
     body,
+    options
+  )
+}
+
+/**
+ * ### Validate a Signed Embed URL
+ *
+ * GET /embed/sso/validate -> IEmbedUrlResponse
+ *
+ * @param sdk IAPIMethods implementation
+ * @param url URL to validate
+ * @param options one-time API call overrides
+ *
+ */
+export const validate_embed_url = async (
+  sdk: IAPIMethods,
+  url?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IEmbedUrlResponse, IError | IValidationError>> => {
+  return sdk.get<IEmbedUrlResponse, IError | IValidationError>(
+    '/embed/sso/validate',
+    { url },
+    null,
     options
   )
 }
@@ -3858,7 +3883,10 @@ export const api_spec = async (
 
 /**
  * ### This feature is enabled only by special license.
- * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
+ *
+ * This endpoint provides the private label configuration, which includes hiding documentation links, custom favicon uploading, etc.
+ *
+ * This endpoint is deprecated. [Get Setting](#!/Config/get_setting) should be used to retrieve private label settings instead
  *
  * GET /whitelabel_configuration -> IWhitelabelConfiguration
  *
@@ -3883,7 +3911,9 @@ export const whitelabel_configuration = async (
 }
 
 /**
- * ### Update the whitelabel configuration
+ * ### Update the private label configuration
+ *
+ * This endpoint is deprecated. [Set Setting](#!/Config/set_setting) should be used to update private label settings instead
  *
  * PUT /whitelabel_configuration -> IWhitelabelConfiguration
  *
@@ -6430,10 +6460,7 @@ export const delete_folder = async (
 /**
  * ### Get information about all folders.
  *
- * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
- * or if they contain soft-deleted content.
- *
- * In API 4.0+, all personal folders will be returned.
+ * All personal folders will be returned.
  *
  * GET /folders -> IFolder[]
  *
@@ -6585,7 +6612,6 @@ export const folder_ancestors = async (
 
 /**
  * ### Get all looks in a folder.
- * In API 3.x, this will return all looks in a folder, including looks in the trash.
  * In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
  *
  * GET /folders/{folder_id}/looks -> ILookWithQuery[]
@@ -7678,7 +7704,7 @@ export const look = async (
  *
  * Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
  * essentially disappear from view even though they still reside in the db.
- * In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
+ * You can pass `deleted: true` as a parameter to [search_looks()](#!/Look/search_looks) to list soft-deleted looks.
  *
  * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
  * database and destroyed. There is no "undo" for `delete_look()`.
@@ -7743,7 +7769,8 @@ export const delete_look = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
  * | html | Simple html
@@ -9516,7 +9543,8 @@ export const create_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
  * | html | Simple html
@@ -9607,7 +9635,8 @@ export const run_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
  * | html | Simple html
@@ -9672,7 +9701,7 @@ export const run_inline_query = async (
  * Here is an example inline query URL:
  *
  * ```
- * https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+ * https://looker.mycompany.com:19999/api/4.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
  * ```
  *
  * When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
@@ -9698,7 +9727,8 @@ export const run_inline_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
  * | html | Simple html
@@ -9853,22 +9883,82 @@ export const kill_query = async (
 }
 
 /**
- * Get a SQL Runner query.
+ * ### Run a saved SQL interface query.
  *
- * GET /sql_queries/{slug} -> ISqlQuery
+ * This runs a previously created SQL interface query.
+ *
+ * The 'result_format' parameter specifies the desired structure and format of the response.
+ *
+ * Supported formats:
+ *
+ * | result_format | Description
+ * | :-----------: | :--- |
+ * | json | Plain json
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | csv | Comma separated values with a header
+ * | txt | Tab separated values with a header
+ * | html | Simple html
+ * | md | Simple markdown
+ * | xlsx | MS Excel spreadsheet
+ * | sql | Returns the generated SQL rather than running the query
+ * | png | A PNG image of the visualization of the query
+ * | jpg | A JPG image of the visualization of the query
+ *
+ * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
+ *
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
  *
  * @param sdk IAPIMethods implementation
- * @param slug slug of query
+ * @param query_id Integer id of query
+ * @param result_format Format of result, options are: ["json_bi"]
  * @param options one-time API call overrides
  *
  */
-export const sql_query = async (
+export const run_sql_interface_query = async (
   sdk: IAPIMethods,
-  slug: string,
+  query_id: number,
+  result_format: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ISqlQuery, IError>> => {
-  slug = encodeParam(slug)
-  return sdk.get<ISqlQuery, IError>(`/sql_queries/${slug}`, null, null, options)
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  result_format = encodeParam(result_format)
+  return sdk.get<string, IError | IValidationError>(
+    `/sql_interface_queries/${query_id}/run/${result_format}`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Create a SQL interface query.
+ *
+ * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+ * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+ * will be returned and no new query will be created. Whether a new query is created or not, you can use
+ * the 'id' in the returned query with the 'run' method.
+ *
+ * The query parameters are passed as json in the body of the request.
+ *
+ * POST /sql_interface_queries -> ISqlInterfaceQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSqlInterfaceQueryCreate>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_sql_interface_query = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteSqlInterfaceQueryCreate>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISqlInterfaceQuery, IError | IValidationError>> => {
+  return sdk.post<ISqlInterfaceQuery, IError | IValidationError>(
+    '/sql_interface_queries',
+    null,
+    body,
+    options
+  )
 }
 
 /**
@@ -9894,6 +9984,25 @@ export const create_sql_query = async (
     body,
     options
   )
+}
+
+/**
+ * Get a SQL Runner query.
+ *
+ * GET /sql_queries/{slug} -> ISqlQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param slug slug of query
+ * @param options one-time API call overrides
+ *
+ */
+export const sql_query = async (
+  sdk: IAPIMethods,
+  slug: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISqlQuery, IError>> => {
+  slug = encodeParam(slug)
+  return sdk.get<ISqlQuery, IError>(`/sql_queries/${slug}`, null, null, options)
 }
 
 /**
@@ -10036,6 +10145,7 @@ export const create_dashboard_render_task = async (
       pdf_paper_size: request.pdf_paper_size,
       pdf_landscape: request.pdf_landscape,
       long_tables: request.long_tables,
+      theme: request.theme,
     },
     request.body,
     options
