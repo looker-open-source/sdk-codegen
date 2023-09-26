@@ -6,6 +6,7 @@
   "author": "Looker",
   "private": true,
   "workspaces": [
+    "bin/looker-resources-index",
     "packages/*"
   ],
   "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
