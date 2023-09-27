@@ -6,6 +6,7 @@
   "author": "Looker",
   "private": true,
   "workspaces": [
+    "apix-files",
     "bin/looker-resources-index",
     "packages/*"
   ],
