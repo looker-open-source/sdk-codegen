@@ -6,6 +6,8 @@
   "author": "Looker",
   "private": true,
   "workspaces": [
+    "apix-files",
+    "bin/looker-resources-index",
     "packages/*"
   ],
   "homepage": "https://github.com/looker-open-source/sdk-codegen#readme",
