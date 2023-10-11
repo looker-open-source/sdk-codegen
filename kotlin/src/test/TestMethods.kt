@@ -12,7 +12,7 @@ class TestMethods {
         getId: (item: TAll) -> TId,
         getEntity: (id: TId, fields: String?) -> SDKResponse,
         fields: String? = null,
-        maxErrors: Int = 3
+        maxErrors: Int = 3,
     ): String {
         val entityName = TEntity::class.simpleName!!
         val list = sdk.ok<Array<TAll>>(lister())
@@ -46,7 +46,7 @@ class TestMethods {
         getId: (item: TAll) -> TId,
         getEntity: (id: TId, fields: String?) -> SDKResponse,
         fields: String? = null,
-        maxErrors: Int = 3
+        maxErrors: Int = 3,
     ) {
         val entityName = TEntity::class.simpleName!!
         var result = listGetter<TAll, TId, TEntity>(lister, getId, getEntity, null, maxErrors)
@@ -64,7 +64,7 @@ class TestMethods {
             "system__activity",
             "dashboard",
             arrayOf("dashboard.id", "dashboard.title", "dashboard.count"),
-            limit = "100"
+            limit = "100",
         )
     }
 
@@ -80,9 +80,9 @@ class TestMethods {
             sdk.create_look(
                 WriteLookWithQuery(
                     description = "SDK Look",
-                    query = simpleQuery()
-                )
-            )
+                    query = simpleQuery(),
+                ),
+            ),
         )
         print("Prepared Look ${look.id}")
         return look
@@ -99,9 +99,9 @@ class TestMethods {
                 WriteDashboard(
                     description = "SDK Dashboard",
                     title = "SDK Dashboard Title",
-                    show_title = true
-                )
-            )
+                    show_title = true,
+                ),
+            ),
         )
         print("Prepared Dashboard ${dashboard.id}")
         return dashboard
@@ -117,26 +117,26 @@ class TestMethods {
             sdk.create_board(
                 WriteBoard(
                     description = "SDK board description",
-                    title = "SDK Board"
-                )
-            )
+                    title = "SDK Board",
+                ),
+            ),
         )
 
         val section = sdk.ok<BoardSection>(
             sdk.create_board_section(
                 WriteBoardSection(
                     board_id = board.id!!,
-                    description = "SDK section"
-                )
-            )
+                    description = "SDK section",
+                ),
+            ),
         )
         val item = sdk.ok<BoardItem>(
             sdk.create_board_item(
                 WriteBoardItem(
                     board_section_id = section.id,
-                    look_id = look.id
-                )
-            )
+                    look_id = look.id,
+                ),
+            ),
         )
         print("Prepared Board ${board.id} Section ${section.id} Item ${item.id} with Look ${look.id}")
         return board
@@ -156,8 +156,8 @@ class TestMethods {
                 format = "csv",
                 address = "sftp://example",
                 secret_parameters = "{\"password\":\"secret\"}",
-                parameters = "{\"username\":\"name\"}"
-            )
+                parameters = "{\"username\":\"name\"}",
+            ),
         )
 
         val plan = sdk.ok<ScheduledPlan>(
@@ -171,9 +171,9 @@ class TestMethods {
                     timezone = "America/Los_Angeles",
                     crontab = "*/1440 * * * *",
                     enabled = true, // Plan must be enabled to be retrieved by `all_scheduled_plans`
-                    scheduled_plan_destination = destinations
-                )
-            )
+                    scheduled_plan_destination = destinations,
+                ),
+            ),
         )
         print("Prepared scheduled plan ${plan.id}")
         return plan
@@ -245,7 +245,7 @@ class TestMethods {
     @Test
     fun testRunInlineQuery() {
         val result = sdk.ok<String>(
-            sdk.run_inline_query("csv", simpleQuery())
+            sdk.run_inline_query("csv", simpleQuery()),
         )
         assertTrue(result.contains("Dashboard ID"))
     }
@@ -255,7 +255,7 @@ class TestMethods {
         listGetter<ColorCollection, String, ColorCollection>(
             { sdk.all_color_collections() },
             { item -> item.id!! },
-            { id, fields -> sdk.color_collection(id, fields) }
+            { id, fields -> sdk.color_collection(id, fields) },
         )
     }
 
@@ -264,7 +264,7 @@ class TestMethods {
         listGetter<DBConnection, String, DBConnection>(
             { sdk.all_connections() },
             { item -> item.name!! },
-            { id, fields -> sdk.connection(id, fields) }
+            { id, fields -> sdk.connection(id, fields) },
         )
     }
 
@@ -273,7 +273,7 @@ class TestMethods {
         listGetter<Datagroup, String, Datagroup>(
             { sdk.all_datagroups() },
             { item -> item.id!! },
-            { id, _ -> sdk.datagroup(id) }
+            { id, _ -> sdk.datagroup(id) },
         )
     }
 
@@ -283,7 +283,7 @@ class TestMethods {
         testAll<DashboardBase, String, Dashboard>(
             { sdk.all_dashboards() },
             { item -> item.id!! },
-            { id, fields -> sdk.dashboard(id, fields) }
+            { id, fields -> sdk.dashboard(id, fields) },
         )
     }
 
@@ -298,7 +298,7 @@ class TestMethods {
         testAll<Folder, String, Folder>(
             { sdk.all_folders() },
             { item -> item.id!! },
-            { id, fields -> sdk.folder(id, fields) }
+            { id, fields -> sdk.folder(id, fields) },
         )
     }
 
@@ -307,7 +307,7 @@ class TestMethods {
         listGetter<Group, String, Group>(
             { sdk.all_groups() },
             { item -> item.id!! },
-            { id, fields -> sdk.group(id, fields) }
+            { id, fields -> sdk.group(id, fields) },
         )
     }
 
@@ -317,7 +317,7 @@ class TestMethods {
         listGetter<BoardItem, String, BoardItem>(
             { sdk.all_board_items() },
             { item -> item.id!! },
-            { id, fields -> sdk.board_item(id, fields) }
+            { id, fields -> sdk.board_item(id, fields) },
         )
     }
 
@@ -334,7 +334,7 @@ class TestMethods {
         listGetter<Board, String, Board>(
             { sdk.all_boards() },
             { item -> item.id!! },
-            { id, fields -> sdk.board(id, fields) }
+            { id, fields -> sdk.board(id, fields) },
         )
     }
 
@@ -344,7 +344,7 @@ class TestMethods {
         listGetter<BoardSection, String, BoardSection>(
             { sdk.all_board_sections() },
             { item -> item.id!! },
-            { id, fields -> sdk.board_section(id, fields) }
+            { id, fields -> sdk.board_section(id, fields) },
         )
     }
 
@@ -353,7 +353,7 @@ class TestMethods {
         listGetter<IntegrationHub, String, IntegrationHub>(
             { sdk.all_integration_hubs() },
             { item -> item.id!! },
-            { id, fields -> sdk.integration_hub(id, fields) }
+            { id, fields -> sdk.integration_hub(id, fields) },
         )
     }
 
@@ -362,7 +362,7 @@ class TestMethods {
         listGetter<Integration, String, Integration>(
             { sdk.all_integrations() },
             { item -> item.id!! },
-            { id, fields -> sdk.integration(id, fields) }
+            { id, fields -> sdk.integration(id, fields) },
         )
     }
 
@@ -371,7 +371,7 @@ class TestMethods {
         listGetter<LegacyFeature, String, LegacyFeature>(
             { sdk.all_legacy_features() },
             { item -> item.id!! },
-            { id, _ -> sdk.legacy_feature(id) }
+            { id, _ -> sdk.legacy_feature(id) },
         )
     }
 
@@ -386,7 +386,7 @@ class TestMethods {
         testAll<LookmlModel, String, LookmlModel>(
             { sdk.all_lookml_models() },
             { item -> item.name!! },
-            { id, fields -> sdk.lookml_model(id, fields) }
+            { id, fields -> sdk.lookml_model(id, fields) },
         )
     }
 
@@ -396,7 +396,7 @@ class TestMethods {
         testAll<Look, String, LookWithQuery>(
             { sdk.all_looks() },
             { item -> item.id!! },
-            { id, fields -> sdk.look(id, fields) }
+            { id, fields -> sdk.look(id, fields) },
         )
     }
 
@@ -405,7 +405,7 @@ class TestMethods {
         testAll<ModelSet, String, ModelSet>(
             { sdk.all_model_sets() },
             { item -> item.id!! },
-            { id, fields -> sdk.model_set(id, fields) }
+            { id, fields -> sdk.model_set(id, fields) },
         )
     }
 
@@ -414,7 +414,7 @@ class TestMethods {
         testAll<PermissionSet, String, PermissionSet>(
             { sdk.all_permission_sets() },
             { item -> item.id!! },
-            { id, fields -> sdk.permission_set(id, fields) }
+            { id, fields -> sdk.permission_set(id, fields) },
         )
     }
 
@@ -429,7 +429,7 @@ class TestMethods {
         testAll<Project, String, Project>(
             { sdk.all_projects() },
             { item -> item.id!! },
-            { id, fields -> sdk.project(id, fields) }
+            { id, fields -> sdk.project(id, fields) },
         )
     }
 
@@ -438,7 +438,7 @@ class TestMethods {
         testAll<Role, String, Role>(
             { sdk.all_roles() },
             { item -> item.id!! },
-            { id, _ -> sdk.role(id) }
+            { id, _ -> sdk.role(id) },
         )
     }
 
@@ -448,7 +448,7 @@ class TestMethods {
         testAll<ScheduledPlan, String, ScheduledPlan>(
             { sdk.all_scheduled_plans() },
             { item -> item.id!! },
-            { id, fields -> sdk.scheduled_plan(id, fields) }
+            { id, fields -> sdk.scheduled_plan(id, fields) },
         )
         clearScheduledPlan()
     }
@@ -458,7 +458,7 @@ class TestMethods {
         testAll<Theme, String, Theme>(
             { sdk.all_themes() },
             { item -> item.id!! },
-            { id, fields -> sdk.theme(id, fields) }
+            { id, fields -> sdk.theme(id, fields) },
         )
     }
 
@@ -473,7 +473,7 @@ class TestMethods {
         testAll<UserAttribute, String, UserAttribute>(
             { sdk.all_user_attributes() },
             { item -> item.id!! },
-            { id, fields -> sdk.user_attribute(id, fields) }
+            { id, fields -> sdk.user_attribute(id, fields) },
         )
     }
 
@@ -490,7 +490,7 @@ class TestMethods {
         testAll<User, String, User>(
             { sdk.all_users() },
             { item -> item.id!! },
-            { id, fields -> sdk.user(id, fields) }
+            { id, fields -> sdk.user(id, fields) },
         )
     }
 
@@ -515,7 +515,7 @@ class TestMethods {
                 user_can_view = true,
                 user_can_edit = true,
                 // Now that Transport.kt uses GSon, this null property will be stripped from the request payload
-                hidden_value_domain_whitelist = null
+                hidden_value_domain_whitelist = null,
             )
             val actual = sdk.ok<UserAttribute>(sdk.create_user_attribute(body))
             // We won't get here when there's an error
@@ -532,7 +532,7 @@ class TestMethods {
         testAll<Workspace, String, Workspace>(
             { sdk.all_workspaces() },
             { item -> item.id!! },
-            { id, _ -> sdk.workspace(id) }
+            { id, _ -> sdk.workspace(id) },
         )
     }
 
@@ -540,11 +540,11 @@ class TestMethods {
     fun testErrorReporting() {
         try {
             val props = ThemeSettings(
-                background_color = "invalid"
+                background_color = "invalid",
             )
             val theme = WriteTheme(
                 name = "'bogus!",
-                settings = props
+                settings = props,
             )
             val actual = sdk.ok<Theme>(sdk.validate_theme(theme))
             assertNull(actual) // test should never get here
