@@ -9598,7 +9598,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>> {
     render_task_id = encodeParam(render_task_id)
-    return this.get<string, IError>(
+    return this.get<Blob, IError>(
       `/render_tasks/${render_task_id}/results`,
       null,
       null,
