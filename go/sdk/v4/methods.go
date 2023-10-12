@@ -3865,7 +3865,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_roles -> []GroupSearch
-func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
+func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -3900,7 +3900,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_hierarchy -> []GroupHierarchy
-func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
+func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -4237,22 +4237,6 @@ func (l *LookerSDK) TestIntegration(
 
 // endregion Integration: Manage Integrations
 
-// region JdbcInterface: LookML Model metadata for JDBC Clients
-
-// ### Handle Avatica RPC Requests
-//
-// GET /__jdbc_interface__ -> JdbcInterface
-func (l *LookerSDK) JdbcInterface(
-	avaticaRequest string,
-	options *rtl.ApiSettings) (JdbcInterface, error) {
-	var result JdbcInterface
-	err := l.session.Do(&result, "GET", "/4.0", "/__jdbc_interface__", map[string]interface{}{"avatica_request": avaticaRequest}, nil, options)
-	return result, err
-
-}
-
-// endregion JdbcInterface: LookML Model metadata for JDBC Clients
-
 // region Look: Run and Manage Looks
 
 // ### Get information about all active Looks
@@ -4476,7 +4460,7 @@ func (l *LookerSDK) MoveLook(
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
+func (l *LookerSDK) AllLookmlModels(request RequestArtifactNamespaces,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
 	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
@@ -5713,61 +5697,6 @@ func (l *LookerSDK) KillQuery(
 
 }
 
-// ### Run a saved SQL interface query.
-//
-// This runs a previously created SQL interface query.
-//
-// The 'result_format' parameter specifies the desired structure and format of the response.
-//
-// Supported formats:
-//
-// | result_format | Description
-// | :-----------: | :--- |
-// | json | Plain json
-// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-// | csv | Comma separated values with a header
-// | txt | Tab separated values with a header
-// | html | Simple html
-// | md | Simple markdown
-// | xlsx | MS Excel spreadsheet
-// | sql | Returns the generated SQL rather than running the query
-// | png | A PNG image of the visualization of the query
-// | jpg | A JPG image of the visualization of the query
-//
-// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-//
-// **Note**: Binary content may be returned by this method.
-func (l *LookerSDK) RunSqlInterfaceQuery(
-	queryId int64,
-	resultFormat string,
-	options *rtl.ApiSettings) (string, error) {
-	resultFormat = url.PathEscape(resultFormat)
-	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_interface_queries/%v/run/%v", queryId, resultFormat), nil, nil, options)
-	return result, err
-
-}
-
-// ### Create a SQL interface query.
-//
-// This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
-// and are not deleted. If you create a query that is exactly like an existing query then the existing query
-// will be returned and no new query will be created. Whether a new query is created or not, you can use
-// the 'id' in the returned query with the 'run' method.
-//
-// The query parameters are passed as json in the body of the request.
-//
-// POST /sql_interface_queries -> SqlInterfaceQuery
-func (l *LookerSDK) CreateSqlInterfaceQuery(
-	body WriteSqlInterfaceQueryCreate,
-	options *rtl.ApiSettings) (SqlInterfaceQuery, error) {
-	var result SqlInterfaceQuery
-	err := l.session.Do(&result, "POST", "/4.0", "/sql_interface_queries", nil, body, options)
-	return result, err
-
-}
-
 // ### Create a SQL Runner Query
 //
 // Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -6085,7 +6014,7 @@ func (l *LookerSDK) AllPermissions(
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /permission_sets/search -> []PermissionSet
-func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
+func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
 	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6242,7 +6171,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /roles/search/with_user_count -> []RoleSearch
-func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6754,6 +6683,77 @@ func (l *LookerSDK) UpdateSession(
 
 // endregion Session: Session Information
 
+// region SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
+// ### Handles Avatica RPC metadata requests for SQL Interface queries
+//
+// GET /sql_interface_queries/metadata -> SqlInterfaceQueryMetadata
+func (l *LookerSDK) SqlInterfaceMetadata(
+	avaticaRequest string,
+	options *rtl.ApiSettings) (SqlInterfaceQueryMetadata, error) {
+	var result SqlInterfaceQueryMetadata
+	err := l.session.Do(&result, "GET", "/4.0", "/sql_interface_queries/metadata", map[string]interface{}{"avatica_request": avaticaRequest}, nil, options)
+	return result, err
+
+}
+
+// ### Run a saved SQL interface query.
+//
+// This runs a previously created SQL interface query.
+//
+// The 'result_format' parameter specifies the desired structure and format of the response.
+//
+// Supported formats:
+//
+// | result_format | Description
+// | :-----------: | :--- |
+// | json | Plain json
+// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | csv | Comma separated values with a header
+// | txt | Tab separated values with a header
+// | html | Simple html
+// | md | Simple markdown
+// | xlsx | MS Excel spreadsheet
+// | sql | Returns the generated SQL rather than running the query
+// | png | A PNG image of the visualization of the query
+// | jpg | A JPG image of the visualization of the query
+//
+// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
+//
+// **Note**: Binary content may be returned by this method.
+func (l *LookerSDK) RunSqlInterfaceQuery(
+	queryId int64,
+	resultFormat string,
+	options *rtl.ApiSettings) (string, error) {
+	resultFormat = url.PathEscape(resultFormat)
+	var result string
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_interface_queries/%v/run/%v", queryId, resultFormat), nil, nil, options)
+	return result, err
+
+}
+
+// ### Create a SQL interface query.
+//
+// This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+// and are not deleted. If you create a query that is exactly like an existing query then the existing query
+// will be returned and no new query will be created. Whether a new query is created or not, you can use
+// the 'id' in the returned query with the 'run' method.
+//
+// The query parameters are passed as json in the body of the request.
+//
+// POST /sql_interface_queries -> SqlInterfaceQuery
+func (l *LookerSDK) CreateSqlInterfaceQuery(
+	body WriteSqlInterfaceQueryCreate,
+	options *rtl.ApiSettings) (SqlInterfaceQuery, error) {
+	var result SqlInterfaceQuery
+	err := l.session.Do(&result, "POST", "/4.0", "/sql_interface_queries", nil, body, options)
+	return result, err
+
+}
+
+// endregion SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
 // region Theme: Manage Themes
 
 // ### Get an array of all existing themes
@@ -6762,7 +6762,7 @@ func (l *LookerSDK) UpdateSession(
 //
 // This method returns an array of all existing themes. The active time for the theme is not considered.
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // GET /themes -> []Theme
 func (l *LookerSDK) AllThemes(
@@ -6788,7 +6788,7 @@ func (l *LookerSDK) AllThemes(
 //
 // For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // POST /themes -> Theme
 func (l *LookerSDK) CreateTheme(
@@ -6836,7 +6836,7 @@ func (l *LookerSDK) CreateTheme(
 //
 // Get a **single theme** by id with [Theme](#!/Theme/theme)
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // GET /themes/search -> []Theme
 func (l *LookerSDK) SearchThemes(request RequestSearchThemes,
@@ -6875,7 +6875,7 @@ func (l *LookerSDK) DefaultTheme(
 //
 // Returns the new specified default theme object.
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // PUT /themes/default -> Theme
 func (l *LookerSDK) SetDefaultTheme(
@@ -6895,7 +6895,7 @@ func (l *LookerSDK) SetDefaultTheme(
 //
 // The optional `ts` parameter can specify a different timestamp than "now."
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // GET /themes/active -> []Theme
 func (l *LookerSDK) ActiveThemes(request RequestActiveThemes,
@@ -6911,7 +6911,7 @@ func (l *LookerSDK) ActiveThemes(request RequestActiveThemes,
 // The optional `ts` parameter can specify a different timestamp than "now."
 // Note: API users with `show` ability can call this function
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // GET /themes/theme_or_default -> Theme
 func (l *LookerSDK) ThemeOrDefault(
@@ -6930,7 +6930,7 @@ func (l *LookerSDK) ThemeOrDefault(
 //
 // See [Create Theme](#!/Theme/create_theme) for constraints
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // POST /themes/validate -> ValidationError
 func (l *LookerSDK) ValidateTheme(
@@ -6946,7 +6946,7 @@ func (l *LookerSDK) ValidateTheme(
 //
 // Use this to retrieve a specific theme, whether or not it's currently active.
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // GET /themes/{theme_id} -> Theme
 func (l *LookerSDK) Theme(
@@ -6962,7 +6962,7 @@ func (l *LookerSDK) Theme(
 
 // ### Update the theme by id.
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // PATCH /themes/{theme_id} -> Theme
 func (l *LookerSDK) UpdateTheme(
@@ -6984,7 +6984,7 @@ func (l *LookerSDK) UpdateTheme(
 //
 // All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
 //
-// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
 //
 // DELETE /themes/{theme_id} -> string
 func (l *LookerSDK) DeleteTheme(
@@ -7837,7 +7837,7 @@ func (l *LookerSDK) CreateEmbedUser(
 // ### Get information about all user attributes.
 //
 // GET /user_attributes -> []UserAttribute
-func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
+func (l *LookerSDK) AllUserAttributes(request RequestAllBoardSections,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
 	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)

@@ -10825,26 +10825,6 @@ public enum InvestigativeContentType: String, Codable {
     case dashboard = "dashboard"
 }
 
-public struct JdbcInterface: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case _results = "results"
-    }
-    private var _results: AnyString?
-    /**
-     * JDBC Metadata to inflate Avatica response classes. (read-only)
-     */
-    public var results: String? {
-        get { _results?.value }
-        set { _results = newValue.map(AnyString.init) }
-    }
-
-    public init(results: String? = nil) {
-        self._results = results.map(AnyString.init)
-    }
-
-}
-
 public struct LDAPConfig: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -16314,7 +16294,6 @@ public struct Project: SDKModel {
         case allow_warnings
         case is_example
         case _dependency_status = "dependency_status"
-        case _data_tests_count = "data_tests_count"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -16478,16 +16457,7 @@ public struct Project: SDKModel {
         set { _dependency_status = newValue.map(AnyString.init) }
     }
 
-    private var _data_tests_count: AnyInt?
-    /**
-     * Number of data tests within project (read-only)
-     */
-    public var data_tests_count: Int64? {
-        get { _data_tests_count?.value }
-        set { _data_tests_count = newValue.map(AnyInt.init) }
-    }
-
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil, data_tests_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -16510,7 +16480,6 @@ public struct Project: SDKModel {
         self.allow_warnings = allow_warnings
         self.is_example = is_example
         self._dependency_status = dependency_status.map(AnyString.init)
-        self._data_tests_count = data_tests_count.map(AnyInt.init)
     }
 
 }
@@ -20288,6 +20257,26 @@ public struct SqlInterfaceQueryCreate: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, _ sql: String, jdbc_client: Bool? = nil) {
         self.init(can: can, sql: sql, jdbc_client: jdbc_client)
+    }
+
+}
+
+public struct SqlInterfaceQueryMetadata: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _results = "results"
+    }
+    private var _results: AnyString?
+    /**
+     * JDBC Metadata to inflate Avatica response classes. (read-only)
+     */
+    public var results: String? {
+        get { _results?.value }
+        set { _results = newValue.map(AnyString.init) }
+    }
+
+    public init(results: String? = nil) {
+        self._results = results.map(AnyString.init)
     }
 
 }
@@ -26484,7 +26473,7 @@ public struct WritePrivatelabelConfiguration: SDKModel {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, data_tests_count
+ * can, id, uses_git, is_example
  */
 public struct WriteProject: SDKModel {
 

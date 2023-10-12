@@ -2746,13 +2746,6 @@ enum class InvestigativeContentType : Serializable {
 }
 
 /**
- * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
- */
-data class JdbcInterface (
-    var results: String? = null
-) : Serializable
-
-/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property alternate_email_login_allowed Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
  * @property auth_password (Write-Only)  Password for the LDAP account used to access the LDAP server
@@ -4144,7 +4137,6 @@ data class PrivatelabelConfiguration (
  * @property allow_warnings Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
  * @property is_example If true the project is an example project and cannot be modified (read-only)
  * @property dependency_status Status of dependencies in your manifest & lockfile
- * @property data_tests_count Number of data tests within project (read-only)
  */
 data class Project (
     var can: Map<String,Boolean>? = null,
@@ -4168,8 +4160,7 @@ data class Project (
     var git_release_mgmt_enabled: Boolean? = null,
     var allow_warnings: Boolean? = null,
     var is_example: Boolean? = null,
-    var dependency_status: String? = null,
-    var data_tests_count: Long? = null
+    var dependency_status: String? = null
 ) : Serializable
 
 /**
@@ -5113,6 +5104,13 @@ data class SqlInterfaceQueryCreate (
     var can: Map<String,Boolean>? = null,
     var sql: String,
     var jdbc_client: Boolean? = null
+) : Serializable
+
+/**
+ * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
+ */
+data class SqlInterfaceQueryMetadata (
+    var results: String? = null
 ) : Serializable
 
 /**
@@ -6807,7 +6805,7 @@ data class WritePrivatelabelConfiguration (
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, data_tests_count
+ * can, id, uses_git, is_example
  *
  * @property name Project display name
  * @property git_remote_url Git remote repository url

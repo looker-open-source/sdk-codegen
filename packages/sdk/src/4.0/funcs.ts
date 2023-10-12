@@ -129,7 +129,6 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
-  IJdbcInterface,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -170,10 +169,8 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -213,13 +210,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -243,6 +236,7 @@ import type {
   ISmtpSettings,
   ISmtpStatus,
   ISqlInterfaceQuery,
+  ISqlInterfaceQueryMetadata,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -6811,13 +6805,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithRoles,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6869,13 +6863,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithHierarchy,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -7507,33 +7501,6 @@ export const test_integration = async (
 
 //#endregion Integration: Manage Integrations
 
-//#region JdbcInterface: LookML Model metadata for JDBC Clients
-
-/**
- * ### Handle Avatica RPC Requests
- *
- * GET /__jdbc_interface__ -> IJdbcInterface
- *
- * @param sdk IAPIMethods implementation
- * @param avatica_request Avatica RPC request
- * @param options one-time API call overrides
- *
- */
-export const jdbc_interface = async (
-  sdk: IAPIMethods,
-  avatica_request?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IJdbcInterface, IError>> => {
-  return sdk.get<IJdbcInterface, IError>(
-    '/__jdbc_interface__',
-    { avatica_request },
-    null,
-    options
-  )
-}
-
-//#endregion JdbcInterface: LookML Model metadata for JDBC Clients
-
 //#region Look: Run and Manage Looks
 
 /**
@@ -7891,13 +7858,13 @@ export const move_look = async (
  * GET /lookml_models -> ILookmlModel[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+ * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestAllLookmlModels,
+  request: IRequestArtifactNamespaces,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -9883,85 +9850,6 @@ export const kill_query = async (
 }
 
 /**
- * ### Run a saved SQL interface query.
- *
- * This runs a previously created SQL interface query.
- *
- * The 'result_format' parameter specifies the desired structure and format of the response.
- *
- * Supported formats:
- *
- * | result_format | Description
- * | :-----------: | :--- |
- * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
- * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
- * | csv | Comma separated values with a header
- * | txt | Tab separated values with a header
- * | html | Simple html
- * | md | Simple markdown
- * | xlsx | MS Excel spreadsheet
- * | sql | Returns the generated SQL rather than running the query
- * | png | A PNG image of the visualization of the query
- * | jpg | A JPG image of the visualization of the query
- *
- * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
- *
- * @remarks
- * **NOTE**: Binary content may be returned by this function.
- *
- * @param sdk IAPIMethods implementation
- * @param query_id Integer id of query
- * @param result_format Format of result, options are: ["json_bi"]
- * @param options one-time API call overrides
- *
- */
-export const run_sql_interface_query = async (
-  sdk: IAPIMethods,
-  query_id: number,
-  result_format: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError | IValidationError>> => {
-  result_format = encodeParam(result_format)
-  return sdk.get<string, IError | IValidationError>(
-    `/sql_interface_queries/${query_id}/run/${result_format}`,
-    null,
-    null,
-    options
-  )
-}
-
-/**
- * ### Create a SQL interface query.
- *
- * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
- * and are not deleted. If you create a query that is exactly like an existing query then the existing query
- * will be returned and no new query will be created. Whether a new query is created or not, you can use
- * the 'id' in the returned query with the 'run' method.
- *
- * The query parameters are passed as json in the body of the request.
- *
- * POST /sql_interface_queries -> ISqlInterfaceQuery
- *
- * @param sdk IAPIMethods implementation
- * @param body Partial<IWriteSqlInterfaceQueryCreate>
- * @param options one-time API call overrides
- *
- */
-export const create_sql_interface_query = async (
-  sdk: IAPIMethods,
-  body: Partial<IWriteSqlInterfaceQueryCreate>,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ISqlInterfaceQuery, IError | IValidationError>> => {
-  return sdk.post<ISqlInterfaceQuery, IError | IValidationError>(
-    '/sql_interface_queries',
-    null,
-    body,
-    options
-  )
-}
-
-/**
  * ### Create a SQL Runner Query
  *
  * Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -10480,13 +10368,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+ * @param request composed interface "IRequestSearchModelSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchPermissionSets,
+  request: IRequestSearchModelSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10760,13 +10648,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+ * @param request composed interface "IRequestSearchRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRolesWithUserCount,
+  request: IRequestSearchRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -11540,6 +11428,112 @@ export const update_session = async (
 
 //#endregion Session: Session Information
 
+//#region SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
+/**
+ * ### Handles Avatica RPC metadata requests for SQL Interface queries
+ *
+ * GET /sql_interface_queries/metadata -> ISqlInterfaceQueryMetadata
+ *
+ * @param sdk IAPIMethods implementation
+ * @param avatica_request Avatica RPC request
+ * @param options one-time API call overrides
+ *
+ */
+export const sql_interface_metadata = async (
+  sdk: IAPIMethods,
+  avatica_request?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISqlInterfaceQueryMetadata, IError>> => {
+  return sdk.get<ISqlInterfaceQueryMetadata, IError>(
+    '/sql_interface_queries/metadata',
+    { avatica_request },
+    null,
+    options
+  )
+}
+
+/**
+ * ### Run a saved SQL interface query.
+ *
+ * This runs a previously created SQL interface query.
+ *
+ * The 'result_format' parameter specifies the desired structure and format of the response.
+ *
+ * Supported formats:
+ *
+ * | result_format | Description
+ * | :-----------: | :--- |
+ * | json | Plain json
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | csv | Comma separated values with a header
+ * | txt | Tab separated values with a header
+ * | html | Simple html
+ * | md | Simple markdown
+ * | xlsx | MS Excel spreadsheet
+ * | sql | Returns the generated SQL rather than running the query
+ * | png | A PNG image of the visualization of the query
+ * | jpg | A JPG image of the visualization of the query
+ *
+ * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
+ *
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param query_id Integer id of query
+ * @param result_format Format of result, options are: ["json_bi"]
+ * @param options one-time API call overrides
+ *
+ */
+export const run_sql_interface_query = async (
+  sdk: IAPIMethods,
+  query_id: number,
+  result_format: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  result_format = encodeParam(result_format)
+  return sdk.get<string, IError | IValidationError>(
+    `/sql_interface_queries/${query_id}/run/${result_format}`,
+    null,
+    null,
+    options
+  )
+}
+
+/**
+ * ### Create a SQL interface query.
+ *
+ * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+ * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+ * will be returned and no new query will be created. Whether a new query is created or not, you can use
+ * the 'id' in the returned query with the 'run' method.
+ *
+ * The query parameters are passed as json in the body of the request.
+ *
+ * POST /sql_interface_queries -> ISqlInterfaceQuery
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteSqlInterfaceQueryCreate>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_sql_interface_query = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteSqlInterfaceQueryCreate>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ISqlInterfaceQuery, IError | IValidationError>> => {
+  return sdk.post<ISqlInterfaceQuery, IError | IValidationError>(
+    '/sql_interface_queries',
+    null,
+    body,
+    options
+  )
+}
+
+//#endregion SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
 //#region Theme: Manage Themes
 
 /**
@@ -11549,7 +11543,7 @@ export const update_session = async (
  *
  * This method returns an array of all existing themes. The active time for the theme is not considered.
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * GET /themes -> ITheme[]
  *
@@ -11581,7 +11575,7 @@ export const all_themes = async (
  *
  * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * POST /themes -> ITheme
  *
@@ -11641,7 +11635,7 @@ export const create_theme = async (
  *
  * Get a **single theme** by id with [Theme](#!/Theme/theme)
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * GET /themes/search -> ITheme[]
  *
@@ -11708,7 +11702,7 @@ export const default_theme = async (
  *
  * Returns the new specified default theme object.
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * PUT /themes/default -> ITheme
  *
@@ -11739,7 +11733,7 @@ export const set_default_theme = async (
  *
  * The optional `ts` parameter can specify a different timestamp than "now."
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * GET /themes/active -> ITheme[]
  *
@@ -11767,7 +11761,7 @@ export const active_themes = async (
  * The optional `ts` parameter can specify a different timestamp than "now."
  * Note: API users with `show` ability can call this function
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * GET /themes/theme_or_default -> ITheme
  *
@@ -11798,7 +11792,7 @@ export const theme_or_default = async (
  *
  * See [Create Theme](#!/Theme/create_theme) for constraints
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * POST /themes/validate -> IValidationError
  *
@@ -11825,7 +11819,7 @@ export const validate_theme = async (
  *
  * Use this to retrieve a specific theme, whether or not it's currently active.
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * GET /themes/{theme_id} -> ITheme
  *
@@ -11853,7 +11847,7 @@ export const theme = async (
 /**
  * ### Update the theme by id.
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * PATCH /themes/{theme_id} -> ITheme
  *
@@ -11887,7 +11881,7 @@ export const update_theme = async (
  *
  * All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
  *
- * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
  * DELETE /themes/{theme_id} -> string
  *
@@ -13339,13 +13333,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+ * @param request composed interface "IRequestAllBoardSections" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllUserAttributes,
+  request: IRequestAllBoardSections,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(
