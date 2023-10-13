@@ -28,7 +28,6 @@ import com.looker.rtl.*
 import com.looker.sdk.ApiSettings
 import com.looker.sdk.LookerSDK
 import com.looker.sdk.apiConfig
-import io.ktor.client.HttpClient
 import java.io.File
 
 typealias jsonDict = Map<String, Any>
@@ -88,12 +87,5 @@ open class TestConfig() {
         options.timeout = 120
         options.verifySSL = false
         return options
-    }
-
-    /**
-     * Return an HTTP test client
-     */
-    fun testClient(): HttpClient {
-        return customClient(testSettings(settings))
     }
 }

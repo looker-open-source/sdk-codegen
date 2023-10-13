@@ -32,6 +32,12 @@ dependencies {
     implementation "io.github.cdimascio:dotenv-kotlin:6.2.2"
     implementation "org.ini4j:ini4j:0.5.4"
 
+    implementation "com.google.http-client:google-http-client:$googleHttpVersion"
+    implementation "com.google.http-client:google-http-client-apache-v2:$googleHttpVersion"
+    implementation "com.google.http-client:google-http-client-appengine:$googleHttpVersion"
+    implementation "com.google.http-client:google-http-client-gson:$googleHttpVersion"
+
+
     implementation "io.ktor:ktor-client:$ktorVersion"
     implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
     implementation "io.ktor:ktor-client-json:$ktorVersion"

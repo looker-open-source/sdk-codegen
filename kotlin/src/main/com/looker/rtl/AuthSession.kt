@@ -24,8 +24,8 @@
 
 package com.looker.rtl
 
-import io.ktor.client.request.forms.*
-import io.ktor.http.*
+import io.ktor.client.request.forms.FormDataContent
+import io.ktor.http.Parameters
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
