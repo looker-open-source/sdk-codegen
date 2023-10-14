@@ -24,7 +24,6 @@
 
 package com.looker.rtl
 
-import com.google.api.client.extensions.appengine.http.UrlFetchTransport
 import com.google.api.client.http.ByteArrayContent
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpContent
@@ -35,19 +34,9 @@ import com.google.api.client.http.HttpRequestInitializer
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.http.json.JsonHttpContent
-import com.google.api.client.json.gson.GsonFactory
-import com.google.gson.Gson
+import com.google.api.client.json.Json
 import com.google.gson.annotations.SerializedName
-import com.looker.rtl.GsonObjectParser.Companion.serializeToMap
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
+import com.looker.rtl.GsonObjectParser.Companion.GSON
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.ssl.SSLContextBuilder
@@ -117,8 +106,8 @@ enum class HttpMethod {
 enum class HttpTransports(val label: String) {
     APACHE("Apache HTTP Client"),
     JAVA_NET("Native Java HTTP Client"),
-    URL_FETCH("Google App Engine HTTP Client"),
-    // KTOR("Kotlin based HTTP Client") TODO: Add ktor transport wrapper
+    // URL_FETCH("Google App Engine HTTP Client"), TODO: App Engine support? Requires App Engine SDK.
+    // KTOR("Kotlin based HTTP Client") TODO: Add ktor transport wrapper.
 }
 
 data class RequestSettings(
@@ -195,8 +184,11 @@ fun addQueryParams(path: String, params: Values = emptyMap()): String {
     return "$path?$qp"
 }
 
-/** Returns a [HttpRequestInitializer] that sets suitable for  */
-fun customInitializer(options: TransportOptions, requestSettings: RequestSettings): HttpRequestInitializer {
+/** Returns a [HttpRequestInitializer] prepared with the provided requestSettings  */
+fun customInitializer(
+    options: TransportOptions,
+    requestSettings: RequestSettings,
+): HttpRequestInitializer {
     return HttpRequestInitializer {
         // Timeout is passed in as seconds
         val timeout = (options.timeout * 1000)
@@ -272,24 +264,31 @@ class Transport(val options: TransportOptions) {
 
         val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
         val hostnameVerifier = HostnameVerifier { _, _ -> true }
+
         return Pair(sslSocketFactory, hostnameVerifier)
     }
 
+    /** Given [TransportOptions], selects the requested [HttpTransport].
+     * Will optionally disable SSL certificate verification iff [TransportOptions.verifySSL]
+     * is false */
     fun initTransport(options: TransportOptions): HttpTransport {
         return when (HttpTransports.valueOf(options.httpTransport.uppercase())) {
             HttpTransports.APACHE -> {
                 if (!options.verifySSL) {
                     val clientBuilder = ApacheHttpTransport.newDefaultHttpClientBuilder()
-                    val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) { _, _ -> true }
-                    val sslsf = SSLConnectionSocketFactory(sslBuilder.build())
+                    val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) {
+                            _, _ -> true
+                    }
+                    val sslSocketFactory = SSLConnectionSocketFactory(sslBuilder.build())
                     clientBuilder
                         .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                        .setSSLSocketFactory(sslsf)
+                        .setSSLSocketFactory(sslSocketFactory)
 
                     return ApacheHttpTransport(clientBuilder.build())
                 }
                 ApacheHttpTransport()
             }
+
             HttpTransports.JAVA_NET -> {
                 if (!options.verifySSL) {
                     val (sslSocketFactory, hostnameVerifier) = getAllTrustingVerifiers()
@@ -300,15 +299,6 @@ class Transport(val options: TransportOptions) {
                     return clientBuilder.build()
                 }
                 NetHttpTransport()
-            }
-            HttpTransports.URL_FETCH -> {
-                if (!options.verifySSL) {
-                    val builder = UrlFetchTransport.Builder()
-                    builder.doNotValidateCertificate()
-
-                    return builder.build()
-                }
-                UrlFetchTransport()
             }
         }
     }
@@ -325,14 +315,23 @@ class Transport(val options: TransportOptions) {
         val finalizedRequestSettings: RequestSettings =
             finalizeRequest(method, path, queryParams, authenticator)
 
-        val requestInitializer: HttpRequestInitializer = customInitializer(options, finalizedRequestSettings)
+        val requestInitializer: HttpRequestInitializer =
+            customInitializer(options, finalizedRequestSettings)
         val requestFactory: HttpRequestFactory = transport.createRequestFactory(requestInitializer)
 
         val httpContent: HttpContent? = when (body) {
-            is FormDataContent -> ByteArrayContent("application/x-www-form-urlencoded", body.bytes())
+            // the body has already been prepared as HttpContent
+            is HttpContent -> body
+            // content is a raw string to be converted to a byte array
             is String -> ByteArrayContent("application/x-www-form-urlencoded", body.toByteArray())
+            // content is a data class to be serialized as JSON
             else -> {
-                if (body != null) JsonHttpContent(GsonFactory(), serializeToMap(body)) else null
+                // TODO: Consider using JsonHttpContent()
+                if (body != null) {
+                    ByteArrayContent(Json.MEDIA_TYPE, GSON.toJson(body).toByteArray())
+                } else {
+                    null
+                }
             }
         }
 
@@ -342,7 +341,7 @@ class Transport(val options: TransportOptions) {
             httpContent
         )
 
-        // TODO get overrides parameter to work without causing compilation errors in UserSession
+// TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
 //        overrides?.let { o ->
 //            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
@@ -351,18 +350,21 @@ class Transport(val options: TransportOptions) {
 //            }
 //        }
 
-        val result = try {
+        val sdkResponse = try {
             val response = request.execute()
-            val result = when (T::class) {
-                String::class -> response.content.bufferedReader().use(BufferedReader::readText)
+            val rawResult: T = when (T::class) {
+                // some responses may be a string (e.g. query results in `csv` format)
+                String::class ->
+                    response.content.bufferedReader().use(BufferedReader::readText) as T
+                // most responses are JSON
                 else -> response.parseAs(T::class.java)
             }
-            SDKResponse.SDKSuccessResponse(result)
+            SDKResponse.SDKSuccessResponse(rawResult)
         } catch (e: Exception) {
             SDKResponse.SDKErrorResponse("$method $path $e")
         }
 
-        return result
+        return sdkResponse
     }
 
     /** Returns a [HttpRequestInitializer] that adds Looker auth headers and finalizes URL */
@@ -373,7 +375,9 @@ class Transport(val options: TransportOptions) {
         authenticator: Authenticator?,
     ): RequestSettings {
         val requestPath = makeUrl(path, queryParams, authenticator)
+        // headers as provided by options but not yet finalized
         val provisionalHeaders = options.headers.toMutableMap()
+
         var auth = authenticator ?: ::defaultAuthenticator
         if (path.startsWith("http://", true) ||
             path.startsWith("https://", true)
@@ -408,8 +412,7 @@ fun parseSDKError(msg: String): SDKErrorInfo {
     var result = SDKErrorInfo("", listOf(), "")
     info?.let {
         val (payload) = it.destructured
-        val gson = Gson()
-        result = gson.fromJson(payload, SDKErrorInfo::class.java)
+        result = GSON.fromJson(payload, SDKErrorInfo::class.java)
         // Ignore the linter suggestion to replace `.isNullOrEmpty()` with `.isEmpty()` because it's *wrong*
         if (result.errors.isNullOrEmpty()) {
             result.errors = listOf()

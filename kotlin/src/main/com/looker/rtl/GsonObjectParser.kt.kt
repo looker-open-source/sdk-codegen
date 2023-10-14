@@ -10,6 +10,7 @@ import java.lang.reflect.Type
 import java.nio.charset.Charset
 import java.util.HashMap
 
+/** Custom GSON based parser for deserialization. */
 class GsonObjectParser : ObjectParser {
     override fun <T : Any?> parseAndClose(
         inputStream: InputStream?,
@@ -33,22 +34,15 @@ class GsonObjectParser : ObjectParser {
 
     private fun <T : Any?> doParseAndClose(reader: Reader?, type: Type?): T {
         val jsonReader = JsonReader(reader)
-        jsonReader.isLenient = true
         jsonReader.use {
             return GSON.fromJson(reader, type)
         }
     }
 
     companion object {
+        /** [Gson] instance used for serializing Kotlin data classes and deserializing responses */
         val GSON: Gson = Gson().newBuilder()
-            .setLenient()
             .registerTypeAdapter(AuthToken::class.java, AuthTokenAdapter())
             .create()
-
-        // TODO: Get data class to JSON serialization working with GsonFactory
-        fun serializeToMap(obj: Any): HashMap<*, *>? {
-            val string = GSON.toJson(obj)
-            return GSON.fromJson(string, HashMap::class.java)
-        }
     }
 }
