@@ -31,12 +31,16 @@ import com.google.api.client.http.HttpHeaders
 import com.google.api.client.http.HttpRequest
 import com.google.api.client.http.HttpRequestFactory
 import com.google.api.client.http.HttpRequestInitializer
+import com.google.api.client.http.HttpResponseException
 import com.google.api.client.http.HttpTransport
 import com.google.api.client.http.apache.v2.ApacheHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.Json
 import com.google.gson.annotations.SerializedName
 import com.looker.rtl.GsonObjectParser.Companion.GSON
+import com.looker.rtl.SDKResponse.Companion.ERROR_BODY
+import org.apache.http.client.config.CookieSpecs
+import org.apache.http.client.config.RequestConfig
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.ssl.SSLContextBuilder
@@ -79,6 +83,9 @@ sealed class SDKResponse {
     /** An error representing an issue in the SDK, like a network or parsing error. */
     data class SDKError(val message: String) : SDKResponse() {
         val type: String = "sdk_error"
+    }
+    companion object {
+        const val ERROR_BODY = "error_body"
     }
 }
 
@@ -189,17 +196,16 @@ fun customInitializer(
     options: TransportOptions,
     requestSettings: RequestSettings,
 ): HttpRequestInitializer {
-    return HttpRequestInitializer {
-        // Timeout is passed in as seconds
+    return HttpRequestInitializer { request -> // Timeout is passed in as seconds
         val timeout = (options.timeout * 1000)
-        it.connectTimeout = timeout
-        it.readTimeout = timeout
+        request.connectTimeout = timeout
+        request.readTimeout = timeout
 
-        it.parser = GsonObjectParser()
-        it.followRedirects = true
+        request.parser = GsonObjectParser()
+        request.followRedirects = true
 
         // set headers
-        it.headers = HttpHeaders().also {
+        request.headers = HttpHeaders().also {
             requestSettings.headers.forEach { (k, v) ->
                 it.set(k, v)
             }
@@ -269,24 +275,31 @@ class Transport(val options: TransportOptions) {
     }
 
     /** Given [TransportOptions], selects the requested [HttpTransport].
-     * Will optionally disable SSL certificate verification iff [TransportOptions.verifySSL]
-     * is false */
+     *
+     * Will disable SSL certificate verification iff [TransportOptions.verifySSL] is false.
+     */
     fun initTransport(options: TransportOptions): HttpTransport {
         return when (HttpTransports.valueOf(options.httpTransport.uppercase())) {
             HttpTransports.APACHE -> {
+                // TODO: fix bug upstream that does not pass client context to requests.
+                //  The Netscape `expire` datetime format is not compatible with the "default" and
+                //  will log invalid warnings.
+                val clientBuilder =
+                    ApacheHttpTransport.newDefaultHttpClientBuilder().setDefaultRequestConfig(
+                        RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build()
+                    )
                 if (!options.verifySSL) {
-                    val clientBuilder = ApacheHttpTransport.newDefaultHttpClientBuilder()
                     val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) {
-                            _, _ -> true
+                        _, _ ->
+                        true
                     }
                     val sslSocketFactory = SSLConnectionSocketFactory(sslBuilder.build())
                     clientBuilder
                         .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
                         .setSSLSocketFactory(sslSocketFactory)
-
-                    return ApacheHttpTransport(clientBuilder.build())
                 }
-                ApacheHttpTransport()
+
+                ApacheHttpTransport(clientBuilder.build())
             }
 
             HttpTransports.JAVA_NET -> {
@@ -298,6 +311,7 @@ class Transport(val options: TransportOptions) {
 
                     return clientBuilder.build()
                 }
+
                 NetHttpTransport()
             }
         }
@@ -352,16 +366,24 @@ class Transport(val options: TransportOptions) {
 
         val sdkResponse = try {
             val response = request.execute()
+            if (response.content == null) {
+                return SDKResponse.SDKSuccessResponse(null)
+            }
             val rawResult: T = when (T::class) {
                 // some responses may be a string (e.g. query results in `csv` format)
                 String::class ->
                     response.content.bufferedReader().use(BufferedReader::readText) as T
+                // TODO(https://github.com/looker-open-source/sdk-codegen/issues/1341):
+                //  add streaming support. Currently, `stream` methods read the entire response.
+                ByteArray::class -> response.content.readBytes() as T
                 // most responses are JSON
                 else -> response.parseAs(T::class.java)
             }
             SDKResponse.SDKSuccessResponse(rawResult)
+        } catch (e: HttpResponseException) {
+            SDKResponse.SDKErrorResponse("$method $path $ERROR_BODY: ${e.content}")
         } catch (e: Exception) {
-            SDKResponse.SDKErrorResponse("$method $path $e")
+            SDKResponse.SDKError(e.message ?: "Something went wrong")
         }
 
         return sdkResponse
@@ -407,11 +429,11 @@ data class SDKErrorInfo(
 )
 
 fun parseSDKError(msg: String): SDKErrorInfo {
-    val rx = Regex("""\s+Text:\s+"(.*)"$""")
+    val rx = Regex("""(?<=$ERROR_BODY:).*$""")
     val info = rx.find(msg)
     var result = SDKErrorInfo("", listOf(), "")
     info?.let {
-        val (payload) = it.destructured
+        val payload = info.value
         result = GSON.fromJson(payload, SDKErrorInfo::class.java)
         // Ignore the linter suggestion to replace `.isNullOrEmpty()` with `.isEmpty()` because it's *wrong*
         if (result.errors.isNullOrEmpty()) {

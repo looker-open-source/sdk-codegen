@@ -268,7 +268,6 @@ class TestMethods {
         )
     }
 
-    @Ignore
     @Test
     fun testAllDataGroups() {
         listGetter<Datagroup, String, Datagroup>(

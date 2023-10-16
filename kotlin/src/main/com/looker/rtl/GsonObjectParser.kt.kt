@@ -8,7 +8,6 @@ import java.io.InputStreamReader
 import java.io.Reader
 import java.lang.reflect.Type
 import java.nio.charset.Charset
-import java.util.HashMap
 
 /** Custom GSON based parser for deserialization. */
 class GsonObjectParser : ObjectParser {
