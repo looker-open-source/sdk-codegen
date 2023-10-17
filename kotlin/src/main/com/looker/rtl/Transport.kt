@@ -39,8 +39,6 @@ import com.google.api.client.json.Json
 import com.google.gson.annotations.SerializedName
 import com.looker.rtl.GsonObjectParser.Companion.GSON
 import com.looker.rtl.SDKResponse.Companion.ERROR_BODY
-import org.apache.http.client.config.CookieSpecs
-import org.apache.http.client.config.RequestConfig
 import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory
 import org.apache.http.ssl.SSLContextBuilder
@@ -114,7 +112,7 @@ enum class HttpTransports(val label: String) {
     APACHE("Apache HTTP Client"),
     JAVA_NET("Native Java HTTP Client"),
     // URL_FETCH("Google App Engine HTTP Client"), TODO: App Engine support? Requires App Engine SDK.
-    // KTOR("Kotlin based HTTP Client") TODO: Add ktor transport wrapper.
+    // KTOR("Kotlin based HTTP Client") TODO: Add ktor transport wrapper. Do we need this?
 }
 
 data class RequestSettings(
@@ -282,12 +280,12 @@ class Transport(val options: TransportOptions) {
         return when (HttpTransports.valueOf(options.httpTransport.uppercase())) {
             HttpTransports.APACHE -> {
                 // TODO: fix bug upstream that does not pass client context to requests.
-                //  The Netscape `expire` datetime format is not compatible with the "default" and
-                //  will log invalid warnings.
+                //  The `expire` datetime format used in the Looker response is not compatible with
+                //  the "default" CookieSpec. We should be able to select an alternative spec but
+                //  doing so here does not cascade to individual requests.
+                //  Disable cookie management for now.
                 val clientBuilder =
-                    ApacheHttpTransport.newDefaultHttpClientBuilder().setDefaultRequestConfig(
-                        RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD).build()
-                    )
+                    ApacheHttpTransport.newDefaultHttpClientBuilder().disableCookieManagement()
                 if (!options.verifySSL) {
                     val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) {
                         _, _ ->
@@ -336,9 +334,9 @@ class Transport(val options: TransportOptions) {
         val httpContent: HttpContent? = when (body) {
             // the body has already been prepared as HttpContent
             is HttpContent -> body
-            // content is a raw string to be converted to a byte array
+            // body is a raw string to be converted to a byte array
             is String -> ByteArrayContent("application/x-www-form-urlencoded", body.toByteArray())
-            // content is a data class to be serialized as JSON
+            // body is a data class to be serialized as JSON or null
             else -> {
                 // TODO: Consider using JsonHttpContent()
                 if (body != null) {
@@ -397,6 +395,7 @@ class Transport(val options: TransportOptions) {
         authenticator: Authenticator?,
     ): RequestSettings {
         val requestPath = makeUrl(path, queryParams, authenticator)
+
         // headers as provided by options but not yet finalized
         val provisionalHeaders = options.headers.toMutableMap()
 
