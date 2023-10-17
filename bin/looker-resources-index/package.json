@@ -1,5 +1,6 @@
 {
-  "name": "looker-resources-index",
+  "name": "@internal/looker-resources-index",
+  "version": "0.0.0",
   "description": "A listing of Looker-related resources, and some automation for publishing the listing in consumable formats",
   "main": "src/resource-data/resources.ts",
   "private": true,

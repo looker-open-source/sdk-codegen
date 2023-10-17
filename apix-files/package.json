@@ -1,5 +1,5 @@
 {
-  "name": "@looker/apix-files",
+  "name": "@internal/apix-files",
   "version": "21.0.11",
   "description": "Looker File Server for API Explorer",
   "main": "lib/index.js",
