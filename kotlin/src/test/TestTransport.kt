@@ -24,6 +24,7 @@
 
 import com.google.gson.Gson
 import com.looker.rtl.*
+import com.looker.rtl.SDKResponse.Companion.ERROR_BODY
 import com.looker.sdk.AGENT_TAG
 import com.looker.sdk.ENVIRONMENT_PREFIX
 import com.looker.sdk.LOOKER_APPID
@@ -127,7 +128,7 @@ class TestTransport {
 
     @Test
     fun testSummaryError() {
-        val payload = """Some kind of error happened! Text: "{"message":"Oops!","documentation_url":"MyBad"}""""
+        val payload = """Some kind of error happened! $ERROR_BODY: {"message":"Oops!","documentation_url":"MyBad"}"""
         val error = parseSDKError(payload)
         assertEquals("Oops!", error.message)
         assertTrue(error.errors.isEmpty())

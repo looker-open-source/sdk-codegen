@@ -25,6 +25,7 @@
 package com.looker.sdk
 
 import com.looker.rtl.ConfigurationProvider
+import com.looker.rtl.DEFAULT_HTTP_TRANSPORT
 import com.looker.rtl.DEFAULT_TIMEOUT
 import com.looker.rtl.asBoolean
 import com.looker.rtl.unQuote
@@ -92,12 +93,14 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override var headers: Map<String, String> = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
+    override var httpTransport = DEFAULT_HTTP_TRANSPORT
 
     private val keyBaseUrl: String = "base_url"
     private val keyApiVersion: String = "api_version"
     private val keyEnvironmentPrefix: String = "environmentPrefix"
     private val keyVerifySSL: String = "verify_ssl"
     private val keyTimeout: String = "timeout"
+    private val keyHttpTransport: String = "kotlin_http_transport"
 
     init {
         val settings = this.readConfig()
@@ -121,6 +124,10 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
         settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
+        }
+
+        settings[keyHttpTransport].let { value ->
+            httpTransport = if (value !== null) value else httpTransport
         }
     }
 
@@ -153,6 +160,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         addSystemProperty(map, keyApiVersion)
         addSystemProperty(map, keyVerifySSL)
         addSystemProperty(map, keyTimeout)
+        addSystemProperty(map, keyHttpTransport)
         return map.toMap()
     }
 }

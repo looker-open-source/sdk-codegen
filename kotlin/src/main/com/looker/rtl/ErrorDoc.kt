@@ -30,7 +30,7 @@ class ErrorDocItem(var url: String)
 /** Structure of the error code document index */
 typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
 
- interface IErrorDocLink {
+interface IErrorDocLink {
     /** base redirector url */
     var redirector: String
     /** api version of the error link */
@@ -39,9 +39,9 @@ typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
     var statusCode: String
     /** REST API Path */
     var apiPath: String
- }
+}
 
- interface IErrorDoc {
+interface IErrorDoc {
     /** Index of all known error codes. Call load() to populate it */
     var index: ErrorCodeIndex?
 
@@ -103,10 +103,10 @@ typealias ErrorCodeIndex = HashMap<String, ErrorDocItem>
      * @param errorMdUrl url for the error document
      */
     fun methodName(errorMdUrl: String): String
- }
+}
 
 /** Class to process Looker API error payloads and retrieve error documentation */
-class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl): IErrorDoc {
+class ErrorDoc(val sdk: APIMethods, val cdnUrl: String = ErrorCodesUrl) : IErrorDoc {
     companion object {
         /** Location of the public CDN for Looker API Error codes */
         const val ErrorCodesUrl = "https://static-a.cdn.looker.app/errorcodes/"
