@@ -24,6 +24,7 @@
 
  */
 
+import { logError, logWarn } from '../util'
 import type { ExtensionHostApi, ExtensionSDK } from './types'
 
 let _hostApi: ExtensionHostApi | undefined
@@ -46,7 +47,7 @@ const errorListener = (event: ErrorEvent) => {
       _hostApi.error(event)
     }
   } else {
-    console.error(
+    logError(
       'Extension has unhandled error. Reporting on console as Looker host api not initialized',
       event
     )
@@ -61,7 +62,7 @@ const errorListener = (event: ErrorEvent) => {
 const beforeUnloadListener = () => {
   if (_hostApi) {
     _hostApi.unloaded()
-    console.warn('Extension is being unloaded')
+    logWarn('Extension is being unloaded')
   }
 }
 

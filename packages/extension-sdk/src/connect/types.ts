@@ -25,6 +25,12 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
+import type {
+  VisualizationDataReceivedCallback,
+  RawVisualizationData,
+  VisualizationSDK,
+} from './visualization'
+import type { TileHostDataChangedCallback, TileSDK, TileHostData } from './tile'
 
 /**
  * Extension event used for chatty communication
@@ -113,6 +119,54 @@ export enum ExtensionRequestType {
    * extensions running under /extensions
    */
   SPARTAN_LOGOUT = 'SPARTAN_LOGOUT',
+  /**
+   * Extension rendered
+   */
+  RENDERED = 'RENDERED',
+  /**
+   * Visualization configuration data
+   */
+  VIS_DEFAULT_CONFIG = 'VIS_DEFAULT_CONFIG',
+  /**
+   * Change visualization configuration after intial load
+   */
+  VIS_CONFIG_UPDATE = 'VIS_CONFIG_UPDATE',
+  /**
+   * Tile add error messages
+   */
+  TILE_ADD_ERRORS = 'TILE_ADD_ERRORS',
+  /**
+   * Tile clear error messages
+   */
+  TILE_CLEAR_ERRORS = 'TILE_CLEAR_ERRORS',
+  /**
+   * Tile trigger
+   */
+  TILE_TRIGGER = 'TILE_TRIGGER',
+  /**
+   * Tile open drill menu
+   */
+  TILE_OPEN_DRILL_MENU = 'TILE_OPEN_DRILL_MENU',
+  /**
+   * Tile toggle cross filter
+   */
+  TILE_TOGGLE_CROSS_FILTER = 'TILE_TOGGLE_CROSS_FILTER',
+  /**
+   * Tile run dashboard. Indicates that the dashboard queries should be run.
+   */
+  TILE_RUN_DASHBOARD = 'TILE_RUN_DASHBOARD',
+  /**
+   * Tile stop dashboard. Indicates to a dashboard that a queries should be stopped
+   */
+  TILE_STOP_DASHBOARD = 'TILE_STOP_DASHBOARD',
+  /**
+   * Tile update filters. Update the filters of the dashboard.
+   */
+  TILE_UPDATE_FILTERS = 'TILE_UPDATE_FILTERS',
+  /**
+   * Open schedule dialog.
+   */
+  TILE_OPEN_SCHEDULE_DIALOG = 'TILE_OPEN_SCHEDULE_DIALOG',
 }
 
 /**
@@ -154,6 +208,7 @@ export interface UpdateLocationRequest {
 }
 
 export interface ExtensionHostApi extends ExtensionSDK {
+  isDashboardMountSupported: boolean
   handleNotification(
     message: ExtensionNotification
   ): ExtensionInitializationResponse | undefined
@@ -235,7 +290,61 @@ export enum ExtensionNotificationType {
    * communication
    */
   INITIALIZE = 'INITIALIZE',
+  /**
+   * Visualization data
+   */
+  VISUALIZATION_DATA = 'VISUALIZATION_DATA',
+  /**
+   * Tile host data changed
+   */
+  TILE_HOST_DATA = 'TILE_HOST_DATA',
 }
+
+/**
+ * Extension initialize message. Will be received once
+ * when the extension is first instantiated
+ */
+export interface ExtensionInitializeMessage {
+  type: ExtensionNotificationType.INITIALIZE
+  payload: LookerHostData
+}
+
+/**
+ * Route changed message. Received when the host route changes.
+ * This happens when the user clicks the browser backward or
+ * forward button.
+ */
+export interface ExtensionRouteChangedMessage {
+  type: ExtensionNotificationType.ROUTE_CHANGED
+  payload: RouteChangeData
+}
+
+/**
+ * Visualization data. Only received by extensions visualizations.
+ * <code>Looker >=22.8</code>
+ */
+export interface ExtensionVisualizationDataMessage {
+  type: ExtensionNotificationType.VISUALIZATION_DATA
+  payload: RawVisualizationData
+}
+
+/**
+ * Tile Host Data Changed notificaction
+ * <code>Looker >=22.8</code>
+ */
+export interface TileHostDataChangedMessage {
+  type: ExtensionNotificationType.TILE_HOST_DATA
+  payload: Partial<TileHostData>
+}
+
+/**
+ * Extension notification
+ */
+export type ExtensionNotification =
+  | ExtensionInitializeMessage
+  | ExtensionRouteChangedMessage
+  | ExtensionVisualizationDataMessage
+  | TileHostDataChangedMessage
 
 /**
  * Route change data
@@ -262,8 +371,20 @@ export type HostType = 'standard' | 'embed' | 'spartan'
 /**
  * Extension mount type.
  * Fullscreen mount.
+ * @deprecated <code>Looker >=22.8</code>. Use MountPoint (fullscreen is equivalent of standalone)
  */
-export type MountType = 'fullscreen'
+export type MountType = 'fullscreen' | undefined
+
+/**
+ * Extension mount point
+ * <code>Looker >=22.8</code>
+ */
+export enum MountPoint {
+  standalone = 'standalone',
+  dashboardVisualization = 'dashboard-visualization',
+  dashboardTile = 'dashboard-tile',
+  dashboardTilePopup = 'dashboard-tile-popup',
+}
 
 /**
  * Initialization data. Looker host data.
@@ -306,17 +427,24 @@ export interface LookerHostData {
    */
   mountType?: MountType
   /**
+   * Extension mount point.
+   * <code>Looker >=22.8</code>
+   */
+  mountPoint: MountPoint
+  /**
    * Extension context data
    */
   contextData?: string
-}
-
-/**
- * Extension notification
- */
-export interface ExtensionNotification {
-  type: ExtensionNotificationType
-  payload?: LookerHostData | RouteChangeData | undefined
+  /**
+   * The extension is rendering to a PDF or image.
+   * <code>Looker >=22.8</code>
+   */
+  isRendering?: boolean
+  /**
+   * When true the dashboard tile has been enabled.
+   * <code>Looker >=22.8</code>
+   */
+  extensionDashboardTileEnabled: boolean
 }
 
 /**
@@ -364,6 +492,15 @@ export interface ExtensionHostConfiguration {
    * Set to -1 for no timeout.
    */
   chattyTimeout?: number
+  /**
+   * Callback called when visualization data received
+   */
+  visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+
+  /**
+   * Callback called when the host is updated
+   */
+  tileHostDataChangedCallback?: TileHostDataChangedCallback
 }
 
 export interface ExtensionHostApiConfiguration
@@ -716,4 +853,28 @@ export interface ExtensionSDK {
    * Log user out of Looker. Only works when running under /spartan
    */
   spartanLogout(): void
+
+  /**
+   * Indicate that an extension has been rendered.
+   * <code>Looker >=22.8</code>
+   */
+  rendered(failureMessage?: string): void
+
+  /**
+   * Visualization API.
+   */
+  visualizationSDK: VisualizationSDK
+
+  /**
+   * Tile API.
+   */
+  tileSDK: TileSDK
+
+  /**
+   * Returns true if dashboard mount is supported. There are two
+   * checks involved:
+   * 1. The extension mount point is configured correctly
+   * 2. The Looker host system supports it.
+   */
+  isDashboardMountSupported: boolean
 }

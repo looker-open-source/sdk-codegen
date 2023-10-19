@@ -4,7 +4,7 @@ The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. 
 
 This package supports using the Looker SDK in the browser. The [@looker/sdk-node](https://www.npmjs.com/package/@looker/sdk-node) package depends on this package (@looker/sdk) and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
 
-The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
+The SDK uses a plug-in architecture (also known as dependency injection) for initializing and supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
 Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
@@ -66,7 +66,7 @@ The `looker.ini` configuration file and environment variables are _never_ used i
 
 ### Developing with multiple API versions
 
-Version API 4.0 is available and API 3.1 is deprecated. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
+Please use API 4.0. API 3.1 is deprecated. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
 
 `LookerBrowserSDK.init31()` and `Looker31SDK()` initialize the API 3.1 implementation of the SDK.
 

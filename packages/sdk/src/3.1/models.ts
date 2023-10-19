@@ -25,7 +25,7 @@
  */
 
 /**
- * 308 API models: 190 Spec, 50 Request, 51 Write, 17 Enum
+ * 311 API models: 190 Spec, 53 Request, 51 Write, 17 Enum
  */
 
 import type { IDictionary, Url, DelimArray } from '@looker/sdk-rtl'
@@ -2393,7 +2393,7 @@ export interface IEmbedSsoParams {
    */
   target_url: Url
   /**
-   * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+   * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
    */
   session_length?: number | null
   /**
@@ -2401,7 +2401,7 @@ export interface IEmbedSsoParams {
    */
   force_logout_login?: boolean
   /**
-   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+   * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
    */
   external_user_id?: string | null
   /**
@@ -2440,6 +2440,10 @@ export interface IEmbedSsoParams {
    * Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
    */
   secret_id?: number | null
+  /**
+   * Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
+   */
+  embed_domain?: string | null
 }
 
 export interface IEmbedUrlResponse {
@@ -6003,6 +6007,20 @@ export interface IRequestAllScheduledPlans {
 }
 
 /**
+ * Dynamically generated request type for all_user_attributes
+ */
+export interface IRequestAllUserAttributes {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Fields to order the results by. Sortable fields include: name, label
+   */
+  sorts?: string | null
+}
+
+/**
  * Dynamically generated request type for all_users
  */
 export interface IRequestAllUsers {
@@ -6879,6 +6897,64 @@ export interface IRequestSearchDashboards {
 }
 
 /**
+ * Dynamically generated request type for search_folders
+ */
+export interface IRequestSearchFolders {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Return only page N of paginated results
+   */
+  page?: number | null
+  /**
+   * Return N rows of data per page
+   */
+  per_page?: number | null
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match Space title.
+   */
+  name?: string | null
+  /**
+   * Match Space id
+   */
+  id?: number | null
+  /**
+   * Filter on a children of a particular folder.
+   */
+  parent_id?: string | null
+  /**
+   * Filter on folder created by a particular user.
+   */
+  creator_id?: string | null
+  /**
+   * Combine given search criteria in a boolean OR expression
+   */
+  filter_or?: boolean | null
+  /**
+   * Match is shared root
+   */
+  is_shared_root?: boolean | null
+  /**
+   * Match is users root
+   */
+  is_users_root?: boolean | null
+}
+
+/**
  * Dynamically generated request type for search_groups
  */
 export interface IRequestSearchGroups {
@@ -7082,6 +7158,48 @@ export interface IRequestSearchModelSets {
   all_access?: boolean | null
   /**
    * Match model sets by built_in status.
+   */
+  built_in?: boolean | null
+  /**
+   * Combine given search criteria in a boolean OR expression.
+   */
+  filter_or?: boolean | null
+}
+
+/**
+ * Dynamically generated request type for search_permission_sets
+ */
+export interface IRequestSearchPermissionSets {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null
+  /**
+   * Number of results to return (used with `offset`).
+   */
+  limit?: number | null
+  /**
+   * Number of results to skip before returning any (used with `limit`).
+   */
+  offset?: number | null
+  /**
+   * Fields to sort by.
+   */
+  sorts?: string | null
+  /**
+   * Match permission set id.
+   */
+  id?: number | null
+  /**
+   * Match permission set name.
+   */
+  name?: string | null
+  /**
+   * Match permission sets by all_access status.
+   */
+  all_access?: boolean | null
+  /**
+   * Match permission sets by built_in status.
    */
   built_in?: boolean | null
   /**

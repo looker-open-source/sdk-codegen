@@ -25,7 +25,15 @@
  */
 
 import type { ReactNode } from 'react'
-import type { ExtensionHostApi, ExtensionSDK } from '@looker/extension-sdk'
+import type {
+  ExtensionHostApi,
+  ExtensionSDK,
+  RawVisualizationData,
+  TileHostData,
+  TileSDK,
+  VisualizationSDK,
+  LookerHostData,
+} from '@looker/extension-sdk'
 
 /**
  * Base extension context
@@ -35,6 +43,10 @@ export interface BaseExtensionContextData {
    * Extension SDK.
    */
   extensionSDK: ExtensionSDK
+  /**
+   * Looker host data
+   */
+  lookerHostData?: Readonly<LookerHostData>
   /**
    * Error message will be set in an initialization error occurs.
    * @deprecated if an initialization error occurs the extension
@@ -50,6 +62,22 @@ export interface BaseExtensionContextData {
    * Current route state
    */
   routeState?: any
+  /**
+   * Visualization data.
+   */
+  visualizationData?: Readonly<RawVisualizationData>
+  /**
+   * Visualization api.
+   */
+  visualizationSDK: VisualizationSDK
+  /**
+   * Tile host data
+   */
+  tileHostData: Readonly<TileHostData>
+  /**
+   * Tile api.
+   */
+  tileSDK: TileSDK
 }
 
 export interface RouteData {
@@ -103,6 +131,6 @@ export interface ExtensionProviderProps {
 export interface ExtensionConnectorProps extends ExtensionProviderProps {
   contextData: BaseExtensionContextData
   connectedCallback: (extensionSDK: ExtensionHostApi) => void
-  updateContextData: (contextData: BaseExtensionContextData) => void
+  updateContextData: (contextData: Partial<BaseExtensionContextData>) => void
   unloadedCallback: () => void
 }

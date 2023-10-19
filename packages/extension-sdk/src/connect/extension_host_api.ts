@@ -26,6 +26,14 @@
 
 import type { ChattyHostConnection, Options } from '@looker/chatty'
 import intersects from 'semver/ranges/intersects'
+import { logError } from '../util'
+import type {
+  VisualizationDataReceivedCallback,
+  VisualizationSDK,
+} from './visualization'
+import { VisualizationSDKImpl } from './visualization/visualization_sdk'
+import type { TileHostDataChangedCallback, TileSDK } from './tile'
+import { TileSDKImpl } from './tile/tile_sdk'
 import { FetchProxyImpl } from './fetch_proxy'
 import type {
   ExtensionInitializationResponse,
@@ -36,12 +44,12 @@ import type {
   FetchResponseBodyType,
   LookerHostData,
   ApiVersion,
-  RouteChangeData,
 } from './types'
 import {
   ExtensionEvent,
   ExtensionNotificationType,
   ExtensionRequestType,
+  MountPoint,
 } from './types'
 
 export const EXTENSION_SDK_VERSION = '0.10.5'
@@ -52,15 +60,50 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private chattyHost: ChattyHostConnection
   private setInitialRoute?: (route: string, routeState?: any) => void
   private hostChangedRoute?: (route: string, routeState?: any) => void
+  private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+  private tileHostDataChangedCallback?: TileHostDataChangedCallback
+  private _visualizationSDK?: VisualizationSDK
+  private _tileSDK?: TileSDK
+
   private contextData?: string
 
   constructor(configuration: ExtensionHostApiConfiguration) {
     this._configuration = configuration
-    const { chattyHost, setInitialRoute, hostChangedRoute } =
-      this._configuration
+    const {
+      chattyHost,
+      setInitialRoute,
+      hostChangedRoute,
+      visualizationDataReceivedCallback,
+      tileHostDataChangedCallback,
+    } = this._configuration
     this.chattyHost = chattyHost
     this.setInitialRoute = setInitialRoute
     this.hostChangedRoute = hostChangedRoute
+    this.visualizationDataReceivedCallback = visualizationDataReceivedCallback
+    this.tileHostDataChangedCallback = tileHostDataChangedCallback
+  }
+
+  get isDashboardMountSupported(): boolean {
+    return (
+      !!this._lookerHostData?.extensionDashboardTileEnabled &&
+      (this.lookerHostData?.mountPoint === MountPoint.dashboardTile ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardVisualization ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardTilePopup)
+    )
+  }
+
+  get visualizationSDK(): VisualizationSDK {
+    if (!this._visualizationSDK) {
+      this._visualizationSDK = new VisualizationSDKImpl(this)
+    }
+    return this._visualizationSDK
+  }
+
+  get tileSDK(): TileSDK {
+    if (!this._tileSDK) {
+      this._tileSDK = new TileSDKImpl(this)
+    }
+    return this._tileSDK
   }
 
   get lookerHostData() {
@@ -68,38 +111,58 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   }
 
   handleNotification(
-    message?: ExtensionNotification
+    message: ExtensionNotification
   ): ExtensionInitializationResponse | undefined {
-    const { type, payload } = message || {}
+    const { type } = message
     switch (type) {
-      case ExtensionNotificationType.ROUTE_CHANGED:
+      case ExtensionNotificationType.ROUTE_CHANGED: {
+        const { payload } = message
         if (this.hostChangedRoute && payload) {
-          const { route, routeState } = payload as RouteChangeData
+          const { route, routeState } = payload
           if (route) {
             this.hostChangedRoute(route, routeState)
           }
         }
         return undefined
-      case ExtensionNotificationType.INITIALIZE: {
-        this._lookerHostData = payload as LookerHostData
-        if (this._lookerHostData) {
-          this.contextData = this._lookerHostData.contextData
+      }
+      case ExtensionNotificationType.VISUALIZATION_DATA: {
+        const { payload } = message
+        this.visualizationSDK.updateVisData(payload)
+        if (this.visualizationDataReceivedCallback) {
+          this.visualizationDataReceivedCallback(payload)
         }
+        return undefined
+      }
+      case ExtensionNotificationType.TILE_HOST_DATA: {
+        const { payload } = message
+        this.tileSDK.tileHostDataChanged(payload)
+        if (this.tileHostDataChangedCallback) {
+          this.tileHostDataChangedCallback(payload)
+        }
+        return undefined
+      }
+      case ExtensionNotificationType.INITIALIZE: {
+        const { payload } = message
+        const lookerHostData = payload || {}
+        if (!lookerHostData.mountPoint) {
+          lookerHostData.mountPoint = MountPoint.standalone
+        }
+        this._lookerHostData = lookerHostData
+        this.contextData = lookerHostData.contextData
         let errorMessage
         if (
           this._configuration.requiredLookerVersion &&
-          this._lookerHostData &&
-          this._lookerHostData.lookerVersion
+          lookerHostData.lookerVersion
         ) {
           errorMessage = this.verifyLookerVersion(
             this._configuration.requiredLookerVersion
           )
           if (errorMessage) {
-            console.error(errorMessage)
+            logError(errorMessage)
           }
         }
         if (this.setInitialRoute && payload) {
-          const { route, routeState } = payload as LookerHostData
+          const { route, routeState } = payload
           if (route) {
             this.setInitialRoute(route, routeState)
           }
@@ -110,7 +173,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         }
       }
       default:
-        console.error('Unrecognized extension notification', message)
+        logError('Unrecognized extension notification', message)
         throw new Error(`Unrecognized extension notification type ${type}`)
     }
   }
@@ -123,7 +186,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     if (!keyName.match(/^[A-Za-z0-9_.]+$/)) {
       throw new Error('Unsupported characters in key name')
     }
-    return `{{${this._lookerHostData!.extensionId.replace(
+    return `{{${(this._lookerHostData as LookerHostData).extensionId.replace(
       /::|-/g,
       '_'
     )}_${keyName}}}`
@@ -358,7 +421,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         error: error && error.toString ? error.toString() : error,
       })
     } else {
-      console.error(
+      logError(
         'Unhandled error but Looker host connection not established',
         errorEvent
       )
@@ -463,7 +526,11 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     })
   }
 
-  private async sendAndReceive(
+  rendered(failureMessage?: string) {
+    this.send(ExtensionRequestType.RENDERED, { failureMessage })
+  }
+
+  async sendAndReceive(
     type: string,
     payload?: any,
     options?: Options
@@ -481,7 +548,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       .then((values) => values[0])
   }
 
-  private send(type: string, payload?: any) {
+  send(type: string, payload?: any) {
     if (!this._lookerHostData) {
       throw new Error('Looker host connection not established')
     }

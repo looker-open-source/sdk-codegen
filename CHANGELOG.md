@@ -1,5 +1,36 @@
 # Changelog
 
+## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.14.1...sdk-codegen-all-v23.16.0) (2023-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 23.16 ([#1365](https://github.com/looker-open-source/sdk-codegen/issues/1365)) ([9d6937a](https://github.com/looker-open-source/sdk-codegen/commit/9d6937a042d1649b41bc1851d579b5aa5360ad44))
+
+
+### Bug Fixes
+
+* add mdls import to makeTheCall when mdls is used ([#1355](https://github.com/looker-open-source/sdk-codegen/issues/1355)) ([4f5ed2b](https://github.com/looker-open-source/sdk-codegen/commit/4f5ed2be97cc1462b980c20c2e9140cee087865f))
+* sync up package versions ([#1356](https://github.com/looker-open-source/sdk-codegen/issues/1356)) ([351a15d](https://github.com/looker-open-source/sdk-codegen/commit/351a15d71dd6b87124a0275a9b2d126f4e5c3ed1))
+
+## [23.14.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.12.0...sdk-codegen-all-v23.14.1) (2023-08-15)
+
+
+### Features
+
+* generate SDKs for Looker 23.14 ([#1347](https://github.com/looker-open-source/sdk-codegen/issues/1347)) ([90f3f5f](https://github.com/looker-open-source/sdk-codegen/commit/90f3f5f3104c1a76cd1cce10e06e0b995e53c40f))
+* Send message on visConfig extension update ([#1348](https://github.com/looker-open-source/sdk-codegen/issues/1348)) ([20295d3](https://github.com/looker-open-source/sdk-codegen/commit/20295d318aa7aa59083342038f0c5168959ef3fd))
+
+
+### Bug Fixes
+
+* change visconfig types to reflect new getter ([#1350](https://github.com/looker-open-source/sdk-codegen/issues/1350)) ([c7648d9](https://github.com/looker-open-source/sdk-codegen/commit/c7648d9792bf976e2ea0ab0e94dfa0d45de83e66))
+
+
+### Miscellaneous Chores
+
+* Update Typescript SDK README.md ([#1353](https://github.com/looker-open-source/sdk-codegen/issues/1353)) ([b528e38](https://github.com/looker-open-source/sdk-codegen/commit/b528e3895fc4b5c7b864627fcfb9d421233f12a1))
+
 ## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.10.0...sdk-codegen-all-v23.12.0) (2023-07-17)
 
 

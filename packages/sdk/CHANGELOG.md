@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v23.14.1...sdk-v23.16.0) (2023-09-21)
+
+
+### Features
+
+* generate SDKs for Looker 23.16 ([#1365](https://github.com/looker-open-source/sdk-codegen/issues/1365)) ([9d6937a](https://github.com/looker-open-source/sdk-codegen/commit/9d6937a042d1649b41bc1851d579b5aa5360ad44))
+
+## [23.14.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v23.12.0...sdk-v23.14.1) (2023-08-15)
+
+
+### Features
+
+* generate SDKs for Looker 23.14 ([#1347](https://github.com/looker-open-source/sdk-codegen/issues/1347)) ([90f3f5f](https://github.com/looker-open-source/sdk-codegen/commit/90f3f5f3104c1a76cd1cce10e06e0b995e53c40f))
+
+
+### Miscellaneous Chores
+
+* Update Typescript SDK README.md ([#1353](https://github.com/looker-open-source/sdk-codegen/issues/1353)) ([b528e38](https://github.com/looker-open-source/sdk-codegen/commit/b528e3895fc4b5c7b864627fcfb9d421233f12a1))
+
 ## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v23.10.0...sdk-v23.12.0) (2023-07-17)
 
 

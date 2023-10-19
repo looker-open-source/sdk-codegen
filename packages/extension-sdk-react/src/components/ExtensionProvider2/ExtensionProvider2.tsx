@@ -72,11 +72,19 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
       )
     }
     registerCoreSDK2(coreSDK)
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: any) => {
       return {
         ...previousState,
         extensionSDK: extensionHost,
         coreSDK,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
+        lookerHostData,
       }
     })
   }
@@ -85,7 +93,9 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
     unregisterCoreSDK2()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData2<T>) => {
       return {
         ...previousState,
@@ -95,7 +105,7 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
   }
 
   return (
-    <ExtensionContext2.Provider value={extensionData!}>
+    <ExtensionContext2.Provider value={extensionData}>
       <ExtensionConnector
         {...rest}
         contextData={extensionData}

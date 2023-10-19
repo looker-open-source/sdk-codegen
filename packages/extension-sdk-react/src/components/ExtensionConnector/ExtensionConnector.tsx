@@ -25,8 +25,9 @@
  */
 
 import isEqual from 'lodash/isEqual'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { MemoryRouter } from 'react-router-dom'
+import type { RawVisualizationData, TileHostData } from '@looker/extension-sdk'
 import { connectExtensionHost } from '@looker/extension-sdk'
 import { ErrorMessage } from '../ErrorMessage'
 import { RouteChangeListener } from '../RouteChangeListener'
@@ -51,33 +52,65 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
   chattyTimeout,
   children,
 }) => {
+  const contextDataRef = useRef(contextData)
   const [initialRouteData, setInitialRouteData] = useState<RouteData>()
   const [hostRouteData, setHostRouteData] = useState<RouteData>({ route: '' })
   const [initializing, setInitializing] = useState(true)
   const [initializeError, setInitializeError] = useState<string>()
 
-  const setInitialRouteAndRouteState = (route: string, routeState?: any) => {
-    if (hostTracksRoute) {
-      setInitialRouteData({ route, routeState })
-    }
-  }
+  useEffect(() => {
+    contextDataRef.current = contextData
+  }, [contextData])
 
-  const hostChangedRoute = (_route: string, routeState?: any) => {
-    const route = _route.startsWith('/') ? _route : '/' + _route
-    if (
-      route !== hostRouteData.route ||
-      !isEqual(routeState, hostRouteData.routeState)
-    ) {
-      setHostRouteData({ route, routeState })
+  const setInitialRouteAndRouteState = useCallback(
+    (route: string, routeState?: any) => {
+      if (hostTracksRoute) {
+        setInitialRouteData({ route, routeState })
+      }
+    },
+    [hostTracksRoute, setInitialRouteData]
+  )
+
+  const hostChangedRoute = useCallback(
+    (_route: string, routeState?: any) => {
+      const route = _route.startsWith('/') ? _route : '/' + _route
+      if (
+        route !== hostRouteData.route ||
+        !isEqual(routeState, hostRouteData.routeState)
+      ) {
+        setHostRouteData({ route, routeState })
+        updateContextData({
+          route,
+          routeState,
+        })
+      }
+    },
+    [setHostRouteData, updateContextData]
+  )
+
+  const visualizationDataReceivedCallback = useCallback(
+    (visualizationData: RawVisualizationData) => {
       updateContextData({
-        ...contextData,
-        route,
-        routeState,
+        visualizationData,
       })
-    }
-  }
+    },
+    [updateContextData]
+  )
 
-  React.useEffect(() => {
+  const tileHostDataChangedCallback = useCallback(
+    (partialHostData: Partial<TileHostData>) => {
+      if (contextDataRef.current.tileSDK) {
+        const { tileSDK } = contextDataRef.current
+        tileSDK.tileHostDataChanged(partialHostData)
+        updateContextData({
+          tileHostData: tileSDK.tileHostData,
+        })
+      }
+    },
+    [updateContextData]
+  )
+
+  useEffect(() => {
     const initialize = async () => {
       try {
         const extensionHost = await connectExtensionHost({
@@ -85,6 +118,8 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
           requiredLookerVersion,
           hostChangedRoute,
           chattyTimeout,
+          visualizationDataReceivedCallback,
+          tileHostDataChangedCallback,
         })
         connectedCallback(extensionHost)
         setInitializing(false)
@@ -101,7 +136,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
     }
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     return initializing
       ? undefined
       : setupClosePopoversListener(contextData.extensionSDK)

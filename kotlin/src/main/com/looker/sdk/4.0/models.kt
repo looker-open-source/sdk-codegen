@@ -25,7 +25,7 @@
  */
 
 /**
- * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
+ * 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -53,7 +53,7 @@ data class AccessToken (
 /**
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
  * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
- * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
  * @property custom_url_label Label for the custom url defined by the alert creator
@@ -1903,7 +1903,7 @@ enum class DeviceType : Serializable {
  * @property persistent_table_indexes PDT index columns (read-only)
  * @property persistent_table_sortkeys PDT sortkey columns (read-only)
  * @property persistent_table_distkey PDT distkey column (read-only)
- * @property supports_streaming Suports streaming results (read-only)
+ * @property supports_streaming Supports streaming results (read-only)
  * @property automatically_run_sql_runner_snippets Should SQL Runner snippets automatically be run (read-only)
  * @property connection_tests Array of names of the tests that can be run on a connection using this dialect (read-only)
  * @property supports_inducer Is supported with the inducer (i.e. generate from sql) (read-only)
@@ -2031,9 +2031,36 @@ data class EgressIpAddresses (
 ) : Serializable
 
 /**
- * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property domain_allowlist List of domains to allow for embedding
+ * @property alert_url_allowlist List of base urls to allow for alert/schedule
+ * @property alert_url_param_owner Owner of who defines the alert/schedule params on the base url
+ * @property alert_url_label Label for the alert/schedule url
+ * @property sso_auth_enabled Is SSO embedding enabled for this Looker
+ * @property embed_cookieless_v2 Is Cookieless embedding enabled for this Looker
+ * @property embed_content_navigation Is embed content navigation enabled for this looker
+ * @property embed_content_management Is embed content management enabled for this Looker
+ * @property strict_sameorigin_for_login When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+ * @property look_filters When true, filters are enabled on embedded Looks
+ * @property hide_look_navigation When true, removes navigation to Looks from embedded dashboards and explores.
+ */
+data class EmbedConfig (
+    var domain_allowlist: Array<String>? = null,
+    var alert_url_allowlist: Array<String>? = null,
+    var alert_url_param_owner: String? = null,
+    var alert_url_label: String? = null,
+    var sso_auth_enabled: Boolean? = null,
+    var embed_cookieless_v2: Boolean? = null,
+    var embed_content_navigation: Boolean? = null,
+    var embed_content_management: Boolean? = null,
+    var strict_sameorigin_for_login: Boolean? = null,
+    var look_filters: Boolean? = null,
+    var hide_look_navigation: Boolean? = null
+) : Serializable
+
+/**
+ * @property session_length Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
- * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+ * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
  * @property first_name First name of the embed user. Defaults to 'Embed' if not specified
  * @property last_name Last name of the embed user. Defaults to 'User' if not specified
  * @property user_timezone Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
@@ -2042,8 +2069,8 @@ data class EgressIpAddresses (
  * @property group_ids List of Looker group ids in which to enroll the embed user
  * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
  * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
- * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
  * @property embed_domain The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
+ * @property session_reference_token Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
  */
 data class EmbedCookielessSessionAcquire (
     var session_length: Long? = null,
@@ -2057,8 +2084,8 @@ data class EmbedCookielessSessionAcquire (
     var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var session_reference_token: String? = null,
-    var embed_domain: String? = null
+    var embed_domain: String? = null,
+    var session_reference_token: String? = null
 ) : Serializable
 
 /**
@@ -2112,7 +2139,7 @@ data class EmbedCookielessSessionGenerateTokensResponse (
 
 /**
  * @property target_url The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
- * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property session_length Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
  */
 data class EmbedParams (
@@ -2142,9 +2169,9 @@ data class EmbedSecret (
 
 /**
  * @property target_url The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
- * @property session_length Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+ * @property session_length Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
  * @property force_logout_login When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.
- * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+ * @property external_user_id A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
  * @property first_name First name of the embed user. Defaults to 'Embed' if not specified
  * @property last_name Last name of the embed user. Defaults to 'User' if not specified
  * @property user_timezone Sets the user timezone for the embed user session, if the User Specific Timezones setting is enabled in the Looker admin settings. A value of `null` forces the embed user to use the Looker Application Default Timezone. You MUST omit this property from the request if the User Specific Timezones setting is disabled. Timezone values are validated against the IANA Timezone standard and can be seen in the Application Time Zone dropdown list on the Looker General Settings admin page.
@@ -2154,6 +2181,7 @@ data class EmbedSecret (
  * @property external_group_id A unique value identifying an embed-exclusive group. Multiple embed users using the same `external_group_id` value will be able to share Looker content with each other. Content and embed users associated with the `external_group_id` will not be accessible to normal Looker users or embed users not associated with this `external_group_id`.
  * @property user_attributes A dictionary of name-value pairs associating a Looker user attribute name with a value.
  * @property secret_id Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.
+ * @property embed_domain Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
  */
 data class EmbedSsoParams (
     var target_url: String,
@@ -2168,7 +2196,8 @@ data class EmbedSsoParams (
     var group_ids: Array<String>? = null,
     var external_group_id: String? = null,
     var user_attributes: Map<String,Any>? = null,
-    var secret_id: String? = null
+    var secret_id: String? = null,
+    var embed_domain: String? = null
 ) : Serializable
 
 /**
@@ -2669,8 +2698,8 @@ data class IntegrationParam (
 
 /**
  * @property tag Matches a field that has this tag. (read-only)
- * @property any_tag If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
- * @property all_tags If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+ * @property any_tag If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)
+ * @property all_tags If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)
  */
 data class IntegrationRequiredField (
     var tag: String? = null,
@@ -2715,13 +2744,6 @@ data class InternalHelpResourcesContent (
 enum class InvestigativeContentType : Serializable {
     dashboard
 }
-
-/**
- * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
- */
-data class JdbcInterface (
-    var results: String? = null
-) : Serializable
 
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
@@ -3658,6 +3680,17 @@ data class Manifest (
     var name: String? = null,
     var imports: Array<ImportedProject>? = null,
     var localization_settings: LocalizationSettings? = null
+) : Serializable
+
+/**
+ * @property install_enabled Whether marketplace auto installation is enabled
+ * @property update_looker_enabled Whether marketplace auto update is enabled for looker extensions
+ * @property update_third_party_enabled Whether marketplace auto update is enabled for third party extensions
+ */
+data class MarketplaceAutomation (
+    var install_enabled: Boolean? = null,
+    var update_looker_enabled: Boolean? = null,
+    var update_third_party_enabled: Boolean? = null
 ) : Serializable
 
 /**
@@ -4956,9 +4989,11 @@ data class SessionConfig (
 
 /**
  * @property extension_framework_enabled Toggle extension framework on or off
- * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
- * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+ * @property marketplace_auto_install_enabled (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
+ * @property marketplace_automation
  * @property marketplace_enabled Toggle marketplace on or off
+ * @property marketplace_site Location of Looker marketplace CDN (read-only)
  * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration
  * @property custom_welcome_email
@@ -4969,14 +5004,17 @@ data class SessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
- * @property embed_cookieless_v2 Toggle cookieless embed setting
+ * @property embed_cookieless_v2 (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
  * @property embed_enabled True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+ * @property embed_config
  */
 data class Setting (
     var extension_framework_enabled: Boolean? = null,
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_automation: MarketplaceAutomation? = null,
     var marketplace_enabled: Boolean? = null,
+    var marketplace_site: String? = null,
     var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: PrivatelabelConfiguration? = null,
     var custom_welcome_email: CustomWelcomeEmail? = null,
@@ -4988,7 +5026,8 @@ data class Setting (
     var override_warnings: Boolean? = null,
     var email_domain_allowlist: Array<String>? = null,
     var embed_cookieless_v2: Boolean? = null,
-    var embed_enabled: Boolean? = null
+    var embed_enabled: Boolean? = null,
+    var embed_config: EmbedConfig? = null
 ) : Serializable
 
 /**
@@ -5043,6 +5082,35 @@ data class Snippet (
     var name: String? = null,
     var label: String? = null,
     var sql: String? = null
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique Id (read-only)
+ * @property signature Calcite signature (read-only)
+ */
+data class SqlInterfaceQuery (
+    var can: Map<String,Boolean>? = null,
+    var id: Long? = null,
+    var signature: String
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property sql Original SQL request
+ * @property jdbc_client Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+ */
+data class SqlInterfaceQueryCreate (
+    var can: Map<String,Boolean>? = null,
+    var sql: String,
+    var jdbc_client: Boolean? = null
+) : Serializable
+
+/**
+ * @property results JDBC Metadata to inflate Avatica response classes. (read-only)
+ */
+data class SqlInterfaceQueryMetadata (
+    var results: String? = null
 ) : Serializable
 
 /**
@@ -5721,7 +5789,7 @@ data class Workspace (
  *
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
  * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
- * @property cron Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+ * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
  * @property custom_url_label Label for the custom url defined by the alert creator
@@ -7014,11 +7082,12 @@ data class WriteSessionConfig (
 
 /**
  * Dynamic writeable type for Setting removes:
- * embed_enabled
+ * marketplace_site, embed_enabled
  *
  * @property extension_framework_enabled Toggle extension framework on or off
- * @property extension_load_url_enabled (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
- * @property marketplace_auto_install_enabled Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+ * @property extension_load_url_enabled (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+ * @property marketplace_auto_install_enabled (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
+ * @property marketplace_automation
  * @property marketplace_enabled Toggle marketplace on or off
  * @property marketplace_terms_accepted Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
  * @property privatelabel_configuration Dynamic writeable type for PrivatelabelConfiguration removes:
@@ -7031,12 +7100,14 @@ data class WriteSessionConfig (
  * @property host_url Change the base portion of your Looker instance URL setting
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
- * @property embed_cookieless_v2 Toggle cookieless embed setting
+ * @property embed_cookieless_v2 (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
+ * @property embed_config
  */
 data class WriteSetting (
     var extension_framework_enabled: Boolean? = null,
     var extension_load_url_enabled: Boolean? = null,
     var marketplace_auto_install_enabled: Boolean? = null,
+    var marketplace_automation: MarketplaceAutomation? = null,
     var marketplace_enabled: Boolean? = null,
     var marketplace_terms_accepted: Boolean? = null,
     var privatelabel_configuration: WritePrivatelabelConfiguration? = null,
@@ -7048,7 +7119,20 @@ data class WriteSetting (
     var host_url: String? = null,
     var override_warnings: Boolean? = null,
     var email_domain_allowlist: Array<String>? = null,
-    var embed_cookieless_v2: Boolean? = null
+    var embed_cookieless_v2: Boolean? = null,
+    var embed_config: EmbedConfig? = null
+) : Serializable
+
+/**
+ * Dynamic writeable type for SqlInterfaceQueryCreate removes:
+ * can
+ *
+ * @property sql Original SQL request
+ * @property jdbc_client Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+ */
+data class WriteSqlInterfaceQueryCreate (
+    var sql: String,
+    var jdbc_client: Boolean? = null
 ) : Serializable
 
 /**

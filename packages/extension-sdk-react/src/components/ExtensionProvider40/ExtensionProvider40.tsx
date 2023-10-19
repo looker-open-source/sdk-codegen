@@ -35,6 +35,9 @@ import type {
 import { ExtensionConnector } from '../ExtensionConnector'
 import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
 
+/**
+ * Extension context data
+ */
 export interface ExtensionContextData40 extends BaseExtensionContextData {
   coreSDK: ILooker40SDK
 }
@@ -62,11 +65,19 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
     const coreSDK: ILooker40SDK =
       LookerExtensionSDK.create40Client(extensionHost)
     registerCore40SDK(coreSDK as Looker40SDK)
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
+    const { visualizationData } = visualizationSDK
+    const { tileHostData } = tileSDK
     setExtensionData((previousState: any) => {
       return {
         ...previousState,
         extensionSDK: extensionHost,
         coreSDK,
+        visualizationSDK,
+        tileSDK,
+        visualizationData,
+        tileHostData,
+        lookerHostData,
       }
     })
   }
@@ -75,7 +86,9 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
     unregisterCore40SDK()
   }
 
-  const updateContextData = (updatedContextData: BaseExtensionContextData) => {
+  const updateContextData = (
+    updatedContextData: Partial<BaseExtensionContextData>
+  ) => {
     setExtensionData((previousState: ExtensionContextData40) => {
       return {
         ...previousState,

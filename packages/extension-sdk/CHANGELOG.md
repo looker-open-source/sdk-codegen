@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.14.1...extension-sdk-v23.16.0) (2023-09-21)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.14.1 to ^23.16.0
+
+## [23.14.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.12.0...extension-sdk-v23.14.1) (2023-08-15)
+
+
+### Features
+
+* Send message on visConfig extension update ([#1348](https://github.com/looker-open-source/sdk-codegen/issues/1348)) ([20295d3](https://github.com/looker-open-source/sdk-codegen/commit/20295d318aa7aa59083342038f0c5168959ef3fd))
+
+
+### Bug Fixes
+
+* change visconfig types to reflect new getter ([#1350](https://github.com/looker-open-source/sdk-codegen/issues/1350)) ([c7648d9](https://github.com/looker-open-source/sdk-codegen/commit/c7648d9792bf976e2ea0ab0e94dfa0d45de83e66))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.12.0 to ^23.14.1
+
 ## [23.12.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.10.0...extension-sdk-v23.12.0) (2023-07-17)
 
 
