@@ -127,6 +127,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJdbcInterface,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -167,8 +168,10 @@ import type {
   IRequestAllGroups,
   IRequestAllGroupUsers,
   IRequestAllIntegrations,
+  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
+  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -208,9 +211,13 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
+  IRequestSearchGroupsWithHierarchy,
+  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
+  IRequestSearchPermissionSets,
   IRequestSearchRoles,
+  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -234,7 +241,6 @@ import type {
   ISmtpSettings,
   ISmtpStatus,
   ISqlInterfaceQuery,
-  ISqlInterfaceQueryMetadata,
   ISqlQuery,
   ISqlQueryCreate,
   ISshPublicKey,
@@ -6378,12 +6384,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_roles(
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>> {
     return this.get<IGroupSearch[], IError>(
@@ -6434,12 +6440,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
-   * @param request composed interface "IRequestSearchGroups" for complex method parameters
+   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_hierarchy(
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroupsWithHierarchy,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>> {
     return this.get<IGroupHierarchy[], IError>(
@@ -7031,6 +7037,31 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   //#endregion Integration: Manage Integrations
 
+  //#region JdbcInterface: LookML Model metadata for JDBC Clients
+
+  /**
+   * ### Handle Avatica RPC Requests
+   *
+   * GET /__jdbc_interface__ -> IJdbcInterface
+   *
+   * @param avatica_request Avatica RPC request
+   * @param options one-time API call overrides
+   *
+   */
+  async jdbc_interface(
+    avatica_request?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IJdbcInterface, IError>> {
+    return this.get<IJdbcInterface, IError>(
+      '/__jdbc_interface__',
+      { avatica_request },
+      null,
+      options
+    )
+  }
+
+  //#endregion JdbcInterface: LookML Model metadata for JDBC Clients
+
   //#region Look: Run and Manage Looks
 
   /**
@@ -7369,12 +7400,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /lookml_models -> ILookmlModel[]
    *
-   * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
+   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_lookml_models(
-    request: IRequestArtifactNamespaces,
+    request: IRequestAllLookmlModels,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>> {
     return this.get<ILookmlModel[], IError>(
@@ -9248,6 +9279,81 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Run a saved SQL interface query.
+   *
+   * This runs a previously created SQL interface query.
+   *
+   * The 'result_format' parameter specifies the desired structure and format of the response.
+   *
+   * Supported formats:
+   *
+   * | result_format | Description
+   * | :-----------: | :--- |
+   * | json | Plain json
+   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | csv | Comma separated values with a header
+   * | txt | Tab separated values with a header
+   * | html | Simple html
+   * | md | Simple markdown
+   * | xlsx | MS Excel spreadsheet
+   * | sql | Returns the generated SQL rather than running the query
+   * | png | A PNG image of the visualization of the query
+   * | jpg | A JPG image of the visualization of the query
+   *
+   * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
+   *
+   * @remarks
+   * **NOTE**: Binary content may be returned by this function.
+   *
+   * @param query_id Integer id of query
+   * @param result_format Format of result, options are: ["json_bi"]
+   * @param options one-time API call overrides
+   *
+   */
+  async run_sql_interface_query(
+    query_id: number,
+    result_format: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError | IValidationError>> {
+    result_format = encodeParam(result_format)
+    return this.get<string, IError | IValidationError>(
+      `/sql_interface_queries/${query_id}/run/${result_format}`,
+      null,
+      null,
+      options
+    )
+  }
+
+  /**
+   * ### Create a SQL interface query.
+   *
+   * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+   * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+   * will be returned and no new query will be created. Whether a new query is created or not, you can use
+   * the 'id' in the returned query with the 'run' method.
+   *
+   * The query parameters are passed as json in the body of the request.
+   *
+   * POST /sql_interface_queries -> ISqlInterfaceQuery
+   *
+   * @param body Partial<IWriteSqlInterfaceQueryCreate>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_sql_interface_query(
+    body: Partial<IWriteSqlInterfaceQueryCreate>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ISqlInterfaceQuery, IError | IValidationError>> {
+    return this.post<ISqlInterfaceQuery, IError | IValidationError>(
+      '/sql_interface_queries',
+      null,
+      body,
+      options
+    )
+  }
+
+  /**
    * ### Create a SQL Runner Query
    *
    * Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -9743,12 +9849,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /permission_sets/search -> IPermissionSet[]
    *
-   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
+   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
-    request: IRequestSearchModelSets,
+    request: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>> {
     return this.get<IPermissionSet[], IError>(
@@ -10005,12 +10111,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
-   * @param request composed interface "IRequestSearchRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_roles_with_user_count(
-    request: IRequestSearchRoles,
+    request: IRequestSearchRolesWithUserCount,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>> {
     return this.get<IRoleSearch[], IError>(
@@ -10744,106 +10850,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   //#endregion Session: Session Information
 
-  //#region SqlInterfaceQuery: Run and Manage SQL Interface Queries
-
-  /**
-   * ### Handles Avatica RPC metadata requests for SQL Interface queries
-   *
-   * GET /sql_interface_queries/metadata -> ISqlInterfaceQueryMetadata
-   *
-   * @param avatica_request Avatica RPC request
-   * @param options one-time API call overrides
-   *
-   */
-  async sql_interface_metadata(
-    avatica_request?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ISqlInterfaceQueryMetadata, IError>> {
-    return this.get<ISqlInterfaceQueryMetadata, IError>(
-      '/sql_interface_queries/metadata',
-      { avatica_request },
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Run a saved SQL interface query.
-   *
-   * This runs a previously created SQL interface query.
-   *
-   * The 'result_format' parameter specifies the desired structure and format of the response.
-   *
-   * Supported formats:
-   *
-   * | result_format | Description
-   * | :-----------: | :--- |
-   * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | csv | Comma separated values with a header
-   * | txt | Tab separated values with a header
-   * | html | Simple html
-   * | md | Simple markdown
-   * | xlsx | MS Excel spreadsheet
-   * | sql | Returns the generated SQL rather than running the query
-   * | png | A PNG image of the visualization of the query
-   * | jpg | A JPG image of the visualization of the query
-   *
-   * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-   *
-   * @remarks
-   * **NOTE**: Binary content may be returned by this function.
-   *
-   * @param query_id Integer id of query
-   * @param result_format Format of result, options are: ["json_bi"]
-   * @param options one-time API call overrides
-   *
-   */
-  async run_sql_interface_query(
-    query_id: number,
-    result_format: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError | IValidationError>> {
-    result_format = encodeParam(result_format)
-    return this.get<string, IError | IValidationError>(
-      `/sql_interface_queries/${query_id}/run/${result_format}`,
-      null,
-      null,
-      options
-    )
-  }
-
-  /**
-   * ### Create a SQL interface query.
-   *
-   * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
-   * and are not deleted. If you create a query that is exactly like an existing query then the existing query
-   * will be returned and no new query will be created. Whether a new query is created or not, you can use
-   * the 'id' in the returned query with the 'run' method.
-   *
-   * The query parameters are passed as json in the body of the request.
-   *
-   * POST /sql_interface_queries -> ISqlInterfaceQuery
-   *
-   * @param body Partial<IWriteSqlInterfaceQueryCreate>
-   * @param options one-time API call overrides
-   *
-   */
-  async create_sql_interface_query(
-    body: Partial<IWriteSqlInterfaceQueryCreate>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ISqlInterfaceQuery, IError | IValidationError>> {
-    return this.post<ISqlInterfaceQuery, IError | IValidationError>(
-      '/sql_interface_queries',
-      null,
-      body,
-      options
-    )
-  }
-
-  //#endregion SqlInterfaceQuery: Run and Manage SQL Interface Queries
-
   //#region Theme: Manage Themes
 
   /**
@@ -10853,7 +10859,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * This method returns an array of all existing themes. The active time for the theme is not considered.
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * GET /themes -> ITheme[]
    *
@@ -10883,7 +10889,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * POST /themes -> ITheme
    *
@@ -10941,7 +10947,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Get a **single theme** by id with [Theme](#!/Theme/theme)
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * GET /themes/search -> ITheme[]
    *
@@ -11004,7 +11010,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Returns the new specified default theme object.
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * PUT /themes/default -> ITheme
    *
@@ -11033,7 +11039,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * The optional `ts` parameter can specify a different timestamp than "now."
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * GET /themes/active -> ITheme[]
    *
@@ -11059,7 +11065,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * The optional `ts` parameter can specify a different timestamp than "now."
    * Note: API users with `show` ability can call this function
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * GET /themes/theme_or_default -> ITheme
    *
@@ -11088,7 +11094,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * See [Create Theme](#!/Theme/create_theme) for constraints
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * POST /themes/validate -> IValidationError
    *
@@ -11113,7 +11119,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * Use this to retrieve a specific theme, whether or not it's currently active.
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * GET /themes/{theme_id} -> ITheme
    *
@@ -11139,7 +11145,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Update the theme by id.
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * PATCH /themes/{theme_id} -> ITheme
    *
@@ -11171,7 +11177,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
    *
-   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+   * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
    *
    * DELETE /themes/{theme_id} -> string
    *
@@ -12543,12 +12549,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * GET /user_attributes -> IUserAttribute[]
    *
-   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
+   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
-    request: IRequestAllBoardSections,
+    request: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>> {
     return this.get<IUserAttribute[], IError>(

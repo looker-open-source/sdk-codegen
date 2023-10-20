@@ -2606,6 +2606,12 @@ public enum InvestigativeContentType
   dashboard
 }
 
+public class JdbcInterface : SdkModel
+{
+  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
+  public string? results { get; set; } = null;
+}
+
 public class LDAPConfig : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -3964,6 +3970,8 @@ public class Project : SdkModel
   public bool? is_example { get; set; } = null;
   /// <summary>Status of dependencies in your manifest & lockfile</summary>
   public string? dependency_status { get; set; } = null;
+  /// <summary>Number of data tests within project (read-only)</summary>
+  public long? data_tests_count { get; set; } = null;
 }
 
 public class ProjectError : SdkModel
@@ -4870,12 +4878,6 @@ public class SqlInterfaceQueryCreate : SdkModel
   public string sql { get; set; } = "";
   /// <summary>Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.</summary>
   public bool? jdbc_client { get; set; } = null;
-}
-
-public class SqlInterfaceQueryMetadata : SdkModel
-{
-  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
-  public string? results { get; set; } = null;
 }
 
 public class SqlQuery : SdkModel
@@ -6498,7 +6500,7 @@ public class WritePrivatelabelConfiguration : SdkModel
 }
 
 /// Dynamic writeable type for Project removes:
-/// can, id, uses_git, is_example
+/// can, id, uses_git, is_example, data_tests_count
 public class WriteProject : SdkModel
 {
   /// <summary>Project display name</summary>

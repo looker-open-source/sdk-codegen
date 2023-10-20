@@ -5344,6 +5344,19 @@ InvestigativeContentType.__new__ = model.safe_enum__new__  # type: ignore
 
 
 @attr.s(auto_attribs=True, init=False)
+class JdbcInterface(model.Model):
+    """
+    Attributes:
+        results: JDBC Metadata to inflate Avatica response classes.
+    """
+    results: Optional[str] = None
+
+    def __init__(self, *,
+            results: Optional[str] = None):
+        self.results = results
+
+
+@attr.s(auto_attribs=True, init=False)
 class LDAPConfig(model.Model):
     """
     Attributes:
@@ -8039,6 +8052,7 @@ class Project(model.Model):
         allow_warnings: Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
         is_example: If true the project is an example project and cannot be modified
         dependency_status: Status of dependencies in your manifest & lockfile
+        data_tests_count: Number of data tests within project
     """
     can: Optional[MutableMapping[str, bool]] = None
     id: Optional[str] = None
@@ -8062,6 +8076,7 @@ class Project(model.Model):
     allow_warnings: Optional[bool] = None
     is_example: Optional[bool] = None
     dependency_status: Optional[str] = None
+    data_tests_count: Optional[int] = None
 
     def __init__(self, *,
             can: Optional[MutableMapping[str, bool]] = None,
@@ -8085,7 +8100,8 @@ class Project(model.Model):
             git_release_mgmt_enabled: Optional[bool] = None,
             allow_warnings: Optional[bool] = None,
             is_example: Optional[bool] = None,
-            dependency_status: Optional[str] = None):
+            dependency_status: Optional[str] = None,
+            data_tests_count: Optional[int] = None):
         self.can = can
         self.id = id
         self.name = name
@@ -8108,6 +8124,7 @@ class Project(model.Model):
         self.allow_warnings = allow_warnings
         self.is_example = is_example
         self.dependency_status = dependency_status
+        self.data_tests_count = data_tests_count
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9939,19 +9956,6 @@ class SqlInterfaceQueryCreate(model.Model):
         self.sql = sql
         self.can = can
         self.jdbc_client = jdbc_client
-
-
-@attr.s(auto_attribs=True, init=False)
-class SqlInterfaceQueryMetadata(model.Model):
-    """
-    Attributes:
-        results: JDBC Metadata to inflate Avatica response classes.
-    """
-    results: Optional[str] = None
-
-    def __init__(self, *,
-            results: Optional[str] = None):
-        self.results = results
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -13118,7 +13122,7 @@ logo_url, favicon_url
 class WriteProject(model.Model):
     """
     Dynamic writeable type for Project removes:
-can, id, uses_git, is_example
+can, id, uses_git, is_example, data_tests_count
 
     Attributes:
         name: Project display name

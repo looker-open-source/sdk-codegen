@@ -5492,6 +5492,25 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     //endregion Integration: Manage Integrations
 
+    //region JdbcInterface: LookML Model metadata for JDBC Clients
+
+
+    /**
+     * ### Handle Avatica RPC Requests
+     *
+     * @param {String} avatica_request Avatica RPC request
+     *
+     * GET /__jdbc_interface__ -> ByteArray
+     */
+    @JvmOverloads fun jdbc_interface(
+        avatica_request: String? = null
+    ) : SDKResponse {
+            return this.get<ByteArray>("/__jdbc_interface__", 
+                mapOf("avatica_request" to avatica_request))
+    }
+
+    //endregion JdbcInterface: LookML Model metadata for JDBC Clients
+
     //region Look: Run and Manage Looks
 
 
@@ -7479,6 +7498,67 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
 
     /**
+     * ### Run a saved SQL interface query.
+     *
+     * This runs a previously created SQL interface query.
+     *
+     * The 'result_format' parameter specifies the desired structure and format of the response.
+     *
+     * Supported formats:
+     *
+     * | result_format | Description
+     * | :-----------: | :--- |
+     * | json | Plain json
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | csv | Comma separated values with a header
+     * | txt | Tab separated values with a header
+     * | html | Simple html
+     * | md | Simple markdown
+     * | xlsx | MS Excel spreadsheet
+     * | sql | Returns the generated SQL rather than running the query
+     * | png | A PNG image of the visualization of the query
+     * | jpg | A JPG image of the visualization of the query
+     *
+     * @param {Long} query_id Integer id of query
+     * @param {String} result_format Format of result, options are: ["json_bi"]
+     *
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> ByteArray
+     *
+     * **Note**: Binary content may be returned by this method.
+     */
+    fun run_sql_interface_query(
+        query_id: Long,
+        result_format: String
+    ) : SDKResponse {
+        val path_query_id = encodeParam(query_id)
+        val path_result_format = encodeParam(result_format)
+            return this.get<ByteArray>("/sql_interface_queries/${path_query_id}/run/${path_result_format}", mapOf())
+    }
+
+
+    /**
+     * ### Create a SQL interface query.
+     *
+     * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+     * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+     * will be returned and no new query will be created. Whether a new query is created or not, you can use
+     * the 'id' in the returned query with the 'run' method.
+     *
+     * The query parameters are passed as json in the body of the request.
+     *
+     * @param {WriteSqlInterfaceQueryCreate} body
+     *
+     * POST /sql_interface_queries -> ByteArray
+     */
+    fun create_sql_interface_query(
+        body: WriteSqlInterfaceQueryCreate
+    ) : SDKResponse {
+            return this.post<ByteArray>("/sql_interface_queries", mapOf(), body)
+    }
+
+
+    /**
      * ### Create a SQL Runner Query
      *
      * Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -8786,86 +8866,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
 
     //endregion Session: Session Information
 
-    //region SqlInterfaceQuery: Run and Manage SQL Interface Queries
-
-
-    /**
-     * ### Handles Avatica RPC metadata requests for SQL Interface queries
-     *
-     * @param {String} avatica_request Avatica RPC request
-     *
-     * GET /sql_interface_queries/metadata -> ByteArray
-     */
-    @JvmOverloads fun sql_interface_metadata(
-        avatica_request: String? = null
-    ) : SDKResponse {
-            return this.get<ByteArray>("/sql_interface_queries/metadata", 
-                mapOf("avatica_request" to avatica_request))
-    }
-
-
-    /**
-     * ### Run a saved SQL interface query.
-     *
-     * This runs a previously created SQL interface query.
-     *
-     * The 'result_format' parameter specifies the desired structure and format of the response.
-     *
-     * Supported formats:
-     *
-     * | result_format | Description
-     * | :-----------: | :--- |
-     * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-     * | csv | Comma separated values with a header
-     * | txt | Tab separated values with a header
-     * | html | Simple html
-     * | md | Simple markdown
-     * | xlsx | MS Excel spreadsheet
-     * | sql | Returns the generated SQL rather than running the query
-     * | png | A PNG image of the visualization of the query
-     * | jpg | A JPG image of the visualization of the query
-     *
-     * @param {Long} query_id Integer id of query
-     * @param {String} result_format Format of result, options are: ["json_bi"]
-     *
-     * GET /sql_interface_queries/{query_id}/run/{result_format} -> ByteArray
-     *
-     * **Note**: Binary content may be returned by this method.
-     */
-    fun run_sql_interface_query(
-        query_id: Long,
-        result_format: String
-    ) : SDKResponse {
-        val path_query_id = encodeParam(query_id)
-        val path_result_format = encodeParam(result_format)
-            return this.get<ByteArray>("/sql_interface_queries/${path_query_id}/run/${path_result_format}", mapOf())
-    }
-
-
-    /**
-     * ### Create a SQL interface query.
-     *
-     * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
-     * and are not deleted. If you create a query that is exactly like an existing query then the existing query
-     * will be returned and no new query will be created. Whether a new query is created or not, you can use
-     * the 'id' in the returned query with the 'run' method.
-     *
-     * The query parameters are passed as json in the body of the request.
-     *
-     * @param {WriteSqlInterfaceQueryCreate} body
-     *
-     * POST /sql_interface_queries -> ByteArray
-     */
-    fun create_sql_interface_query(
-        body: WriteSqlInterfaceQueryCreate
-    ) : SDKResponse {
-            return this.post<ByteArray>("/sql_interface_queries", mapOf(), body)
-    }
-
-    //endregion SqlInterfaceQuery: Run and Manage SQL Interface Queries
-
     //region Theme: Manage Themes
 
 
@@ -8876,7 +8876,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * This method returns an array of all existing themes. The active time for the theme is not considered.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} fields Requested fields.
      *
@@ -8905,7 +8905,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {WriteTheme} body
      *
@@ -8956,7 +8956,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Get a **single theme** by id with [Theme](#!/Theme/theme)
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} id Match theme id.
      * @param {String} name Match theme name.
@@ -9026,7 +9026,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Returns the new specified default theme object.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} name Name of theme to set as default
      *
@@ -9049,7 +9049,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * The optional `ts` parameter can specify a different timestamp than "now."
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} name Name of theme
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
@@ -9075,7 +9075,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * The optional `ts` parameter can specify a different timestamp than "now."
      * Note: API users with `show` ability can call this function
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} name Name of theme
      * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
@@ -9099,7 +9099,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * See [Create Theme](#!/Theme/create_theme) for constraints
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {WriteTheme} body
      *
@@ -9117,7 +9117,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * Use this to retrieve a specific theme, whether or not it's currently active.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} theme_id Id of theme
      * @param {String} fields Requested fields.
@@ -9137,7 +9137,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Update the theme by id.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} theme_id Id of theme
      * @param {WriteTheme} body
@@ -9162,7 +9162,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      *
      * All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
      *
      * @param {String} theme_id Id of theme
      *
