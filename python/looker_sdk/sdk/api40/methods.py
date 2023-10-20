@@ -6809,6 +6809,31 @@ class Looker40SDK(api_methods.APIMethods):
 
     #endregion
 
+    #region JdbcInterface: LookML Model metadata for JDBC Clients
+
+    # ### Handle Avatica RPC Requests
+    #
+    # GET /__jdbc_interface__ -> mdls.JdbcInterface
+    def jdbc_interface(
+        self,
+        # Avatica RPC request
+        avatica_request: Optional[str] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> mdls.JdbcInterface:
+        """Get JDBC Interface"""
+        response = cast(
+            mdls.JdbcInterface,
+            self.get(
+                path="/__jdbc_interface__",
+                structure=mdls.JdbcInterface,
+                query_params={"avatica_request": avatica_request},
+                transport_options=transport_options
+            )
+        )
+        return response
+
+    #endregion
+
     #region Look: Run and Manage Looks
 
     # ### Get information about all active Looks
@@ -9115,6 +9140,76 @@ class Looker40SDK(api_methods.APIMethods):
         )
         return response
 
+    # ### Run a saved SQL interface query.
+    #
+    # This runs a previously created SQL interface query.
+    #
+    # The 'result_format' parameter specifies the desired structure and format of the response.
+    #
+    # Supported formats:
+    #
+    # | result_format | Description
+    # | :-----------: | :--- |
+    # | json | Plain json
+    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | csv | Comma separated values with a header
+    # | txt | Tab separated values with a header
+    # | html | Simple html
+    # | md | Simple markdown
+    # | xlsx | MS Excel spreadsheet
+    # | sql | Returns the generated SQL rather than running the query
+    # | png | A PNG image of the visualization of the query
+    # | jpg | A JPG image of the visualization of the query
+    #
+    # GET /sql_interface_queries/{query_id}/run/{result_format} -> Union[str, bytes]
+    def run_sql_interface_query(
+        self,
+        # Integer id of query
+        query_id: int,
+        # Format of result, options are: ["json_bi"]
+        result_format: str,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> Union[str, bytes]:
+        """Run SQL Interface Query"""
+        result_format = self.encode_path_param(result_format)
+        response = cast(
+            Union[str, bytes],
+            self.get(
+                path=f"/sql_interface_queries/{query_id}/run/{result_format}",
+                structure=Union[str, bytes],  # type: ignore
+                transport_options=transport_options
+            )
+        )
+        return response
+
+    # ### Create a SQL interface query.
+    #
+    # This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+    # and are not deleted. If you create a query that is exactly like an existing query then the existing query
+    # will be returned and no new query will be created. Whether a new query is created or not, you can use
+    # the 'id' in the returned query with the 'run' method.
+    #
+    # The query parameters are passed as json in the body of the request.
+    #
+    # POST /sql_interface_queries -> mdls.SqlInterfaceQuery
+    def create_sql_interface_query(
+        self,
+        body: mdls.WriteSqlInterfaceQueryCreate,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> mdls.SqlInterfaceQuery:
+        """Create SQL Interface Query"""
+        response = cast(
+            mdls.SqlInterfaceQuery,
+            self.post(
+                path="/sql_interface_queries",
+                structure=mdls.SqlInterfaceQuery,
+                body=body,
+                transport_options=transport_options
+            )
+        )
+        return response
+
     # ### Create a SQL Runner Query
     #
     # Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -10644,101 +10739,6 @@ class Looker40SDK(api_methods.APIMethods):
 
     #endregion
 
-    #region SqlInterfaceQuery: Run and Manage SQL Interface Queries
-
-    # ### Handles Avatica RPC metadata requests for SQL Interface queries
-    #
-    # GET /sql_interface_queries/metadata -> mdls.SqlInterfaceQueryMetadata
-    def sql_interface_metadata(
-        self,
-        # Avatica RPC request
-        avatica_request: Optional[str] = None,
-        transport_options: Optional[transport.TransportOptions] = None,
-    ) -> mdls.SqlInterfaceQueryMetadata:
-        """Get SQL Interface Query Metadata"""
-        response = cast(
-            mdls.SqlInterfaceQueryMetadata,
-            self.get(
-                path="/sql_interface_queries/metadata",
-                structure=mdls.SqlInterfaceQueryMetadata,
-                query_params={"avatica_request": avatica_request},
-                transport_options=transport_options
-            )
-        )
-        return response
-
-    # ### Run a saved SQL interface query.
-    #
-    # This runs a previously created SQL interface query.
-    #
-    # The 'result_format' parameter specifies the desired structure and format of the response.
-    #
-    # Supported formats:
-    #
-    # | result_format | Description
-    # | :-----------: | :--- |
-    # | json | Plain json
-    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-    # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-    # | csv | Comma separated values with a header
-    # | txt | Tab separated values with a header
-    # | html | Simple html
-    # | md | Simple markdown
-    # | xlsx | MS Excel spreadsheet
-    # | sql | Returns the generated SQL rather than running the query
-    # | png | A PNG image of the visualization of the query
-    # | jpg | A JPG image of the visualization of the query
-    #
-    # GET /sql_interface_queries/{query_id}/run/{result_format} -> Union[str, bytes]
-    def run_sql_interface_query(
-        self,
-        # Integer id of query
-        query_id: int,
-        # Format of result, options are: ["json_bi"]
-        result_format: str,
-        transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Union[str, bytes]:
-        """Run SQL Interface Query"""
-        result_format = self.encode_path_param(result_format)
-        response = cast(
-            Union[str, bytes],
-            self.get(
-                path=f"/sql_interface_queries/{query_id}/run/{result_format}",
-                structure=Union[str, bytes],  # type: ignore
-                transport_options=transport_options
-            )
-        )
-        return response
-
-    # ### Create a SQL interface query.
-    #
-    # This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
-    # and are not deleted. If you create a query that is exactly like an existing query then the existing query
-    # will be returned and no new query will be created. Whether a new query is created or not, you can use
-    # the 'id' in the returned query with the 'run' method.
-    #
-    # The query parameters are passed as json in the body of the request.
-    #
-    # POST /sql_interface_queries -> mdls.SqlInterfaceQuery
-    def create_sql_interface_query(
-        self,
-        body: mdls.WriteSqlInterfaceQueryCreate,
-        transport_options: Optional[transport.TransportOptions] = None,
-    ) -> mdls.SqlInterfaceQuery:
-        """Create SQL Interface Query"""
-        response = cast(
-            mdls.SqlInterfaceQuery,
-            self.post(
-                path="/sql_interface_queries",
-                structure=mdls.SqlInterfaceQuery,
-                body=body,
-                transport_options=transport_options
-            )
-        )
-        return response
-
-    #endregion
-
     #region Theme: Manage Themes
 
     # ### Get an array of all existing themes
@@ -10747,7 +10747,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # This method returns an array of all existing themes. The active time for the theme is not considered.
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # GET /themes -> Sequence[mdls.Theme]
     def all_themes(
@@ -10782,7 +10782,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # POST /themes -> mdls.Theme
     def create_theme(
@@ -10839,7 +10839,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # Get a **single theme** by id with [Theme](#!/Theme/theme)
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # GET /themes/search -> Sequence[mdls.Theme]
     def search_themes(
@@ -10913,7 +10913,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # Returns the new specified default theme object.
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # PUT /themes/default -> mdls.Theme
     def set_default_theme(
@@ -10942,7 +10942,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # The optional `ts` parameter can specify a different timestamp than "now."
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # GET /themes/active -> Sequence[mdls.Theme]
     def active_themes(
@@ -10972,7 +10972,7 @@ class Looker40SDK(api_methods.APIMethods):
     # The optional `ts` parameter can specify a different timestamp than "now."
     # Note: API users with `show` ability can call this function
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # GET /themes/theme_or_default -> mdls.Theme
     def theme_or_default(
@@ -11001,7 +11001,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # See [Create Theme](#!/Theme/create_theme) for constraints
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # POST /themes/validate -> mdls.ValidationError
     def validate_theme(
@@ -11025,7 +11025,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # Use this to retrieve a specific theme, whether or not it's currently active.
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # GET /themes/{theme_id} -> mdls.Theme
     def theme(
@@ -11051,7 +11051,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Update the theme by id.
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # PATCH /themes/{theme_id} -> mdls.Theme
     def update_theme(
@@ -11082,7 +11082,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
     #
-    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
+    # **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
     #
     # DELETE /themes/{theme_id} -> str
     def delete_theme(

@@ -1156,7 +1156,7 @@ describe('LookerNodeSDK', () => {
     })
 
     it('no INI', async () => {
-      const sdk = LookerNodeSDK.init40(new NodeSettings(environmentPrefix))
+      const sdk = LookerNodeSDK.init31(new NodeSettings(environmentPrefix))
       const me = await sdk.ok(sdk.me())
       expect(me).not.toBeUndefined()
       expect(me.id).not.toBeUndefined()
