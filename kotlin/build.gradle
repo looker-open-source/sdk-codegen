@@ -29,7 +29,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     implementation "io.github.cdimascio:dotenv-kotlin:6.2.2"
-    implementation "org.ini4j:ini4j:0.5.4"
+
+    implementation "commons-configuration:commons-configuration:1.10"
 
     implementation "com.google.http-client:google-http-client:$googleHttpVersion"
     implementation "com.google.http-client:google-http-client-apache-v2:$googleHttpVersion"
