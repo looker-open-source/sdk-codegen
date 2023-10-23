@@ -2,7 +2,7 @@ group = "com.looker.sdk"
 defaultTasks = mutableListOf("jar")
 
 val kotlinVersion = providers.gradleProperty("kotlinVersion").get()
-val ktorVersion = providers.gradleProperty("ktorVersion").get()
+val googleHttpVersion = providers.gradleProperty("googleHttpVersion").get()
 
 plugins {
     kotlin("jvm")
@@ -35,10 +35,12 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
     implementation("org.ini4j:ini4j:0.5.4")
 
-    implementation("io.ktor:ktor-client:$ktorVersion")
-    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-    implementation("io.ktor:ktor-client-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-gson:$ktorVersion")
+    implementation("commons-configuration:commons-configuration:1.10")
+
+    implementation(platform("com.google.http-client:google-http-client-bom:$googleHttpVersion"))
+    implementation("com.google.http-client:google-http-client")
+    implementation("com.google.http-client:google-http-client-apache-v2")
+    implementation("com.google.http-client:google-http-client-gson")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.google.code.gson:gson:2.8.5")
