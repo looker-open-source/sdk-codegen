@@ -2,6 +2,7 @@ name: TypeScript SDK CI
 on:
   pull_request:
     paths:
+      - package.json
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
@@ -14,6 +15,7 @@ on:
     branches:
       - main
     paths:
+      - package.json
       - packages/sdk/**
       - packages/sdk-rtl/**
       - packages/sdk-node/**
