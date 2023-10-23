@@ -150,7 +150,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             keyEnvironmentPrefix to environmentPrefix,
             keyVerifySSL to verifySSL.toString(),
             keyTimeout to timeout.toString(),
-            "headers" to headers.toString()
+            "headers" to headers.toString(),
         ).plus(rawMap)
     }
 
