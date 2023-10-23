@@ -41,27 +41,27 @@ open class APIMethods(val authSession: AuthSession) {
         }
     }
 
-    inline fun <reified T> get(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> get(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> head(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> head(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.HEAD, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> delete(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> delete(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.DELETE, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> post(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> post(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.POST, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> put(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> put(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.PUT, path, queryParams, body, authRequest)
     }
 
-    inline fun <reified T> patch(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
+    inline fun <reified T : Any> patch(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
         return authSession.transport.request<T>(HttpMethod.PATCH, path, queryParams, body, authRequest)
     }
 

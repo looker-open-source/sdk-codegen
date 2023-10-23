@@ -24,8 +24,7 @@
 
 package com.looker.rtl
 
-import io.ktor.client.request.forms.*
-import io.ktor.http.*
+import com.google.api.client.http.UrlEncodedContent
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
@@ -144,12 +143,11 @@ open class AuthSession(
                 unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_ID") ?: config[client_id])
             val clientSecret =
                 unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET") ?: config[client_secret])
-            val body = FormDataContent(
-                Parameters.build {
-                    append(client_id, clientId)
-                    append(client_secret, clientSecret)
-                }
+            val params = mapOf(
+                client_id to clientId,
+                client_secret to clientSecret
             )
+            val body = UrlEncodedContent(params)
             val token = ok<AuthToken>(
                 transport.request<AuthToken>(
                     HttpMethod.POST,

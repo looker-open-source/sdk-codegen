@@ -25,12 +25,13 @@
 package com.looker.sdk
 
 import com.looker.rtl.ConfigurationProvider
+import com.looker.rtl.DEFAULT_HTTP_TRANSPORT
 import com.looker.rtl.DEFAULT_TIMEOUT
 import com.looker.rtl.asBoolean
 import com.looker.rtl.unQuote
-import org.ini4j.Ini
-import java.io.ByteArrayInputStream
+import org.apache.commons.configuration.HierarchicalINIConfiguration
 import java.io.File
+import java.io.StringReader
 
 /** Structure read from an .INI file */
 typealias ApiSections = Map<String, Map<String, String>>
@@ -39,14 +40,20 @@ typealias ApiSections = Map<String, Map<String, String>>
  * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
  */
 fun apiConfig(contents: String): ApiSections {
-    val iniParser = Ini(ByteArrayInputStream(contents.toByteArray()))
+    val iniParser = HierarchicalINIConfiguration()
+    iniParser.load(StringReader(contents))
 
-    val ret = mutableMapOf<String, Map<String, String>>()
-    iniParser.forEach { (section, values) ->
-        ret[section] = values.map { it.key to unQuote(it.value) }.toMap()
+    return mutableMapOf<String, Map<String, String>>().also { mapToReturn ->
+        iniParser.sections.forEach { section ->
+            mapToReturn[section] = mutableMapOf<String, String>().also { sectionMap ->
+                iniParser.getKeys(section).forEach { key ->
+                    // `key` is fully scoped (e.g. `Looker.<key>`) but we just want the key so
+                    // remove the section prefix before adding to the map.
+                    sectionMap[key.removePrefix("$section.")] = unQuote(iniParser.getString(key))
+                }
+            }
+        }
     }
-
-    return ret
 }
 
 // TODO why no @JvmOverloads here?
@@ -92,12 +99,14 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     override var headers: Map<String, String> = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
     override var verifySSL: Boolean = true
     override var timeout: Int = DEFAULT_TIMEOUT
+    override var httpTransport = DEFAULT_HTTP_TRANSPORT
 
     private val keyBaseUrl: String = "base_url"
     private val keyApiVersion: String = "api_version"
     private val keyEnvironmentPrefix: String = "environmentPrefix"
     private val keyVerifySSL: String = "verify_ssl"
     private val keyTimeout: String = "timeout"
+    private val keyHttpTransport: String = "kotlin_http_transport"
 
     init {
         val settings = this.readConfig()
@@ -122,6 +131,10 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         settings[keyTimeout].let { value ->
             timeout = if (value !== null) value.toInt() else timeout
         }
+
+        settings[keyHttpTransport].let { value ->
+            httpTransport = if (value !== null) value else httpTransport
+        }
     }
 
     override fun isConfigured(): Boolean {
@@ -137,7 +150,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
             keyEnvironmentPrefix to environmentPrefix,
             keyVerifySSL to verifySSL.toString(),
             keyTimeout to timeout.toString(),
-            "headers" to headers.toString()
+            "headers" to headers.toString(),
         ).plus(rawMap)
     }
 
@@ -153,6 +166,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         addSystemProperty(map, keyApiVersion)
         addSystemProperty(map, keyVerifySSL)
         addSystemProperty(map, keyTimeout)
+        addSystemProperty(map, keyHttpTransport)
         return map.toMap()
     }
 }

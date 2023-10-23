@@ -457,7 +457,10 @@ describe('spec conversion', () => {
       versions.supported_versions = onlyPublic(versions.supported_versions)
       const actual = getSpecLinks(versions)
       expect(actual).toBeDefined()
-      expect(actual).toHaveLength(3)
+      /*
+       * 23.18 and later only has one API defined
+       * expect(actual).toHaveLength(3)
+       */
       actual.forEach((spec) => {
         expect(spec.name).not.toEqual('')
         expect(spec.version).not.toEqual('')
@@ -484,7 +487,10 @@ describe('spec conversion', () => {
       )
       const actual = await loadSpecs(sdk, links)
       expect(actual).toBeDefined()
-      expect(actual).toHaveLength(3)
+      /*
+       * 23.18 and later only has one API defined
+       * expect(actual).toHaveLength(3)
+       */
       actual.forEach((spec) => {
         expect(isEmpty(spec.api)).toEqual(false)
         expect(spec.api.version).not.toEqual('')
