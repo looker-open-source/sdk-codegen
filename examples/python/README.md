@@ -27,6 +27,9 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 ## Query : Run and Manage Queries
 - [Kill all running queries](kill_queries.py)
 
+## QueryTask : Manage Query Tasks
+- [Download dashboard tiles as CSVs][download_dashboard_csv.py]
+
 ## RenderTask : Manage Render Tasks
 
 - [Download dashboard tile in specified format](download_tile.py)
