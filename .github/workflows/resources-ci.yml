@@ -1,19 +1,5 @@
 name: Resources Index CI
 on:
-  pull_request:
-    paths:
-      - bin/looker-resources-index/**
-      - docs/resources/**
-      - .github/workflows/resources-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - bin/looker-resources-index/**
-      - docs/resources/**
-      - .github/workflows/resources-ci.yml
-
   workflow_dispatch:
 
 defaults:

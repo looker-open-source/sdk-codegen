@@ -1,23 +1,5 @@
 name: Codegen CI
 on:
-  pull_request:
-    paths:
-      - package.json
-      - packages/sdk-codegen/**
-      - packages/sdk-codegen-utils/**
-      - packages/sdk-codegen-scripts/**
-      - .github/workflows/codegen-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - package.json
-      - packages/sdk-codegen/**
-      - packages/sdk-codegen-utils/**
-      - packages/sdk-codegen-scripts/**
-      - .github/workflows/codegen-ci.yml
-
   workflow_dispatch:
 
 env:

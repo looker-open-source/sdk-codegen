@@ -1,29 +1,5 @@
 name: TypeScript SDK CI
 on:
-  pull_request:
-    paths:
-      - package.json
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
-      - .github/workflows/tssdk-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - package.json
-      - packages/sdk/**
-      - packages/sdk-rtl/**
-      - packages/sdk-node/**
-      - packages/extension-sdk/**
-      - packages/extension-sdk-react/**
-      - packages/extension-utils/**
-      - .github/workflows/tssdk-ci.yml
-
   workflow_dispatch:
 
 env:

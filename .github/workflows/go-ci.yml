@@ -1,17 +1,5 @@
 name: Go SDK CI
 on:
-  pull_request:
-    paths:
-      - go/**
-      - .github/workflows/go-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - go/**
-      - .github/workflows/go-ci.yml
-
   workflow_dispatch:
 
 env:
