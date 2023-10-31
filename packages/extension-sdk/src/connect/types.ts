@@ -124,7 +124,7 @@ export enum ExtensionRequestType {
    */
   RENDERED = 'RENDERED',
   /**
-   * Visualization configuration data
+   * Set up the visConfig options that should be present in an explore
    */
   VIS_DEFAULT_CONFIG = 'VIS_DEFAULT_CONFIG',
   /**

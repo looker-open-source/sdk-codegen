@@ -119,5 +119,38 @@ export interface VisualizationSDK {
   visConfig: VisualizationConfig
   queryResponse: QueryResponse
   updateVisData: (rawVisData: RawVisualizationData) => void
-  configureVisualization: (options: RawVisConfig) => void
+  configureVisualization: (options: VisOptions) => void
+  setVisConfig: (config: RawVisConfig) => void
+}
+
+export interface VisOptionValue {
+  [label: string]: string
+}
+
+export interface VisOption {
+  type: string
+  values?: VisOptionValue[]
+  display?: string
+  default?: any
+  label?: string
+  section?: string
+  placeholder?: string
+  display_size?: 'half' | 'third' | 'normal'
+  order?: number
+  hidden?: (setOptions: RawVisConfig) => boolean
+  disabledReason?: (
+    setOptions: RawVisConfig,
+    queryResponse: QueryResponse
+  ) => string | null
+  min?: number
+  max?: number
+  required?: boolean
+  words?: VisOptionValue[]
+  supports?: string[]
+  color_application?: string
+  sublabel?: string
+}
+
+export interface VisOptions {
+  [optionName: string]: VisOption
 }
