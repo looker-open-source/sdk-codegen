@@ -153,7 +153,7 @@ describe('VisualizationSDK', () => {
     expect(sdk.visualizationData).toBeUndefined()
   })
 
-  it('updates visConfig remotely and queryResponse locally when provided', () => {
+  it('updates visConfig and queryResponse locally when provided', () => {
     const sdk = new VisualizationSDKImpl(api)
     expect(sdk.visualizationData).toBeUndefined()
     const visConfig: RawVisConfig = {
@@ -183,9 +183,6 @@ describe('VisualizationSDK', () => {
     sdk.updateVisData(visualizationData)
     expect(sdk.visualizationData).toEqual(visualizationData)
     expect(sdk.visConfig.visConfig).toEqual(visConfig)
-    expect(api.send).toHaveBeenCalledWith('VIS_CONFIG_UPDATE', {
-      updatedConfig: visConfig,
-    })
 
     const updatedVisConfig = {
       ...visConfig,
@@ -199,9 +196,5 @@ describe('VisualizationSDK', () => {
     sdk.updateVisData(updatedVisualizationData)
     expect(sdk.visualizationData).toEqual(updatedVisualizationData)
     expect(sdk.visConfig.visConfig).toEqual(updatedVisConfig)
-    expect(api.send).toHaveBeenCalledWith('VIS_CONFIG_UPDATE', {
-      updatedConfig: updatedVisConfig,
-    })
-    expect(sdk.visualizationData).toEqual(updatedVisualizationData)
   })
 })

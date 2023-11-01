@@ -61,7 +61,7 @@ export const getValueAndFormat = (
   return { value, valueFormat }
 }
 
-export const liquidFillDefaultConfig = {
+export const liquidFillVisOptions = {
   showComparison: {
     label: 'Use field comparison',
     default: false,

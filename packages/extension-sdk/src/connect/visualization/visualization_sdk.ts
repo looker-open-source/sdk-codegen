@@ -39,6 +39,7 @@ import type {
   TableCalculation,
   PivotConfig,
   RawVisQueryResponse,
+  VisOptions,
 } from './types'
 
 class QueryResponseImpl implements QueryResponse {
@@ -130,9 +131,6 @@ export class VisualizationSDKImpl implements VisualizationSDK {
       this.visualizationData = visualizationData
       if (this.visConfig && this._visConfig) {
         this._visConfig.update(this.visualizationData.visConfig)
-        this.hostApi.send(ExtensionRequestType.VIS_CONFIG_UPDATE, {
-          updatedConfig: this.visualizationData.visConfig,
-        })
       }
       if (this.queryResponse && this._queryResponse) {
         this._queryResponse.update(this.visualizationData.queryResponse)
@@ -140,9 +138,19 @@ export class VisualizationSDKImpl implements VisualizationSDK {
     }
   }
 
-  configureVisualization(options: RawVisConfig): void {
+  configureVisualization(options: VisOptions): void {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
+  }
+
+  setVisConfig(config: RawVisConfig) {
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.VIS_CONFIG_UPDATE, {
+        updatedConfig: config,
+      })
     } else {
       throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
     }
