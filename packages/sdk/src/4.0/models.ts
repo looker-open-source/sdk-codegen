@@ -4392,13 +4392,6 @@ export enum InvestigativeContentType {
   dashboard = 'dashboard',
 }
 
-export interface IJdbcInterface {
-  /**
-   * JDBC Metadata to inflate Avatica response classes. (read-only)
-   */
-  results?: string
-}
-
 export interface ILDAPConfig {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -6733,10 +6726,6 @@ export interface IProject {
    * Status of dependencies in your manifest & lockfile
    */
   dependency_status?: string | null
-  /**
-   * Number of data tests within project (read-only)
-   */
-  data_tests_count?: number
 }
 
 export interface IProjectError {
@@ -10543,6 +10532,13 @@ export interface ISqlInterfaceQueryCreate {
   jdbc_client?: boolean
 }
 
+export interface ISqlInterfaceQueryMetadata {
+  /**
+   * JDBC Metadata to inflate Avatica response classes. (read-only)
+   */
+  results?: string
+}
+
 export interface ISqlQuery {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -13201,7 +13197,7 @@ export interface IWritePrivatelabelConfiguration {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, data_tests_count
+ * can, id, uses_git, is_example
  */
 export interface IWriteProject {
   /**
