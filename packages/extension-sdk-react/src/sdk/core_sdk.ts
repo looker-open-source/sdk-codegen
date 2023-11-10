@@ -25,30 +25,30 @@
  */
 
 import {
-  registerCore31SDK,
-  unregisterCore31SDK,
-  getCore31SDK,
-} from './core_sdk_31'
+  registerCore40SDK,
+  unregisterCore40SDK,
+  getCore40SDK,
+} from './core_sdk_40'
 
 /**
  * Register the core SDK. The ExtensionProvider will automatically
  * call this when connection with the host succeeds. An extension using
  * the ExtensionProvider should  never call this.
  * @param coreSDK core sdk
- * @deprecated use registerCore31SDK or registerCore40SDK instead
+ * @deprecated use registerCore40SDK instead
  */
-export const registerCoreSDK = registerCore31SDK
+export const registerCoreSDK = registerCore40SDK
 
 /**
  * Unregister the core SDK. The ExtensionProvider will automatically
  * call this when it is unloaded. An extension using
  * the ExtensionProvider should never call this.
- * @deprecated use unregisterCore31SDK or unregisterCore40SDK instead
+ * @deprecated use unregisterCore40SDK instead
  */
-export const unregisterCoreSDK = unregisterCore31SDK
+export const unregisterCoreSDK = unregisterCore40SDK
 
 /**
  * Global access to the coreSDK. An error will be thrown if accessed prematurely.
- * @deprecated use getCore31SDK or getCore40SDK instead
+ * @deprecated use getCore40SDK instead
  */
-export const getCoreSDK = getCore31SDK
+export const getCoreSDK = getCore40SDK

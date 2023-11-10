@@ -35,7 +35,6 @@ import type {
 } from '@looker/extension-sdk'
 import { DashboardRunState } from '@looker/extension-sdk'
 import { useLocation } from 'react-router-dom'
-import { unregisterCore31SDK } from '../../sdk/core_sdk_31'
 import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
 import type { BaseExtensionContextData } from '.'
 import { ExtensionConnector } from '.'
@@ -70,7 +69,6 @@ jest.mock('@looker/extension-sdk', () => {
     ...actual,
     connectExtensionHost,
     LookerExtensionSDK: {
-      create31Client: () => ({}),
       create40Client: () => ({}),
     },
   }
@@ -110,7 +108,6 @@ describe('ExtensionConnector component', () => {
     visualizationSDK.updateVisData = jest.fn()
     jest.spyOn(console, 'error').mockImplementation()
     mockFailConnection = false
-    unregisterCore31SDK()
     unregisterCore40SDK()
   })
 

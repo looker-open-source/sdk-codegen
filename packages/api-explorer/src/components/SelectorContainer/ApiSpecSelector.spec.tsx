@@ -83,10 +83,10 @@ describe('ApiSpecSelector', () => {
         Object.keys(specs).length
       )
     })
-    const button = screen.getByText('3.1')
+    const button = screen.getByText('4.0')
     userEvent.click(button)
     expect(push).toHaveBeenCalledWith({
-      pathname: '/3.1/methods/Dashboard/dashboard',
+      pathname: '/4.0/methods/Dashboard/dashboard',
       search: '',
     })
   })

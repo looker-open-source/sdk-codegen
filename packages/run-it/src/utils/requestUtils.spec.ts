@@ -163,7 +163,7 @@ describe('requestUtils', () => {
 
       const resp = await runRequest(
         sdk,
-        '/api/3.1',
+        '/api/4.0',
         'POST',
         '/queries/run/{result_format}',
         { result_format: 'json' },
@@ -173,7 +173,7 @@ describe('requestUtils', () => {
 
       expect(spy).toHaveBeenCalledWith(
         'POST',
-        '/api/3.1/queries/run/json',
+        '/api/4.0/queries/run/json',
         {
           fields: 'first_name, last_name',
         },

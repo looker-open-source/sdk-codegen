@@ -37,7 +37,7 @@ describe('DocMarkdown', () => {
         source={
           '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
         }
-        specKey={'3.1'}
+        specKey={'4.0'}
       />
     )
     const heading = screen.getByRole('heading')
@@ -53,11 +53,11 @@ describe('DocMarkdown', () => {
   test('it remaps hashbang urls found in markdown input', () => {
     const input =
       'A link to the [create_dashboard](#!/Dashboard/create_dashboard) endpoint'
-    renderWithReduxProvider(<DocMarkdown source={input} specKey={'3.1'} />)
+    renderWithReduxProvider(<DocMarkdown source={input} specKey={'4.0'} />)
     expect(screen.getByText(/A link to the/)).toBeInTheDocument()
     expect(screen.getByText('create_dashboard')).toHaveAttribute(
       'href',
-      '/3.1/methods/Dashboard/create_dashboard'
+      '/4.0/methods/Dashboard/create_dashboard'
     )
   })
 
@@ -65,7 +65,7 @@ describe('DocMarkdown', () => {
     renderWithReduxProvider(
       <DocMarkdown
         source={'[external_link](https://www.foo.com)'}
-        specKey={'3.1'}
+        specKey={'4.0'}
       />
     )
     expect(screen.getByText('external_link')).toHaveAttribute(
@@ -82,7 +82,7 @@ describe('DocMarkdown', () => {
     renderWithReduxProvider(
       <DocMarkdown
         source={'An API Explorer to explore your OpenAPI spec'}
-        specKey={'3.1'}
+        specKey={'4.0'}
       />,
       store
     )
@@ -98,16 +98,16 @@ describe('DocMarkdown', () => {
     renderWithReduxProvider(
       <DocMarkdown
         source={
-          'An inline styled link with matching text in both the link text and the href: [create_dashboard](/3.1/methods/Dashboard/create_dashboard)'
+          'An inline styled link with matching text in both the link text and the href: [create_dashboard](/4.0/methods/Dashboard/create_dashboard)'
         }
-        specKey={'3.1'}
+        specKey={'4.0'}
       />,
       store
     )
     const link = screen.getByRole('link')
     expect(link).toHaveAttribute(
       'href',
-      '/3.1/methods/Dashboard/create_dashboard'
+      '/4.0/methods/Dashboard/create_dashboard'
     )
     expect(link).toContainHTML('create_<mark>dashboard</mark>')
   })
@@ -115,7 +115,7 @@ describe('DocMarkdown', () => {
   test('it renders code blocks', () => {
     const code =
       '```\nAuthorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4\n```'
-    renderWithReduxProvider(<DocMarkdown source={code} specKey={'3.1'} />)
+    renderWithReduxProvider(<DocMarkdown source={code} specKey={'4.0'} />)
     expect(
       screen.getByText(
         'Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4'
@@ -125,7 +125,7 @@ describe('DocMarkdown', () => {
 
   test('it renders inline code', () => {
     const markdown = 'Some text with code: `const noop = () => null`'
-    renderWithReduxProvider(<DocMarkdown source={markdown} specKey={'3.1'} />)
+    renderWithReduxProvider(<DocMarkdown source={markdown} specKey={'4.0'} />)
     expect(screen.getByText('const noop = () => null')).toBeInTheDocument()
   })
 })

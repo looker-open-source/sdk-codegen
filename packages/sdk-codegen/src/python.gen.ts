@@ -117,7 +117,7 @@ class ${this.packageName}(api_methods.APIMethods):
 `
 
   methodsEpilogue = (_indent: string) =>
-    this.apiVersion === '3.1' ? `LookerSDK = ${this.packageName}` : ''
+    this.apiVersion === '4.0' ? `LookerSDK = ${this.packageName}` : ''
 
   modelsPrologue = (_indent: string) => `
 # ${this.warnEditing()}

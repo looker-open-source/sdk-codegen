@@ -26,7 +26,6 @@
 
 import {
   LookerExtensionSDK as _LookerExtensionSDK,
-  Looker31SDK,
   Looker40SDK,
 } from '@looker/sdk'
 import type { ExtensionHostApi } from '../connect'
@@ -35,16 +34,6 @@ import { ApiVersion } from '../connect'
 import { SdkConnection } from './sdk_connection'
 
 export class LookerExtensionSDK {
-  /**
-   * Create an SDK client that uses SDK 3.1
-   * @param hostConnection extension host API
-   */
-  static create31Client(hostConnection: ExtensionHostApi): Looker31SDK {
-    return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk31),
-      Looker31SDK
-    )
-  }
 
   /**
    * Create an SDK client that uses SDK 4.0
@@ -61,6 +50,6 @@ export class LookerExtensionSDK {
    * Creates a [[LookerSDK]] object.
    */
   static createClient(hostConnection: ExtensionHostApi) {
-    return LookerExtensionSDK.create31Client(hostConnection)
+    return LookerExtensionSDK.create40Client(hostConnection)
   }
 }

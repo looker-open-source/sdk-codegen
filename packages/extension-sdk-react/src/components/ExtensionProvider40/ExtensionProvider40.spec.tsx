@@ -41,7 +41,7 @@ jest.mock('@looker/extension-sdk', () => ({
     mockFailConnection
       ? Promise.reject(new Error('Extension failed to load'))
       : Promise.resolve(mockHost),
-  LookerExtensionSDK31: {
+  LookerExtensionSDK40: {
     createClient: () => ({}),
   },
 }))

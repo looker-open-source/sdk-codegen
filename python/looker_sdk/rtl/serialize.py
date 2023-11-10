@@ -108,24 +108,14 @@ def translate_keys_structure_hook(converter, data, model_type):
     ret = converter.structure_attrs_fromdict(new_data, model_type)
     return ret
 
-
-converter31 = cattr.Converter()
-deserialize31 = functools.partial(deserialize, converter=converter31)
-serialize31 = functools.partial(serialize, converter=converter31)
 converter40 = cattr.Converter()
 deserialize40 = functools.partial(deserialize, converter=converter40)
 serialize40 = functools.partial(serialize, converter=converter40)
 
-
-converter31.register_structure_hook(datetime.datetime, hooks.datetime_structure_hook)
+s
 converter40.register_structure_hook(datetime.datetime, hooks.datetime_structure_hook)
-unstructure_hook31 = functools.partial(hooks.unstructure_hook, converter31)  # type: ignore
 unstructure_hook40 = functools.partial(hooks.unstructure_hook, converter40)  # type: ignore
-converter31.register_unstructure_hook(model.Model, unstructure_hook31)  # type: ignore
 converter40.register_unstructure_hook(model.Model, unstructure_hook40)  # type: ignore
-converter31.register_unstructure_hook(
-    datetime.datetime, hooks.datetime_unstructure_hook  # type: ignore
-)
 converter40.register_unstructure_hook(
     datetime.datetime, hooks.datetime_unstructure_hook  # type: ignore
 )

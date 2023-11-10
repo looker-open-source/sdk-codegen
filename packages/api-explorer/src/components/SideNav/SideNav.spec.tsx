@@ -49,7 +49,7 @@ describe('SideNav', () => {
     saveLocation = globalThis.window.location
     window.location = {
       ...saveLocation,
-      pathname: '/3.1',
+      pathname: '/4.0',
     }
   })
 
@@ -73,7 +73,7 @@ describe('SideNav', () => {
   })
 
   test('Methods tab is the default active tab', () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods'])
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
@@ -85,7 +85,7 @@ describe('SideNav', () => {
   })
 
   test('url determines active tab', () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/types'])
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/types'])
     // eslint-disable-next-line jest-dom/prefer-in-document
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
@@ -105,13 +105,13 @@ jest.mock('react-router-dom', () => {
 
 describe('Search', () => {
   test('inputting text in search box updates URL', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods'])
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
     await userEvent.paste(input, searchPattern)
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: '/3.1/methods',
+        pathname: '/4.0/methods',
         search: `s=${searchPattern}`,
       })
     })
@@ -125,7 +125,7 @@ describe('Search', () => {
     jest.spyOn(spec.api!, 'search')
     renderWithRouterAndReduxProvider(
       <SideNav spec={spec} />,
-      ['/3.1/methods?s=embedsso'],
+      ['/4.0/methods?s=embedsso'],
       store
     )
     const input = screen.getByLabelText('Search')

@@ -50,7 +50,7 @@ class CustomConfigReader extends NodeSettings {
 }
 
 ;(async () => {
-  const sdk = LookerNodeSDK.init31(
+  const sdk = LookerNodeSDK.init40(
     new CustomConfigReader({
       base_url: 'https://<your-looker-server>:19999',
     } as IApiSettings)

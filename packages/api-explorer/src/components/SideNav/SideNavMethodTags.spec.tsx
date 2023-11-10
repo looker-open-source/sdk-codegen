@@ -36,7 +36,7 @@ describe('SideNavTags', () => {
   const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
   test('it renders a provided tag and its methods', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavMethodTags tags={tags} specKey={'3.1'} />
+      <SideNavMethodTags tags={tags} specKey={'4.0'} />
     )
     const tag = screen.getByText('Dashboard')
     const tagContent = 'Create Dashboard'
@@ -49,7 +49,7 @@ describe('SideNavTags', () => {
 
   test('tags are rendered initially collapsed and expand when clicked', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavMethodTags tags={tags} specKey={'3.1'} />
+      <SideNavMethodTags tags={tags} specKey={'4.0'} />
     )
 
     const allTags = screen.getAllByText(/ApiAuth|Dashboard/)
@@ -63,8 +63,8 @@ describe('SideNavTags', () => {
 
   test('tag is expanded if specified in route', () => {
     renderWithRouterAndReduxProvider(
-      <SideNavMethodTags tags={tags} specKey={'3.1'} />,
-      ['/3.1/methods/Dashboard']
+      <SideNavMethodTags tags={tags} specKey={'4.0'} />,
+      ['/4.0/methods/Dashboard']
     )
 
     const allTags = screen.getAllByText(/^(ApiAuth|Dashboard)$/)

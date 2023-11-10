@@ -27,13 +27,12 @@
 import React, { useState } from 'react'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
 import { LookerExtensionSDK } from '@looker/extension-sdk'
-import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import type { Looker40SDK } from '@looker/sdk'
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
 import { ExtensionConnector } from '../ExtensionConnector'
-import { registerCore31SDK, unregisterCore31SDK } from '../../sdk/core_sdk_31'
 import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
 import type { ExtensionContextData } from './types'
 
@@ -57,12 +56,9 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
     {} as ExtensionContextData
   )
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    const core31SDK: Looker31SDK =
-      LookerExtensionSDK.create31Client(extensionHost)
     const core40SDK: Looker40SDK =
       LookerExtensionSDK.create40Client(extensionHost)
     // Provide global access for use by redux if needed
-    registerCore31SDK(core31SDK)
     registerCore40SDK(core40SDK)
     const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
     const { visualizationData } = visualizationSDK
@@ -71,9 +67,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
       return {
         ...previousState,
         extensionSDK: extensionHost,
-        coreSDK: core31SDK,
-        core31SDK,
-        core40SDK,
+        coreSDK: core40SDK,
         visualizationSDK,
         tileSDK,
         visualizationData,
@@ -84,7 +78,6 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   }
 
   const unloadedCallback = () => {
-    unregisterCore31SDK()
     unregisterCore40SDK()
   }
 
