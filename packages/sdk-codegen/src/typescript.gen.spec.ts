@@ -1512,7 +1512,6 @@ export enum Align {
  * @param options one-time API call overrides
  *
  */
-
 export const createUserSlice = createCreateDataSlice<
   IUser,
   { body?: Partial<IWriteUser>; fields?: string; options?: Partial<ITransportSettings> }
